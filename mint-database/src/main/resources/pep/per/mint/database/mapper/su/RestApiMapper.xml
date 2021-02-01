@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.RestApiMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertRestService">
+		<selectKey keyProperty="serviceId" resultType="string" order="BEFORE" >
+			select 'SR' || lpad(to_char(to_number(nvl(max(substr(SERVICE_ID,3)),'0')) + 1),8,'0') from TSU0205
+		</selectKey>
+		insert into TSU0205 (
+		    SERVICE_ID,
+		    SERVICE_CD,
+		    SERVICE_NM,
+		    SERVICE_URI,
+		    SERVICE_TYPE,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) values (
+			#{serviceId},
+			#{serviceCd, jdbcType=VARCHAR},
+			#{serviceNm, jdbcType=VARCHAR},
+			#{serviceUri, jdbcType=VARCHAR},
+			#{serviceType, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getRestServiceList" parameterType="Map" resultMap="serviceResultMap">
+		SELECT 
+			SERVICE_ID,
+			SERVICE_CD,
+  			SERVICE_NM,
+  			SERVICE_URI,
+  			SERVICE_TYPE,
+  			REG_DATE,
+  			MOD_DATE,
+  			COMMENTS
+  		FROM TSU0205
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		<if test="serviceCd != null">
+			and SERVICE_CD like '%'||#{serviceCd}||'%'
+		</if>
+		<if test="serviceNm != null">
+			and SERVICE_NM like '%'||#{serviceNm}||'%'
+		</if>
+	</select>
+	
+
+	<select id="getRestServiceDetail" parameterType="string" resultMap="serviceResultMap">
+		SELECT 
+			SERVICE_ID,
+			SERVICE_CD,
+  			SERVICE_NM,
+  			SERVICE_URI,
+  			SERVICE_TYPE,
+  			REG_DATE,
+  			MOD_DATE,
+  			COMMENTS
+		FROM TSU0205  			
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		and SERVICE_ID = #{serverId}
+	</select>
+	
+	<resultMap type="Service" id="serviceResultMap">
+		<id property="serviceId" 			column="SERVICE_ID"/>
+		<result property="serviceCd"			column="SERVICE_CD"/>
+		<result property="serviceNm"			column="SERVICE_NM"/>
+		<result property="serviceUri"			column="SERVICE_URI"/>
+		<result property="serviceType"			column="SERVICE_TYPE"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		
+	</resultMap>
+	
+	
+	<update id="updateRestService">
+		update TSU0205
+		   set   SERVICE_CD 	= #{serviceCd, jdbcType=VARCHAR}
+		   		, SERVICE_NM 	= #{serviceNm, jdbcType=VARCHAR}
+				,SERVICE_URI 	= #{serviceUri, jdbcType=VARCHAR}
+				,SERVICE_TYPE   = #{serviceType, jdbcType=VARCHAR}
+				,COMMENTS 		= #{comments, jdbcType=VARCHAR}
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+				
+		where SERVICE_ID = #{serviceId}
+	</update>
+	
+	<delete id="deleteRestService">
+		update TSU0205
+		set DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		where SERVICE_ID = #{serviceId}
+	</delete>
+	
+
+</mapper>

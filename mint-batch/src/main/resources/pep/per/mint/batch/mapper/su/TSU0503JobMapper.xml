@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0503JobMapper">
+    <!--
+    <cache/>
+    -->
+
+    <delete id="deleteTSU0503">
+    	DELETE FROM TSU0503
+    	 WHERE ST_YEAR  = substr(#{stDate},1,4)
+    	   AND ST_MONTH = substr(#{stDate},5,2)
+    </delete>
+    
+    <insert id="insertTSU0503">
+		INSERT INTO TSU0503 (
+			SELECT DISTINCT substr(#{stDate},1,4),
+							substr(#{stDate},5,2),
+							B.INTEGRATION_ID
+			  FROM TAN0101 A, TAN0201 B
+			 WHERE A.INTERFACE_ID = B.INTERFACE_ID AND A.STATUS = 'I0' AND A.DEL_YN = 'N'
+			MINUS
+			SELECT DISTINCT ST_YEAR, ST_MONTH, INTF_ID
+			  FROM SI_STAT_INTF_MONTH
+			 WHERE ST_YEAR = substr(#{stDate},1,4)
+			   AND ST_MONTH = substr(#{stDate},5,2)
+		)    
+    </insert>
+    
+    <delete id="deleteTSU0504">
+    	DELETE FROM TSU0504
+    	 WHERE ST_DATE = #{stDate}
+    </delete>
+    
+    <insert id="insertTSU0504">
+    	INSERT INTO TSU0504 VALUES(
+			#{stDate}
+    	   ,(SELECT COUNT(*) FROM TAN0101 WHERE DEL_YN = 'N')
+    	   ,(SELECT COUNT(*) FROM TAN0101 WHERE DEL_YN = 'N' AND STATUS = 'I0')
+    	)
+    </insert>
+
+</mapper>

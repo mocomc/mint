@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.migration.mapper.ifm.IfmMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<select id="selectSI_STAT_INTF_DAY" resultType="map">
+	<![CDATA[
+	select
+		   GROUP_ID                       				    as "GROUP_ID"
+		  ,INTF_ID                        				    as "INTERFACE_ID"
+		  ,ST_YEAR || ST_MONTH || ST_DAY  				    as "TR_DAY"
+		  ,sum(nvl(ST_N_COMPSIZE,0) + nvl(ST_COMPSIZE,0)) 	as "DATA_SIZE"
+		  ,sum(nvl(ST_FINISHED,0))		                  	as "SUCCESS_CNT"
+		  ,sum(nvl(ST_SEND_ERR,0) + nvl(ST_RECV_ERR,0))   	as "ERROR_CNT"
+		  ,sum(nvl(ST_PROCESSING,0))                 		as "PROCESS_CNT"
+		from SI_STAT_INTF_DAY
+		where ST_YEAR  = #{year}
+		  and ST_MONTH = #{month}
+		  and ST_DAY   = #{day}
+		group by GROUP_ID,INTF_ID,ST_YEAR,ST_MONTH,ST_DAY;
+
+	]]>
+	</select>
+
+	<select id="selectSI_STAT_INTF_MONTH" resultType="map">
+	<![CDATA[
+	  select
+		   GROUP_ID                       					as "GROUP_ID"
+		  ,INTF_ID                        					as "INTERFACE_ID"
+		  ,ST_YEAR || ST_MONTH            					as "TR_MONTH"
+		  ,sum(nvl(ST_N_COMPSIZE,0) + nvl(ST_COMPSIZE,0)) 	as "DATA_SIZE"
+		  ,sum(nvl(ST_FINISHED,0))		                  	as "SUCCESS_CNT"
+		  ,sum(nvl(ST_SEND_ERR,0) + nvl(ST_RECV_ERR,0))   	as "ERROR_CNT"
+		  ,sum(nvl(ST_PROCESSING,0))                 		as "PROCESS_CNT"
+		from SI_STAT_INTF_MONTH
+		where ST_YEAR  = #{year}
+		  and ST_MONTH = #{month}
+		group by GROUP_ID,INTF_ID,ST_YEAR,ST_MONTH;
+
+	]]>
+	</select>
+
+</mapper>

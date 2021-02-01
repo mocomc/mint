@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.SimulatorMapper">
+  	<!--
+  	<cache/>
+  	-->
+	 
+  	<select id="getLastSimulationRecord" resultMap="simulationRecordResult">
+		select
+			* 
+	     from TB_SIM_TABLE_DS
+	    where RECORD_ID = (select max(RECORD_ID) from TB_SIM_TABLE_DS where SND_STAT = 'N')
+  	</select>
+  
+  
+  	<resultMap id="simulationRecordResult" type="SimulationRecord">
+  		<id property="id" 			column="RECORD_ID"/>
+		<result property="msg" 		column="MSG"/>
+		<result property="sndDate" 	column="SND_DATE"/>
+		<result property="sndStat" 	column="SND_STAT"/>
+		<result property="errMsg" 	column="ERR_MSG"/>
+		<result property="tryCnt" 	column="TRY_CNT"/>
+		<result property="regId"	column="REG_ID"/>
+		<result property="regDate" 	column="REG_DATE"/>
+	</resultMap>
+	
+	
+   	<select id="getSimulationRecordList" parameterType="string" resultMap="simulationRecordResult">
+   	<![CDATA[
+		select
+			* 
+	     from TB_SIM_TABLE_DS
+	    where REG_DATE <= #{regDate}||'245959999' and REG_DATE >= #{regDate}||'000000000'
+	]]>
+  	</select>
+   	 
+   	
+   	<insert id="insertSimulationRecord" parameterType="SimulationRecord">
+   		insert into TB_SIM_TABLE_DS (
+	   		 RECORD_ID
+			,MSG
+			,SND_DATE
+			,SND_STAT
+			,ERR_MSG
+			,TRY_CNT
+			,REG_ID
+			,REG_DATE
+		) values (
+			 #{id}
+			,#{msg}
+			,#{sndDate}
+			,#{sndStat}
+			,#{errMsg}
+			,#{tryCnt}
+			,#{regId}
+			,#{regDate}
+		)
+   	</insert>
+   	   	
+   	<!-- update -->
+	<update id="updateSimulationRecord" parameterType="SimulationRecord">
+   		update TB_SIM_TABLE_DS
+   		   set
+			 MSG   		= #{msg}
+			,SND_DATE 	= #{sndDate}
+			,SND_STAT   = #{sndStat}
+			,ERR_MSG    = #{errMsg}
+			,TRY_CNT    = #{tryCnt}
+	   	where RECORD_ID = #{id}
+   	</update>
+   	 	
+</mapper>

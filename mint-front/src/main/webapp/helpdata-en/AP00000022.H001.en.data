@@ -1,0 +1,30 @@
+AP00000022$$$H001$$$en$$$장애 등록$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Failure Registration<br></font><font size="2">
+&nbsp; 1. Process<br>
+&nbsp; 2. Register procedure<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. title correction : change default value
+that registered at IIP<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. classificatio of error/failure : simple
+application error(error), server/DB/disk error(failure) <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. processing status : change default
+value that registered at IIP and select "taking action",
+"completed action"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">d. type of error/failure : select error
+list registered as IIP Code (request to the person in charge of IIP to process
+if needed)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">e. error/failure system : select system,
+default value that registered at IIP<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">f. severity : select "H",
+"M", "L" according to whole company standardization</font><font size="2">
+policy<br>
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">g. action date : If you select
+"action complete" at "action state", action date will
+automatically selected<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">h. describe freely from error/failure
+outline to attached file<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 3. In case of action result is
+"H"<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Progress approvql process(Essential)</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

@@ -1,0 +1,30 @@
+AP00000049$$$H002$$$en$$$중복체크$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Duplication
+check <br></font><font size="2">
+&nbsp; 1. Matters that require attention about request for development<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. prior consultation between Comsumer and
+Provider <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (link mode/business service name/table name/exchanged data(Object)
+format etc.)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. Consumer writes the interface
+definition<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. Consumer collects and manages
+registration/change/disuse<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Duplication check and I/F reuse<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. check interface ID registration<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">[Provider system name + Provider Service
+name] Required input<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Provider Service name should be given in
+prior consultation and should have SAPaRFC name, DBaTABLE name<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. related search function<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Input Provider system &gt; Display
+only Provider Service list / Select<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Click "initialization"
+button when you want to re-search results<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. When there is no search result, click
+"Close" button &gt; New registration.<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></span><font size="2">When there is a result, click
+"Reuse" button &gt; Additional registration of Consumer system/the
+person in charge.</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

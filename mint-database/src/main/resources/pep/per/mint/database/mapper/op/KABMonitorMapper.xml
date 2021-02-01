@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.KABMonitorMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getMessageLogListTotalCount" parameterType="Map" resultType="int">
+	  	SELECT
+	  		COUNT(MESSAGE_LOG.MESSAGE_MANAGE_NO)
+	  	FROM MESSAGE_LOG MESSAGE_LOG
+	  	WHERE 1=1
+	  	AND MESSAGE_LOG.REQ_PROCESS_DT BETWEEN TO_TIMESTAMP(#{startDate},'YYYYMMDDHH24MISSFF9') AND TO_TIMESTAMP(#{endDate},'YYYYMMDDHH24MISSFF9')
+	  	<if test="messageManageNo != null and messageManageNo !=''">
+      	AND MESSAGE_LOG.MESSAGE_MANAGE_NO LIKE '%'||#{messageManageNo}||'%'
+      	</if>
+
+      	-- 기관코드
+      	<if test="insttCode != null and insttCode !=''">
+      	AND MESSAGE_LOG.INSTT_CODE LIKE '%'||#{insttCode}||'%'
+      	</if>
+
+		-- 거래구분코드
+      	<if test="delngSeCode != null and delngSeCode !=''">
+      	AND MESSAGE_LOG.DELNG_SE_CODE LIKE '%'||#{delngSeCode}||'%'
+      	</if>
+
+		-- 관리구분코드
+      	<if test="manageSe != null and manageSe !=''">
+      	AND MESSAGE_LOG.MANAGE_SE LIKE '%'||#{manageSe}||'%'
+      	</if>
+
+		-- 요청전문
+      	<if test="reqMessage != null and reqMessage !=''">
+      	AND MESSAGE_LOG.REQ_MESSAGE LIKE '%'||#{reqMessage}||'%'
+      	</if>
+
+		-- 응답코드
+      	<if test="responseCode != null and responseCode !=''">
+      	AND MESSAGE_LOG.RESPONSE_CODE LIKE '%'||#{responseCode}||'%'
+      	</if>
+
+      	<if test="status != null and status != ''">
+       	AND ((MESSAGE_LOG.RES_PROCESS_DT IS NULL
+       	AND SYSDATE > MESSAGE_LOG.REQ_PROCESS_DT + (40/24/60/60))
+       	OR MESSAGE_LOG.RES_PROCESS_DT > MESSAGE_LOG.REQ_PROCESS_DT + (40/24/60/60))
+       	</if>
+	</select>
+
+	<select id="getMessageLogList" parameterType="Map" resultMap="MessageLogResult">
+		SELECT
+        	CASE
+            WHEN M.STATUS='1' THEN
+              CASE
+                WHEN M.RES_PROCESS_DT > M.REQ_PROCESS_DT + (40/24/60/60) THEN 'TIMEOUT'
+              ELSE 'FINISHED'
+              END
+          ELSE M.STATUS
+          END AS STATUS,
+	      	M.MESSAGELOG_ID AS MESSAGELOG_ID,
+	      	M.MESSAGE_MANAGE_NO AS MESSAGE_MANAGE_NO,
+	      	M.INSTT_CODE AS INSTT_CODE,
+	      	M.DELNG_SE_CODE AS DELNG_SE_CODE,
+	      	M.MANAGE_SE AS MANAGE_SE,
+	      	M.TRNSMIS_DT AS TRNSMIS_DT,
+	      	M.REQ_PROCESS_DT AS REQ_PROCESS_DT,
+	      	M.RES_PROCESS_DT AS RES_PROCESS_DT,
+	      	M.RESPONSE_CODE AS RESPONSE_CODE
+		FROM (
+	      	SELECT
+	      		DECODE(MESSAGE_LOG.RES_PROCESS_DT, NULL, DECODE(SIGN(TO_NUMBER(SYSDATE-(MESSAGE_LOG.REQ_PROCESS_DT + (40/24/60/60)))), -1, 'PROCESSING','TIMEOUT'),'1') AS STATUS,
+	        	MESSAGE_LOG.TRNSMIS_DT || '-' || MESSAGE_LOG.MESSAGE_MANAGE_NO AS MESSAGELOG_ID,
+	        	MESSAGE_LOG.MESSAGE_MANAGE_NO AS MESSAGE_MANAGE_NO,
+	        	MESSAGE_LOG.INSTT_CODE AS INSTT_CODE,
+	        	MESSAGE_LOG.DELNG_SE_CODE AS DELNG_SE_CODE,
+	        	MESSAGE_LOG.MANAGE_SE AS MANAGE_SE,
+	        	MESSAGE_LOG.TRNSMIS_DT AS TRNSMIS_DT,
+	        	MESSAGE_LOG.REQ_PROCESS_DT AS REQ_PROCESS_DT,
+	        	MESSAGE_LOG.RES_PROCESS_DT AS RES_PROCESS_DT,
+	        	MESSAGE_LOG.RESPONSE_CODE AS RESPONSE_CODE,
+	        	ROW_NUMBER() OVER(ORDER BY MESSAGE_LOG.REQ_PROCESS_DT DESC) AS RNUM
+	      	FROM MESSAGE_LOG MESSAGE_LOG
+	      	WHERE 1=1
+	      	AND MESSAGE_LOG.REQ_PROCESS_DT BETWEEN TO_TIMESTAMP(#{startDate},'YYYYMMDDHH24MISSFF9') AND TO_TIMESTAMP(#{endDate},'YYYYMMDDHH24MISSFF9')
+
+	      	-- GLOBAL ID
+	      	<if test="messageManageNo != null and messageManageNo !=''">
+	      	AND MESSAGE_LOG.MESSAGE_MANAGE_NO LIKE '%'||#{messageManageNo}||'%'
+	      	</if>
+
+			-- 기관코드
+	      	<if test="insttCode != null and insttCode !=''">
+	      	AND MESSAGE_LOG.INSTT_CODE LIKE '%'||#{insttCode}||'%'
+	      	</if>
+
+			-- 거래구분코드
+	      	<if test="delngSeCode != null and delngSeCode !=''">
+	      	AND MESSAGE_LOG.DELNG_SE_CODE LIKE '%'||#{delngSeCode}||'%'
+	      	</if>
+
+			-- 관리구분코드
+	      	<if test="manageSe != null and manageSe !=''">
+	      	AND MESSAGE_LOG.MANAGE_SE LIKE '%'||#{manageSe}||'%'
+	      	</if>
+
+			-- 요청전문
+	      	<if test="reqMessage != null and reqMessage !=''">
+	      	AND MESSAGE_LOG.REQ_MESSAGE LIKE '%'||#{reqMessage}||'%'
+	      	</if>
+
+			-- 응답코드
+	      	<if test="responseCode != null and responseCode !=''">
+	      	AND MESSAGE_LOG.RESPONSE_CODE LIKE '%'||#{responseCode}||'%'
+	      	</if>
+
+	      	<if test="status != null and status != ''">
+        	AND ((MESSAGE_LOG.RES_PROCESS_DT IS NULL
+        	AND SYSDATE > MESSAGE_LOG.REQ_PROCESS_DT + (40/24/60/60))
+        	OR MESSAGE_LOG.RES_PROCESS_DT > MESSAGE_LOG.REQ_PROCESS_DT + (40/24/60/60))
+        	</if>
+	      ) M
+		WHERE 1=1
+	    AND RNUM BETWEEN #{startIndex} AND #{endIndex}
+	</select>
+
+	<select id="getMessageLogDetail" parameterType="Map" resultMap="MessageLogResult">
+		SELECT
+        	MESSAGE_MANAGE_NO,
+        	TRNSMIS_DT,
+        	<choose>
+				<when test="isDecrypt != null and isDecrypt eq 'Y'.toString()">
+				MAGICDB.DEC('KAB_ARIA_01',REQ_MESSAGE) AS REQ_MESSAGE,
+    			MAGICDB.DEC('KAB_ARIA_01',RES_MESSAGE) AS RES_MESSAGE
+				</when>
+				<otherwise>
+				REQ_MESSAGE,
+	      		RES_MESSAGE
+				</otherwise>
+			</choose>
+		FROM MESSAGE_LOG
+	    WHERE 1=1
+	    AND MESSAGE_LOG.MESSAGE_MANAGE_NO = #{logKey1}
+        AND TRNSMIS_DT = #{logKey2}
+	</select>
+
+	<resultMap id="MessageLogResult" type="MessageLog" >
+		<result property="messageLogId" column="MESSAGELOG_ID" />
+		<result property="messageManageNo" column="MESSAGE_MANAGE_NO" />
+		<result property="insttCode" column="INSTT_CODE" />
+		<result property="delngSeCode" column="DELNG_SE_CODE" />
+		<result property="manageSe" column="MANAGE_SE" />
+		<result property="trnsmisDt" column="TRNSMIS_DT" />
+		<result property="reqMessage" column="REQ_MESSAGE" />
+		<result property="reqProcessDt" column="REQ_PROCESS_DT" />
+		<result property="resMessage" column="RES_MESSAGE" />
+		<result property="resProcessDt" column="RES_PROCESS_DT" />
+		<result property="responseCode" column="RESPONSE_CODE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+
+	<select id="getTrackingLogDetail" parameterType="Map" resultMap="TRLogDetailResult" databaseId="oracle">
+		SELECT
+			  A.MASTERLOG_ID
+			, A.DETAILLOG_ID
+			, A.MSG_DATETIME
+			, A.PR_PROCESS_MODE
+			, B.PR_HOST_ID
+			, B.PR_PROCESS_ID
+			, A.PR_DT
+			, C.NM AS STATUS_NM
+			, A.MSG_STATUS AS STATUS
+			, A.RECORD_CNT
+			, A.DATA_SIZE
+			, A.COMPRESS_YN
+			, D.ERROR_MSG
+			<choose>
+				<when test="isDecrypt != null and isDecrypt eq 'Y'.toString()">
+				, DETAILLOG_DATA_PKG.DEC(E.DATA) AS DATA
+				</when>
+				<otherwise>
+				, E.DATA AS DATA
+				</otherwise>
+			</choose>
+
+			, F.DIRECTORY_NM
+			, F.FILE_NM
+		  	, CASE
+		  		WHEN NODE_INFO.NODE_IDX IS NULL THEN
+					NVL(PIDX.IDX,
+						CASE
+							WHEN A.PR_PROCESS_MODE IN('SNDR', 'ISND') THEN 1
+							WHEN A.PR_PROCESS_MODE IN('BRKR', 'IHUB') THEN 11
+							WHEN A.PR_PROCESS_MODE IN('SBRK', 'IREQ') THEN 21
+							WHEN A.PR_PROCESS_MODE IN('REPL')         THEN 22
+							WHEN A.PR_PROCESS_MODE IN('RBRK', 'IRLY') THEN 23
+							WHEN A.PR_PROCESS_MODE IN('SNRC')         THEN 88
+							WHEN A.PR_PROCESS_MODE IN('RCVR', 'IRCV') THEN 99
+							WHEN A.PR_PROCESS_MODE = '' THEN 0
+						END
+					)
+		  		ELSE
+		  			NODE_INFO.NODE_IDX
+		  	  END AS IDX
+		FROM
+			DETAILLOG A
+			LEFT OUTER JOIN DETAILLOG_ID_MAP B ON A.MASTERLOG_ID = B.MASTERLOG_ID AND A.DETAILLOG_ID = B.DETAILLOG_ID
+			LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'OP' AND LEVEL2 = '01') C ON A.MSG_STATUS = C.CD
+			LEFT OUTER JOIN DETAILLOG_ERR D ON A.MASTERLOG_ID = D.MASTERLOG_ID AND A.DETAILLOG_ID = D.DETAILLOG_ID AND A.MSG_DATETIME = D.MSG_DATETIME
+			LEFT OUTER JOIN DETAILLOG_DATA E ON A.MASTERLOG_ID = E.MASTERLOG_ID AND A.DETAILLOG_ID = E.DETAILLOG_ID AND A.MSG_DATETIME = E.MSG_DATETIME
+			LEFT OUTER JOIN DETAILLOG_FILE F ON A.MASTERLOG_ID = F.MASTERLOG_ID AND A.DETAILLOG_ID = F.DETAILLOG_ID AND A.MSG_DATETIME = F.MSG_DATETIME
+			LEFT OUTER JOIN (SELECT IDX, ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'tracking' AND ATTRIBUTE_ID = 'process.mode.sort.index') PIDX ON A.PR_PROCESS_MODE = PIDX.ATTRIBUTE_VALUE
+			LEFT OUTER JOIN
+			(
+				SELECT
+					NODE_INFO.GROUP_ID,
+					NODE_INFO.INTF_ID,
+					NODE_INFO.NODE_ID,
+					NODE_INFO.NODE_NM,
+					NODE_INFO.HOST_ID,
+					NODE_INFO.NODE_TYPE,
+					NODE_INFO.NODE_GUBUN,
+					NVL(NODE_IDX.IDX, 0) AS NODE_IDX
+				FROM
+					NODEINFO NODE_INFO
+					LEFT OUTER JOIN
+					(
+						SELECT
+							DISTINCT GROUP_ID, INTF_ID, TO_NODE_ID AS NODE_ID, LEVEL AS IDX
+						FROM
+						(
+							SELECT
+								GROUP_ID,
+								INTF_ID,
+								FROM_NODE_ID,
+								TO_NODE_ID
+							FROM
+								(
+									SELECT
+										P.GROUP_ID,
+										P.INTF_ID,
+										'' AS FROM_NODE_ID,
+										P.FROM_NODE_ID AS TO_NODE_ID
+									FROM
+										LINKINFO P
+										LEFT OUTER JOIN LINKINFO C ON
+											P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+									WHERE
+										C.FROM_NODE_ID IS NULL
+
+									UNION
+
+									SELECT
+										P.GROUP_ID,
+										P.INTF_ID,
+										P.FROM_NODE_ID,
+										P.TO_NODE_ID
+									FROM
+										LINKINFO P
+										LEFT OUTER JOIN LINKINFO C ON
+											P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+								)
+							WHERE
+								1 = 1
+								AND GROUP_ID = #{groupId}
+								AND INTF_ID = #{intfId}
+						)
+
+						START WITH FROM_NODE_ID IS NULL
+						CONNECT BY NOCYCLE FROM_NODE_ID = PRIOR TO_NODE_ID
+						ORDER BY GROUP_ID, INTF_ID, LEVEL, TO_NODE_ID
+					) NODE_IDX ON
+						NODE_INFO.GROUP_ID = NODE_IDX.GROUP_ID
+						AND NODE_INFO.INTF_ID = NODE_IDX.INTF_ID
+						AND NODE_INFO.NODE_ID = NODE_IDX.NODE_ID
+				WHERE
+					1 = 1
+					AND NODE_INFO.GROUP_ID = #{groupId}
+					AND NODE_INFO.INTF_ID = #{intfId}
+				ORDER BY IDX NULLS FIRST, NODE_ID
+			) NODE_INFO ON
+			  NODE_INFO.NODE_ID = B.PR_PROCESS_ID
+		WHERE
+			A.MASTERLOG_ID = B.MASTERLOG_ID
+			AND B.MASTERLOG_ID = #{logKey1}
+			AND A.MSG_DATETIME = #{logKey2}
+		ORDER BY IDX ASC
+	</select>
+
+	<resultMap id="TRLogDetailResult" type="TRLogDetail">
+        <result property="logKey1"          column="MASTERLOG_ID" />
+        <result property="logKey2"          column="MSG_DATETIME" />
+        <result property="logKey3"          column="DETAILLOG_ID" />
+        <result property="processMode"      column="PR_PROCESS_MODE" />
+        <result property="hostId"           column="PR_HOST_ID" />
+        <result property="processId"        column="PR_PROCESS_ID" />
+        <result property="processTime"      column="PR_DT" />
+        <result property="status"           column="STATUS" />
+        <result property="statusNm"         column="STATUS_NM" />
+        <result property="recordCnt"        column="RECORD_CNT" />
+        <result property="dataSize"         column="DATA_SIZE" />
+        <result property="compressYn"       column="COMPRESS_YN" />
+        <result property="errorMsg"         column="ERROR_MSG" />
+        <result property="msg"              column="DATA"  ></result>
+        <result property="msgToByte"        column="DATA"  jdbcType="BLOB" ></result>
+        <result property="directoryNm"      column="DIRECTORY_NM" />
+        <result property="fileNm"           column="FILE_NM" />
+        <result property="hopCnt"           column="IDX"/>
+    </resultMap>
+
+
+    <select id="getTrackingInterfaceInfo" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT
+			B.GROUP_ID,
+ 			B.INTF_ID
+		FROM
+			MASTERLOG A
+			INNER JOIN MASTERLOG_ID_MAP B ON
+				A.MASTERLOG_ID = B.MASTERLOG_ID
+		WHERE
+			1 = 1
+			AND A.MASTERLOG_ID = #{logKey1}
+			AND A.MSG_DATETIME = #{logKey2}
+	</select>
+
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.ut.CommonUploadMapper">
+	<!--
+  	<cache/>
+  	-->
+
+	<resultMap id="uploadSummaryMap" type="UploadSummary">
+		<result property="batchId" 		column="BATCH_ID"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="batchCount" 	column="BATCH_CNT"/>
+		<result property="resultCd" 	column="RESULT_CD"/>
+		<result property="resultMsg" 	column="RESULT_MSG"/>
+		<result property="fileName" 	column="FILE_NM"/>
+		<result property="filePath" 	column="FILE_PATH"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="regUserNm" 	column="REG_USER_NM"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+		<result property="modUserNm" 	column="MOD_USER_NM"/>
+	</resultMap>
+
+	<resultMap id="uploadDetailMap" type="UploadDetail">
+		<result property="batchId" 			column="BATCH_ID"/>
+		<result property="requirementId" 	column="REQUIREMENT_ID"/>
+		<result property="rowIndex" 		column="ROW_INDEX"/>
+	</resultMap>
+
+
+	<select id="getUploadDetailList" resultMap="uploadDetailMap">
+		select
+			 BATCH_ID
+			,REQUIREMENT_ID
+			,ROW_INDEX
+			,RESULT_CD
+			,RESULT_MSG
+		 from TOP0404
+		where BATCH_ID = #{batchId}
+	</select>
+
+	<select id="getUploadSummaryList" resultMap="uploadSummaryMap">
+			SELECT
+			  BATCH_ID
+			, COMMENTS
+			, BATCH_CNT
+			, RESULT_CNT
+			, RESULT_CD
+			, RESULT_MSG
+			, FILE_NM
+			, FILE_PATH
+			, REG_DATE
+			, REG_USER
+			, ( SELECT USER_NM FROM TSU0101 WHERE USER_ID = REG_USER AND DEL_YN = 'N' ) AS REG_USER_NM
+			, MOD_DATE
+			, MOD_USER
+			, ( SELECT USER_NM FROM TSU0101 WHERE USER_ID = MOD_USER AND DEL_YN = 'N' ) AS MOD_USER_NM
+		FROM
+		  TOP0403
+		ORDER BY BATCH_ID DESC
+
+	</select>
+
+	<insert id="insertUploadSummary" parameterType="UploadSummary">
+		<selectKey keyProperty="batchId" resultType="string" order="BEFORE" >
+			SELECT 'UP' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(BATCH_ID,3)),'0')) + 1),8,'0') FROM TOP0403
+		</selectKey>
+		INSERT
+		INTO TOP0403
+		  (
+		    BATCH_ID,
+		    COMMENTS,
+		    BATCH_CNT,
+		    RESULT_CNT,
+		    RESULT_CD,
+		    RESULT_MSG,
+		    FILE_NM,
+		    FILE_PATH,
+		    REG_DATE,
+		    REG_USER,
+		    MOD_DATE,
+		    MOD_USER
+		  )
+		  VALUES
+		  (
+		    #{batchId,		jdbcType=VARCHAR},
+		    #{comments,		jdbcType=VARCHAR},
+		    #{batchCount,	jdbcType=NUMERIC},
+		    #{resultCount,	jdbcType=NUMERIC},
+		    #{resultCd,		jdbcType=VARCHAR},
+		    #{resultMsg,	jdbcType=VARCHAR},
+		    #{fileName,		jdbcType=VARCHAR},
+		    #{filePath,		jdbcType=VARCHAR},
+		    #{regDate,		jdbcType=VARCHAR},
+		    #{regId,		jdbcType=VARCHAR},
+		    #{modDate,		jdbcType=VARCHAR},
+		    #{modId,		jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<update id="updateUploadSummary" parameterType="UploadSummary">
+		UPDATE TOP0403
+		   SET
+		   	COMMENTS	= #{comments,	jdbcType=VARCHAR},
+		    BATCH_CNT	= #{batchCount,	jdbcType=NUMERIC},
+		    RESULT_CNT	= #{resultCount,jdbcType=NUMERIC},
+		    RESULT_CD	= #{resultCd,	jdbcType=VARCHAR},
+		    RESULT_MSG	= #{resultMsg,	jdbcType=VARCHAR},
+		    FILE_NM		= #{fileName,	jdbcType=VARCHAR},
+		    FILE_PATH	= #{filePath,	jdbcType=VARCHAR},
+		    MOD_DATE	= #{modDate,	jdbcType=VARCHAR},
+		    MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		WHERE
+			BATCH_ID = #{batchId,jdbcType=VARCHAR}
+	</update>
+
+	<insert id="insertUploadDetail">
+		INSERT
+		INTO TOP0404
+		  (
+		    BATCH_ID,
+		    REQUIREMENT_ID,
+		    ROW_INDEX
+		  )
+		  VALUES
+		  (
+		    #{batchId,			jdbcType=VARCHAR},
+		    #{requirementId,	jdbcType=VARCHAR},
+		    #{rowIndex,			jdbcType=NUMERIC}
+		  )
+	</insert>
+
+	<insert id="insertUploadDetailError">
+		INSERT
+		INTO TOP0405
+		  (
+		    BATCH_ID,
+		    INTEGRATION_ID,
+		    ROW_INDEX,
+		    RESULT_CD,
+		    RESULT_MSG
+		  )
+		  VALUES
+		  (
+		    #{batchId,			jdbcType=VARCHAR},
+		    #{integrationId,	jdbcType=VARCHAR},
+		    #{rowIndex,			jdbcType=NUMERIC},
+		    #{resultCd,			jdbcType=VARCHAR},
+		    #{resultMsg,		jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<delete id="deleteUploadSummary" parameterType="java.util.HashMap">
+		DELETE FROM TOP0403 WHERE BATCH_ID IN <foreach item="item" index="index" collection="batchId" open="(" separator="," close=")"> #{item} </foreach>
+	</delete>
+
+	<delete id="deleteUploadDetail"  parameterType="java.util.HashMap">
+		DELETE FROM TOP0404 WHERE BATCH_ID IN <foreach item="item" index="index" collection="batchId" open="(" separator="," close=")"> #{item} </foreach>
+	</delete>
+
+</mapper>

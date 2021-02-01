@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.BrokerMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getBrokerInfo" parameterType="string" resultMap="brokerInfoResult">
+		select
+			* 
+	     from TB_RUT_BRK_BROKER
+	    where BRK_ID = #{id} 	
+	</select>
+	
+	<resultMap type="BrokerInfo" id="brokerInfoResult">
+		<id property="id" 				column="BRK_ID"/>
+		<result property="name" 		column="NM"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+		
+		<association property="listenerGroup" column="LSNR_GRP_ID" select="getListenerGroup"/>
+		
+	</resultMap>
+	
+	<select id="getServiceGroupList"  parameterType="string" resultMap="serviceGroupResult">
+		select
+			 A.GRP_ID
+			,A.NM
+			,A.DESCRIPTION
+			,A.REG_DATE
+			,A.REG_ID
+			,A.MOD_DATE
+			,A.MOD_ID
+	     from TB_RUT_BRK_SERVICE_GRP A, TB_RUT_BRK_SERVICE_GRP_LIST B
+	    where A.GRP_ID = B.GRP_ID
+	      and B.BRK_ID = #{id} 
+	</select>
+	
+  	<select id="getServiceGroup" parameterType="string" resultMap="serviceGroupResult">
+		select
+			* 
+	     from TB_RUT_BRK_SERVICE_GRP
+	    where GRP_ID = #{id} 
+  	</select>
+  
+  
+  	<resultMap id="serviceGroupResult" type="ServiceGroup">
+  		<id property="id" 				column="GRP_ID"/>
+		<result property="name" 		column="NM"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+		<collection property="serviceInfoList" javaType="ArrayList" column="GRP_ID" ofType="ServiceInfo" select="getServiceInfoList"/>
+	</resultMap>
+	
+  		
+	<select id="getServiceInfoList" parameterType="string" resultMap="serviceInfoResult">
+		select
+			 B.SERVICE_ID		as SERVICE_ID					
+			,B.NM				as NM									
+			,B.TR_MODE			as TR_MODE					
+			,B.ADD_TH_CNT		as ADD_TH_CNT					
+			,B.SERVICE_DELAY	as SERVICE_DELAY		
+			,B.EXCEPTION_DELAY	as EXCEPTION_DELAY
+			,B.PERSISTENT_YN    as PERSISTENT_YN	
+			,B.DESCRIPTION		as DESCRIPTION			
+			,B.REG_DATE			as REG_DATE						
+			,B.REG_ID			as REG_ID							
+			,B.MOD_DATE			as MOD_DATE						
+			,B.MOD_ID			as MOD_ID
+			,C.RULESET_ID       as RULESET_ID							
+	     from TB_RUT_BRK_SERVICE_LIST A, TB_RUT_BRK_SERVICE B, TB_RUL_APP C
+	    where A.GRP_ID = #{id} 
+	      and A.SERVICE_ID = B.SERVICE_ID
+	      and B.SERVICE_ID = C.APP_ID
+	      and B.USE_YN = 'Y'
+  	</select>  		
+   	
+   	
+   	<resultMap id="serviceInfoResult" type="ServiceInfo">
+  		<id property="id" column="SERVICE_ID"/>
+		<result property="name" 					column="NM"/>
+		<result property="commit" 					column="TR_MODE"/>
+		<result property="additionalThreadCount" 	column="ADD_TH_CNT"/>
+		<result property="serviceDelay" 			column="SERVICE_DELAY"/>
+		<result property="exceptionDelay" 			column="EXCEPTION_DELAY"/>
+		<result property="isPersistent"				column="PERSISTENT_YN" 	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="description" 				column="DESCRIPTION"/>
+		<result property="regDate" 					column="REG_DATE"/>
+		<result property="regId" 					column="REG_ID"/>
+		<result property="modDate" 					column="MOD_DATE"/>
+		<result property="modId" 					column="MOD_ID"/>
+		<result property="ruleSetId"				column="RULESET_ID"/>
+		<collection property="inputTaskInfoList" javaType="ArrayList" column="SERVICE_ID" ofType="TaskInfo" select="getInputTaskInfoList"/>
+	</resultMap>
+	
+	<select id="getInputTaskInfoList" parameterType="string" resultMap="taskInfoResult">
+		select 
+			 C.TASK_ID			as TASK_ID					
+			,C.NM				as NM							  	
+			,C.TYPE				as TYPE						  	
+			,C.CLASS			as CLASS						
+			,C.ADD_TH_OPT		as ADD_TH_OPT			  	
+			,C.ADD_TH_CNT		as ADD_TH_CNT			  	
+			,C.TR_MODE			as TR_MODE					
+			,C.FAIL_TERMINAL_ID	as FAIL_TERMINAL_ID 	
+			,C.DESCRIPTION		as DESCRIPTION			
+			,C.REG_DATE			as REG_DATE				  	
+			,C.REG_ID			as REG_ID					  	
+			,C.MOD_DATE			as MOD_DATE				  	
+			,C.MOD_ID			as MOD_ID	
+			,D.TERMINAL_ID		as FAIL_TERMINAL_ID
+			,D.NM				as FAIL_TERMINAL_NM
+			,D.DESCRIPTION		as FAIL_TERMINAL_DESCRIPTION			
+			,D.REG_DATE			as FAIL_TERMINAL_REG_DATE				  	
+			,D.REG_ID			as FAIL_TERMINAL_REG_ID					  	
+			,D.MOD_DATE			as FAIL_TERMINAL_MOD_DATE				  	
+			,D.MOD_ID			as FAIL_TERMINAL_MOD_ID	
+		from
+			(select
+				 B.TASK_ID			as TASK_ID					
+				,B.NM				as NM							  	
+				,B.TYPE				as TYPE						  	
+				,B.CLASS			as CLASS						
+				,B.ADD_TH_OPT		as ADD_TH_OPT			  	
+				,B.ADD_TH_CNT		as ADD_TH_CNT			  	
+				,B.TR_MODE			as TR_MODE					
+				,B.FAIL_TERMINAL_ID	as FAIL_TERMINAL_ID 	
+				,B.DESCRIPTION		as DESCRIPTION			
+				,B.REG_DATE			as REG_DATE				  	
+				,B.REG_ID			as REG_ID					  	
+				,B.MOD_DATE			as MOD_DATE				  	
+				,B.MOD_ID			as MOD_ID					  	
+		     from TB_RUT_BRK_TASK_LIST A, TB_RUT_BRK_TASK B
+		    where A.SERVICE_ID = #{id} 
+		      and A.TASK_ID = B.TASK_ID
+		      and A.TYPE = '1') C left outer join  TB_RUT_BRK_FAL_TML D
+	    on C.FAIL_TERMINAL_ID = D.TERMINAL_ID
+  	</select> 
+	
+	<!-- 
+	<select id="getTaskInfoList" parameterType="string" resultMap="taskInfoResult">
+		select 
+			 C.TASK_ID			as TASK_ID					
+			,C.NM				as NM							  	
+			,C.TYPE				as TYPE						  	
+			,C.CLASS			as CLASS						
+			,C.ADD_TH_OPT		as ADD_TH_OPT			  	
+			,C.ADD_TH_CNT		as ADD_TH_CNT			  	
+			,C.TR_MODE			as TR_MODE					
+			,C.FAIL_TERMINAL_ID	as FAIL_TERMINAL_ID 	
+			,C.DESCRIPTION		as DESCRIPTION			
+			,C.REG_DATE			as REG_DATE				  	
+			,C.REG_ID			as REG_ID					  	
+			,C.MOD_DATE			as MOD_DATE				  	
+			,C.MOD_ID			as MOD_ID	
+			,D.TERMINAL_ID		as FAIL_TERMINAL_ID
+			,D.NM				as FAIL_TERMINAL_NM
+			,D.DESCRIPTION		as FAIL_TERMINAL_DESCRIPTION			
+			,D.REG_DATE			as FAIL_TERMINAL_REG_DATE				  	
+			,D.REG_ID			as FAIL_TERMINAL_REG_ID					  	
+			,D.MOD_DATE			as FAIL_TERMINAL_MOD_DATE				  	
+			,D.MOD_ID			as FAIL_TERMINAL_MOD_ID	
+		from
+			(select
+				 B.TASK_ID			as TASK_ID					
+				,B.NM				as NM							  	
+				,B.TYPE				as TYPE						  	
+				,B.CLASS			as CLASS						
+				,B.ADD_TH_OPT		as ADD_TH_OPT			  	
+				,B.ADD_TH_CNT		as ADD_TH_CNT			  	
+				,B.TR_MODE			as TR_MODE					
+				,B.FAIL_TERMINAL_ID	as FAIL_TERMINAL_ID 	
+				,B.DESCRIPTION		as DESCRIPTION			
+				,B.REG_DATE			as REG_DATE				  	
+				,B.REG_ID			as REG_ID					  	
+				,B.MOD_DATE			as MOD_DATE				  	
+				,B.MOD_ID			as MOD_ID					  	
+		     from TB_RUT_BRK_TASK_LIST A, TB_RUT_BRK_TASK B
+		    where A.SERVICE_ID = #{id} 
+		      and A.TASK_ID = B.TASK_ID
+		      and A.TYPE = '0') C left outer join  TB_RUT_BRK_FAL_TML D
+	    on C.FAIL_TERMINAL_ID = D.TERMINAL_ID
+  	</select> 
+	 -->
+	 
+  	<resultMap id="taskInfoResult" type="TaskInfo">
+  		<id property="id" column="TASK_ID"/>
+		<result property="name" 						column="NM"/>
+		<result property="type" 						column="TYPE"/>
+		<result property="taskClass" 					column="CLASS"/>
+		<result property="additionalThreadCountOption" 	column="ADD_TH_OPT"/>
+		<result property="additionalThreadCount" 		column="ADD_TH_CNT"/>
+		<result property="commit" 						column="TR_MODE"/>
+		<result property="description" 					column="DESCRIPTION"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+		
+		<association property="failTerminalInfo" javaType="FailTerminalInfo" column="FAIL_TERMINAL_ID">
+			<id property="id" 				column="FAIL_TERMINAL_ID"/>
+			<result property="name" 		column="FAIL_TERMINAL_NM"/>
+			<result property="description" 	column="FAIL_TERMINAL_DESCRIPTION"/>
+			<result property="regDate" 		column="FAIL_TERMINAL_REG_DATE"/>
+			<result property="regId" 		column="FAIL_TERMINAL_REG_ID"/>
+			<result property="modDate" 		column="FAIL_TERMINAL_MOD_DATE"/>
+			<result property="modId" 		column="FAIL_TERMINAL_MOD_ID"/>
+		</association>
+	</resultMap>
+		
+	<select id="getTaskProperties" parameterType="string" resultMap="taskPropertyResult">
+		select
+			* 
+		  from TB_RUT_BRK_TASK_PROPERTY
+		where TASK_ID = #{id}
+	</select>
+	
+	<resultMap type="map" id="taskPropertyResult">
+		<result property="key" 			column="KEY"/>
+		<result property="value" 		column="VALUE"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+	
+	<select id="getOutputTerminalInfoList" parameterType="string" resultMap="outputTerminalInfoResult">
+		select
+			 B.TERMINAL_ID		as TERMINAL_ID					
+			,B.NM				as NM									
+			,B.DESCRIPTION		as DESCRIPTION			
+			,B.REG_DATE			as REG_DATE						
+			,B.REG_ID			as REG_ID							
+			,B.MOD_DATE			as MOD_DATE						
+			,B.MOD_ID			as MOD_ID							
+	     from TB_RUT_BRK_OUT_TML_LIST A, TB_RUT_BRK_OUT_TML B
+	    where A.TASK_ID = #{id} 
+	      and A.TERMINAL_ID = B.TERMINAL_ID
+  	</select>  		
+   	
+   	<resultMap id="outputTerminalInfoResult" type="OutputTerminalInfo">
+  		<id property="id" column="TERMINAL_ID"/>
+		<result property="name" 					column="NM"/>
+		<result property="description" 				column="DESCRIPTION"/>
+		<result property="regDate" 					column="REG_DATE"/>
+		<result property="regId" 					column="REG_ID"/>
+		<result property="modDate" 					column="MOD_DATE"/>
+		<result property="modId" 					column="MOD_ID"/>
+		<collection property="linkInfoList" javaType="ArrayList" column="TERMINAL_ID" ofType="LinkInfo" select="getLinkInfoList"/>
+	</resultMap>
+	
+	<select id="getLinkInfoList" parameterType="string" resultMap="linkInfoResult">
+		select
+		 	 E.LINK_ID					as LINK_ID					
+			,E.NM						as NM									
+			,E.DESCRIPTION			    as DESCRIPTION			
+			,E.REG_DATE					as REG_DATE						
+			,E.REG_ID					as REG_ID							
+			,E.MOD_DATE					as MOD_DATE						
+			,E.MOD_ID                  	as MOD_ID
+			,E.IN_TERMINAL_ID          	as IN_TERMINAL_ID
+			,E.IN_TERMINAL_NM          	as IN_TERMINAL_NM
+			,E.IN_TERMINAL_DESCRIPTION 	as IN_TERMINAL_DESCRIPTION			
+			,E.IN_TERMINAL_REG_DATE		as IN_TERMINAL_REG_DATE						
+			,E.IN_TERMINAL_REG_ID		as IN_TERMINAL_REG_ID							
+			,E.IN_TERMINAL_MOD_DATE		as IN_TERMINAL_MOD_DATE						
+			,E.IN_TERMINAL_MOD_ID      	as IN_TERMINAL_MOD_ID
+			,E.TASK_ID					as TASK_ID					
+			,E.TASK_NM					as TASK_NM							  	
+			,E.TASK_TYPE				as TASK_TYPE						  	
+			,E.TASK_CLASS				as TASK_CLASS						
+			,E.TASK_ADD_TH_OPT			as TASK_ADD_TH_OPT			  	
+			,E.TASK_ADD_TH_CNT			as TASK_ADD_TH_CNT			  	
+			,E.TASK_TR_MODE				as TASK_TR_MODE					
+			,E.TASK_FAIL_TERMINAL_ID 	as TASK_FAIL_TERMINAL_ID 	
+			,E.TASK_DESCRIPTION			as TASK_DESCRIPTION			
+			,E.TASK_REG_DATE			as TASK_REG_DATE				  	
+			,E.TASK_REG_ID				as TASK_REG_ID					  	
+			,E.TASK_MOD_DATE			as TASK_MOD_DATE				  	
+			,E.TASK_MOD_ID             	as TASK_MOD_ID
+			,F.TERMINAL_ID				as FAIL_TERMINAL_ID
+			,F.NM						as FAIL_TERMINAL_NM
+			,F.DESCRIPTION				as FAIL_TERMINAL_DESCRIPTION			
+			,F.REG_DATE					as FAIL_TERMINAL_REG_DATE				  	
+			,F.REG_ID					as FAIL_TERMINAL_REG_ID					  	
+			,F.MOD_DATE					as FAIL_TERMINAL_MOD_DATE				  	
+			,F.MOD_ID					as FAIL_TERMINAL_MOD_ID	
+		from (
+			select
+				 B.LINK_ID			as LINK_ID					
+				,B.NM				as NM									
+				,B.DESCRIPTION		as DESCRIPTION			
+				,B.REG_DATE			as REG_DATE						
+				,B.REG_ID			as REG_ID							
+				,B.MOD_DATE			as MOD_DATE						
+				,B.MOD_ID			as MOD_ID
+				,C.TERMINAL_ID		as IN_TERMINAL_ID
+				,C.NM				as IN_TERMINAL_NM
+				,C.DESCRIPTION		as IN_TERMINAL_DESCRIPTION			
+				,C.REG_DATE			as IN_TERMINAL_REG_DATE						
+				,C.REG_ID			as IN_TERMINAL_REG_ID							
+				,C.MOD_DATE			as IN_TERMINAL_MOD_DATE						
+				,C.MOD_ID			as IN_TERMINAL_MOD_ID
+				,D.TASK_ID			as TASK_ID					
+				,D.NM				as TASK_NM							  	
+				,D.TYPE				as TASK_TYPE						  	
+				,D.CLASS			as TASK_CLASS						
+				,D.ADD_TH_OPT		as TASK_ADD_TH_OPT			  	
+				,D.ADD_TH_CNT		as TASK_ADD_TH_CNT			  	
+				,D.TR_MODE			as TASK_TR_MODE					
+				,D.FAIL_TERMINAL_ID	as TASK_FAIL_TERMINAL_ID 	
+				,D.DESCRIPTION		as TASK_DESCRIPTION			
+				,D.REG_DATE			as TASK_REG_DATE				  	
+				,D.REG_ID			as TASK_REG_ID					  	
+				,D.MOD_DATE			as TASK_MOD_DATE				  	
+				,D.MOD_ID			as TASK_MOD_ID
+		     from TB_RUT_BRK_TML_LINKS A, TB_RUT_BRK_LINK B, TB_RUT_BRK_IN_TML C, TB_RUT_BRK_TASK D
+		    where A.OUT_TERMINAL_ID = #{id}
+		      and A.LINK_ID = B.LINK_ID
+		      and B.TERMINAL_ID = C.TERMINAL_ID
+		      and C.TASK_ID = D.TASK_ID
+	    ) E left outer join  TB_RUT_BRK_FAL_TML F
+	    on E.TASK_FAIL_TERMINAL_ID = F.TERMINAL_ID
+	
+	</select>
+	
+	<resultMap id="linkInfoResult" type="LinkInfo">
+		<id property="id" column="LINK_ID"/>
+		<result property="name" 					column="NM"/>
+		<result property="description" 				column="DESCRIPTION"/>
+		<result property="regDate" 					column="REG_DATE"/>
+		<result property="regId" 					column="REG_ID"/>
+		<result property="modDate" 					column="MOD_DATE"/>
+		<result property="modId" 					column="MOD_ID"/>
+		<association property="inputTerminalInfo" javaType="InputTerminalInfo" column="TERMINAL_ID">
+			<id property="id" 				column="IN_TERMINAL_ID"/>
+			<result property="name" 		column="IN_TERMINAL_NM"/>
+			<result property="description" 	column="IN_TERMINAL_DESCRIPTION"/>
+			<result property="regDate" 		column="IN_TERMINAL_REG_DATE"/>
+			<result property="regId" 		column="IN_TERMINAL_REG_ID"/>
+			<result property="modDate" 		column="IN_TERMINAL_MOD_DATE"/>
+			<result property="modId" 		column="IN_TERMINAL_MOD_ID"/>
+			<association property="taskInfo" javaType="TaskInfo" column="TASK_ID">
+				
+				<id property="id" column="TASK_ID"/>
+				<result property="name" 						column="TASK_NM"/>
+				<result property="type" 						column="TASK_TYPE"/>
+				<result property="taskClass" 					column="TASK_CLASS"/>
+				<result property="additionalThreadCountOption" 	column="TASK_ADD_TH_OPT"/>
+				<result property="additionalThreadCount" 		column="TASK_ADD_TH_CNT"/>
+				<result property="commit" 						column="TASK_TR_MODE"/>
+				<result property="description" 					column="TASK_DESCRIPTION"/>
+				<result property="regDate" 						column="TASK_REG_DATE"/>
+				<result property="regId" 						column="TASK_REG_ID"/>
+				<result property="modDate" 						column="TASK_MOD_DATE"/>
+				<result property="modId" 						column="TASK_MOD_ID"/>
+				
+				<association property="failTerminalInfo" javaType="FailTerminalInfo" column="FAIL_TERMINAL_ID">
+					<id property="id" 				column="FAIL_TERMINAL_ID"/>
+					<result property="name" 		column="FAIL_TERMINAL_NM"/>
+					<result property="description" 	column="FAIL_TERMINAL_DESCRIPTION"/>
+					<result property="regDate" 		column="FAIL_TERMINAL_REG_DATE"/>
+					<result property="regId" 		column="FAIL_TERMINAL_REG_ID"/>
+					<result property="modDate" 		column="FAIL_TERMINAL_MOD_DATE"/>
+					<result property="modId" 		column="FAIL_TERMINAL_MOD_ID"/>
+				</association>
+				
+			</association>
+		
+		</association>
+	</resultMap>
+	
+	<select id="getFailTerminalLinkInfoList" parameterType="string" resultMap="linkInfoResult">
+		select
+		 	 E.LINK_ID					as LINK_ID					
+			,E.NM						as NM									
+			,E.DESCRIPTION			    as DESCRIPTION			
+			,E.REG_DATE					as REG_DATE						
+			,E.REG_ID					as REG_ID							
+			,E.MOD_DATE					as MOD_DATE						
+			,E.MOD_ID                  	as MOD_ID
+			,E.IN_TERMINAL_ID          	as IN_TERMINAL_ID
+			,E.IN_TERMINAL_NM          	as IN_TERMINAL_NM
+			,E.IN_TERMINAL_DESCRIPTION 	as IN_TERMINAL_DESCRIPTION			
+			,E.IN_TERMINAL_REG_DATE		as IN_TERMINAL_REG_DATE						
+			,E.IN_TERMINAL_REG_ID		as IN_TERMINAL_REG_ID							
+			,E.IN_TERMINAL_MOD_DATE		as IN_TERMINAL_MOD_DATE						
+			,E.IN_TERMINAL_MOD_ID      	as IN_TERMINAL_MOD_ID
+			,E.TASK_ID					as TASK_ID					
+			,E.TASK_NM					as TASK_NM							  	
+			,E.TASK_TYPE				as TASK_TYPE						  	
+			,E.TASK_CLASS				as TASK_CLASS						
+			,E.TASK_ADD_TH_OPT			as TASK_ADD_TH_OPT			  	
+			,E.TASK_ADD_TH_CNT			as TASK_ADD_TH_CNT			  	
+			,E.TASK_TR_MODE				as TASK_TR_MODE					
+			,E.TASK_FAIL_TERMINAL_ID 	as TASK_FAIL_TERMINAL_ID 	
+			,E.TASK_DESCRIPTION			as TASK_DESCRIPTION			
+			,E.TASK_REG_DATE			as TASK_REG_DATE				  	
+			,E.TASK_REG_ID				as TASK_REG_ID					  	
+			,E.TASK_MOD_DATE			as TASK_MOD_DATE				  	
+			,E.TASK_MOD_ID             	as TASK_MOD_ID
+			,F.TERMINAL_ID				as FAIL_TERMINAL_ID
+			,F.NM						as FAIL_TERMINAL_NM
+			,F.DESCRIPTION				as FAIL_TERMINAL_DESCRIPTION			
+			,F.REG_DATE					as FAIL_TERMINAL_REG_DATE				  	
+			,F.REG_ID					as FAIL_TERMINAL_REG_ID					  	
+			,F.MOD_DATE					as FAIL_TERMINAL_MOD_DATE				  	
+			,F.MOD_ID					as FAIL_TERMINAL_MOD_ID	
+		from (
+			select
+				 B.LINK_ID			as LINK_ID					
+				,B.NM				as NM									
+				,B.DESCRIPTION		as DESCRIPTION			
+				,B.REG_DATE			as REG_DATE						
+				,B.REG_ID			as REG_ID							
+				,B.MOD_DATE			as MOD_DATE						
+				,B.MOD_ID			as MOD_ID
+				,C.TERMINAL_ID		as IN_TERMINAL_ID
+				,C.NM				as IN_TERMINAL_NM
+				,C.DESCRIPTION		as IN_TERMINAL_DESCRIPTION			
+				,C.REG_DATE			as IN_TERMINAL_REG_DATE						
+				,C.REG_ID			as IN_TERMINAL_REG_ID							
+				,C.MOD_DATE			as IN_TERMINAL_MOD_DATE						
+				,C.MOD_ID			as IN_TERMINAL_MOD_ID
+				,D.TASK_ID			as TASK_ID					
+				,D.NM				as TASK_NM							  	
+				,D.TYPE				as TASK_TYPE						  	
+				,D.CLASS			as TASK_CLASS						
+				,D.ADD_TH_OPT		as TASK_ADD_TH_OPT			  	
+				,D.ADD_TH_CNT		as TASK_ADD_TH_CNT			  	
+				,D.TR_MODE			as TASK_TR_MODE					
+				,D.FAIL_TERMINAL_ID	as TASK_FAIL_TERMINAL_ID 	
+				,D.DESCRIPTION		as TASK_DESCRIPTION			
+				,D.REG_DATE			as TASK_REG_DATE				  	
+				,D.REG_ID			as TASK_REG_ID					  	
+				,D.MOD_DATE			as TASK_MOD_DATE				  	
+				,D.MOD_ID			as TASK_MOD_ID
+		     from TB_RUT_BRK_TML_LINKS A, TB_RUT_BRK_LINK B, TB_RUT_BRK_IN_TML C, TB_RUT_BRK_TASK D
+		    where A.FAIL_TERMINAL_ID = #{id}
+		      and A.LINK_ID = B.LINK_ID
+		      and B.TERMINAL_ID = C.TERMINAL_ID
+		      and C.TASK_ID = D.TASK_ID
+	    ) E left outer join  TB_RUT_BRK_FAL_TML F
+	    on E.TASK_FAIL_TERMINAL_ID = F.TERMINAL_ID	
+	</select>
+	
+	
+	<!-- Listener -->
+	<select id="getListenerGroup" parameterType="string" resultMap="listenerGroupResult">
+		select
+			* 
+	     from TB_RUT_BRK_LSNR_GRP
+	    where GRP_ID = #{id} 
+  	</select>
+  
+  
+  	<resultMap id="listenerGroupResult" type="ListenerGroup">
+  		<id property="id" 				column="GRP_ID"/>
+		<result property="name" 		column="NM"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+		<collection property="listenerServiceInfoList" javaType="ArrayList" column="GRP_ID" ofType="ListenerServiceInfo" select="getListenerServiceInfoList"/>
+	</resultMap>
+	
+  		
+	<select id="getListenerServiceInfoList" parameterType="string" resultMap="listenerServiceInfoResult">
+		select
+			 B.LSNR_ID			as LSNR_ID					
+			,B.NM				as NM									
+			,B.CLASS			as CLASS					
+			,B.TYPE				as TYPE					
+			,B.DESCRIPTION		as DESCRIPTION			
+			,B.REG_DATE			as REG_DATE						
+			,B.REG_ID			as REG_ID							
+			,B.MOD_DATE			as MOD_DATE						
+			,B.MOD_ID			as MOD_ID							
+	     from TB_RUT_BRK_LSNR_LIST A, TB_RUT_BRK_LSNR B
+	    where A.GRP_ID = #{id} 
+	      and A.LSNR_ID = B.LSNR_ID
+  	</select>  		
+   	
+   	
+   	<resultMap id="listenerServiceInfoResult" type="ListenerServiceInfo">
+  		<id property="id" column="LSNR_ID"/>
+		<result property="name" 					column="NM"/>
+		<result property="listenerServiceClass" 	column="CLASS"/>
+		<result property="type" 					column="TYPE"/>
+		<result property="description" 				column="DESCRIPTION"/>
+		<result property="regDate" 					column="REG_DATE"/>
+		<result property="regId" 					column="REG_ID"/>
+		<result property="modDate" 					column="MOD_DATE"/>
+		<result property="modId" 					column="MOD_ID"/>
+	</resultMap>
+	
+	<select id="getListenerProperties" parameterType="string" resultMap="listenerPropertyResult">
+		select
+			* 
+		  from TB_RUT_BRK_LSNR_PROPERTY
+		where LSNR_ID = #{id}
+	</select>
+	
+	<resultMap type="map" id="listenerPropertyResult">
+		<result property="key" 			column="KEY"/>
+		<result property="value" 		column="VALUE"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+	
+	<insert id="insertListenerGroup" parameterType="ListenerGroup">
+		insert into TB_RUT_BRK_LSNR_GRP (
+			 GRP_ID
+			,NM
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<insert id="insertListenerServiceInfo" parameterType="ListenerServiceInfo">
+		insert into TB_RUT_BRK_LSNR (
+			 LSNR_ID
+			,NM
+			,CLASS
+			,TYPE
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{listenerServiceClass}
+			,#{type}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+
+	<insert id="insertListenerProperty" parameterType="map">
+		insert into TB_RUT_BRK_LSNR_PROPERTY (
+			 LSNR_ID
+			,KEY
+			,VALUE
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{listenerId}
+			,#{key}
+			,#{value}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<insert id="insertBrokerInfo" parameterType="BrokerInfo">
+		insert into TB_RUT_BRK_BROKER (
+			 BRK_ID
+			,NM
+			,LSNR_GRP_ID
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{listenerGroup.id}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<insert id="insertServiceGroup" parameterType="ServiceGroup">
+		insert into TB_RUT_BRK_SERVICE_GRP (
+			 GRP_ID
+			,NM
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+
+	
+
+	<insert id="insertServiceInfo" parameterType="ServiceInfo">
+		insert into TB_RUT_BRK_SERVICE (
+			 SERVICE_ID
+			,NM
+			,TR_MODE
+			,ADD_TH_CNT
+			,SERVICE_DELAY
+			,EXCEPTION_DELAY
+			,PERSISTENT_YN
+			,USE_YN
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{commit}
+			,#{additionalThreadCount}
+			,#{serviceDelay}
+			,#{exceptionDelay}
+			,#{isPersistent, typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,'Y'
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	 
+	<insert id="insertTaskInfo" parameterType="TaskInfo">
+		insert into TB_RUT_BRK_TASK (
+			 TASK_ID
+			,NM
+			,TYPE
+			,CLASS
+			,ADD_TH_OPT
+			,ADD_TH_CNT
+			,TR_MODE
+			,FAIL_TERMINAL_ID  
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID	
+		) values (
+			 #{id}
+			,#{name}
+			,#{type}
+			,#{taskClass}
+			,#{additionalThreadCountOption}
+			,#{additionalThreadCount}
+			,#{commit}
+			,#{failTerminalInfo.id}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	 
+	<insert id="insertTaskProperty" parameterType="map">
+		insert into TB_RUT_BRK_TASK_PROPERTY (
+			 TASK_ID
+			,KEY
+			,VALUE
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{taskId}
+			,#{key}
+			,#{value}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	 
+	 
+	<insert id="insertOutputTerminalInfo" parameterType="OutputTerminalInfo">
+		insert into TB_RUT_BRK_OUT_TML (
+			 TERMINAL_ID
+			,NM
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	
+	<insert id="insertOutputTerminalList" parameterType="map">
+		insert into TB_RUT_BRK_OUT_TML_LIST (
+			 TASK_ID
+			,TERMINAL_ID
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{taskId}
+			,#{terminalId}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<insert id="insertFailTerminalInfo" parameterType="FailTerminalInfo">
+		insert into TB_RUT_BRK_FAL_TML (
+			 TERMINAL_ID
+			,NM
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	 
+	<insert id="insertLinkInfo" parameterType="LinkInfo">
+	
+		insert into TB_RUT_BRK_LINK (
+			 LINK_ID
+			,NM
+			,TERMINAL_ID
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{inputTerminalInfo.id}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	 
+	 
+	<insert id="insertInputTerminalInfo" parameterType="InputTerminalInfo">
+		insert into TB_RUT_BRK_IN_TML (
+			 TERMINAL_ID
+			,NM
+			,TASK_ID
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{taskInfo.id}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<insert id="insertTerminalLinks" parameterType="map">
+		insert into TB_RUT_BRK_TML_LINKS (
+			 LINK_ID
+			,OUT_TERMINAL_ID
+			,FAIL_TERMINAL_ID
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{linkId}
+			,#{outputTerminalId}
+			,#{failTerminalId}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<insert id="insertServiceGroupList" parameterType="map">
+		insert into TB_RUT_BRK_SERVICE_GRP_LIST (
+			 BRK_ID
+			,GRP_ID
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{brokerId}
+			,#{groupId}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+	<select id="existTask" parameterType="string" resultType="String">
+		select
+			TASK_ID 
+	     from TB_RUT_BRK_TASK
+	    where TASK_ID = #{id} 
+  	</select>
+  	
+  	<insert id="insertTaskList" parameterType="map">
+		insert into TB_RUT_BRK_TASK_LIST (
+			 SERVICE_ID
+			,TASK_ID
+			,TYPE
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{serviceId}
+			,#{taskId}
+			,#{type}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+	
+</mapper>

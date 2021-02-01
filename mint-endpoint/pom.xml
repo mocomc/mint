@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>pep.per</groupId>
+		<artifactId>mint</artifactId>
+		<version>3.0.0</version>
+	</parent>
+
+	<artifactId>mint-endpoint</artifactId>
+ 
+	<properties>
+		<javax.servlet.servlet-api-version>2.5</javax.servlet.servlet-api-version>
+		<javax.servlet.jsp-api-version>2.1</javax.servlet.jsp-api-version>
+		<javax.servlet.jstl-version>1.2</javax.servlet.jstl-version>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+	</properties>
+	
+
+	<dependencies>
+
+	
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javax.servlet.servlet-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${javax.servlet.jsp-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${javax.servlet.jstl-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-common</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-database</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

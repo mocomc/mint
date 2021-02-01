@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.BatchApplicationMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertApplicationJob">
+		<selectKey keyProperty="jobId" resultType="string" order="BEFORE" >
+			  select to_char((nvl(max(TO_NUMBER(JOB_ID)),0) +1))  AS jobId
+			  from TBA0001
+		</selectKey>
+		INSERT
+		INTO TBA0001
+		  (
+		    JOB_ID,
+		    GRP_ID,
+		    JOB_NM,
+		    IMPL_CLASS,
+		    TYPE,
+		    TABLE_NM,
+		    COMMENTS
+		  )
+		  VALUES
+		  (
+			#{jobId, jdbcType=VARCHAR},
+			#{grpId, jdbcType=VARCHAR},
+			#{batchJob.jobNm, jdbcType=VARCHAR},
+			#{batchJob.implClass, jdbcType=VARCHAR},
+			'0',
+			#{batchJob.tableNm, jdbcType=VARCHAR},
+			#{batchJob.comments, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<insert id="insertApplicationSchedule">
+		INSERT
+		INTO TBA0003
+		  (
+		    SCHEDULE_ID,
+		    SCHEDULE_NM,
+		    USAGE
+		  )
+		  VALUES
+		  (
+			#{jobId, jdbcType=VARCHAR},
+			#{batchSchedule.scheduleNm, jdbcType=VARCHAR},
+			#{batchSchedule.usage, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<insert id="insertApplicationMapping">
+		INSERT
+		INTO TBA0004
+		  (
+		    JOB_ID,
+		    SCHEDULE_ID,
+		    GRP_ID,
+		    SEQ,
+		    TYPE,
+		    VALUE
+		  )
+		  VALUES
+		  (
+		  	#{jobId, jdbcType=VARCHAR},
+			#{jobId, jdbcType=VARCHAR},
+			#{grpId, jdbcType=VARCHAR},
+			'0',
+			'0',
+			#{value, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<select id="getApplicationList" parameterType="Map" resultMap="batchApplicationResultMap">
+		SELECT T.JOB_ID, T.JOB_NM, T.IMPL_CLASS, T."TYPE", T.TABLE_NM, T.COMMENTS,
+		A.SCHEDULE_ID, A.SEQ, A."TYPE", A.VALUE,	 A.SCHEDULE_NM, A."USAGE"
+		FROM TBA0001 T
+		LEFT OUTER JOIN (
+			SELECT
+			 B.SCHEDULE_ID, B.JOB_ID, B.GRP_ID, B.SEQ, B."TYPE", B.VALUE,
+			 C.SCHEDULE_NM, C."USAGE"
+			FROM
+			TBA0004 B
+			INNER JOIN TBA0003 C ON  B.SCHEDULE_ID =  C.SCHEDULE_ID
+		)  A ON A.JOB_ID =  T.JOB_ID
+	</select>
+
+	<select id="existApplication" parameterType="Map" resultMap="batchApplicationResultMap">
+		SELECT JOB_ID
+		FROM TBA0001
+		WHERE JOB_ID = #{jobId}
+	</select>
+
+
+	<resultMap type="BatchMapping" id="batchApplicationResultMap">
+		<id property="jobId" column="JOB_ID" />
+		<result property="seq" column="SEQ" />
+ 		<result property="type" column="TYPE" />
+		<result property="jobNm" column="JOB_NM" />
+		<result property="implClass" column="IMPL_CLASS" />
+		<result property="tableNm" column="TABLE_NM" />
+		<result property="comments" column="COMMENTS" />
+ 		<result property="usage" column="USAGE" />
+ 		<result property="value" column="VALUE" />
+
+		<association property="batchJob" javaType="BatchJob">
+			<id property="jobId" column="JOB_ID" />
+			<result property="jobNm" column="JOB_NM" />
+			<result property="implClass" column="IMPL_CLASS" />
+			<result property="type" column="TYPE" />
+			<result property="tableNm" column="TABLE_NM" />
+			<result property="comments" column="COMMENTS" />
+		</association>
+
+		<association property="batchSchedule" javaType="BatchSchedule">
+			<id property="scheduleId" column="SCHEDULE_ID" />
+			<result property="scheduleNm" column="SCHEDULE_NM" />
+			<result property="usage" column="USAGE" />
+		</association>
+
+
+	</resultMap>
+
+
+	<update id="updateApplicationJob">
+		update TBA0001
+		   set
+		   		JOB_NM 			= #{batchJob.jobNm, jdbcType=VARCHAR}
+		   		,GRP_ID			= #{grpId, jdbcType=VARCHAR}
+		   		,IMPL_CLASS		= #{batchJob.implClass, jdbcType=VARCHAR}
+		    	,TABLE_NM 		= #{batchJob.tableNm, jdbcType=VARCHAR}
+		    	,COMMENTS		= #{batchJob.comments, jdbcType=VARCHAR}
+		where  JOB_ID = #{jobId}
+	</update>
+
+	<update id="updateApplicationSchedule">
+		update TBA0003
+		   set
+		   		SCHEDULE_NM 	= #{batchSchedule.scheduleNm, jdbcType=VARCHAR}
+		   		,USAGE			= #{batchSchedule.usage, jdbcType=VARCHAR}
+		where  SCHEDULE_ID = #{jobId}
+	</update>
+
+	<update id="updateApplicationMapping">
+		update TBA0004
+		   set
+		   		VALUE 	= #{value, jdbcType=VARCHAR}
+		where  JOB_ID = #{jobId} AND SCHEDULE_ID = #{jobId}
+	</update>
+
+	<delete id="deleteApplication">
+	</delete>
+
+
+
+	<select id="usedApplication" parameterType="Map" resultType="String">
+	</select>
+
+
+	<delete id="deleteApplicationMappingUserRole">
+	</delete>
+
+
+
+</mapper>

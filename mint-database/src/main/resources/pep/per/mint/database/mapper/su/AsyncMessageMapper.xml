@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.AsyncMessageMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+    <insert id="insertWebsocketUser" parameterType="WebsocketUser">
+        insert into TSU1402 (
+            USER_ID,
+            CHANNEL_ID,
+            SESSION_ID,
+            LOGOUT_DATE,
+            LOGIN_YN,
+            LOGIN_DATE
+        ) values (
+            #{userId},
+            #{channelId},
+            #{sessionId},
+            #{logoutDate},
+            #{loginYn},
+            #{loginDate}
+        )        
+    </insert>    
+    
+    <select id="getWebsocketUser" parameterType="map" resultType="WebsocketUser">
+        select 
+            USER_ID     as "userId",
+            CHANNEL_ID  as "channelId",
+            SESSION_ID  as "sessionId",
+            LOGOUT_DATE as "logoutDate",
+            LOGIN_YN    as "loginYn",
+            LOGIN_DATE  as "loginDate"
+         from TSU1402
+        where USER_ID  = #{userId}
+          and CHANNEL_ID = #{channelId}    
+    </select>
+    
+    <update id="updateWebsocketUser" parameterType="WebsocketUser">
+        update TSU1402
+           set             
+            SESSION_ID  = #{sessionId},
+            LOGOUT_DATE = #{logoutDate},
+            LOGIN_YN    = #{loginYn},
+            LOGIN_DATE  = #{loginDate} 
+         where USER_ID  = #{userId}
+           and CHANNEL_ID = #{channelId}
+    </update>
+    
+    
+    
+    <select id="getChannnel" parameterType="string" resultType="WebsocketChannel">
+        select 
+            CHANNEL_ID  as "channelId",
+            CHANNEL_NM  as "channelName",
+            REG_DATE    as "regDate"
+          from TSU1401
+         where CHANNEL_ID = #{channelId}
+    </select>
+    
+    <insert id="insertChannel" parameterType="WebsocketChannel">
+        insert into TSU1401 (
+            CHANNEL_ID,
+            CHANNEL_NM,
+            REG_DATE
+        ) values (
+            #{channelId},
+            #{channelName},
+            #{regDate}
+        )   
+    </insert>
+    
+     
+    <insert id="insertMessage" parameterType="WebsocketMessage">
+        <selectKey keyProperty="messageId" resultType="string" order="BEFORE" >
+            select to_char(to_number(nvl(max(to_number(MESSAGE_ID)),'0')) + 1) from TSU1403
+		</selectKey>
+        insert into TSU1403 (
+            MESSAGE_ID,
+            CHANNEL_ID,
+            SENDER_ID,
+            MESSAGE,
+            REG_DATE
+        ) values (
+            #{messageId},
+            #{channel.channelId},
+            #{sender.userId},
+            #{message, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String},
+            #{regDate}
+        )
+        
+    </insert>  
+    
+    <insert id="insertSendMsgResult" parameterType="map">
+        insert into TSU1405 (
+            MESSAGE_ID,
+            CHANNEL_ID,
+            SENDER_ID,
+            RECEIVER_ID,            
+            SND_YN
+        ) values (
+            #{messageId},
+            #{channelId},
+            #{senderId},
+            #{receiverId},
+            'N'
+        )        
+    </insert>
+    
+    <update id="updateSendMsgResult" parameterType="map">
+        update TSU1405 
+           set
+            SND_YN   = #{sndYn},
+            SND_DATE = #{sndDate},
+            RESULT_CD= #{resultCd},
+            ERROR_MSG= #{errorMsg}
+         where MESSAGE_ID = #{messageId}  
+           and CHANNEL_ID = #{channelId}
+           and SENDER_ID  = #{senderId}
+           and RECEIVER_ID= #{receiverId}        
+    </update>
+        
+        
+    <update id="updateSendMsgProcessing" parameterType="map">
+        update TSU1405 
+           set
+            SND_YN   = 'P',
+            SND_DATE = #{sndDate}
+         where CHANNEL_ID = #{channelId}
+           and SND_YN  = 'N'      
+    </update>
+    
+                    
+    <select id="getMessageList" parameterType="map" resultMap="websocketMessageResultMap">
+        select 
+            a.MESSAGE_ID,            
+            a.MESSAGE,
+            a.REG_DATE,
+            c.CHANNEL_ID,
+            c.CHANNEL_NM,
+            b.SND_YN,
+            b.SND_DATE,
+            b.RESULT_CD,
+            b.ERROR_MSG,            
+            a.SENDER_ID,
+            e.SESSION_ID    as SENDER_SESSION_ID,
+            e.LOGOUT_DATE   as SENDER_LOGOUT_DATE,
+            e.LOGIN_YN      as SENDER_LOGIN_YN,
+            e.LOGIN_DATE    as SENDER_LOGIN_DATE,
+            b.RECEIVER_ID,            
+            d.SESSION_ID    as RECEIVER_SESSION_ID,
+            d.LOGOUT_DATE   as RECEIVER_LOGOUT_DATE,
+            d.LOGIN_YN      as RECEIVER_LOGIN_YN,
+            d.LOGIN_DATE    as RECEIVER_LOGIN_DATE
+          from TSU1403 a
+     inner join TSU1405 b
+            on b.MESSAGE_ID = a.MESSAGE_ID
+           and a.CHANNEL_ID = #{channelId}
+           and b.CHANNEL_ID = a.CHANNEL_ID
+           and b.SND_YN = #{sndYn}
+     inner join TSU1401 c
+            on c.CHANNEL_ID = b.CHANNEL_ID
+     inner join TSU1402 d
+            on d.USER_ID = b.RECEIVER_ID
+           and d.CHANNEL_ID = b.CHANNEL_ID
+     inner join TSU1402 e
+            on e.USER_ID = a.SENDER_ID
+           and e.CHANNEL_ID = a.CHANNEL_ID
+                
+    </select>
+    
+    <resultMap id="websocketMessageResultMap" type="WebsocketMessage">
+        <id property="messageId"    column="MESSAGE_ID"/>
+        <result property="message"  column="MESSAGE"/>
+        <result property="regDate"  column="REG_DATE"/>
+        <association property="channel" javaType="WebsocketChannel">
+            <id property="channelId"        column="CHANNEL_ID"/>
+            <result property="channelName"  column="CHANNEL_NM"/>
+        </association>    
+        <association property="sender" javaType="WebsocketUser">
+            <id property="userId"           column="SENDER_ID"/>
+            <id property="channelId"        column="CHANNEL_ID"/>
+            <result property="sessionId"    column="SENDER_SESSION_ID"/>
+            <result property="logoutDate"   column="SENDER_LOGOUT_DATE"/>
+            <result property="loginDate"    column="SENDER_LOGIN_DATE"/>
+            <result property="loginYn"      column="SENDER_LOGIN_YN"/>     
+        </association>    
+        <collection property="receivers" ofType="WebsocketUser">
+            <id property="userId"           column="RECEIVER_ID"/>
+            <id property="channelId"        column="CHANNEL_ID"/>
+            <result property="sessionId"    column="RECEIVER_SESSION_ID"/>
+            <result property="logoutDate"   column="RECEIVER_LOGOUT_DATE"/>
+            <result property="loginDate"    column="RECEIVER_LOGIN_DATE"/>
+            <result property="loginYn"      column="RECEIVER_LOGIN_YN"/>               
+        </collection>
+    </resultMap>
+    
+</mapper>

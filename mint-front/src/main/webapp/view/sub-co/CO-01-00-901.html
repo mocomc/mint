@@ -1,0 +1,244 @@
+﻿<!--
+	Screen ID : CO-01-00-901
+	Screen NM : 시스템 검색 팝업(검색조건에서 호출되는 팝업)
+	[변경 이력]
+	* 20160218-001
+	  해당 팝업은 메인화면의 '업무별시스템현황' 설정 화면으로 사용되도록 구현되어 있었으나
+	  CO-01-00-001 화면으로 대체가 가능하여 각 화면별 '검색조건' 에서 호출되는 팝업으로 용도 변경
+	* 20170109-001
+	  TreeModel 적용
+-->
+
+<div class="modal inmodal-original" id="CO-01-00-901" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog-original">
+		<div class="modal-content-original animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<div>
+					<h2><lb class="lb-82"></lb> <lb class="lb-351"></lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<input id="popup-tf-searchText" type="text" class="input-tag-12 k-textbox" style="width:80%" placeholder="Search...">
+						<button id="popup-btn-clear" type="button" class="btn btn-default btn-sm btn-outline btn-input-side"><i class="fa fa-check"></i> <lb class="lb-79"></lb></button>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+            <div class="modal-body-original" style="height: 500px;">
+				<div class='full-height-scroll'>
+					<div id="popup-tv-system"></div>
+				</div>
+            </div>
+            <div class="modal-footer-original">
+                <button id="popup-btn-apply" type="button" class="btn btn-primary" ><i class="fa fa-check"></i>  <lb class="lb-358"></lb></button>
+                <button id="popup-btn-close" type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+            </div>
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "CO-01-00-901";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			treeData: null,
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.sub.fn_initCallback', {isPopupScroll:true});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//TODO
+					$.sub.fn_initTree();
+					$.sub.fn_getRootNode();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+
+			fn_initTree : function() {
+				try {
+					$("#popup-tv-system").kendoTreeView({
+						dataTextField: 'text',
+						dataValueField :'id',
+						loadOnDemand: true,
+						collapse: function(e) {
+							mint.ui.treeViewCollapse(e.node);
+						},
+						expand: function(e) {
+							mint.ui.treeViewExpand(e.node);
+						}/* ,
+						dataBound: function(){
+				          	this.expand('.k-item');
+				        } */
+                	});
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTree"});
+				}
+			},//end fn_initTree
+
+
+			//-----------------------------------------------------------------------
+			// Description :: Root Node 검색
+			//-----------------------------------------------------------------------
+			fn_getRootNode : function() {
+				try {
+					var system = new Object();
+					if(mint.common.getScreenParam('orgId') != null){
+						system.organizationId = mint.common.getScreenParam('orgId');
+					}
+
+					mint.callService(system, screenName, 'REST-R02-CO-02-00-012', function(jsonData) {
+						if( ! mint.common.isEmpty(jsonData) ) {
+							$.sub.fn_setRootNode(jsonData);
+							$.sub.treeData = JSON.parse(JSON.stringify(jsonData));
+					 	};
+					}, { errorCall : true, notificationView : false } );
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getRootNode"});
+				}
+			},//end fn_getRootNode()
+
+			//-----------------------------------------------------------------------
+			// Description :: Root Node 검색
+			//-----------------------------------------------------------------------
+			fn_setRootNode : function(jsonData) {
+				try {
+					if( ! mint.common.isEmpty(jsonData) ) {
+						var dataSource  = new kendo.data.HierarchicalDataSource({
+							data:jsonData,
+							schema: {
+								data: "roots",
+								model: {
+									id: "id",
+									hasChildren: function (node) {
+										return mint.ui.treeViewHasChildren(node);
+									},
+									children: "items",
+									text: "text",
+									parent: "parent",
+									group: "group",
+									root: "root"
+								}
+							}
+						});
+						var treeView = $("#popup-tv-system").data("kendoTreeView");
+					    treeView.setDataSource(dataSource);
+					    treeView.expand('.k-item');
+					    //mint.ui.treeViewSort(treeView.dataSource.view());
+				 	};
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setRootNode"});
+				}
+			},//end fn_setRootNode()
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 적용 버튼 클릭 이벤트
+	//-----------------------------------------------------------------------
+	$('#popup-btn-apply').click(function(e) {
+		try {
+			var selectedItem = null;
+
+			var entityTree = $("#popup-tv-system").data("kendoTreeView");
+			var tmpselectedItem = entityTree.dataItem(entityTree.select());
+
+
+			if( mint.common.isEmpty(tmpselectedItem) ) {
+				mint.common.alert('CW00003', 'System');
+				return;
+			}
+
+			selectedItem = new kendo.data.Node({
+				systemId: tmpselectedItem.id,
+				systemCd: tmpselectedItem.objCode,
+				systemNm: tmpselectedItem.objName
+			});
+
+			var callback = mint.common.getScreenParam('callback');
+			var fn_callback = mint.common.fn_callback(callback);
+			if( fn_callback ) {
+				mint.common.setScreenParam('callback', null);
+				fn_callback(selectedItem);
+			} else {
+				mint.common.alert('CE90000');
+				return;
+			}
+
+			$('#CO-01-00-901').modal('hide');
+		} catch( e ) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "popup-btn-apply.click"});
+		}
+
+
+	});
+
+  	//-----------------------------------------------------------------------
+	// Description :: 초기화 버튼 클릭 이벤트
+	//-----------------------------------------------------------------------
+    $('#popup-btn-clear').on("click", function() {
+		$('#popup-tf-searchText').val('');
+		$.sub.fn_setRootNode($.sub.treeData);
+    });
+
+  	//-----------------------------------------------------------------------
+	// Description :: 검색어 필드 입력 이벤트
+	//-----------------------------------------------------------------------
+    $("#popup-tf-searchText").on("keyup", function() {
+        var query = $(this).val().toLowerCase();
+        if( mint.common.isEmpty(query) ) {
+        	mint.ui.treeViewFilter('popup-tv-system', query);
+        } else {
+            setTimeout(function () {
+            	mint.ui.treeViewFilter('popup-tv-system', query);
+            }, 200);
+        }
+    });
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+});//end document.ready()
+</script>

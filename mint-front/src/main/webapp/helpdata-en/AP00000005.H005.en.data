@@ -1,0 +1,13 @@
+AP00000005$$$H005$$$en$$$리소스$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Resource<br></font><font size="2">
+&nbsp; An application linkup protocol method developed by business team<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp;&nbsp; sort )<span style="mso-spacerun: yes;">&nbsp; </span></font><font size="2">DB(TABLE)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">FILE<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; </font></span><font size="2">WS(SOAP)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">HTTP<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">API(library provided by IIB)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Proxy(connect SAP to SAP PO)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">RFC(connect SAP to IIB)</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

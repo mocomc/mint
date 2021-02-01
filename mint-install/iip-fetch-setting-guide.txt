@@ -1,0 +1,152 @@
+======================================================================================================
+- IIP 패치 설정 가이드
+------------------------------------------------------------------------------------------------------
+- SVN:/trunk/mint/mint-install/iip-fetch-setting-guide.txt
+- subject : 패치 설정 가이드
+- author  : whoana
+- begin   : 2019.05
+------------------------------------------------------------------------------------------------------
+본 문서에서는 IIP 패치 프로그램 수행을 위한 절차를 설명한다. 
+mint-3.0.0 기준으로 설명한다.
+
+1.패치 설정
+	1.1.패치 라이프사이클 및 주요 기능
+		1.1.1.라이프사이클
+			1)mint-front  디플로이
+			2)스프링빈 정의 및 인스턴스 생성
+			3)pep.per.mint.fetch.FetchManager.start
+			4)패치 진행
+			5)패치 실패 시 mint-front 실행 실패
+			6)패치 성공 후 mint-front 실행
+
+		1.1.2.주요 기능
+			1.1.2.1.Database 테이블, 인덱스 생성 삭제 수정 등 DDL 처리 기능
+			1.1.2.2.Database 데이터 등록 수정 삭제 기능
+			1.1.2.3.공통코드(TSU0301) 등록 수정 삭제 기능
+			1.1.2.4.포털환경설정(TSU0302) 등록 수정 삭제 기능
+
+ 	1.2.패치 프로젝트 모듈 위치
+ 		mint-fetch
+ 		mint-front 를 통해 함께 배포되므로 패치 모듈 배포는 별도 작업이 필요치 않음.
+ 		다만
+ 		아래 "1.3.패치 리소스 설정" 이 필요함.
+ 		또한
+ 		mint-front 배포 모듈 빌드 옵션에 mint-fetch 프로젝트를 추가 후 빌드를 수행해 준다.
+ 		     mvn clean package -pl mint-common,mint-solution-mi,mint-database,mint-batch,mint-inhouse,mint-websocket,mint-front,mint-fetch
+
+ 	1.3.패치 리소스 설정
+ 		아래 리소스 위치에 패치 리소스를 편집 구성한다.
+ 		1.3.1.패치 리소스 홈
+ 			mint-front/src/main/resources3.0/fetch
+        1.3.2.패치 설정파일
+         	패치 설정파일은 yml 파일 규칙에 따라 작성이 필요함.(yml에 대한 규칙은 구글링)
+        	아래 패치 설정파일을 fetch.yml 로 리네임하고 내용을 편집한다.
+ 		    (* 패치가 불필요할 경우에는 반드시 패치 설정파일을 삭제 또는 백업파일로 리네임 해둔다.)
+ 			{패치리소스 홈}/fetch.yml.bakup
+
+ 			[설정 파일 fetch.yml 내용]
+ 			fetch:
+			 id: f19042901                                  1)패치ID를 설정한다.(배포할때 발번, 형식 "f"+[YYMMDD]+[00])
+			 version: f19042901								2)패치 버전.(패치 내역의 키값으로 이용될 후보키, 현재는 id와 동일 값 부여함.)
+			 author: whoana									3)패치 작업자
+			 comments: 스키마변경,데이터,공통코드,포털환경설정 업데이트 	4)패치 내용
+			 database:
+			  schema:
+			   - fetch-schema01.sql							5)패치 처리할 DDL문 작성 파일, 파일명은 변경 가능
+			   - fetch-schema02.sql							6)추가로 패치 처리할 DDL문 작성 파일, 파일명은 변경 가능(내용이 없다면 파일을 삭제할 것.)
+			  data:
+			   - fetch-data01.sql							7)패치 처리할 DML문 작성 파일, 파일명은 변경 가능
+			   - fetch-data02.sql							8)추가로 패치 처리할 DML문 작성 파일, 파일명은 변경 가능(내용이 없다면 파일을 삭제할 것.)
+			  tsu0301:
+			   fetch-tsu0301.sql							9)공통코드[TSU0301] DML문 작성 파일
+			  tsu0302:
+			   fetch-tsu0302.sql							10)포털환경설정[TSU0302] DML문 작성 파일
+		1.3.3.패치 로그 설정
+			기존 로그 설정파일 logback.xml내에 아래 appender 및 logger 설정을 추가해 준다.
+				<!-- fetch appender -->
+				<appender name="FILE-FETCH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+					<file>${IIP_LOG_HOME}//log//fetch.log</file>
+					<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+						<!-- daily rollover -->
+						<fileNamePattern>${IIP_LOG_HOME}//log//fetch.%i.log</fileNamePattern>
+						<minIndex>1</minIndex>
+						<maxIndex>30</maxIndex>
+					</rollingPolicy>
+					<triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+						<maxFileSize>20MB</maxFileSize>
+					</triggeringPolicy>
+					<encoder>
+						<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%25.25thread] %40.40C{3}:%4.4L - %m%n</Pattern>
+					</encoder>
+				</appender>
+				...
+				...
+				...
+				<!-- fetch logger -->
+				<logger name="pep.per.mint.fetch" additivity="false">
+					<level value="${APP_LOG_LEVEL}" />
+					<appender-ref ref="FILE-FETCH"/>
+				</logger>
+
+			아래는 패치완료 후 로그파일을 기록 예이다.
+			[패치 성공]
+				2019-05-14 14:22:36.600  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  68 - startFetch
+				2019-05-14 14:22:36.600  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  69 - ------------------------------------------------------------------------
+				2019-05-14 14:22:36.664 DEBUG [    localhost-startStop-1]                     p.p.m.f.FetchManager: 131 - fetcProperties:/Users/whoana/DEV/workspace-sts/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/mint-front/WEB-INF/classes/fetch/fetch.yml
+				2019-05-14 14:22:36.721  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 145 - ID :f19042901
+				2019-05-14 14:22:36.721  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 146 - VERSION :f19042901
+				2019-05-14 14:22:36.721  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 147 - 작성자 :whoana
+				2019-05-14 14:22:36.722  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 148 - 내용 :스키마변경, 데이터 변경, 공통코드, 포털환경설정 등을 업데이트
+				2019-05-14 14:22:36.723  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner:  75 - schemaFile 처리 시작:/Users/whoana/DEV/workspace-sts/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/mint-front/WEB-INF/classes/fetch/fetch-schema01.sql
+				2019-05-14 14:22:36.723  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner:  76 - ------------------------------------------------------------------------
+				2019-05-14 14:22:36.729  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner: 203 - DROP TABLE TSU0901
+				2019-05-14 14:22:36.893  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner: 203 - /* 설치(패치)결과 */
+				...
+				...
+				...
+				2019-05-14 14:22:37.342  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner: 144 - tsu0302 처리 완료
+				2019-05-14 14:22:37.440  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  72 - ------------------------------------------------------------------------
+				2019-05-14 14:22:37.441  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  73 - okFetch
+				2019-05-14 14:22:37.441  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  74 - 패치 작업이 정상적으로 처리되었습니다.
+				2019-05-14 14:22:37.441  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  92 - ------------------------------------------------------------------------
+				2019-05-14 14:22:37.441  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  93 - finishFetch (elapsedTime:843 ms)
+				2019-05-14 14:29:57.973  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  67 - ------------------------------------------------------------------------
+
+			[패치가 존재하지 않을 경우]
+				2019-05-23 16:26:48.969  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  69 - ------------------------------------------------------------------------
+				2019-05-23 16:26:48.971  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  70 - startFetch
+				2019-05-23 16:26:48.971  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  71 - ------------------------------------------------------------------------
+				2019-05-23 16:26:49.045  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  78 - 패치 작업이 존재하지 않습니다.
+				2019-05-23 16:26:49.045  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  97 - ------------------------------------------------------------------------
+				2019-05-23 16:26:49.045  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  98 - finishFetch (elapsedTime:76 ms)
+
+			[패치 실패]
+				2019-05-15 13:28:21.886  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  69 - ------------------------------------------------------------------------
+				2019-05-15 13:28:21.887  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  70 - startFetch
+				2019-05-15 13:28:21.887  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  71 - ------------------------------------------------------------------------
+				2019-05-15 13:28:21.993 DEBUG [    localhost-startStop-1]                     p.p.m.f.FetchManager: 145 - fetcProperties:/Users/whoana/DEV/workspace-sts/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/mint-front/WEB-INF/classes/fetch/fetch.yml
+				2019-05-15 13:28:22.063  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 159 - ID:f19042901
+				2019-05-15 13:28:22.063  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 160 - VERSION:f19042901
+				2019-05-15 13:28:22.064  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 161 - 작성자:whoana
+				2019-05-15 13:28:22.068  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager: 162 - 내용:스키마변경, 데이터 변경, 공통코드, 포털환경설정 등을 업데이트
+				2019-05-15 13:28:22.081  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner:  75 - schemaFile 처리 시작:/Users/whoana/DEV/workspace-sts/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/mint-front/WEB-INF/classes/fetch/fetch-schema01.sql
+				2019-05-15 13:28:22.081  INFO [    locㅓㅓㅓㅓㅓㅓㅓㅓㅓjjalhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner:  76 - ------------------------------------------------------------------------
+				2019-05-15 13:28:22.088  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner: 203 - DROP TABLE TSU0901
+				2019-05-15 13:28:22.195  INFO [    localhost-startStop-1]            p.p.m.f.d.FetchDatabaseRunner:  81 - schemaFile 처리 실패:/Users/whoana/DEV/workspace-sts/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/mint-front/WEB-INF/classes/fetch/fetch-schema01.sql
+				2019-05-15 13:28:22.236 ERROR [    localhost-startStop-1]                     p.p.m.f.FetchManager:  90 -
+				java.sql.SQLSyntaxErrorException: ORA-00942: 테이블 또는 뷰가 존재하지 않습니다
+
+				        at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:445)
+				        at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:396)
+				...
+				...
+				...
+				2019-05-15 13:28:22.236 ERROR [    localhost-startStop-1]                     p.p.m.f.FetchManager:  91 - ------------------------------------------------------------------------
+				2019-05-15 13:28:22.236 ERROR [    localhost-startStop-1]                     p.p.m.f.FetchManager:  92 - failFetch
+				2019-05-15 13:28:22.236 ERROR [    localhost-startStop-1]                     p.p.m.f.FetchManager:  93 - 패치에 실패하였습니다.
+				2019-05-15 13:28:22.237 ERROR [    localhost-startStop-1]                     p.p.m.f.FetchManager:  94 - 문제해결을 위해 fetch.log 파일을 제품 개발자에게 전달해 주십시오.
+				2019-05-15 13:28:22.237  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  97 - ------------------------------------------------------------------------
+				2019-05-15 13:28:22.237  INFO [    localhost-startStop-1]                     p.p.m.f.FetchManager:  98 - finishFetch (elapsedTime:351 ms)
+
+
+

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0509JobMapper">
+
+    <!--
+    <cache/>
+    -->
+    
+    
+    <select id="getMatchingCount" resultType="int">
+    	SELECT COUNT(*) AS CNT
+    	FROM TSU0509
+    	WHERE
+    		1 = 1
+		<if test="stMonth != null and stMonth != ''">
+			AND ST_MONTH = #{stMonth}
+		</if>    		
+		<if test="channelId != null and channelId != ''">
+			AND CHANNEL_ID = #{channelId}
+		</if>
+    </select>
+    
+    <!-- 인터페이스 최초 등록 일 조회 -->
+    <select id="getInterfaceBeginRegDate" resultType="String">
+		SELECT SUBSTR(MIN(REG_DATE),0,6) AS REG_DATE FROM TAN0101 
+    </select>
+    
+    <!-- 집게 정보 최초 수집 월 조회 -->
+    <select id="getBeginRegDate" resultType="String">
+		SELECT MIN(ST_MONTH) AS REG_DATE FROM TSU0509 
+    </select>    
+    
+	<sql id="interfaceCountSQL">
+    <![CDATA[
+    	SELECT
+    		  ST_MONTH
+    		, CHANNEL_ID
+    		, ACCUMUL_CNT
+    		, REG_CNT
+    		, DEL_CNT
+    		, CHK_CNT
+    	FROM
+    		(
+				SELECT
+				    YMD AS ST_MONTH
+				  , CHANNEL_ID
+				  , SUM( ACCUMUL_CNT + REG_CNT - DEL_Y_CNT ) OVER( PARTITION BY CHANNEL_ID ORDER BY YMD, CHANNEL_ID ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) ACCUMUL_CNT
+				  , REG_CNT
+				  , DEL_Y_CNT AS DEL_CNT
+				  , DEL_N_CNT AS CHK_CNT
+				FROM
+				  (
+				    SELECT
+				        A.YMD
+				      , A.CHANNEL_ID
+				      , 0 AS ACCUMUL_CNT
+				      , SUM(NVL(B.REG_CNT, 0)) AS REG_CNT
+				      , SUM(NVL(B.DEL_Y_CNT, 0)) AS DEL_Y_CNT
+				      , SUM(NVL(B.DEL_N_CNT, 0)) AS DEL_N_CNT
+				    FROM
+				      (
+				        SELECT 
+				          A.YMD, B.CHANNEL_ID
+				        FROM
+				          (
+				            SELECT 
+				              TO_CHAR(ADD_MONTHS( TO_DATE( #{beginDate}, 'YYYYMM '),( LEVEL - 1 ) ), 'YYYYMM') AS YMD 
+				            FROM DUAL
+				            CONNECT BY ADD_MONTHS( TO_DATE( #{beginDate}, 'YYYYMM' ),( LEVEL - 1 ) ) <= ADD_MONTHS( TO_DATE( TO_CHAR( SYSDATE, 'YYYYMM' ), 'YYYYMM' ), + 0 )
+				          ) A
+				          CROSS JOIN
+				          (
+				            SELECT CHANNEL_ID
+				            FROM TIM0002
+				            WHERE DEL_YN = 'N'
+				          ) B
+				      ) A
+				      LEFT OUTER JOIN
+				      (
+				      
+				        SELECT
+				            A.DATES
+				          , A.CHANNEL_ID
+				          , NVL(B.REG_CNT,0) AS REG_CNT      
+				          , NVL(A.DEL_Y_CNT,0) AS DEL_Y_CNT
+				          , NVL(A.DEL_N_CNT,0) AS DEL_N_CNT
+				        FROM
+				          (
+				            SELECT
+				                SUBSTR(DATES, 1, 6) AS DATES
+				              , CHANNEL_ID
+				              , COUNT(DATES) AS REG_CNT
+				              , SUM(DEL_Y_CNT) AS DEL_Y_CNT
+				              , SUM(DEL_N_CNT) AS DEL_N_CNT
+				            FROM
+				              (
+				                SELECT 
+				                    FROM_SUB_01.DATES
+				                  , FROM_SUB_01.CHANNEL_ID
+				                  , FROM_SUB_01.INTERFACE_ID
+				                  , FROM_SUB_01.DEL_Y_CNT
+				                  , FROM_SUB_01.DEL_N_CNT
+				                  , FROM_SUB_01.DEL_YN          
+				                FROM 
+				                  (
+				                    SELECT
+				                        A.INTERFACE_ID
+				                      , B.CHANNEL_ID
+				                      , B.REG_DATE
+				                      , CASE
+				                          WHEN A.REQUIREMENT_CNT <> A.DEL_Y_CNT THEN
+				                            B.REG_DATE
+				                          ELSE
+				                            ( SELECT MAX(MOD_DATE) AS MOD_DATE FROM TAN0101 WHERE DEL_YN = 'Y' AND INTERFACE_ID = A.INTERFACE_ID )
+				                        END AS DATES
+				                      , CASE WHEN A.REQUIREMENT_CNT =  A.DEL_Y_CNT THEN 1 ELSE 0 END AS DEL_Y_CNT
+				                      , CASE WHEN A.REQUIREMENT_CNT <> A.DEL_Y_CNT THEN 1 ELSE 0 END AS DEL_N_CNT
+				                      , CASE WHEN A.REQUIREMENT_CNT = A.DEL_Y_CNT THEN 'Y' ELSE 'N' END AS DEL_YN
+				                    FROM
+				                      (
+				                        SELECT
+				                            INTERFACE_ID
+				                          , COUNT(REQUIREMENT_ID) AS REQUIREMENT_CNT
+				                          , SUM(DEL_Y_CNT) AS DEL_Y_CNT
+				                          , SUM(DEL_N_CNT) AS DEL_N_CNT
+				                        FROM
+				                          (
+				                            SELECT 
+				                                INTERFACE_ID
+				                              , REQUIREMENT_ID
+				                              , CASE WHEN DEL_YN = 'Y' THEN 1 ELSE 0 END AS DEL_Y_CNT
+				                              , CASE WHEN DEL_YN = 'N' THEN 1 ELSE 0 END AS DEL_N_CNT
+				                            FROM 
+				                              TAN0101 A
+				                            ORDER BY INTERFACE_ID
+				                          )
+				                        GROUP BY INTERFACE_ID
+				                        ORDER BY INTERFACE_ID ASC
+				                      ) A
+				                      INNER JOIN TAN0201 B ON
+				                      A.INTERFACE_ID = B.INTERFACE_ID
+				                  ) FROM_SUB_01
+				              ) FROM_SUB_02
+				            GROUP BY SUBSTR(DATES, 1, 6),CHANNEL_ID
+				            ORDER BY TO_NUMBER(SUBSTR(DATES, 1, 6)) ASC, CHANNEL_ID ASC      
+				          ) A
+				          FULL OUTER JOIN
+				          (
+				            SELECT
+				                SUBSTR(REG_DATE,1,6) AS DATES
+				              , CHANNEL_ID
+				              , COUNT(INTERFACE_ID) AS REG_CNT
+				            FROM TAN0201
+				            GROUP BY SUBSTR(REG_DATE,1,6), CHANNEL_ID
+				            ORDER BY SUBSTR(REG_DATE,1,6) ASC, CHANNEL_ID         
+				          ) B ON
+				            A.DATES = B.DATES AND A.CHANNEL_ID = B.CHANNEL_ID
+				        ORDER BY DATES ASC, CHANNEL_ID ASC  
+				        
+				      ) B ON
+				        A.YMD = B.DATES
+				        AND A.CHANNEL_ID = B.CHANNEL_ID
+				    --WHERE A.CHANNEL_ID ='CN00000002'    
+				    GROUP BY A.YMD, A.CHANNEL_ID
+				    ORDER BY A.YMD, A.CHANNEL_ID
+				  )
+    		)
+    	WHERE
+    		1 = 1
+    		AND ST_MONTH >= #{fromDate}    					
+	 ]]>	  	
+	</sql> 
+    
+    <!-- 집계 대상 조회 -->
+    <select id="getMonthlyInterfaceCountList" resultType="java.util.LinkedHashMap">
+		<include refid="pep.per.mint.batch.mapper.su.TSU0509JobMapper.interfaceCountSQL"/>
+    </select>
+    
+    <!-- 집계 정보 일괄 처리 -->
+    <select id="insertInitTSU0509" resultType="String">
+		INSERT INTO TSU0509( ST_MONTH, CHANNEL_ID, ACCUMUL_CNT, REG_CNT, DEL_CNT, CHK_CNT ) 
+		<include refid="pep.per.mint.batch.mapper.su.TSU0509JobMapper.interfaceCountSQL"/>
+    </select>
+         
+	
+	<insert id="insertTSU0509">
+		INSERT INTO TSU0509 ( ST_MONTH, CHANNEL_ID, ACCUMUL_CNT, REG_CNT, DEL_CNT, CHK_CNT )
+		VALUES 
+		(
+			#{ST_MONTH},
+			#{CHANNEL_ID},
+			#{ACCUMUL_CNT,	jdbcType=INTEGER},
+			#{REG_CNT,		jdbcType=INTEGER},
+			#{DEL_CNT,		jdbcType=INTEGER},
+			#{CHK_CNT,		jdbcType=INTEGER}
+		)
+	</insert>
+
+    <update id="updateTSU0509" >
+		UPDATE TSU0509
+		SET ACCUMUL_CNT	= #{ACCUMUL_CNT},
+			REG_CNT		= #{REG_CNT, jdbcType=INTEGER},
+			DEL_CNT		= #{DEL_CNT, jdbcType=INTEGER},
+			CHK_CNT		= #{CHK_CNT, jdbcType=INTEGER}
+		WHERE
+			ST_MONTH = #{ST_MONTH} 
+			AND CHANNEL_ID = #{CHANNEL_ID}
+    </update>
+
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.ControlMsgMapper">
+
+  	<!--
+  	<cache/>
+  	-->
+ 
+   	<select id="getControlMsgList" parameterType="string" resultMap="controlMsgListResult">
+		select 
+		  a.ID
+		 ,a.TYPE
+		 ,a.CMD
+		 ,a.GROUP_ID
+		 ,a.KEY
+		 ,a.ROUTE_SYSTEM_ID
+		 ,a.REG_ID
+		 ,a.REG_DATE
+		 ,0  as SEQ
+		 ,'' as PROCESS_ID
+		 ,'' as RESULT_CODE
+		 ,'' as RESULT_MSG
+		 ,'' as MOD_DATE
+		 ,'' as MOD_ID
+		from TB_GW_CTRL_MSG a
+		where a.TYPE = #{type}
+		    and a.CMD = #{cmd}
+		    and a.REG_ID = #{regId}
+		    and a.REG_DATE >= to_char(sysdate,'yyyymmdd') || '000000'
+		order by a.REG_DATE DESC		   
+   	</select>
+
+	<select id="getControlMsgResultList" parameterType="string" resultMap="controlMsgListResult">
+		select 
+		  a.ID
+		 ,a.TYPE
+		 ,a.CMD
+		 ,a.GROUP_ID
+		 ,a.KEY
+		 ,a.ROUTE_SYSTEM_ID
+		 ,a.REG_ID
+		 ,a.REG_DATE
+		 ,0  as SEQ
+		 ,'' as PROCESS_ID
+		 ,'' as RESULT_CODE
+		 ,'' as RESULT_MSG
+		 ,'' as MOD_DATE
+		 ,'' as MOD_ID
+		from TB_GW_CTRL_MSG a
+		where a.ID = #{id}
+		union all	
+		select 
+		  a.ID
+		 ,a.TYPE
+		 ,a.CMD
+		 ,a.GROUP_ID
+		 ,a.KEY
+		 ,a.ROUTE_SYSTEM_ID
+		 ,a.REG_ID
+		 ,a.REG_DATE
+		 ,b.SEQ
+		 ,b.PROCESS_ID
+		 ,b.RESULT_CODE
+		 ,b.RESULT_MSG
+		 ,b.MOD_DATE
+		 ,b.MOD_ID
+		from TB_GW_CTRL_MSG a, TB_GW_CTRL_MSG_RESULT b
+		where a.ID = #{id}
+		  and a.ID = b.ID
+		order by SEQ		   
+   	</select>
+   	
+   	   	
+   	<resultMap id="controlMsgListResult" type="ControlMsg" >
+   		<id property="id" 					column="ID"/>
+   		<result property="type" 			column="TYPE"/>
+		<result property="cmd" 				column="CMD"/>
+		<result property="groupId" 			column="GROUP_ID"/>
+		<result property="key" 				column="KEY"/>
+		<result property="routeSystemId" 	column="ROUTE_SYSTEM_ID"/>
+		<result property="seq" 				column="SEQ"/>
+		<result property="processId" 		column="PROCESS_ID"/>
+		<result property="resultCode" 		column="RESULT_CODE"/>
+		<result property="resultMsg" 		column="RESULT_MSG"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_ID"/>
+		<result property="modDate" 			column="MOD_DATE"/>
+		<result property="modId" 			column="MOD_ID"/>
+   	</resultMap>
+   	
+   	<insert id="insertControlMsg" parameterType="ControlMsg">
+   		insert into TB_GW_CTRL_MSG (
+	   		 ID
+			,TYPE
+			,CMD
+			,GROUP_ID
+			,KEY
+			,ROUTE_SYSTEM_ID
+			,REG_ID
+			,REG_DATE
+		) values (
+			 #{id}
+			,#{type}
+			,#{cmd}
+			,#{groupId}
+			,#{key}
+			,#{routeSystemId}
+			,#{regId}
+			,#{regDate}
+		)
+   	</insert>
+   	
+    
+   	<insert id="insertControlMsgResult" parameterType="ControlMsg">
+   		insert into TB_GW_CTRL_MSG_RESULT (
+	   		 ID
+			,SEQ
+			,PROCESS_ID
+			,RESULT_CODE
+			,RESULT_MSG
+			,MOD_ID
+			,MOD_DATE
+		) values (
+			 #{id}
+			,#{seq}
+			,#{processId}
+			,#{resultCode}
+			,#{resultMsg}
+			,#{modId}
+			,#{modDate}
+		)
+   	</insert> 
+   
+</mapper>

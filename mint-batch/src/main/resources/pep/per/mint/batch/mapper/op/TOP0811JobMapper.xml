@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605,
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.TOP0811JobMapper">
+  	<!--
+  	<cache/>
+  	-->
+    <select id="selectNoTaranactionPos" resultType="map">
+    <![CDATA[
+        select
+            a.STORE_CD  as "storeCd",
+            a.POS_NO    as "posNo",
+            (select max(GET_DATE) from TOP0813 where STORE_CD = a.STORE_CD and POS_NO = a.POS_NO) as "recentSaleDate"
+          from (
+            select
+                a.STORE_CD,
+                a.POS_NO
+             from TIM0501 a
+            where not exists (select * from TIM0502 where STORE_CD = a.STORE_CD and POS_NO = a.POS_NO and POS_MONITOR_YN = 'N')
+            minus
+            select
+                STORE_CD,
+                POS_NO
+              from TOP0813
+             where GET_DATE >= #{checkDate} || '00'
+               and GET_DATE <= #{checkDate} || '24'
+             group by STORE_CD, POS_NO
+        ) a
+    ]]>
+    </select>
+
+	<delete id="deleteTOP0811">
+        delete from TOP0811
+	</delete>
+
+	<insert id="insertTOP0811">
+    <![CDATA[
+        insert into TOP0811 (
+            STORE_CD,
+            POS_NO,
+            RECENT_SALE_DATE,
+            REG_DATE,
+            REG_APP
+        ) select
+            a.STORE_CD,
+            a.POS_NO,
+            (select max(GET_DATE) from TOP0813 where STORE_CD = a.STORE_CD and POS_NO = a.POS_NO),
+            #{regDate},
+            #{regApp}
+          from (
+            select
+                a.STORE_CD,
+                a.POS_NO
+             from TIM0501 a
+            where not exists (select * from TIM0502 where STORE_CD = a.STORE_CD and POS_NO = a.POS_NO and POS_MONITOR_YN = 'N')
+            minus
+            select
+                STORE_CD,
+                POS_NO
+              from TOP0813
+             where GET_DATE >= #{checkDate} || '00'
+               and GET_DATE <= #{checkDate} || '24'
+             group by STORE_CD, POS_NO
+            ) a
+    ]]>
+	</insert>
+
+</mapper>

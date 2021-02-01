@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.EventNotiMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="existEventNotiList" parameterType="Map"  resultType="Map">
+		select SERVER_ID FROM TOP0906
+		where SERVER_ID = #{serverId}
+	</select>
+
+	<update id="updateEventNotiList" parameterType="Map">
+		update TOP0906
+		   set   SMS_YN 		= #{smsYn, jdbcType=VARCHAR}
+				,EMAIL_YN  		= #{emailYn, jdbcType=VARCHAR}
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+		where SERVER_ID = #{serverId}
+	</update>
+
+	<insert id="insertEventNotiList" parameterType="Map">
+		INSERT INTO  TOP0906
+		(
+			SERVER_ID,
+			SMS_YN,
+			EMAIL_YN,
+			REG_DATE,
+			REG_USER,
+			DEL_YN
+		) VALUES
+		(
+			#{serverId},
+			#{smsYn, jdbcType=VARCHAR},
+			#{emailYn, jdbcType=VARCHAR},
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR},
+			'N'
+		)
+	</insert>
+
+
+
+	<select id="getEventList" parameterType="Map" resultMap="eventSMSResultMap">
+
+		SELECT SMS_ID, type,
+		cdsu06.NM as typeNm ,
+		contents,
+		snd_req_date
+		FROM TOP0904 a
+		left outer join (select CD, NM from TSU0301 where LEVEL1 = 'SU' and LEVEL2 = '06' and DEL_YN = 'N') cdsu06 on a.TYPE = cdsu06.CD
+		WHERE DEL_YN='N'
+
+		<if test="type != null">
+			AND a.TYPE = #{type}
+		</if>
+
+		AND a.snd_req_date  &gt; #{eventFromDate}||'000000' AND a.snd_req_date &lt; #{eventToDate}||'999999'
+		order by snd_req_date desc
+	</select>
+
+
+
+	<resultMap  type="Sms" id="eventSMSResultMap">
+		<id property="smsId"		column="SMS_ID" />
+		<id property="type"			column="type" />
+		<result property="typeNm" 			column="typeNm"/>
+		<result property="contents" 			column="contents"/>
+		<result property="sndReqDate" 		column="snd_req_date"/>
+	</resultMap>
+
+
+	<select id="getEventNotiList" parameterType="Map" resultType="Map">
+
+	SELECT
+			X.AGENT_ID,
+			X.AGENT_CD,
+			X.AGENT_NM,
+			X.HOSTNAME,
+			X.SERVER_NM,
+			X.SERVER_ID,
+			X.SMS_YN,
+			X.EMAIL_YN
+		FROM (
+		SELECT
+			tim0211.AGENT_ID,
+			tim0211.AGENT_CD,
+			tim0211.AGENT_NM,
+			tim0211.HOSTNAME,
+			tim0211.DEL_YN,
+			tim0201.SERVER_ID,
+			tim0201.SERVER_NM,
+			CASE WHEN  top0906.SMS_YN IS NULL THEN 'Y' ELSE top0906.SMS_YN END AS SMS_YN,
+			CASE WHEN  top0906.EMAIL_YN IS NULL THEN 'Y' ELSE top0906.EMAIL_YN END AS EMAIL_YN
+		FROM
+		TIM0211 tim0211
+		INNER JOIN TIM0201 tim0201 ON tim0201.SERVER_ID = tim0211.SERVER_ID
+		LEFT OUTER JOIN TOP0906 top0906 ON   tim0211.SERVER_ID  = top0906.SERVER_ID
+		WHERE tim0211.DEL_YN='N'
+		) X WHERE 1=1
+		<if test="smsYn != null">
+			AND X.SMS_YN = #{smsYn}
+		</if>
+		<if test="serverId != null">
+			AND X.SERVER_ID = #{serverId}
+		</if>
+	</select>
+
+
+	<select id="getEventNotiQmgrList" parameterType="Map"  resultType="Map">
+		SELECT
+			tim0201.SERVER_ID,
+			qmgr.QMGR_ID,
+			CASE WHEN  top0906.SMS_YN IS NULL THEN 'Y' ELSE top0906.SMS_YN END AS SMS_YN,
+			CASE WHEN  top0906.EMAIL_YN IS NULL THEN 'Y' ELSE top0906.EMAIL_YN END AS EMAIL_YN
+		FROM
+		TIM0201  tim0201
+		LEFT OUTER JOIN TOP0906 top0906 ON   tim0201.SERVER_ID  = top0906.SERVER_ID
+		LEFT OUTER JOIN TIM0206 qmgr ON qmgr.SERVER_ID = tim0201.SERVER_ID
+		WHERE tim0201.DEL_YN='N'
+
+	</select>
+</mapper>

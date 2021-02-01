@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.RuleMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getRuleSet" parameterType="string" resultMap="ruleSetResult">
+		select
+			* 
+	     from TB_RUL_RULESET_MST
+	    where RULESET_ID = #{id} 
+  	</select>
+  
+  	
+  	<resultMap id="ruleSetResult" type="RuleSet">
+  		<id property="id" column="RULESET_ID"/>
+		<result property="name" 		column="RULESET_NM"/>
+		<result property="type" 		column="RULESET_TYPE"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+		<collection property="ruleList" javaType="ArrayList" column="RULESET_ID" ofType="Rule" select="selectRuleList"/>
+	</resultMap>
+   	
+   	<select id="selectRuleList" parameterType="string" resultMap="ruleListResult">
+   		select 
+   			 A.RULE_ID
+   			,A.RULE_SEQ
+   			,A.NEXT_RULESET_ID
+   			,A.NEXT_RULE_ID
+   			,A.NEXT_RULE_SEQ
+   			,B.RULE_TYPE
+   			,B.RULE_NM
+   			,B.DESCRIPTION
+   			,B.REG_DATE
+   			,B.REG_ID
+   			,B.MOD_DATE
+   			,B.MOD_ID 
+   		  from TB_RUL_RULESET_DET A, TB_RUL_RULE B 
+   		 where A.RULESET_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   		 order by A.RULE_SEQ ASC 
+   	</select>
+   	
+   	<resultMap id="ruleListResult" type="Rule" >
+   		<id property="id" 					column="RULE_ID"/>
+   		<result property="type" 			column="RULE_TYPE"/>
+   		<result property="seq" 				column="RULE_SEQ"/>
+   		<result property="name" 			column="RULE_NM"/>
+   		<result property="nextRuleSetId" 	column="NEXT_RULESET_ID"/>
+   		<result property="nextRuleId" 		column="NEXT_RULE_ID"/>
+   		<result property="nextRuleSeq" 		column="NEXT_RULE_SEQ"/>
+   		<result property="description" 		column="DESCRIPTION"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_ID"/>
+		<result property="modDate" 			column="MOD_DATE"/>
+		<result property="modId" 			column="MOD_ID"/>
+   	</resultMap>
+   	 
+   	<select id="getParseSystemFieldRule" parameterType="string" resultMap="parseSystemFieldRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.MSGSET_ID
+   			 ,A.IS_IF_MAP
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_PARSE_SYSTEMFIELD_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID 
+   	</select>
+
+   	<resultMap id="parseSystemFieldRuleResult" type="ParseSystemFieldRule">
+   		<id property="id" 						column="RULE_ID"/>
+   		<result property="messageSetId" 		column="MSGSET_ID"/>
+   		<result property="hasInterfaceMapping"	column="IS_IF_MAP" 	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>
+   	
+   	<select id="getParseRule" parameterType="string" resultMap="parseRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.MSGSET_ID
+   			 ,A.MAP_POINT
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_PARSE_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID 
+   	</select>
+
+   	<resultMap id="parseRuleResult" type="ParseRule">
+   		<id property="id" 						column="RULE_ID"/>
+   		<result property="messageSetId" 		column="MSGSET_ID"/>
+   		<result property="mapPoint"				column="MAP_POINT" 	/>
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>   	
+   	
+   	<select id="getRouteRule" parameterType="string" resultMap="routeRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.SYSTEM_ID
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_ROUTE_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="routeRuleResult" type="RouteRule">
+   		<id property="id" 						column="RULE_ID"/>
+   		<result property="targetSystemId" 		column="SYSTEM_ID"/>
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>
+   	
+   	<select id="getRouteByInterfaceRule" parameterType="string" resultMap="routeByInterfaceRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_ROUTE_IF_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="routeByInterfaceRuleResult" type="RouteByInterfaceRule">
+   		<id property="id" 						column="RULE_ID"/>
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>
+   	
+   	<select id="getRouteByInterfaceInfo" parameterType="string" resultMap="routeByInterfaceMapResult" >
+   		select 
+   			 INTERFACE_ID
+			,SYSTEM_ID
+   		  from TB_RUL_ROUTE_MAP
+   		 where RULE_ID = #{id} 
+   	</select>
+ 	    	
+ 	<resultMap id="routeByInterfaceMapResult" type="RouteInfo">
+   		<id property="id" 				column="INTERFACE_ID"/>
+   		<result property="routeId"	 	column="SYSTEM_ID"/>
+   	</resultMap>
+   	    	
+ 	<select id="getUserDefineRule" parameterType="string" resultMap="UserDefineRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.IMPL_CLASS
+   			 ,A.IMPL_METHOD
+   			 ,A.CLASSPATH_FILE   			    			 
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_USER_DEFINE_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="UserDefineRuleResult" type="UserDefineRule">
+   		<id property="id" 						column="RULE_ID"/>
+   		<result property="implementClass" 		column="IMPL_CLASS"/>
+   		<result property="implementMethod" 		column="IMPL_METHOD"/>
+   		<result property="classPathFile" 		column="CLASSPATH_FILE"/>
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>
+ 	    	
+	<select id="getLogRule" parameterType="string" resultMap="logRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.SAVE_TYPE
+   			 ,A.USE_YN
+   			 ,A.PREFIX 
+   			 ,A.SAVE_PATH
+   			 ,A.EXT
+   			 ,A.FILE_SWITCH_TYPE
+   			 ,A.FILE_SWITCH_TIME
+   			 ,A.FILE_SWITCH_NUM
+   			 ,A.FILE_SWITCH_SIZE   			 
+   			 ,A.DIVISION_TYPE
+   			 ,A.BACKUP_PATH
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_LOG_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID 
+   	</select>
+
+   	<resultMap id="logRuleResult" type="LogRule">
+   		<id property="id" 						column="RULE_ID"/>
+   		<result property="saveType" 			column="SAVE_TYPE" />
+		<result property="usable" 				column="USE_YN" typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="prefix" 				column="PREFIX" />
+		<result property="savePath" 			column="SAVE_PATH" />
+		<result property="ext" 					column="EXT" />
+		<result property="fileSwitchType" 		column="FILE_SWITCH_TYPE" />
+		<result property="fileSwitchTime" 		column="FILE_SWITCH_TIME" />
+		<result property="fileSwitchNum" 		column="FILE_SWITCH_NUM" />
+		<result property="fileSwitchSize" 		column="FILE_SWITCH_SIZE" />
+		<result property="divisionType" 		column="DIVISION_TYPE" />
+		<result property="backupPath" 			column="BACKUP_PATH" />
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap> 	   	
+   	
+   	<select id="getMonitorRule" parameterType="string" resultMap="monitorRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.MON_YN_AP
+   			 ,A.MON_YN_TP
+   			 ,A.MON_YN_IF
+   			 ,A.MON_YN_IF_TP
+   			 ,A.INC_USER_DATA
+   			 ,A.INC_EXCEPTION
+   			 ,A.MON_SAMPLE_TIME
+   			 ,A.BROADCAST_SERVER_ID   			    			    			 
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_MONITOR_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="monitorRuleResult" type="MonitorRule">
+   		<id property="id" 								column="RULE_ID"/>
+   		<result property="monitorApplication" 			column="MON_YN_AP"		typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="monitorApplicationThroughput" column="MON_YN_TP" 		typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="monitorInterface" 			column="MON_YN_IF"  	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="monitorInterfaceThroughput" 	column="MON_YN_IF_TP" 	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="includeUserData" 				column="INC_USER_DATA" 	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="includeException" 			column="INC_EXCEPTION" 	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="monitorSampleTime" 			column="MON_SAMPLE_TIME" />
+		<result property="broadcastServerId" 			column="BROADCAST_SERVER_ID" />
+   		<result property="hasMonitor"	 				column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 						column="RULE_NM"/>
+		<result property="description" 					column="DESCRIPTION"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+   	</resultMap> 	   
+   	
+   	<select id="getSourceSystemRule" parameterType="string" resultMap="sourceSystemRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.SYSTEM_ID
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_SRCSYSTEM_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="sourceSystemRuleResult" type="SourceSystemRule">
+   		<id property="id" 						column="RULE_ID"/>
+		<result property="sourceSystemId" 		column="SYSTEM_ID" />
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap> 
+   	
+   	
+   	<select id="getRecoveryRule" parameterType="string" resultMap="recoveryRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.SESSION_RECOVERY_YN
+   			 ,A.DATA_RECOVERY_YN
+   			 ,A.ORIGIN_REQ_RECOVERY_YN
+   			 ,A.RECOVERY_FIELDSET_ID
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_RUL_RECOVERY_RULE A, TB_RUL_RULE B
+   		 where A.RULE_ID = #{id}
+   		   and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="recoveryRuleResult" type="RecoveryRule">
+   		<id property="id" 						column="RULE_ID"/>
+		<result property="isSessionRecovery" 	column="SESSION_RECOVERY_YN" />
+		<result property="isDataRecovery" 		column="DATA_RECOVERY_YN" />
+		<result property="isReqServerRecovery" 	column="ORIGIN_REQ_RECOVERY_YN" />
+		<result property="fieldSetId" 			column="RECOVERY_FIELDSET_ID" />
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>
+   	
+   	
+   	<select id="getMapRule" parameterType="string" resultMap="mapRuleResult">
+   		select 
+   			  A.RULE_ID
+   			 ,A.MAP_ID
+   			 ,B.MONITOR_YN
+   			 ,B.RULE_NM
+   			 ,B.DESCRIPTION
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		from TB_RUL_MAP_RULE A, TB_RUL_RULE B
+   		where A.RULE_ID = #{id}
+   		     and A.RULE_ID = B.RULE_ID
+   	</select>
+
+   	<resultMap id="mapRuleResult" type="MapRule">
+   		<id property="id" 						column="RULE_ID"/>
+		<result property="mapId" 				column="MAP_ID" />
+   		<result property="hasMonitor"	 		column="MONITOR_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+   		<result property="name" 				column="RULE_NM"/>
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+   	</resultMap>    	
+   	
+   	
+   	
+   	<select id="getRestServiceUriList" resultMap="restServiceUriListResult">
+   		select 
+   			* 
+   		  from TB_RUT_REST_SERVICE 
+   	</select>
+   	
+   	<resultMap id="restServiceUriListResult" type="RestServiceUri" >
+   		<id property="id" 					column="REST_SERVICE_ID"/>
+   		<result property="name" 			column="NM"/>
+   		<result property="uri" 				column="URI"/>
+   		<result property="description" 		column="DESCRIPTION"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_ID"/>
+		<result property="modDate" 			column="MOD_DATE"/>
+		<result property="modId" 			column="MOD_ID"/>
+   	</resultMap>
+   	
+   	
+   	
+   	<insert id="insertRuleSet" parameterType="RuleSet">
+   		insert into TB_RUL_RULESET_MST (
+	   		 RULESET_ID
+			,RULESET_NM
+			,RULESET_TYPE
+			,DESCRIPTION
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+		) values (
+			 #{id}
+			,#{name}
+			,#{type}
+			,#{description}
+			,#{regId}
+			,#{regDate}
+			,#{modId}
+			,#{modDate}
+		)
+   	</insert>
+   	
+   	
+   	<insert id="insertRuleSetDetail" parameterType="RuleSetDetail">
+   		insert into TB_RUL_RULESET_DET (
+	   		 RULESET_ID
+			,RULE_ID
+			,RULE_SEQ
+			,NEXT_RULESET_ID
+			,NEXT_RULE_ID
+			,NEXT_RULE_SEQ
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{ruleSetId}
+			,#{ruleId}
+			,#{seq}
+			,#{nextRuleSetId,jdbcType=VARCHAR}
+			,#{nextRuleId,jdbcType=VARCHAR}
+			,#{nextRuleSeq,jdbcType=NUMERIC}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+   	</insert>
+   	
+   	<insert id="insertRule" parameterType="Rule">
+   		insert into TB_RUL_RULE (
+	   		 RULE_ID
+			,RULE_NM
+			,RULE_TYPE
+			,MONITOR_YN
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{type}
+			,#{hasMonitor,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+   	</insert>
+   	
+   	<insert id="insertParseSystemFieldRule" parameterType="ParseSystemFieldRule">
+   		insert into TB_RUL_PARSE_SYSTEMFIELD_RULE (
+	   		 RULE_ID
+			,MSGSET_ID
+			,IS_IF_MAP
+		) values (
+			 #{id}
+			,#{messageSetId}
+			,#{hasInterfaceMapping,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+		)
+   	</insert>
+   	
+   	<insert id="insertRouteRule" parameterType="RouteRule">
+   		insert into TB_RUL_ROUTE_RULE (
+	   		 RULE_ID
+			,SYSTEM_ID
+		) values (
+			 #{id}
+			,#{targetSystemId}
+		)
+   	</insert>
+   	
+   	<insert id="insertRouteByInterfaceRule" parameterType="RouteByInterfaceRule">
+   		insert into TB_RUL_ROUTE_IF_RULE (
+	   		 RULE_ID
+		) values (
+			 #{id}
+		)
+   	</insert>
+   	
+   	<insert id="insertRouteMap" parameterType="RouteMap">
+   		insert into TB_RUL_ROUTE_MAP (
+	   		 RULE_ID
+			,INTERFACE_ID
+			,SYSTEM_ID
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{ruleId}
+			,#{interfaceId}
+			,#{systemId}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+   	</insert>
+   	
+   	<insert id="insertUserDefineRule" parameterType="UserDefineRule">
+   		insert into TB_RUL_USER_DEFINE_RULE (
+	   		 RULE_ID
+			,IMPL_CLASS
+			,IMPL_METHOD
+			,CLASSPATH_FILE
+		) values (
+			 #{id}
+			,#{implementClass}
+			,#{implementMethod}
+			,#{classPathFile}
+		)
+   	</insert>
+   	
+   	<insert id="insertLogRule" parameterType="LogRule">
+   		insert into TB_RUL_LOG_RULE (
+			 RULE_ID
+			,SAVE_TYPE
+			,USE_YN
+			,PREFIX
+			,SAVE_PATH
+			,EXT
+			,FILE_SWITCH_TYPE
+			,FILE_SWITCH_TIME
+			,FILE_SWITCH_NUM
+			,FILE_SWITCH_SIZE
+			,DIVISION_TYPE
+			,BACKUP_PATH
+		) values (
+			 #{id}
+			,#{saveType}
+			,#{usable,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{prefix}
+			,#{savePath}
+			,#{ext}
+			,#{fileSwitchType}
+			,#{fileSwitchTime}
+			,#{fileSwitchNum}
+			,#{fileSwitchSize}
+			,#{divisionType}
+			,#{backupPath}
+		)
+   	</insert>
+	
+	<insert id="insertMonitorRule" parameterType="MonitorRule">
+   		insert into TB_RUL_MONITOR_RULE (
+	   		 RULE_ID
+			,MON_YN_AP
+			,MON_YN_TP
+			,MON_YN_IF
+			,MON_YN_IF_TP
+			,INC_USER_DATA
+			,INC_EXCEPTION
+			,MON_SAMPLE_TIME
+			,BROADCAST_SERVER_ID
+		) values (
+			 #{id}
+			,#{monitorApplication,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{monitorApplicationThroughput,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{monitorInterface,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{monitorInterfaceThroughput,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{includeUserData,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{includeException,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,#{monitorSampleTime}
+			,#{broadcastServerId}
+		)
+   	</insert>   	
+
+   	<insert id="insertSourceSystemRule" parameterType="SourceSystemRule">
+   		insert into TB_RUL_SRCSYSTEM_RULE (
+	   		 RULE_ID
+			,SYSTEM_ID
+		) values (
+			 #{id}
+			,#{sourceSystemId}
+		)
+   	</insert>
+   	
+   	<!-- 
+   	public void insertRestServiceUri(RestServiceUri uri) throws Exception;
+   	"id":"getControlMsgResultList",
+            "name":"getControlMsgResultList",
+            "uri":"/mint/control/getControlMsgResultList",
+            "description":"getControlMsgResultList",
+            "regDate":"20141006150000",
+            "regId":"mint",
+            "modDate":"20141006150000",
+            "modId":"mint"
+   	 -->
+   	<insert id="insertRestServiceUri" parameterType="RestServiceUri">
+   		insert into TB_RUT_REST_SERVICE (
+   			 REST_SERVICE_ID
+   			,NM
+   			,URI
+   			,DESCRIPTION
+   			,REG_DATE
+   			,REG_ID
+   			,MOD_DATE
+   			,MOD_ID
+   		) values (
+   			 #{id}
+   			,#{name}
+   			,#{uri}
+   			,#{description}
+   			,#{regDate}
+   			,#{regId}
+   			,#{modDate}
+   			,#{modId}
+   		)
+   	</insert>
+   	<delete id="deleteAllRestServiceUri">
+   		delete from TB_RUT_REST_SERVICE
+   	</delete>
+   	<insert id="insertRestServiceUriTest" parameterType="RestServiceUri">
+   		insert into TB_RUT_REST_SERVICE_TEST (
+   			 REST_SERVICE_ID
+   			,NM
+   			,URI
+   			,DESCRIPTION
+   			,REG_DATE
+   			,REG_ID
+   			,MOD_DATE
+   			,MOD_ID
+   		) values (
+   			 #{id}
+   			,#{name}
+   			,#{uri}
+   			,#{description}
+   			,#{regDate}
+   			,#{regId}
+   			,#{modDate}
+   			,#{modId}
+   		)
+   	</insert>
+   	<delete id="deleteAllRestServiceUriTest">
+   		delete from TB_RUT_REST_SERVICE_TEST
+   	</delete>
+   	
+   	<!-- update -->
+   	<update id="updateRuleSet" parameterType="RuleSet">
+   		update TB_RUL_RULESET_MST
+   		   set
+			 RULESET_NM   = #{name}
+			,RULESET_TYPE = #{type}
+			,DESCRIPTION  = #{description}
+			,REG_ID       = #{regId}
+			,REG_DATE     = #{regDate}
+			,MOD_ID       = #{modId}
+			,MOD_DATE     = #{modDate}
+	   	 where RULESET_ID = #{id}
+   	</update>
+   	
+   	
+   	<update id="updateRuleSetDetail" parameterType="RuleSetDetail">
+   		update TB_RUL_RULESET_DET
+   		   set
+			 NEXT_RULESET_ID = #{nextRuleSetId,jdbcType=VARCHAR}
+			,NEXT_RULE_ID    = #{nextRuleId,jdbcType=VARCHAR}
+			,NEXT_RULE_SEQ   = #{nextRuleSeq,jdbcType=NUMERIC}
+			,REG_DATE        = #{regDate}
+			,REG_ID          = #{regId}
+			,MOD_DATE        = #{modDate}
+			,MOD_ID          = #{modId}
+		 where RULESET_ID    = #{ruleSetId}	
+		   and RULE_ID       = #{ruleId}
+		   and RULE_SEQ      = #{seq}	
+   	</update>
+   	
+   	<update id="updateRule" parameterType="Rule">
+   		update TB_RUL_RULE
+   		   set
+			 RULE_NM     = #{name}
+			,MONITOR_YN  = #{hasMonitor,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,DESCRIPTION = #{description}
+			,REG_DATE    = #{regDate}
+			,REG_ID      = #{regId}
+			,MOD_DATE    = #{modDate}
+			,MOD_ID      = #{modId}
+	   	where RULE_ID    = #{id}
+   	</update>
+   	
+   	<update id="updateParseSystemFieldRule" parameterType="ParseSystemFieldRule">
+   		update TB_RUL_PARSE_SYSTEMFIELD_RULE
+   		   set
+			 MSGSET_ID   = #{messageSetId}
+			,IS_IF_MAP   = #{hasInterfaceMapping,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+	   	where RULE_ID    = #{id}
+   	</update>
+   	
+   	<update id="updateRouteRule" parameterType="RouteRule">
+   		update TB_RUL_ROUTE_RULE
+   		   set
+			 SYSTEM_ID   = #{targetSystemId}
+	    where RULE_ID    = #{id}
+   	</update>
+	<!--    	
+   	<update id="updateRouteByInterfaceRule" parameterType="RouteByInterfaceRule">
+   		update TB_RUL_ROUTE_IF_RULE
+	   	where RULE_ID    = #{id}
+   	</update>
+   	 -->
+   	<update id="updateRouteMap" parameterType="RouteMap">
+   		update TB_RUL_ROUTE_MAP
+   		   set
+			 SYSTEM_ID      = #{systemId} 
+			,REG_DATE     	= #{regDate} 
+			,REG_ID       	= #{regId} 
+			,MOD_DATE     	= #{modDate} 
+			,MOD_ID       	= #{modId} 
+		where INTERFACE_ID	= #{interfaceId} 
+	   	  and RULE_ID     	= #{ruleId} 
+   	</update>
+   	
+   	<update id="updateUserDefineRule" parameterType="UserDefineRule">
+   		update TB_RUL_USER_DEFINE_RULE
+   		   set
+			  IMPL_CLASS  		= #{implementClass}
+			 ,IMPL_METHOD  		= #{implementMethod}
+			 ,CLASSPATH_FILE  	= #{classPathFile}
+	   	where RULE_ID    = #{id}
+   	</update>
+   	
+   	<update id="updateLogRule" parameterType="LogRule">
+   		update TB_RUL_LOG_RULE
+   		   set
+			,SAVE_TYPE         = #{saveType}
+			,USE_YN            = #{usable,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,PREFIX            = #{prefix}
+			,SAVE_PATH         = #{savePath}
+			,EXT               = #{ext}
+			,FILE_SWITCH_TYPE  = #{fileSwitchType}
+			,FILE_SWITCH_TIME  = #{fileSwitchTime}
+			,FILE_SWITCH_NUM   = #{fileSwitchNum}
+			,FILE_SWITCH_SIZE  = #{fileSwitchSize}
+			,DIVISION_TYPE     = #{divisionType}
+			,BACKUP_PATH       = #{backupPath}
+		where RULE_ID          = #{id}
+   	</update>
+	
+	<update id="updateMonitorRule" parameterType="MonitorRule">
+   		update TB_RUL_MONITOR_RULE
+   		   set
+			 MON_YN_AP           = #{monitorApplication}
+			,MON_YN_TP           = #{monitorApplicationThroughput}
+			,MON_YN_IF           = #{monitorInterface}
+			,MON_YN_IF_TP        = #{monitorInterfaceThroughput}
+			,INC_USER_DATA       = #{includeUserData}
+			,INC_EXCEPTION       = #{includeException}
+			,MON_SAMPLE_TIME     = #{monitorSampleTime}
+			,BROADCAST_SERVER_ID = #{broadcastServerId}
+	   	where RULE_ID            = #{id}
+   	</update>   	
+
+   	<update id="updateSourceSystemRule" parameterType="SourceSystemRule">
+   		update TB_RUL_SRCSYSTEM_RULE
+   		   set
+			SYSTEM_ID   = #{sourceSystemId}
+	   	where RULE_ID    = #{id}
+   	</update>
+   	
+   	   	
+</mapper>

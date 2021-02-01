@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.co.WidgetMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getWidgetConfig" parameterType="Map" resultMap="getWidgetConfigResult" databaseId="oracle">
+        <include refid="selectWidgetConfig"/>
+    </select>
+
+  	<select id="getWidgetConfig" parameterType="Map" resultMap="getWidgetConfigResult" databaseId="tibero">
+        <include refid="selectWidgetConfig"/>
+    </select>
+
+  	<select id="getWidgetConfig" parameterType="Map" resultMap="getWidgetConfigResult" databaseId="altibase">
+        <include refid="selectWidgetConfig"/>
+    </select>
+
+  	<select id="getWidgetConfig" parameterType="Map" resultMap="getWidgetConfigResultPostgreSQL" databaseId="postgres">
+        <include refid="selectWidgetConfig"/>
+    </select>
+
+    <sql id="selectWidgetConfig">
+		SELECT SERVICE_CD, SCHEDULE, PARAMS
+		FROM TSU0205
+		WHERE
+			1 = 1
+			AND DEL_YN = 'N'
+			<if test="serviceCd != null">
+			AND SERVICE_CD IN <foreach item="item" index="index" collection="serviceCd" open="(" separator="," close=")"> #{item} </foreach>
+			</if>
+    </sql>
+
+	<resultMap id="getWidgetConfigResult" type="java.util.LinkedHashMap">
+		<id property="serviceCd"      column="SERVICE_CD"/>
+		<result property="schedule"   column="SCHEDULE"/>
+		<result property="params"     column="PARAMS" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+	</resultMap>
+
+	<resultMap id="getWidgetConfigResultPostgreSQL" type="java.util.LinkedHashMap">
+		<id property="serviceCd"      column="SERVICE_CD"/>
+		<result property="schedule"   column="SCHEDULE"/>
+		<result property="params"     column="PARAMS"/>
+	</resultMap>
+
+	<!--
+	  WS0040(시스템별 거래현황) 대상시스템조회
+	-->
+	<select id="getWS0040Target" parameterType="Map" resultMap="WS0040TargetResult">
+		SELECT TIM0101.SYSTEM_ID, TIM0101.SYSTEM_CD, TIM0101.SYSTEM_NM
+		FROM
+			TIM0101
+			INNER JOIN TIM0106 ON
+				TIM0106.SYSTEM_ID = TIM0101.SYSTEM_ID
+		WHERE
+			1 = 1
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+			AND TIM0106.DEL_YN = 'N'
+		ORDER BY TIM0106.PRIORITY ASC
+	</select>
+
+	<resultMap id="WS0040TargetResult" type="java.util.LinkedHashMap">
+		<id property="systemId"         column="SYSTEM_ID"/>
+		<result property="systemCd"     column="SYSTEM_CD"/>
+		<result property="systemNm"      column="SYSTEM_NM"/>
+	</resultMap>
+
+	<!--
+	  WS0042(WMQ종합상황판 대상시스템조회)
+	-->
+	<select id="getWS0042Target" parameterType="Map" resultMap="WS0042TargetResult">
+		SELECT DISTINCT TIM0101.SYSTEM_ID, TIM0101.SYSTEM_CD, TIM0101.SYSTEM_NM
+		FROM
+			TIM0101
+			INNER JOIN TIM0604 ON
+				TIM0101.SYSTEM_ID = TIM0604.SYSTEM_ID
+		WHERE
+			1 = 1
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+		ORDER BY TIM0101.SYSTEM_NM ASC
+	</select>
+
+	<resultMap id="WS0042TargetResult" type="java.util.LinkedHashMap">
+		<id property="systemId"         column="SYSTEM_ID"/>
+		<result property="systemCd"     column="SYSTEM_CD"/>
+		<result property="systemNm"      column="SYSTEM_NM"/>
+	</resultMap>
+
+	<select id="getSystemTreeWithModel-OLD" parameterType="Map" resultMap="getSystemTreeWithModelResult">
+		SELECT
+			 A.P_SYS_ID
+			,B.SYSTEM_CD AS P_SYS_CD
+			,B.SYSTEM_NM AS P_SYS_NM
+			,B.GRP_YN    AS P_GRP_YN
+			,B.ROOT_YN   AS P_ROOT_YN
+			,A.C_SYS_ID
+			,C.SYSTEM_CD AS C_SYS_CD
+			,C.SYSTEM_NM AS C_SYS_NM
+			,C.GRP_YN    AS C_GRP_YN
+			,A.DEPTH
+		FROM
+			TIM0102 A
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') B ON A.P_SYS_ID = B.SYSTEM_ID
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') C ON A.C_SYS_ID = C.SYSTEM_ID
+		WHERE
+			1 = 1
+			AND A.DEL_YN = 'N'
+			AND A.DEPTH = 0 AND B.ROOT_YN='Y'
+
+		UNION ALL
+
+		SELECT
+			 A.P_SYS_ID
+			,B.SYSTEM_CD AS P_SYS_CD
+			,B.SYSTEM_NM AS P_SYS_NM
+			,B.GRP_YN    AS P_GRP_YN
+			,B.ROOT_YN   AS P_ROOT_YN
+			,A.C_SYS_ID
+			,C.SYSTEM_CD AS C_SYS_CD
+			,C.SYSTEM_NM AS C_SYS_NM
+			,C.GRP_YN    AS C_GRP_YN
+			,A.DEPTH
+		FROM
+			TIM0102 A
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') B ON A.P_SYS_ID = B.SYSTEM_ID
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') C ON A.C_SYS_ID = C.SYSTEM_ID
+		WHERE
+			1 = 1
+			AND A.DEL_YN = 'N'
+			AND A.DEPTH =  1
+		ORDER BY P_SYS_NM ASC, C_SYS_NM ASC
+	</select>
+
+	<select id="getSystemTreeWithModel" parameterType="Map" resultMap="getSystemTreeWithModelResult">
+		SELECT
+			 TIM0101.SYSTEM_ID AS P_SYS_ID
+			,TIM0101.SYSTEM_CD AS P_SYS_CD
+			,TIM0101.SYSTEM_NM AS P_SYS_NM
+			,'Y'               AS P_GRP_YN
+			,'Y'               AS P_ROOT_YN
+			,TIM0101.SYSTEM_ID AS C_SYS_ID
+			,TIM0101.SYSTEM_CD AS C_SYS_CD
+			,TIM0101.SYSTEM_NM AS C_SYS_NM
+			,TIM0101.GRP_YN    AS C_GRP_YN
+			,0                 AS DEPTH
+		FROM
+			TIM0101
+		WHERE
+			1 = 1
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+		ORDER BY TIM0101.SYSTEM_NM ASC
+	</select>
+
+	<resultMap id="getSystemTreeWithModelResult" type="java.util.LinkedHashMap">
+		<result property="parentId" 	column="P_SYS_ID"/>
+		<result property="parentCd" 	column="P_SYS_CD"/>
+		<result property="parentNm" 	column="P_SYS_NM"/>
+		<result property="parentGrpYn" 	column="P_GRP_YN"/>
+		<result property="parentRootYn" column="P_ROOT_YN"/>
+		<result property="childId"  	column="C_SYS_ID"/>
+		<result property="childCd"  	column="C_SYS_CD"/>
+		<result property="childNm"  	column="C_SYS_NM"/>
+		<result property="childGrpYn" 	column="C_GRP_YN"/>
+		<result property="depth"    	column="DEPTH" javaType="Integer" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<select id="getServerList" parameterType="Map" resultMap="getServerListResult">
+		SELECT
+		  TIM0101.SYSTEM_ID,
+		  TIM0101.SYSTEM_CD,
+		  TIM0101.SYSTEM_NM,
+		  TIM0201.SERVER_ID,
+		  TIM0201.SERVER_CD,
+		  TIM0201.SERVER_NM,
+		  TIM0201.AGENT_ID,
+		  TIM0201.AGENT_CD,
+		  TIM0201.AGENT_NM
+		FROM
+		  TIM0101
+		  INNER JOIN TIM0202 ON
+		    TIM0202.SYSTEM_ID = TIM0101.SYSTEM_ID
+		  INNER JOIN
+		  (
+		    SELECT
+		      TIM0201.SERVER_ID,
+		      TIM0201.SERVER_CD,
+		      TIM0201.SERVER_NM,
+		      TIM0211.AGENT_ID,
+		      TIM0211.AGENT_CD,
+		      TIM0211.AGENT_NM
+		    FROM
+		      TIM0201
+		      INNER JOIN TIM0211 ON
+		      TIM0211.SERVER_ID = TIM0201.SERVER_ID
+		    WHERE
+		      1 = 1
+		      AND TIM0201.DEL_YN = 'N'
+		      AND TIM0211.DEL_YN = 'N'
+		  ) TIM0201 ON
+		    TIM0202.SERVER_ID = TIM0201.SERVER_ID
+		WHERE
+		  1 = 1
+		  AND TIM0101.SYSTEM_ID = #{systemId}
+		ORDER BY TIM0201.SERVER_NM ASC
+	</select>
+
+	<resultMap id="getServerListResult" type="java.util.LinkedHashMap">
+		<result property="systemId" column="SYSTEM_ID"/>
+		<result property="systemCd" column="SYSTEM_CD"/>
+		<result property="systemNm" column="SYSTEM_NM"/>
+		<result property="serverId" column="SERVER_ID"/>
+		<result property="serverCd" column="SERVER_CD"/>
+		<result property="serverNm"	column="SERVER_NM"/>
+		<result property="agentId"  column="AGENT_ID"/>
+		<result property="agentCd"  column="AGENT_CD"/>
+		<result property="agentNm" 	column="AGENT_NM"/>
+	</resultMap>
+
+	<insert id="insertPersonalizationByUser" parameterType="Map">
+		<selectKey keyProperty="saveId" resultType="string" order="BEFORE" >
+			SELECT 'SV' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(SAVE_ID,3)),'0')) + 1),8,'0') FROM TSU0224
+		</selectKey>
+
+		INSERT INTO TSU0224 (
+			 SAVE_ID
+			,BOARD_ID
+			,SUBJECT
+			,CONTENTS
+			,SHARED
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+			 #{saveId}
+			,#{boardId}
+			,#{subject}
+			,#{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{shared}
+			,#{comments}
+			,'N'
+			,#{regDate}
+			,#{regId}
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<update id="updatePersonalizationByUser" parameterType="Map">
+		UPDATE TSU0224
+		SET
+			<if test="subject != null">
+			SUBJECT  = #{subject},
+			</if>
+			<if test="shared != null">
+			SHARED   = #{shared},
+			</if>
+			<if test="contents != null">
+			CONTENTS = #{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String},
+			</if>
+			<if test="comments != null">
+			COMMENTS = #{comments},
+			</if>
+			MOD_DATE = #{regDate},
+			MOD_USER = #{regId}
+		WHERE
+			1 = 1
+			AND SAVE_ID = #{saveId}
+			AND BOARD_ID = #{boardId}
+			AND REG_USER = #{regId}
+	</update>
+
+	<delete id="deletePersonalizationByUser" parameterType="Map">
+		DELETE
+		FROM TSU0224
+		WHERE
+			1 = 1
+			AND SAVE_ID = #{saveId}
+			AND BOARD_ID = #{boardId}
+			AND REG_USER = #{regId}
+	</delete>
+
+	<select id="getPersonalizationByUserList" parameterType="Map" resultMap="getPersonalizationByUserResult">
+		SELECT
+			 SAVE_ID
+			,BOARD_ID
+			,SUBJECT
+			,SHARED
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		FROM TSU0224
+		WHERE
+			1 = 1
+			AND BOARD_ID = #{boardId}
+			AND REG_USER = #{regId}
+		ORDER BY SAVE_ID DESC
+	</select>
+
+	<select id="getPersonalizationBySharedList" parameterType="Map" resultMap="getPersonalizationByUserResult">
+		SELECT
+			 SAVE_ID
+			,BOARD_ID
+			,SUBJECT
+			,SHARED
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		FROM TSU0224
+		WHERE
+			1 = 1
+			AND BOARD_ID = #{boardId}
+			AND REG_USER != #{regId}
+			AND SHARED = 'Y'
+		ORDER BY SAVE_ID DESC
+	</select>
+
+	<select id="getPersonalization" parameterType="Map" resultMap="getPersonalizationByUserResult">
+		SELECT
+			 SAVE_ID
+			,BOARD_ID
+			,SUBJECT
+			,CONTENTS
+			,SHARED
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		FROM TSU0224
+		WHERE
+			1 = 1
+			AND SAVE_ID = #{saveId}
+	</select>
+
+	<resultMap id="getPersonalizationByUserResult" type="java.util.LinkedHashMap">
+		<result property="saveId"   column="SAVE_ID"/>
+		<result property="boardId"  column="BOARD_ID"/>
+		<result property="subject"  column="SUBJECT"/>
+		<result property="contents" column="CONTENTS" jdbcType="CLOB" javaType="String" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
+		<result property="shared"   column="SHARED"/>
+		<result property="comments"	column="COMMENTS"/>
+		<result property="delYn"    column="DEL_YN"/>
+		<result property="regDate"  column="REG_DATE"/>
+		<result property="regUser" 	column="REG_USER"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modUser" 	column="MOD_USER"/>
+	</resultMap>
+</mapper>

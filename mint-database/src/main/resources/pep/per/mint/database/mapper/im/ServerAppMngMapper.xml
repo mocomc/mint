@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.ServerAppMngMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<select id="getAppInfoList" parameterType="Map" resultMap="appInfoResultMap">
+		    SELECT
+		           b.SERVER_ID
+		          ,b.SERVER_NM
+		          ,a.APP_ID
+		     	  ,a.APP_NM
+		     	  ,a.HOME
+		     	  ,a.VERSION
+		     	  ,a.REG_DATE
+		     	  ,a.REG_USER
+		     	  ,a.MOD_DATE
+		     	  ,a.MOD_USER
+		      FROM TIM0603 a
+		INNER JOIN TIM0201 b
+		        ON b.SERVER_ID = a.SERVER_ID
+		<if test="serverId != null and (serverId neq ''.toString())">
+               AND a.SERVER_ID = #{serverId}
+        </if>
+        <if test="applicationNm != null">
+               AND a.APP_NM like '%'||#{applicationNm}||'%'
+        </if>
+		ORDER BY a.MOD_DATE desc, b.SERVER_NM, a.APP_NM
+	</select>
+
+	<resultMap type="ApplicationInfo" id="appInfoResultMap">
+		<id property="serverId" 			column="SERVER_ID"/>
+		<id property="applicationId" 		column="APP_ID"/>
+		<result property="serverNm" 		column="SERVER_NM"/>
+		<result property="applicationNm" 	column="APP_NM"/>
+		<result property="home" 			column="HOME"/>
+		<result property="version"			column="VERSION"/>
+		<result property="regDate"			column="REG_DATE"/>
+		<result property="regId"			column="REG_USER"/>
+		<result property="modDate"			column="MOD_DATE"/>
+		<result property="modId"			column="MOD_USER"/>
+	</resultMap>
+
+	<update id="updateAppInfo">
+		update TIM0603
+		   set VERSION = #{version, jdbcType=VARCHAR},
+			   MOD_DATE= #{modDate, jdbcType=VARCHAR},
+			   MOD_USER= #{modId, jdbcType=VARCHAR}
+		 where SERVER_ID = #{serverId}
+		   and APP_NM = #{applicationNm}
+		   and HOME   = #{home}
+	</update>
+
+
+
+
+	<insert id="insertAppInfo">
+		<selectKey keyProperty="applicationId" resultType="string" order="BEFORE" >
+			SELECT TO_CHAR(NVL(max(TO_NUMBER(APP_ID)),0) + 1) FROM TIM0603
+		</selectKey>
+
+		insert into TIM0603 (
+			SERVER_ID,
+			APP_ID,
+			APP_NM,
+			HOME,
+			VERSION,
+			TYPE,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) values (
+			#{serverId	   , jdbcType=VARCHAR},
+			#{applicationId, jdbcType=VARCHAR},
+			#{applicationNm, jdbcType=VARCHAR},
+			#{home		   , jdbcType=VARCHAR},
+			#{version      , jdbcType=VARCHAR},
+			#{type		   , jdbcType=VARCHAR},
+			'N'            ,
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+</mapper>

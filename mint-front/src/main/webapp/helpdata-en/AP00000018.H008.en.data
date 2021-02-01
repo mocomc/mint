@@ -1,0 +1,9 @@
+AP00000018$$$H008$$$en$$$디스크 사용현황$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Disk usage state <br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp;&nbsp; Install/collect
+Agent for each server and show disk usage information every 1 minute<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">It shows only top 5 and you need to consult
+with the person in charge of Infra when usage percent is over 80 percent</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

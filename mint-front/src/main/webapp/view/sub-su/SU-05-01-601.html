@@ -1,0 +1,348 @@
+﻿﻿<!--
+	Screen ID : SU-05-01-601
+	Screen NM : SHL 데이터일괄등록.
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-659">일괄등록 신한생명</lb></h2>
+	    <ol class="breadcrumb">
+	        <li><lb class="lb-8"></lb></li>
+	        <li class="active"><strong><lb class="lb-659">일괄등록</lb></strong></li>
+	    </ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" ></div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						<span><lb class="lb-660">일괄등록 목록</lb></span>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+						    <i class="fa fa-chevron-up"></i>
+						</a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-excelTemplateDownLoad"><i class="fa fa-file-excel-o"></i> <lb class="lb-670">Excel-Template-Download</lb></a>
+						<a class="btn btn-w-m btn-primary btn-excelUpload-save"><i class="fa fa-arrow-up"></i> <lb class="lb-671"></lb></a>
+					</div>
+					<div class="ibox-content" style="height: 300px;">
+						<div class="col-sm-8">
+							<div class="form-group">
+                        		<span class="lable_tag" style="width:17%"><lb class="lb-3033"></lb></span>
+								<input name="excelFileUpload" id="excelFileUpload" type="file" accept=".xls, .xlsx"/>
+							</div>
+						</div>
+						<hr class="hr-space">
+						<hr class="hr-space">
+						<div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="lable_tag"><lb class="lb-11"></lb><lb class="lb-542"></lb></span>
+								<span style="padding: 0px 0px 0px 0px;">
+					            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+										<span class="radio-primary" style="padding-right: 10px;">
+											<input id="uploadType-all" type="radio" name="uploadType" value="0" checked="checked"><label for="uploadType-all"><lb class="lb-89">전체</lb></label>
+										</span>
+		                                <span class="radio-info" style="padding:0px 20px;">
+		                                	<input id="uploadType-basic" type="radio" name="uploadType" value="2"><label for="uploadType-basic"><lb class="lb-152">기본정보</lb></label>
+		                                </span>
+		                                <span class="radio-success" style="padding:0px 20px;">
+		                                	<input id="uploadType-interface" type="radio" name="uploadType" value="1"><label for="uploadType-interface"><lb class="lb-395"></lb><lb class="lb-429"></lb></label>
+		                                </span>
+                                	</div>
+                                </span>
+                            </div>
+                        </div>
+						<hr class="hr-space">
+						<hr class="hr-space">
+						<div class="col-sm-4 uploadDivision" style="display:none;">
+							<div class="form-group">
+                                <span class="lable_tag"><lb class="lb-11"></lb><lb class="lb-494"></span>
+								<span style="padding: 0px 0px 0px 0px;">
+					            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+										<span class="radio-info" style="padding-right: 10px;">
+											<input id="uploadDivision-re" type="radio" name="uploadDivision" value="0" checked="checked"><label for="uploadDivision-re"><lb class="lb-9999">재등록</lb></label>
+										</span>
+		                                <span class="radio-warning" style="padding:0px 20px;">
+		                                	<input id="uploadDivision-add" type="radio" name="uploadDivision" value="1"><label for="uploadDivision-add"><lb class="lb-370">추가</lb><lb class="lb-11">등록</lb></label>
+		                                </span>
+                                	</div>
+                                </span>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function() {
+	    //=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main/main_detail, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "SU-05-01-601";
+
+	    $.extend({
+	        main : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+				checkedBatchId : '',
+
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.checkedBatchId = new Map();
+						$.main.fn_initFileUpload();
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				fn_initFileUpload : function() {
+					try {
+						kendo.ui.Upload.fn._supportsDrop = function() { return false; }
+				 		$("#excelFileUpload").kendoUpload({
+				 			  files: []
+							, multiple: false
+				 			, async: {
+				 				saveUrl: "/mint/ut/excel/upload/site/shl/basedata",
+				 				autoUpload: false
+				 			}
+				 			, localization: {
+				 				select: mint.label.getLabel('lb-220')
+				 			}
+
+				 			, select : function(e) {
+				 				var selectFile = e.files[0];
+				 				if( ! mint.common.isEmpty(selectFile) && selectFile.extension.toLowerCase() != '.xlsx' ) {
+				 					mint.common.alert('확장자가 .xlsx 파일만 업로드 할 수 있습니다.');
+				 					e.preventDefault();
+				 				}
+
+	                    		if( mint.common.invalidFileName(selectFile.name) ) {
+	                    			mint.common.alert('CW00015', selectFile.name);
+	                    			e.preventDefault();
+	                    		}
+
+				 	            // custom button 확용
+				 	            setTimeout(function() {
+				 	            	$.main.kendoUploadButton = $(".k-upload-selected");
+				 	            	$.main.kendoUploadButton.hide();
+				 	            }, 1);
+				 			}
+				 			, upload: function(e) {
+				 				{
+				 					var uploadType = $("input[type=radio][name='uploadType']:checked").val();
+				 					var uploadDivision = $("input[type=radio][name='uploadDivision']:checked").val();
+				 					e.data = {item:uploadType, item2:uploadDivision, userId:mint.session.getUserId()};
+				 				}
+				 			}
+
+				 			, progress: function(e) {
+				 				mint.waitingLoad(true);
+				 			}
+				 			, cancel: function(e) {
+				 			}
+				 			, error: function(e) {
+								$.main.fn_uploadCheck(e.XMLHttpRequest)
+				 			}
+				 			, success: function(e) {
+								$.main.fn_uploadCheck(e.XMLHttpRequest)
+				 			}
+				 			, complete: function(e) {
+				 				mint.waitingLoad(false);
+				 			}
+
+				 			, remove: function onRemove(e) {
+				 				var files = e.files;
+
+				 		       	for(var i=0; i<$('#excelFileUpload').data("kendoUpload").options.files.length; i++) {
+				 		   			if(files[0].uid == $('#file').data("kendoUpload").options.files[i].uid) {
+				 		   				$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+				 		   				$('#excelFileUpload').data("kendoUpload").options.files.splice(i, 1);
+				 		   			    e.preventDefault();
+				 		   			}
+				 		   		}
+				 		    }
+
+
+				 		});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initFileUpload"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Panel#01 초기화
+				//-----------------------------------------------------------------------
+				fn_uploadCheck : function( xhr ) {
+					try {
+						var httpStatus = xhr.status;
+						if( httpStatus == 200 ) {
+							//-----------------------------------------------------------------------
+							// Response ComMessage
+							//-----------------------------------------------------------------------
+							var msg = JSON.parse(xhr.responseText);
+							if( msg.errorCd == 0 ) {
+
+								mint.common.alert('CI00105');
+								$('#AN-01-00-008-POPUP-01').modal('hide');
+
+							} else {
+								$('#AN-01-00-008-POPUP-01').modal('hide');
+								mint.common.errorDialog('Service', msg.errorCd, msg.errorMsg, msg.errorDetail);
+							}
+
+						} else {
+							switch( httpStatus ) {
+								case 12029 : //server shutdown
+									alertMsg = mint.message.getMessage('CE12029', null);
+									break;
+								case 404 :
+									alertMsg = mint.message.getMessage('CE10404', null);
+									break;
+								default :
+									alertMsg = mint.message.getMessage('CE10000', httpStatus);
+									break;
+							}
+							mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_uploadCheck"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid DataSource return
+				//-----------------------------------------------------------------------
+				fn_getGridDataSource : function(gridId, jsonData) {
+					try {
+						var dataSource = null;
+							dataSource = new kendo.data.DataSource({
+								  data: []
+							    , page:1
+							    , pageSize: mint.ui.getPageSizesM({'currentPage' : true})
+							    //, schema: {
+							    //}
+							});
+
+						return dataSource;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridDataSource"});
+					}
+				},//end fn_getGridDataSource()
+
+				//-----------------------------------------------------------------------
+				// Description :: excel upload
+				//-----------------------------------------------------------------------
+				fn_excelUpload : function() {
+					try {
+						var fileLen = $("#excelFileUpload").data("kendoUpload").wrapper.find(".k-file").length;
+						if( fileLen > 0 ) {
+							var uploadDivision = $("input[type=radio][name='uploadDivision']:checked").val();
+							if(uploadDivision == "1") {
+								if(mint.common.confirm('인터페이스정보를 추가등록 하시겠습니까?')) {
+									$.main.kendoUploadButton.click();
+								}
+							} else {
+								if(mint.common.confirm('기존데이터는 삭제됩니다. 진행하시겠습니까?')) {
+									$.main.kendoUploadButton.click();
+								}
+							}
+						} else {
+							mint.common.alert('파일이 첨부되지 않았습니다.');
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_excelUpload"});
+					}
+				}
+	        }
+	    });
+
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+		$(".btn-excelUpload-save").click(function(e) {
+			try {
+				$.main.fn_excelUpload();
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelUpload-save.click"});
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: interface delete
+		//-----------------------------------------------------------------------
+		$(".btn-excelTemplateDownLoad").click(function(e) {
+			try {
+				$(location).attr("href", encodeURI("/mint/ut/excel/download/template?filename=[IIP]DE_000_UPLOAD_TEMPLATE.xlsx") );
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelTemplateDownLoad.click"});
+			}
+		});
+
+		$("input[name=uploadType]").change(function(){
+			var uploadType = $(this).val();
+			if(uploadType == "1") {
+				$('.uploadDivision').show();
+			} else {
+				$('.uploadDivision').hide();
+				$('input[name="uploadDivision"][value="0"]').prop("checked", true);
+			}
+		});
+
+
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================
+	    $.main.fn_init();
+	    mint.label.attachLabel(null);
+	});
+</script>
+
+<style>
+	/* 첨부파일 - style customize set */
+	.k-filename {
+		max-width: 60% !important;
+	}
+	.k-upload {
+		width: 60% !important;
+		float: left;
+		margin-right:10px;
+	}
+</style>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다.
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605,
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.InterfaceLogErrorNHJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<select id="selectErrorTrLog" resultMap="TrLogMap">
+	<![CDATA[
+		SELECT
+			/*+ INDEX_SS(A MASTERLOG_PK) */
+			A.MSG_HOST_ID
+			, A.MSG_GROUP_ID
+			, A.MSG_INTF_ID,
+			, Count(A.MSG_HOST_ID ) AS TOTAL_CNT
+		    SUM(CASE WHEN A.MSG_STATUS='99' THEN 1 ELSE 0 END) AS ERROR_CNT
+		FROM MASTERLOG A
+		WHERE A.MSG_DATETIME > #{fromDate}
+		AND A.MSG_DATETIME <= #{toDate}
+		AND MSG_DT BETWEEN TO_DATE(SUBSTR(#{fromDate}, 1, 8), 'YYYYMMDD') - 1
+		AND TO_DATE(SUBSTR(#{fromDate}, 1, 8), 'YYYYMMDD') + 1
+		GROUP BY A.MSG_HOST_ID, A.MSG_GROUP_ID, A.MSG_INTF_ID
+	]]>
+	</select>
+
+	<resultMap type="java.util.HashMap" id="TrLogMap">
+		<result javaType="java.lang.String" column="MSG_HOST_ID" property="hostId" />
+		<result javaType="java.lang.String" column="MSG_GROUP_ID" property="groupId" />
+		<result javaType="java.lang.String" column="MSG_INTF_ID" property="intfId" />
+		<result javaType="java.lang.Integer" column="TOTAL_CNT" property="totalCnt" />
+		<result javaType="java.lang.Integer" column="ERROR_CNT" property="errCnt" />
+	</resultMap>
+
+	<select id="selectSendUser" resultMap="SendUserMap">
+	<![CDATA[
+		 SELECT CELL_PHONE  FROM TSU0101 WHERE DEL_YN='N' AND ROLE_ID='UR00000001' AND CELL_PHONE IS NOT NULL
+	]]>
+	</select>
+
+	<resultMap type="java.util.HashMap" id="SendUserMap">
+		<result javaType="java.lang.String" column="CELL_PHONE" property="hpNum" />
+	</resultMap>
+
+
+<!--
+	<insert id="insertInterfaceErrLogSms">
+
+	<selectKey keyProperty="smsId" resultType="string" order="BEFORE" >
+			  select to_char(nvl(max(to_number(SMS_ID)) + 1,1)) from TOP0904
+		</selectKey>
+		insert into TOP0904 (
+			 SMS_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,RETRY
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{smsId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=VARCHAR}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{retry, 		jdbcType=NUMERIC}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+	</insert>
+ -->
+
+ 	<insert id="insertInterfaceErrLogSms">
+
+		insert into TOP0904 (
+			 SMS_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,RETRY
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{smsId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=VARCHAR}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{retry, 		jdbcType=NUMERIC}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

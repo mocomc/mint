@@ -1,0 +1,25 @@
+{
+	"objectType":"SiteInfo",
+		"applicationInfo":[],
+		"defInterfaceCallPath":"{IIPAGENT_HOME}/script/interfaceCall.sh",
+		"siteHomeInfo":[
+			{
+				"objectType":"SiteHomeInfo",
+				"systemCd":"ABABCM",
+				"home":"",
+				"binaryPath":"{IIPAGENT_HOME}/script/ABABCM.sh"
+			},
+			{
+				"objectType":"SiteHomeInfo",
+				"systemCd":"CDCDGG",
+				"home":"",
+				"binaryPath":"{IIPAGENT_HOME}/script/CDCDGG.sh"
+			},
+			{
+				"objectType":"SiteHomeInfo",
+				"systemCd":"WJWJCM",
+				"home":"",
+				"binaryPath":"{IIPAGENT_HOME}/script/WJWJCM.sh"
+			}
+		]
+}

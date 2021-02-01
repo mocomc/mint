@@ -1,0 +1,16 @@
+======================================================================================================
+- TROUBLESHOOTING
+------------------------------------------------------------------------------------------------------
+- bug-id format  : iipagent-bug-yyyymmdd-000
+- author  : whoana
+- begin   : 2019.01
+------------------------------------------------------------------------------------------------------
+
+iipagent-bug-20190118-001
+	내용 :
+		jdk1.7.0_25 에서 memory 체크가 정상적으로 되지 않는 문제.
+		com.sun.management.OperatingSystemMXBean 의 getTotalPhysicalMemorySize, getFreePhysicalMemorySize 메소드를 통해 얻은 값이 정확하지 않음.
+	fix :
+		jdk1.7.0_80 으로 업그레이드 후 해결됨
+	환경 :
+		Windows Server 2012 R2 Standard 64BIT

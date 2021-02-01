@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다. 
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605, 
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.DayStatisticsJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<delete id="deleteSD">
+	<![CDATA[
+		DELETE FROM SI_STAT_INTF_DAY 
+		 WHERE (ST_YEAR||ST_MONTH||ST_DAY) >= #{fromDate}
+		   AND (ST_YEAR||ST_MONTH||ST_DAY) <= #{toDate}
+	]]>
+	</delete>
+
+	<insert id="insertSD">
+	<![CDATA[
+		INSERT INTO SI_STAT_INTF_DAY (GROUP_ID, INTF_ID, HOST_ID, ST_YEAR, ST_MONTH, ST_DAY, 
+			ADAPTER_CODE, ST_PROCESSING, ST_FINISHED, ST_SEND_ERR, ST_N_COMPSIZE, ST_COMPSIZE, 
+			ST_P_RECORD_CNT, ST_F_RECORD_CNT, ST_E_RECORD_CNT)
+		(
+			 SELECT  GROUP_ID,INTF_ID, HOST_ID,ST_YEAR,ST_MONTH,ST_DAY, ADAPTER_CODE,
+                   SUM(ST_PROCESSING),SUM(ST_FINISHED),SUM(ST_SEND_ERR),
+                   SUM(ST_N_COMPSIZE),SUM(ST_COMPSIZE),
+                   SUM(ST_P_RECORD_CNT),SUM(ST_F_RECORD_CNT),SUM(ST_E_RECORD_CNT)
+            FROM
+                   SI_STAT_INTF_HOUR
+            WHERE (ST_YEAR||ST_MONTH||ST_DAY) >= #{fromDate}
+              and (ST_YEAR||ST_MONTH||ST_DAY) <= #{toDate}
+            GROUP BY
+                   GROUP_ID,
+                   INTF_ID,
+                   HOST_ID,
+                   ST_YEAR,
+                   ST_MONTH,
+                   ST_DAY,
+                   ADAPTER_CODE
+		)
+	]]>
+	</insert>
+	
+</mapper>

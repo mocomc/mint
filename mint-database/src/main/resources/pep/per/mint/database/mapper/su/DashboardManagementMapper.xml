@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.DashboardManagementMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertDashboardManagement">
+		INSERT
+		INTO TSU0223
+		  (
+		    BOARD_ID,
+		    BOARD_CD,
+		    BOARD_NM,
+		    BOARD_TYPE,
+		    USE_YN,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		  )
+		  VALUES
+		  (
+			#{boardCd, jdbcType=VARCHAR},
+			#{boardCd, jdbcType=VARCHAR},
+			#{boardNm, jdbcType=VARCHAR},
+			#{boardType, jdbcType=VARCHAR},
+			#{useYn, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<select id="getDashboardManagementList" parameterType="Map" resultMap="boardResultMap">
+		SELECT
+			TSU0223.BOARD_ID AS BOARD_ID,
+			TSU0223.BOARD_CD AS BOARD_CD,
+			TSU0223.BOARD_NM AS BOARD_NM,
+			TSU0223.BOARD_TYPE AS BOARD_TYPE,
+	      	TSU0223.USE_YN AS USE_YN,
+			TSU0223.COMMENTS AS COMMENTS,
+			TSU0223.DEL_YN AS DEL_YN,
+			TSU0223.REG_DATE AS REG_DATE,
+			TSU0223.REG_USER AS REG_USER,
+			TSU0223.MOD_DATE AS MOD_DATE,
+			TSU0223.MOD_USER AS MOD_USER
+		FROM TSU0223
+		WHERE 1=1
+		AND DEL_YN='N'
+		ORDER BY BOARD_NM ASC
+	</select>
+
+
+	<resultMap type="DashboardManagement" id="boardResultMap">
+		<id property="boardId" 				column="BOARD_ID"/>
+		<result property="boardCd" 				column="BOARD_CD"/>
+		<result property="boardNm" 					column="BOARD_NM"/>
+		<result property="boardType"				column="BOARD_TYPE"/>
+		<result property="useYn"				column="USE_YN"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="delYn"				column="DEL_YN"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+	</resultMap>
+
+
+	<update id="updateDashboardManagement">
+		update TSU0223
+		   set
+		   		BOARD_ID	= #{boardCd, jdbcType=VARCHAR}
+		   		,BOARD_CD = #{boardCd, jdbcType=VARCHAR}
+		   		,BOARD_NM = #{boardNm, jdbcType=VARCHAR}
+		   		,BOARD_TYPE = #{boardType, jdbcType=VARCHAR}
+		   		,USE_YN = #{useYn, jdbcType=VARCHAR}
+		    	,COMMENTS = #{comments, jdbcType=VARCHAR}
+				,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+				,MOD_USER = #{modId, jdbcType=VARCHAR}
+		where  BOARD_ID = #{boardId}
+	</update>
+
+	<delete id="deleteDashboardManagement">
+		DELETE FROM TSU0223	WHERE  BOARD_ID = #{boardId}
+	</delete>
+
+</mapper>

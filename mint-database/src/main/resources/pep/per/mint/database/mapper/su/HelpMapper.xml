@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.HelpMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getHelpList" resultMap="helpResultMapDefault" databaseId="oracle">
+        <include refid="selectHelpList"/>
+    </select>
+
+	<select id="getHelpList" resultMap="helpResultMapDefault" databaseId="altibase">
+        <include refid="selectHelpList"/>
+    </select>
+
+	<select id="getHelpList" resultMap="helpResultMapDefault" databaseId="tibero">
+        <include refid="selectHelpList"/>
+    </select>
+
+	<select id="getHelpList" resultMap="helpResultMapPostgreSQL" databaseId="postgres">
+        <include refid="selectHelpList"/>
+    </select>
+
+    <sql id="selectHelpList">
+		SELECT
+			a.APP_ID
+			,b.APP_NM
+			,b.COMMENTS
+			,a.HELP_ID
+			,a.LANG_ID
+			,a.SUBJECT
+			,a.CONTENTS
+			,a.DEL_YN
+			,a.REG_USER
+			,a.REG_DATE
+			,a.MOD_USER
+			,a.MOD_DATE
+		FROM TSU0215 a
+		INNER JOIN TSU0204 b
+		ON a.APP_ID = b.APP_ID
+		AND a.DEL_YN = 'N'
+		<if test="helpNm != null">
+		AND (b.APP_NM LIKE '%'||#{helpNm}||'%' OR a.SUBJECT LIKE '%'||#{helpNm}||'%')
+		</if>
+		ORDER BY a.APP_ID, a.HELP_ID
+    </sql>
+
+    <select id="getHelp" resultMap="helpResultMapDefault" databaseId="oracle">
+        <include refid="selectHelp"/>
+    </select>
+
+	<select id="getHelp" resultMap="helpResultMapDefault" databaseId="altibase">
+        <include refid="selectHelp"/>
+    </select>
+
+	<select id="getHelp" resultMap="helpResultMapDefault" databaseId="tibero">
+        <include refid="selectHelp"/>
+    </select>
+
+	<select id="getHelp" resultMap="helpResultMapPostgreSQL" databaseId="postgres">
+        <include refid="selectHelp"/>
+    </select>
+
+    <sql id="selectHelp">
+		SELECT
+			a.APP_ID
+			,b.APP_NM
+			,b.COMMENTS
+			,a.HELP_ID
+			,a.LANG_ID
+			,a.SUBJECT
+			,a.CONTENTS
+			,a.DEL_YN
+			,a.REG_USER
+			,a.REG_DATE
+			,a.MOD_USER
+			,a.MOD_DATE
+		FROM TSU0215 a
+		INNER JOIN TSU0204 b
+		ON a.APP_ID = b.APP_ID
+		AND a.DEL_YN = 'N'
+		AND a.APP_ID = #{appId}
+		AND a.HELP_ID = #{helpId}
+		AND a.LANG_ID = #{langId}
+    </sql>
+
+  	<resultMap id="helpResultMapDefault" type="Help">
+  		<id property="appId" 			column="APP_ID"/>
+		<id property="helpId" 			column="HELP_ID"/>
+		<id property="langId" 			column="LANG_ID"/>
+		<result property="appNm" 		column="APP_NM"/>
+		<result property="appComments" 	column="COMMENTS"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<result property="contents"		column="CONTENTS" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+		<result property="modDate"		column="MOD_DATE"/>
+	</resultMap>
+
+  	<resultMap id="helpResultMapPostgreSQL" type="Help">
+  		<id property="appId" 			column="APP_ID"/>
+		<id property="helpId" 			column="HELP_ID"/>
+		<id property="langId" 			column="LANG_ID"/>
+		<result property="appNm" 		column="APP_NM"/>
+		<result property="appComments" 	column="COMMENTS"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<result property="contents"		column="CONTENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+		<result property="modDate"		column="MOD_DATE"/>
+	</resultMap>
+
+	<insert id="insertHelp">
+		INSERT INTO TSU0215 (
+			APP_ID
+			,HELP_ID
+			,LANG_ID
+			,SUBJECT
+			,CONTENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+		    #{appId, jdbcType=VARCHAR}
+		   ,#{helpId, jdbcType=VARCHAR}
+		   ,#{langId, jdbcType=VARCHAR}
+		   ,#{subject, jdbcType=VARCHAR}
+		   <choose>
+        		<when test="_databaseId == 'postgres'">
+		   ,#{contents}
+        		</when>
+        		<otherwise>
+		   ,#{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+        		</otherwise>
+        	</choose>
+		   ,'N'
+		   ,#{regDate, jdbcType=VARCHAR}
+		   ,#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateHelp">
+		UPDATE TSU0215
+		SET
+		    SUBJECT = #{subject, jdbcType=VARCHAR}
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+		   ,CONTENTS = #{contents}
+        		</when>
+        		<otherwise>
+		   ,CONTENTS = #{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+        		</otherwise>
+        	</choose>
+		   ,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+		   ,MOD_USER = #{modId, jdbcType=VARCHAR}
+		WHERE APP_ID  = #{appId, jdbcType=VARCHAR}
+		AND HELP_ID = #{helpId, jdbcType=VARCHAR}
+		AND LANG_ID = #{langId, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteAllHelp">
+		DELETE FROM TSU0215
+	</delete>
+
+	<delete id="deleteHelp">
+		DELETE FROM TSU0215 WHERE LANG_ID = #{langId}
+	</delete>
+
+	<delete id="deleteHelpList">
+		DELETE FROM TSU0215
+		WHERE APP_ID = #{appId} AND HELP_ID = #{helpId} AND LANG_ID = #{langId}
+<!-- 		UPDATE TSU0215
+		SET
+			DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE APP_ID = #{appId} AND HELP_ID = #{helpId} AND LANG_ID = #{langId} -->
+	</delete>
+
+	<select id="existHelp" parameterType="Map" resultMap="helpResultMapDefault">
+		SELECT
+			APP_ID,
+			HELP_ID,
+			LANG_ID
+		FROM TSU0215
+		WHERE DEL_YN = 'N' AND
+			  APP_ID = #{appId} AND
+			  HELP_ID = #{helpId} AND
+			  LANG_ID = #{langId}
+	</select>
+
+
+	<select id="getTooltipList" resultMap="tooltipResultMap">
+		SELECT
+			a.APP_ID
+			,a.TOOLTIP_ID
+			,a.LANG_ID
+			,b.APP_NM
+			,b.COMMENTS
+			,a.TARGET_ID
+			,a.FILTER_ID
+			,a.SUBJECT
+			,a.CONTENTS
+			,a.DEL_YN
+			,a.REG_USER
+			,a.REG_DATE
+			,a.MOD_USER
+			,a.MOD_DATE
+		FROM TSU0216 a
+		INNER JOIN TSU0204 b
+		ON a.APP_ID = b.APP_ID
+		AND a.DEL_YN = 'N'
+		ORDER BY a.APP_ID, a.TOOLTIP_ID
+	</select>
+
+	<select id="getTooltip" resultMap="tooltipResultMap">
+		SELECT
+			a.APP_ID
+			,a.TOOLTIP_ID
+			,a.LANG_ID
+			,b.APP_NM
+			,b.COMMENTS
+			,a.TARGET_ID
+			,a.FILTER_ID
+			,a.SUBJECT
+			,a.CONTENTS
+			,a.DEL_YN
+			,a.REG_USER
+			,a.REG_DATE
+			,a.MOD_USER
+			,a.MOD_DATE
+		FROM TSU0216 a
+		INNER JOIN TSU0204 b
+		ON a.APP_ID = b.APP_ID
+		AND a.APP_ID = #{appId}
+		AND a.TOOLTIP_ID = #{tooltipId}
+	</select>
+
+	<resultMap id="tooltipResultMap" type="Tooltip">
+		<id property="appId" 		column="APP_ID"/>
+		<id property="tooltipId" 	column="TOOLTIP_ID"/>
+		<id property="langId" 		column="LANG_ID"/>
+		<result property="appNm" 		column="APP_NM"/>
+		<result property="appComments" 	column="COMMENTS"/>
+		<result property="targetId" column="TARGET_ID"/>
+		<result property="filterId" column="FILTER_ID"/>
+		<result property="subject" 	column="SUBJECT"/>
+		<result property="contents"	column="CONTENTS" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+		<result property="delYn" 	column="DEL_YN"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="modId" 	column="MOD_USER"/>
+		<result property="modDate"	column="MOD_DATE"/>
+	</resultMap>
+
+	<insert id="insertTooltip">
+		INSERT INTO TSU0216 (
+			 APP_ID
+			,TOOLTIP_ID
+			,LANG_ID
+			,TARGET_ID
+			,FILTER_ID
+			,SUBJECT
+			,CONTENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{appId	, jdbcType=VARCHAR}
+			,#{tooltipId, jdbcType=VARCHAR}
+			,#{langId	, jdbcType=VARCHAR}
+			,#{targetId	, jdbcType=VARCHAR}
+			,#{filterId	, jdbcType=VARCHAR}
+			,#{subject	, jdbcType=VARCHAR}
+			,#{contents	, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,'N'
+			,#{regDate	, jdbcType=VARCHAR}
+			,#{regId	, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateTooltip">
+		UPDATE TSU0216
+		SET
+			SUBJECT = #{subject, jdbcType=VARCHAR}
+			,CONTENTS = #{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,TARGET_ID = #{targetId, jdbcType=VARCHAR}
+			,FILTER_ID = #{filterId, jdbcType=VARCHAR}
+			,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+			,MOD_USER = #{modId, jdbcType=VARCHAR}
+		WHERE APP_ID = #{appId, jdbcType=VARCHAR}
+		AND TOOLTIP_ID = #{helpId, jdbcType=VARCHAR}
+		AND LANG_ID = #{langId, jdbcType=VARCHAR}
+	</update>
+
+	<select id="exportHelp" resultMap="exportHelpResultMap">
+		SELECT
+			APP_ID || '.' || HELP_ID || '.' || LANG_ID AS "fileId",
+			LANG_ID AS "langId",
+			APP_ID || '$$$' ||
+			HELP_ID|| '$$$' ||
+			LANG_ID|| '$$$' ||
+			SUBJECT|| '$$$' ||
+			CONTENTS AS "contents"
+		 FROM TSU0215
+	</select>
+
+	<resultMap id="exportHelpResultMap" type="java.util.LinkedHashMap">
+		<result property="fieldId" column="fieldId"/>
+		<result property="contents" column="contents" javaType="String" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
+	</resultMap>
+</mapper>

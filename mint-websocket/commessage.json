@@ -1,0 +1,49 @@
+[
+{
+  "objectType": "ComMessage",
+  "requestObject":{"agentNm":"NH_LUX_002" },
+  "startTime": "20150701120001001",
+  "endTime": null,
+  "errorCd":"0",
+  "errorMsg":"",
+  "userId": "nh",
+  "appId": "AN-01-00-001",
+  "extension":{
+  	"objectType": "Extension",
+  	"serviceCd" : "WS0051",
+  	"msgType" : "REQ"
+  }
+}
+,
+{
+  "objectType": "ComMessage",
+  "requestObject":{"agentNm":"NH_LUX_002","qmgrNm":"TESTQM02","queueNm":"TEST.LQ" },
+  "startTime": "20150701120001001",
+  "endTime": null,
+  "errorCd":"0",
+  "errorMsg":"",
+  "userId": "nh",
+  "appId": "AN-01-00-001",
+  "extension":{
+  	"objectType": "Extension",
+  	"serviceCd" : "WS0052",
+  	"msgType" : "REQ"
+  }
+}
+,
+{
+  "objectType": "ComMessage",
+  "requestObject":{"agentNm":"NH_LUX_002","qmgrNm":"TESTQM02","queueNm":"TEST.LQ","delay":1 },
+  "startTime": "20150701120001001",
+  "endTime": null,
+  "errorCd":"0",
+  "errorMsg":"",
+  "userId": "nh",
+  "appId": "AN-01-00-001",
+  "extension":{
+  	"objectType": "Extension",
+  	"serviceCd" : "WS0053",
+  	"msgType" : "ON"
+  }
+}
+]

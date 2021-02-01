@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.ChannelAttrMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertAttribute">
+		<selectKey keyProperty="attrId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'CA' || LPAD((COALESCE(MAX(SUBSTR(ATTRIBUTE_ID,3)),'0')::numeric+1)::text,8,'0') FROM TAN0204 WHERE CHANNEL_ID = #{channelId}
+        		</when>
+        		<otherwise>
+			SELECT 'CA' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(ATTRIBUTE_ID,3)),'0')) + 1),8,'0') FROM TAN0204 WHERE CHANNEL_ID = #{channelId}
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TAN0204
+		(
+			CHANNEL_ID,
+			ATTRIBUTE_ID,
+			ATTRIBUTE_CD,
+			ATTRIBUTE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{channelId, jdbcType=VARCHAR},
+			#{attrId, jdbcType=VARCHAR},
+			#{attrCd, jdbcType=VARCHAR},
+			#{attrNm, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getAttributeList" parameterType="Map" resultMap="channelAttrResultMap">
+		SELECT
+			CHANNEL_ID,
+			ATTRIBUTE_ID,
+			ATTRIBUTE_CD,
+			ATTRIBUTE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		FROM TAN0204
+  		WHERE DEL_YN= 'N'
+		AND CHANNEL_ID = #{channelId}
+		ORDER BY ATTRIBUTE_ID ASC
+	</select>
+
+	<resultMap type="ChannelAttribute" id="channelAttrResultMap">
+		<id property="channelId" 			column="CHANNEL_ID"/>
+		<id property="attrId" 				column="ATTRIBUTE_ID"/>
+		<result property="attrCd"				column="ATTRIBUTE_CD"/>
+		<result property="attrNm"				column="ATTRIBUTE_NM"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+	</resultMap>
+
+	<update id="updateAttribute">
+		UPDATE TAN0204
+		SET
+			ATTRIBUTE_CD 	= #{attrCd, jdbcType=VARCHAR}
+		    ,ATTRIBUTE_NM	= #{attrNm, jdbcType=VARCHAR}
+		    ,COMMENTS		= #{comments, jdbcType=VARCHAR}
+			,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+		WHERE CHANNEL_ID = #{channelId} AND ATTRIBUTE_ID = #{attrId}
+	</update>
+
+	<delete id="deleteAttribute">
+		UPDATE TAN0204
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE CHANNEL_ID = #{channelId} AND ATTRIBUTE_ID = #{attrId}
+	</delete>
+
+	<select id="existAttribute" parameterType="Map" resultMap="channelAttrResultMap">
+		SELECT
+			CHANNEL_ID,
+			ATTRIBUTE_ID,
+			ATTRIBUTE_CD
+  		FROM TAN0204
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		AND CHANNEL_ID = #{channelId}
+		AND ATTRIBUTE_CD = #{attrCd}
+		<if test="attrId != null">
+		AND ATTRIBUTE_ID &lt;&gt; #{attrId}
+		</if>
+	</select>
+
+	<select id="usedAttribute" parameterType="Map" resultType="String">
+		SELECT INTERFACE_ID
+  		FROM TAN0205
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		AND CHANNEL_ID = #{channelId} AND ATTRIBUTE_ID = #{attrId}
+	</select>
+</mapper>

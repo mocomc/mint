@@ -1,0 +1,2811 @@
+﻿<!--
+	Screen ID : AN-06-00-002
+	Screen NM : 전문I/O 등록/수정
+	[변경 이력]
+	* 20200225-001 : New
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div id="oldPath" class="col-lg-5">
+ 		<h2 class="lb-change">전문I/O 등록</h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-9999">전문I/O 관리</lb></li>
+	        <li class="active"><strong class="lb-change">전문I/O 등록</strong></li>
+		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-1008"></lb></h5>
+                    <div class="ibox-tools">
+                    	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			            <a class="btn btn-w-m btn-primary btn-upload"><i class="fa fa-arrow-up"></i> <lb class="lb-9999">Excel Import</lb></a>
+			            <a class="btn btn-w-m btn-danger btn-meta-check"><i class="fa fa-history"></i> <lb class="lb-9999">Meta Check</lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-save"><i class="fa fa-save"></i> <lb class="lb-310"></lb></a>
+			            <!--
+			            <a class="btn btn-w-m btn-default btn-outline btn-tmp-save" style="display:none;"><i class="fa fa-archive"></i> <lb class="lb-1010"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-tmp-read" style="display:none;"><i class="fa fa-history"></i> <lb class="lb-1011"></lb></a>
+			            -->
+			            <a class="btn btn-w-m btn-default btn-outline btn-cancel" style="display:none;"><i class="fa fa-times"></i> <lb class="lb-143"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-back" style="display:none;"><i class="fa fa-reply"></i> <lb class="lb-311"></lb></a>
+					</div>
+				</div>
+
+              	<div class="ibox-content">
+                  	<div class="row">
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-9999">코드(CD)</lb></label>
+                               		<input id="tf-dataSetCd" name="dataSetCd" type="text" class="input-tag-4 k-textbox" placeholder="">
+                               		<input id="hd-dataSetId" name="hd-dataSetId" type="hidden">
+                               		<input id="hd-dataSetCd-Old" name="hd-dataSetCd-Old" type="hidden">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-9999">한글명</lb></label>
+                               		<input id="tf-dataSetNm1" name="dataSetNm1" type="text" class="input-tag-4 k-textbox" placeholder="">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-9999">영문명</lb></label>
+                               		<input id="tf-dataSetNm2" name="dataSetNm2" type="text" class="input-tag-4 k-textbox" placeholder="">
+                              	</div>
+							</div>
+						</div>
+						<hr class="hr-space">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-9999">구분</lb></span>
+								<span style="padding: 0px 0px 0px 10px;">
+					            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+										<span class="radio-info" style="padding-right: 10px;">
+											<input id="rd-layout-y" type="radio" name="rd-layout" value="Y" checked="checked"><label for="rd-layout-y"><lb class="lb-9999">전문I/O</lb></label>
+										</span>
+		                                <span class="radio-danger" style="padding:0px 20px;">
+		                                	<input id="rd-layout-n" type="radio" name="rd-layout" value="N"><label for="rd-layout-n"><lb class="lb-9999">복합유형</lb></label>
+		                                </span>
+                                	</div>
+                                </span>
+                            </div>
+                        </div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+									<label class="label-tag-4"><lb class="lb-9999">암호화</lb></label>
+									<input id="cb-encryptType" name="encryptType" type="combobox" placeholder="Select" class="input-tag-4" data-bind="value: value, events: {select: select}">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-1012">길이</lb></label>
+                               		<input id="tf-length" name="length" type="number" class="input-tag-4 input-tag-view k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                              	</div>
+							</div>
+						</div>
+
+						<div style="display:none;">
+						<hr class="hr-space">
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+									<label class="label-tag-4"><lb class="lb-48">유형</lb></label>
+									<input id="cb-dataFormat" name="msgType" type="combobox" placeholder="Search..." class="input-tag-4" data-bind="value: value, events: {select: select}">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-9999">레코드구분자</lb></label>
+                               		<input id="tf-recordDelimiter" name="recordDelimiter" type="text" class="input-tag-4 input-tag-view k-textbox delimiter" placeholder="" readonly="readonly" disabled="disabled" data-bind="disabled: isDisabled">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-9999">필드구분자</lb></label>
+                               		<input id="tf-fieldDelimiter" name="fieldDelimiter" type="text" class="input-tag-4 input-tag-view k-textbox delimiter" placeholder="" readonly="readonly" disabled="disabled" data-bind="disabled: isDisabled">
+                              	</div>
+							</div>
+						</div>
+						</div>
+
+
+
+						<div style="display:none;">
+						<hr class="hr-space">
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-535">등록자</lb></label>
+                               		<input id="tf-regUserNm"    name="regUserNm"    type="text" class="input-tag-4 input-tag-view k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+	                            	<label class="label-tag-4"><lb class="lb-71">등록일</lb></label>
+                                	<input id="tf-regDate" name="regDate" type="text" class="input-tag-4 input-tag-view k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                              	</div>
+							</div>
+						</div>
+						</div>
+					</div><!-- end row -->
+
+           		</div>
+           	</div>
+       	</div>
+   	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="tabs-container">
+				<div class="tabs-lefts">
+					<ul id="tab-datafield-info" class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#tab01"><lb class="lb-1009"></lb></a></li>
+						<li class=""><a data-toggle="tab" href="#tab02"><lb class="lb-218"></lb></a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="tab01" class="tab-pane active">
+							<div class="panel-body">
+
+		                 		<div class="row">
+		 							<div class="col-lg-12">
+		 	  							<div id="gd-TreeList"></div>
+			               			</div>
+		    					</div>
+							</div><!-- end panel-body -->
+						</div><!-- end tab-pane -->
+
+						<div id="tab02" class="tab-pane">
+							<div class="panel-body">
+		                        <div class="row">
+		                        	<div class="col-sm-12">
+		                        	<textarea id="ta-description" rows="5" cols="30" style="height:200px"></textarea>
+		                        	</div>
+		                        </div>
+								<hr class="hr-space">
+								<hr class="hr-space">
+							</div><!-- end panel-body -->
+						</div><!-- end tab-pane -->
+
+					</div><!--  end tab-content -->
+				</div><!-- end tab-position -->
+			</div><!-- end tabs-container -->
+       	</div><!--  end col-sm-12 -->
+	</div><!-- end row -->
+</div><!-- end wrapper -->
+
+
+<div class="modal inmodal" id="AN-06-00-002-UPLOAD" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only"></span>
+				</button>
+				<div>
+					<h2 class="popupTitle"><lb class="lb-9999">Excel Select</lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-lg-12">
+						<hr class="hr-space">
+						<div class="form-group" style="width:99.5%;">
+							<input name="fileUpload" id="fileUpload" type="file" accept=".xls, .xlsx"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+
+            <div class="modal-footer-original">
+                <button type="button" class="btn btn-primary btn-upload-save" ><i class="fa fa-arrow-up"></i>  <lb class="lb-9999">Import</lb></button>
+                <button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-143"></lb></button>
+            </div>
+		</div>
+	</div>
+</div>
+<div id="spreadsheet" style="display:none; width: 100%;"></div>
+
+<script type="text/x-kendo-template" id="template-grid-btn-list">
+	<div>
+		<span style="float: right;">
+			<button class="k-button k-button-icontext btn-create-child">
+				<span class="k-icon k-i-plus"></span><lb class="lb-370"></lb>
+			</button>
+		</span>
+		<span style="float: right;">
+			<button class="k-button k-button-icontext btn-move-down">
+				<span class="k-icon k-i-arrow-down"></span><lb class="lb-1035"></lb>
+			</button>
+		</span>
+		<span style="float: right;">
+			<button class="k-button k-button-icontext btn-move-up">
+				<span class="k-icon k-i-arrow-up"></span><lb class="lb-1034"></lb>
+			</button>
+		</span>
+
+		<span style="float: right;">
+			<input id="btn-camel-switch" class="btn-camel-switch"/>
+		</span>
+
+		<span style="float: right; padding-top:8px; padding-right: 10px;">
+			<lb class="lb-9999">메타체크시 영문필드 표기 : </lb>
+		</span>
+	</div>
+</script>
+
+<script>
+$(document).ready(function(){
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "AN-06-00-002";
+	$.extend({
+		main_detail : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				isModify : false,
+				recordIdx : 1,
+				delimiter: {cd: '2', nm: 'delimiter'},
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+				try {
+					mint.init('$.main_detail.fn_initCallback');
+					//mint.common.siteMenuPath(screenName);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 화면 초기화
+					//-----------------------------------------------------------------------
+					$.main_detail.isModify = mint.common.getScreenParam('isModify');
+					$.main_detail.fn_initComponent(null);
+					$.main_detail.fn_enableComponent($.main_detail.isModify);
+
+					//-----------------------------------------------------------------------
+					// 샹세/수정 체크
+					//-----------------------------------------------------------------------
+					if( !mint.common.isEmpty($.main_detail.isModify) && $.main_detail.isModify === true ) {
+						{
+							$('.lb-change').text('전문I/O 수정'); //TODO:: Label
+							//$('.btn-upload').css('display','none');
+						}
+						$.main_detail.dataSetId = mint.common.getScreenParam('dataSetId');
+			      		if( ! mint.common.isEmpty( $.main_detail.dataSetId ) ) {
+							mint.callService(null, 'AN-06-00-002', 'REST-R02-AN-06-00', '$.main_detail.fn_setDataField',
+								{
+							    	  errorCall : true
+							    	, params : {dataSetId : $.main_detail.dataSetId}
+							    }
+							);
+			      		}
+					}
+
+					//-----------------------------------------------------------------------
+					// Meta Y/N
+					//-----------------------------------------------------------------------
+					{
+						var usedMeta = mint.common.getEnvValue('layout.meta.used');
+						var usedMetaAssist = mint.common.getEnvValue('layout.meta.client.assist');
+						if(!mint.common.isEmpty(usedMeta) && usedMeta.length > 0 && usedMeta[0] == 'Y' ) {
+							$.main_detail.usedMeta = true;
+						} else {
+							$.main_detail.usedMeta = false;
+						}
+						if(!mint.common.isEmpty(usedMetaAssist) && usedMeta.length > 0 && usedMetaAssist[0] == 'Y' ) {
+							$.main_detail.usedMetaAssist = true;
+						} else {
+							$.main_detail.usedMetaAssist = false;
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Screen Parameter Clear
+					//-----------------------------------------------------------------------
+					{
+						mint.common.removeScreenParam('isModify');
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: component enable/disable
+			//-----------------------------------------------------------------------
+			fn_enableComponent : function(isModify) {
+				try {
+					if(isModify) {
+						$('.btn-cancel').show();
+						$('.btn-back').show();
+						$('.btn-tmp-save').show();
+						$('.btn-tmp-read').show();
+					} else {  // create
+						$('.btn-cancel').hide();
+						$('.btn-back').show();
+						$('.btn-tmp-save').show();
+						$('.btn-tmp-read').show();
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_enableComponent"});
+				}
+			},//end fn_enableComponent()
+
+			//-----------------------------------------------------------------------
+			// Description :: component 초기화
+			//-----------------------------------------------------------------------
+			fn_initComponent : function(options) {
+				try {
+					//-----------------------------------------------------------------------
+					// Service Call 지연에 따른 UI 깨짐 방지용
+					//-----------------------------------------------------------------------
+					{
+	 					mint.ui.setDropDownList('cb-dataFormat', {}, 0, 'nm', 'cd');
+	 					mint.ui.setDropDownList('cb-encryptType', {}, 0, 'nm', 'cd');
+					}
+					//-----------------------------------------------------------------------
+					// Dropdown
+					//-----------------------------------------------------------------------
+					{
+						// Variables
+						$.main_detail.YesNoValue = [{ nm: 'Yes', cd: 'Y' }, { nm: 'No', cd: 'N' }];
+						$.main_detail.encryptTypeUsedYN = true; //TODO :: setEnv
+
+						// Init Binding
+	 					mint.ui.setDropDownList('cb-dataFormat', mint.common.commonCodeMap.get("cds").AN11, 0, 'nm', 'cd');
+	 					if( $.main_detail.encryptTypeUsedYN == true ) {
+	 						mint.ui.setDropDownList('cb-encryptType', $.main_detail.YesNoValue, 0, 'nm', 'cd');
+	 					} else {
+	 						mint.ui.setDropDownList('cb-encryptType', mint.common.commonCodeMap.get("cds").AN08, 0, 'nm', 'cd');
+	 					}
+
+
+	 					// Data Selection
+	 					var an11 = mint.common.getEnvValue('default.ui.an11');
+	 					kendo.bind($('#cb-dataFormat'), kendo.observable({
+	 						value: (!mint.common.isEmpty(an11) && an11.length > 0) ? an11[0] : '0',
+	 						select: function(e) {
+	 							$.main_detail.fn_delimiterField(e.dataItem);
+	 						}
+	 					}));
+
+
+	 					if( $.main_detail.encryptTypeUsedYN == true) {
+		 					kendo.bind($('#cb-encryptType'), kendo.observable({
+		 						value: 'N',
+		 						select: function(e) {
+		 							//TODO
+		 						}
+		 					}));
+	 					} else {
+		 					var an08 = mint.common.getEnvValue('default.ui.an08');
+		 					kendo.bind($('#cb-encryptType'), kendo.observable({
+		 						value: (!mint.common.isEmpty(an08) && an08.length > 0) ? an08[0] : '0',
+		 						select: function(e) {
+		 							//TODO
+		 						}
+		 					}));
+	 					}
+
+	 					{
+	 						var selectedItem = $('#cb-dataFormat').data('kendoDropDownList').dataItem();
+	 						$.main_detail.fn_delimiterField(selectedItem);
+	 					}
+
+					}
+ 					//-----------------------------------------------------------------------
+					// TreeList
+					//-----------------------------------------------------------------------
+					$.main_detail.fn_initTreeList($.main_detail.usedMeta);
+					//-----------------------------------------------------------------------
+					// TextField
+					//-----------------------------------------------------------------------
+					$('#tf-regUserNm').val( mint.session.getUserNm() );
+					$('#hd-regUserId').val( mint.session.getUserId() );
+					$('#tf-regDate').val( mint.common.getTodayDate()  );
+					//-----------------------------------------------------------------------
+					// TextArea
+					//-----------------------------------------------------------------------
+					$("#ta-description").kendoEditor({
+			        });
+
+					//-----------------------------------------------------------------------
+					// Style
+					//-----------------------------------------------------------------------
+					$('input[type=number]').css("text-align", 'right');
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initComponent"});
+				}
+			},//end fn_initComponent()
+
+			//-----------------------------------------------------------------------
+			// Description :: delimiterField enable/disable
+			//-----------------------------------------------------------------------
+			fn_delimiterField : function(selectedItem) {
+				try {
+					if( !mint.common.isEmpty(selectedItem) && (selectedItem.cd == $.main_detail.delimiter.cd || selectedItem.nm == $.main_detail.delimiter.nm) ) {
+						$('.delimiter').each(function(e) {
+							$(this).prop('disabled', '').prop('readonly', '');
+							$(this).removeClass('input-tag-view');
+						});
+					} else {
+						$('.delimiter').each(function(e) {
+							$(this).prop('disabled', 'disabled').prop('readonly', 'readonly');
+							$(this).addClass('input-tag-view');
+						});
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_delimiterField"});
+				}
+			},//end fn_delimiterField()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initTreeList
+			//-----------------------------------------------------------------------
+			fn_initTreeList : function(usedMeta) {
+				try {
+					var hCSSCenter = {style: 'text-align: center; vertical-align:middle;'};
+					var aCSSCenter = {style: 'text-align: center; white-space: nowrap;'};
+					var aCSSLeft = {style: 'text-align: left; white-space: nowrap;'};
+					var locked = true;
+					$("#gd-TreeList").kendoTreeList({
+			          	dataSource : $.main_detail.fn_getTreeListDataSource([]),
+						filterable: false,
+						resizable: true,
+			            sortable: false,
+			            selectable: true,
+			            scrollable: true,
+			            editable: {
+			                mode: "inline",
+			                move: true
+			            },
+			            batch: true,
+			            navigatable: true,
+			            toolbar: kendo.template( $("#template-grid-btn-list").html() ),
+						columns: [
+							{
+								command: [
+									{
+										name: "edit", text: " ", className:"mint-i-btn",
+									},
+								    {
+						            	name: "delete",
+						            	text: " ",
+						              	className: "mint-i-btn",
+						              	imageClass: "k-i-delete",
+						              	click: function(e) {
+						            	  	var tr = $(e.target).closest("tr");
+						            	  	this.removeRow(tr);
+							            }
+							        },
+								],
+								field: "commandButton",
+								title: "Operation",
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								width: "95px", locked: locked,
+							},
+							{
+								field: "createChildButton",
+								title: " ",
+								template: '#=$.main_detail.fn_createChildRowButton("gd-TreeList", type, typeNm)#',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editable: function(dataItem) { return false; },
+								width: "30px", locked: locked,
+							},
+							{
+								field: "name1",
+								title: mint.label.getLabel('lb-1014')+'(*)',
+								template: '#=$.main_detail.fn_gridTemplateName(name1)#',
+								headerAttributes: hCSSCenter, attributes : aCSSLeft,
+								editor: function(container, options) {
+									if($.main_detail.usedMeta && $.main_detail.usedMetaAssist) {
+										options.placeholder ='Search..';
+										$.main_detail.fn_gridEditorAutoComplete(container, options);
+									} else {
+										$.main_detail.fn_gridEditorTextBox(container, options);
+									}
+								},
+								width: "130px", locked: locked, expandable: true,
+							},
+							{
+								field: "parentNmKo",
+								title: '부모식별자(한)',
+								headerAttributes: hCSSCenter, attributes : aCSSLeft,
+								editor: function(container, options) {
+									if($.main_detail.usedMeta && $.main_detail.usedMetaAssist) {
+										options.placeholder ='Search..';
+										$.main_detail.fn_gridEditorAutoComplete(container, options);
+									} else {
+										$.main_detail.fn_gridEditorTextBox(container, options);
+									}
+								},
+								width: "130px", locked: locked,
+							},
+							{
+								field: "requiredYn",
+								title:  '필수',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor : mint.ui.gridEditorYesOrNoComboBox,
+								width: "80px", locked: locked,
+							},
+							{
+								field: "metaYn",
+								title: '메타체크',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorYesOrNoComboBox,
+								width: "80px", locked: locked,
+							},
+							{
+								field: "name2",
+								title: mint.label.getLabel('lb-1015'),
+								headerAttributes: hCSSCenter, attributes: aCSSLeft,
+								editor: function(container, options) {
+									if($.main_detail.usedMeta && $.main_detail.usedMetaAssist) {
+										$.main_detail.fn_gridEditorAutoComplete(container, options);
+									} else {
+										$.main_detail.fn_gridEditorTextBox(container, options);
+									}
+								},
+								width: "130px", locked: locked,
+							},
+							{
+								field: "parentNmEn",
+								title: '부모식별자(영)',
+								headerAttributes: hCSSCenter, attributes : aCSSLeft,
+								editor: function(container, options) {
+									if($.main_detail.usedMeta && $.main_detail.usedMetaAssist) {
+										$.main_detail.fn_gridEditorAutoComplete(container, options);
+									} else {
+										$.main_detail.fn_gridEditorTextBox(container, options);
+									}
+								},
+								width: "130px", locked: locked,
+							},
+							{
+								field: "type",
+								title:  mint.label.getLabel('lb-48'),
+								template: '#=typeNm#',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor : function(container, options) {
+									mint.ui.gridEditorFieldTypeComboBox(container, options, '$.main_detail.fn_fieldTypeCheck');
+								},
+								width: "120px", locked: locked,
+							},
+							{
+								field: "complexTypeSearchButton",
+								title: " ",
+								template: '#=$.main_detail.fn_complexTypeSearchButton("gd-TreeList", type, typeNm, null)#',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editable: function(dataItem) { return false; },
+								width: "30px", locked: locked,
+
+							},
+							{
+								field: "length",
+								title: mint.label.getLabel('lb-1012'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter, format: '{0:#}',
+								editable: function(dataItem) {
+									return true;
+									//return $.main_detail.fn_columnEditable(dataItem);
+								},
+								editor: function(container, options) {
+									mint.ui.gridEditorNumbericTextBox(container, options, '$.main_detail.fn_callBackLength');
+								},
+								width: "100px",
+							},
+							{
+								field: "scale",
+								title: 'SCALE',
+								editable: function(dataItem) { return true; },
+								headerAttributes: hCSSCenter, attributes: aCSSCenter, format: '{0:#}',
+								width: "100px",
+							},
+							{
+								field: "offset",
+								title: mint.label.getLabel('lb-1016'),
+								editable: function(dataItem) { return false; },
+								headerAttributes: hCSSCenter, attributes: aCSSCenter, format: '{0:#}',
+								width: "100px",
+								hidden: true,
+							},
+							{
+								field: "defaultValue",
+								title: mint.label.getLabel('lb-1017'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								width: "100px",
+							},
+							{
+								field: "justify",
+								title: mint.label.getLabel('lb-1023'),
+								template: '#=justifyNm#',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorJustifyComboBox,
+								width: "120px",
+							},
+							{
+								field: "padding",
+								title: mint.label.getLabel('lb-1024'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								width: "95px",
+							},
+							{
+								field: "encryptType",
+								title: mint.label.getLabel('lb-1018'),
+								template: '#=encryptTypeNm#',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorEncryptTypeComboBox,
+								width: "120px",
+							},
+							{
+								field: "koreanYn",
+								title: '한글여부',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorYesOrNoComboBox,
+								width: "100px",
+							},
+							{
+								field: "decimalPointYn",
+								title: '소수점포함여부',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorYesOrNoComboBox,
+								width: "120px",
+							},
+
+							{
+								field: "maskingYn",
+								title: '마스킹여부',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorYesOrNoComboBox,
+								width: "100px",
+							},
+							{
+								field: "maskingPatternCd",
+								title: '마스킹패턴코드',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								width: "150px",
+							},
+							{
+								field: "comments",
+								title: '비고',
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								width: "200px",
+							},
+
+							{
+								field: "isLengthField",
+								title: mint.label.getLabel('lb-1019'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorYesOrNoComboBox,
+								width: "100px",
+								hidden: true,
+							},
+							{
+								field: "hasRepeatCountField",
+								title: mint.label.getLabel('lb-1020'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								editor: mint.ui.gridEditorYesOrNoComboBox,
+								width: "100px",
+								hidden: true,
+							},
+							{
+								field: "repeatFieldId",
+								title: mint.label.getLabel('lb-1021'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter,
+								width: "120px",
+								hidden: true,
+							},
+							{
+								field: "repeatCount",
+								title: mint.label.getLabel('lb-1022'),
+								headerAttributes: hCSSCenter, attributes: aCSSCenter, format: '{0:#}',
+								width: "100px",
+								hidden: true,
+							},
+							{ field : "id", hidden : true },
+						],
+						beforeEdit: function(e) {
+
+						},
+						edit: function(e) {
+							//-----------------------------------------------------------------------
+							// Command Button Replace
+							//-----------------------------------------------------------------------
+							{
+								e.container.find("button[class*='k-button']").each(function(){
+									var command = $(this).data('command');
+									if( command === 'update' || command === 'canceledit' ) {
+										var span = $(this).find('span')[0];
+										$(this).addClass('mint-i-btn');
+										$(this).html(span);
+									}
+								});
+							}
+							//-----------------------------------------------------------------------
+							// Tree Depth Presentation Field, placeholder view
+							//-----------------------------------------------------------------------
+							{
+								var firstField = e.container.find(':input[id=name1]');
+							}
+							//-----------------------------------------------------------------------
+							// Editor Select
+							//-----------------------------------------------------------------------
+							{
+								var row = e.container;
+								this.select(row);
+							}
+							//-----------------------------------------------------------------------
+							// Editor Focus(TODO: 근본적인 방법 확인 필요)
+							//-----------------------------------------------------------------------
+							{
+								var activeElement = $('#' + e.container.context.id + '_active_element');
+								if(activeElement.length > 0) {
+									var field = activeElement.find(':input');
+									var dataRole = field.data('role');
+
+									//input default, numerictextbox
+									if(mint.common.isEmpty(dataRole) || dataRole == 'textbox' || dataRole == 'autocomplete') {
+										field.focus();
+									}
+
+									//input dropdownlist
+									if( dataRole == 'dropdownlist' ) {
+										field.data("kendoDropDownList").focus();
+									}
+
+								} else {
+									firstField.focus();
+								}
+							}
+							//-----------------------------------------------------------------------
+							// editable
+							//-----------------------------------------------------------------------
+							{
+								var model = e.model;
+								if( model.type == '4' || model.typeNm == 'complex') {
+
+								}
+							}
+						},
+						dataBound: function (e) {
+							//-----------------------------------------------------------------------
+							// ROW / COL CSS 처리
+							//-----------------------------------------------------------------------
+							var items = e.sender.dataItems();
+							if( items.length > 0 ) {
+								for(var i = 0; i < items.length; i++ ) {
+									var trTotal = e.sender.wrapper.find("tr[data-uid='" + items[i].uid + "']");
+									trTotal.removeClass('k-alt');
+
+									var tables = locked ? e.sender.lockedTable : e.sender.table;
+									var tr = tables.find("tr[data-uid='" + items[i].uid + "']");
+									var td = tr.find("td:eq(5)"); //metaYn column
+									if( items[i].valid === false && items[i].metaYn == 'Y') {
+										td.addClass('btn-danger');
+									} else {
+										td.removeClass('btn-danger');
+									}
+								}
+							}
+							//TODO :: delay 가 필요한 이유 확인(엑셀로 등록할때만 발생)
+							mint.common.setTimeout(function() {
+								mint.ui.gridVerticalScrollBar(e);
+							}, 10);
+
+						},
+						save: function(e) {
+							e.model.valid = false;
+
+							/*
+							var isCamel = $('#btn-camel-switch').data('kendoSwitch').check();
+							if(isCamel) {
+								e.model.name2 = $.main_detail.fn_convCamel(e.model.name2);
+								e.model.parentNmEn = $.main_detail.fn_convCamel(e.model.parentNmEn);
+							}
+							*/
+						},
+					});
+
+					//-----------------------------------------------------------------------
+					// TreeList Toolbar
+					//-----------------------------------------------------------------------
+					{
+						$(".btn-create-child").kendoButton({
+							click: function(e) {
+								$.main_detail.fn_btn_add_click();
+							}
+						});
+
+						$(".btn-move-up").kendoButton({
+							click: function(e) {
+								$.main_detail.fn_btn_up_click();
+							}
+						});
+
+						$(".btn-move-down").kendoButton({
+							click: $.main_detail.fn_btn_down_click
+						});
+
+						$("#btn-camel-switch").kendoSwitch({
+							checked: true,
+							width: 80,
+							messages: {
+								checked: 'Camel',
+								unchecked: 'Default'
+							},
+							change: function(e) {
+								//$.main_detail.fn_convAll(e.checked);
+							}
+						});
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initTreeList"});
+				}
+			},//end fn_initTreeList()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListDataSource
+			//-----------------------------------------------------------------------
+			fn_getTreeListDataSource : function(jsonData) {
+				try {
+					var	dataSource = new kendo.data.TreeListDataSource({
+							data: jsonData,
+						    schema: {
+						    	model: $.main_detail.fn_getTreeListModel()
+						    },
+						});
+					return dataSource;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTreeListDataSource"});
+				}
+			},//end fn_getTreeListDataSource()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListModel
+			//-----------------------------------------------------------------------
+			fn_getTreeListModel : function() {
+				try {
+					var model = {
+						id: "id",
+						parentId: "parentId",
+	            		fields: {
+	            			objectType: {type: "string", editable:false, nullable:false, defaultValue: "DataField"},
+	            			id: {type: "string", editable:true, nullable: false},
+	            			dataSetId:   {type: "string", editable:false, nullable: false, defaultValue: ""},
+	            			dataFieldId: {type: "string", editable:false, nullable: false, defaultValue: ""},
+	            			parentId: {type: "string", editable:true, nullable: true},
+	            			seq:         {type: "string", editable: false, nullable: false, defaultValue: ""},
+		            		name1:       {type: "string", editable: true, nullable: false, defaultValue: "", validation: { required: true }},
+		            		name2:       {type: "string", editable: true, nullable: false, defaultValue: "", validation: { required: true }},
+		            		cd:          {type: "string", editable: false, nullable: true, defaultValue: ""},
+		            		type:        {type: "string", editable: true, nullable: false, defaultValue: $.main_detail.fn_getEnvDefaultValue('default.ui.an09')},
+		            		typeNm:      {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			length:      {type: "number", validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: 0},
+		            		offset:      {type: "number", validation: { required: true, min: 0, step: 1, format: 'n0', decimals: 1 } , editable: true, nullable: false, defaultValue: 0},
+	            			encryptType : {type: "string", editable: true, nullable: false, defaultValue: $.main_detail.fn_getEnvDefaultValue('default.ui.an08')},
+	            			encryptTypeNm : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			isLengthField : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatCount : {type: "number", validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: 0},
+	            			hasRepeatCountField : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatFieldId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatDataSetId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			defaultValue: {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			justify : {type: "string", editable: true, nullable: false, defaultValue: $.main_detail.fn_getEnvDefaultValue('default.ui.an13')},
+	            			justifyNm : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			padding : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			fieldSetId:  {type: "string", editable:false, nullable: true, defaultValue: ""},
+
+	            			refDataSetId:  {type: "string", editable:true, nullable: true, defaultValue: ""},
+	            			refDataFieldId:  {type: "string", editable:true, nullable: true, defaultValue: ""},
+	            			parentNmKo:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			parentNmEn:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			requiredYn:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			scale:	{type: "number", validation: { required: false, min: 0}, editable: true, nullable: false, defaultValue: 0},
+	            			koreanYn:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			metaYn:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			decimalPointYn:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+
+	            			maskingYn:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			maskingPatternCd:{type: "string", editable: true, nullable: true, defaultValue: ""},
+	            			comments:	{type: "string", editable: true, nullable: true, defaultValue: ""},
+
+	            			regDate : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			regId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			modDate : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			modId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+
+
+	            			valid: {type: "boolean", editable: false, nullable: true, defaultValue: false},
+
+	            		},
+	            		expanded: true
+					};
+
+					var TreeListModel = new kendo.data.TreeListModel.define(model);
+					return TreeListModel;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTreeListModel"});
+				}
+			}, //end fn_getTreeListModel()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_columnEditable
+			//-----------------------------------------------------------------------
+			fn_columnEditable : function( dataItem ) {
+				try {
+					//ComplexType 일때는 Not-Editable
+					//TODO : 저정하기전에는 반영되지 않은 부분 보완 필요... 또는 기능 삭제
+					if( $.main_detail.fn_isComplexType(dataItem.type, dataItem.typeNm) ) {
+						return false;
+					} else {
+						return true;
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_columnEditable"});
+				}
+			}, //end fn_columnEditable()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getEnvDefaultValue
+			//-----------------------------------------------------------------------
+			fn_getEnvDefaultValue : function(param) {
+				try {
+ 					var envValue = mint.common.getEnvValue(param);
+ 					return (!mint.common.isEmpty(envValue) && envValue.length > 0) ? envValue[0] : '';
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getEnvDefaultValue"});
+				}
+			}, //end fn_getEnvDefaultValue()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_gridTemplateName
+			//-----------------------------------------------------------------------
+			fn_gridTemplateName : function (value) {
+				try {
+					if( !mint.common.isEmpty(value) ) {
+						return "<span>" + value + "</span>";
+					} else {
+						return "<span>[empty]</span>";
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_gridTemplateName"});
+				}
+			}, //end fn_gridTemplateName()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_callBackLength
+			//-----------------------------------------------------------------------
+			fn_callBackLength : function (container, options, e) {
+				try {
+					var targetId = container.context.id;
+					var treeList = $('#' + targetId).data('kendoTreeList');
+					var dataView = treeList.dataSource.view();
+					var dataItem = treeList.dataItem(container.closest("tr"));
+
+					$.main_detail.fn_lengthSum(dataView);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callBackLength"});
+				}
+			}, //end fn_callBackLength()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_lengthSum
+			//-----------------------------------------------------------------------
+			fn_lengthSum : function (dataView) {
+				try {
+					var totalLength = 0;
+					var preDataItem;
+					dataView.forEach(function(v, i, a) {
+						if( i == 0 ) {
+							preDataItem = v;
+						} else {
+							if( !v.hasChildren ) {
+								v.offset = preDataItem.length + preDataItem.offset;
+								preDataItem = v;
+							}
+						}
+						totalLength += v.length;
+						$('#tf-length').val(totalLength);
+					});
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_lengthSum"});
+				}
+			}, //end fn_gridTemplateName()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_createChildRowButton
+			//-----------------------------------------------------------------------
+			fn_createChildRowButton : function (gridId, type, typeNm) {
+				try {
+					var button = "<span class='"+gridId+"' onclick='$.main_detail.fn_createChildRowAction(this);' style='cursor: pointer;'><i class='fa fa-plus'></i></span>";
+					if( $.main_detail.fn_isComplexType(type, typeNm) ) {
+						return "<span class='complexTypeControl mint-visible'>" + button + "</span>";
+					} else {
+						return "<span class='complexTypeControl mint-visible mint-hidden'>" + button + "</span>";
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_createChildRowButton"});
+				}
+			}, //end fn_createChildRowButton()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_complexTypeSearchButton
+			//-----------------------------------------------------------------------
+			fn_complexTypeSearchButton : function (gridId, type, typeNm) {
+				try {
+					var button = "<span class='"+gridId+"' onclick='$.main_detail.fn_complexTypeSearchAction(this);' style='cursor: pointer;'><i class='fa fa-search'></i></span>";
+					if( $.main_detail.fn_isComplexType(type, typeNm) ) {
+						return "<span class='complexTypeControl mint-visible'>" + button + "</span>";
+					} else {
+						return "<span class='complexTypeControl mint-visible mint-hidden'>" + button + "</span>";
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_complexTypeSearchButton"});
+				}
+			}, //end fn_complexTypeSearchButton()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_createChildRowAction
+			//-----------------------------------------------------------------------
+			fn_createChildRowAction : function(node) {
+				try {
+					var grid = $("#" + node.className).data("kendoTreeList");
+					var row = $(node).closest("tr");
+					var	data = grid.dataItem(row);
+					$.main_detail.fn_btn_addChildRow(data.id);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_createChildRowAction"});
+				}
+			},//end fn_createChildRowAction()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_complexTypeSearchAction
+			//-----------------------------------------------------------------------
+			fn_complexTypeSearchAction : function(node) {
+				try {
+					var grid = $("#" + node.className).data("kendoTreeList");
+					var row = $(node).closest("tr");
+					var	data = grid.dataItem(row);
+
+					mint.common.setScreenParam('parentId', data.id);
+					mint.common.setScreenParam('searchType', 'complex');
+					mint.common.setScreenParam('applyType', 'normal');
+					mint.common.setScreenParam('callback', '$.main_detail.fn_setComplexField');
+					mint.common.searchPopup('../sub-an/AN-06-02-001.html','AN-06-02-001');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_complexTypeSearchAction"});
+				}
+			},//end fn_complexTypePopup()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setComplexField
+			//-----------------------------------------------------------------------
+			fn_setComplexField : function(selectedItem) {
+				try {
+					var entityGrid = $("#gd-TreeList").data("kendoTreeList");
+					var dataItem = entityGrid.dataItem(entityGrid.select());
+					var dataFieldList = selectedItem.dataFieldList;
+					var parentDataField = {};
+
+					entityGrid.saveRow();
+
+					for(var i = 0; i < dataFieldList.length; i++ ) {
+						var dataField = dataFieldList[i];
+						if( mint.common.isEmpty(dataField.parentId) ) {
+							parentDataField = $.main_detail.fn_btn_addChildRow(dataItem.id, dataField);
+						} else {
+							$.main_detail.fn_btn_addChildRow(parentDataField.id, dataField);
+						}
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setComplexField"});
+				}
+			},//end fn_setComplexField()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_isComplexType
+			//-----------------------------------------------------------------------
+			fn_isComplexType : function(typeCd, typeNm) {
+				try {
+					if( mint.common.isEmpty($.main_detail.complextype) ) {
+						var complextype = mint.common.getEnvValue('layout.complextype');
+						if(!mint.common.isEmpty(complextype) && complextype.length > 0) {
+							$.main_detail.complextype = JSON.parse(complextype[0]);
+						} else {
+							$.main_detail.complextype = {'4':'complex'};
+						}
+					}
+
+					var complexTypeName = $.main_detail.complextype[typeCd];
+
+					if( !mint.common.isEmpty(complexTypeName) && typeNm == complexTypeName ) {
+						return true;
+					} else {
+						return false;
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_isComplexType"});
+				}
+			},//end fn_isComplexType()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_convCamel
+			//-----------------------------------------------------------------------
+			fn_convAll : function(isCamel) {
+				try {
+					var treeList = $("#gd-TreeList").data("kendoTreeList");
+					var dataSource = treeList.dataSource;
+					var data = dataSource.data();
+
+					for( var i = 0; i < data.length; i++ ) {
+						if(isCamel) {
+							data[i].set('name2', $.main_detail.fn_convCamel(data[i].name2));
+							data[i].set('parentNmEn', $.main_detail.fn_convCamel(data[i].parentNmEn));
+						} else {
+							//data[i].set('name2', $.main_detail.fn_convDefault(data[i].name2));
+							//data[i].set('parentNmEn', $.main_detail.fn_convDefault(data[i].parentNmEn));
+						}
+					}
+
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_convCamel"});
+				}
+			},//end fn_convCamel()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_convCamel
+			//-----------------------------------------------------------------------
+			fn_convCamel : function(str) {
+				try {
+					var before = str.toLowerCase();
+					var after = '';
+					var bs = before.split('_');
+
+					if(bs.length < 2) {
+						return bs;
+					}
+
+					for (var i = 0; i < bs.length; i++) {
+						if(bs[i].length > 0){
+							if(i==0)
+								after += bs[i].toLowerCase();
+							else
+								after += bs[i].toLowerCase().substr(0,1).toUpperCase()+bs[i].substr(1,bs[i].length-1);
+						}
+					}
+					return after;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_convCamel"});
+				}
+			},//end fn_convCamel()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_convDefault
+			//-----------------------------------------------------------------------
+			fn_convDefault : function(str) {
+				try {
+				    return str.replace(/([A-Z])/g, function(arg){
+				        return '_'+arg.toLowerCase();
+				    }).toUpperCase();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_convDefault"});
+				}
+			},//end fn_convDefault()
+
+			//=======================================================================
+			// Main Operation
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 저장
+			//-----------------------------------------------------------------------
+			fn_save : function() {
+				try {
+					if( $.main_detail.fn_validationCheck() ) {
+						$.main_detail.fn_saveDataSet();
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_save"});
+				}
+			},//end fn_save()
+
+
+			//-----------------------------------------------------------------------
+			// Description ::  Validation 체크
+			//-----------------------------------------------------------------------
+			fn_validationCheck : function() {
+				try {
+
+					// CD
+					if( mint.common.isEmpty($('#tf-dataSetCd').val()) ) {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-1006'));
+						$('#tf-dataSetCd').focus();
+						return;
+					}
+					// 한글명
+					if( mint.common.isEmpty($('#tf-dataSetNm1').val()) ) {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-1001'));
+						$('#tf-dataSetNm1').focus();
+						return;
+					}
+					// 영문명
+					if( mint.common.isEmpty($('#tf-dataSetNm2').val()) ) {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-1001'));
+						$('#tf-dataSetNm2').focus();
+						return;
+					}
+
+					var selectedItem = $('#cb-dataFormat').data('kendoDropDownList').dataItem();
+					if( !mint.common.isEmpty(selectedItem) && (selectedItem.cd == $.main_detail.delimiter.cd || selectedItem.nm == $.main_detail.delimiter.nm) ) {
+
+						if( mint.common.isEmpty($('#tf-recordDelimiter').val()) ) {
+							//mint.common.alert('CW00001', mint.label.getLabel('lb-9999'));
+							mint.common.alert('CW00001', '레코드구분자');
+							$('#tf-recordDelimiter').focus();
+							return;
+						}
+
+						if( mint.common.isEmpty($('#tf-fieldDelimiter').val()) ) {
+							//mint.common.alert('CW00001', mint.label.getLabel('lb-9999'));
+							mint.common.alert('CW00001', '필드구분자');
+							$('#tf-fieldDelimiter').focus();
+							return;
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// DataField List
+					//-----------------------------------------------------------------------
+					var dataSource = $("#gd-TreeList").data('kendoTreeList').dataSource;
+					var dataFieldList = dataSource.view();
+
+					if( dataFieldList.length <= 0 ) {
+						mint.common.alert('CW00001', '전문I/O 필드 정보');//mint.label.getLabel('lb-82'));
+						$('#tab-datafield-info a:eq(0)').tab('show');
+						mint.common.focus($('#gd-TreeList'));
+						return;
+					}
+
+					if($.main_detail.usedMeta === true) {
+						var isMetaCheckAction = false;
+						dataFieldList.forEach(function(v, i, a) {
+							if(v.metaYn === 'Y' && v.valid === false) {
+								isMetaCheckAction = true;
+							}
+						});
+
+						if(isMetaCheckAction) {
+							mint.common.alert('Meta Check 가 필요합니다.');
+							return;
+						}
+					}
+					//-----------------------------------------------------------------------
+					// add :: 20201130 요구사항 > Camel 저장
+					// modify :: 20201217 요구사항 > isCamel 저장할때 필요없다고 함 => 주석처리
+					// add :: 20201229 요구사항 > DATE = 20, CLOB = 4000 으로 length 고정
+					//-----------------------------------------------------------------------
+					var isCamel = $('#btn-camel-switch').data('kendoSwitch').check();
+					for(var i=0; i< dataFieldList.length; i++){
+						if( mint.common.isEmpty(dataFieldList[i].name1) ) {
+							mint.common.alert('CW00001', mint.label.getLabel('lb-1014'));
+							$('#gd-TreeList').focus();
+							return;
+						}
+
+						if( mint.common.isEmpty(dataFieldList[i].name2) ) {
+							mint.common.alert('CW00001', mint.label.getLabel('lb-1015'));
+							$('#gd-TreeList').focus();
+							return;
+						}
+
+						if( mint.common.isEmpty(dataFieldList[i].typeNm) ) {
+							mint.common.alert('CW00001', mint.label.getLabel('lb-48'));
+							$('#gd-TreeList').focus();
+							return;
+						}
+
+						/*
+						if(isCamel) {
+							dataFieldList[i].set('name2', $.main_detail.fn_convCamel(dataFieldList[i].name2));
+							dataFieldList[i].set('parentNmEn', $.main_detail.fn_convCamel(dataFieldList[i].parentNmEn));
+						}
+						*/
+
+						if( !mint.common.isEmpty(dataFieldList[i].parentId) ) {
+							var parentNode = dataSource.parentNode(dataFieldList[i]);
+							dataFieldList[i].set('parentNmKo', parentNode.name1);
+							dataFieldList[i].set('parentNmEn', parentNode.name2);
+						}
+
+						// 20201229 - length 고정
+						// 20201229 - length 가 공백이거나 0이면... 기본값설정
+						{
+							if( dataFieldList[i].typeNm == 'DATE' ) {
+								if( mint.common.isEmpty(dataFieldList[i].length) || dataFieldList[i].length == 0 )
+									dataFieldList[i].length = 20;
+							}
+
+
+							if( dataFieldList[i].typeNm == 'CLOB' ) {
+								if( mint.common.isEmpty(dataFieldList[i].length) || dataFieldList[i].length == 0 )
+									dataFieldList[i].length = 4000;
+							}
+						}
+
+		           	}
+
+					return true;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_validationCheck"});
+				}
+			},//end fn_validationCheck()
+
+			//-----------------------------------------------------------------------
+			// Description :: 저장 - DataSet
+			//-----------------------------------------------------------------------
+			fn_saveDataSet : function() {
+				try {
+					var datasetObject = $.main_detail.fn_getDataSetObject();
+
+					if( !mint.common.isEmpty($('#hd-dataSetId').val()) && $.main_detail.isModify == true ) {
+						// 수정일 경우
+						if( !mint.common.isEmpty($('#hd-dataSetCd-Old').val()) && $('#hd-dataSetCd-Old').val() != $('#tf-dataSetCd').val() ) {
+							$.main_detail.fn_dataSetCdCheck(function() {
+								$.main_detail.fn_updateDataSet(datasetObject);
+							});
+						} else {
+							$.main_detail.fn_updateDataSet(datasetObject);
+						}
+					} else {
+						// 등록일 경우, DATASET_CD 중복체크
+						$.main_detail.fn_dataSetCdCheck(function() {
+							$.main_detail.fn_createDataSet(datasetObject);
+						});
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_saveDataSet"});
+				}
+			},//end fn_saveDataSet()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dataSetCdCheck
+			//-----------------------------------------------------------------------
+			fn_dataSetCdCheck : function(func) {
+				try {
+					mint.callService(null, screenName, 'REST-R05-AN-06-00', function(responseData) {
+						if( !mint.common.isEmpty(responseData) && responseData == 0 ) {
+							func();
+						} else {
+							mint.common.alert('전문I/O 코드 [' + $("#tf-dataSetCd").val() + '] 로 이미 등록되어 있습니다.');//TODO::Message
+							return;
+						}
+					},
+					{
+						  errorCall : true
+						, notificationView : false
+						, params 	: {dataSetCd : $("#tf-dataSetCd").val()}
+					});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_dataSetCdCheck"});
+				}
+			},//end fn_dataSetCdCheck()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_updateDataSet
+			//-----------------------------------------------------------------------
+			fn_updateDataSet : function(datasetObject) {
+				try {
+					mint.callService(datasetObject, screenName, 'REST-U01-AN-06-00', '$.main_detail.fn_saveComplete',
+						{
+							  errorCall : true
+							, notificationView : false
+							, params 	: {dataSetId : $("#hd-dataSetId").val()}
+						}
+					);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_updateDataSet"});
+				}
+			},//end fn_updateDataSet()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_createDataSet
+			//-----------------------------------------------------------------------
+			fn_createDataSet : function(datasetObject) {
+				try {
+					mint.callService(datasetObject, screenName, 'REST-C01-AN-06-00', '$.main_detail.fn_saveComplete',
+						{
+							  errorCall : true
+							, notificationView : false
+						}
+					);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_createDataSet"});
+				}
+			},//end fn_createDataSet()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDataSetObject
+			//-----------------------------------------------------------------------
+			fn_getDataSetObject : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// DataField Object
+					//-----------------------------------------------------------------------
+					var dataFieldGridView = $("#gd-TreeList").data().kendoTreeList.dataSource.view();
+					var dataFieldList = dataFieldGridView.toJSON();
+
+
+					//-----------------------------------------------------------------------
+					// DataSet Object
+					//-----------------------------------------------------------------------
+					var dataSetObject = new Object();
+		 			dataSetObject.objectType      	= 'DataSet';
+					dataSetObject.dataSetId			= $("#hd-dataSetId").val();
+					dataSetObject.cd			   	= $("#tf-dataSetCd").val();
+					dataSetObject.name1			   	= $("#tf-dataSetNm1").val();
+					dataSetObject.name2			   	= $("#tf-dataSetNm2").val();
+					dataSetObject.dataFormat	   	= mint.common.isEmpty($("#cb-dataFormat").data("kendoDropDownList").value()) ? '0' : $("#cb-dataFormat").data("kendoDropDownList").value();
+					dataSetObject.length	        = $("#tf-length").val();
+					dataSetObject.encryptType		= $("#cb-encryptType").data("kendoDropDownList").value();
+					dataSetObject.isStandard        = 'N' //$('input:radio[name="rd-search-standard"]:checked').val();
+					dataSetObject.comments		  	= $("#ta-description").data("kendoEditor").value();
+					dataSetObject.delYn           	= 'N';
+					dataSetObject.isRoot			=  $('input:radio[name="rd-layout"]:checked').val();
+					dataSetObject.recordDelimiter   = $('#tf-recordDelimiter').val();
+					dataSetObject.fieldDelimiter    = $('#tf-fieldDelimiter').val();
+					dataSetObject.dataFieldList  	= dataFieldList;
+
+					return dataSetObject;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getDataSetObject"});
+				}
+			},//end fn_getDataSetObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setDataField
+			//-----------------------------------------------------------------------
+			fn_setDataField : function(jsonData) {
+				try {
+					if( !mint.common.isEmpty(jsonData) ) {
+						// Layer 1
+						if( !mint.common.isEmpty(jsonData.dataSetId) ) {
+							$('#hd-dataSetId').val( jsonData.dataSetId );
+							$('#hd-dataSetCd-Old').val( jsonData.cd );
+						}
+						$('#tf-dataSetCd').val( jsonData.cd );
+						$('#tf-dataSetNm1').val( jsonData.name1 );
+						$('#tf-dataSetNm2').val( jsonData.name2 );
+
+						// Layer 2
+						$('input:radio[name=rd-layout]:input[value=' + jsonData.isRoot + ']').prop('checked', true);
+						$('#cb-encryptType').data('kendoDropDownList').value(jsonData.encryptType);
+						$('#tf-length').val( jsonData.length );
+
+						// Layer 3
+						$('#cb-dataFormat').data('kendoDropDownList').value(jsonData.dataFormat);
+						$('#tf-recordDelimiter').val(jsonData.recordDelimiter);
+						$('#tf-fieldDelimiter').val(jsonData.fieldDelimiter);
+
+						$('#tf-regUserNm').val( !mint.common.isEmpty(jsonData.regUser) ? jsonData.regUser.userNm : '');
+						$('#tf-regDate').val( mint.common.isEmpty( jsonData.modDate ) ? '' : mint.common.formatDate(jsonData.modDate) );
+
+						// TreeList
+						var dataFieldList = jsonData.dataFieldList;
+						var dataSource = $.main_detail.fn_getTreeListDataSource(dataFieldList);
+						var treeList = $("#gd-TreeList").data('kendoTreeList');
+						treeList.setDataSource(dataSource);
+
+						// Max recordIdx Setting
+						{
+							var idx = [];
+							dataFieldList.forEach(function(value, index, array) {
+								idx.push(parseInt(value.id));
+							});
+
+							var maxIdx = idx.reduce(function(p,c) {
+								return p > c ? p : c;
+							});
+
+							$.main_detail.recordIdx = mint.common.isEmpty(maxIdx) ? 1 : (parseInt(maxIdx) + 1);
+						}
+
+						//-----------------------------------------------------------------------
+						// Description
+						//-----------------------------------------------------------------------
+						$("#ta-description").data("kendoEditor").value(jsonData.comments);
+						if( mint.common.isEmpty($.main_detail.isModify) ) {
+							$($('#ta-description').data().kendoEditor.body).prop('contenteditable', false);
+							$($('#ta-description').data().kendoEditor.body).prop('disabled', true);
+						}
+
+					} else {
+						mint.common.alert('BW00009', null);
+						mint.back(null);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setDataField"});
+				}
+			},//end fn_setDataField()
+
+			//-----------------------------------------------------------------------
+			// Description :: 저장 콜백
+			//-----------------------------------------------------------------------
+			fn_saveComplete : function(jsonObject) {
+				try {
+					if( !mint.common.isEmpty(jsonObject) ) {
+						//-----------------------------------------------------------------------
+						// - Alert Message 를 Display 한다.
+						//-----------------------------------------------------------------------
+						var msgCode = null;
+						if( mint.common.isEmpty($('#hd-dataSetId').val()) ) {
+							msgCode = 'CI00101';
+						} else {
+							msgCode = 'CI00102';
+						}
+						mint.common.alert(msgCode, null);
+
+						{
+							mint.setDetailView('Y');
+							mint.common.setScreenParam("dataSetId", jsonObject.dataSetId);
+							mint.move('../sub-an/AN-06-00-003');
+						}
+
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_saveComplete"});
+				}
+			},//end fn_saveComplete()
+
+
+
+			//=======================================================================
+			// Tree List Toolbar Operation
+			//=======================================================================
+			//-----------------------------------------------------------------------
+			// Description :: fn_btn_copy_click
+			// TODO :: 보완 필요
+			//-----------------------------------------------------------------------
+			fn_btn_copy_click : function() {
+				try {
+					mint.common.setScreenParam('callback', '$.main_detail.fn_addDataSet');
+					mint.common.searchPopup('../sub-an/AN-06-02-001.html','AN-06-02-001');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_copy_click"});
+				}
+			},//fn_btn_copy_click
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_btn_add_click
+			//-----------------------------------------------------------------------
+			fn_btn_add_click : function() {
+				if(!$.main_detail.fn_checkMetaByLocal())
+					return;
+
+				var idx = $.main_detail.recordIdx++;
+        		var node = $.main_detail.fn_getDataFieldObject({
+        			id: String(idx),
+        			parentId: null,
+        			seq: idx,
+         			dataFieldId: String(idx),
+        		});
+
+				$('#gd-TreeList').data('kendoTreeList').dataSource.pushCreate(node);
+			}, //fn_btn_add_click
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_btn_addChildRow
+			//-----------------------------------------------------------------------
+			fn_btn_addChildRow : function(parentId, dataField) {
+				if(!$.main_detail.fn_checkMetaByLocal())
+					return;
+
+				var idx = $.main_detail.recordIdx++;
+        		var node = $.main_detail.fn_getDataFieldObject({
+        			id: String(idx),
+        			parentId: parentId,
+        			seq: idx,
+         			dataFieldId: String(idx),
+        		});
+
+				if(!mint.common.isEmpty(dataField)) {
+					{
+						delete dataField.id;
+						delete dataField.rowIndex;
+						delete dataField.seq;
+						delete dataField.dataFieldId;
+						delete dataField.parentId;
+					}
+					$.extend(node, dataField);
+				}
+
+				//TODO : 추가되는 위치 옵션 처리 pushInsert or pushCreate
+				$('#gd-TreeList').data('kendoTreeList').dataSource.pushCreate(node);
+				return node;
+			}, //fn_btn_addChildRow
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_btn_down_click
+			//-----------------------------------------------------------------------
+			fn_btn_down_click : function() {
+				try {
+					var grid = $("#gd-TreeList").data('kendoTreeList');
+					$.main_detail.fn_moveSelectedRow(grid, 1);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_down_click"});
+				}
+			},//end fn_btn_down_click()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_btn_down_click
+			//-----------------------------------------------------------------------
+			fn_btn_up_click : function() {
+				try {
+					var grid = $("#gd-TreeList").data('kendoTreeList');
+					$.main_detail.fn_moveSelectedRow(grid, -1);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_up_click"});
+				}
+			},//end fn_btn_up_click()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_moveSelectedRow
+			//-----------------------------------------------------------------------
+			fn_moveSelectedRow : function(grid, direction) {
+				try {
+					var gridView = grid.dataSource.view();
+					var gridData = grid.dataSource.data();
+
+			        var selectedItem = grid.dataItem(grid.select());
+			        if (!selectedItem) {
+			            return;
+			        }
+
+					var targetViewList = gridView.filter(function(value, index, array) {
+						return (value.parentId === selectedItem.parentId);
+					});
+
+			        var selectedViewIdx = targetViewList.indexOf(selectedItem);
+
+			        var targetItem = null;
+					if( direction < 0 ) {
+						targetItem = targetViewList[selectedViewIdx-1];
+					} else {
+						targetItem = targetViewList[selectedViewIdx+1];
+					}
+
+
+					if(targetItem) {
+						var targetDataIdx = gridData.indexOf(targetItem);
+						var selectedDataIdx = gridData.indexOf(selectedItem);
+			        	gridData[targetDataIdx] = selectedItem;
+			        	gridData[selectedDataIdx] = targetItem;
+			        	grid.dataSource.sync();
+
+						$.main_detail.fn_complexTypeHandler(grid.select(), selectedItem.type, selectedItem.typeNm);
+					}
+
+					// length sum
+					{
+			        	$.main_detail.fn_lengthSum(grid.dataSource.view());
+			        	grid.dataSource.sync();
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_moveSelectedRow"});
+				}
+			},//end fn_moveSelectedRow()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_fieldTypeCheck
+			//-----------------------------------------------------------------------
+			fn_fieldTypeCheck : function(container, options, dataItem) {
+				try {
+					// Combobox 의 Selected Item
+					if(dataItem) {
+						var typeCd = dataItem.cd;
+						var typeNm = dataItem.nm;
+						// Model Update
+						{
+							options.model.type   = typeCd
+							options.model.typeNm = typeNm;
+
+							//-----------------------------------------------------------------------
+							// 20201203 add :: complexType 은 metaYn = 'N' 이 default
+							//-----------------------------------------------------------------------
+							if($.main_detail.usedMeta === true) {
+								if( $.main_detail.fn_isComplexType(typeCd, typeNm) ) {
+									if( mint.common.isEmpty(options.model.metaYn) )
+										options.model.metaYn = 'N';
+								} else {
+									if( mint.common.isEmpty(options.model.metaYn) )
+										options.model.metaYn = 'Y';
+								}
+							} else {
+								options.model.metaYn = 'N';
+							}
+
+							//-----------------------------------------------------------------------
+							// 20201229 add :: DATE = 20, CLOB = 4000 으로 셋팅해달라고 함
+							//-----------------------------------------------------------------------
+							{
+								if(typeNm === 'DATE') {
+									if( mint.common.isEmpty(options.model.length) || options.model.length == 0 )
+										options.model.length = 20;
+								}
+								if(typeNm === 'CLOB') {
+									if( mint.common.isEmpty(options.model.length) || options.model.length == 0 )
+										options.model.length = 4000;
+								}
+							}
+						}
+						var tr = container.closest("tr");
+						$.main_detail.fn_complexTypeHandler(tr, typeCd, typeNm);
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_fieldTypeCheck"});
+				}
+			},//end fn_fieldTypeCheck()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_complexTypeHandler
+			//-----------------------------------------------------------------------
+			fn_complexTypeHandler : function(row, typeCd, typeNm) {
+				try {
+					if($.main_detail.isModify === true) return;
+
+					var complexTypeControl = row.find("span[class*='complexTypeControl']");
+					if( $.main_detail.fn_isComplexType(typeCd, typeNm) ) {
+						complexTypeControl.each(function() {
+							$(this).removeClass('mint-hidden');
+						});
+					} else {
+						complexTypeControl.each(function() {
+							$(this).addClass('mint-hidden');
+						});
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_complexTypeHandler"});
+				}
+			},//end fn_complexTypeHandler()
+
+
+			//=======================================================================
+			// Event Handler
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_eventKendoGridSaveRowPreAction(selector::tr)
+			//-----------------------------------------------------------------------
+			fn_eventKendoGridSaveRowPreAction : function(editRow) {
+				try {
+					//-----------------------------------------------------------------------
+					// Workaround(editable.move == true 일때 편집모드 save 누락)
+					// edit() :: e.container.find('input[data-bind*="value"]');
+					//-----------------------------------------------------------------------
+					var deferred = $.Deferred();
+
+					var input = editRow.find('input[data-bind*="value"]');
+					input.each(function(e) {
+						var dataRole = $(this).data('role');
+
+						//input default
+						if(mint.common.isEmpty(dataRole)) {
+							$(this).trigger('change');
+						}
+
+						//input textbox
+						if( dataRole == 'textbox' ) {
+							$(this).blur();
+						}
+
+						//input autocomplete
+						if( dataRole == 'autocomplete' ) {
+							$(this).data("kendoAutoComplete").trigger('change');
+						}
+
+						//input numerictextbox
+						if( dataRole == 'numerictextbox' ) {
+							$(this).blur(); // kendoNummericTextBox Save 위해 focus change
+						}
+
+						//input dropdownlist
+						if( dataRole == 'dropdownlist' ) {
+							$(this).data("kendoDropDownList").trigger('change');
+						}
+					});
+					deferred.resolve();
+					return deferred.promise();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_eventKendoGridSaveRowPreAction"});
+				}
+			},//end fn_eventKendoGridSaveRow()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_eventKendoGridSaveRow(selector::tr)
+			//-----------------------------------------------------------------------
+			fn_eventKendoGridSaveRow : function(e) {
+				try {
+					var targetId = e.delegateTarget.id;
+					var treeList = $('#' + targetId).data('kendoTreeList');
+
+					if( $(this).attr('data-role') === 'editable' ) {
+						e.preventDefault();
+					} else {
+ 						var editRow = $('#' + targetId).find('tr[data-role="editable"]');
+ 						if(editRow.size() > 0) {
+ 							$.main_detail.fn_eventKendoGridSaveRowPreAction(editRow)
+ 							.done(function(){
+ 								treeList.saveRow();
+ 							})
+ 							.fail(function(){
+
+ 							});
+ 						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_eventKendoGridSaveRow"});
+				}
+			},//end fn_eventKendoGridSaveRow()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_eventKendoGridEditRowOpen(selector::td)
+			//-----------------------------------------------------------------------
+			fn_eventKendoGridEditRowOpen : function(e) {
+				try {
+					if($.main_detail.fn_checkMetaByLocal()) {
+						var targetId = e.delegateTarget.id;
+						var treeList = $('#' + targetId).data('kendoTreeList');
+
+						if( $(this).closest('tr').attr('data-role') === 'editable' ||
+							$(this).find('[class*=complexTypeControl]').length > 0 ) {
+							e.preventDefault();
+						} else {
+							treeList.editRow($(this));
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_eventKendoGridEditRowOpen"});
+				}
+			},//end fn_eventKendoGridEditRowOpen()
+
+
+			//=======================================================================
+			// MetaData Check
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireMeta
+			//-----------------------------------------------------------------------
+			fn_requireMeta : function() {
+				try {
+
+					var isTest = false;
+
+					if(isTest) {
+						if(('localStorage' in window) && window['localStorage'] !== null) {
+							var responseData = [{'KOR': '한글', 'ENG': '영어'}];
+							window.localStorage.setItem('meta', JSON.stringify(responseData));
+						} else {
+
+						}
+					} else {
+						//1) META 조회후, WebStorage 에 저장
+						mint.callService(null, screenName, 'REST-R03-AN-06-00', function(responseData) {
+								if(('localStorage' in window) && window['localStorage'] !== null) {
+									window.localStorage.setItem('meta', JSON.stringify(responseData));
+								} else {
+
+								}
+
+							},
+							{
+								errorCall : true,
+								notificationView : false
+							}
+						);
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_requireMeta"});
+				}
+			},//fn_requireMeta
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_checkMetaByLocal
+			//-----------------------------------------------------------------------
+			fn_checkMetaByLocal : function() {
+				try {
+
+					if($.main_detail.usedMeta === false) {
+						return true;
+					} else {
+						if( $.main_detail.usedMetaAssist === true ) {
+							var meta = window.localStorage.getItem('meta');
+							if(meta) {
+								return true;
+							} else {
+								//TODO
+								mint.common.alert('Meta 정보 조회후 사용하세요!!');
+								return false;
+							}
+						} else {
+							return true;
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_checkMetaByLocal"});
+				}
+			},//fn_checkMetaByLocal
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_checkaMetaByRemote
+			//-----------------------------------------------------------------------
+			fn_checkMetaByRemote : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// DataField Object
+					//-----------------------------------------------------------------------
+					var dataFieldGridView = $("#gd-TreeList").data().kendoTreeList.dataSource.view();
+					var dataFieldList = dataFieldGridView.toJSON();
+
+					var isCamel = $('#btn-camel-switch').data('kendoSwitch').check();
+					mint.callService(dataFieldList, screenName, 'REST-R04-AN-06-00', function(responseData) {
+							mint.common.alert('Meta Check 가 완료되었습니다.');//TODO::Message
+							var dataSource = $.main_detail.fn_getTreeListDataSource(responseData);
+							var treeList = $("#gd-TreeList").data('kendoTreeList');
+							treeList.setDataSource(dataSource);
+
+							var dataView = treeList.dataSource.view();
+							$.main_detail.fn_lengthSum(dataView);
+						},
+						{
+							errorCall : true,
+							notificationView : false,
+							params : {isCamel : isCamel ? true : false}
+						}
+					);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_checkaMetaByRemote"});
+				}
+			},//fn_checkaMetaByRemote
+
+
+			//=======================================================================
+			// Inline Component
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_gridEditorTextBox
+			//-----------------------------------------------------------------------
+			fn_gridEditorTextBox : function(container, options, changeCallBack) {
+				try {
+				    var input = $('<input/>');
+				    input.attr('id', options.field);
+				    input.attr('name', options.field);
+				    input.appendTo(container);
+				    input.kendoTextBox({
+						change: function(e) {
+
+						}
+					});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_gridEditorTextBox"});
+				}
+			},//end fn_gridEditorTextBox()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_gridEditorAutoComplete
+			//-----------------------------------------------------------------------
+			fn_gridEditorAutoComplete : function(container, options, changeCallBack) {
+				try {
+
+					var meta = window.localStorage.getItem('meta');
+					var metaObject;
+
+					if(meta) {
+						var dataSource = {
+							serverFiltering: false,
+							data: metaObject = JSON.parse(meta)
+						};
+					}
+
+				    var input = $("<input/>");
+				    input.attr('id', options.field);
+				    input.attr("name", options.field);
+				    input.appendTo(container);
+				    input.kendoAutoComplete({
+						dataTextField: "KOR",
+						dataSource: dataSource,
+						autoWidth: true,
+						delay: 200,
+						enable: mint.common.isEmpty(options.enable) ? true : options.enable,
+						enforceMinLength: true,
+						minLength: 1,
+						filter: 'startswith',
+						highlightFirst: false,
+						ignoreCase: true,
+						suggest: false,
+						//separator: "",
+						placeholder: mint.common.isEmpty(options.placeholder) ? '' : options.placeholder,
+						change: function(e) {
+
+						},
+						close: function(e){
+							//-----------------------------------------------------------------------
+							// TODO :: Open 된 API 가 없으므로, 업데이트시 마다 체크해볼것(dataItem, event)
+							//-----------------------------------------------------------------------
+							var selectedItem = e.sender.listView._dataItems;
+							var wrapper = e.sender.wrapper;
+							var row = wrapper.closest('tr');
+							var keyCode = e.sender._last;
+
+							//-----------------------------------------------------------------------
+							// model update
+							//-----------------------------------------------------------------------
+							if( options.field == 'name1' ) {
+								if( selectedItem && selectedItem.length > 0 ) {
+									options.model.name2 = selectedItem[0].ENG;
+								} else {
+									options.model.name2 = '';
+								}
+							}
+
+							if( options.field == 'parentNmKo' ) {
+								if( selectedItem && selectedItem.length > 0 ) {
+									options.model.parentNmEn = selectedItem[0].ENG;
+								} else {
+									options.model.parentNmEn = '';
+								}
+							}
+
+
+							//-----------------------------------------------------------------------
+							// TAB Key
+							//-----------------------------------------------------------------------
+							if( keyCode == kendo.keys.TAB ) {
+								row.find('input[name=name2]').val(options.model.name2);
+								row.find('input[name=parentNmEn]').val(options.model.parentNmEn);
+							}
+							//-----------------------------------------------------------------------
+							// Enter Key
+							//-----------------------------------------------------------------------
+							if( keyCode == kendo.keys.ENTER ) {
+								var divsion = wrapper.closest('div[class*=k-treelist]');
+								var treeList = divsion.data('kendoTreeList');
+								treeList.saveRow();
+								treeList.editRow(wrapper);
+							}
+
+						},
+						dataBound: function(e){
+
+						},
+						filtering: function(e){
+
+						},
+						open: function(e){
+
+						},
+						select: function(e){
+
+						},
+                        //headerTemplate: '<div class="dropdown-header k-widget k-header"><span>Kor</span><span>Eng</span></div>'	,
+						footerTemplate: 'Total <strong>#: instance.dataSource.total() #</strong> items found',
+						template: '<span class="k-state-default">#: data.KOR #(#: data.ENG #)</span>',
+					});
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_gridEditorAutoComplete"});
+				}
+			},//end fn_gridEditorAutoComplete()
+
+
+			//=======================================================================
+			// Excel Upload
+			//=======================================================================
+			//-----------------------------------------------------------------------
+			// Description :: fn_uploadPopup
+			//-----------------------------------------------------------------------
+			fn_uploadPopup : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// fileUpload
+					//-----------------------------------------------------------------------
+					$.main_detail.fn_initFileUpload();
+
+					$('#AN-06-00-002-UPLOAD').modal({
+						backdrop: 'static'
+					}).on('hidden.bs.modal', function(event) {
+			        	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+			        	if( spreadsheet ) {
+			        		spreadsheet.destroy();
+			        		$('.k-spreadsheet-names-popup').remove();
+			        		$('.k-spreadsheet-formula-list').remove();
+			        	}
+					});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_uploadPopup"});
+				}
+			},//fn_uploadPopup
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initFileUpload
+			//-----------------------------------------------------------------------
+			fn_initFileUpload : function() {
+				try {
+
+					var oldObject = $('#fileUpload').data('kendoUpload');
+
+					if(oldObject) {
+						oldObject.clearAllFiles();
+						oldObject.destroy();
+					}
+
+					var url = mint.rest.getServiceUrl('REST-F01-AN-06-00', false);
+
+					$("#fileUpload").kendoUpload({
+						files: [],
+						multiple: false,
+						async: {
+							saveUrl: url,
+							autoUpload: false
+						},
+						localization: {
+							select: mint.label.getLabel('lb-220')
+						},
+						select : function(e) {
+							var selectFile = e.files[0];
+							if( ! mint.common.isEmpty(selectFile) && selectFile.extension.toLowerCase() != '.xlsx' ) {
+								mint.common.alert('확장자가 .xlsx 파일만 업로드 할 수 있습니다.');
+								e.preventDefault();
+							}
+
+							if( mint.common.invalidFileName(selectFile.name) ) {
+								mint.common.alert('CW00015', selectFile.name);
+								e.preventDefault();
+							}
+						},
+						upload: function(e) {
+							e.data = {userId: mint.session.getUserId()};
+						},
+						progress: function(e) {
+							mint.waitingLoad(true);
+						},
+						cancel: function(e) {
+						},
+						error: function(e) {
+							$.main_detail.fn_uploadCheck(e.XMLHttpRequest)
+						},
+						success: function(e) {
+							$.main_detail.fn_uploadCheck(e.XMLHttpRequest)
+						},
+						complete: function(e) {
+							mint.waitingLoad(false);
+						},
+						remove: function(e) {
+							var files = e.files;
+							for(var i=0; i<$('#fileUpload').data("kendoUpload").options.files.length; i++) {
+								if(files[0].uid == $('#file').data("kendoUpload").options.files[i].uid) {
+									$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+									$('#fileUpload').data("kendoUpload").options.files.splice(i, 1);
+									e.preventDefault();
+								}
+							}
+						}
+					});
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initFileUpload"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_uploadCheck
+			//-----------------------------------------------------------------------
+			fn_uploadCheck : function( xhr ) {
+				try {
+					var httpStatus = xhr.status;
+					if( httpStatus == 200 ) {
+						//-----------------------------------------------------------------------
+						// Response ComMessage
+						//-----------------------------------------------------------------------
+						var msg = JSON.parse(xhr.responseText);
+						if( msg.errorCd == 0 ) {
+
+							var fieldList = msg.responseObject;
+							if(!mint.common.isEmpty(fieldList) && fieldList.length > 0) {
+								var ds = 12;
+								var de = fieldList.length -1;
+								$.main_detail.fn_setExcelDataBinding(fieldList, ds, de, true, null );
+							} else {
+								mint.common.alert('Excel-Import 가 완료되었으나, 데이터가 없습니다\nExcel 작성규칙, 내용, 포멧 등을 확인하십시요'); //TODO :: Message
+							}
+
+							$('#AN-06-00-002-UPLOAD').modal('hide');
+						} else {
+							$('#AN-06-00-002-UPLOAD').modal('hide');
+							mint.common.errorDialog('Service', msg.errorCd, msg.errorMsg, msg.errorDetail);
+						}
+
+					} else {
+						switch( httpStatus ) {
+							case 12029 : //server shutdown
+								alertMsg = mint.message.getMessage('CE12029', null);
+								break;
+							case 404 :
+								alertMsg = mint.message.getMessage('CE10404', null);
+								break;
+							default :
+								alertMsg = mint.message.getMessage('CE10000', httpStatus);
+								break;
+						}
+						mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_uploadCheck"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_uploadSave
+			//-----------------------------------------------------------------------
+			fn_uploadSave : function() {
+				try {
+
+					var envVal = mint.common.getEnvValue('layout.excel.server.parsing');
+
+					if(!mint.common.isEmpty(envVal) && envVal.length > 0 && envVal[0] == 'Y' ) {
+						var isServerSideProcess = true;
+					} else {
+						var isServerSideProcess = false;
+					}
+
+					if(isServerSideProcess) {
+						//-----------------------------------------------------------------------
+						// Server Side Excel Parsing ( Java Base ) :: 구현하지 않았음
+						//-----------------------------------------------------------------------
+						var fileUpload = $("#fileUpload").data("kendoUpload");
+	 					var fileLen = fileUpload.wrapper.find(".k-file").length;
+	 					if( fileLen > 0 ) {
+	 						fileUpload.upload();
+	 					} else {
+	 						//TODO :: Message
+	 						mint.common.alert('파일이 첨부되지 않았습니다.');
+	 					}
+					} else {
+						//-----------------------------------------------------------------------
+						// Client Side Excel Parsing ( JavaScript Base )
+						// SheetJS or Kendo-Spreadsheet
+						//-----------------------------------------------------------------------
+						var referenceByVariables = false; //TODO :: setEnv
+
+						var uploadComponent = $('#fileUpload').getKendoUpload();
+						var files = uploadComponent.getFiles();
+
+				        if(files.length > 0) {
+				        	var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+				        	if( spreadsheet ) {
+				        		spreadsheet.destroy();
+				        	} else {
+				        		spreadsheet = $("#spreadsheet").kendoSpreadsheet({
+									sheets:[]
+					            }).data("kendoSpreadsheet");
+				        	}
+
+				        	spreadsheet.fromFile(files[0].rawFile)
+				        	.done(function() {
+				        		//-----------------------------------------------------------------------
+				        		// excel workbook load
+				        		//-----------------------------------------------------------------------
+				        		var sheet = spreadsheet.sheetByName('레이아웃');
+				        		if(mint.common.isEmpty(sheet)) {
+				        			mint.common.alert("Excel에 '레이아웃' 시트가 존재하지 않습니다");
+				        			return;
+				        		}
+	 			        		var sheetJSON = sheet.toJSON();
+	 			        		var rows = sheetJSON.rows;
+
+	 			        		//-----------------------------------------------------------------------
+	 			        		// excel name value parsing
+	 			        		//-----------------------------------------------------------------------
+	 			        		if(referenceByVariables) {
+						        	var h_field_info = spreadsheet.nameValue('h_field_info');
+						        	var h_end = spreadsheet.nameValue('h_end');
+
+						        	if( mint.common.isEmpty(h_field_info) || mint.common.isEmpty(h_end) ) {
+						        		//TODO :: Message 정리
+										mint.common.alert('레이아웃 정보를 읽을수 없습니다. Excel-Template 의 포멧에 문제가 있는것 같습니다. 관리자에게 문의하세요!!');
+										return;
+						        	}
+						        	//-----------------------------------------------------------------------
+						        	// fieldinfo start ~ end position parsing
+						        	//-----------------------------------------------------------------------
+						        	var ds = parseInt(h_field_info.row) + 2;
+						        	var de = parseInt(h_end.row) -1;
+
+	 			        		} else {
+									var ds = 12;
+									var de = rows.length -1;
+	 			        		}
+
+
+	 			        		$.main_detail.fn_setExcelDataBinding(rows, ds, de, false, {
+	 			        			sheet: sheet,
+	 			        			referenceByVariables: referenceByVariables,
+	 			        		});
+				        	})
+				        	.fail(function() {
+				        		//doSomething()
+				        	});
+				        	$('#AN-06-00-002-UPLOAD').modal('hide');
+				        }
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_uploadSave"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_seekRow
+			//-----------------------------------------------------------------------
+			fn_seekRow : function(rows, ds, de, curLevel) {
+				try {
+					for(var i = de; i >= ds; i--) {
+						if( parseInt(rows[i].cells[1].value) == (curLevel - 1)) {
+							return i;
+						}
+					}
+					return -1;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_seekRow"});
+				}
+			},//fn_seekRow
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setExcelDataBinding
+			//-----------------------------------------------------------------------
+			fn_setExcelDataBinding : function(rows, ds, de, isServerSideProcess, options) {
+
+				try {
+					var sheet = ( !mint.common.isEmpty(options) && !mint.common.isEmpty(options.sheet) ) ? options.sheet : null;
+					var referenceByVariables = (!mint.common.isEmpty(options) && options.referenceByVariables === true) ? true : false;
+
+		        	var fieldList = [];
+		        	var curLevel = 1;
+		        	var preData = null;	// 이전 데이터
+
+		        	var idx = 0;
+		        	for( var i = ds; i <= de; i++ ) {
+		        		idx++;
+		        		var row = rows[i];
+
+						if( !referenceByVariables ) {
+							if( row.cells[0].value == '[END]' ) {
+								break;
+							}
+						}
+
+		        		curLevel = parseInt(row.cells[1].value);
+		        		//-----------------------------------------------------------------------
+		        		// parentId 설정
+		        		//-----------------------------------------------------------------------
+						var parentId = null;
+						if( preData && preData.level ) {
+							if( curLevel > preData.level ) {
+								parentId = preData.id;
+							} else if( curLevel == preData.level ) {
+								parentId = preData.parentId;
+							} else {
+								var pIdx = $.main_detail.fn_seekRow(rows, ds, i, curLevel);
+								if( pIdx != -1 ) {
+									parentId = pIdx - ds + 1;
+								}
+							}
+						}
+						//-----------------------------------------------------------------------
+						// Node Create
+						//-----------------------------------------------------------------------
+						{
+							try {
+				        		var node = $.main_detail.fn_getDataFieldObject({
+				        			id: String(idx),
+				        			parentId: parentId,
+				        			dataFieldId: String(idx),
+				        			seq: idx,
+				        			name1: row.cells[2].value,
+				        			parentNmKo: row.cells[3].value,
+				        			requiredYn: !mint.common.isEmpty(row.cells[4].value) ? row.cells[4].value.toUpperCase() : 'N',
+				        			name2: row.cells[5].value,
+				        			parentNmEn: row.cells[6].value,
+				        			type: $.main_detail.fn_getCommonCodeValueByName('AN09', 'nm', 'cd', row.cells[7].value),
+				        			typeNm: row.cells[7].value,
+				        			length: row.cells[8].value,
+				        			scale: row.cells[9].value,
+				        			defaultValue: row.cells[10].value,
+				        			justify: $.main_detail.fn_getCommonCodeValueByName('AN13', 'nm', 'cd', row.cells[11].value),
+				        			justifyNm: row.cells[11].value,
+				        			padding: row.cells[12].value,
+				        			encryptType: $.main_detail.fn_getCommonCodeValueByName('AN08', 'nm', 'cd', row.cells[13].value),
+				        			encryptTypeNm: row.cells[13].value,
+				        			metaYn: !mint.common.isEmpty(row.cells[14].value) ? row.cells[14].value.toUpperCase() : '',
+				        			koreanYn: !mint.common.isEmpty(row.cells[15].value) ? row.cells[15].value.toUpperCase() : 'N',
+				        			decimalPointYn: !mint.common.isEmpty(row.cells[16].value) ? row.cells[16].value.toUpperCase() : 'N',
+				        			maskingYn: !mint.common.isEmpty(row.cells[17].value) ? row.cells[17].value.toUpperCase() : 'N',
+				        			maskingPatternCd: !mint.common.isEmpty(row.cells[18].value) ? row.cells[18].value.toUpperCase() : '',
+				        			comments: !mint.common.isEmpty(row.cells[19].value) ? row.cells[19].value.toUpperCase() : '',
+				        		});
+
+
+								//-----------------------------------------------------------------------
+								// 20201229 add :: DATE = 20, CLOB = 4000 으로 셋팅해달라고 함
+								//-----------------------------------------------------------------------
+								{
+									if(node.typeNm === 'DATE') {
+										if( mint.common.isEmpty(node.length) || node.length == 0 )
+											node.length = 20;
+									}
+									if(node.typeNm === 'CLOB') {
+										if( mint.common.isEmpty(node.length) || node.length == 0 )
+											node.length = 4000;
+									}
+								}
+
+
+			    				fieldList.push(node);
+			    				preData = {id: String(idx), parentId : parentId, level : curLevel };
+							} catch(e) {
+								//TODO :: Message
+								mint.common.alert('Excel-Template 내용에 문제가 있습니다\nExcel-Template 이 최신 버전인지 확인하세요');
+								return;
+							}
+						}
+
+		        	}
+
+					//-----------------------------------------------------------------------
+					// DataSet Object
+					//-----------------------------------------------------------------------
+					{
+						var dataSetObject = new Object();
+
+						if( sheet ) {
+							//-----------------------------------------------------------------------
+							// Client Side Parsing
+							//-----------------------------------------------------------------------
+							if(referenceByVariables) {
+					        	dataSetObject.cd  = sheet.range(spreadsheet.nameValue('m_cd')).value();
+					        	dataSetObject.name1  = sheet.range(spreadsheet.nameValue('m_nm_kr')).value();
+					        	dataSetObject.name2  = sheet.range(spreadsheet.nameValue('m_nm_en')).value();
+					        	dataSetObject.encryptType  = sheet.range(spreadsheet.nameValue('m_encrypt_type')).value();
+					        	dataSetObject.dataFormat = $.main_detail.fn_getCommonCodeValueByName('AN11', 'nm', 'cd', sheet.range(spreadsheet.nameValue('m_data_format')).value());
+					        	dataSetObject.recordDelimiter  = sheet.range(spreadsheet.nameValue('m_delimiter_record')).value();
+					        	dataSetObject.fieldDelimiter  = sheet.range(spreadsheet.nameValue('m_delimiter_field')).value();
+							} else {
+					        	dataSetObject.cd  = sheet.range('$C$3').value();
+					        	dataSetObject.name1  = sheet.range('$C$4').value();
+					        	dataSetObject.name2  = sheet.range('$C$5').value();
+					        	dataSetObject.encryptType  = sheet.range('$C$6').value();
+					        	dataSetObject.dataFormat = $.main_detail.fn_getCommonCodeValueByName('AN11', 'nm', 'cd', sheet.range('$C$7').value());
+					        	dataSetObject.recordDelimiter  = sheet.range('$C$8').value();
+					        	dataSetObject.fieldDelimiter  = sheet.range('$C$9').value();
+							}
+						} else {
+							//-----------------------------------------------------------------------
+							// Server Side Parsing row.cells[5].value
+							//-----------------------------------------------------------------------
+				        	dataSetObject.cd  = rows[2].cells[2].value;
+				        	dataSetObject.name1  = rows[3].cells[2].value;
+				        	dataSetObject.name2  = rows[4].cells[2].value;
+				        	dataSetObject.encryptType  = rows[5].cells[2].value;
+
+							//-----------------------------------------------------------------------
+							// [보안] 신한생명 F/W 는 역공학으로 Excel 생성하면서 아래 항목 작성하지 않음
+							//-----------------------------------------------------------------------
+							try {
+					        	dataSetObject.dataFormat = $.main_detail.fn_getCommonCodeValueByName('AN11', 'nm', 'cd', rows[6].cells[2].value);
+					        	dataSetObject.recordDelimiter  = rows[7].cells[2].value;
+					        	dataSetObject.fieldDelimiter  = rows[8].cells[2].value;
+							}catch(e) {
+					        	dataSetObject.dataFormat = '';
+					        	dataSetObject.recordDelimiter  = '';
+					        	dataSetObject.fieldDelimiter  = '';
+							}
+
+						}
+
+			        	dataSetObject.dataFieldList = fieldList;
+			        	$.main_detail.fn_setDataField(dataSetObject);
+					}
+					{
+						var treeList = $('#gd-TreeList').data('kendoTreeList');
+						var dataView = treeList.dataSource.view();
+						$.main_detail.fn_lengthSum(dataView);
+					}
+
+					mint.common.alert('Excel-Import 가 완료되었습니다'); //TODO :: Message
+				} catch( e ) {
+					mint.common.alert('Excel-Import 처리도중 문제가 발생했습니다\n' + e); //TODO :: Message
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setExcelDataBinding"});
+				}
+			},//fn_setExcelDataBinding
+
+
+
+			//=======================================================================
+			// ETC...
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDataFieldObject
+			// TODO: field 정리 필요
+			//-----------------------------------------------------------------------
+			fn_getDataFieldObject : function(options) {
+				try {
+					var model = {
+						objectType: 'DataField',
+						id: '', // key, String(idx)
+
+						dataSetId: '',
+						dataFieldId: '',// String(idx)
+						parentId: null,
+						seq: '', //idx
+						//name1: '',
+						//name2: '',
+						cd: '',
+						type: '',
+						typeCd: '',
+						typeNm: '',
+						offset: 0,
+						length: 0,
+						//encryptType: '',
+						//encryptTypeNm: '',
+						isLengthField: 'N',
+						repeatCount: 0,
+						hasRepeatCountField: 'N',
+						repeatDataSetId: '',
+						repeatFieldId: '',
+
+						defaultValue: '',
+						//justify: '',
+						//justifyNm: '',
+						padding: '',
+
+						fieldSetId: null,
+						refDataFieldId: '',
+						refDataSetId: '',
+
+						parentNmKo: '',
+						parentNmEn: '',
+						requiredYn: 'N',
+						scale: 0,
+						koreanYn: 'N',
+						//metaYn: $.main_detail.usedMeta ? 'Y' : 'N',
+						metaYn: '',
+						decimalPointYn: 'N',
+						maskingYn: 'N',
+						maskingPatternCd: '',
+						comments: '',
+
+						valid: false
+					};
+
+					if(options) {
+						model = $.extend(model, options);
+					}
+					return model;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getDataFieldObject"});
+				}
+			},//fn_getDataFieldObject
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCommonCodeValueByName
+			//-----------------------------------------------------------------------
+			fn_getCommonCodeValueByName : function(codes, keyField, valueField, value) {
+				try {
+					var codeGroup = mint.common.commonCodeMap.get("cds")[codes];
+					for(var i in codeGroup) {
+						if(value == codeGroup[i][keyField]) {
+							return codeGroup[i][valueField];
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getCommonCodeValueByName"});
+				}
+			},//fn_getCommonCodeValueByName
+
+			//-----------------------------------------------------------------------
+			// Description :: 수정 삭제 가능 여부 체크
+			//-----------------------------------------------------------------------
+			fn_isModifyer : function() {
+				try {
+					var isModifyer = false;
+					//등록자 및 어드민 검사
+					if($('#hd-regUserId').val() == mint.session.getUserId() || mint.session.isInterfaceAdmin() == 'Y') {
+						isModifyer = true;
+					}
+					return isModifyer;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_isModifyer"});
+				}
+			},//end fn_isModifyer()
+
+		}// end main
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: Meta Check 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-meta-check').on('click', function() {
+		$.main_detail.fn_checkMetaByRemote();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 저장 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-save').on('click', function() {
+		$.main_detail.fn_save();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Meta Read 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-meta-read').on('click', function() {
+		$.main_detail.fn_requireMeta();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 이전 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-back').on('click', function(e) {
+		mint.back(null);
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 취소 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-cancel').click(function(e) {
+		mint.setDetailView('Y');
+		mint.common.setScreenParam("dataSetId", $("#hd-dataSetId").val());
+		mint.move('../sub-an/AN-06-00-003');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Excel Upload Click
+	//-----------------------------------------------------------------------
+	$(".btn-upload").click(function(e) {
+		try {
+			$.main_detail.fn_uploadPopup();
+		}
+		catch (e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelUpload.click"});
+		}
+	});
+
+
+	//-----------------------------------------------------------------------
+	// Description :: Excel Upload
+	//-----------------------------------------------------------------------
+	$(".btn-upload-save").click(function(e) {
+		try {
+			$.main_detail.fn_uploadSave();
+		}
+		catch (e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelUpload.click"});
+		}
+	});
+
+
+	//-----------------------------------------------------------------------
+	// Description :: 수정 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-update').on('click', function(e) {
+		if($.main_detail.fn_isModifyer()) {
+			var confirmCheck = mint.common.confirm('CI00002',null);
+			if(confirmCheck) {
+				$.main_detail.fn_save();
+			}
+		} else {
+			mint.common.alert('CW00007', null);
+		}
+       });
+	//-----------------------------------------------------------------------
+	// Description :: 임시저장 불러오기 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-tmp-save').on('click', function(e) {
+		//$.main_detail.fn_tempDataSetSave();
+       });
+	//-----------------------------------------------------------------------
+	// Description :: 임시저장 불러오기 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-tmp-read').on('click', function(e) {
+		//$.main_detail.fn_tempDataSetRead();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 시스템 그리드 클릭 이벤트
+	//-----------------------------------------------------------------------
+	$('#gd-TreeList').on('click', 'tr.k-state-selected, [data-command="edit"]', function (e) {
+		$.main_detail.fn_eventKendoGridSaveRow.apply(this, [e]);
+	});
+
+	$('#gd-TreeList').on('dblclick', 'tr.k-state-selected td', function (e) {
+		$.main_detail.fn_eventKendoGridEditRowOpen.apply(this, [e]);
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main_detail.fn_init();
+	mint.label.attachLabel(null);
+});
+</script>

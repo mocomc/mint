@@ -1,0 +1,8 @@
+AP00000001$$$H001$$$en$$$조회조건$$$<p><font color="#000000" face="굴림" size="3">
+ </font><font color="#000000" face="굴림" size="3">
+ </font><font color="#000000" face="굴림" size="3">
+
+  </font><font color="#000000" face="굴림" size="3">
+
+ </font><font color="#000000" face="굴림" size="3">
+</font><strong><font face="Tahoma">Search Conditions</font></strong></p><p><strong><font face="Tahoma">&nbsp; 1. Offering auto complete search function</font></strong></p><p><font face="Tahoma">&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;If you enter the "search key" in ComboBox, list of words that include "search key" will automatically aligned</font></p><p><strong><font face="Tahoma">&nbsp; 2. Related search function</font></strong></p><p><font face="Tahoma">&nbsp;&nbsp;&nbsp; &nbsp;"system" + "business name" + "interface name" are combined together so that interactively reflected to the search result</font></p><p><strong><font face="Tahoma">&nbsp; 3. Initialization button</font></strong></p><p><font face="Tahoma">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; You can use "initialization button" when you enter the search conditions that already had been selected out of related search functions.</font></p><p><strong><font face="Tahoma">&nbsp;&nbsp;4. Search range</font></strong></p><p><font face="Tahoma">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a.&nbsp;Total : search all things that are registered at the life cycle management.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.&nbsp;Only user&nbsp;: search only user's handling interfaces. </font></p><p><font color="#000000" face="굴림" size="3"><br></font><br></p>

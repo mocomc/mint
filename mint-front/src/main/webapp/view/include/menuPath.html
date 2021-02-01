@@ -1,0 +1,33 @@
+
+<script type="text/x-kendo-template" id="template-menuPath">
+	<h2>
+	# if(!mint.common.isEmpty(data[data.length-1].menuOpt)){ #
+		# var menuOptTop =  JSON.parse(data[data.length-1].menuOpt); #
+		<lb class="#=menuOptTop.label #">#= mint.common.isEmpty(mint.label.getLabel(menuOptTop.label)) ? data[data.length-1].menuNm : mint.label.getLabel(menuOptTop.label) #</lb>
+	# } else { #
+		<lb class="">#= data[data.length-1].menuNm # </lb>
+	# } #
+	</h2>
+	<ol class="breadcrumb">
+# for ( var i = 0; i < data.length; i++ ) { #
+	# if(i == (data.length-1)){ #
+		<li class="active"><strong>
+	# } else { #
+		<li>
+	# } #
+
+	# if(!mint.common.isEmpty(data[i].menuOpt)){ #
+		# var menuOpt =  JSON.parse(data[i].menuOpt); #
+		<lb class="#=menuOpt.label #">#= mint.common.isEmpty(mint.label.getLabel(menuOpt.label)) ? data[i].menuNm : mint.label.getLabel(menuOpt.label) # </lb>
+	# } else { #
+		<lb class="">#= data[i].menuNm # </lb>
+	#}#
+
+	#if(i == (data.length-1)){#
+		</strong></li>
+	#}else{#
+		</li>
+	#}#
+# } #
+ 	</ol>
+</script>

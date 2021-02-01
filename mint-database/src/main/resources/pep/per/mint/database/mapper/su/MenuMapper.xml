@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.MenuMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertMenu">
+		<selectKey keyProperty="menuId" resultType="string" order="BEFORE" >
+			<choose>
+				<when test="_databaseId == 'postgres'">
+			  SELECT 'MN' || LPAD((COALESCE(MAX(SUBSTR(MENU_ID,3)),'0')::numeric+1)::text,8,'0') FROM TSU0207
+		    	</when>
+		    	<otherwise>
+			  SELECT 'MN' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(MENU_ID,3)),'0')) + 1),8,'0') FROM TSU0207
+		    	</otherwise>
+			</choose>
+		</selectKey>
+		INSERT INTO TSU0207
+		(
+		    MENU_ID,
+		    MENU_NM,
+		    MENU_CD,
+		    MENU_OPT,
+		    ROOT_YN,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{menuId, jdbcType=VARCHAR},
+			#{menuNm, jdbcType=VARCHAR},
+			#{menuCd, jdbcType=VARCHAR},
+			#{menuOpt, jdbcType=VARCHAR},
+			#{rootYn, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getMenuList" parameterType="Map" resultMap="menuResultMap">
+		SELECT
+			MENU_ID,
+			MENU_NM,
+			MENU_CD,
+			MENU_OPT,
+			ROOT_YN,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		FROM TSU0207
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		ORDER BY ROOT_YN DESC, MENU_ID ASC
+	</select>
+
+	<resultMap type="Menu" id="menuResultMap">
+		<id property="menuId" 				column="MENU_ID"/>
+		<result property="menuNm"				column="MENU_NM"/>
+		<result property="menuCd"				column="MENU_CD"/>
+		<result property="menuOpt"				column="MENU_OPT"/>
+		<result property="rootYn"				column="ROOT_YN"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+		<collection property="appList" ofType="Application">
+			<id property="appId"				column="APP_ID"/>
+			<result property="appCd"		column="APP_CD"/>
+			<result property="appNm"		column="APP_NM"/>
+			<result property="appOpt"		column="APP_OPT"/>
+			<result property="appUri"		column="APP_URI"/>
+		</collection>
+	</resultMap>
+
+	<update id="updateMenu">
+		UPDATE TSU0207
+		SET
+			MENU_NM 	= #{menuNm, jdbcType=VARCHAR}
+		   	,MENU_CD	= #{menuCd, jdbcType=VARCHAR}
+		   	,MENU_OPT	= #{menuOpt, jdbcType=VARCHAR}
+		    ,ROOT_YN	= #{rootYn, jdbcType=VARCHAR}
+		    ,COMMENTS	= #{comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE MENU_ID = #{menuId}
+	</update>
+
+	<delete id="deleteMenu">
+		UPDATE TSU0207
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE MENU_ID =#{menuId}
+	</delete>
+
+
+	<select id="existMenu" parameterType="Map" resultMap="menuResultMap">
+		SELECT
+			MENU_ID,
+			ROOT_YN
+  		FROM TSU0207
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		AND  MENU_NM = #{menuNm}
+		<if test="menuId != null">
+			AND MENU_ID &lt;&gt; #{menuId}
+		</if>
+	</select>
+
+
+	<select id="usedMenu" parameterType="Map" resultType="String">
+		SELECT ROLE_ID
+  		FROM TSU0203
+  		WHERE DEL_YN= 'N'
+		AND MENU_ID = #{menuId}
+	</select>
+
+	<select id="getMenuTreeWithModelParam" resultMap="menuTreeWithModelResultMap">
+		SELECT
+			 a.P_MENU_ID
+			,b.MENU_NM AS P_MENU_NM
+			,b.ROOT_YN AS P_ROOT_YN
+			,a.C_MENU_ID
+			,c.MENU_NM AS C_MENU_NM
+			,a.DEPTH
+		FROM TSU0208 a
+		INNER JOIN (SELECT * FROM TSU0207 WHERE DEL_YN = 'N') b ON a.P_MENU_ID = b.MENU_ID
+		INNER JOIN (SELECT * FROM TSU0207 WHERE DEL_YN = 'N') c ON a.C_MENU_ID = c.MENU_ID
+		WHERE a.DEL_YN = 'N'
+		AND a.DEPTH = 0 AND b.ROOT_YN='Y'
+  		UNION ALL
+		SELECT
+			 a.P_MENU_ID
+			,b.MENU_NM AS P_MENU_NM
+			,b.ROOT_YN AS P_ROOT_YN
+			,a.C_MENU_ID
+			,c.MENU_NM AS C_MENU_NM
+			,a.DEPTH
+		FROM TSU0208 a
+		INNER JOIN (SELECT * FROM TSU0207 WHERE DEL_YN = 'N') b ON a.P_MENU_ID = b.MENU_ID
+		INNER JOIN (SELECT * FROM TSU0207 WHERE DEL_YN = 'N') c ON a.C_MENU_ID = c.MENU_ID
+		WHERE a.DEL_YN = 'N'
+	 	AND a.DEPTH =  1
+	</select>
+
+	<resultMap id="menuTreeWithModelResultMap" type="java.util.Map">
+		<result property="parentId" 	column="P_MENU_ID"/>
+		<result property="parentNm" 	column="P_MENU_NM"/>
+		<result property="parentRootYn" column="P_ROOT_YN"/>
+		<result property="childId"  	column="C_MENU_ID"/>
+		<result property="childNm"  	column="C_MENU_NM"/>
+		<result property="depth"    	column="DEPTH" javaType="Integer" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<select id="getNotUseMenuList" parameterType="Map" resultMap="menuResultMap">
+		SELECT
+			MENU_ID,
+			MENU_NM,
+			MENU_CD,
+			MENU_OPT,
+			ROOT_YN,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		FROM TSU0207 A
+  		WHERE 1 = 1
+  	    AND A.MENU_ID NOT IN (
+    	  SELECT P_MENU_ID AS MENU_ID FROM TSU0208 WHERE DEL_YN = 'N' AND DEPTH = 0
+    	)
+  		AND DEL_YN = 'N' AND ROOT_YN = 'N'
+		ORDER BY ROOT_YN DESC, MENU_ID ASC
+	</select>
+
+	<select id="existPath" parameterType="string" resultType="string">
+		SELECT P_MENU_ID FROM TSU0208 WHERE DEPTH = 0 AND P_MENU_ID = #{menuId} AND C_MENU_ID = #{menuId}
+	</select>
+
+	<insert id="insertMenuPath" parameterType="MenuPath">
+		INSERT INTO TSU0208 (
+			 P_MENU_ID
+			,C_MENU_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="createMenuPathRelation" parameterType="Map">
+		INSERT INTO TSU0208 (
+			 P_MENU_ID
+			,C_MENU_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		)
+		SELECT
+			 a.P_MENU_ID
+			,b.C_MENU_ID
+			,a.DEPTH + b.DEPTH +1
+			,'N'
+		<choose>
+			<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+		FROM TSU0208 a, TSU0208 b
+	    	</when>
+	    	<otherwise>
+			,#{regDate}
+			,#{regId}
+		FROM TSU0208 a CROSS JOIN TSU0208 b
+	    	</otherwise>
+		</choose>
+		WHERE a.C_MENU_ID = #{pid}
+		AND b.P_MENU_ID = #{cid}
+	</insert>
+
+	<delete id="deleteMenuChildPath">
+	<!--
+	delete TSU0208 where P_MENU_ID = #{menuId} or C_MENU_ID = #{menuId}
+	 -->
+		DELETE FROM TSU0208 WHERE C_MENU_ID  IN (
+	  		SELECT a.C_MENU_ID
+		 	FROM TSU0208 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_MENU_ID = #{menuId}
+   		)
+   		OR C_MENU_ID = #{menuId}
+	</delete>
+
+	<select id="getMenuDetail" parameterType="Map" resultMap="menuResultMap">
+		SELECT
+			A.MENU_ID,
+			A.MENU_NM,
+			A.MENU_CD,
+			A.MENU_OPT,
+			A.ROOT_YN,
+			A.COMMENTS,
+			A.DEL_YN,
+			A.REG_DATE,
+			A.REG_USER,
+			A.MOD_DATE,
+			A.MOD_USER,
+			H.APP_ID,
+			H.APP_NM,
+			H.APP_CD,
+			H.APP_URI,
+			H.APP_OPT,
+			H.SEQ
+		FROM TSU0207 A
+		LEFT OUTER JOIN (
+			SELECT
+				b.MENU_ID
+				,b.SEQ
+				,c.APP_ID
+				,c.APP_NM
+				,c.APP_CD
+				,c.APP_URI
+				,c.APP_OPT
+			FROM TSU0204 c
+			INNER JOIN TSU0214 b ON c.APP_ID = b.APP_ID
+		) h ON a.MENU_ID = h.MENU_ID
+  		WHERE A.DEL_YN= 'N'
+  		AND A.MENU_ID = #{menuId}
+		ORDER BY H.SEQ
+	</select>
+
+	<delete id="deleteMenuRelativeApps">
+		DELETE FROM TSU0214 WHERE MENU_ID = #{menuId}
+	</delete>
+
+	<insert id="insertMenuRelativeApps">
+		INSERT INTO TSU0214 (
+			 MENU_ID
+			,APP_ID
+			,SEQ
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{menuId}
+			,#{apps.appId}
+		<choose>
+			<when test="_databaseId == 'postgres'">
+			,#{apps.seq}::numeric
+	    	</when>
+	    	<otherwise>
+			,#{apps.seq}
+	    	</otherwise>
+		</choose>
+			,'N'
+			,#{apps.regDate}
+			,#{apps.regId}
+		)
+	</insert>
+
+
+	<update id="updateMenuRootYn">
+		UPDATE TSU0207
+		SET
+			ROOT_YN	= 'N'
+		WHERE MENU_ID = #{menuId}
+	</update>
+
+
+	<delete id="deleteMenuMappingUserRole">
+		DELETE TSU0203 WHERE  MENU_ID = #{menuId}
+	</delete>
+
+	<insert id="insertMenuMappingUserRole">
+		<selectKey keyProperty="seq" resultType="String" order="BEFORE" >
+			SELECT MAX(seq)+1 FROM TSU0203
+		</selectKey>
+		INSERT INTO TSU0203
+		SELECT ROLE_ID,
+		<choose>
+			<when test="_databaseId == 'altibase'">
+			'${menuId}',
+			'${seq}',
+			'Y',
+			'N',
+			TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+			REG_USER,
+			TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+	    	</when>
+			<when test="_databaseId == 'postgres'">
+			#{menuId},
+			#{seq}::numeric,
+			'Y',
+			'N',
+			TO_CHAR(now(), 'yyyyMMddHH24MISS'),
+			REG_USER,
+			TO_CHAR(now(), 'yyyyMMddHH24MISS'),
+	    	</when>
+	    	<otherwise>
+			#{menuId},
+			#{seq},
+			'Y',
+			'N',
+			TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+			REG_USER,
+			TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+	    	</otherwise>
+		</choose>
+			''
+		FROM TSU0201
+		WHERE DEL_YN='N'
+	</insert>
+</mapper>

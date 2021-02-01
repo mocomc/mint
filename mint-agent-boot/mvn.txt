@@ -1,0 +1,7 @@
+cd C:\WORK\IIP_V3\mint\
+
+mvn17 -pl mint-common,mint-agent-boot clean package -Dmaven.test.skip=true -P mint-3.0.0 -X
+
+
+C:\Java\jdk170_79\bin\java -classpath .\target\mint-agent-boot-0.0.1-SNAPSHOT.jar  -Dfile.encoding=UTF-8  -Xverify:none -DIIPAGENT_HOME=C:\WORK\IIP_V3\mint\mint-agent-boot\target   pep.per.mint.agent.IIPAgentStartUp
+

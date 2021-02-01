@@ -1,0 +1,65 @@
+======================================================================================================
+- IIP 데이터 트래킹 상세 화면 노드 순서 설정 가이드
+------------------------------------------------------------------------------------------------------
+- SVN:/trunk/mint/mint-install/iip-dataTracking-nodeSetting-guide.txt
+- subject : IIP 데이터 트래킹 상세 화면 노드 순서 설정 가이드
+- author  : psp
+- begin   : 2019.04
+------------------------------------------------------------------------------------------------------
+1. 목적
+	IIP 데이터 트래킹 상세 화면에서 표현되는 노드(SNDR, RCVR 등)의 순서를 설정한다.
+
+
+2. 구조
+	2.1 쿼리 상의 기본 정렬 순서
+
+	DETAILLOG 테이블의 PR_PROCESS_MODE 컬럼 값을 기준으로 순서를 처리
+	
+	PR_PROCESS_MODE IN('SNDR', 'ISND') THEN 1
+	PR_PROCESS_MODE IN('BRKR', 'IHUB') THEN 11
+	PR_PROCESS_MODE IN('SBRK', 'IREQ') THEN 21
+	PR_PROCESS_MODE IN('REPL')         THEN 22
+	PR_PROCESS_MODE IN('RBRK', 'IRLY') THEN 23
+	PR_PROCESS_MODE IN('SNRC')         THEN 88
+	PR_PROCESS_MODE IN('RCVR', 'IRCV') THEN 99
+	PR_PROCESS_MODE = '' THEN 0
+	
+	2.2 사용자 설정
+
+	환경설정 테이블(TSU0302)에서 설정
+
+
+3. 노드 순서 정렬을 위한 환경설정
+	3.1. 포털환경설정에 아래 정보를 사이트 환경에 맞게 등록해 준다.
+
+	package와 attribute_id, attribute_nm은 동일하게 등록하고,
+	attribute_value에 각각 노드의 값을 입력,
+	idx의 값으로 순서(전후)를 설정한다.
+	
+	해당 idx와 value의 값은 각 사이트의 기준에 맞춰 조정한다.
+
+	(예시)
+	------------------------------------------------------------------------------------------------
+	package 	id 						idx	nm						value	comments
+	------------------------------------------------------------------------------------------------
+	tracking	process.mode.sort.index	1	process.mode.sort.index	SNDR	트레킹-노드정렬순서
+	tracking	process.mode.sort.index	11	process.mode.sort.index	RQST	트레킹-노드정렬순서
+	tracking	process.mode.sort.index	21	process.mode.sort.index	RQSTR	트레킹-노드정렬순서
+	tracking	process.mode.sort.index	31	process.mode.sort.index	BRKR	트레킹-노드정렬순서
+	tracking	process.mode.sort.index	41	process.mode.sort.index	REPL	트레킹-노드정렬순서
+	tracking	process.mode.sort.index	71	process.mode.sort.index	SNRC	트레킹-노드정렬순서
+	tracking	process.mode.sort.index	81	process.mode.sort.index	RCVR	트레킹-노드정렬순서
+	------------------------------------------------------------------------------------------------
+	
+	[SQL]
+	update tsu0302 set idx=2 where attribute_id='process.mode.sort.index' and attribute_value='SNDR';
+
+	--(값이 없는 경우)
+	Insert into TSU0302 (PACKAGE,ATTRIBUTE_ID,IDX,ATTRIBUTE_NM,ATTRIBUTE_VALUE,COMMENTS,DEL_YN,REG_DATE,REG_USER,MOD_DATE,MOD_USER)
+	values ('tracking','process.mode.sort.index',1,'process.mode.sort.index','SNDR','트래킹-노드정렬순서','N','20180830101823','IIP','20180830101823','IIP');
+
+
+4. 주의
+
+	value의 값만 놓고 비교하므로, RQST와 RQSTR 같이 표시만 다른 노드는 별개로 취급하게 된다. 따라서 각각의 값을 한쪽으로 통일하거나 둘 다 등록할 필요가 있다.
+	

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.ScreenLabelMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertScreenLabel">
+		<selectKey keyProperty="msgId" resultType="string" order="BEFORE" >
+			<if test="labelType eq '1'.toString()">
+				<choose>
+					<when test="_databaseId == 'postgres'">
+				SELECT (COALESCE(MAX(MSG_ID::numeric),1000) + 1)::text FROM TSU0217 WHERE LANG_ID = #{langId} AND (MSG_ID::numeric &gt;=1000 AND  MSG_ID::numeric &lt;2000)
+			    	</when>
+			    	<otherwise>
+				SELECT TO_CHAR(NVL(MAX(TO_NUMBER(MSG_ID)),1000) + 1) FROM TSU0217 WHERE LANG_ID = #{langId} AND (MSG_ID &gt;=1000 AND  MSG_ID &lt;2000)
+			    	</otherwise>
+				</choose>
+			</if>
+			<if test="labelType eq '0'.toString()">
+				<choose>
+					<when test="_databaseId == 'postgres'">
+				SELECT (COALESCE(MAX(MSG_ID::numeric),0) + 1)::text FROM TSU0217 WHERE LANG_ID = #{langId} AND MSG_ID::numeric &lt; 1000
+			    	</when>
+			    	<otherwise>
+				SELECT TO_CHAR(NVL(MAX(TO_NUMBER(MSG_ID)),0) + 1) FROM TSU0217 WHERE LANG_ID = #{langId} AND MSG_ID &lt; 1000
+			    	</otherwise>
+				</choose>
+		 	</if>
+		 	<if test="labelType eq '2'.toString()">
+		 		<choose>
+					<when test="_databaseId == 'postgres'">
+				SELECT (COALESCE(MAX(MSG_ID::numeric),3000) + 1)::text FROM TSU0217 WHERE LANG_ID = #{langId} AND MSG_ID::numeric &gt;= 3000
+			    	</when>
+			    	<otherwise>
+				SELECT TO_CHAR(NVL(MAX(TO_NUMBER(MSG_ID)),3000) + 1) FROM TSU0217 WHERE LANG_ID = #{langId} AND MSG_ID &gt;= 3000
+			    	</otherwise>
+				</choose>
+		 	</if>
+		</selectKey>
+
+		INSERT INTO TSU0217 (
+		    LANG_ID,
+		    MSG_ID,
+		    MSG,
+		    TAG,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{langId, jdbcType=VARCHAR},
+			#{msgId},
+			#{msg, jdbcType=VARCHAR},
+			#{tag, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getScreenLabelList" parameterType="Map" resultMap="screenLabelResultMap">
+		SELECT
+			LANG_ID,
+		<choose>
+			<when test="_databaseId == 'postgres'">
+			CAST(MSG_ID AS numeric) AS MSG_ID,
+	    	</when>
+	    	<otherwise>
+			CAST(MSG_ID AS NUMBER) AS MSG_ID,
+	    	</otherwise>
+		</choose>
+			MSG,
+			TAG,
+  			REG_DATE,
+  			MOD_DATE
+  		FROM TSU0217
+  		WHERE DEL_YN = 'N'
+		<if test="msgId != null">
+		AND MSG_ID LIKE '%'||#{msgId}||'%'
+		</if>
+		<if test="msg != null">
+		AND MSG LIKE '%'||#{msg}||'%'
+		</if>
+		<if test="langId != null">
+		AND LANG_ID = #{langId}
+		</if>
+		ORDER BY LANG_ID,MSG_ID DESC
+	</select>
+
+	<select id="getScreenLabelDetail" parameterType="string" resultMap="screenLabelResultMap">
+		SELECT
+			LANG_ID,
+			MSG_ID,
+			MSG,
+			TAG,
+  			REG_DATE,
+  			MOD_DATE
+		FROM TSU0217
+  		WHERE DEL_YN= 'N'
+		AND LANG_ID = #{langId} AND MSG_ID = #{msgId}
+	</select>
+
+	<resultMap type="ScreenLabel" id="screenLabelResultMap">
+		<id property="langId" 		column="LANG_ID"/>
+		<id property="msgId" 		column="MSG_ID"/>
+		<result property="msg"		column="MSG"/>
+		<result property="tag"		column="TAG"/>
+		<result property="regDate"	column="REG_DATE"/>
+		<result property="modDate"	column="MOD_DATE"/>
+	</resultMap>
+
+	<update id="updateScreenLabel">
+		UPDATE TSU0217
+		SET
+			MSG_ID = #{msgId, jdbcType=VARCHAR}
+			,MSG = #{msg, jdbcType=VARCHAR}
+			,TAG = #{tag, jdbcType=VARCHAR}
+			,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+			,MOD_USER = #{modId, jdbcType=VARCHAR}
+		WHERE LANG_ID = #{langId} AND MSG_ID = #{orgMsgId}
+	</update>
+
+	<delete id="deleteScreenLabel">
+		UPDATE TSU0217
+		SET
+			DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE LANG_ID = #{langId} AND MSG_ID = #{msgId}
+	</delete>
+
+	<select id="existScreenLabel" parameterType="Map" resultMap="screenLabelResultMap">
+		SELECT
+			LANG_ID,
+		<choose>
+			<when test="_databaseId == 'postgres'">
+			CAST(MSG_ID AS numeric) AS MSG_ID,
+	    	</when>
+	    	<otherwise>
+			CAST(MSG_ID AS NUMBER) AS MSG_ID,
+	    	</otherwise>
+		</choose>
+			MSG,
+			TAG,
+  			REG_DATE,
+  			MOD_DATE
+  		FROM TSU0217
+  		WHERE DEL_YN = 'N'
+		<if test="msgId != null">
+		AND MSG_ID = #{msgId}
+		</if>
+		<if test="langId != null">
+		AND LANG_ID = #{langId}
+		</if>
+	</select>
+</mapper>

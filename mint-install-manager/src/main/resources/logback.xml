@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds" >
+
+	<property name="APP_LOG_LEVEL" value="debug" />
+	<property name="3RD_LOG_LEVEL" value="debug" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yymmdd HH:mm:ss.SSS} >%msg%n</Pattern>
+			<!--
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+			-->
+            <!--
+			<Pattern>%d{HH:mm:ss.SSS}   %-4relative %-5level - %logger{35} - %msg%n</Pattern>
+            -->
+		</layout>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${ZOON_HOME}/log/logFile.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${ZOON_HOME}/log/logFile.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxFileSize>30MB</maxFileSize>
+			<!-- keep 1 days' worth of history -->
+			<maxHistory>5</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<!--
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+			-->
+			<Pattern>%d{HH:mm:ss.SSS}   %-4relative %-5level - %logger{35} - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- Application Loggers -->
+	<logger name="pep.per.mint">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger> 
+
+	<logger name="pep.per.mint.common">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="pep.per.mint.install.manager">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+ 
+
+	<root level="debug">
+		 
+		<appender-ref ref="STDOUT" />
+		 
+        
+		<appender-ref ref="FILE" />
+       
+	</root>
+</configuration>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.ifm.IfmNHJobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="selectInterfaces" resultType="map">
+    <![CDATA[
+		select distinct
+			SUBSTR(A.MSG_DATETIME, 1, 10) 	as "trDate"
+		   ,a.MSG_INTF_ID      				as "integrationId"
+		   ,a.MSG_GROUP_ID					as "groupId"
+		  from MASTERLOG a
+		  WHERE 1=1
+		  AND a.MSG_DATETIME >= #{fromDate}
+		  and a.MSG_DATETIME <= #{toDate}
+
+    ]]>
+    </select>
+
+    <select id="selectInterfaceTransactionSummary" resultType="map">
+    <![CDATA[
+    	select /*+ INDEX(A IX_MASTERLOG_MSDT_02) */
+			MSG_GROUP_ID,
+			MSG_INTF_ID,
+            SUBSTR(A.MSG_DATETIME, 1, 10) as "trDate"
+            ,SUM(CASE WHEN A.MSG_STATUS='01' THEN 1 ELSE 0 END) as "processCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='00' THEN 1 ELSE 0 END) as "successCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='99' THEN 1 ELSE 0 END) as "errorCnt"
+          from MASTERLOG A
+          WHERE MSG_GROUP_ID = #{groupId}
+      	 	AND MSG_INTF_ID = #{integrationId}
+           and (A.MSG_DATETIME >= #{fromDate} AND A.MSG_DATETIME <= #{toDate})
+   	  group by  A.MSG_GROUP_ID,A.MSG_INTF_ID ,SUBSTR(A.MSG_DATETIME, 1, 10)
+    ]]>
+    </select>
+
+    <select id="selectInterfaceTransactionSummaryAll" resultType="map">
+    <![CDATA[
+    	select
+			MSG_GROUP_ID,
+			MSG_INTF_ID,
+             TO_CHAR(TO_DATE(TO_CHAR(A.MSG_DT, 'YYYYMMDDHH24'),'YYYYMMDDHH24') +9/24,'YYYYMMDDHH24') as "trDate"
+            ,SUM(CASE WHEN A.MSG_STATUS='01' THEN 1 ELSE 0 END) as "processCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='00' THEN 1 ELSE 0 END) as "successCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='99' THEN 1 ELSE 0 END) as "errorCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='01' THEN RECORD_CNT ELSE 0 END) as "processRCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='00' THEN RECORD_CNT ELSE 0 END) as "successRCnt"
+            ,SUM(CASE WHEN A.MSG_STATUS='99' THEN RECORD_CNT ELSE 0 END) as "errorRCnt"
+          from MASTERLOG A
+          WHERE
+             (A.MSG_DT >= TO_DATE(#{fromDate}  ,'YYYYMMDDHH24') - 9/24 AND A.MSG_DT <= TO_DATE(#{toDate},'YYYYMMDDHH24') - 9/24)
+   	  group by  A.MSG_GROUP_ID,A.MSG_INTF_ID ,TO_CHAR(A.MSG_DT, 'YYYYMMDDHH24')
+
+    ]]>
+    </select>
+
+    <select id="selectDataSize" resultMap="selectDataSizeResultMap">
+    <![CDATA[
+		SELECT
+			 SUM(CASE WHEN PR_PROCESS_MODE='SNDR' THEN DATA_SIZE ELSE 0 END ) AS "sndDataSize"
+            ,SUM(CASE WHEN PR_PROCESS_MODE='RCVR' THEN DATA_SIZE ELSE 0 END ) AS "rcvDataSize"
+       FROM DETAILLOG
+      WHERE MSG_GROUP_ID = #{groupId}
+      	 AND  MSG_INTF_ID = #{integrationId}
+        AND MSG_DATETIME >= #{fromDate}
+        AND MSG_DATETIME <= #{toDate}
+
+    ]]>
+    </select>
+
+    <resultMap type="map" id="selectDataSizeResultMap">
+    	<result property="sndDataSize" column="sndDataSize" javaType="double"/>
+    	<result property="rcvDataSize" column="rcvDataSize" javaType="double"/>
+    </resultMap>
+
+</mapper>

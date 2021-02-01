@@ -1,0 +1,462 @@
+﻿<!--
+	Screen ID : AN-05-00-503
+	Screen NM : 메타 검색
+-->
+<div class="modal inmodal" id="AN-05-00-503" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="wrapper wrapper-content animated fadeInRight">
+			<!--wrapper wrapper-content-->
+				<!--row-->
+				<div class="row">
+					<!--col-lg-12-->
+					<div class="col-lg-12">
+						<!--ibox float-e-margins-->
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5><lb class="lb-1013"></h5>&nbsp;&nbsp;&nbsp;
+								<div class="ibox-tools">
+									<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H002')"></a>
+			                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+								</div>
+								<div style="float: right; padding: 0px 20px 0px 0px;">
+									<a class="btn btn-w-m btn-default btn-outline btn-clear"><i class="fa fa-check "></i> <lb class="lb-79"></lb></a>
+									<a class="btn btn-w-m btn-default btn-outline btn-datasetsearch"><i class="fa fa-search "></i> <lb class="lb-10"></lb></a>
+								</div>
+							</div>
+							<!--ibox-content-->
+			             	<div class="ibox-content">
+			             		<!--row-->
+			               		<div class="row">
+									<div class="col-sm-6">
+			                            <div class="form-group">
+			                            	<span class="lable_tag"><lb class="lb-1014">필드명</lb><a class="help-over-label" onclick="mint.ui.help(this, 'AP00000005','H003')"></a></span>
+			                               	<input id="tf-fieldNm" type="text" class="k-input"  placeholder="Search..." style="width: 63%;">
+			                           	</div>
+									</div>
+									<div class="col-sm-6">
+			                            <div class="form-group">
+			                            	<span class="lable_tag"><lb class="lb-48">설명</lb><a class="help-over-label" onclick="mint.ui.help(this, 'AP00000005','H003')"></a></span>
+			                               	<input id="cb-fieldType" type="text" style="width: 63%;">
+			                           	</div>
+									</div>
+			                   	</div>
+							 	<!--row end-->
+			                </div>
+							<!--ibox-content end-->
+			           	</div>
+						<!--ibox float-e-margins end-->
+					</div>
+					<!--col-lg-12 end-->
+				</div>
+				<!--row end-->
+
+
+				<!--row start-->
+				<div class="row">
+					<!--col-lg-12-->
+			 		<div class="col-lg-12">
+						<!--ibox float-e-margins-->
+			            <div class="ibox float-e-margins">
+							<!--ibox-content-->
+			                <div class="ibox-content">
+			                	<!-- kendo table-->
+			                	<div id="example">
+			       	     			<div id="sub-grid"></div>
+								</div>
+								<!--kendo table end-->
+			               	</div>
+							<!--ibox-content end-->
+			            </div>
+						<!--ibox float-e-margins end-->
+			       	</div>
+					<!--col-lg-12 end-->
+				</div>
+				<!--row end-->
+			</div>
+
+			<!--modal-footer START-->
+			<div class="modal-footer-original" style="clear: both">
+				<button id="btn_apply" class="btn btn-primary" type="button"><i class="fa fa-check"></i> <lb class="lb-358"></lb></button>
+				<button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i> <lb class="lb-298"></lb> </button>
+			</div>
+			<!--modal-footer END-->
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "AN-05-00-003-2";
+		$.extend({
+			sub_main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				searchNode : "",
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.ui.initScreen();
+						$.sub_main.fn_initSearchNode();
+						$.sub_main.fn_setSearchComboBox();
+						$.sub_main.fn_setSearchResultGrid();
+
+
+						mint.ui.setDropDownList('cb-fieldType', mint.common.commonCodeMap.get("cds").AN09   , -1, 'nm'       , 'cd'       );
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+	            //-----------------------------------------------------------------------
+	            // Description :: 검색 조건 초기화 함수
+	            //-----------------------------------------------------------------------
+	            fn_clearSearchArea : function() {
+	                try {
+
+	                    $('#tf-fieldNm').val('');
+	                    $("#cb-fieldType").data("kendoDropDownList").select(-1);
+	                    $.sub_main.fn_initSearchNode();
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_clearSearchArea"});
+	                }
+	            },
+
+				//-----------------------------------------------------------------------
+	            // Description :: searchNode 초기화 함수
+	            //-----------------------------------------------------------------------
+	            fn_initSearchNode : function() {
+	                try {
+	                    $.sub_main.searchNode = new Object();
+
+	                    $.sub_main.searchNode.previous = null;
+	                    $.sub_main.searchNode.current = null;
+	                    $.sub_main.searchNode.previousType = null;
+	                    $.sub_main.searchNode.currentType = null;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_initSearchNode"});
+	                }
+	            },
+
+	            //-----------------------------------------------------------------------
+	            // Description :: searchNode 데이터 세팅
+	            //-----------------------------------------------------------------------
+	            fn_setSearchNode : function(currentId, type) {
+	                try {
+	                	if($.sub_main.searchNode.current != currentId) {
+	                        $.sub_main.searchNode.previous = $.sub_main.searchNode.current;
+	                        $.sub_main.searchNode.previousType = $.sub_main.searchNode.currentType;
+
+	                        $.sub_main.searchNode.current = currentId;
+	                        $.sub_main.searchNode.currentType = type;
+
+	                        if($.sub_main.searchNode.previousType == 'combo') {
+	                        	if($.sub_main.searchNode.previous != null) {
+	                                //$("#" + $.sub_main.searchNode.previous).kendoComboBox({ enable: false });
+	                                var combobox = $("#" + $.sub_main.searchNode.previous).data("kendoComboBox");
+	                                combobox.enable(false);
+	                            }
+	                        } else {
+	                        	if( ! mint.common.isEmpty( $.sub_main.searchNode ) && ! mint.common.isEmpty( $.sub_main.searchNode.previous ) ) {
+		                        	$("#" + $.sub_main.searchNode.previous).prop("disabled", true);
+		                        	$("#" + $.sub_main.searchNode.previous).css("background-color", "#F9F8F8");
+	                        	}
+	                        }
+	                    }
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_setSearchNode"});
+	                }
+	            },
+
+
+
+				//-----------------------------------------------------------------------
+				// Description ::  검색 조건 - ComboBox 설정
+				//-----------------------------------------------------------------------
+				fn_setSearchComboBox : function() {
+					try {
+						$("#tf-fieldNm").keydown($.sub_main.fn_onKeyDownAN050000302);
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_setSearchComboBox"});
+					}
+				},//end fn_setSearchComboBox()
+
+				//-----------------------------------------------------------------------
+				// Description :: 엔터키 이벤트
+				//-----------------------------------------------------------------------
+				fn_onKeyDownAN050000302 : function() {
+					try {
+						if(event.keyCode == 13) {
+							$.sub_main.fn_searchDataSetList();
+				     	}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_onKeyDownAN050000302"});
+					}
+				},//end fn_onKeyDownAN050000302()
+
+
+
+				//-----------------------------------------------------------------------
+				// Description ::  검색 결과 - Grid 설정
+				//-----------------------------------------------------------------------
+				fn_setSearchResultGrid : function() {
+					try {
+						var fixLeftGridWidth = ($('#sub-grid')[0].clientWidth / 10) * 7;
+						var fixLeftCoulmnWidth = fixLeftGridWidth / 4;
+
+						//컬럼 레이블 아이디 세팅
+						var labelCoulmn = $.sub_main.fn_setGridColumnLabel();
+
+						var grid = $("#sub-grid").kendoGrid({
+							dataSource : {
+				 				  data: ""
+				 				, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+							}
+							, filterable: true
+						    , sortable : true
+							, selectable: "row"
+							, resizable: true
+							, pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesXS()
+						    	, buttonCount 	: 5
+
+							}
+						    , columns : [
+									{
+										title : "",
+										template : "<input type='checkbox' name='metafield-list-checkbox' class='if-popup-ifCheckbox' >",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+										, width : "5%"
+									}
+									,{
+										  title 	: labelCoulmn['#lbl-name1']
+										, field 	: "name1"
+										, width 	: fixLeftCoulmnWidth
+										, template	: "<span title='${name1}'>${name1}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									,{
+										  title 	: labelCoulmn['#lbl-name2']
+										, field 	: "name2"
+										, width 	: fixLeftCoulmnWidth
+										, template	: "<span title='${name2}'>${name2}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: labelCoulmn['#lbl-type']
+										, field 	: "typeNm"
+										, width 	: fixLeftCoulmnWidth / 2
+										, template	: "<span title='${typeNm}'>${typeNm}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+											 style: 'white-space: nowrap;  text-align: center;'
+							            }
+									}
+									, {
+										  title 	: labelCoulmn['#lbl-length']
+										, field 	: "length"
+										, width 	: fixLeftCoulmnWidth / 2
+										, template	: "<span title='${length}'>${length}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'text-align: center; white-space: nowrap;'
+							            }
+									}
+
+							]
+						    , dataBound: function (e) {
+						    	if(0 == $("#sub-grid").data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$("#sub-grid").children(".k-grid-content").height(gridHeight /3.5);
+						    		$("#sub-grid").children(".k-grid-content-locked").height(gridHeight / 3.5);
+						    	} else {
+						    		$("#sub-grid").children(".k-grid-content").height('auto');
+							    	$("#sub-grid").children(".k-grid-content-locked").height('auto');
+						    	}
+						    }
+						}).data("kendoGrid");
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_setSearchResultGrid"});
+					}
+				},//end fn_setSearchResultGrid()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 검색 결과 - Grid 컬럼 Label 설정
+				//-----------------------------------------------------------------------
+				fn_setGridColumnLabel : function() {
+					try {
+						var returnObject = {
+								 '#lbl-name2'	: mint.label.getLabel('lb-1014')
+								, '#lbl-name1' 	: mint.label.getLabel('lb-1015')
+								, '#lbl-type'	: mint.label.getLabel('lb-48')
+								, '#lbl-length'	: mint.label.getLabel('lb-1012')
+						};
+						return returnObject;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_setGridColumnLabel"});
+					}
+				},//end fn_setGridColumnLabel()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 버튼 Click 이벤트
+				//-----------------------------------------------------------------------
+				fn_searchDataSetList : function() {
+					try {
+						var metaField = new Object();
+				    	if(!$("#tf-fieldNm").val() == ''){
+				    		metaField.name1 = $("#tf-fieldNm").val();
+				    	}
+						if($("#cb-fieldType").data("kendoDropDownList").value() != '')
+				    		metaField.type = $("#cb-fieldType").data("kendoDropDownList").value();
+					    mint.callService(metaField, 'AN-05-00-503', 'REST-R09-AN-05-01', '$.sub_main.fn_setGridData', {errorCall : true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_searchDataSetList"});
+					}
+				},//end fn_searchDataSetList()
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 버튼 Click 이벤트 - Grid Data 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function(jsonData) {
+					try {
+						if( !mint.common.isEmpty(jsonData) ) {
+							var dataSource = new kendo.data.DataSource({
+								  data: jsonData
+							    , page:1
+							    , pageSize:mint.ui.getPageSizesXS({'currentPage' : true})
+							});
+
+							//데이터 재설정
+							$("#sub-grid").data("kendoGrid").setDataSource(dataSource);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub_main.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+			},// end sub_main
+
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//-----------------------------------------------------------------------
+		// Description :: 검색조건 초기화 클릭
+		//-----------------------------------------------------------------------
+		$('.btn-clear').on('click', function() {
+        	$.sub_main.fn_clearSearchArea();
+    	});
+		//-----------------------------------------------------------------------
+		// Description :: 조회 버튼에 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$(".btn-datasetsearch").click(function () {
+			$.sub_main.fn_searchDataSetList();
+        });
+
+		//-----------------------------------------------------------------------
+		// Description :: 적용 버튼 클릭 이벤트
+		//-----------------------------------------------------------------------
+	    $('#btn_apply').click(function(e) {
+
+	    	var entityGrid = $("#sub-grid").data("kendoGrid");
+	        var selectedItem = entityGrid.dataItem(entityGrid.select());
+			if(selectedItem == null){
+				alert("선택한 복합유형이 없습니다.");
+				return;
+			}
+			var callback = mint.common.getScreenParam('callback');
+			var fn_callback = mint.common.fn_callback(callback);
+			if( fn_callback ) {
+				mint.common.setScreenParam('callback', null);
+				fn_callback(selectedItem);
+			} else {
+				mint.common.alert('callback not defined.');
+				return;
+			}
+
+			$('#AN-05-00-503').modal('hide');
+		});
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.sub_main.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+
+</script>
+
+<style>
+
+	#interface-grid .k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	#interface-grid .k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr {
+	    cursor : pointer;
+	}
+</style>
+

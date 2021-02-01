@@ -1,0 +1,722 @@
+﻿<!--
+	Screen ID : SU-02-02-002
+	Screen NM : FAQ 등록/수정 팝업
+	[변경 이력]
+	* YYYYMMDD-001
+-->
+<div class="modal inmodal" id="SU-02-02-002" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only"><lb class="lb-298"></lb></span>
+				</button>
+				<div>
+					<h2 class="popupTitle"><lb class="lb-24"></lb> <lb class="lb-421"></lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-lg-12">
+						<div class="form-group">
+							<span id="lb-mapKeyDesc" class="lable_tag6"><lb class="lb-537"></lb></span>
+								<input id="popup-cb-category" type="text" placeholder="" style="width:80%;">
+							</span>
+						</div>
+						<hr class="hr-space">
+						<div class="form-group">
+							<span id="lb-mapKeyDesc" class="lable_tag6"><lb class="lb-540"></lb></span>
+							<span class="k-widget k-autocomplete k-header k-state-default" style="width:80%;">
+								<input id="popup-tf-question" type="text" class="k-input required" message="질문을 입력해 주시기 바랍니다." placeholder="" style="width:100%;">
+							</span>
+						</div>
+
+						<hr class="hr-space">
+						<hr class="hr-space">
+
+						<div class="form-group">
+							<textarea id="popup-ta-answer" rows="5" cols="30" style="height:180px"></textarea>
+						</div>
+
+						<hr class="hr-space">
+
+						<div class="form-group">
+							<input id="fu-uploadFile" name="uploadFile" type="file" />
+						</div>
+
+						<hr class="hr-space">
+						<!--
+						<div class="form-group">
+							<textarea id="popup-ta-html" class="alert alert-success" rows="2" cols="30" placeholder="외부 HTML 페이지 를 포함하려면 여기에 입력하세요" style="width:100%;height:50px;background-color:#FFFFFF;"></textarea>
+						</div>
+						-->
+						<div class="bs-callout01" style="padding: 15px 5px 80px 5px; border-left-width: 5px; background-color: #FAFAFB; border-left-color: #1C84C6">
+							<div class="col-sm-6">
+                            	<span><i class="fa fa-square text-primary" style="color: #A6CAF0;"></i> <lb class="lb-541"></lb> <lb class="lb-509"></lb><lb class="lb-170"></lb></span>
+	                            <input id="popup-dp-startDate" style="text-align:center; width: 47%">
+	                            <hr class="hr-space">
+                            	<span><i class="fa fa-square text-primary" style="color: #1c84c6;"></i> <lb class="lb-541"></lb> <lb class="lb-530"></lb><lb class="lb-170"></lb></span>
+                           		<input id="popup-dp-endDate" style="text-align:center; width: 47%">
+							</div>
+							<div  class="col-sm-6">
+								<span><i class="fa fa-square text-primary" style="color: #A6CAF0;"></i> <lb class="lb-538"></lb> <lb class="lb-541"></lb> <lb class="lb-539"></lb></span>
+	                            <span style="padding: 0px 0px 0px 10px;">
+	                                <label style="padding-left:10px;"><input type="radio" name="type" value="Y" > Yes </label>
+	                                <label style="padding-left:10px;"><input type="radio" name="type" value="N" checked="checked"> No </label>
+	                            </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+
+            <div class="modal-footer-original">
+                <button type="button" class="btn btn-primary btn-save" ><i class="fa fa-check"></i>  <lb class="lb-310"></lb></button>
+                <button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-143"></lb></button>
+            </div>
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "SU-02-02-002";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			uploadFileSelectedCount : 0, //업로드할 파일을 선택할때 카운트
+			uploadFileCount : 0,         //업로드가 성공되었을때 증가, 실패시 0
+			uploadFileInfoList : [],     //업로드 성공시 해당 파일 정보가 저장됨
+			originalAttachFile : [],     //내용 수정시 이미 등록된 파일정보가 있을때 저장됨
+			uploadFileFailInfo : [],     //업로드 실패시 파일정보 및 메세지 셋팅 {uid:'',msg:''} 형식
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.sub.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//초기화 임시
+					{
+						//-----------------------------------------------------------------------
+						// 카테고리 설정
+						//-----------------------------------------------------------------------
+	                	$.sub.fn_getCategoryList();
+						//-----------------------------------------------------------------------
+						// 공지시작일
+						//-----------------------------------------------------------------------
+	                    $("#popup-dp-startDate").kendoDatePicker({
+	                        format : "yyyy/MM/dd",
+	                        culture: "ko-KR",
+	                        value : new Date(),
+	                        change : function(e) {
+	                        	$("#popup-dp-endDate").data("kendoDatePicker").setOptions({min: this.value()});
+	                        	$("#popup-dp-endDate").data("kendoDatePicker").value(this.value());
+	                        }
+	                    });
+	        			//-----------------------------------------------------------------------
+	        			// 공지종료일
+	        			//-----------------------------------------------------------------------
+	                    $("#popup-dp-endDate").kendoDatePicker({
+	                        format : "yyyy/MM/dd",
+	                        culture: "ko-KR",
+	                        value : new Date(),
+	                        change : function(e) {
+	                        	$("#popup-dp-startDate").data("kendoDatePicker").setOptions({max: this.value()});
+	                        }
+	                    });
+
+	        			//-----------------------------------------------------------------------
+	        			// Editor
+	        			//-----------------------------------------------------------------------
+	                	$("#popup-ta-answer").kendoEditor({
+	                		resizable: { content: true, toolbar: true }
+	                	});
+
+	                	//수정
+						if ($.main.faqProcMode == "UPDATE") {
+							$.sub.fn_initModifyMode();
+						}
+						else {
+							$("#popup-dp-startDate").data("kendoDatePicker").setOptions({min: new Date()});
+							$("#popup-dp-endDate").data("kendoDatePicker").setOptions({min: new Date()});
+							$.sub.fn_fileUpload([]);
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			}, //end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: 수정모드 기초 데이터 초기화
+			//-----------------------------------------------------------------------
+			fn_initModifyMode : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// TODO::$.main 으로 되어 있는 부분 시간될때 정리
+					//-----------------------------------------------------------------------
+
+					// 팝업 타이틀 수정
+					$('.popupTitle').html(mint.label.getLabel('lb-24') + " " + mint.label.getLabel('lb-342'));
+
+					$("#popup-tf-question").val($.main.faqDetailData.question);
+
+					$("#popup-ta-answer").data("kendoEditor").value($.main.faqDetailData.answer);
+
+					var tmpYear = Number($.main.faqDetailData.startDate.substring(0,4));
+					var tmpMonth = Number($.main.faqDetailData.startDate.substring(4,6)) - 1;
+					var tmpDay = Number($.main.faqDetailData.startDate.substring(6,8));
+					$("#popup-dp-startDate").data("kendoDatePicker").value(new Date(tmpYear, tmpMonth, tmpDay));
+					tmpYear = Number($.main.faqDetailData.endDate.substring(0,4));
+					tmpMonth = Number($.main.faqDetailData.endDate.substring(4,6)) - 1;
+					tmpDay = Number($.main.faqDetailData.endDate.substring(6,8));
+					$("#popup-dp-endDate").data("kendoDatePicker").value(new Date(tmpYear, tmpMonth, tmpDay));
+
+				    $('input:radio[name=type]:input[value=' + $.main.faqDetailData.flag + ']').attr("checked", true);
+
+					//-----------------------------------------------------------------------
+					// 첨부파일
+					//-----------------------------------------------------------------------
+					var faqAttachFile = $.main.faqDetailData.faqAttachFile;
+					var uploadFiles = [];
+
+					if ( !mint.common.isEmpty(faqAttachFile) && faqAttachFile.length > 0 ) {
+						for (var i=0; i<faqAttachFile.length; i++) {
+							var fileObject = new Object();
+
+							fileObject.objectType = "FaqAttachFile";
+							fileObject.name      = faqAttachFile[i].fileNm;
+							fileObject.size      = '';
+							fileObject.extension = '';
+							fileObject.ownerId   = faqAttachFile[i].ownerId;
+							fileObject.fileId    = faqAttachFile[i].fileId;
+							fileObject.fileNm    = faqAttachFile[i].fileNm;
+							fileObject.filePath  = faqAttachFile[i].filePath;
+							fileObject.flag      = '';
+
+							uploadFiles.push(fileObject);
+
+							//-----------------------------------------------------------------------
+							// 공지사항/FAQ 첨부파일은 FLAG 에 따라 생성/삭제 등을 처리하므로 기존정보 유지 필요
+							//-----------------------------------------------------------------------
+							$.sub.originalAttachFile.push(fileObject);
+
+						}
+					}
+					$.sub.fn_fileUpload(uploadFiles);
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initModifyMode"});
+				}
+
+			}, // end fn_initModifyMode
+
+			//-----------------------------------------------------------------------
+			// Description :: 카테고리 조회
+			//-----------------------------------------------------------------------
+			fn_getCategoryList : function() {
+
+				try {
+					var requestObject = new Object();
+					requestObject.categoryType = "1"; // 공지사항:0, FAQ:1
+
+					//데이터 조회
+				    mint.callService(requestObject, screenName, 'REST-R01-SU-02-00', '$.sub.fn_setCategoryList', {errorCall : true});
+				}
+				catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getCategoryList"});
+				}
+			}, // end fn_getCategoryList()
+
+			//-----------------------------------------------------------------------
+			// Description :: 카테고리 조회 콜백
+			//-----------------------------------------------------------------------
+			fn_setCategoryList : function(jsonData) {
+				try {
+					mint.ui.setComboBoxWithValue('popup-cb-category', jsonData, 1, 'categoryNm', 'categoryId');
+					$("#popup-cb-category").data("kendoComboBox").bind("change", function(e) {
+						var widget = e.sender;
+						if (widget.value() && widget.select() === -1) {
+							widget.value("");
+						}
+					});
+
+
+					if ($.main.faqProcMode == "UPDATE") {
+						// 카테고리 설정
+						$("#popup-cb-category").data("kendoComboBox").value($.main.faqDetailData.categoryId);
+					}
+				}
+				catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setCategoryList"});
+				}
+			}, // end fn_setCategoryList()
+
+			//-----------------------------------------------------------------------
+            // Description :: 목록으로 이동
+            //-----------------------------------------------------------------------
+			fn_moveList : function() {
+				try {
+					mint.move('../sub-su/SU-02-02-001');
+				}
+				catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_moveList"});
+				}
+			}, // end fn_moveList()
+
+			//-----------------------------------------------------------------------
+			// Description :: 입력 Data 필수 체크
+			//-----------------------------------------------------------------------
+			fn_validateData : function() {
+				var isReturn = false;
+            	//Validate Check
+				{
+					//var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+
+					if ($("#popup-cb-category").val().replace(/\s/g,'') == "") {
+						mint.common.alert('CW00003', mint.label.getLabel('lb-537'));
+						$("#popup-cb-category").focus();
+						return false;
+					}
+
+					if ($("#popup-tf-question").val().replace(/\s/g,'') == "") {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-68'));
+						$("#popup-tf-question").focus();
+						return false;
+					}
+
+					if ($("#popup-ta-answer").data("kendoEditor").value() == "") {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-69'));
+						return false;
+					}
+
+					if (kendo.toString($("#popup-dp-startDate").data("kendoDatePicker").value(), 'yyyyMMdd') == ""
+							|| kendo.toString($("#popup-dp-startDate").data("kendoDatePicker").value(), 'yyyyMMdd') == null) {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-541') + ' ' + mint.label.getLabel('lb-509') + mint.label.getLabel('lb-170'));
+						$("#popup-dp-startDate").focus();
+						return false;
+					}
+
+					if (kendo.toString($("#popup-dp-endDate").data("kendoDatePicker").value(), 'yyyyMMdd') == ""
+							|| kendo.toString($("#popup-dp-endDate").data("kendoDatePicker").value(), 'yyyyMMdd') == null) {
+						mint.common.alert('CW00001', mint.label.getLabel('lb-541') + ' ' + mint.label.getLabel('lb-530') + mint.label.getLabel('lb-170'));
+						$("#popup-dp-endDate").focus();
+						return false;
+					}
+				}
+
+            	return true;
+			}, // end fn_validateData
+
+			//-----------------------------------------------------------------------
+			// Description :: 입력 Data set
+			//-----------------------------------------------------------------------
+			fn_getSaveData : function() {
+				try {
+					var faqData = new Object();
+
+					faqData.objectType = "FAQ";
+					faqData.categoryId = $("#popup-cb-category").val().replace(/\s/g,'');
+					faqData.question   = $("#popup-tf-question").val();
+					faqData.answer     = $("#popup-ta-answer").data("kendoEditor").value();
+					faqData.startDate  = kendo.toString($("#popup-dp-startDate").data("kendoDatePicker").value(), 'yyyyMMdd');
+					faqData.endDate    = kendo.toString($("#popup-dp-endDate").data("kendoDatePicker").value(), 'yyyyMMdd');
+					faqData.flag       = $("input[type=radio][name='type']:checked").val().replace(/\s/g,'');
+					faqData.importance = null;
+					faqData.html       = null;
+					faqData.delYn      = "N";
+
+					//-----------------------------------------------------------------------
+					// 첨부파일
+					//-----------------------------------------------------------------------
+					var attatchFileList = [];
+
+					//-----------------------------------------------------------------------
+					// 기존 첨부파일
+					//-----------------------------------------------------------------------
+					// 공지사항/FAQ 첨부파일은 FLAG 에 따라 생성/삭제 등을 처리하므로 기존정보 유지 필요
+					//-----------------------------------------------------------------------
+					if( $.sub.originalAttachFile.length > 0 ) {
+						for(var i=0; i<$.sub.originalAttachFile.length; i++) {
+                            var attachFileObject = new Object();
+                            attachFileObject.objectType = 'FaqAttachFile';
+                            attachFileObject.ownerId    = $.sub.originalAttachFile[i].ownerId;
+                            attachFileObject.fileId     = $.sub.originalAttachFile[i].fileId;
+                            attachFileObject.fileNm     = $.sub.originalAttachFile[i].fileNm;
+                            attachFileObject.filePath   = $.sub.originalAttachFile[i].filePath;;
+                            attachFileObject.flag       = $.sub.originalAttachFile[i].flag;
+
+							attatchFileList.push(attachFileObject);
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// 새 첨부파일
+					//-----------------------------------------------------------------------
+					if( $.sub.uploadFileInfoList.length > 0 ) {
+						for(var i=0; i<$.sub.uploadFileInfoList.length; i++) {
+                            var attachFileObject = new Object();
+                            attachFileObject.objectType = 'FaqAttachFile';
+                            attachFileObject.ownerId    = '';
+                            attachFileObject.fileId     = '';
+                            attachFileObject.fileNm     = $.sub.uploadFileInfoList[i].fileNm;
+                            attachFileObject.filePath   = $.sub.uploadFileInfoList[i].filePath;
+                            attachFileObject.flag       = 'C';
+
+							attatchFileList.push(attachFileObject);
+						}
+			        }
+					faqData.faqAttachFile = attatchFileList;
+
+					return faqData;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getSaveData"});
+				}
+			}, // end fn_getSaveData()
+
+			//-----------------------------------------------------------------------
+            // Description :: 저장이 완료되면 목록으로 보낸다.
+            //-----------------------------------------------------------------------
+			fn_saveComplete : function(jsonObject) {
+				try {
+					if( !mint.common.isEmpty(jsonObject) ) {
+						//-----------------------------------------------------------------------
+						// - Alert Message 를 Display 한다.
+						//-----------------------------------------------------------------------
+						var msgCode = null;
+		            	if($.main.faqProcMode == "UPDATE") {
+		            		msgCode = 'CI00102';
+		            	} else {
+		            		msgCode = 'CI00105';
+		            	}
+		            	mint.common.alert(msgCode, null);
+		            	$('#SU-02-02-002').modal('hide');
+
+		            	$.main.fn_searchFAQ();
+					}
+				}
+				catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_saveComplete"});
+				}
+
+			}, // end fn_saveComplete()
+
+			//-----------------------------------------------------------------------
+			// Description :: FAQ 저장
+			//-----------------------------------------------------------------------
+			fn_saveFAQ : function() {
+				try {
+					var requestObject = $.sub.fn_getSaveData();
+					if ($.main.faqProcMode == "UPDATE") {
+						mint.callService(requestObject, screenName, "REST-U01-SU-02-02", '$.sub.fn_saveComplete', {errorCall : false, params : {faqId : $.main.faqDetailData.faqId} });
+					} else {
+						mint.callService(requestObject, screenName, "REST-C01-SU-02-02", '$.sub.fn_saveComplete', {errorCall : false });
+					}
+				}
+				catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_saveFAQ"});
+				}
+
+			}, // end fn_savefaq()
+
+			//-----------------------------------------------------------------------
+			// Description :: 저장
+			//-----------------------------------------------------------------------
+			fn_save : function() {
+				try {
+					if( $.sub.fn_validateData() ){
+						//-----------------------------------------------------------------------
+						// 업로드에 실패한 파일을 삭제하지 않고 저장 버튼 클릭시 Alert Messgae 후 멈춤
+						// ( 체크할 수 있는 방법이 마땅치 않음 )
+						//-----------------------------------------------------------------------
+						if( $.sub.uploadFileFailInfo.length > 0 ) {
+							mint.common.alert('[RE]-' +$.sub.uploadFileFailInfo[0].msg);
+							return;
+						}
+
+						if( $.sub.uploadFileCount >= $.sub.uploadFileSelectedCount ) {
+							$.sub.fn_saveFAQ();
+						} else {
+							$('#fu-uploadFile').data('kendoUpload').upload();
+						}
+
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_save"});
+				}
+
+			}, // end fn_save()
+
+			//-----------------------------------------------------------------------
+            // Description :: 첨부파일 세팅
+            //-----------------------------------------------------------------------
+            fn_fileUpload : function(fileList) {
+            	$("#fu-uploadFile").kendoUpload({
+                    files: fileList,
+                    async: {
+                        saveUrl: "/mint/ut/file/upload",
+                        removeUrl: "remove",
+                        autoUpload: false
+                    },
+                    localization: {
+                        select: mint.label.getLabel('lb-220')
+                    },
+                    select : function(e) {
+                    	for( var i = 0; i < e.files.length; i++ ) {
+                    		if( e.files[i].size == 0 ) {
+                    			mint.common.alert('CW00013', e.files[i].name);
+                    			e.preventDefault();
+                    		}
+
+                    		if( mint.common.invalidFileName(e.files[i].name) ) {
+                    			mint.common.alert('CW00015', e.files[i].name);
+                    			e.preventDefault();
+                    		}
+                    		$.sub.uploadFileSelectedCount++;
+                    	}
+                    },
+                    upload: function(e) {
+                    	e.data = {userId:mint.session.getUserId()};
+                    },
+		 			progress: function(e) {
+		 				$.sub.fn_uploadProgress(e);
+		 			},
+		 			cancel: function(e) {
+
+		 			},
+                    error: function(e) {
+                    	$.sub.fn_uploadCheck(e);
+                    },
+                    success: function(e) {
+                    	$.sub.fn_uploadCheck(e);
+                    },
+		 			complete: function(e) {
+		 				$.sub.fn_uploadComplete(e);
+		 			},
+		 			remove: function(e) {
+						$.sub.fn_removeFile(e);
+		 		    },
+
+                });
+            }, // end fn_fileUpload
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드 상태 체크
+			//-----------------------------------------------------------------------
+			fn_uploadCheck : function( e ) {
+				try {
+					var xhr = e.XMLHttpRequest;
+					var httpStatus = xhr.status;
+					if( httpStatus == 200 ) {
+						//-----------------------------------------------------------------------
+						// Response ComMessage
+						//-----------------------------------------------------------------------
+						var msg = JSON.parse(xhr.responseText);
+						if( msg.errorCd == 0 ) {
+
+							var responseObject = msg.responseObject;
+							if( !mint.common.isEmpty(responseObject) && !mint.common.isEmpty(responseObject[0]) ) {
+								var uploadFileInfo = new Object();
+								uploadFileInfo.uid      = e.files[0].uid;
+								uploadFileInfo.fileNm   = responseObject[0].fileNm;
+								uploadFileInfo.filePath = responseObject[0].filePath;
+								$.sub.uploadFileInfoList.push(uploadFileInfo);
+
+								$.sub.uploadFileCount ++;
+							}
+
+						} else {
+							$.sub.uploadFileFailInfo.push({uid: e.files[0].uid, msg: msg.errorMsg});
+							e.preventDefault();
+							return;
+						}
+
+					} else {
+						switch( httpStatus ) {
+							case 12029 : //server shutdown
+								alertMsg = mint.message.getMessage('CE12029', null);
+								break;
+							case 404 :
+								alertMsg = mint.message.getMessage('CE10404', null);
+								break;
+							default :
+								alertMsg = mint.message.getMessage('CE10000', httpStatus);
+								break;
+						}
+						mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_uploadCheck"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드시 진행시.
+			//-----------------------------------------------------------------------
+			fn_uploadProgress : function(event) {
+				try {
+					mint.waitingLoad(true);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_uploadProgress"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드 완료시.
+			//-----------------------------------------------------------------------
+			fn_uploadComplete : function(event) {
+				try {
+					mint.waitingLoad(false);
+					//-----------------------------------------------------------------------
+					// 업로드 실패시 Retry 버튼 숨김
+					//-----------------------------------------------------------------------
+					$('.k-button.k-upload-action[aria-label="Retry"]').css('display','none');
+
+					//-----------------------------------------------------------------------
+					// 업로드 실패한 파일 정보가 있으면 Alert Message 후 멈춤
+					//-----------------------------------------------------------------------
+					if( $.sub.uploadFileFailInfo.length > 0 ) {
+						mint.common.alert( $.sub.uploadFileFailInfo[0].msg );
+						return;
+					}
+
+					//-----------------------------------------------------------------------
+					// 파일 업로드가 최종적으로 완료되면, save 호출
+					// 파일 업로드후 업로드카운트 >= 셀렉트카운트 이면 Next 처리
+					//-----------------------------------------------------------------------
+					if( $.sub.uploadFileCount >= $.sub.uploadFileSelectedCount ) {
+						$.sub.uploadFileFailInfo = [];
+						$.sub.fn_saveFAQ();
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_uploadComplete"});
+				}
+			},
+
+          	//-----------------------------------------------------------------------
+            // Description :: 첨부파일 삭제 이벤트 세팅
+            //-----------------------------------------------------------------------
+            fn_removeFile : function(e) {
+            	var files = e.files;
+
+				//-----------------------------------------------------------------------
+				// 기 등록된 파일을 삭제할 경우 기 등록된 정보에서도 삭제 처리
+				// --> 인터페이스 등록화면에서 필요한 처리 로직
+				//-----------------------------------------------------------------------
+                for( var i = 0; i < $('#fu-uploadFile').data("kendoUpload").options.files.length; i++ ) {
+                    if( files[0].uid == $('#fu-uploadFile').data("kendoUpload").options.files[i].uid ) {
+                        $('#fu-uploadFile').data("kendoUpload").options.files.splice(i, 1);
+                    }
+                }
+
+				//-----------------------------------------------------------------------
+				// 신규로 등록된 파일을 삭제할 경우 신규로 등록된 정보에서도 삭제 처리
+				//-----------------------------------------------------------------------
+				for( var i = 0; i < $.sub.uploadFileInfoList.length; i++ ) {
+					if( files[0].uid == $.sub.uploadFileInfoList[i].uid ) {
+						$.sub.uploadFileInfoList.splice(i,1);
+					}
+				}
+
+				//-----------------------------------------------------------------------
+				// 화면상에서 삭제된것 처럼 처리하기 위해 html remove
+				//-----------------------------------------------------------------------
+            	$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+
+				//-----------------------------------------------------------------------
+				// 공지사항/FAQ 의 경우 파일정보의 flag 값에 따라 CRUD 처리함
+				//-----------------------------------------------------------------------
+            	$.sub.fn_setAttachFileFlag(files[0].fileId, files[0].fileNm, 'D');
+
+				//-----------------------------------------------------------------------
+				// e.files.rowFile 정보가 비어있지 않으면 신규로 업로드한 파일로 인지
+				//-----------------------------------------------------------------------
+				if(!mint.common.isEmpty(e.files[0].rawFile)) {
+					if($.sub.uploadFileSelectedCount > 0) {
+						$.sub.uploadFileSelectedCount--;
+					}
+				}
+
+				//-----------------------------------------------------------------------
+				// 파일 업로드에 실패한 파일을 삭제할 경우 uid 및 msg 초기화
+				//-----------------------------------------------------------------------
+				for( var i = 0; i < $.sub.uploadFileFailInfo.length; i++ ) {
+					if( files[0].uid == $.sub.uploadFileFailInfo[i].uid ) {
+						$.sub.uploadFileFailInfo.splice(i,1);
+					}
+				}
+
+				//-----------------------------------------------------------------------
+				// kendoFileUpload Component 의 removeURL 을 호출하지 않도록 처리하기 위함
+				//-----------------------------------------------------------------------
+				e.preventDefault();
+
+            }, // end fn_removeFile
+
+          	//-----------------------------------------------------------------------
+            // Description :: 첨부파일 삭제 플래그 설정(공지사항 및 FAQ 처리 로직)
+            //-----------------------------------------------------------------------
+            fn_setAttachFileFlag : function(fileId, fileName, flag) {
+            	for(var i = 0; i < $.sub.originalAttachFile.length; i++) {
+            		if( $.sub.originalAttachFile[i].fileId == fileId && $.sub.originalAttachFile[i].fileNm == fileName) {
+            			$.sub.originalAttachFile[i].flag = flag;
+            		}
+            	}
+            }
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: FAQ 입력 정보 저장(insert)
+	//-----------------------------------------------------------------------
+	$(".btn-save").click(function(e) {
+		try {
+			$.sub.fn_save();
+		}
+		catch (e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-save.click"});
+		}
+	});
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>

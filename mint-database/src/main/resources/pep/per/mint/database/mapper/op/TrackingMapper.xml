@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.TrackingMapper">
+	<!-- <cache/> -->
+
+	<select id="getTrackingLogListTotalCount" parameterType="Map" resultType="int">
+
+		SELECT
+			/*+ INDEX (A UIDX01_TOP0503) */
+			COUNT(A.TRACKING_DATE)
+      	FROM
+      	(
+      		SELECT
+      			TRACKING_DATE
+      		FROM TOP0503
+      		WHERE 1 = 1
+      		AND TRACKING_DATE <![CDATA[>=]]> #{startDate}
+			AND TRACKING_DATE <![CDATA[<=]]> #{endDate}
+			<if test="status != null and status != ''">
+			AND STATUS = #{status}
+			</if>
+			<if test="trackingDate !=null and trackingDate !=''">
+			AND TRACKING_DATE = #{trackingDate}
+			</if>
+			<if test="channelId != null and channelId != ''">
+			AND CHANNEL_ID = #{channelId}
+			</if>
+			<if test="organizationId != null and organizationId != ''">
+			AND (
+				SND_ORG_ID = #{organizationId}
+				OR RCV_ORG_ID = #{organizationId}
+			)
+			</if>
+			<if test="systemId != null and systemId != ''">
+			AND (
+				SND_SYSTEM_ID = #{systemId}
+				OR RCV_SYSTEM_ID = #{systemId}
+			)
+			</if>
+			<if test="businessId != null and businessId != ''">
+			AND BUSINESS_ID = #{businessId}
+			</if>
+			<if test="interfaceNm != null and interfaceNm != ''">
+			AND INTERFACE_NM = #{interfaceNm}
+			</if>
+			<if test="integrationId != null and integrationId != ''">
+			AND INTEGRATION_ID = #{integrationId}
+			</if>
+			-----------------------------------------------
+			-- 데이터 엑세스 권한
+			-----------------------------------------------
+			<choose>
+			<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+			</when>
+			<otherwise>
+			AND EXISTS
+			(
+				SELECT TOP0503.INTERFACE_ID
+				FROM (
+				<include refid="pep.per.mint.database.mapper.op.TrackingMapper.getDataAccessRoleInterface"/>
+				) ACCESS_ROLE_INTF
+				WHERE TOP0503.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+			)
+			</otherwise>
+			</choose>
+		) A
+	</select>
+
+	<select id="getTrackingLogList" parameterType="Map" resultMap="TRLogResult">
+		SELECT
+  			TRACKING.INTEGRATION_ID      AS INTEGRATION_ID ,
+  			TRACKING.TRACKING_DATE       AS TRACKING_DATE ,
+  			TRACKING.ORG_HOST_ID         AS ORG_HOST_ID ,
+  			TRACKING.INTERFACE_ID        AS INTERFACE_ID ,
+  			TRACKING.STATUS              AS STATUS ,
+  			CASE
+    			WHEN TRACKING.STATUS = '00'
+    			THEN '완료'
+    			WHEN TRACKING.STATUS = '01'
+    			THEN '처리중'
+    			WHEN TRACKING.STATUS = '99'
+    			THEN '오류'
+		    ELSE ''
+  			END                        AS STATUS_NM ,
+  			TRACKING.MATCH             AS MATCH ,
+  			TRACKING.RECORD_CNT        AS RECORD_CNT ,
+  			TRACKING.DATA_AMT          AS DATA_AMT ,
+  			TRACKING.CMP               AS CMP ,
+  			TRACKING.CST               AS CST ,
+  			TRACKING.TDC               AS TDC ,
+  			TRACKING.FNC               AS FNC ,
+  			TRACKING.ERC               AS ERC ,
+  			TRACKING.ERROR_CD          AS ERROR_CD ,
+  			TRACKING.ERROR_MSG         AS ERROR_MSG ,
+  			TRACKING.BUSINESS_ID       AS BUSINESS_ID ,
+  			TRACKING.BUSINESS_NM       AS BUSINESS_NM ,
+  			TRACKING.INTERFACE_NM      AS INTERFACE_NM ,
+  			TRACKING.CHANNEL_ID        AS CHANNEL_ID ,
+  			TRACKING.CHANNEL_NM        AS CHANNEL_NM ,
+  			TRACKING.DATA_PR_DIR       AS DATA_PR_DIR ,
+  			TRACKING.DATA_PR_DIR_NM    AS DATA_PR_DIR_NM ,
+  			TRACKING.DATA_PR_METHOD    AS DATA_PR_METHOD ,
+  			TRACKING.DATA_PR_METHOD_NM AS DATA_PR_METHOD_NM ,
+  			TRACKING.APP_PR_METHOD     AS APP_PR_METHOD ,
+  			TRACKING.APP_PR_METHOD_NM  AS APP_PR_METHOD_NM ,
+  			TRACKING.SND_SYSTEM_ID     AS SND_SYSTEM_ID ,
+  			TRACKING.SND_SYSTEM_NM     AS SND_SYSTEM_NM ,
+  			TRACKING.SND_RES_TYPE      AS SND_RES_TYPE ,
+  			TRACKING.SND_RES_NM        AS SND_RES_NM ,
+  			TRACKING.RCV_SYSTEM_ID     AS RCV_SYSTEM_ID ,
+  			TRACKING.RCV_SYSTEM_NM     AS RCV_SYSTEM_NM ,
+  			TRACKING.RCV_RES_TYPE      AS RCV_RES_TYPE ,
+  			TRACKING.RCV_RES_NM        AS RCV_RES_NM
+		FROM (
+    		SELECT *
+    		FROM (
+      			SELECT
+        			ROWNUM AS RNUM ,
+        			A.*
+      			FROM (
+      				SELECT *
+      				FROM TOP0503
+      				WHERE 1=1
+      				AND TRACKING_DATE <![CDATA[>=]]> #{startDate}
+      				AND TRACKING_DATE <![CDATA[<=]]> #{endDate}
+      				<if test="status != null and status != ''">
+					AND STATUS = #{status}
+					</if>
+					<if test="trackingDate !=null and trackingDate !=''">
+					AND TRACKING_DATE = #{trackingDate}
+					</if>
+					<if test="channelId != null and channelId != ''">
+					AND CHANNEL_ID = #{channelId}
+					</if>
+					<if test="organizationId != null and organizationId != ''">
+					AND (
+						SND_ORG_ID = #{organizationId}
+						OR RCV_ORG_ID = #{organizationId}
+					)
+					</if>
+					<if test="systemId != null and systemId != ''">
+					AND (
+						SND_SYSTEM_ID = #{systemId}
+						OR RCV_SYSTEM_ID = #{systemId}
+					)
+					</if>
+					<if test="businessId != null and businessId != ''">
+					AND BUSINESS_ID = #{businessId}
+					</if>
+					<if test="interfaceNm != null and interfaceNm != ''">
+					AND INTERFACE_NM = #{interfaceNm}
+					</if>
+					<if test="integrationId != null and integrationId != ''">
+					AND INTEGRATION_ID = #{integrationId}
+					</if>
+					-----------------------------------------------
+					-- 데이터 엑세스 권한
+					-----------------------------------------------
+					<choose>
+					<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+					</when>
+					<otherwise>
+					AND EXISTS
+					(
+						SELECT TOP0503.INTERFACE_ID
+						FROM (
+						<include refid="pep.per.mint.database.mapper.op.TrackingMapper.getDataAccessRoleInterface"/>
+						) ACCESS_ROLE_INTF
+						WHERE TOP0503.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+					)
+					</otherwise>
+					</choose>
+      			) A
+  				WHERE ROWNUM <![CDATA[<]]>= #{endIndex}
+  			) B
+			WHERE B.RNUM <![CDATA[>]]>= #{startIndex}
+		) TRACKING
+	</select>
+
+	<resultMap id="TRLogResult" type="TrackingLog">
+		<result property="integrationId" column="INTEGRATION_ID" />
+		<result property="trackingDate" column="TRACKING_DATE" />
+		<result property="orgHostId" column="ORG_HOST_ID" />
+		<result property="interfaceId" column="INTERFACE_ID" />
+		<result property="status" column="STATUS" />
+		<result property="statusNm" column="STATUS_NM" />
+		<result property="match" column="MATCH" />
+		<result property="recordCnt" column="RECORD_CNT" />
+		<result property="dataAmt" column="DATA_AMT" />
+		<result property="cmp" column="CMP" />
+		<result property="cst" column="CST" />
+		<result property="tdc" column="TDC" />
+		<result property="fnc" column="FNC" />
+		<result property="erc" column="ERC" />
+		<result property="errorCd" column="ERROR_CD" />
+		<result property="errorMsg" column="ERROR_MSG" />
+		<result property="businessId" column="BUSINESS_ID" />
+		<result property="businessNm" column="BUSINESS_NM" />
+		<result property="interfaceNm" column="INTERFACE_NM" />
+		<result property="channelId" column="CHANNEL_ID" />
+		<result property="channelNm" column="CHANNEL_NM" />
+		<result property="dataPrDir" column="DATA_PR_DIR" />
+		<result property="dataPrDirNm" column="DATA_PR_DIR_NM" />
+		<result property="dataPrMethod" column="DATA_PR_METHOD" />
+		<result property="dataPrMethodNm" column="DATA_PR_METHOD_NM" />
+		<result property="appPrMethod" column="APP_PR_METHOD" />
+		<result property="appPrMethodNm" column="APP_PR_METHOD_NM" />
+		<result property="sndOrgId" column="SND_ORG_ID" />
+		<result property="sndOrgNm" column="SND_ORG_NM" />
+		<result property="sndSystemId" column="SND_SYSTEM_ID" />
+		<result property="sndSystemNm" column="SND_SYSTEM_NM" />
+		<result property="sndResType" column="SND_RES_TYPE" />
+		<result property="sndResNm" column="SND_RES_NM" />
+		<result property="rcvOrgId" column="RCV_ORG_ID" />
+		<result property="rcvOrgNm" column="RCV_ORG_NM" />
+		<result property="rcvSystemId" column="RCV_SYSTEM_ID" />
+		<result property="rcvSystemNm" column="RCV_SYSTEM_NM" />
+		<result property="rcvResType" column="RCV_RES_TYPE" />
+		<result property="rcvResNm" column="RCV_RES_NM" />
+	</resultMap>
+
+	<select id="getTrackingLogDetail" parameterType="Map" resultMap="TRLogDetailResult">
+		SELECT
+		  A.ID	     	   AS ID,
+		  A.INTEGRATION_ID AS INTEGRATION_ID,
+		  A.TRACKING_DATE  AS TRACKING_DATE,
+		  A.ORG_HOST_ID    AS ORG_HOST_ID,
+		  A.STATUS         AS STATUS,
+		  A.NODE_TYPE      AS NODE_TYPE,
+		  A.START_DATE     AS START_DATE,
+		  A.END_DATE       AS END_DATE,
+		  A.SEQ            AS SEQ,
+		  A.HOST_ID        AS HOST_ID,
+		  A.PROCESS_ID     AS PROCESS_ID,
+		  A.IP             AS IP,
+		  A.OS             AS OS,
+		  A.APP_NM         AS APP_NM,
+		  A.ERROR_CD       AS ERROR_CD,
+		  A.ERROR_MSG      AS ERROR_MSG,
+		  A.RECORD_CNT     AS RECORD_CNT,
+		  B.DATA		   AS MSG,
+		  A.DATA_AMT       AS DATA_AMT,
+		  A.CMP            AS CMP,
+		  A.DIRECTORY      AS DIRECTORY,
+		  A.FILE_NM        AS FILE_NM,
+		  A.FILE_SIZE      AS FILE_SIZE
+		FROM TOP0501 A
+		LEFT OUTER JOIN TOP0502 B ON A.ID = B.ID
+		WHERE 1=1
+		AND A.INTEGRATION_ID = #{integrationId}
+		AND A.TRACKING_DATE = #{trackingDate}
+		AND A.ORG_HOST_ID = #{orgHostId}
+		ORDER BY A.SEQ ASC
+	</select>
+
+	<resultMap id="TRLogDetailResult" type="TrackingLogDetail">
+		<result property="id" column="ID" />
+		<result property="integrationId" column="INTEGRATION_ID" />
+		<result property="trackingDate" column="TRACKING_DATE" />
+		<result property="orgHostId" column="ORG_HOST_ID" />
+		<result property="status" column="STATUS" />
+		<result property="nodeType" column="NODE_TYPE" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="seq" column="SEQ" />
+		<result property="hostId" column="HOST_ID" />
+		<result property="processId" column="PROCESS_ID" />
+		<result property="ip" column="IP" />
+		<result property="os" column="OS" />
+		<result property="appNm" column="APP_NM" />
+		<result property="errorCd" column="ERROR_CD" />
+		<result property="errorMsg" column="ERROR_MSG" />
+		<result property="recordCnt" column="RECORD_CNT" />
+		<result property="msg" column="MSG" />
+		<result property="msgToByte" column="MSG" jdbcType="BLOB"></result>
+		<result property="dataAmt" column="DATA_AMT" />
+		<result property="cmp" column="CMP" />
+		<result property="directory" column="DIRECTORY" />
+		<result property="fileNm" column="FILE_NM" />
+		<result property="fileSize" column="FILE_SIZE" />
+	</resultMap>
+
+	<!-- 데이터 접근 권한별 인터페이스 조회 -->
+	<sql id="getDataAccessRoleInterface">
+		-----------------------------------------------
+		-- 데이터 접근 권한 별 인터페이스 조회
+		-----------------------------------------------
+		SELECT
+			DISTINCT
+			TSU0220.INTERFACE_ID
+		FROM
+			<include refid="pep.per.mint.database.mapper.op.TrackingMapper.getDataAccessRoleUser"/>
+			-----------------------------------------------
+			-- 데이터 접근 권한
+			-----------------------------------------------
+			INNER JOIN TSU0218 TSU0218 ON
+				ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			-----------------------------------------------
+			-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+			-----------------------------------------------
+			INNER JOIN TSU0220 TSU0220 ON
+				TSU0220.ROLE_ID = ACCESS_ROLE.ROLE_ID
+		WHERE
+			1 = 1
+			AND TSU0218.DEL_YN = 'N'
+	</sql>
+
+	<!-- 로그인 사용자 데이터 접근 권한 조회 -->
+	<sql id="getDataAccessRoleUser">
+		-----------------------------------------------
+		-- 로그인 사용자 데이터 접근 권한 조회(공통)
+		-----------------------------------------------
+		(
+			SELECT
+				DISTINCT
+				TSU0219.USER_ID   AS USER_ID,
+				TSU0221.C_ROLE_ID AS ROLE_ID,
+				TSU0221.DEPTH     AS DEPTH
+			FROM
+				(
+					SELECT
+						TSU0101.USER_ID,
+						TSU0219.ROLE_ID
+					FROM
+						TSU0101 TSU0101
+						INNER JOIN TSU0219 ON
+							TSU0101.USER_ID = TSU0219.USER_ID
+					WHERE
+						1 = 1
+						AND TSU0101.DEL_YN = 'N'
+						AND TSU0101.USER_ID = #{userId}
+				) TSU0219
+					INNER JOIN TSU0221 ON
+					TSU0219.ROLE_ID = TSU0221.P_ROLE_ID
+		) ACCESS_ROLE
+	</sql>
+</mapper>

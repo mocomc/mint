@@ -1,0 +1,83 @@
+======================================================================================================
+- IIP MI Agent/Runner 모니터링 설정 가이드
+------------------------------------------------------------------------------------------------------
+- SVN:/trunk/mint/mint-install/iip-miMonitor-setting-guide.txt
+- subject : MI Agent/Runner 모니터링 설정 가이드
+- author  : psp
+- begin   : 2019.02
+------------------------------------------------------------------------------------------------------
+1.목적
+	IIP 상에 특정 MI Manager와 관련된 Agent/Runner를 대시보드에서 모니터링할 수 있도록 설정한다.
+
+2. 구조
+	2.1 MI 모니터링
+		2.2.1. Agent 상태 모니터링
+
+		+-------------------+    +---------------------------------+     +------------------------------+
+		| MI Manager(Agent) | -->|	MI에이전트/러너상태모니터링 배치   | --> |MI Agent상태 table(top0809)	|
+		|		    |	 |	MIAgentStateCheckJob.java  |	 |				|
+		+-------------------+    +---------------------------------+     +------------------------------+
+		
+		2.2.2. Runner 상태 모니터링
+		
+		+--------------------+    +------------------------------+       +------------------------------+
+		| MI Manager(Runner) | -->|	MI에이전트/러너상태모니터링 배치 | ----> |MI Runner상태 table(top0808)	|
+		|		     |	  |	MIAgentStateCheckJob.java|	 |				|
+		+--------------------+    +------------------------------+       +------------------------------+
+
+3.MI Monitor 작동을 위한 환경설정
+	3.1. MI Agent/Runner를 모니터링 하기 위한 환경설정
+		Agent와 Runner 상태를 가져오기 위해 MI Manager에 접속하기 위한 환경설정으로
+		IIP 서버 기동전에 설정되어 있어야 한다.(혹은 설정 후 재기동 필요)
+		
+		3.1.1 포털환경설정에 아래 정보를 사이트 환경에 맞게 등록해 준다.
+			------------------------------------------------------------------------------------------------
+				package		id				type	value		비고
+			------------------------------------------------------------------------------------------------
+				solution	mi.manager.ip			string	10.10.8.83	MI 매니저 접속 주소
+				solution	mi.manager.port			string	8991		MI 매니저 접속 포트
+				solution	mi.manager.username		string	USER003		MI 매니저 접속 ID
+				solution	mi.manager.password		string	USER003		MI 매니저 접속 패스워드
+		 	------------------------------------------------------------------------------------------------
+
+			[SQL]			
+				update tsu0302 set attribute_value='10.10.8.83' where attribute_nm='solution.mi.manager.ip';
+				update tsu0302 set attribute_value='8991' where attribute_nm='solution.mi.manager.port';
+				update tsu0302 set attribute_value='USER003' where attribute_nm='solution.mi.manager.username';
+				update tsu0302 set attribute_value='10.10.8.83' where attribute_nm='solution.mi.manager.password';
+			
+			
+			--(값이 없는 경우)			
+				insert into tsu0302(package, attribute_id, idx, attribute_nm, attribute_value, comments, del_yn, reg_date, reg_user,mod_date, mod_user) values ('solution','mi.manager.ip',1,'solution.mi.manager.ip','10.10.8.83','MI 매니저 접속 주소','N', to_char(sysdate,'yyyymmddhh24miss'), 'iip','','');
+				insert into tsu0302(package, attribute_id, idx, attribute_nm, attribute_value, comments, del_yn, reg_date, reg_user,mod_date, mod_user) values ('solution','mi.manager.port',1,'solution.mi.manager.port','8991','MI 매니저 접속 포트','N', to_char(sysdate,'yyyymmddhh24miss'), 'iip','','');
+				insert into tsu0302(package, attribute_id, idx, attribute_nm, attribute_value, comments, del_yn, reg_date, reg_user,mod_date, mod_user) values ('solution','mi.manager.username',1,'solution.mi.manager.username','USER003','MI 매니저 접속 ID','N', to_char(sysdate,'yyyymmddhh24miss'), 'iip','','');
+				insert into tsu0302(package, attribute_id, idx, attribute_nm, attribute_value, comments, del_yn, reg_date, reg_user,mod_date, mod_user) values ('solution','mi.manager.password',1,'solution.mi.manager.password','USER003','MI 매니저 접속 패스워드','N', to_char(sysdate,'yyyymmddhh24miss'), 'iip','','');
+				
+		3.1.2 MI에이전트/러너상태모니터링 스케줄러를 등록해 준다.
+		
+			스케줄 테이블[TBA003]에 스케줄 정보 등록
+			--------------------------------------------------------
+				SCHEDULE_ID		SCHEDULE_NM					USAGE
+			--------------------------------------------------------
+					15			MI에이전트/러너상태모니터링		Y
+			[SQL]
+				insert into tba0003 (schedule_id, schedule_nm, usage) values ('15','MI에이전트/러너상태모니터링','Y');
+
+			스케줄값 테이블[TBA0004]에 스케줄 값 등록(매 1분마다 배치 실행 기준)
+			--------------------------------------------------------------
+				SCHEDULE_ID		JOB_ID	GRP_ID	SEQ	TYPE	VALUE
+			--------------------------------------------------------------
+					15			15		1		0	0		0 0-59 * * * ?
+			[SQL]
+				insert into tba0004 (schedule_id, job_id, grp_id, seq, type, value) values ('15','15', '1', 0, '0', '0 0-59 * * * ?');
+
+	3.2. IIP 화면 상 설정
+		3.2.1 포털개발자 계정으로 MI Agent 관련 메뉴 등록
+			[IIP개발자]>[매뉴관리]의 [매뉴관리] 탭에서 [EAI엔진관리](IM-02-01-002) 메뉴를 활성화
+			경로) [모니터링]>[환경설정]>[EAI실행모듈]
+		
+		3.2.2 [EAI실행모듈] 환경설정에 등록
+			3.2.2.1 [에이전트]에 MI Agent의 에이전트코드, 에이전트명, 서버를 등록
+			
+			3.2.2.2 등록된 [에이전트]의 하위 트리 [Runner]에 MI Runner의 이름을 등록
+			

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.PotalStatisticsMapper">
+	<!--
+  	<cache/>
+  	-->
+	
+	<!--
+		일자별 로그인 카운트 SQL 
+	 -->
+	 
+	<resultMap id="LoginStatistics1Map" type="java.util.LinkedHashMap">
+		<result property="loginDate" column="LOGIN_DATE"/>
+		<result property="cnt"		 column="CNT"/>
+	</resultMap>	 
+	 
+	<select id="getLoginStatistics1" resultMap="LoginStatistics1Map">
+		SELECT 
+		    SUBSTR(LOGIN_DATE, 1, 8) AS LOGIN_DATE
+		  , COUNT(USER_ID) AS CNT
+		FROM TOP0200
+		WHERE SUBSTR(LOGIN_DATE, 1, 8) BETWEEN #{fromDate} AND #{toDate}
+		GROUP BY SUBSTR(LOGIN_DATE, 1, 8)
+		ORDER BY SUBSTR(LOGIN_DATE, 1, 8) DESC, COUNT(USER_ID)
+	</select>
+	
+	
+	<!--
+		일자별,사용자별 로그인 카운트 SQL 
+	 -->
+	 
+	<resultMap id="LoginStatistics2Map" type="java.util.LinkedHashMap">
+		<result property="loginDate" column="LOGIN_DATE"/>
+		<result property="cnt"		 column="CNT"/>
+		<result property="userId"	 column="USER_ID"/>
+		<result property="userNm"	 column="USER_NM"/>
+	</resultMap>	 
+	 
+	<select id="getLoginStatistics2" resultMap="LoginStatistics2Map">
+		SELECT
+		    A.LOGIN_DATE
+		  , A.CNT
+		  , A.USER_ID
+		  , B.USER_NM
+		FROM
+		  (
+		    SELECT 
+		        SUBSTR(LOGIN_DATE, 1, 8) AS LOGIN_DATE
+		      , COUNT(USER_ID) AS CNT
+		      , USER_ID
+		    FROM TOP0200
+		    WHERE SUBSTR(LOGIN_DATE, 1, 8) BETWEEN #{fromDate} AND #{toDate}
+		    GROUP BY SUBSTR(LOGIN_DATE, 1, 8), USER_ID
+		  ) A
+		  LEFT OUTER JOIN TSU0101 B
+		  ON
+		    A.USER_ID = B.USER_ID
+		ORDER BY LOGIN_DATE DESC, CNT DESC    
+	</select>
+	
+	<!--
+		일자별,사용자별 로그인/로그아웃 SQL 
+	 -->
+	 
+	<resultMap id="LoginStatisticsDetailMap" type="java.util.LinkedHashMap">
+		<result property="loginDate"	column="LOGIN_DATE"/>
+		<result property="userId"		column="USER_ID"/>
+		<result property="userNm"		column="USER_NM"/>
+		<result property="loginTime"	column="LOGIN_TIME"/>
+		<result property="logoutTime"	column="LOGOUT_TIME"/>
+	</resultMap>	 
+	 
+	<select id="getLoginStatisticsDetail" resultMap="LoginStatisticsDetailMap">
+		SELECT
+		    A.LOGIN_DATE
+		  , A.USER_ID
+		  , B.USER_NM
+		  , A.LOGIN_TIME
+		  , A.LOGOUT_TIME
+		FROM
+		  (
+		    SELECT
+		        SUBSTR(LOGIN_DATE, 1, 8) AS LOGIN_DATE
+		      , USER_ID
+		      , LOGIN_DATE AS LOGIN_TIME
+		      , LOGOUT_DATE AS LOGOUT_TIME
+		    FROM TOP0200
+		    WHERE SUBSTR(LOGIN_DATE, 1, 8) BETWEEN #{fromDate} AND #{toDate}
+		  ) A
+		  LEFT OUTER JOIN TSU0101 B
+		  ON
+		    A.USER_ID = B.USER_ID
+		ORDER BY LOGIN_DATE DESC, LOGIN_TIME DESC   
+	</select>		
+
+
+</mapper>

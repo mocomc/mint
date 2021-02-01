@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다. 
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605, 
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.batch.su.TSU0602BatchJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<delete id="deleteTSU0602">
+		delete from TSU0602
+		 where ST_DATE = #{stDate}
+	</delete>
+
+	<insert id="insertTSU0602">
+		insert into TSU0602(
+			 ST_DATE
+			,SYSTEM_ID
+			,DISK_ID
+			,MIN_USE
+			,MAX_USE
+			,AVG_USE
+		)
+		select
+			 substr(DATETIME,1,8) 	as ST_DATE
+			,IP 				  	as SYSTEM_ID
+			,DISK_NAME				as DISK_ID
+			,min(DISK_USAGE) 		as MIN_USE
+			,max(DISK_USAGE) 		as MAX_USE
+			,avg(DISK_USAGE)    	as AVG_USE
+		 from DB_DISK_LOG
+		where DATETIME <![CDATA[>=]]> #{stDate} ||'000000'
+		  and DATETIME <![CDATA[<=]]> #{stDate} ||'240000'
+		group by substr(DATETIME,1,8), IP, DISK_NAME
+	</insert>
+	
+</mapper>

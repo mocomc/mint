@@ -1,0 +1,824 @@
+﻿<!--
+	Screen ID : AN-04-00-001
+	Screen NM : TO-DO LIST
+-->
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<!--
+	<div id="menuPath" class="col-lg-5">
+    </div>
+      -->
+	<div class="col-lg-5">
+		<h2 id="title"><lb class="lb-19"></lb></h2>
+
+		<ol class="breadcrumb">
+	        <li><lb class="lb-8"></lb></li>
+	        <li class="active" id="locationTitle"><strong><lb class="lb-19"></lb></strong></li>
+ 		</ol>
+
+	</div>
+	<!--button-->
+	<div class="col-lg-7">
+		<div class="title-action" >
+		</div>
+	</div>
+	<!--button end-->
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-lg-12">
+		    <div class="tabs-container">
+		        <ul class="nav nav-tabs">
+		            <li class="active">
+		            	<a data-toggle="tab" href="#todo-tab01">
+		            		<!-- <lb class="lb-395"></lb> <lb class="lb-375"></lb> -->
+		            		<lb class="lb-121">접수 대상</lb>
+		            	  	<span class="label label-warning tab01Cnt" style="display: none">0</span>
+		            	</a>
+                        <!--<span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H001')"></span>-->
+		            </li>
+		            <li class="">
+		            	<a data-toggle="tab" href="#todo-tab02">
+		            		<lb class="lb-122">접수 요청</lb>
+		            		<span class="label label-warning tab02Cnt" style="display: none">0</span>
+		            	</a>
+	            		<!--<span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H002')"></span>-->
+		            </li>
+		            <li class="">
+		            	<a data-toggle="tab" href="#todo-tab03">
+		            		<lb class="lb-123">접수 반려</lb>
+		            		<span class="label label-warning tab03Cnt" style="display: none">0</span>
+		            	</a>
+						<!--<span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H003')"></span>-->
+		            </li>
+		            <li class="">
+		            	<a data-toggle="tab" href="#todo-tab04">
+		            		<lb class="lb-124">개발 대상</lb>
+		            		<span class="label label-warning tab04Cnt" style="display: none">0</span>
+		            	</a>
+						<!--<span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H004')"></span>-->
+		            </li>
+		            <li class="">
+		            	<a data-toggle="tab" href="#todo-tab05">
+		            		<lb class="lb-125">테스트 대상</lb>
+		            		<span class="label label-warning tab05Cnt" style="display: none">0</span>
+		            	</a>
+						<!--<span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H005')"></span>-->
+		            </li>
+		            <li class="">
+                        <a data-toggle="tab" href="#todo-tab06">
+                        	<lb class="lb-126">이행 대상</lb>
+                        	<span class="label label-warning tab06Cnt" style="display: none">0</span>
+                        </a>
+                       	<!--<span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H006')"></span>-->
+                    </li>
+		        </ul>
+                <span class="help-over-tab" onclick="mint.ui.help(this, 'AP00000009','H001')"></span>
+
+		        <div class="tab-content">
+		            <div id="todo-tab01" class="tab-pane active">
+		                <div class="panel-body">
+	                		<div id="tab01-grid"></div>
+						</div>
+		            </div>
+		            <div id="todo-tab02" class="tab-pane">
+		                <div class="panel-body">
+							<div id="tab02-grid"></div>
+		                </div>
+		            </div>
+		            <div id="todo-tab03" class="tab-pane">
+		                <div class="panel-body">
+							<div id="tab03-grid"></div>
+		                </div>
+		            </div>
+		            <div id="todo-tab04" class="tab-pane">
+		                <div class="panel-body">
+							<div id="tab04-grid"></div>
+		                </div>
+		            </div>
+		            <div id="todo-tab05" class="tab-pane">
+		                <div class="panel-body">
+							<div id="tab05-grid"></div>
+		                </div>
+		            </div>
+		            <div id="todo-tab06" class="tab-pane">
+                        <div class="panel-body">
+                            <div id="tab06-grid"></div>
+                        </div>
+                    </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "AN-04-00-001";
+		$.extend({
+			main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+
+
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						$.main.fn_initTab01();
+						$.main.fn_initTab02();
+						$.main.fn_initTab03();
+						$.main.fn_initTab04();
+						$.main.fn_initTab05();
+						$.main.fn_initTab06();
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_getTab01();
+						$.main.fn_getTab02();
+						$.main.fn_getTab03();
+						$.main.fn_getTab04();
+						$.main.fn_getTab05();
+						$.main.fn_getTab06();
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab01 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab01 : function() {
+					try {
+						$("#tab01-grid").kendoGrid( $.main.fn_commonGridTemplate("#tab01-grid") ).data("kendoGrid");
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab01"});
+					}
+				},//end fn_initTab01
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab02 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab02 : function() {
+					try {
+						$("#tab02-grid").kendoGrid( $.main.fn_commonGridTemplate("#tab02-grid") ).data("kendoGrid");
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab02"});
+					}
+				},//end fn_initTab02
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab03 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab03 : function() {
+					try {
+						$("#tab03-grid").kendoGrid( $.main.fn_commonGridTemplate("#tab03-grid") ).data("kendoGrid");
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab03"});
+					}
+				},//end fn_initTab03
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab04 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab04 : function() {
+					try {
+						$("#tab04-grid").kendoGrid( $.main.fn_commonGridTemplate("#tab04-grid") ).data("kendoGrid");
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab04"});
+					}
+				},//end fn_initTab04
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab05 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab05 : function() {
+					try {
+						$("#tab05-grid").kendoGrid( $.main.fn_commonGridTemplate("#tab05-grid") ).data("kendoGrid");
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab05"});
+					}
+				},//end fn_initTab05
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab06 초기화
+				//-----------------------------------------------------------------------
+	            fn_initTab06 : function() {
+                    try {
+                    	$("#tab06-grid").kendoGrid( $.main.fn_commonGridTemplate("#tab06-grid") ).data("kendoGrid");
+                    } catch( e ) {
+                        mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab06"});
+                    }
+                },//end fn_initTab06
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab01~06 GridTemplate
+				//-----------------------------------------------------------------------
+				fn_commonGridTemplate : function(tabGridId) {
+					try {
+
+						return {
+		                    dataSource :
+		                    {
+			                    data : "",
+		                        pageSize : mint.ui.getPageSizesS({'currentPage' : true}),
+
+			                    schema :
+			                    {
+			                        model :
+			                        {
+			                        	fields :
+			                        	{
+											regDate : {type : "string"},
+											modDate : {type : "string"},
+											requirementNm : {type : "string"},
+											interfaceNm : {type : "string"},
+											interfaceId : {type : "string"},
+											channelNm : {type : "string"},
+											statusNm : {type : "string"},
+											status : {type : "string"},
+											requirementId : {type : "string"},
+			                            }
+			                        }
+			                    }
+
+		                    },
+
+						    //height : 350,
+						    filterable: true,
+							selectable: "row",
+							resizable: true,
+		                    sortable : true,
+		                    scrollable : true,
+							pageable :
+							{
+								//refresh 		: false,
+								pageSizes		: mint.ui.getPageSizesS(),
+								buttonCount 	: 5
+							},
+		                    columns : [
+								{
+									field : "businessNm",
+									title : mint.label.getLabel('lb-83'),
+									width : "90px",
+									template : "<span title='${businessNm}'>${businessNm}</span>",
+									headerAttributes :
+									{
+									    style : "text-align: center"
+									},
+									attributes :
+									{
+									    style : "text-align: left; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true }
+								},
+
+
+								{
+									field : "interfaceNm",
+									title : mint.label.getLabel('lb-153'),
+									width : "90px",
+									template : "<span title='${interfaceNm}'>${interfaceNm}</span>",
+									headerAttributes :
+									{
+									    style : "text-align: center"
+									},
+									attributes :
+									{
+									    style : "text-align: left; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true }
+								},
+
+								{
+									field : "integrationId",
+									title : mint.label.getLabel('lb-154'),
+									width : "90px",
+									headerAttributes :
+									{
+									    style : "text-align: center"
+									},
+									attributes :
+									{
+									    style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true }
+								},
+
+								{
+									field : "channelNm",
+									title : mint.label.getLabel('lb-80'),
+									width : "60px",
+									headerAttributes :
+									{
+									    style : "text-align: center"
+									},
+									attributes :
+									{
+									    style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									hidden: true
+								},
+								{
+									template : '#= mint.common.formatDate(regDate) #',
+									field : "regDate",
+									title : mint.label.getLabel('lb-71'),
+									width : "60px",
+									headerAttributes :
+									{
+										style : "text-align: center"
+									},
+									attributes :
+									{
+										style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true }
+								},
+								{
+									template : '#= mint.common.formatDate(modDate) #',
+									field : "modDate",
+									title : mint.label.getLabel('lb-582'),
+									width : "60px",
+									headerAttributes :
+									{
+									    style : "text-align: center"
+									},
+									attributes :
+									{
+									    style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true }
+								},
+								{
+								    field : "statusNm",
+								    title : mint.label.getLabel('lb-106'),
+								    width : "60px",
+								    headerAttributes :
+								    {
+								        style : "text-align: center"
+								    },
+								    attributes :
+								    {
+								        style : "text-align: center; white-space: nowrap;"
+								    },
+								    filterable: { multi: true, search: true }
+								},
+
+								{
+								    template : '#=$.main.fn_todoTemplate(status, statusNm, requirementId)#',
+								    title : mint.label.getLabel('lb-559'),
+								    width : "120px",
+								    headerAttributes :
+								    {
+								        style : "text-align: center"
+								    },
+								    attributes :
+								    {
+								        style : "text-align: center; white-space: nowrap;"
+								    }
+								},
+								{
+                                    field : "requirementId",
+                                    hidden : true
+                                },
+								{
+                                    field : "status",
+                                    hidden : true
+                                },
+		                    ]
+						    , dataBound: function (e) {
+						    	if(0 == $(tabGridId).data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$(tabGridId).children(".k-grid-content").height(gridHeight /2.5);
+						    		$(tabGridId).children(".k-grid-content-locked").height(gridHeight / 2.5);
+						    	} else {
+						    		$(tabGridId).children(".k-grid-content").height('auto');
+							    	$(tabGridId).children(".k-grid-content-locked").height('auto');
+						    	}
+						    }
+				        };
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_commonGridTemplate"});
+					}
+				},//end fn_commonGridTemplate
+
+
+
+
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab01 조회
+				//-----------------------------------------------------------------------
+				fn_getTab01 : function() {
+					try {
+	                    mint.callService(null, 'AN-04-00-001', 'REST-R01-AN-04-00-001', '$.main.fn_setTab01',
+	                    		{
+	                    			errorCall : false,
+	                    			notificationView : false,
+	                    			params : {
+	                    				userId : mint.session.getUserId()
+	                    			}
+	                    		}
+	                    );
+					} catch ( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTab01"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab02 조회
+				//-----------------------------------------------------------------------
+				fn_getTab02 : function() {
+					try {
+	                    mint.callService(null, 'AN-04-00-001', 'REST-R02-AN-04-00-001', '$.main.fn_setTab02',
+	                    		{
+	                    			errorCall : false,
+	                    			notificationView : false,
+	                    			params : {
+	                    				userId : mint.session.getUserId()
+	                    			}
+	                    		}
+	                    );
+					} catch ( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTab02"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab03 조회
+				//-----------------------------------------------------------------------
+				fn_getTab03 : function() {
+					try {
+	                    mint.callService(null, 'AN-04-00-001', 'REST-R03-AN-04-00-001', '$.main.fn_setTab03',
+	                    		{
+	                    			errorCall : false,
+	                    			notificationView : false,
+	                    			params : {
+	                    				userId : mint.session.getUserId()
+	                    			}
+	                    		}
+	                    );
+					} catch ( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTab03"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab04 조회
+				//-----------------------------------------------------------------------
+				fn_getTab04 : function() {
+					try {
+	                    mint.callService(null, 'AN-04-00-001', 'REST-R04-AN-04-00-001', '$.main.fn_setTab04',
+	                    		{
+	                    			errorCall : false,
+	                    			notificationView : false,
+	                    			params : {
+	                    				userId : mint.session.getUserId()
+	                    			}
+	                    		}
+	                    );
+					} catch ( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTab04"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab05 조회
+				//-----------------------------------------------------------------------
+				fn_getTab05 : function() {
+					try {
+	                    mint.callService(null, 'AN-04-00-001', 'REST-R05-AN-04-00-001', '$.main.fn_setTab05',
+	                    		{
+	                    			errorCall : false,
+	                    			notificationView : false,
+	                    			params : {
+	                    				userId : mint.session.getUserId()
+	                    			}
+	                    		}
+	                    );
+					} catch ( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTab05"});
+					}
+				},
+
+
+				//-----------------------------------------------------------------------
+                // Description :: Tab06 조회
+                //-----------------------------------------------------------------------
+                fn_getTab06 : function() {
+                    try {
+                        mint.callService(null, 'AN-04-00-001', 'REST-R06-AN-04-00-001', '$.main.fn_setTab06',
+                                {
+                                    errorCall : false,
+                                    notificationView : false,
+                                    params : {
+                                    	userId : mint.session.getUserId()
+                                    }
+                                }
+                        );
+                    } catch ( e ) {
+                        mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTab06"});
+                    }
+                },
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab01 조회결과 반영
+				//-----------------------------------------------------------------------
+				fn_setTab01 : function(jsonData) {
+					try {
+						$.main.fn_commonDataSourceTemplate("#tab01-grid", ".tab01Cnt", jsonData);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setTab01"});
+					}
+				},//end fn_setTab01
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab02 조회결과 반영
+				//-----------------------------------------------------------------------
+				fn_setTab02 : function(jsonData) {
+					try {
+						$.main.fn_commonDataSourceTemplate("#tab02-grid", ".tab02Cnt", jsonData);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setTab02"});
+					}
+				},//end fn_setTab02
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab03 조회결과 반영
+				//-----------------------------------------------------------------------
+				fn_setTab03 : function(jsonData) {
+					try {
+						$.main.fn_commonDataSourceTemplate("#tab03-grid", ".tab03Cnt", jsonData);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setTab03"});
+					}
+				},//end fn_setTab03
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab04 조회결과 반영
+				//-----------------------------------------------------------------------
+				fn_setTab04 : function(jsonData) {
+					try {
+						$.main.fn_commonDataSourceTemplate("#tab04-grid", ".tab04Cnt", jsonData)
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setTab04"});
+					}
+				},//end fn_setTab04
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab05 조회결과 반영
+				//-----------------------------------------------------------------------
+				fn_setTab05 : function(jsonData) {
+					try {
+						$.main.fn_commonDataSourceTemplate("#tab05-grid", ".tab05Cnt", jsonData);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setTab05"});
+					}
+				},//end fn_setTab05
+
+				//-----------------------------------------------------------------------
+                // Description :: Tab06 조회결과 반영
+                //-----------------------------------------------------------------------
+                fn_setTab06 : function(jsonData) {
+                    try {
+                    	$.main.fn_commonDataSourceTemplate("#tab06-grid", ".tab06Cnt", jsonData);
+                    } catch( e ) {
+                        mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setTab06"});
+                    }
+                },//end fn_setTab01
+
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab01~06 DataSource 템플릿
+				//-----------------------------------------------------------------------
+				fn_commonDataSourceTemplate : function(tabGridId, tabCntClass, jsonData) {
+					try {
+
+	                    dataSource = new kendo.data.DataSource(
+	    	                    {
+	    		                    data : jsonData,
+	    	                        pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+	    	                    });
+
+	    		                $(tabGridId).data("kendoGrid").setDataSource(dataSource);
+	    		                cnt = $(tabGridId).data("kendoGrid").dataSource.total();
+	    		                if( cnt > 0 ) {
+	    							$(tabCntClass).html(cnt);
+	    							$(tabCntClass).show();
+	    		                };
+
+						return dataSource;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_commonDataSourceTemplate"});
+					}
+				},//end fn_commonDataSourceTemplate
+
+
+				//-----------------------------------------------------------------------
+				// Description :: tab03 TODO button 설정
+				//-----------------------------------------------------------------------
+				fn_todoTemplate : function(status, statusNm, requirementId) {
+					try {
+						//status 에 따라 TODO 버튼이 달라진다
+						var statusCheck = status.substring(0, 1);
+
+						var template = "";
+						var CRUDPS   = "";
+
+						var commentBtnCss = "btn btn-xs btn-success";
+						var commentBtnTxt = mint.label.getLabel('lb-561') + mint.label.getLabel('lb-562');
+						var isComment     = false;
+
+						var todoBtnCss    = "btn btn-xs btn-primary";
+						var todoBtnTxt    = "";
+						var isTodo        = false;
+
+						var detailBtnCss  = "btn btn-xs btn-outline btn-default";
+						var detailBtnTxt  = mint.label.getLabel('lb-353');
+
+
+						switch( status ) {
+							case 'A1':
+								isTodo = true;
+								todoBtnTxt = mint.label.getLabel('lb-116');
+								break;
+							case 'H0':
+								isTodo = true;
+								todoBtnTxt = mint.label.getLabel('lb-119');
+								break;
+							case 'B1' :
+							case 'B2' :
+							case 'B3' :
+							case 'B4' :
+								if( mint.lifecycle.isApprover() ) {
+									isComment = true;
+									isTodo = true;
+									todoBtnTxt = mint.label.getLabel('lb-120');
+								}
+								break;
+							case 'E1' :
+							case 'E2' :
+							case 'E3' :
+							case 'E4' :
+								isComment = true;
+								break;
+							case 'F1' :
+							case 'F2' :
+								if( mint.lifecycle.isDeveloper() ) {
+									isTodo = true;
+									todoBtnTxt = mint.label.getLabel('lb-140');
+								}
+								break;
+							case 'G0' :
+								if( mint.lifecycle.isTester() ) {
+									isTodo = true;
+									todoBtnTxt = mint.label.getLabel('lb-141');
+								}
+								break;
+							case 'F4' :
+								if( mint.lifecycle.isApplier() ) {
+									isTodo = true;
+									todoBtnTxt = mint.label.getLabel('lb-142');
+								}
+								break;
+						}
+
+
+						if( !isTodo && !isComment ) {
+							//template = 'N/A';
+							todoBtn   = '<span style="padding-right: 3px;"><button class="' + detailBtnCss   + '" type="button" onclick="$.main.fn_todoAction(\'' + status + '\', \'' + requirementId + '\', \'' + CRUDPS + '\')"><i class="fa fa-edit"></i> ' + detailBtnTxt + '</button></span>';
+							template = template + todoBtn;
+						} else {
+							if( isComment ) {
+								todoBtn   = '<span style="padding-right: 3px;"><button class="' + commentBtnCss   + '" type="button" onclick="$.main.fn_commentView(\'' + status + '\', \'' + statusNm + '\', \'' + requirementId + '\', \'' + CRUDPS + '\')"><i class="fa fa-edit"></i> ' + commentBtnTxt + '</button></span>';
+								template = template + todoBtn;
+							}
+							if( isTodo ) {
+								todoBtn   = '<span style="padding-right: 3px;"><button class="' + todoBtnCss   + '" type="button" onclick="$.main.fn_todoAction(\'' + status + '\', \'' + requirementId + '\', \'' + CRUDPS + '\')"><i class="fa fa-check"></i> ' + todoBtnTxt + '</button></span>';
+								template = template + todoBtn;
+							}
+						}
+						return template;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_todoTemplate"});
+					}
+				},//end fn_todoTemplate()
+
+
+	            //-----------------------------------------------------------------------
+	            // Description :: TODO 수행을 위한 페이지 전환
+	            //-----------------------------------------------------------------------
+	            fn_todoAction : function(status, requirementId, CRUDPS) {
+	                try {
+	               		mint.common.setScreenParam("requirementId", requirementId);
+	               		mint.common.setScreenParam("callBackPage", "../sub-an/AN-04-00-001");
+	               		mint.setDetailView('Y');
+	               		mint.move('../sub-an/AN-01-00-003',{CRUDPS:CRUDPS});
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_todoAction"});
+	                }
+	            },//end fn_todoAction()
+
+
+
+	            //-----------------------------------------------------------------------
+	            // Description :: Comment(의견) 팝업
+	            //-----------------------------------------------------------------------
+	            fn_commentView : function(status, statusNm, requirementId) {
+	                try {
+						//데이터 조회
+	                    mint.callService(null, 'AN-04-00-001', 'REST-R01-CO-02-00-010', function(jsonData)
+	                    		{
+	                    			var poupTitle = statusNm + " " + mint.label.getLabel('lb-561');
+	                    			var subject   = '';
+	                    			var comments  = '';
+
+	                    			if( !mint.common.isEmpty(jsonData) ) {
+	                    				if( !mint.common.isEmpty(jsonData.subject) ) {
+            								subject = jsonData.subject;
+            							}
+
+            							if( !mint.common.isEmpty(jsonData.reqComments) ) {
+            								comments = jsonData.reqComments;
+            							}
+	                    			}
+
+	                    			$("#dialogPop").remove();
+				            		var obj = $('<div id="dialogPop"></div>');
+				            		$('body').prepend(obj);
+				            		$.ajax({
+				                 		url: "../sub-co/CO-01-00-105.html",
+				                 		success:function(data){
+				                 			$("#dialogPop").html('');
+				                     		$("#dialogPop").html(data);
+
+				                     		$('#popupTitle').html(poupTitle);
+				                     		$("#popupContent > h3").html(subject);
+				                     		$("#popupContent > small").html(comments);
+
+				                     		$('#approvalComments').modal({
+				                				backdrop: 'static'
+				                			}).on('hidden.bs.modal', function(event) {
+				                				$('#dialogPop').html('');
+				                			});
+				                 		}
+				             		});
+
+	                    		},
+	                    		{
+	                    			errorCall : false,
+	                    			params : {
+	                    				approvalItemType : "0",
+	                    				approvalItemId : requirementId
+	                    			}
+	                    		}
+	                    );
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_commentView"});
+	                }
+	            },
+
+			}// end main
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+</script>

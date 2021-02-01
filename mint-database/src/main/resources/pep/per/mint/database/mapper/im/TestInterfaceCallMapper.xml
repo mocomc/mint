@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.TestInterfaceCallMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getTestResultListBySystem" parameterType="Map" resultMap="testBySystemResultMap">
+
+			SELECT
+	    		 a.TEST_ID
+	    		,a.TEST_DATE
+	    		,b.SYSTEM_ID
+	    		,c.SYSTEM_NM
+	    		,b.STATUS
+	    		,d.NM AS STATUS_NM
+	    		,b.REQ_DATE
+	    		,b.RES_DATE
+	    		,a.REG_USER
+			 	,b.TOT_CNT
+			 	,b.ING_CNT
+			 	,b.ERR_CNT
+			 	,b.SUC_CNT
+		      FROM TIM0601 a
+		INNER JOIN (
+		 		SELECT
+				     b.TEST_ID
+				    ,b.TEST_DATE
+				 	,b.SYSTEM_ID
+			    	,DECODE(b.ING_CNT, 0, DECODE(b.ERR_CNT, 0, '1', '9'),'0') AS STATUS
+				 	,b.TOT_CNT
+				 	,b.ING_CNT
+				 	,b.ERR_CNT
+				 	,b.SUC_CNT
+			    	,b.REQ_DATE
+			    	,DECODE(b.ING_CNT, 0, b.RES_DATE, '') AS RES_DATE
+				  FROM  (
+					 SELECT
+					     b.TEST_ID
+					    ,b.TEST_DATE
+					 	,b.SYSTEM_ID
+					 	,count(*) AS TOT_CNT
+					 	,sum(decode(b.STATUS, '0', 1 , 0)) AS ING_CNT
+					 	,sum(decode(b.STATUS, '9', 1 , 0)) AS ERR_CNT
+					 	,sum(decode(b.STATUS, '1', 1 , 0)) AS SUC_CNT
+				    	,min(b.REQ_DATE) AS REQ_DATE
+				    	,max(b.RES_DATE) AS RES_DATE
+					   FROM TIM0602 b
+					  WHERE b.TEST_DATE = #{testDate}
+					   <if test="systemId != null and (systemId neq ''.toString())">
+				        AND b.SYSTEM_ID = #{systemId}
+				       </if>
+					   <if test="serverId != null and (serverId neq ''.toString())">
+				        AND b.SERVER_ID = #{serverId}
+				       </if>
+				       <if test="interfaceId != null and (interfaceId neq ''.toString())">
+				        AND b.INTERFACE_ID = #{interfaceId}
+				       </if>
+					  GROUP BY b.TEST_ID, b.TEST_DATE, b.SYSTEM_ID
+				   ) b
+				) b
+		        ON a.TEST_DATE = b.TEST_DATE
+		       AND a.TEST_ID = b.TEST_ID
+		INNER JOIN TIM0101 c
+		        ON b.SYSTEM_ID = c.SYSTEM_ID
+   LEFT OUTER JOIN TSU0301 d
+                ON b.STATUS = d.CD
+               AND d.LEVEL1 = 'IM'
+               AND d.LEVEL2 = '32'
+		  ORDER BY a.TEST_ID DESC, a.STATUS DESC, c.SYSTEM_NM
+
+	</select>
+
+	<resultMap type="InterfaceCallDetail" id="testBySystemResultMap">
+		<id property="testId" 			column="TEST_ID"/>
+		<id property="systemId" 		column="SYSTEM_ID"/>
+		<result property="testDate" 	column="TEST_DATE"/>
+		<result property="systemNm" 	column="SYSTEM_NM"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="statusNm" 	column="STATUS_NM"/>
+		<result property="reqDate" 		column="REQ_DATE"/>
+		<result property="resDate" 		column="RES_DATE"/>
+	</resultMap>
+
+
+	<select id="getTestResultListByInterface" parameterType="Map" resultMap="testByInterfaceResultMap">
+		    SELECT
+	    		 b.SEQ
+	    		,b.MSG
+	    		,b.SYSTEM_ID
+	    		,c.SYSTEM_NM
+	    		,b.SERVER_ID
+	    		,d.SERVER_NM
+				,e.INTERFACE_ID
+				,e.INTEGRATION_ID
+	    		,b.STATUS
+	    		,f.NM AS STATUS_NM
+	    		,b.REQ_DATE
+	    		,b.RES_DATE
+		      FROM TIM0602 b
+		INNER JOIN TIM0101 c
+		        ON b.SYSTEM_ID = c.SYSTEM_ID
+		       AND b.TEST_ID = #{testId}
+		       AND b.TEST_DATE = #{testDate}
+		       <if test="interfaceId != null">
+		       AND b.INTERFACE_ID = #{interfaceId}
+		       </if>
+		INNER JOIN TIM0201 d
+		        ON b.SERVER_ID = d.SERVER_ID
+		INNER JOIN TAN0201 e
+		        ON b.INTERFACE_ID = e.INTERFACE_ID
+   LEFT OUTER JOIN TSU0301 f
+                ON b.STATUS = f.CD
+               AND f.LEVEL1 = 'IM'
+               AND f.LEVEL2 = '32'
+		  ORDER BY b.SEQ DESC , c.SYSTEM_NM, d.SERVER_NM, e.INTEGRATION_ID
+	</select>
+
+	<select id="getTestResultListByInterfaceSystem" parameterType="Map" resultMap="testByInterfaceResultMap">
+		    SELECT
+	    		 b.SEQ
+	    		,b.MSG
+	    		,b.SYSTEM_ID
+	    		,c.SYSTEM_NM
+	    		,b.SERVER_ID
+	    		,d.SERVER_NM
+				,e.INTERFACE_ID
+				,e.INTEGRATION_ID
+	    		,b.STATUS
+	    		,f.NM AS STATUS_NM
+	    		,b.REQ_DATE
+	    		,b.RES_DATE
+		      FROM TIM0602 b
+		INNER JOIN TIM0101 c
+		        ON b.SYSTEM_ID = c.SYSTEM_ID
+		       AND b.TEST_ID = #{testId}
+		       AND b.TEST_DATE = #{testDate}
+		       AND b.SYSTEM_ID = #{systemId}
+		INNER JOIN TIM0201 d
+		        ON b.SERVER_ID = d.SERVER_ID
+		INNER JOIN TAN0201 e
+		        ON b.INTERFACE_ID = e.INTERFACE_ID
+   LEFT OUTER JOIN TSU0301 f
+                ON b.STATUS = f.CD
+               AND f.LEVEL1 = 'IM'
+               AND f.LEVEL2 = '32'
+		  ORDER BY b.SEQ DESC , c.SYSTEM_NM, d.SERVER_NM, e.INTEGRATION_ID
+	</select>
+
+
+	<resultMap type="InterfaceCallDetail" id="testByInterfaceResultMap">
+		<result property="seq" 			 column="SEQ"/>
+		<result property="message" 		 column="MSG"/>
+		<result property="systemId" 	 column="SYSTEM_ID"/>
+		<result property="systemNm" 	 column="SYSTEM_NM"/>
+		<result property="serverId" 	 column="SERVER_ID"/>
+		<result property="serverNm" 	 column="SERVER_NM"/>
+		<result property="interfaceId" 	 column="INTERFACE_ID"/>
+		<result property="integrationId" column="INTEGRATION_ID"/>
+		<result property="status" 		 column="STATUS"/>
+		<result property="statusNm" 	 column="STATUS_NM"/>
+		<result property="reqDate" 		 column="REQ_DATE"/>
+		<result property="resDate" 		 column="RES_DATE"/>
+	</resultMap>
+
+	<select id="getInterfaceListForTest" parameterType="Map" resultMap="interfaceListForTestResultMap">
+		    SELECT
+	    		 a.INTERFACE_ID
+	    		,a.INTEGRATION_ID
+	    		,b.SYSTEM_ID
+	    		,c.SERVER_ID
+	    		,(SELECT MAX(AGENT_NM) FROM TIM0211 WHERE SERVER_ID = C.SERVER_ID 
+	    		AND DEL_YN = 'N') AS AGENT_NM
+	    		,cdim04.NM AS RESOURCE_TYPE
+	    		,(SELECT SYSTEM_CD FROM TIM0101 WHERE SYSTEM_ID = B.SYSTEM_ID 
+	    		AND DEL_YN = 'N') AS SYSTEM_CD
+		      FROM TAN0201 a
+		INNER JOIN TAN0213 b
+		        ON a.INTERFACE_ID = b.INTERFACE_ID
+		       AND (a.INTEGRATION_ID like '%0' ) AND ( a.INTEGRATION_ID not like 'MRRT%' OR a.INTEGRATION_ID  not like 'PRDY%' )
+		       AND b.NODE_TYPE = '0'
+
+		       <if test="interfaceId != null and (interfaceId neq ''.toString())">
+		       AND a.INTERFACE_ID = #{interfaceId}
+		       </if>
+		       <if test="systemId != null and (systemId neq ''.toString())">
+		       AND b.SYSTEM_ID = #{systemId}
+		       </if>
+		       AND a.DEL_YN = 'N'
+		INNER JOIN TIM0202 c
+		        ON c.SYSTEM_ID = b.SYSTEM_ID
+		       <if test="serverId != null and (serverId neq ''.toString()) ">
+		       AND c.SERVER_ID =  #{serverId}
+		       </if>
+		       AND c.DEL_YN = 'N'
+		LEFT OUTER JOIN (select CD, NM from TSU0301 where LEVEL1 = 'IM' and
+		 LEVEL2 = '04' and DEL_YN = 'N') cdim04 on b.RESOURCE_TYPE  = cdim04.CD
+		ORDER BY 1, 2, 3
+	</select>
+
+	<resultMap type="InterfaceCallDetail" id="interfaceListForTestResultMap">
+		<id property="interfaceId" 			column="INTERFACE_ID"/>
+		<result property="integrationId" 	column="INTEGRATION_ID"/>
+		<result property="systemId" 		column="SYSTEM_ID"/>
+		<result property="serverId" 		column="SERVER_ID"/>
+		<result property="agentNm" 			column="AGENT_NM"/>
+		<result property="resourceType" 	column="RESOURCE_TYPE"/>
+		<result property="systemCd" 		column="SYSTEM_CD"/>
+	</resultMap>
+
+	<insert id="insertInterfaceCallMaster">
+		<selectKey keyProperty="testId" resultType="string" order="BEFORE" >
+			SELECT TO_CHAR(NVL(max(TO_NUMBER(TEST_ID)),0) + 1) FROM TIM0601 WHERE TEST_DATE = #{testDate	, jdbcType=VARCHAR}
+		</selectKey>
+
+		INSERT INTO TIM0601 (
+			 TEST_ID
+			,TEST_DATE
+			,TEST_CNT
+			,IF_CNT
+			,STATUS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{testId	, jdbcType=VARCHAR}
+			,#{testDate	, jdbcType=VARCHAR}
+			,#{testCount, jdbcType=NUMERIC}
+			,#{interfaceCount, jdbcType=NUMERIC}
+			,#{status	, jdbcType=VARCHAR}
+			,#{delYn	, jdbcType=VARCHAR}
+			,#{regDate	, jdbcType=VARCHAR}
+			,#{regId	, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateInterfaceCallMaster">
+		UPDATE TIM0601
+		   SET STATUS    = #{status, jdbcType=VARCHAR}
+		      ,DEL_YN    = #{delYn	, jdbcType=VARCHAR}
+		      ,MOD_DATE  = #{modDate, jdbcType=VARCHAR}
+		      ,MOD_USER  = #{modId	, jdbcType=VARCHAR}
+		 WHERE TEST_ID   = #{testId, jdbcType=VARCHAR}
+		   AND TEST_DATE = #{testDate, jdbcType=VARCHAR}
+	</update>
+
+	<insert id="insertInterfaceCallDetail">
+		INSERT INTO TIM0602 (
+			 TEST_ID
+			,TEST_DATE
+			,SYSTEM_ID
+			,SERVER_ID
+			,INTERFACE_ID
+			,SEQ
+			,STATUS
+			,AGENT_NM
+			,REQ_DATE
+			,RES_DATE
+			,MSG
+		) VALUES (
+			 #{testId	  , jdbcType=VARCHAR}
+			,#{testDate	  , jdbcType=VARCHAR}
+			,#{systemId	  , jdbcType=VARCHAR}
+			,#{serverId	  , jdbcType=VARCHAR}
+			,#{interfaceId, jdbcType=VARCHAR}
+			,#{seq	      , jdbcType=NUMERIC}
+			,#{status	  , jdbcType=VARCHAR}
+			,#{agentNm	  , jdbcType=VARCHAR}
+			,#{reqDate	  , jdbcType=VARCHAR}
+			,#{resDate	  , jdbcType=VARCHAR}
+			,#{message	  , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateInterfaceCallDetail">
+	    UPDATE TIM0602
+		   SET STATUS    = #{status, jdbcType=VARCHAR}
+		      ,RES_DATE  = #{resDate, jdbcType=VARCHAR}
+		      ,MSG       = #{message, jdbcType=VARCHAR}
+		 WHERE TEST_ID   = #{testId, jdbcType=VARCHAR}
+		   AND TEST_DATE = #{testDate, jdbcType=VARCHAR}
+		   AND SYSTEM_ID = #{systemId, jdbcType=VARCHAR}
+		   AND SERVER_ID = #{serverId, jdbcType=VARCHAR}
+		   AND INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+		   AND SEQ = #{seq, jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="updateAllInterfaceCallDetailTimeout">
+	    UPDATE TIM0602
+		   SET STATUS    = #{status, jdbcType=VARCHAR}
+		      ,RES_DATE  = #{resDate, jdbcType=VARCHAR}
+		      ,MSG       = 'timeout'
+		 WHERE TEST_ID   = #{testId, jdbcType=VARCHAR}
+		   AND TEST_DATE = #{testDate, jdbcType=VARCHAR}
+		   AND STATUS    = '0'
+	</update>
+
+	<select id="getIngTestCount" resultMap="interfaceTestCntResultMap">
+	SELECT
+		 count(*) AS TOT_CNT
+		,sum(decode(STATUS,'0',1,0)) AS ING_CNT
+		,sum(decode(STATUS,'9',1,0)) AS FAIL_CNT
+		,sum(decode(STATUS,'1',1,0)) AS SUCCESS_CNT
+	   FROM TIM0602
+	  WHERE TEST_DATE = #{testDate}
+	    AND TEST_ID   = #{testId}
+	</select>
+
+	<resultMap type="map" id="interfaceTestCntResultMap">
+		<result property="totCount" 	column="TOT_CNT" 	 javaType="int"/>
+		<result property="ingCount" 	column="ING_CNT" 	 javaType="int"/>
+		<result property="failCount" 	column="FAIL_CNT" 	 javaType="int"/>
+		<result property="successCount" column="SUCCESS_CNT" javaType="int"/>
+	</resultMap>
+
+
+
+
+</mapper>

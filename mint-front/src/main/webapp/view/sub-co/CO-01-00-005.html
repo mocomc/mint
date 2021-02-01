@@ -1,0 +1,341 @@
+﻿<!--
+	Screen ID : CO-01-00-005
+	Screen NM : 결재 팝업
+	[변경 이력]
+	  2016/08/12
+	   - 지랄 염병할 삼성전기 요구사항으로 결재선그룹 선택부를 하드코딩 해놨는데 해당 값을 다른값으로 변경해달라고 함.
+	     신규/수정의뢰 -> 신규/삭제의뢰
+	     삭제의뢰     -> 수정의뢰
+-->
+<div class="modal inmodal" id="CO-01-00-005" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<div>
+					<h2 class="popupTitle"></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-lg-12">
+						<div class="col-lg-12">
+							<h4><i class="fa fa-edit"></i> <lb class="lb-561"></lb></h4>
+							<hr class="hr-space">
+							<div class="form-group">
+								<label class="label-tag-12"><lb class="lb-68"></lb></label>
+								<input id="popup-tf-title" name="" type="text" class="input-tag-81p k-textbox">
+							</div>
+							<hr class="hr-space">
+							<hr class="hr-space">
+							<div class="form-group">
+	                            <span style="padding: 0px 0px 5px 0px; float: right;">
+	                            	<div class="radio radio-success radio-inline" style="padding-left:20px;">
+	                                	<input id="edit-text" type="radio" class="editMode" name="editMode" value="0" checked="checked">
+	                                	<label for="edit-text"><lb class="lb-385"></lb></label>
+	                                </div>
+	                            	<div class="radio radio-warning radio-inline" style="padding-left:20px;">
+	                                	<input id="edit-html" type="radio" class="editMode" name="editMode" value="0">
+	                                	<label for="edit-html"><lb class="lb-386"></lb></label>
+	                                </div>
+	                            </span>
+								<textarea id="popup-ta-comments-text" class="form-control" rows="5" cols="30" style="border-radius:4px; width:100%; height:120px; overflow-y:auto;"></textarea>
+								<textarea id="popup-ta-comments-html" rows="5" cols="30" style="height:120px; overflow-y:auto;"></textarea>
+							</div>
+						</div>
+						<!--
+						<div class="poupup-tabs-container">
+							<ul class="nav nav-tabs">
+							    <li class="active"><a data-toggle="tab" href="#pop-tab-1"><lb class="lb-376"></lb></a></li>
+							    <li class=""><a data-toggle="tab" href="#pop-tab-2"><lb class="lb-377"></lb></a></li>
+							</ul>
+							<div class="tab-content">
+							    <div id="pop-tab-1" class="tab-pane active">
+							        <div class="panel-body">
+							        	<div class="col-lg-12">
+							        		<div id="approvalContentTemplate"></div>
+							        	</div>
+							        </div>
+							    </div>
+							    <div id="pop-tab-2" class="tab-pane">
+							        <div class="panel-body">
+							        </div>
+							    </div>
+							</div>
+						</div>
+						-->
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+
+            <div class="modal-footer-original">
+                <button type="button" class="btn btn-success btn-popup-approval"         style="display:none;"><i class="fa fa-check"></i> <lb class="lb-389">승인</lb></button>
+                <button type="button" class="btn btn-warning btn-popup-reject"           style="display:none;"><i class="fa fa-check"></i> <lb class="lb-390">반려</lb></button>
+				<button type="button" class="btn btn-success btn-popup-request-approval" style="display:none;"><i class="fa fa-check"></i> <lb class="lb-391">상신</lb></button>
+
+                <button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i> <lb class="lb-143">취소</lb></button>
+            </div>
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "CO-01-00-005";
+		$.extend({
+			sub : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				approvalItem : new Object(),
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.sub.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+
+						var approvalItem = mint.common.getScreenParam('approvalItem');
+
+						if( !mint.common.isEmpty(approvalItem) ) {
+							var popupTitle = '';
+							$.sub.approvalItem = approvalItem;
+							//-----------------------------------------------------------------------
+							// Popup Title
+							//-----------------------------------------------------------------------
+							switch( $.sub.approvalItem.actionFlag ) {
+								case 'B1':
+									popupTitle = mint.label.getLabel('lb-116');
+									break;
+								case 'B2':
+									popupTitle = mint.label.getLabel('lb-117');
+									break;
+								case 'B3':
+									popupTitle = mint.label.getLabel('lb-118');
+									break;
+								case 'B4':
+									popupTitle = mint.label.getLabel('lb-119');
+									break;
+								default:
+									popupTitle = mint.label.getLabel('lb-120');
+									break;
+							}
+							if( $.sub.approvalItem.type == 'apply' ) {
+								popupTitle = mint.label.getLabel('lb-120');
+							}
+
+							$('.popupTitle').text(popupTitle);
+
+							if( $.sub.approvalItem.type == 'request' ) {
+								$('.btn-popup-request-approval').show();
+							} else if( $.sub.approvalItem.type == 'apply' ) {
+								$('.btn-popup-approval').show();
+								$('.btn-popup-reject').show();
+							}
+						} else {
+
+						}
+
+
+						//TextArea 초기화
+						{
+							$("#popup-ta-comments-html").kendoEditor({
+								resizable: { content: true, toolbar: true }
+							});
+							$("#popup-ta-comments-text").show();
+							$("#popup-ta-comments-html").data("kendoEditor").wrapper.hide();
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description : 인터페이스요건 결재요청
+				//-----------------------------------------------------------------------
+				fn_requestApproval : function(actionFlag) {
+					try {
+
+							if( mint.common.isEmpty($.sub.approvalItem.actionFlag) || mint.common.isEmpty($.sub.approvalItem.requirementId) ) return;
+
+							//결재 링크키 발번.
+							mint.callService(null, screenName, 'REST-R02-CO-02-00-010', function (linkId) {
+
+								var requestObject = new Object();
+								requestObject.objectType 	   = 'Approval';
+								requestObject.approvalItemId   = $.sub.approvalItem.requirementId;
+								requestObject.approvalItemType = '0';
+								requestObject.subject 		   = $('#popup-tf-title').val();
+								requestObject.reqComments      = $('#edit-text').is(':checked') ? $('#popup-ta-comments-text').val() : $('#popup-ta-comments-html').data('kendoEditor').value();
+								requestObject.approvalContents = '';
+								requestObject.linkKey 		   = linkId;
+								requestObject.reqUserId 	   = mint.session.getUserId();
+								requestObject.reqDate 		   = mint.common.remakeYYMMDD(new Date());
+								requestObject.reqType          = $.sub.approvalItem.actionFlag;
+								if( ! mint.common.isEmpty($.sub.approvalItem.requirement) ) {
+									requestObject.requirement  = $.sub.approvalItem.requirement;
+								}
+								//requestObject.requirement      = mint.common.isEmpty($.sub.approvalItem.requirement) ? '' : $.sub.approvalItem.requirement;
+
+								//결재 요청.
+
+								var restId = $.sub.approvalItem.actionFlag == 'B2' ? 'REST-C02-CO-02-00-010' : 'REST-C01-CO-02-00-010';
+								mint.callService( requestObject, screenName, restId, function(jsonData) {
+									if( !mint.common.isEmpty(jsonData) ) {
+										mint.common.alert('CI00106', null);
+									}
+
+									var callback = mint.common.getScreenParam('callback');
+									var fn_callback = mint.common.fn_callback(callback);
+									if( fn_callback ) {
+										mint.common.setScreenParam('callback', null);
+										fn_callback(jsonData);
+									} else {
+										mint.common.alert('CE90000');
+										return;
+									}
+									$('#CO-01-00-005').modal('hide');
+								}, {errorCall : true});
+							},{errorCall : true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_requestApproval"});
+					}
+				},//end fn_requestApproval()
+
+				//-----------------------------------------------------------------------
+				// Description : 인터페이스요건 결재처리
+				//-----------------------------------------------------------------------
+				fn_applyApproval : function(apply) {
+					try {
+
+						var requestObject = new Object();
+						requestObject.objectType 	   = 'Approval';
+						requestObject.approvalItemId   = $.sub.approvalItem.requirementId;
+						requestObject.approvalItemType = '0';
+						requestObject.subject 		   = $('#popup-tf-title').val();
+						requestObject.reqComments      = $('#edit-text').is(':checked') ? $('#popup-ta-comments-text').val() : $('#popup-ta-comments-html').data('kendoEditor').value();
+						requestObject.approvalContents = '';
+						requestObject.linkKey 		   = '';
+						requestObject.reqUserId 	   = mint.session.getUserId();
+						requestObject.reqDate 		   = mint.common.remakeYYMMDD(new Date());
+						requestObject.reqType          = $.sub.approvalItem.actionFlag;
+
+
+
+						mint.callService( requestObject, screenName, 'REST-C03-CO-02-00-010', function(jsonData) {
+							if( !mint.common.isEmpty(jsonData) ) {
+								if(apply)
+									mint.common.alert('CI00107', null);
+								else
+									mint.common.alert('CI00108', null);
+							}
+
+							var callback = mint.common.getScreenParam('callback');
+							var fn_callback = mint.common.fn_callback(callback);
+							if( fn_callback ) {
+								mint.common.setScreenParam('callback', null);
+								fn_callback(jsonData);
+							} else {
+								mint.common.alert('CE90000');
+								return;
+							}
+							$('#CO-01-00-005').modal('hide');
+						}, {errorCall : true, params : { apply : apply} });
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_applyApproval"});
+					}
+				},//end fn_applyApproval()
+
+			}// end sub
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//-----------------------------------------------------------------------
+		// Description :: 상신 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-popup-request-approval').on('click', function(e) {
+			var confirmCheck = mint.common.confirm('CI00006', null);
+			if(confirmCheck) {
+				$.sub.fn_requestApproval();
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 승인 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-popup-approval').on('click', function(e) {
+			var confirmCheck = mint.common.confirm('CI00007', null);
+			if(confirmCheck) {
+				$.sub.fn_applyApproval(true);
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 반려 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-popup-reject').on('click', function(e) {
+			var confirmCheck = mint.common.confirm('CI00008', null);
+			if(confirmCheck) {
+				$.sub.fn_applyApproval(false);
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 에디터 모드 변경
+		//-----------------------------------------------------------------------
+		$('.editMode').click(function(){
+			if( $('#edit-text').is(':checked') ) {
+				$("#popup-ta-comments-text").show();
+				$("#popup-ta-comments-html").data("kendoEditor").wrapper.hide();
+
+				var str = $("#popup-ta-comments-html").data("kendoEditor").value();
+				$("#popup-ta-comments-text").val( str );
+			} else if( $('#edit-html').is(':checked') ) {
+				$("#popup-ta-comments-text").hide();
+				$("#popup-ta-comments-html").data("kendoEditor").wrapper.show();
+
+				var str = $("#popup-ta-comments-text").val();
+				$("#popup-ta-comments-html").data("kendoEditor").value( str );
+			}
+		});
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.sub.fn_init();
+		mint.label.attachLabel(null);
+
+	});//end document.ready()
+
+</script>

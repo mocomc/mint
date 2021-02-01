@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.PosTranMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<select id="getPosTranHistoryListTotalCount" parameterType="Map" resultType="java.lang.Integer">
+		SELECT
+			COUNT(A.STORE_CD)  			
+		FROM TOP0817 A
+		INNER JOIN TIM0501 B
+		ON A.STORE_CD = B.STORE_CD
+		AND A.POS_NO  = B.POS_NO
+		<if test="storeCd != null and storeCd != ''">
+		AND LOWER(B.STORE_CD) LIKE LOWER('%'||#{storeCd}||'%')
+		</if>
+		<if test="storeNm != null and storeNm != ''">
+		AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+		</if>
+		<if test="bizplAddr != null and bizplAddr != ''">
+		AND B.BIZPL_ADDR LIKE '%'||#{bizplAddr}||'%'
+		</if>
+		WHERE 1=1
+		AND A.REG_DATE BETWEEN #{startDate} AND #{endDate}
+		ORDER BY A.REG_DATE DESC
+	</select>
+
+	<select id="getPosTranHistoryList" parameterType="Map" resultMap="storeResultMap">
+		SELECT
+  			A.STORE_CD AS STORE_CD,
+  			ROWNUM AS RNUM,
+  			A.POS_NO AS POS_NO,
+  			B.STORE_NM AS STORE_NM,
+  			B.CUST_STORE_CD AS CUST_STORE_CD,
+  			B.BIZPL_ADDR AS BIZPL_ADDR,
+  			A.REG_DATE AS REG_DATE
+		FROM TOP0817 A
+		INNER JOIN TIM0501 B
+		ON A.STORE_CD = B.STORE_CD
+		AND A.POS_NO  = B.POS_NO
+		<if test="storeCd != null and storeCd != ''">
+		AND LOWER(B.STORE_CD) LIKE LOWER('%'||#{storeCd}||'%')
+		</if>
+		<if test="storeNm != null and storeNm != ''">
+		AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+		</if>
+		<if test="bizplAddr != null and bizplAddr != ''">
+		AND B.BIZPL_ADDR LIKE '%'||#{bizplAddr}||'%'
+		</if>
+		WHERE 1=1
+		AND A.REG_DATE BETWEEN #{startDate} AND #{endDate}
+		ORDER BY A.REG_DATE DESC
+	</select>
+
+	<resultMap type="Store" id="storeResultMap">
+		<result property="storeId" 			column="STORE_ID"/>
+		<result property="idx"              column="RNUM"/>
+		<result property="storeCd" 			column="STORE_CD"/>
+		<result property="posNo" 				column="POS_NO"/>
+		<result property="storeNm"			column="STORE_NM"/>
+		<result property="custStoreCd"		column="CUST_STORE_CD"/>
+		<result property="regDate"			column="REG_DATE"/>
+		<result property="regUser"			column="REG_USER"/>
+		<result property="modDate"			column="MOD_DATE"/>
+		<result property="modUser"			column="MOD_USER"/>
+		<result property="posMonitorYn"		column="POS_MONITOR_YN"/>
+		<result property="posStatus"			column="POS_STATUS"/>
+		<result property="bizplAddr"			column="BIZPL_ADDR"/>
+	</resultMap>
+
+</mapper>

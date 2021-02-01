@@ -1,0 +1,19 @@
+
+===============================================================================
+- title		: RestfulService URL 보안
+- date		: 20201019
+- author	: whoana
+- contents	: RESTful Service Router 개발 
+-------------------------------------------------------------------------------
+1 라우터 적용 절차
+	소스 활성화를 위해 아래 절차 수행 필요(활성화 전에는 기존 서비스 URL 로 서비스 됨)
+	1) 소스 변경 
+		js/common/mint.base.js, js/common/mint.rest.js 두 개의 파일 내애 hasRouter 함수 파라메터 기본값 변경 :false -> true
+		js/common/mint.rest.js 파일 내에 서비스 리스트를 내용 없는 객체로 변경할 것 mint_rest.services = {...}  -> mint_rest.services = {}
+	2) 서비스 등록 
+		TSU0205 테이블에 Restful 서비스 등록 (서비스리스트정리.xlsx 참고)
+	3) 소스 빌드 및 배포 
+
+2 소스 적용 전 수행할 것
+	개발 환경에서 등록된 서비스 URL을 전수 테스트하여 정상 수행 되는지 반드시 테스트 할 것.  
+ 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kendo UI Snippet</title>
+
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.2.805/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.2.805/styles/kendo.rtl.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.2.805/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.2.805/styles/kendo.dataviz.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.2.805/styles/kendo.dataviz.default.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.2.805/styles/kendo.mobile.all.min.css">
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2015.2.805/js/kendo.all.min.js"></script>
+</head>
+<body>
+
+<script src="http://kendo.cdn.telerik.com/2014.1.528/js/cultures/kendo.culture.ko-KR.min.js"></script>
+<script>
+      kendo.culture("ko-KR");
+      kendo.calendar.views[0].title = function(date) {
+        var culture = kendo.culture();
+        var cultureName = culture.name;
+
+        var month = culture.calendar.months.names[date.getMonth()];
+        var year = date.getFullYear();
+
+        var title;
+
+        switch(culture.name) {
+          case "zh-TW":
+          case "ko-KR":
+          case "ja-JS":
+            title = year + " " + month;
+            break;
+          case "fr-CA":
+            title = month + ", " + year;
+            break;
+          default:
+            title = month + " " + year;
+        }
+
+        return title;
+      };
+
+    </script>
+<div id="example">
+    <div class="demo-section k-header" style="width: 300px; text-align: center;">
+        <div id="calendar"></div>
+    </div>
+    <script>
+        $(document).ready(function() {
+          // create Calendar from div HTML element
+          $("#calendar").kendoCalendar();
+        });
+      </script>
+</div>
+</body>
+</html>

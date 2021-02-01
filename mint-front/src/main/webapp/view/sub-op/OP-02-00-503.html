@@ -1,0 +1,441 @@
+﻿<!--
+	Screen ID : OP-02-00-503
+	Screen NM : WMQ종합상황판-상세
+-->
+
+<div class="modal" id="OP-02-00-503" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+                    <span aria-hidden="true">&times;</span> <span id="bt-if-search-close" class="sr-only bt-if-search-close">Close</span>
+                </button>
+                <div>
+                    <h2><lb class="lb-9999">WMQ 상태</lb></h2>
+                </div>
+            </div>
+
+            <!--modal-body-->
+            <div class="modal-body">
+                <div class="ibox-content4">
+                    <div class="col-lg-12">
+                        <div>
+                            <h4>▶ <lb class="lb-9999">큐매니져</lb></h4>
+                        </div>
+                        <div>
+                            <div id="gridQmgr" ></div>
+                        </div>
+                    </div>
+
+					<hr class="hr-space">
+					<hr class="hr-space">
+
+                    <div class="col-lg-12">
+                        <div>
+                            <h4>▶ <lb class="lb-9999">큐</lb></h4>
+                        </div>
+                        <div>
+                            <div id="gridQueue" ></div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-space">
+                    <hr class="hr-space">
+
+					<div class="col-lg-12">
+                        <div>
+							<h4> ▶ <lb class="lb-9999">채널</lb></h4>
+                        </div>
+                        <div>
+							<div id="gridChannel"></div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-space">
+                    <hr class="hr-space">
+
+                </div>
+            </div>
+
+            <!--modal-footer-->
+            <div class="modal-footer-original" style="clear: both">
+                <button id="btnClose" type="button" class="btn btn-danger btn-outline btnClose" data-dismiss="modal"><i class="fa fa-ban"></i> Close </button>
+            </div>
+            <!--modal-footer END-->
+        </div>
+    </div>
+    <!--modal-content animated fadeIn END-->
+</div>
+<!-- modal-dialog END-->
+
+<script type="text/x-kendo-template" id="template-gridNoRecord">
+	<div class="mint-grid-nodata-template" style="position: static;">No records available.</div>
+</script>
+
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "OP-02-00-503";
+    $.extend({
+        sub : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+			detailKey : '',
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.sub.fn_initCallback',{isDraggable:false});
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+
+                	$.sub.fn_initGridQmgr();
+                	$.sub.fn_initGridQueue();
+                	$.sub.fn_initGridChannel();
+
+                	$.sub.detailKey = mint.common.getScreenParam('detailKey');
+
+                	if( !mint.common.isEmpty($.sub.detailKey) ) {
+                		$.sub.fn_getQmgrAlertList();
+                		$.sub.fn_getQueueAlertList();
+                		$.sub.fn_getChannelAlertList();
+                	}
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+                }
+            },
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initGrid
+			//-----------------------------------------------------------------------
+			fn_initGrid : function(gridId, gridModel, gridOptions) {
+				try {
+
+					var columnList = [];
+					var fieldKeys  = Object.keys(gridModel.fields);
+					for( var i = 0; i < fieldKeys.length; i++ ) {
+
+						if( !mint.common.isEmpty(gridModel.fields[fieldKeys[i]].hidden) && gridModel.fields[fieldKeys[i]].hidden == true ) {
+							continue;
+						}
+						var column = new Object();
+						column.title = gridModel.fields[fieldKeys[i]].title;
+						column.field = fieldKeys[i];
+						column.width = gridModel.fields[fieldKeys[i]].width;
+						column.headerAttributes = {style: 'text-align: center'};
+						column.attributes = {style: 'text-align: center; white-space: nowrap;'};
+						if( gridModel.fields[fieldKeys[i]].format == "datetime" ) {
+							column.template = "#= mint.common.formatDateTime(" + fieldKeys[i] + ") #";
+						} else if( gridModel.fields[fieldKeys[i]].format == "number") {
+							column.template = "#= mint.common.addComma(" + fieldKeys[i] + ") #";
+						}
+
+						columnList.push(column);
+					}
+
+					$('#' + gridId).kendoGrid({
+						filterable: false,
+			            sortable: true,
+			            selectable: false,
+			            scrollable: true,
+			            resizable: true,
+			            noRecords: {
+			            	template: kendo.template( $("#template-gridNoRecord").html() )
+			            },
+			            pageable: {
+							refresh 		: false,
+					    	buttonCount 	: 5,
+					    	pageSizes		: mint.ui.getPageSizesXS()
+						},
+					    //toolbar: ["excel"],
+					    excel: {
+					          allPages: true
+					        , filterable: true
+					        , fileName: mint.common.remakeYYMMDD(new Date()).substring(0, 14) +  '.xlsx'
+					    },
+					    messages: {
+					        commands: {
+					          excel: mint.label.getLabel('lb-508')
+					        }
+					    },
+
+					    excelExport: function(e) {
+							//-----------------------------------------------------------------------
+					    	// 스타일 편집
+					    	//-----------------------------------------------------------------------
+					        var sheet = e.workbook.sheets[0];
+					        for (var i = 0; i < sheet.rows.length; i++) {
+					        	for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+					            	sheet.rows[i].cells[ci].vAlign = "center";
+					            	//정렬
+					            	if( sheet.rows[i].type == 'header' ) {
+					            		//헤더일 경우
+					            		sheet.rows[i].cells[ci].hAlign = "center";
+					            		sheet.rows[i].cells[ci].bold = true;
+					            	}
+					            }
+					    	}
+				      	},
+
+						columns : columnList,
+						dataBound: function (e) {
+							if('undefined' != typeof $('#' + gridId).data()) {
+								//-----------------------------------------------------------------------
+								// ROW 에 대한 CSS 처리
+								//-----------------------------------------------------------------------
+								var items = e.sender._data;
+								var checkChannelId = '';
+								if( items.length > 0 ) {
+									for(var i = 0; i < items.length; i++ ) {
+										var tr = e.sender.tbody.find("tr[data-uid='" + items[i].uid + "']");
+										tr.attr('class', '');
+									}
+								}
+							}
+					    }
+					});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGrid"});
+				}
+			},
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_initGridQmgr
+            //-----------------------------------------------------------------------
+            fn_initGridQmgr : function() {
+                try{
+                	var gridId = "gridQmgr";
+					var gridModel = new kendo.data.Model.define({
+						id: "serverId",
+						fields: {
+							serverId : {title: ""                           , hidden: true , width: ""    , format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							serverNm : {title: mint.label.getLabel('lb-357'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							hostNm   : {title: mint.label.getLabel('lb-361'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							ip       : {title: mint.label.getLabel('lb-363'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							qmgrNm   : {title: mint.label.getLabel('lb-263'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							statusNm : {title: mint.label.getLabel('lb-473'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+						}
+					});
+
+					$.sub.fn_initGrid(gridId, gridModel, null);
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGridQmgr"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_initGridQueue
+            //-----------------------------------------------------------------------
+            fn_initGridQueue : function() {
+                try{
+                	var gridId = "gridQueue";
+					var gridModel = new kendo.data.Model.define({
+						id: "serverId",
+						fields: {
+							serverId : {title: ""                           , hidden: true , width: ""    , format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							serverNm : {title: mint.label.getLabel('lb-357'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							hostNm   : {title: mint.label.getLabel('lb-361'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							ip       : {title: mint.label.getLabel('lb-363'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							qmgrNm   : {title: mint.label.getLabel('lb-263'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							queueNm  : {title: mint.label.getLabel('lb-267'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							depth    : {title: mint.label.getLabel('lb-266'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+						}
+					});
+
+					$.sub.fn_initGrid(gridId, gridModel, null);
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGridQueue"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_initGridChannel
+            //-----------------------------------------------------------------------
+            fn_initGridChannel : function() {
+                try{
+                	var gridId = "gridChannel";
+					var gridModel = new kendo.data.Model.define({
+						id: "serverId",
+						fields: {
+							serverId  : {title: ""                           , hidden: true , width: ""    , format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							serverNm  : {title: mint.label.getLabel('lb-357'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							hostNm    : {title: mint.label.getLabel('lb-361'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							ip        : {title: mint.label.getLabel('lb-363'), hidden: false, width: "50px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							qmgrNm    : {title: mint.label.getLabel('lb-263'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							channelNm : {title: mint.label.getLabel('lb-265'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+							statusNm  : {title: mint.label.getLabel('lb-473'), hidden: false, width: "40px", format: "", type: "string", editable: false, nullable: false, defaultValue: ""},
+						}
+					});
+
+					$.sub.fn_initGrid(gridId, gridModel, null);
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGridChannel"});
+                }
+            },
+
+
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getQmgrAlertList
+			//-----------------------------------------------------------------------
+			fn_getQmgrAlertList : function() {
+				try {
+
+					if( mint.common.isEmpty($.sub.detailKey) ) {
+						return;
+					}
+
+					var requestObject = new Object();
+					requestObject.systemId = $.sub.detailKey;
+					mint.callService( requestObject, 'OP-02-00-503', 'REST-R99-CO-99-03',
+						function( jsonData ) {
+							if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+								var dataSource = new kendo.data.DataSource({
+									data: jsonData,
+									page:1,
+									pageSize:mint.ui.getPageSizesS({'currentPage' : true}),
+									sort: { field: "nodeTypeNm", dir: "asc" }
+								});
+								$("#gridQmgr").data("kendoGrid").setDataSource(dataSource);
+							}
+						},
+						{ errorCall : true, notificationView : false }
+					);
+
+				} catch ( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getQmgrAlertList"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getQueueAlertList
+			//-----------------------------------------------------------------------
+			fn_getQueueAlertList : function() {
+				try {
+            		var requestObject = new Object();
+            		requestObject.systemId = $.sub.detailKey;
+					mint.callService(requestObject, 'OP-02-00-503', 'REST-R99-CO-99-04',
+						function( jsonData ) {
+							if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+								var dataSource = new kendo.data.DataSource({
+									data: jsonData,
+									page:1,
+									pageSize:mint.ui.getPageSizesS({'currentPage' : true}),
+									sort: { field: "nodeTypeNm", dir: "asc" }
+								});
+								$("#gridQueue").data("kendoGrid").setDataSource(dataSource);
+							}
+						},
+						{ errorCall : true, notificationView : false }
+					);
+				} catch ( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getQueueAlertList"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getChannelAlertList
+			//-----------------------------------------------------------------------
+			fn_getChannelAlertList : function() {
+				try {
+            		var requestObject = new Object();
+            		requestObject.systemId = $.sub.detailKey;
+					mint.callService(requestObject, 'OP-02-00-503', 'REST-R99-CO-99-05',
+						function( jsonData ) {
+							if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+								var dataSource = new kendo.data.DataSource({
+									data: jsonData,
+									page:1,
+									pageSize:mint.ui.getPageSizesS({'currentPage' : true}),
+									sort: { field: "nodeTypeNm", dir: "asc" }
+								});
+								$("#gridChannel").data("kendoGrid").setDataSource(dataSource);
+							}
+						},
+						{ errorCall : true, notificationView : false }
+					);
+				} catch ( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getChannelAlertList"});
+				}
+			},
+
+
+
+
+
+          	//-----------------------------------------------------------------------
+            // Description :: 그리드 시간 설정
+            //-----------------------------------------------------------------------
+            fn_changeTime : function(val) {
+                try {
+                    if(val != null && val != "") {
+                        var str = val.substring(0, 14);
+                        var returnVal = str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
+                        return returnVal;
+                    } else {
+                    	return "";
+                    }
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_changeTime"});
+                }
+            },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+    });
+
+
+    //=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+
+
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.sub.fn_init();
+    mint.label.attachLabel(null);
+});
+</script>

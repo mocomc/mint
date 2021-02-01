@@ -1,0 +1,381 @@
+﻿<div class="modal inmodal" id="interfacePattern" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only"><lb class="lb-298"></lb></span>
+				</button>
+			
+				<div>
+					<h2><lb class="lb-191"></lb></h2>
+				</div>
+			</div>
+			<!--modal-body--> 
+			<div class="modal-body">
+				<!--client-detail 스크롤바-->  
+				<div class="client-detail">
+					<!--full-height-scroll 스크롤바-->  
+					<div class="full-height-scroll">
+						<!--ibox-content3--> 
+						<div id="interface-pattern-div" class="ibox-content3">
+							<!-- style :: col-sm-4 -->
+						</div>
+						<!--ibox-content3--> 
+					</div>
+					<!--full-height-scroll 스크롤바 END-->  
+				</div>
+				<!--client-detail 스크롤바 END-->  	
+				<p></p>
+			</div>
+			<!--modal-body END--> 
+			<!--modal-footer--> 
+			<div class="modal-footer-original" style="clear:both">
+                <button id="modal_apply" type="button" class="btn btn-primary" ><i class="fa fa-check"></i>  <lb class="lb-358"></lb></button>
+                <button id="btnClose" type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>				
+			</div>
+			<!--modal-footer END--> 
+		</div>
+		<!--modal-content animated fadeIn END--> 
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<!-- modal inmodal END-->
+   
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "CO-01-00-006";
+		$.extend({
+			sub : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				tempPattern : [],
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================			
+				
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.sub.fn_initCallback', {isPopupScroll:true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+					}
+				},//end fn_init()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						mint.callService(null, screenName, 'REST-R01-CO-01-00-006', '$.sub.fn_setInterfacePatterns', {errorCall : true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 패턴 리스트 설정
+				//-----------------------------------------------------------------------
+				fn_setInterfacePatterns : function(jsonData) {
+					try {
+						if(null != jsonData) {
+							$.sub.tempPattern = jsonData;
+							for(var i=0; i<jsonData.length; i++){
+								
+								var jsonDataLength;
+								
+								if(i < 10 ){
+									jsonDataLength = "0"+ (i + 1);
+								} else {
+									jsonDataLength = (i + 1);
+								}
+								
+								var patternImageNumber = $.sub.fn_setPatternImage(jsonData[i]);
+								
+								$('#interface-pattern-div').append(
+									  '	<div class="col-sm-4" id="pattern'+jsonDataLength+'">'
+									+ '		'+jsonData[i].appPrMethodNm+' <label class="pull-right"><input type="radio" name="pattern" value="'+patternImageNumber+'" ></label>'
+									+ '		<div class="b-bot" style="margin-bottom:10px;"><h4>'+jsonData[i].dataPrDirNm+', '+jsonData[i].dataPrMethodNm+', '+jsonData[i].sndRcvRel+'</h4></div>'
+									+ '		<div class="pattern" align="center"><img src="../../img/'+patternImageNumber+'.png"></div>'
+									+ '	</div>'
+								);
+							}
+							
+							if('' != popupPatternImage) {
+								$('input:radio[name=pattern]:input[value='+popupPatternImage+']').prop("checked", true);
+							}
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setInterfacePatterns"});
+					}
+				},//end fn_setInterfacePatterns()
+
+				//-----------------------------------------------------------------------
+				// Description :: 패턴 이미지 설정
+				//-----------------------------------------------------------------------
+				fn_setPatternImage : function(jsonData) {
+					try {
+						var rtnPatternImage;
+						
+						var sourceCount = jsonData.sndRcvRel.split(':')[0];
+						var targetCount = jsonData.sndRcvRel.split(':')[1];
+						
+						if(0 == jsonData.appPrMethod) {
+							//동기
+							if(0 == jsonData.dataPrDir) {
+								//단방향
+								if(1 == sourceCount && 1 == targetCount) {
+									//송신1 : 수신1
+									rtnPatternImage = '';
+								} else if(1 == sourceCount && 'N' == targetCount) {
+									//송신1 : 수신N
+									rtnPatternImage = '';
+								} if('N' == sourceCount && 1 == targetCount) {
+									//송신N : 수신1
+									rtnPatternImage = '';
+								}
+							} else if(1 == jsonData.dataPrDir) {
+								//양방향
+								if(1 == sourceCount && 1 == targetCount) {
+									//송신1 : 수신1
+									rtnPatternImage = 'pattern02';
+								} else if(1 == sourceCount && 'N' == targetCount) {
+									//송신1 : 수신N
+									rtnPatternImage = 'pattern03';
+								} if('N' == sourceCount && 1 == targetCount) {
+									//송신N : 수신1
+									rtnPatternImage = 'pattern01';
+								}
+							}
+						} else if(1 == jsonData.appPrMethod) {
+							//비동기
+							if(0 == jsonData.dataPrDir) {
+								//단방향
+								if(1 == sourceCount && 1 == targetCount) {
+									//송신1 : 수신1
+									rtnPatternImage = 'pattern04';
+								} else if(1 == sourceCount && 'N' == targetCount) {
+									//송신1 : 수신N
+									if('TAONNN-01' == jsonData.patternCd) {
+										rtnPatternImage = 'pattern05';
+									} else {
+										rtnPatternImage = 'pattern06';
+									}
+								} if('N' == sourceCount && 1 == targetCount) {
+									//송신N : 수신1
+									rtnPatternImage = '';
+								}
+							} else if(1 == jsonData.dataPrDir) {
+								//양방향
+								if(1 == sourceCount && 1 == targetCount) {
+									//송신1 : 수신1
+									rtnPatternImage = 'pattern07';
+								} else if(1 == sourceCount && 'N' == targetCount) {
+									//송신1 : 수신N
+									rtnPatternImage = '';
+								} if('N' == sourceCount && 1 == targetCount) {
+									//송신N : 수신1
+									rtnPatternImage = '';
+								}
+							}
+						}
+						
+						return rtnPatternImage;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setPatternImage"});
+					}
+				},//end fn_setPatternImage()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 정보를 바탕으로 선택한 패턴과 정보 비교
+				//-----------------------------------------------------------------------
+				fn_mainPopupPatternCheck : function(popAppPrMethodNm, popDataPrDirNm, popSourceDisplayedData, popTargetDisplayedData) {
+					try {
+						var appPrMethodNm = $("#cb-appPrMethodNm").data("kendoDropDownList").value();
+						var dataPrDirNm = $("#cb-dataPrDirNm").data("kendoDropDownList").value();
+						
+						var sourceDisplayedData = $("#source-grid").data().kendoGrid.dataSource.view();
+						var targetDisplayedData = $("#target-grid").data().kendoGrid.dataSource.view();
+						
+						var rtnBoolCheck = false
+// 						var rtnMessage = '선택한 패턴정보는 인터페이스 기본정보 및 송/수신 정보와 상이합니다 \n\n 항목 \t\t Main 화면 \t 선택한 패턴 \n';
+						var rtnMessage = '- ' + mint.label.getLabel('lb-404') + ' -\n';
+						
+						if(popAppPrMethodNm != appPrMethodNm) {
+							//App 처리방식이 다를 경우
+// 							rtnMessage += "App처리방식 \t" + appPrMethodNm + "\t\t" + popAppPrMethodNm + "\n"
+							rtnMessage += mint.label.getLabel('lb-162') + "\n"
+							rtnBoolCheck= true;
+						}
+						
+						if(popDataPrDirNm != dataPrDirNm) {
+							//Data 처리방향이 다를 경우
+// 							rtnMessage += "Data처리방향 \t" + dataPrDirNm + "\t\t" + popDataPrDirNm + "\n"
+							rtnMessage += mint.label.getLabel('lb-155') + "\n";
+							rtnBoolCheck= true;
+						}
+						
+						var sourceCount =  sourceDisplayedData.length > 1 ? "N" : sourceDisplayedData.length;
+						var targetCount =  targetDisplayedData.length > 1 ? "N" : targetDisplayedData.length;
+						
+						if(sourceCount != popSourceDisplayedData || targetCount != popTargetDisplayedData) {
+// 							rtnMessage += "송/수신 시스템 \t" + sourceCount + ":" + targetCount + "\t\t" + popSourceDisplayedData + ":" + popTargetDisplayedData
+							rtnMessage += mint.label.getLabel('lb-98') + '/' + mint.label.getLabel('lb-102') + ' ' + mint.label.getLabel('lb-405');
+							rtnBoolCheck= true;
+						}
+						
+						if(rtnBoolCheck) {
+							alert(rtnMessage);
+						}
+						
+						return rtnBoolCheck;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_mainPopupPatternCheck"});
+					}
+				},//end fn_mainPopupPatternCheck()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 패턴 정보 복사
+				//-----------------------------------------------------------------------
+				fn_copyPatternInfo : function() {
+					try {
+						var title   = "";
+						var desc    = "";
+						var imgPath = "";
+						var popAppPrMethodNm = "";
+						var popDataPrDirNm = "";
+						var popSourceDisplayedData = "";
+						var popTargetDisplayedData = "";
+						var tempPatternImage;
+						
+						var checkedVal = $('input:radio[name="pattern"]:checked').val();
+						
+						switch( checkedVal ) {
+							case "pattern01":
+								title   = mint.label.getLabel('lb-328');
+								desc    = mint.label.getLabel('lb-330');
+								imgPath = "../../img/pattern01.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-163');
+								popDataPrDirNm = mint.label.getLabel('lb-157');
+								popSourceDisplayedData = "N";
+								popTargetDisplayedData = 1;
+								tempPatternImage = $.sub.tempPattern[5];
+								break;
+							case "pattern02":
+								title   = mint.label.getLabel('lb-328');
+								desc    = mint.label.getLabel('lb-331');
+								imgPath = "../../img/pattern02.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-163');
+								popDataPrDirNm = mint.label.getLabel('lb-157');
+								popSourceDisplayedData = 1;
+								popTargetDisplayedData = 1;
+								tempPatternImage = $.sub.tempPattern[3];
+								break;
+							case "pattern03":
+								title   = mint.label.getLabel('lb-328');
+								desc    = mint.label.getLabel('lb-332');
+								imgPath = "../../img/pattern03.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-163');
+								popDataPrDirNm = mint.label.getLabel('lb-157');
+								popSourceDisplayedData = 1;
+								popTargetDisplayedData = "N";
+								tempPatternImage = $.sub.tempPattern[4];
+								break;
+							case "pattern04":
+								title   = mint.label.getLabel('lb-329');
+								desc    = mint.label.getLabel('lb-333');
+								imgPath = "../../img/pattern04.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-164');
+								popDataPrDirNm = mint.label.getLabel('lb-156');
+								popSourceDisplayedData = 1;
+								popTargetDisplayedData = 1;
+								tempPatternImage = $.sub.tempPattern[0];
+								break;
+							case "pattern05":
+								title   = mint.label.getLabel('lb-329');
+								desc    = mint.label.getLabel('lb-334');
+								imgPath = "../../img/pattern05.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-164');
+								popDataPrDirNm = mint.label.getLabel('lb-156');
+								popSourceDisplayedData = 1;
+								popTargetDisplayedData = "N";
+								tempPatternImage = $.sub.tempPattern[2];
+								break;
+							case "pattern06":
+								title   = mint.label.getLabel('lb-329');
+								desc    = mint.label.getLabel('lb-335');
+								imgPath = "../../img/pattern06.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-164');
+								popDataPrDirNm = mint.label.getLabel('lb-156');
+								popSourceDisplayedData = 1;
+								popTargetDisplayedData = "N";
+								
+								tempPatternImage = $.sub.tempPattern[1];
+								break;
+							case "pattern07":
+								title   = mint.label.getLabel('lb-329');
+								desc    = mint.label.getLabel('lb-331');
+								imgPath = "../../img/pattern07.png";
+								popAppPrMethodNm = mint.label.getLabel('lb-164');
+								popDataPrDirNm = mint.label.getLabel('lb-157');
+								popSourceDisplayedData = 1;
+								popTargetDisplayedData = 1;
+								tempPatternImage = $.sub.tempPattern[6];
+								break;					
+							default:
+								break;
+						}
+
+						if('' == title) {
+							mint.common.alert('CW00003', mint.label.getLabel('lb-191'));
+						//-2016/08/09 주석 처리. 체크 로직이 매우 부족하여 의미 전달이 안됨. 	
+						//} else if($.sub.fn_mainPopupPatternCheck(popAppPrMethodNm, popDataPrDirNm, popSourceDisplayedData, popTargetDisplayedData)) {
+							
+						} else {
+							patternInfo = tempPatternImage;
+							$("#patternTitle > h2").html(title);
+							$("#patternTitle > h4").html(desc);
+							$("#patternImg > img").attr("src", imgPath);
+							$('#interfacePattern').modal('hide');
+						}
+						
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_copyPatternInfo"});
+					}
+				}//end fn_copyPatternInfo()
+				
+			}// end sub
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================		
+		
+		//-----------------------------------------------------------------------
+		// Description :: 적용버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$("#modal_apply").on("click", function () {
+			$.sub.fn_copyPatternInfo();
+	   	});
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================		
+		
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================		
+		$.sub.fn_init();
+		mint.label.attachLabel(null);
+		
+	});
+	
+	
+</script>
+

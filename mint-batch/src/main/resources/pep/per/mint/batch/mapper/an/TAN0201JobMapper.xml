@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.an.TAN0201JobMapper">
+    <!--
+    <cache/>
+    -->
+
+    <select id="getTxLogScaleInfoList" resultMap="txLogScaleInfoResultMap">
+        <!--
+        SELECT INTF_ID,
+        	   ROUND(SUM(ST_COMPSIZE+ST_N_COMPSIZE)/SUM(ST_PROCESSING+ST_FINISHED+ST_SEND_ERR), 0) AS SZ_PER_TRAN,
+        	   ROUND(SUM(ST_PROCESSING+ST_FINISHED+ST_SEND_ERR)/TO_CHAR(LAST_DAY(ADD_MONTHS(SYSDATE-1, -1)), 'DD'), 0) AS CNT_PER_DAY
+          FROM SI_STAT_INTF_MONTH A, TAN0201 B
+         WHERE ST_YEAR = TO_CHAR(ADD_MONTHS(SYSDATE-1, -1), 'YYYY')
+           AND ST_MONTH = TO_CHAR(ADD_MONTHS(SYSDATE-1, -1), 'MM')
+           AND A.INTF_ID = B.INTEGRATION_ID
+      GROUP BY A.INTF_ID
+      -->
+        SELECT
+             INTF_ID
+            ,ROUND(SUM(ST_COMPSIZE+ST_N_COMPSIZE)/SUM(ST_PROCESSING+ST_FINISHED+ST_SEND_ERR), 0) AS SZ_PER_TRAN
+            ,ROUND(SUM(ST_PROCESSING+ST_FINISHED+ST_SEND_ERR)/#{days}, 0) AS CNT_PER_DAY
+         FROM SI_STAT_INTF_MONTH A, TAN0201 B
+        WHERE ST_YEAR  = #{year}
+          AND ST_MONTH = #{month}
+          AND A.INTF_ID = B.INTEGRATION_ID
+        GROUP BY A.INTF_ID
+    </select>
+
+    <resultMap id="txLogScaleInfoResultMap" type="TransactionLogScaleInfo" >
+        <result property="interfaceId" 		column="INTF_ID"/>
+        <result property="sizePerTran" 		column="SZ_PER_TRAN"/>
+        <result property="countPerDay" 		column="CNT_PER_DAY" />
+    </resultMap>
+
+    <update id="updateTxLogScaleInfo" >
+		UPDATE TAN0201 SET SZ_PER_TRAN = #{sizePerTran},
+						   CNT_PER_DAY = #{countPerDay},
+						   QTT_PER_DAY = (#{sizePerTran} * #{countPerDay})
+		 WHERE INTEGRATION_ID = #{interfaceId}
+    </update>
+
+</mapper>

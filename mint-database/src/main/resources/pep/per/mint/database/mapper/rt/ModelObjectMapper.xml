@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.rt.ModelObjectMapper">
+    <!--
+    <cache/>
+    -->
+
+	<select id="getSimpleInterfaceModel" resultMap="simpleInterfaceModelResultMap">
+		SELECT
+			 TRT0101.INTERFACE_MID
+			,TRT0101.NAME AS INTERFACE_MODEL_NM
+			,TRT0101.INTERFACE_ID
+			,TRT0101.STAGE
+			,IM10.NM AS STAGE_NM
+			,TRT0101.DEPLOY_STATUS
+			,AN12.NM AS DEPLOY_STATUS_NM
+			,TRT0101.LAST_DEPLOY_DATE
+			,TRT0201.APP_MID
+			,TRT0201.APP_MODEL_NM
+			,TRT0201.CD AS APP_MODEL_CD
+			,TRT0201.APP_TYPE AS APP_MODEL_TYPE
+			,RT01.NM AS APP_MODEL_TYPE_NM
+			,TRT0201.SYSTEM_ID
+			,TIM0101.SYSTEM_NM
+			,TIM0101.SYSTEM_CD
+			,TRT0201.SEQ AS SYSTEM_SEQ
+			,TRT0201.SYSTEM_TYPE
+			,IM08.NM AS SYSTEM_TYPE_NM
+			,TRT0201.SERVER_ID
+			,TIM0201.SERVER_NM
+			,TIM0201.SERVER_CD
+			,TIM0201.HOST_NM
+			,TIM0201.IP
+			,TRT0201.MSG_MID
+			,TRT0201.MSG_MODEL_NM
+			,TRT0201.DATASET_ID
+			,TRT0201.MSG_IO_TYPE
+			,TRT0201.MSG_MODEL_DEL_YN
+			,TRT0201.MAP_MID
+			,TRT0201.MAP_MODEL_NM
+			,TRT0201.MAP_ID
+			,TRT0201.MAP_IO_TYPE
+			,TRT0201.MAP_MODEL_DEL_YN
+		FROM
+			TRT0101
+			LEFT OUTER JOIN
+			(
+				SELECT
+					 TRT0201.INTERFACE_MID
+					,TRT0201.APP_MID
+					,TRT0201.NAME AS APP_MODEL_NM
+					,TRT0201.CD
+					,TRT0201.APP_TYPE
+					,TRT0201.SYSTEM_ID
+					,TRT0201.SEQ
+					,TRT0201.SYSTEM_TYPE
+					,TRT0201.SERVER_ID
+					,TRT0401.MSG_MID
+					,TRT0401.NAME AS MSG_MODEL_NM
+					,TRT0401.DATASET_ID
+					,TRT0401.TYPE AS MSG_IO_TYPE
+					,TRT0401.DEL_YN AS MSG_MODEL_DEL_YN
+					,TRT0501.MAP_MID
+					,TRT0501.NAME AS MAP_MODEL_NM
+					,TRT0501.MAP_ID
+					,TRT0501.TYPE AS MAP_IO_TYPE
+					,TRT0501.DEL_YN AS MAP_MODEL_DEL_YN
+				FROM
+					TRT0201
+					LEFT OUTER JOIN TRT0401 ON
+						TRT0401.INTERFACE_MID = TRT0201.INTERFACE_MID AND TRT0401.APP_MID = TRT0201.APP_MID
+					LEFT OUTER JOIN TRT0501 ON
+						TRT0501.INTERFACE_MID = TRT0201.INTERFACE_MID AND TRT0501.APP_MID = TRT0201.APP_MID
+			) TRT0201 ON
+				TRT0201.INTERFACE_MID = TRT0101.INTERFACE_MID
+			LEFT OUTER JOIN TSU0301 IM10 ON IM10.LEVEL1 = 'IM' AND IM10.LEVEL2 = '10' AND IM10.CD = TRT0101.STAGE
+			LEFT OUTER JOIN TSU0301 AN12 ON AN12.LEVEL1 = 'AN' AND AN12.LEVEL2 = '12' AND AN12.CD = TRT0101.DEPLOY_STATUS
+			LEFT OUTER JOIN TSU0301 IM08 ON IM08.LEVEL1 = 'IM' AND IM08.LEVEL2 = '08' AND IM08.CD = TRT0201.SYSTEM_TYPE
+			LEFT OUTER JOIN TSU0301 RT01 ON RT01.LEVEL1 = 'RT' AND RT01.LEVEL2 = '01' AND RT01.CD = TRT0201.APP_TYPE
+			LEFT OUTER JOIN TIM0101 ON TIM0101.SYSTEM_ID = TRT0201.SYSTEM_ID
+			LEFT OUTER JOIN TIM0201 ON TIM0201.SERVER_ID = TRT0201.SERVER_ID
+		WHERE
+			1 = 1
+			<if test="interfaceMid != null and interfaceMid != '' ">
+			AND TRT0101.INTERFACE_MID = #{interfaceMid}
+			</if>
+			<if test="interfaceModelName != null and interfaceModelName != '' ">
+			AND TRT0101.NAME LIKE '%'||#{interfaceModelName}||'%'
+			</if>
+			<if test="interfaceId != null and interfaceId != '' ">
+			AND TRT0101.INTERFACE_ID = #{interfaceId}
+			</if>
+			<if test="stage != null and stage != '' ">
+			AND TRT0101.STAGE = #{stage}
+			</if>
+	</select>
+
+
+	<resultMap id="simpleInterfaceModelResultMap" type="InterfaceModelObject">
+		<id property="interfaceMid"				column="INTERFACE_MID"/>
+		<result property="interfaceModelNm"		column="INTERFACE_MODEL_NM"/>
+		<result property="interfaceId"			column="INTERFACE_ID"/>
+		<result property="stage"				column="STAGE"/>
+		<result property="stageNm"				column="STAGE_NM"/>
+		<result property="deployStatus"			column="DEPLOY_STATUS"/>
+		<result property="deployStatusNm"		column="DEPLOY_STATUS_NM"/>
+		<result property="lastDeployDate"		column="LAST_DEPLOY_DATE"/>
+
+		<result property="delYn"				column="DEL_YN"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+
+		<collection property="appModelList" ofType="AppModelObject">
+			<id property="interfaceMid"			column="INTERFACE_MID"/>
+			<id property="appMid"				column="APP_MID"/>
+			<result property="appModelNm"		column="APP_MODEL_NM"/>
+			<result property="appModelCd"		column="APP_MODEL_CD"/>
+			<result property="appModelType"		column="APP_MODEL_TYPE"/>
+			<result property="appModelTypeNm"	column="APP_MODEL_TYPE_NM"/>
+
+			<result property="systemId"			column="SYSTEM_ID"/>
+			<result property="systemNm"			column="SYSTEM_NM"/>
+			<result property="systemCd"			column="SYSTEM_CD"/>
+			<result property="systemNm"			column="SYSTEM_NM"/>
+			<result property="systemType"		column="SYSTEM_TYPE"/>
+			<result property="systemTypeNm"		column="SYSTEM_TYPE_NM"/>
+			<result property="seq"				column="SYSTEM_SEQ"/>
+
+			<result property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm"			column="SERVER_NM"/>
+			<result property="serverCd"			column="SERVER_CD"/>
+			<result property="hostNm"			column="HOST_NM"/>
+			<result property="ip"				column="IP"/>
+
+
+			<collection property="msgModelList" ofType="MsgModelObject" notNullColumn="MSG_MID">
+				<id property="interfaceMid"			column="INTERFACE_MID"/>
+				<id property="appMid"				column="APP_MID"/>
+				<id property="msgMid"				column="MSG_MID"/>
+				<result property="msgModelNm"		column="MSG_MODEL_NM"/>
+				<result property="dataSetId"		column="DATASET_ID"/>
+				<result property="msgIoType"		column="MSG_IO_TYPE"/>
+				<result property="delYn"			column="MSG_MODEL_DEL_YN"/>
+				<association property="dataSet" javaType="DataSet" column="{dataSetId=DATASET_ID, delYn=MSG_MODEL_DEL_YN}" notNullColumn="MSG_MID" select="pep.per.mint.database.mapper.an.DataSetMapper.getSimpleDataSet"/>
+			</collection>
+
+			<collection property="mapModelList" ofType="MapModelObject" notNullColumn="MAP_MID">
+				<id property="interfaceMid"			column="INTERFACE_MID"/>
+				<id property="appMid"				column="APP_MID"/>
+				<id property="mapMid"				column="MAP_MID"/>
+				<result property="mapModelNm"		column="MAP_MODEL_NM"/>
+				<result property="mapId"			column="MAP_ID"/>
+				<result property="mapIoType"		column="MAP_IO_TYPE"/>
+				<result property="delYn"			column="MAP_MODEL_DEL_YN"/>
+				<association property="dataMap" javaType="DataMap" column="{mapId=MAP_ID}" notNullColumn="MAP_ID" select="pep.per.mint.database.mapper.an.DataSetMapper.getSimpleDataMap"/>
+			</collection>
+
+		</collection>
+
+	</resultMap>
+
+	<insert id="createMsgModel" parameterType="pep.per.mint.common.data.basic.runtime.MsgModelObject">
+		<selectKey keyProperty="msgMid" resultType="String" order="BEFORE" >
+			SELECT
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(MSG_MID::numeric), 0) + 1 as msgMid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(MSG_MID)), 0) + 1 as msgMid
+				 </otherwise>
+		   	</choose>
+			FROM TRT0401
+			WHERE INTERFACE_MID = #{interfaceMid} AND APP_MID = #{appMid}
+		</selectKey>
+
+
+		INSERT INTO TRT0401
+		(
+			 INTERFACE_MID
+			,APP_MID
+			,MSG_MID
+			,NAME
+			,DATASET_ID
+			,TYPE
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		)
+		VALUES
+		(
+			 #{interfaceMid,	jdbcType=VARCHAR}
+			,#{appMid,			jdbcType=VARCHAR}
+			,#{msgMid,			jdbcType=VARCHAR}
+			,#{msgModelNm,		jdbcType=VARCHAR}
+			,#{dataSetId,		jdbcType=VARCHAR}
+			,#{msgIoType,		jdbcType=VARCHAR}
+			,#{comments,		jdbcType=VARCHAR}
+			,'N'
+			,#{regDate,			jdbcType=VARCHAR}
+			,#{regId,			jdbcType=VARCHAR}
+			,#{regDate,			jdbcType=VARCHAR}
+			,#{regId,			jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="createMapModel" parameterType="pep.per.mint.common.data.basic.runtime.MapModelObject">
+		<selectKey keyProperty="mapMid" resultType="String" order="BEFORE" >
+			SELECT
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(MAP_MID::numeric), 0) + 1 as mapMid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(MAP_MID)), 0) + 1 as mapMid
+				 </otherwise>
+		   	</choose>
+			FROM TRT0501
+			WHERE INTERFACE_MID = #{interfaceMid} AND APP_MID = #{appMid}
+		</selectKey>
+
+
+		INSERT INTO TRT0501
+		(
+			 INTERFACE_MID
+			,APP_MID
+			,MAP_MID
+			,NAME
+			,MAP_ID
+			,TYPE
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		)
+		VALUES
+		(
+			 #{interfaceMid,	jdbcType=VARCHAR}
+			,#{appMid,			jdbcType=VARCHAR}
+			,#{mapMid,			jdbcType=VARCHAR}
+			,#{mapModelNm,		jdbcType=VARCHAR}
+			,#{mapId,			jdbcType=VARCHAR}
+			,#{mapIoType,		jdbcType=VARCHAR}
+			,#{comments,		jdbcType=VARCHAR}
+			,'N'
+			,#{regDate,			jdbcType=VARCHAR}
+			,#{regId,			jdbcType=VARCHAR}
+			,#{regDate,			jdbcType=VARCHAR}
+			,#{regId,			jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="updateMsgModel" parameterType="pep.per.mint.common.data.basic.runtime.MsgModelObject">
+		UPDATE TRT0401
+		SET
+			 NAME 		= #{name,		jdbcType=VARCHAR}
+			,DATASET_ID	= #{dataSetId,	jdbcType=VARCHAR}
+			,TYPE		= #{type,		jdbcType=VARCHAR}
+			,COMMENTS	= #{comments,	jdbcType=VARCHAR}
+			,DEL_YN		= #{delYn,		jdbcType=VARCHAR}
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+			AND MSG_MID			= #{msgMid,			jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateMapModel" parameterType="pep.per.mint.common.data.basic.runtime.MapModelObject">
+		UPDATE TRT0501
+		SET
+			 NAME 		= #{name,		jdbcType=VARCHAR}
+			,MAP_ID		= #{mapId,		jdbcType=VARCHAR}
+			,TYPE		= #{type,		jdbcType=VARCHAR}
+			,COMMENTS	= #{comments,	jdbcType=VARCHAR}
+			,DEL_YN		= #{delYn,		jdbcType=VARCHAR}
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+			AND MAP_MID			= #{mapMid,			jdbcType=VARCHAR}
+	</update>
+
+	<update id="removeMsgModel" parameterType="pep.per.mint.common.data.basic.runtime.MsgModelObject">
+		UPDATE TRT0401
+		SET
+			 DEL_YN		= #{delYn,		jdbcType=VARCHAR}
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+			AND MSG_MID			= #{msgMid,			jdbcType=VARCHAR}
+	</update>
+
+	<update id="removeMapModel" parameterType="pep.per.mint.common.data.basic.runtime.MapModelObject">
+		UPDATE TRT0501
+		SET
+			 DEL_YN		= #{delYn,		jdbcType=VARCHAR}
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+			AND MAP_MID			= #{mapMid,			jdbcType=VARCHAR}
+	</update>
+
+
+	<delete id="deleteMsgModel" parameterType="pep.per.mint.common.data.basic.runtime.MsgModelObject">
+		DELETE FROM TRT0401
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteMsgModelByMid" parameterType="pep.per.mint.common.data.basic.runtime.MsgModelObject">
+		DELETE FROM TRT0401
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+			AND MSG_MID			= #{msgMid,			jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteMapModel" parameterType="pep.per.mint.common.data.basic.runtime.MapModelObject">
+		DELETE FROM TRT0501
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteMapModelByMid" parameterType="pep.per.mint.common.data.basic.runtime.MapModelObject">
+		DELETE FROM TRT0501
+		WHERE
+			1 = 1
+			AND INTERFACE_MID	= #{interfaceMid,	jdbcType=VARCHAR}
+			AND APP_MID			= #{appMid,			jdbcType=VARCHAR}
+			AND MAP_MID			= #{mapMid,			jdbcType=VARCHAR}
+	</delete>
+
+
+</mapper>

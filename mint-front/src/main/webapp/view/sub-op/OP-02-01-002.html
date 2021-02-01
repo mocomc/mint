@@ -1,0 +1,560 @@
+<!--
+	Screen ID : OP-02-01-002
+	Screen NM : WMQ 종합 상황판
+	Reference : NH농협
+-->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-9999">WMQ종합상황판</lb></h2>
+	</div>
+	<div class="col-lg-7">
+		<div class="mint-page-top-group" >
+            <a class="btn btn-white btn-page-expand"><i class="fa fa-window-maximize"></i> <lb class="lb-999">전체화면</lb></a>
+		</div>
+	</div>
+</div>
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" id="dashboard-attachDiv">
+	<div class="dashboard-item dashboard-layout-default">
+		<div class="row">
+			<div class="col-lg-12 mint-col-default">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-body mint-panel-content">
+						<div class="mint-center-outer"style="width:100%;">
+							<div class="mint-center-inner">
+								<div class="mint-center-centered mint-marking-02 alarm-type-qmgr"></div><small>큐매니져 종료</small>
+								<div class="mint-center-centered mint-marking-02 alarm-type-mixed"></div><small>복합(채널+큐) 이상</small>
+								<div class="mint-center-centered mint-marking-02 alarm-type-channel"></div><small>채널 이상</small>
+								<div class="mint-center-centered mint-marking-02 alarm-type-queue"></div><small>큐 깊이 초과</small>
+								<div class="mint-center-centered mint-marking-02 alarm-type-normal"></div><small>정상</small>
+							</div>
+						</div>
+						<div id="system-panel" style="width:100%;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- wrapper wrapper-content -->
+<div class='wsNotification' style='display:none;'></div>
+
+
+
+
+
+
+<script type="text/x-kendo-template" id="template-dashboard-window">
+<div id="dashboard-window">
+	<div id="dashboard-toolbar"></div>
+	<div id="dashboard-content" class="col-lg-12" style="box-sizing: border-box;"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-title">
+<h6 style="float:none; display:inline; padding-bottom:2px;">
+	<span><i class="fa fa-circle text-success"></i> </span>
+	<span><i class="fa fa-circle text-warning"></i> </span>
+	<span><i class="fa fa-circle text-danger"></i> </span>
+	<span style="font-size:14px;">WMQ종합상황판</span>
+</h6>
+</script>
+
+
+
+
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "OP-02-01-002";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			criticalColor: {
+				DEFAULT	: '#FFDF24',
+				NORMAL	: '#97C2FC',
+				WARNING	: '#FF902B',
+				DANGER	: '#CD1533',
+				QMGR    : '#CD1533',
+				QUEUE   : '#E5A005',
+				CHANNEL : '#F46A1A',
+				MIXED   : '#A68CAF'
+			},
+			network: null,
+			nodes: null,
+			edges: null,
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Description :: 패널 초기화
+					//-----------------------------------------------------------------------
+					{
+						$('.alarm-type-qmgr'   ).css('background-color', $.main.criticalColor.QMGR );
+						$('.alarm-type-mixed'  ).css('background-color', $.main.criticalColor.MIXED);
+						$('.alarm-type-channel').css('background-color', $.main.criticalColor.CHANNEL );
+						$('.alarm-type-queue'  ).css('background-color', $.main.criticalColor.QUEUE );
+						$('.alarm-type-normal' ).css('background-color', $.main.criticalColor.NORMAL );
+
+
+
+						var pHeight = $(window).height() - $('.navbar-static-top')[0].clientHeight - $('.page-heading')[0].clientHeight - $('.footer.fixed')[0].clientHeight - 40;
+						$('#system-panel').height(pHeight);
+
+						$.main.fn_initDraw();
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: 웹소켓 서비스 호출
+					//-----------------------------------------------------------------------
+					if( mint.wsSupported() ) {
+ 						$.main.fn_getWS0042_01()
+ 						.done(function() {
+ 							$.main.fn_getWS0042();
+ 						})
+ 						.fail(function() {});
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: Scroll Attach
+					//-----------------------------------------------------------------------
+					//mint.ui.attachScrollY($('#system-panel'), {'size' : '10px', 'positionY' : 'left'});
+
+					//-----------------------------------------------------------------------
+					// Description :: HealthCheck
+					//-----------------------------------------------------------------------
+					mint.healthCheck();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+
+			}, // end fn_initCallback
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initDraw
+			//-----------------------------------------------------------------------
+			fn_initDraw : function() {
+				try {
+
+					if( !mint.common.isEmpty($.main.network) ) {
+						$.main.network.destroy();
+					}
+					//-----------------------------------------------------------------------
+					// options
+					//-----------------------------------------------------------------------
+					var options = {
+						autoResize: true,
+						height: '100%',
+						width: '100%',
+						clickToUse: false,
+						nodes: {
+							fixed: {
+								x: true, y: true
+							},
+						},
+						edges: {
+
+						},
+						layout:{
+
+						},
+						physics: {
+							enabled: true,
+							stabilization: true,
+						},
+						interaction: {
+
+						}
+					};
+
+
+					var container = $('#system-panel');
+
+					if( !mint.common.isEmpty(container) ) {
+						var data = {
+							nodes: $.main.nodes,
+							edges: $.main.edges
+						};
+
+						$.main.network = new vis.Network(container[0], data, options);
+
+						//-----------------------------------------------------------------------
+						// Click Event
+						//-----------------------------------------------------------------------
+						$.main.network.on('click', function(param) {
+							var nodes = param.nodes;
+							if( !mint.common.isEmpty(nodes) && nodes.length > 0 ) {
+								mint.common.setScreenParam('detailKey', nodes[0]);
+								mint.common.searchPopup('../sub-op/OP-02-00-503.html','OP-02-00-503');
+							}
+						});
+
+						//-----------------------------------------------------------------------
+						// Resize Event
+						//-----------------------------------------------------------------------
+						$.main.network.on('resize', function(param) {
+							try {
+								//-----------------------------------------------------------------------
+								// TODO: 뭔가 하려했으나 할것이 없음.
+								//-----------------------------------------------------------------------
+							} catch(e) {
+								//TODO: 화면 이동시 에러 발생하는 부분 원인 파악후 보완할것.
+							}
+						});
+
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initDraw"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getWS0042_01
+			//-----------------------------------------------------------------------
+			fn_getWS0042_01 : function() {
+				try {
+					var deferred = $.Deferred();
+					var requestObject = new Object();
+
+					mint.callService(requestObject, screenName, 'REST-R99-CO-99-02',
+					function(jsonData, errorCd) {
+
+						var isTest = false;
+						if( isTest ) {
+							var testLength = 20;
+							var testData = [];
+							for( var i = 0; i < testLength; i++ ) {
+								testData.push({systemId: 'system'+i, systemCd: 'system'+i, systemNm: '시스템'+i});
+							}
+							jsonData = testData;
+						}
+
+						if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+							$.main.fn_setNodeData(jsonData);
+							deferred.resolve();
+						} else {
+							deferred.reject();
+						}
+
+					}, {errorCall: true, notificationView: false, waitingView: false});
+
+					return deferred.promise();
+				} catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getWS0042_01"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setNodeData
+			//-----------------------------------------------------------------------
+			fn_setNodeData : function(data) {
+				try {
+
+					var nodes   = []; // Create a data table with nodes.
+					var edges   = []; // Create a data table with links.
+					//-----------------------------------------------------------------------
+					// Center Node
+					//-----------------------------------------------------------------------
+					//nodes.push({id: 0, label: 'EAI Topology', image: DIR + 'node_nostatus.png', shape: 'image'});
+
+					if( !mint.common.isEmpty(data) && data.length > 0 ) {
+						var xDefault = -200;
+						var yDefaylt = 20;
+
+						var posX = xDefault;
+						var posY = yDefaylt;
+
+						var preMaxTextLength = 0;
+						var nodeDistance = 200;
+
+						var panelSize = mint.ui.elementSize( $('#system-panel') );
+						var dataLength = data.length;
+
+						//-----------------------------------------------------------------------
+						// 노드 배치시 x축(가로열) 갯수를 적절히 산정한다(방법이 없어 대략적인 값으로 하드코딩함)
+						//-----------------------------------------------------------------------
+						var xCntMin = 20; // 노드 배치시 가로 갯수를 계산할때 참조될 값(  dataLength <= xCntMin ? 스크린 사이즈로 계산 : xCnt 로 계산)
+						var xCnt    = 10; // 노드 배치 가로열 갯수
+
+						if( dataLength <= 20 ) {
+							xCnt = 5;
+						} else if( dataLength <= 30) {
+							xCnt = 6;
+						} else if( dataLength <= 40) {
+							xCnt = 6;
+						} else if( dataLength <= 50) {
+							xCnt = 6;
+						} else if( dataLength <= 60) {
+							xCnt = 6;
+						} else if( dataLength <= 70 ) {
+							xCnt = 7;
+						} else if( dataLength <= 80 ) {
+							xCnt = 8;
+						} else if( dataLength <= 90 ) {
+							xCnt = 9;
+						} else if( dataLength <= 110 ) {
+							xCnt = 10;
+						} else if( dataLength <= 130 ) {
+							xCnt = 11;
+						} else if( dataLength <= 150 ) {
+							xCnt = 12;
+						} else if( dataLength <= 170 ) {
+							xCnt = 13;
+						} else if( dataLength <= 200 ) {
+							xCnt = 14;
+						} else if( dataLength <= 250 ) {
+							xCnt = 16;
+						} else if( dataLength > 250 ) {
+							xCnt = 17;
+						}
+
+
+						for( var i = 0; i < dataLength; i++ ) {
+							var systemId = data[i].systemId;
+							var systemCd = data[i].systemCd;
+							var systemNm = data[i].systemNm;
+
+							//-----------------------------------------------------------------------
+							// X 값을 계산할때, 이전 노드의 텍스트를 감안하여 계산
+							//-----------------------------------------------------------------------
+							if( i == 0 ) {
+								posX = xDefault;
+								preMaxTextLength = 0;
+							} else {
+								posX = posX + nodeDistance + ( preMaxTextLength <= 20 ? 0 : preMaxTextLength  * 4 );
+								preMaxTextLength = 0;
+							}
+
+							if( dataLength <= xCntMin ) {
+								if( posX > panelSize.clientWidth ) {
+									posX = xDefault;
+									posY = posY + 80;
+								}
+							} else {
+								if( i % xCnt === 0 ) {
+									posX = xDefault;
+									posY = posY + 80;
+								}
+							}
+
+							xPos = posX;
+							yPos = posY;
+
+							if( preMaxTextLength < systemNm.length ) {
+								preMaxTextLength = systemNm.length;
+							}
+
+							nodes.push({id: systemId, label: systemNm, value: i, shape: 'icon', icon: $.main.fn_getIcon($.main.criticalColor.NORMAL), x: xPos, y: yPos });
+
+						}
+
+						$.main.nodes = new vis.DataSet(nodes);
+						$.main.edges = new vis.DataSet(edges);
+						$.main.network.setData({nodes: $.main.nodes, edges: $.main.edges});
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setNodeData"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getWS0042
+			//-----------------------------------------------------------------------
+			fn_getWS0042 : function() {
+				try {
+					var serviceCd = 'WS0042';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								for( var i = 0; i < msg.length; i++ ) {
+									var node = $.main.nodes.get(msg[i].systemId);
+									if( !mint.common.isEmpty(node) ) {
+
+										if( msg[i].errCnt > 0 ) {
+											var color = $.main.criticalColor.DANGER;
+											//-----------------------------------------------------------------------
+											// COLOR 우선순위
+											// 큐매니져 > MIXED(챼널+큐) > 채널 > 큐
+											//-----------------------------------------------------------------------
+											if( msg[i].queueCnt > 0 ) {
+												color = $.main.criticalColor.QUEUE;
+											}
+
+											if( msg[i].channelCnt > 0 ) {
+												color = $.main.criticalColor.CHANNEL;
+											}
+
+											if( msg[i].channelCnt > 0 && msg[i].queueCnt > 0 ) {
+												color = $.main.criticalColor.MIXED;
+											}
+
+											if( msg[i].qmgrCnt > 0 ) {
+												color = $.main.criticalColor.DANGER;
+											}
+
+											$.main.nodes.update({id: msg[i].systemId, icon:$.main.fn_getIcon(color) });
+										} else {
+											$.main.nodes.update({id: msg[i].systemId, icon:$.main.fn_getIcon($.main.criticalColor.NORMAL) });
+										}
+
+									}
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getWS0042"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getIcon
+			//-----------------------------------------------------------------------
+			fn_getIcon : function(color, options) {
+				try {
+					if( mint.common.isEmpty(color) ) {
+						color = $.main.criticalColor.NORMAL;
+					}
+					var icon = {face:'FontAwesome',code:'\uf108', size:50, color: color};
+					return icon;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getIcon"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dashboardWindowOpen
+			//-----------------------------------------------------------------------
+			fn_dashboardWindowOpen : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 템플릿을 읽어 드린다
+					//-----------------------------------------------------------------------
+					var layout = kendo.template($('#template-dashboard-window').html());
+					var title  = kendo.template($('#template-dashboard-title').html());
+
+					//-----------------------------------------------------------------------
+					// DIV 에 템플릿에서 불러온 레이아웃을 붙인다
+					//-----------------------------------------------------------------------
+					var attachDiv = $('#dashboard-attachDiv').prepend( layout );
+					var windowDiv = $('#dashboard-window');
+
+					//-----------------------------------------------------------------------
+					// 윈도우를 오픈한다
+					//-----------------------------------------------------------------------
+					mint.ui.windowOpen(attachDiv, windowDiv, title, function(evt) {
+						//-----------------------------------------------------------------------
+						// DIV Resize
+						//-----------------------------------------------------------------------
+						var pHeight = $(window).height() - $('.navbar-static-top')[0].clientHeight - $('.page-heading')[0].clientHeight - $('.footer.fixed')[0].clientHeight - 40;
+						$('#system-panel').height(pHeight);
+
+						//-----------------------------------------------------------------------
+						// 윈도우가 Close 되면 대시보드 컨텐츠를 원래 DIV 에 붙인다
+						//-----------------------------------------------------------------------
+						attachDiv.html( $('.dashboard-item') );
+					}, null);
+
+					//-----------------------------------------------------------------------
+					// 레이아웃에 대시보드 컨텐츠를 붙인다.( 순서주의-윈도우 오픈후 컨텐츠 붙임 )
+					//-----------------------------------------------------------------------
+					{
+						//-----------------------------------------------------------------------
+						// DIV Resize
+						//-----------------------------------------------------------------------
+						var pHeight = $('#dashboard-window')[0].clientHeight - 40;
+						$('#system-panel').height(pHeight);
+
+						$('#dashboard-toolbar').html('');
+						$('#dashboard-content').html( $('.dashboard-item') );
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dashboardWindowOpen"});
+				}
+
+			},
+
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_checkTimeDisplay
+			//-----------------------------------------------------------------------
+			fn_checkTimeDisplay : function(time) {
+				try {
+					return '<i class="fa fa-clock-o"> ' + kendo.toString(kendo.parseDate(time, 'yyyyMMddHHmmsssss'), 'HH:mm:ss') + ' ' + mint.label.getLabel('lb-998') + '</i>';
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkTimeDisplay"});
+				}
+			},
+
+
+		}// end main
+
+
+
+
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 대시보드 전체 화면
+	//-----------------------------------------------------------------------
+	$('.btn-page-expand').on('click', function () {
+		$.main.fn_dashboardWindowOpen();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 윈도우 리사이즈 이벤트
+	//-----------------------------------------------------------------------
+	$(window).on('resize', function(e) {
+        mint.ui.resize();
+	});
+
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	//mint.ui.draggablePannels();
+
+});//end document.ready()
+</script>

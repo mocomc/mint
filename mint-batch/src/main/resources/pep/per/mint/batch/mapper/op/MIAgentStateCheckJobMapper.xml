@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.MIAgentStateCheckJobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+	<!--
+	public List<Server> getServerList() throws Excepiton;
+     -->
+	<select id="getServerList" resultType="Server">
+		select
+			 a.SERVER_ID as "serverId"
+			,a.SERVER_CD as "serverCd"
+			,a.SERVER_NM as "serverNm"
+			,a.HOST_NM as "hostNm"
+			,a.IP as "ip"
+			,a.OS as "os"
+		 from TIM0201 a inner join TIM0209 b on a.SERVER_ID = b.SERVER_ID and a.DEL_YN = 'N'
+	</select>
+
+	<!--
+	public List<MIAgent> getMIAgentList(Map<String, String> params) throws Exception;
+ 	-->
+    <select id="getMIAgentList" resultMap="miAgentResultMap">
+    <![CDATA[
+		select
+		   a.AGENT_ID
+		  ,a.AGENT_CD
+		  ,a.AGENT_NM
+		  ,a.SERVER_ID
+		  ,a.STATUS
+		  ,a.COMMENTS
+		  ,a.DEL_YN
+		  ,a.REG_DATE
+		  ,a.REG_USER
+		  ,a.MOD_DATE
+		  ,a.MOD_USER
+		  ,b.RUNNER_ID
+		  ,b.RUNNER_NM
+		  ,b.STATUS   as R_STATUS
+		  ,b.COMMENTS as R_COMMENTS
+		  ,b.DEL_YN   as R_DEL_YN
+		  ,b.REG_DATE as R_REG_DATE
+		  ,b.REG_USER as R_REG_USER
+		  ,b.MOD_DATE as R_MOD_DATE
+		  ,b.MOD_USER as R_MOD_USER
+		  from TIM0209 a
+		inner join TIM0210 b on a.AGENT_ID = b.AGENT_ID
+		   and a.SERVER_ID = #{serverId}
+    ]]>
+    </select>
+	<resultMap type="MIAgent" id="miAgentResultMap">
+		<id property="agentId" 		column="AGENT_ID"/>
+		<result property="agentCd" 	column="AGENT_ID"/>
+		<result property="agentNm" 	column="AGENT_NM"/>
+		<result property="comments" column="COMMENTS"/>
+		<result property="delYn" 	column="DEL_YN"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modId" 	column="MOD_USER"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="status" 	column="STATUS"/>
+
+		<collection property="brokerList" ofType="MIRunner">
+			<id property="agentId" 		column="AGENT_ID"/>
+			<id property="runnerId" 	column="RUNNER_ID"/>
+			<result property="runnerNm" column="RUNNER_NM"/>
+			<result property="comments" column="R_COMMENTS"/>
+			<result property="delYn" 	column="R_DEL_YN"/>
+			<result property="modDate" 	column="R_MOD_DATE"/>
+			<result property="modId" 	column="R_MOD_USER"/>
+			<result property="regDate" 	column="R_REG_DATE"/>
+			<result property="regId" 	column="R_REG_USER"/>
+			<result property="status" 	column="R_STATUS"/>
+		</collection>
+
+	</resultMap>
+
+
+    <!--
+    public int insertAgentState(MIAgentState state) throws Exception;
+	-->
+	<insert id="insertAgentState">
+		insert into TOP0809 (
+		 	 AGENT_ID
+			,GET_DATE
+			,STATUS
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{agentId}
+			,#{getDate}
+			,#{status}
+			,#{msg}
+			,#{regDate}
+			,#{regApp}
+		)
+	</insert>
+
+	<update id="updateAgentLastState">
+		update TIM0209
+		   set  STATUS = #{status}
+		       ,MOD_DATE = #{regDate}
+		       ,MOD_USER = #{regApp}
+		 where AGENT_ID = #{agentId}
+	</update>
+
+	<!--
+	public int insertRunnerState(MIRunnerState state) throws Exception;
+  	-->
+	<insert id="insertRunnerState">
+		insert into TOP0808 (
+			 AGENT_ID
+			,RUNNER_ID
+			,GET_DATE
+			,STATUS
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{agentId}
+			,#{runnerId}
+			,#{getDate}
+			,#{status}
+			,#{msg}
+			,#{regDate}
+			,#{regApp}
+		)
+	</insert>
+
+	<update id="updateRunnerLastState">
+		update TIM0210
+		   set  STATUS = #{status}
+		       ,MOD_DATE = #{regDate}
+		       ,MOD_USER = #{regApp}
+		 where AGENT_ID = #{agentId}
+		   and RUNNER_ID = #{runnerId}
+	</update>
+
+</mapper>

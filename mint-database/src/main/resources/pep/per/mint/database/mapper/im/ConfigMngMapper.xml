@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.ConfigMngMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="createConfig">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			SELECT NVL(max(SEQ),0) + 1 AS SEQ
+			  FROM TIM0605
+			 WHERE SYSTEM_ID = #{systemId}
+			   AND SERVER_ID = #{serverId}
+			   AND TYPE      = #{type}
+		</selectKey>
+
+		INSERT INTO TIM0605 (
+			 SYSTEM_ID
+			,SERVER_ID
+			,TYPE
+			,SEQ
+			,PROD_NM
+			,FILE_NM
+			,RESULT
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{systemId	, jdbcType=VARCHAR}
+			,#{serverId	, jdbcType=VARCHAR}
+			,#{type		, jdbcType=VARCHAR}
+			,#{seq		, jdbcType=NUMERIC}
+			,#{productNm, jdbcType=NUMERIC}
+			,#{fileNm	, jdbcType=VARCHAR}
+			,#{result	, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate	, jdbcType=VARCHAR}
+			,#{regId	, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateConfig">
+		UPDATE TIM0605
+		   SET
+		   	 PROD_NM = #{productNm, jdbcType=NUMERIC}
+			,FILE_NM = #{fileNm	, jdbcType=VARCHAR}
+			,RESULT  = #{result	, jdbcType=VARCHAR}
+			,DEL_YN  = #{delYn	, jdbcType=VARCHAR}
+			,MOD_DATE= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER= #{modId	, jdbcType=VARCHAR}
+		 WHERE SYSTEM_ID = #{systemId	, jdbcType=VARCHAR}
+		   AND SERVER_ID = #{serverId	, jdbcType=VARCHAR}
+		   AND TYPE      = #{type		, jdbcType=VARCHAR}
+		   AND SEQ       = #{seq		, jdbcType=NUMERIC}
+
+	</update>
+
+
+	<delete id="deleteConfig">
+		UPDATE TIM0605
+		   SET DEL_YN  = 'Y'
+		   	  ,MOD_DATE= #{modDate  , jdbcType=VARCHAR}
+			  ,MOD_USER= #{modId	, jdbcType=VARCHAR}
+		 WHERE SYSTEM_ID = #{systemId	, jdbcType=VARCHAR}
+		   AND SERVER_ID = #{serverId	, jdbcType=VARCHAR}
+		   AND TYPE      = #{type		, jdbcType=VARCHAR}
+		   AND SEQ       = #{seq		, jdbcType=NUMERIC}
+	</delete>
+
+
+	<delete id="deleteConfigInterfaceList">
+		DELETE FROM TIM0606
+		 WHERE SYSTEM_ID = #{systemId	, jdbcType=VARCHAR}
+		   AND SERVER_ID = #{serverId	, jdbcType=VARCHAR}
+		   AND TYPE      = #{type		, jdbcType=VARCHAR}
+		   AND SEQ       = #{seq		, jdbcType=NUMERIC}
+	</delete>
+
+
+	<insert id="insertConfigInterface">
+		INSERT INTO TIM0606 (
+			 SYSTEM_ID
+			,SERVER_ID
+			,TYPE
+			,SEQ
+			,INTEGRATION_ID
+		) VALUES (
+			 #{systemId	, jdbcType=VARCHAR}
+			,#{serverId	, jdbcType=VARCHAR}
+			,#{type		, jdbcType=VARCHAR}
+			,#{seq		, jdbcType=NUMERIC}
+			,#{integrationId , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getConfigList" resultMap="configInfoResultMap">
+		SELECT
+			 A.SYSTEM_ID
+			,B.SYSTEM_NM
+			,A.SERVER_ID
+			,C.SERVER_NM
+			,(SELECT MAX(AGENT_NM) FROM TIM0211 WHERE SERVER_ID = A.SERVER_ID) AS AGENT_NM
+			,A.TYPE
+			,D.NM AS TYPE_NM
+			,A.SEQ
+			,A.SYSTEM_ID ||'-'|| A.SERVER_ID || '-' || A.TYPE || '-' || A.SEQ AS CONFIG_ID
+			,A.PROD_NM
+			,A.FILE_NM
+			,A.RESULT
+			,F.NM AS RESULT_NM
+			,A.REG_DATE
+			,A.REG_USER
+			,A.MOD_DATE
+			,A.MOD_USER
+		  FROM TIM0605 A
+	INNER JOIN TIM0101 B
+	        ON B.SYSTEM_ID = A.SYSTEM_ID
+			<if test="systemId != null and (systemId neq ''.toString())">
+		   AND A.SYSTEM_ID = #{systemId}
+		    </if>
+			<if test="serverId != null and (serverId neq ''.toString())">
+		   AND A.SERVER_ID = #{serverId}
+		    </if>
+			<if test="type != null and (type neq ''.toString())">
+		   AND A.TYPE = #{type}
+		    </if>
+			<if test="result != null and (result neq ''.toString())">
+		   AND A.RESULT = #{result}
+		    </if>
+		   AND A.DEL_YN = 'N'
+	INNER JOIN TIM0201 C
+	        ON C.SERVER_ID = A.SERVER_ID
+    LEFT OUTER JOIN TSU0301 D ON D.CD = A.TYPE AND D.LEVEL1 = 'IM' AND D.LEVEL2 = '04'
+	LEFT OUTER JOIN TSU0301 F ON F.CD = A.RESULT AND F.LEVEL1 = 'IM' AND F.LEVEL2 = '33'
+		ORDER BY F.CD, B.SYSTEM_NM, C.SERVER_NM, D.NM, A.PROD_NM, A.FILE_NM
+	</select>
+
+	<resultMap id="configInfoResultMap" type="ConfigInfo">
+		<id property="systemId" 	 column="SYSTEM_ID"/>
+		<id property="serverId" 	 column="SERVER_ID"/>
+		<id property="type" 		 column="TYPE"/>
+		<id property="seq" 			 column="SEQ"/>
+		<result property="configId" 	 column="CONFIG_ID"/>
+		<result property="systemNm"	 column="SYSTEM_NM"/>
+		<result property="serverNm"	 column="SERVER_NM"/>
+		<result property="agentNm"	 column="AGENT_NM"/>
+		<result property="typeNm"	 column="TYPE_NM"/>
+		<result property="productNm" column="PROD_NM"/>
+		<result property="fileNm"	 column="FILE_NM"/>
+		<result property="result"	 column="RESULT"/>
+		<result property="resultNm"	 column="RESULT_NM"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modId" 	column="MOD_USER"/>
+	</resultMap>
+
+
+	<select id="getInterfaceList" resultType="string">
+	 	select
+             a.INTEGRATION_ID
+          from TAN0201 a
+         where  exists(
+           select 1
+           from TAN0213 b, TIM0202 c
+           where b.NODE_TYPE 	 = '0'
+             and b.SYSTEM_ID 	 = #{systemId}
+             and b.INTERFACE_ID  = a.INTERFACE_ID
+             AND b.INTERFACE_ID NOT LIKE 'MRRT%'
+             and b.RESOURCE_TYPE = #{type}
+             and b.SYSTEM_ID 	 = c.SYSTEM_ID
+             and c.SERVER_ID 	 = #{serverId}
+             )
+             order by a.INTEGRATION_ID
+	</select>
+
+
+	<select id="getConfigInterfaceList" resultType="string">
+		select
+			a.INTEGRATION_ID
+		from TIM0606 a
+		where a.SYSTEM_ID = #{systemId}
+		and a.SERVER_ID = #{serverId}
+		and a.TYPE      = #{type}
+		and a.SEQ       = #{seq}
+		order by a.INTEGRATION_ID
+	</select>
+
+</mapper>

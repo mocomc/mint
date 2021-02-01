@@ -1,0 +1,685 @@
+﻿<!--
+	Screen ID : AN-01-00-904
+	Screen NM : 사용자 검색 팝업. (인터페이스 담당자 관리에서 사용됨)
+-->
+<!-- 팝업-->
+<div class="modal inmodal" id="personSearchPop" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+					<span aria-hidden="true">&times;</span> <span class="sr-only"><lb class="lb-298"></lb></span>
+				</button>
+				<div>
+					<h2 id="pop-person-title"><lb class="lb-366"></lb> <lb class="lb-10"></lb></h2>
+				</div>
+			</div>
+
+			<!--modal-body--> 
+			<div class="modal-body">
+				<div class="ibox-content4">
+					<div class="panel blank-panel">
+						<div class="panel-body">
+							<div class="client-detail">
+								<div class="full-height-scroll">
+									<div class="col-lg-6">
+										<div class="ibox float-e-margins">
+											<div class="ibox-title">
+												<h5>
+													<span><lb class="lb-366"></lb></span>
+												</h5>
+											</div>
+											<div class="ibox-content">
+												<div>
+													<span class="k-widget k-autocomplete" style="width: 60%;">
+														<input id="pop-tf-user" type="text" class="k-input" placeholder=" Search..." style="width: 100%;" onKeyDown="keyDownPop0041();">
+													</span>
+													<span style="float: right;">
+														<button id="modal_user_search_button" type="button" class="btn btn-default btn-sm btn-outline btn-search" style="padding: 4px 25px 4px 25px;"><i class="fa fa-search"></i> <lb class="lb-351"></lb>    </button>
+													</span>
+												</div>
+												<hr class="hr-space">
+								           		<div id="pop-tab01-grid"></div>
+											</div>
+										</div>
+									</div>
+									
+<!-- 									<div class="col-lg-1"> -->
+<!-- 										<div style="margin:0px 0 0px 0px;"> -->
+<!-- 											<ul class="nav nav-second-level"> -->
+<!-- 												<li style="padding-bottom:15px;"> -->
+<!-- 													<button id="bt-agreement-user" type="button" class="btn btn-default btn-xs btn-outline add-approval-user" >합<i class="fa fa-caret-right"></i></button> -->
+<!-- 						                        </li> -->
+<!-- 												<li style="padding-bottom:15px;"> -->
+<!-- 													<button id="bt-notice-user" type="button" class="btn btn-default btn-xs btn-outline add-approval-user" >통<i class="fa fa-caret-right"></i></button> -->
+<!-- 						                        </li>		                        		                         -->
+<!-- 					                    	</ul> -->
+<!-- 				                    	</div> -->
+<!-- 									</div> -->
+									
+									<div class="col-lg-6">
+										<div class="ibox float-e-margins">
+											<div class="ibox-title">
+												<h5>
+													<span><lb class="lb-358"></lb> <lb class="lb-406"></lb> <lb class="lb-209"></lb></span>
+												</h5>
+											</div>
+											<div class="ibox-content">
+												<hr class="hr-space">
+												<hr class="hr-space">
+												<hr class="hr-space">
+												<hr class="hr-space">
+												<hr class="hr-space">
+												<hr class="hr-space">
+								              	<div id="pop-tab02-grid"></div>
+											</div>
+										</div>
+									</div>		
+								</div>
+							</div>
+						</div>
+						<!--panel-body-->
+					</div>
+					<!--panel blank-panel-->
+				</div>
+				<!--ibox-content4-->
+			</div>
+
+			<!--modal-body END--> 
+
+			<!--modal-footer-->
+			<div class="modal-footer-original" style="clear: both">
+				<button id="pop-bt-move-interface-add" class="btn btn-primary" type="button" ><i class="fa fa-check"></i> <lb class="lb-370"></lb></button>	
+				<button id="pop-bt-move-interface-delete" class="btn btn-primary" type="button" ><i class="fa fa-check"></i> <lb class="lb-343"></lb></button>		
+				<button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i> <lb class="lb-298"></lb></button>
+			</div>
+			<!--modal-footer END-->
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<!-- modal inmodal END-->
+
+<!-- 팝업-->
+
+<script>
+
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "CO-01-00-0041";
+		$.extend({
+			sub : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				personGridSelectBizRowIndex : 0,
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================			
+				
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.sub.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+					}
+				},//end fn_init()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.sub.fn_settingDisplay();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기 설정
+				//-----------------------------------------------------------------------
+				fn_settingDisplay : function() {
+					try {
+						var caller = mint.common.getScreenParam("caller");
+						switch( caller ) {		
+							case "SU-01-01-002" :
+								//퇴사자 업무이관일 경우
+								$('#pop-person-title').text(mint.label.getLabel('lb-608'));
+								$('#pop-bt-move-interface-apply').show();
+								
+								var tempTab01ColumnList = [
+									{
+										field : "companyNm",
+										title : mint.label.getLabel('lb-370'),
+										template : "<span title='${companyNm}'>${companyNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "userNm",
+										title : mint.label.getLabel('lb-372'),
+										template : "<span title='${userNm}'>${userNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "departmentNm",
+										title : mint.label.getLabel('lb-407'),
+										template : "<span title='${departmentNm}'>${departmentNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+								];
+								
+								var tempPageList = new Object();
+								tempPageList.refresh = false;
+								tempPageList.buttonCount = 5;
+								
+								$.sub.fn_setUserGrid('pop-tab01-grid', tempTab01ColumnList, false, tempPageList);
+								
+								var tempTab02ColumnList = [
+									{
+										  template	: '#=$.sub.fn_setComboboxStyleCheck("pop-tab02-grid")#'
+										, width 	: "30px"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+											 style: "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "companyNm",
+										title : mint.label.getLabel('lb-371'),
+										template : "<span title='${companyNm}'>${companyNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+										, editor: function(container, options) {
+										    var input = $("<input readonly='readonly' disabled='disabled'/>");
+										    input.attr("name", options.field);
+										    input.appendTo(container);
+										    input.kendoMaskedTextBox({});
+										}
+									}
+									, {
+										field : "userNm",
+										title : mint.label.getLabel('lb-372'),
+										template : "<span title='${userNm}'>${userNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+										, editor: function(container, options) {
+										    var input = $("<input readonly='readonly' disabled='disabled'/>");
+										    input.attr("name", options.field);
+										    input.appendTo(container);
+										    input.kendoMaskedTextBox({});
+										}
+									}
+									, {
+										field : "departmentNm",
+										title : mint.label.getLabel('lb-407'),
+										template : "<span title='${departmentNm}'>${departmentNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+										, editor: function(container, options) {
+										    var input = $("<input readonly='readonly' disabled='disabled'/>");
+										    input.attr("name", options.field);
+										    input.appendTo(container);
+										    input.kendoMaskedTextBox({});
+										}
+									}
+									, {
+					   					  title		: mint.label.getLabel('lb-210')
+					   					, field 	: "roleTypeNm"
+					   					, template : "<span title='${roleTypeNm}'>${roleTypeNm}</span>"
+					   					, headerAttributes: {
+					   						style: "text-align: center;"
+					   					}
+					   					, attributes: {
+					   						style: "text-align: center; white-space: nowrap;"
+					   					}
+					   					, editor: function(container, options) {
+										    var input = $("<input/>");
+										    input.attr("name", options.field);
+										    input.appendTo(container);
+										    input.kendoDropDownList({
+										    	  dataTextField: "nm"
+												, dataValueField: "nm"
+												, dataSource: mint.common.commonCodeMap.get("cds").IM09
+												, index : 0
+											});
+										    
+										    $(":input[name='roleTypeNm']").on('change', function(e){
+										    	var gridData = $("#pop-tab02-grid").data().kendoGrid.dataSource.view();
+										    	var oldRoleTypeNm = gridData[$.sub.personGridSelectBizRowIndex].roleTypeNm
+										    	var oldUserId = gridData[$.sub.personGridSelectBizRowIndex].userId
+										    	var newRoleTypeNm = $(this).data("kendoDropDownList").value();
+										    	$(this).data("kendoDropDownList").value(newRoleTypeNm);
+										    	gridData[$.sub.personGridSelectBizRowIndex].roleTypeCd = findCommonCode(mint.common.commonCodeMap.get("cds").IM09, 'nm',  newRoleTypeNm).cd;
+										    	
+										    	//담당자 역할 동일 여부 검사
+												for(var i=0; i<gridData.length; i++) {
+													if(oldUserId == gridData[i].userId && newRoleTypeNm == gridData[i].roleTypeNm) {
+														mint.common.alert('BW00045', [gridData[i].userNm, gridData[i].roleTypeNm]);
+														$(this).data("kendoDropDownList").value(oldRoleTypeNm);
+														gridData[$.sub.personGridSelectBizRowIndex].roleTypeCd = findCommonCode(mint.common.commonCodeMap.get("cds").IM09, 'nm',  oldRoleTypeNm).cd;
+													}
+												}
+											});
+										}
+					   				}
+					   				, {
+					 					  title		: mint.label.getLabel('lb-82')
+					   					, field 	: "systemNmCd"
+										, template : '#=$.sub.fn_setStyleCheck(systemNmCd, reUseDelYn)#'
+										, headerAttributes: {
+											style: "text-align: center;"
+										}
+										, attributes: {
+											style: "text-align: center; white-space: nowrap;"
+										}
+										, editor: function(container, options) {
+										
+											if('N' != options.model.reUseDelYn) {
+											    var input = $("<input readonly='readonly'/>");
+											    input.attr("name", options.field);
+											    input.appendTo(container);
+											    input.kendoMaskedTextBox({});
+											    
+											    $(":input[name='systemNmCd']").on('focus', function(){
+													//팝업에 필요한 div 를 동적으로 생성하도록 한다.
+													var parentDiv = 'personSearchPop';
+													var attachDiv = 'attachSystemSearchPop';
+
+													$('#' + attachDiv).remove();
+													$('#page-wrapper').append($('<div id="' + attachDiv + '"></div>'));
+													
+													$.ajax({
+											     		url: "../sub-co/CO-01-00-901.html",
+											     		success:function(data){
+											     			mint.common.setScreenParam('callback', '$.sub.fn_returnSystemPopupData');
+											     			
+											     			$('#' + attachDiv).html('');
+											         		$('#' + attachDiv).html(data);
+											         		$('#' + parentDiv).css('opacity', 0.7);
+											         		
+											         		$('#pop_system_search').modal({
+											    				backdrop: false
+											    			}).on('hidden.bs.modal', function(event) {
+											    				$('body').addClass('modal-open');
+											    				$('#' + parentDiv).css('opacity', 1);
+											    				$('#' + attachDiv).html('');
+											    			});
+											     		}
+											 		});											    	
+											    });			
+											} else {
+												var input = $("<input readonly='readonly' disabled='disabled'/>");
+												input.attr("name", options.field);
+											    input.appendTo(container);
+											    input.kendoMaskedTextBox({});
+											  
+											}
+
+										}
+									}
+					   				
+					   				, {
+										  title		: "reUseDelYn"
+										, field 	: "reUseDelYn"
+										, hidden	: true	
+									}
+					   				, {
+										  title		: "systemId"
+										, field 	: "systemId"
+										, hidden	: true	
+									}
+					   				, {
+										  title		: "systemNm"
+										, field 	: "systemNm"
+										, hidden	: true	
+									}
+					   				, {
+										  title		: "systemCd"
+										, field 	: "systemCd"
+										, hidden	: true	
+									}					   				
+									
+									
+									
+									
+								];
+								
+								$.sub.fn_setUserGrid('pop-tab02-grid', tempTab02ColumnList, true, false);
+								break;
+								
+							default:
+								break;
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_settingDisplay"});
+					}
+				},//end fn_settingDisplay()
+				
+				
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 컬럼 스타일 변경(편집 불가)
+				//-----------------------------------------------------------------------
+				fn_setStyleCheck : function(columnValue, reUseDelYn) {
+					try {
+						if('N' == reUseDelYn) {
+							return "<span title='"+ columnValue +"' style='color:#C0C0C0'>" + columnValue + "</span>";
+						} else {
+							return "<span title='"+ columnValue +"'>" + columnValue + "</span>";
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setStyleCheck"});
+					}
+				},//end fn_setStyleCheck()				
+				
+				
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 설정
+				//-----------------------------------------------------------------------
+				fn_setUserGrid : function(gridId, columnList, editable, pageList) {
+					try {
+						//사용자 그리드
+						$("#" + gridId).kendoGrid({
+				          	dataSource : {
+				 				  data : []
+				 				, page : 1
+				 				, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+							}
+				            , sortable: true
+				            , editable: editable
+				            , change: pop0041onChange
+				            , selectable: true
+				            , pageable : pageList
+							, columns: columnList
+							, dataBound: function (e) {
+								if('undefined' != typeof $("#" + gridId).data()) {
+									if(0 == $("#" + gridId).data().kendoGrid.dataSource.view().length) {
+										$("#" + gridId).children(".k-grid-content").height('200');
+							    	} else {
+							    		$("#" + gridId).children(".k-grid-content").height('auto');
+							    	}
+								}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setUserGrid"});
+					}
+				},//end fn_setUserGrid()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 삭제 표시(편집 불가)
+				//-----------------------------------------------------------------------
+				fn_setComboboxStyleCheck : function(columnClass) {
+					try {
+						return "<span class='"+columnClass+"' onclick='$.sub.fn_removeGridData(this)' style='cursor: pointer;'>X</span>";
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setComboboxStyleCheck"});
+					}
+				},//end fn_setComboboxStyleCheck()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 정보 - 그리드 로우 삭제 클릭 이벤트
+				//-----------------------------------------------------------------------
+				fn_removeGridData : function(node) {
+					try {
+						var grid = $("#pop-tab02-grid").data("kendoGrid");
+						var row = $(node).closest("tr");
+					    var	dataItem = grid.dataItem(row);
+				        	
+					    grid.dataSource.remove(dataItem);
+					    
+					    $('#pop-bt-move-interface-add').focus();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_removeGridData"});
+					}
+				},//end fn_removeGridData()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 사용자 그리드 데이터 설정
+				//-----------------------------------------------------------------------
+				fn_setUserGridData : function(jsonObject) {
+					try {
+						var dataSource = new kendo.data.DataSource({
+						      data: jsonObject
+						    , page:1
+						    , pageSize: mint.ui.getPageSizesXS({'currentPage' : true})
+						});
+						
+						$('#pop-tab01-grid').data('kendoGrid').setDataSource(dataSource);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setUserGridData"});
+					}
+				},//end fn_setUserGridData()
+				
+				//-----------------------------------------------------------------------
+				// Description :: System 리턴 값
+				//-----------------------------------------------------------------------
+				fn_returnSystemPopupData : function(rtnSystemData) {
+					try {
+						var gridItem = $('#pop-tab02-grid').data().kendoGrid.dataSource.data()[$.sub.personGridSelectBizRowIndex];
+						
+						if( mint.common.isEmpty(rtnSystemData) ) {
+							gridItem.set('systemNm', '');
+							gridItem.set('systemId', '');
+							gridItem.set('systemCd', '');
+							gridItem.set('systemNmCd', '');
+						} else {
+							gridItem.set('systemNm', rtnSystemData.systemNm);
+							gridItem.set('systemId', rtnSystemData.systemId);
+							gridItem.set('systemCd', rtnSystemData.systemCd);
+							gridItem.set('systemNmCd', rtnSystemData.systemNm + '(' + rtnSystemData.systemCd +')');
+						}
+						$('#pop-tab02-grid').data('kendoGrid').refresh();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_returnSystemPopupData"});
+					}
+				},//end fn_returnSystemPopupData()				
+				
+				
+			}// end sub
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================	
+			
+		//-----------------------------------------------------------------------
+		// Description :: 조회 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('#modal_user_search_button').click(function() {
+			var users = new Object();
+		    users.userNm = $('#pop-tf-user').val();
+		    
+		    mint.callService(users, screenName, 'REST-R01-CO-01-00-004', '$.sub.fn_setUserGridData',{errorCall : true});
+		});
+			
+	  	//-----------------------------------------------------------------------
+		// Description :: tab1 그리드 Row DBClick 이벤트 설정 (추가)
+		//-----------------------------------------------------------------------
+		$('#pop-tab01-grid').on('dblclick', "tr.k-state-selected", function () {
+			var entityGrid = $("#pop-tab01-grid").data("kendoGrid");
+	    	var rows = entityGrid.select();
+	    	
+	    	if(1 == rows.length) {
+	    		var gridData = $("#pop-tab02-grid").data().kendoGrid.dataSource.view();
+	    		var gridOverlapCheck = false;
+	    		
+	    		var userData = entityGrid.dataItem(rows);
+	    		
+				//담당자 동일 여부 검사
+				for(var i=0; i<gridData.length; i++) {
+					if(userData.userId == gridData[i].userId && 0 == gridData[i].roleTypeCd) {
+						gridOverlapCheck = true;
+						mint.common.alert('BW00045', [gridData[i].userNm, gridData[i].roleTypeNm]);
+					}
+				}
+				
+				if(!gridOverlapCheck) {
+					var grid = $("#pop-tab02-grid").data("kendoGrid");
+					
+					var temmpUserObject = new Object();
+					temmpUserObject.companyNm = userData.companyNm;
+					temmpUserObject.userId = userData.userId;
+					temmpUserObject.userNm = userData.userNm;
+					temmpUserObject.departmentNm = userData.departmentNm;
+					temmpUserObject.roleTypeNm = mint.label.getLabel('lb-215');
+					temmpUserObject.roleTypeCd = 0;
+					
+					temmpUserObject.systemNm = '';
+					temmpUserObject.systemId = '';
+					temmpUserObject.systemCd = '';
+					temmpUserObject.systemNmCd = '';
+					temmpUserObject.reUseDelYn = '';
+					
+					grid.dataSource.add(temmpUserObject);
+					var tempCount = grid.dataSource.view().length - 1;
+					var theCell = $('#pop-tab02-grid tbody tr:eq('+tempCount+') td:eq(4)');//sample selector for a cell
+					$('#pop-tab02-grid').data('kendoGrid').editCell(theCell);//ask the Grid to put that cell in edit mode
+				}
+				
+	    	} else {
+	    		mint.common.alert('BW00015', null);
+	    	}
+		});
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 추가 적용 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+	    $('#pop-bt-move-interface-add').click(function(e) {
+    		var gridData = $("#pop-tab02-grid").data().kendoGrid.dataSource.view();
+    		
+    		if(0 < gridData.length) {
+	    		var r = mint.common.confirm('BI00008', null);
+				
+				if (r == true) {
+					$.main.moveInterfaceListToNewUser('add', gridData);
+		    		$('#personSearchPop').modal('hide');
+				}
+	    	} else {
+	    		mint.common.alert('BW00015', null);
+	    	}
+		});
+	  	
+	  	//-----------------------------------------------------------------------
+		// Description :: 삭제 적용 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+	    $('#pop-bt-move-interface-delete').click(function(e) {
+	    	var gridData = $("#pop-tab02-grid").data().kendoGrid.dataSource.view();
+	    	
+	    	if(0 < gridData.length) {
+	    		var r = mint.common.confirm('BI00009', null);
+				
+				if (r == true) {
+					$.main.moveInterfaceListToNewUser('delete', gridData);
+		    		$('#personSearchPop').modal('hide');
+				}
+	    	} else {
+	    		mint.common.alert('BW00015', null);
+	    	}
+		});
+		
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================	
+		
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================		
+		$.sub.fn_init();
+		mint.label.attachLabel(null);
+		
+	});
+	
+	//공통코드 값 찾기(이름검색)
+	function findCommonCode(commonCode, findValue, findName) {
+		var rtnCommonCode;
+		
+		for(var i=0; i<commonCode.length; i++) {
+			if(findName == commonCode[i][findValue]) {
+				rtnCommonCode = commonCode[i];
+			}
+		}
+		return rtnCommonCode;
+	}
+	
+	//그리드 Row 클릭시 이벤트(index값 저장 및 스타일 제거)
+	function pop0041onChange(arg) {
+		
+		var selectedRows = this.select();
+ 		var dataItem = this.dataItem(selectedRows[0]);
+ 		var dataRows = $("#" + arg.sender.wrapper[0].id).data("kendoGrid").items();
+ 		
+		if('pop-tab02-grid' == arg.sender.wrapper[0].id) {
+			$.sub.personGridSelectBizRowIndex = dataRows.index(this.select());
+			//alert($.sub.personGridSelectBizRowIndex);
+ 		}
+     }
+	
+	//키 입력 이벤트
+	function keyDownPop0041() {
+		if(event.keyCode == 13) {
+			var users = new Object();
+		    users.userNm = $('#pop-tf-user').val();
+		    
+		    mint.callService(users, screenName, 'REST-R01-CO-01-00-004', '$.sub.fn_setUserGridData',{errorCall : true});
+     	}
+	}
+
+</script>
+
+<style>
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+	
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+	
+	.k-grid tr td {
+	    border-bottom: 1px solid #C0C0C0;
+	}
+	
+	.k-grid .k-dirty {
+	  display: none;
+	}
+	
+</style>
+	

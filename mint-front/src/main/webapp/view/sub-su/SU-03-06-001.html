@@ -1,0 +1,870 @@
+<!--
+	Screen ID : SU-03-06-001
+	Screen NM : CPU/MEMORY 현황.
+	[변경 이력]
+	* YYYYMMDD-001
+-->
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-43"></lb></h2>
+		<ol class="breadcrumb">
+            <li id="d1"><lb class="lb-631"></lb></li>
+            <li id="d2"><lb class="lb-33"></lb></li>
+			<li class="active"><strong><lb class="lb-43"></lb></strong></li>
+		</ol>
+	</div>
+	<!--button-->
+	<div class="col-lg-7">
+		<div class="title-action">
+
+		</div>
+	</div>
+	<!--button end-->
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!--row-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-78"></lb></h5>
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000060','H001')"></a>
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+						<!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="#">Config option 1</a></li>
+							<li><a href="#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i></a> -->
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-search"><i class="fa fa-search "></i> <lb class="lb-10"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-status-KPI" style="display: none;"><i class="fa fa-reply"></i> <lb class="lb-33"></lb></a>
+					</div>
+				</div>
+
+				<!--ibox-content-->
+				<div class="ibox-content">
+					<!--row-->
+					<div class="row">
+						<!--col-sm-4 1 -->
+						<div class="col-sm-4">
+							<!-- <form class="form-horizontal"> -->
+								<!--form-group -->
+								<div class="form-group">
+									<span class="lable_tag">AP <lb class="lb-357"></lb></span>
+									<!--comboBox-->
+									<input id="sc-su0306001-apserver" type="text" style="width: 63%;" />
+									<!--comboBox end-->
+								</div>
+								<!--form-group end-->
+							<!-- </form> -->
+						</div>
+						<!--end col-sm-4 1 -->
+
+						<!--col-sm-4 1 -->
+						<div class="col-sm-4">
+							<!-- <form class="form-horizontal"> -->
+								<!--form-group -->
+								<div class="form-group">
+									<span class="lable_tag"><lb class="lb-10"></lb> <lb class="lb-494"></lb></span>
+									<!--comboBox-->
+									<input id="sc-su0306001-category" type="text" style="width: 63%;" />
+									<!--comboBox end-->
+								</div>
+								<!--form-group end-->
+							<!-- </form> -->
+						</div>
+						<!--end col-sm-4 1 -->
+
+						<!--col-sm-4 2 -->
+						<div class="col-sm-4">
+							<!-- <form class="form-horizontal"> -->
+								<!--form-group -->
+								<div class="form-group">
+									<span class="lable_tag"><lb class="lb-567"></lb> <lb class="lb-445"></lb></span>
+									<!--comboBox-->
+									<input id="sc-su0306001-usage-rate" value="50" type="text" style="width: 63%;" />
+									<!--comboBox end-->
+								</div>
+								<!--form-group end-->
+							<!-- </form> -->
+						</div>
+						<!--end col-sm-4 2 -->
+
+						<hr class="hr-space">
+
+						<!--col-sm-8 2 -->
+						<div class="col-sm-8">
+							<!-- <form class="form-horizontal"> -->
+								<!--form-group -->
+								<div class="form-group">
+									<span class="lable_tag" style="width: 17%;"><lb class="lb-302"></lb></span>
+									<!--comboBox-->
+									<input id="sc-su0306001-period-hourly-date" value="2015/04/20" class="input-width"  style="text-align:center; width: 19.1%" />
+									<input id="sc-su0306001-period-hourly-fromhour" type="text" value="00"  style="text-align:center; width: 100px" />
+									<!-- <input id="sc-su0302001-period-hourly-fromminute" type="text" value="00" style="width: 10%" /> 분 -->
+									<span style="padding: 0px 5px;"> ~ </span>
+									<input id="sc-su0306001-period-hourly-tohour" type="text" value="24"  style="text-align:center; width: 100px" />
+									<!-- <input id="sc-su0302001-period-hourly-tominute" type="text" value="00" style="width: 10%" /> 분 -->
+									<!--comboBox end-->
+								</div>
+								<!--form-group end-->
+							<!-- </form> -->
+						</div>
+						<!--end col-sm-4 2 -->
+
+
+					</div>
+					<!--end row-->
+				</div>
+				<!--end ibox-content-->
+			</div>
+			<!--end ibox float-e-margins-->
+		</div>
+		<!--end col-lg-12-->
+	</div>
+	<!--end row-->
+
+	<!--row start-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+
+				<!--ibox-title-->
+				<div class="ibox-title">
+					<h5><lb class="lb-91"></lb></h5>
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000060','H002')"></a>
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+						<!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="#">Config option 1</a></li>
+							<li><a href="#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i></a> -->
+					</div>
+
+				</div>
+				<!--ibox-title end-->
+
+				<div class="ibox-content">
+					<div id="example">
+						<table>
+							<tr>
+								<td style="vertical-align: top;"><div id="grid_su0306001"></div></td>
+								<td style="width: 60%; vertical-align: top;"><div id="chart_su0306001"  style="height: 350px; padding-left: 20px;"></div></td>
+							</tr>
+						</table>
+
+					</div>
+				</div>
+
+			</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+</div>
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "SU-03-06-001";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			requestObject : {},
+			tmpGridRowspanIdx : 0,
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+			//-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.main.fn_initCallback');
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+                	// 조회 조건 초기화
+                	$.main.fn_initSearchCondition();
+
+                	// 그리드 초기화
+                	$.main.fn_initGrid();
+
+                	// 차트 초기화
+                	$.main.fn_initChart();
+
+
+                }
+                catch(e) {
+                	mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+                }
+            }, // end fn_initCallback
+
+          	//-----------------------------------------------------------------------
+            // Description :: 조회 조건 초기화
+            //-----------------------------------------------------------------------
+            fn_initSearchCondition : function() {
+            	try {
+            		var scCategoryData = [
+							{text: mint.label.getLabel('lb-448'), value: "CPU"},
+							{text: mint.label.getLabel('lb-451'), value: "MEMORY"}
+            		];
+            		// 조회 구분 초기화
+            		$("#sc-su0306001-category").kendoDropDownList({
+						dataTextField: "text",
+						dataValueField: "value",
+						dataSource: scCategoryData,
+						index: 0
+            		});
+            		$('#sc-su0306001-category').data("kendoDropDownList").wrapper.keydown(function(event) {
+						$.main.fn_onKeyDownSU0306001(event);
+					});
+
+            		// 사용융 초기화
+            		$("#sc-su0306001-usage-rate").kendoNumericTextBox({
+            			//format: "p0",
+            			decimals: 0,
+            			format: '#',
+                        min: 0,
+                        //max: 0.1,
+                        max: 100,
+                        step: 1,
+                        value: 50
+            		});
+
+
+            		// 검색 기간 초기화
+            		$("#sc-su0306001-period-hourly-date").kendoDatePicker({
+			            format : "yyyy/MM/dd",
+			            culture: "ko-KR",
+			            value : new Date()
+			        });
+
+            		//$("#sc-su0306001-period-hourly-date").data("kendoDatePicker").readonly();
+            		$("#sc-su0306001-period-hourly-date").data("kendoDatePicker").enable(false);
+
+					var tmpFromDate = new Date();
+					tmpFromDate.setHours(8, 0, 0, 0);
+					$("#sc-su0306001-period-hourly-fromhour").kendoTimePicker({
+						value: tmpFromDate
+						, format: "HH:mm"
+						, interval: 60
+						, change : function(e) {
+							//
+						}
+					});
+
+					var tmpToDate = new Date();
+					tmpToDate.setHours(18, 59, 0, 0);
+					$("#sc-su0306001-period-hourly-tohour").kendoTimePicker({
+						value: tmpToDate
+						, format: "HH:59"
+						, interval: 60
+						, change: function(e) {
+							//
+						}
+					});
+
+					// AP 서버정보  조회/초기화
+					$.main.fn_getApServerInfo();
+
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSearchCondition"});
+            	}
+            }, // end fn_initSearchCondition
+
+          	//-----------------------------------------------------------------------
+            // Description :: 조회 조건. AP 서버 정보 조회 실행
+            //-----------------------------------------------------------------------
+            fn_getApServerInfo : function() {
+            	try {
+					var requestObject = {};
+
+            		mint.callService(requestObject, screenName, 'REST-R01-SU-03-06-001', '$.main.fn_setApServerInfo', {errorCall : true});
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getApServerInfo"});
+            	}
+            }, // end fn_getApServerInfo
+
+          	//-----------------------------------------------------------------------
+            // Description :: 조회 조건. AP 서버 정보 조회 콜백
+            //-----------------------------------------------------------------------
+            fn_setApServerInfo : function(jsonData) {
+            	try {
+            		//console.log(jsonData);
+            		// AP 서버정보  초기화
+            		$("#sc-su0306001-apserver").kendoDropDownList({
+						dataTextField: "systemNm",
+						dataValueField: "systemIp",
+						dataSource: jsonData,
+						index: 0
+            		});
+
+            		$('#sc-su0306001-apserver').data("kendoDropDownList").wrapper.keydown(function(event) {
+						$.main.fn_onKeyDownSU0306001(event);
+					});
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setApServerInfo"});
+            	}
+            	finally {
+
+                	// start. 연계 조회(자동) 여부 체크 및 조회
+               		var linkedCategory = mint.common.getScreenParam("SU0306001_SearchCategory");
+   					var linkedAPServer = mint.common.getScreenParam("SU0306001_SearchAPServer");
+   					var linkedFromHour = mint.common.getScreenParam("SU0306001_SearchFromHour");
+   					var linkedToHour = mint.common.getScreenParam("SU0306001_SearchToHour");
+   					var linkedOverUsage = mint.common.getScreenParam("SU0306001_SearchOverUsage");
+
+   					var linkedFromScreenName = mint.common.getScreenParam("LinkedFromScreenName");
+
+   					//console.log(linkedCategory + ", " + linkedAPServer + ", " + linkedFromHour + ", " + linkedToHour + ", " + linkedOverUsage);
+   					if (linkedCategory && linkedAPServer && linkedFromHour && linkedToHour && linkedOverUsage) {
+
+   						if (linkedFromScreenName == "SU-03-00-001") {
+   							$(".btn-status-KPI").show();
+   						}
+   						else {
+   							$(".btn-status-KPI").hide();
+   						}
+
+   						// 조회구분 set
+   						$("#sc-su0306001-category").data("kendoDropDownList").value(linkedCategory.toString());
+   						// AP 서버 set
+   						$("#sc-su0306001-apserver").data("kendoDropDownList").value(linkedAPServer.toString());
+   						// 최소 사용융 set
+   						$("#sc-su0306001-usage-rate").data("kendoNumericTextBox").value(Number(linkedOverUsage));
+
+   						// 기간 set
+   						var tmpFromDate = new Date();
+   						tmpFromDate.setHours(Number(linkedFromHour), 0, 0, 0);
+   						$("#sc-su0306001-period-hourly-fromhour").data("kendoTimePicker").value(tmpFromDate);
+
+   						var tmpToDate = new Date();
+   						tmpToDate.setHours(Number(linkedToHour), 59, 0, 0);
+   						$("#sc-su0306001-period-hourly-tohour").data("kendoTimePicker").value(tmpToDate);
+
+
+   						$.main.fn_getData();
+   					}
+   					mint.common.setScreenParam("SU0306001_SearchCategory", null);
+   					mint.common.setScreenParam("SU0306001_SearchAPServer", null);
+   					mint.common.setScreenParam("SU0306001_SearchFromHour", null);
+   					mint.common.setScreenParam("SU0306001_SearchToHour", null);
+   					mint.common.setScreenParam("SU0306001_SearchOverUsage", null);
+
+   					mint.common.setScreenParam("LinkedFromScreenName", null);
+   					// end. 연계 조회(자동) 여부 체크 및 조회
+
+            	}
+            }, // end fn_setApServerInfo
+
+          	//-----------------------------------------------------------------------
+			// Description :: - 그리드 초기화
+			//-----------------------------------------------------------------------
+			fn_initGrid : function() {
+				try {
+					$("#grid_su0306001").kendoGrid({
+						dataSource : {
+							data: [],
+							page: 1,
+							pageSize : 9
+						},
+						//height: "350",
+						//selectable: "row",
+						resizable: true,
+						sortable: true,
+						pageable : {
+								refresh : false,
+								pageSizes : false,
+								buttonCount : 5
+						},
+						columns : [
+								{
+									field : "serverIp",
+									hidden : true
+								}
+								, {
+									field : "serverNm",
+									title : "AP " + mint.label.getLabel('lb-359'),
+									width : "30%",
+									headerAttributes: {
+										 style: "text-align: center; vertical-align: middle;"
+									},
+									template : "#= $.main.fn_rowsGrouping(serverNm) #",
+									attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "usageRate",
+									title : mint.label.getLabel('lb-448') + " " + mint.label.getLabel('lb-445'),
+									width : "120px",
+									headerAttributes: {
+										 style: "text-align: center; vertical-align: middle;"
+									},
+									template: '#= usageRate #%',
+									attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "occuredDateTime",
+									title : mint.label.getLabel('lb-528') + " " + mint.label.getLabel('lb-510'),
+									//width : "180px",
+									headerAttributes: {
+										 style: "text-align: center; vertical-align: middle;"
+									},
+									template: '#= $.main.fn_setPatternDateTime(occuredDateTime) #',
+									attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+						],
+						dataBound: function (e) {
+							if(1 > $("#grid_su0306001").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+								$("#grid_su0306001").children(".k-grid-content").height(gridHeight /2.5);
+								$("#grid_su0306001").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#grid_su0306001").children(".k-grid-content").height('auto');
+								$("#grid_su0306001").children(".k-grid-content-locked").height('auto');
+							}
+
+							$.main.tmpGridRowspanIdx = 0;
+						}
+					});
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+				}
+			}, // end fn_initGrid
+
+			//-----------------------------------------------------------------------
+            // Description :: time format 변경
+            //-----------------------------------------------------------------------
+            fn_setPatternDateTime : function(val) {
+                try {
+                    var str = val.substring(0, 14);
+                    var returnVal = str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
+                    return returnVal;
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setPatternDateTime"});
+                }
+            }, // end fn_setPatternDateTime
+
+          	//-----------------------------------------------------------------------
+			// Description :: - 그리드 row의 column 데이터 중복 시 그룹핑
+			//-----------------------------------------------------------------------
+			fn_rowsGrouping : function(colValue) {
+
+				try {
+					var result = "";
+
+					var currentPageSize = $("#grid_su0306001").data("kendoGrid").dataSource.pageSize();
+					var page = $("#grid_su0306001").data("kendoGrid").dataSource.page();
+					var totalDataSize = $("#grid_su0306001").data("kendoGrid").dataSource.total();
+
+					var lastPage = parseInt(totalDataSize / currentPageSize) + 1;
+					var lastPageRowsCount = (totalDataSize % currentPageSize);
+
+					var rowsHalf = 0;
+					if (page == lastPage) {
+						rowsHalf = Math.round(lastPageRowsCount/2);
+					}
+					else {
+						rowsHalf = (currentPageSize > totalDataSize) ? Math.round(totalDataSize/2) : Math.round(currentPageSize/2);
+					}
+
+
+					$.main.tmpGridRowspanIdx++;
+
+					if ($.main.tmpGridRowspanIdx == rowsHalf) {
+						result = colValue;
+					}
+					else {
+						if (colValue == mint.label.getLabel('lb-547')) {
+							result = colValue;
+						}
+						else {
+							result = "";
+						}
+					}
+
+					return result;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_rowsGrouping"});
+				}
+
+			}, // end fn_rowsGrouping
+
+			//-----------------------------------------------------------------------
+            // Description :: CPU/Memory 사용률 조회 콜백
+            //-----------------------------------------------------------------------
+			fn_set_su0306001_GridData : function(jsonData) {
+				try {
+
+					var gridData = $.main.fn_get_su0306001_custom_GridData(jsonData);
+					//console.log(gridData);
+					var dataSource = new kendo.data.DataSource({
+						  data: gridData
+					    , page: 1
+					    , pageSize: 9
+					});
+
+					// Grid Title reset
+					$("#grid_su0306001 th[data-field=usageRate]").html($.main.requestObject.scCategory + " " + mint.label.getLabel('lb-445'));
+
+					//데이터 재설정
+					$("#grid_su0306001").data("kendoGrid").setDataSource(dataSource);
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_set_su0306001_GridData"});
+				}
+			}, // end fn_set_su0306001_GridData
+
+			//-----------------------------------------------------------------------
+            // Description :: CPU/Memory 사용률 조회 Data Custom
+            //-----------------------------------------------------------------------
+			fn_get_su0306001_custom_GridData : function(jsonData) {
+				try {
+					var overUsageServerList = [];
+					var overUsageServerData = {};
+					//console.log(jsonData);
+					if (jsonData) {
+						for (var i in jsonData) {
+							overUsageServerData = {};
+
+							overUsageServerData.serverIp = jsonData[i].systemIp;
+							overUsageServerData.serverNm = jsonData[i].systemNm;
+							overUsageServerData.usageRate = jsonData[i].usageRate;
+							overUsageServerData.occuredDateTime = jsonData[i].occurDateTime;
+
+							overUsageServerList.push(overUsageServerData);
+						}
+					}
+
+					return overUsageServerList;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_get_su0306001_custom_GridData"});
+				}
+			}, // end fn_get_su0306001_custom_GridData
+
+			//-----------------------------------------------------------------------
+            // Description :: CPU/Memory 사용률 차트 초기화
+            //-----------------------------------------------------------------------
+			fn_initChart : function() {
+				try {
+					$("#chart_su0306001").kendoChart({
+						title: {
+		                    text: mint.label.getLabel('lb-604')
+		                },
+		                legend : {
+		                    position : "bottom",
+		                    visible : true
+		                },
+		                seriesDefaults: {
+		                    type: "line",
+		                	style: "smooth"
+		                },
+		                series : [  {
+		                    name : mint.label.getLabel('lb-567'),
+		                    data : [],
+		                    color : "#1AB394"
+		                }, {
+		                    name : mint.label.getLabel('lb-569'),
+		                    data : [],
+		                    color : "#FF5E00"
+		                }, {
+		                    name : mint.label.getLabel('lb-516'),
+		                    data : [],
+		                    color : "#FFDF24"
+		                }  ],
+		                valueAxis : {
+		                    labels : {
+		                    	format : "{0}%"
+		                    },
+		                    line : {
+		                        visible : false
+		                    },
+		                    min: 0,
+		                    max: 100,
+		                    majorUnit: 10
+		                },
+		                categoryAxis : {
+		                    categories : [],
+		                    majorGridLines : {
+		                        visible : false
+		                    }
+		                },
+		                tooltip : {
+		                    visible : true,
+		                    format : "{0}%",
+		                    template : "#= series.name #: #= value #%"
+		                }
+
+		            });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChart"});
+				}
+			}, // end fn_initChart
+
+			//-----------------------------------------------------------------------
+            // Description :: CPU/Memory 사용률 차트 조회 콜백
+            //-----------------------------------------------------------------------
+			fn_set_su0306001_ChartData : function(jsonData) {
+				try {
+					//console.log(jsonData);
+					var chartData = $.main.fn_get_su0306001_ChartData_custom(jsonData);
+
+					var chart = $("#chart_su0306001").data("kendoChart");
+
+					if( ! mint.common.isEmpty($.main.requestObject) && ! mint.common.isEmpty($.main.requestObject.scCategory) ) {
+						if( $.main.requestObject.scCategory === 'CPU' ) {
+							chart.options.title.text = "[" + $.main.requestObject.scAPServerNm + "] " + mint.label.getLabel('lb-604');
+						} else if ( $.main.requestObject.scCategory === 'MEMORY' ) {
+							chart.options.title.text = "[" + $.main.requestObject.scAPServerNm + "] " + mint.label.getLabel('lb-605');
+						}
+					}
+					//chart.options.title.text = "[" + $.main.requestObject.scAPServerNm + "] " + mint.label.getLabel('lb-568') + " " + $.main.requestObject.scCategory + " " + mint.label.getLabel('lb-445');
+					chart.options.categoryAxis.categories = chartData.categoryDataSource;
+					chart.options.series = chartData.seriesDataSource;
+					chart.redraw();
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_set_su0306001_ChartData"});
+				}
+			}, // end fn_set_su0306001_ChartData
+
+			//-----------------------------------------------------------------------
+            // Description :: CPU/Memory 사용률 차트 Data Custom
+            //-----------------------------------------------------------------------
+			fn_get_su0306001_ChartData_custom : function(jsonData) {
+				try {
+					var chartData = {
+							seriesDataSource : [],
+							categoryDataSource : []
+					};
+
+					if (jsonData) {
+						var seriesList = [];
+						var seriesData = {};
+						var seriesDataMin = [];
+						var seriesDataMax = [];
+						var seriesDataAvg = [];
+
+						var categoryList = [];
+
+						var dataLen = jsonData.length;
+						for(var i=0; i<dataLen; i++) {
+							seriesDataMin.push(jsonData[i].usageMin);
+							seriesDataMax.push(jsonData[i].usageMax);
+							seriesDataAvg.push(jsonData[i].usageAvg);
+
+							categoryList.push(jsonData[i].occurHour);
+						}
+						// 최소
+						seriesData = {};
+						seriesData.name = mint.label.getLabel('lb-567');
+						seriesData.data = seriesDataMin;
+						seriesData.color = "#1AB394";
+						seriesList.push(seriesData);
+						// 최대
+						seriesData = {};
+						seriesData.name = mint.label.getLabel('lb-569');
+						seriesData.data = seriesDataMax;
+						seriesData.color = "#FF5E00";
+						seriesList.push(seriesData);
+						// 평균
+						seriesData = {};
+						seriesData.name = mint.label.getLabel('lb-516');
+						seriesData.data = seriesDataAvg;
+						seriesData.color = "#FFDF24";
+						seriesList.push(seriesData);
+
+						chartData.seriesDataSource = seriesList;
+						chartData.categoryDataSource = categoryList;
+					}
+
+					return chartData;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_get_su0306001_ChartData_custom"});
+				}
+			}, // end fn_get_su0306001_ChartData_custom
+
+			//-----------------------------------------------------------------------
+            // Description :: 입력 된 조회 조건 정보 설정
+            //-----------------------------------------------------------------------
+			fn_getSearchCondition : function() {
+				try {
+					var resultConditions = {
+							scAPServer : "",
+							scAPServerNm : "",
+							scCategory : "CPU",
+							scOverUsage : 0,
+							scPeriodFromHour : "00",
+							scPeriodToHour : "24"
+					};
+
+					resultConditions.scAPServer = $("#sc-su0306001-apserver").data("kendoDropDownList").value();
+					resultConditions.scAPServerNm = $("#sc-su0306001-apserver").data("kendoDropDownList").text();
+					resultConditions.scCategory = $("#sc-su0306001-category").data("kendoDropDownList").value();
+					resultConditions.scOverUsage = $("#sc-su0306001-usage-rate").data("kendoNumericTextBox").value();
+					resultConditions.scPeriodFromHour = kendo.toString($("#sc-su0306001-period-hourly-fromhour").data("kendoTimePicker").value(), 'HH');
+					//resultConditions.scPeriodToHour = "" + (Number(kendo.toString($("#sc-su0306001-period-hourly-tohour").data("kendoTimePicker").value(), 'HH')) + 1);
+					resultConditions.scPeriodToHour = kendo.toString($("#sc-su0306001-period-hourly-tohour").data("kendoTimePicker").value(), 'HH');
+
+					return resultConditions;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getSearchCondition"});
+				}
+			}, // end fn_getSearchCondition
+
+			//-----------------------------------------------------------------------
+            // Description :: CPU/Memory 사용률 조회 실행(그리드, 차트)
+            //-----------------------------------------------------------------------
+			fn_getData : function() {
+				try {
+					$.main.requestObject = $.main.fn_getSearchCondition();
+					//console.log($.main.requestObject);
+					//조회 - REST-R02-SU-03-06-001
+		    		// 그리드 데이터 조회
+		    	    mint.callService($.main.requestObject, screenName, 'REST-R02-SU-03-06-001', '$.main.fn_set_su0306001_GridData', {errorCall : true});
+					// 차트 데이터 조회
+		    	    mint.callService($.main.requestObject, screenName, 'REST-R03-SU-03-06-001', '$.main.fn_set_su0306001_ChartData', {errorCall : true});
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getData"});
+				}
+			}, // end fn_getData
+
+			//-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDownSU0306001 : function(event) {
+				try {
+					if(event.keyCode == 13) {
+						$.main.fn_getData();
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownSU0306001"});
+				}
+			} // end fn_onKeyDownSU0306001
+
+		} // end main
+	});
+
+	//=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+    // 조회 버튼 클릭 이벤트
+    $('.btn-search').on('click', function() {
+
+    	try {
+			// 조회 실행
+    		$.main.fn_getData();
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-search.click"});
+		}
+
+    });
+
+
+	$(".btn-status-KPI").bind("click", function () {
+
+		try {
+			mint.move('../sub-su/SU-03-00-001');
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-status-KPI.click"});
+		}
+
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+	//-----------------------------------------------------------------------
+	$('#sc-su0306001-usage-rate').keydown(function(event) {
+		$.main.fn_onKeyDownSU0306001(event);
+	});
+
+	$('#sc-su0306001-period-hourly-date').keydown(function(event) {
+		$.main.fn_onKeyDownSU0306001(event);
+	});
+
+	$('#sc-su0306001-period-hourly-fromhour').keydown(function(event) {
+		$.main.fn_onKeyDownSU0306001(event);
+	});
+
+	$('#sc-su0306001-period-hourly-tohour').keydown(function(event) {
+		$.main.fn_onKeyDownSU0306001(event);
+	});
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.main.fn_init();
+    mint.label.attachLabel(null);
+
+});
+</script>
+
+<style>
+/* GRID Scroll hidden */
+.k-grid-header
+{
+   padding: 0 !important;
+}
+
+.k-grid-content
+{
+   overflow-y: visible;
+}
+/* end GRID Scroll hidden */
+
+/* GRID Cursor set */
+.k-grid tr {
+    cursor : default !important;
+}
+/* end GRID Cursor set */
+</style>

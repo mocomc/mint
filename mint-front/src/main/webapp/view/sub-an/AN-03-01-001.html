@@ -1,0 +1,1204 @@
+<!--
+	Screen ID : AN-03-01-001
+	Screen NM : 개발진척현황(솔루션별)
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div id="oldPath" class="col-lg-5">
+		<h2><lb class="lb-15"></lb></h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-8"></lb></li>
+			<li><lb class="lb-14"></lb></li>
+			<li class="active">
+				<strong><lb class="lb-15"></lb></strong>
+			</li>
+		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+	<!--button-->
+	<div class="col-lg-7">
+		<div class="title-action" >
+
+		</div>
+	</div>
+	<!--button end-->
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<!--row-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-78"></h5>
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000006','H001')"></a>
+						<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-interface-status-search" tabindex="0"><i class="fa fa-search "></i> <lb class="lb-10"></lb> </a>
+					</div>
+				</div>
+
+				<!--ibox-content-->
+				<div class="ibox-content">
+					<!--row-->
+					<div class="row">
+						<!--col-sm-4 1-->
+						<div class="col-sm-4">
+							<!--form-group -->
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-302"></span>
+								<!--comboBox-->
+								<input id="cb-month-select" tabindex="1" type="text" style="width: 50%; text-align:center;">
+							</div>
+							<!--form-group end-->
+						</div>
+						<!--col-sm-4 1end -->
+					</div>
+					<!--row end-->
+				</div>
+				<!--ibox-content end-->
+			</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+
+	<!--row start-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<!--ibox-title-->
+				<div class="ibox-title">
+					<h5><lb class="lb-91"></lb></h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+				</div>
+	            <!--ibox-title end-->
+
+	            <!--ibox-content-->
+	            <div class="ibox-content">
+	            	<div class="tabs-container">
+				        <ul id="progress-main-tab" class="nav nav-tabs">
+				            <li class="active">
+				            	<a data-toggle="tab" href="#main-tab01"><lb class="lb-14"></lb></a>
+				            </li>
+				            <li style="display: none;">
+				            	<a data-toggle="tab" href="#main-tab02"><lb class="lb-14"></lb>(<span class="tab-name"></span>)</a>
+				            </li>
+				            <li style="display: none;">
+				            	<a data-toggle="tab" href="#main-tab03"><lb class="lb-348"></lb>(<span class="tab-name"></span>)</a>
+				            </li>
+				        </ul>
+				        <div class="tab-content">
+				            <div id="main-tab01" class="tab-pane active">
+				                <div class="panel-body">
+		                			<!-- kendo table-->
+									<div id="main-chartGrid" ></div>
+									<!--kendo table end-->
+								</div>
+				            </div>
+				            <div id="main-tab02" class="tab-pane">
+				                <div class="panel-body">
+									<div id="main-tab02-div">
+										<!-- kendo table-->
+										<div id="detail-chartGrid" ></div>
+										<!--kendo table end-->
+									</div>
+				                </div>
+				            </div>
+				            <div id="main-tab03" class="tab-pane">
+				                <div class="panel-body">
+									<div id="main-tab03-div">
+										<!-- kendo table-->
+										<div id="detail-grid" ></div>
+										<!--kendo table end-->
+									</div>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				<!--ibox-content end-->
+			</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	 <!--row end-->
+</div>
+<!--wrapper wrapper-content end-->
+
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "AN-03-01-001";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			showChartId : '',
+			detailGridCheck : true,
+			chartDisplayDate : new Date().getDate(),
+			zoomData : [],
+			legendData : [],
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initSearchCondition');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initSearchCondition : function() {
+				try {
+					$('#cb-month-select').kendoDatePicker({
+						  start: "year"
+						, depth: "year"
+						, format: "yyyy/MM"
+					    , culture: "ko-KR"
+					});
+
+					$('#cb-month-select').data("kendoDatePicker").value(new Date());
+
+					//차트 세팅
+					$.main.showChartId = 'main-chartGrid';
+					$.main.setChartGrid('main-chartGrid', mint.label.getLabel('lb-15'));
+
+					var searchChannel = new Object();
+					searchChannel.stMonth = mint.common.remakeYYMMDD($('#cb-month-select').data("kendoDatePicker").value()).substr(0, 6);
+					searchChannel.channelId = null;
+
+					mint.callService(searchChannel, 'AN-03-01-001', 'REST-R01-SU-05-05-000', '$.main.fn_getDailyChanne', {errorCall : true});
+
+					mint.common.siteMenuPath(screenName);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initSearchCondition"});
+				}
+			}, // end fn_initSearchCondition()
+
+			//-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDownAN0301001 : function() {
+				try {
+					if(event.keyCode == 13) {
+						$.main.fn_searchButtonClick();
+			     	}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownAN0301001"});
+				}
+			},//end fn_onKeyDownAN0301001()
+
+			//-----------------------------------------------------------------------
+			// Description :: 차트 그리기
+			//-----------------------------------------------------------------------
+			setChartGrid : function(chartId, chartText) {
+				try {
+
+					//차트 세팅
+					$("#" + chartId).kendoChart({
+						title: {
+		                    text: chartText
+		                }
+						, legend : {
+
+							  position: "top"
+							, orientation: "horizontal"
+							, visible: true
+							, item: {
+								cursor : "pointer",
+						    	visual : function (e) {
+
+							        var color = e.options.markers.background;
+							        var labelColor = e.options.labels.color;
+							        var rect = new kendo.geometry.Rect([0, 0], [100, 50]);
+							        var layout = new kendo.drawing.Layout(rect, {
+							        	  spacing: 5
+							        	, alignItems: "center"
+							       	});
+
+	                    		 	var showLegendType = '';
+
+							        if('main-chartGrid' == chartId) {
+							        	if('#919191' != color) {
+							        		if('CN00000001' == e.series.stackId) {
+				                    			//빨
+			                           			color = '#cd1533';
+				                    		} else if('CN00000002' == e.series.stackId) {
+				                    			//파
+			                           			color = '#009bd7';
+				                    		} else if('CN00000003' == e.series.stackId) {
+				                    			//초
+			                           			color = '#199600';
+				                    		} else if('CN00000004' == e.series.stackId) {
+				                    			//황토
+			                           			color = '#6e5006';
+				                    		} else if('CN00000005' == e.series.stackId) {
+				                    			//노랑
+			                           			color = '#dee009';
+				                    		} else if('CN00000006' == e.series.stackId) {
+				                    			//보라
+			                           			color = '#584458';
+				                    		} else if('CN00000007' == e.series.stackId) {
+				                    			//자주
+			                           			color = '#BC3271';
+				                    		}
+							        	}
+							        	showLegendType = e.series.stack.group;
+							        } else {
+							        	'#919191' == color ? color : color = $.main.fn_returnChartColor(e.series.stackId, e.series.typeId).tempTypeColor;
+							        	showLegendType = e.series.name;
+							        }
+
+							        var marker = new kendo.drawing.Path({
+							        	fill: {
+							            	color: color
+							            }
+							        	, stroke : false
+						          	}).moveTo(15, 0).lineTo(15, 10).lineTo(5, 10).lineTo(5, 0).close();
+
+						          	var label = new kendo.drawing.Text(showLegendType, [0, 0], {
+							        	fill: {
+							            	color: labelColor
+							            }
+						          	});
+
+						          	layout.append(marker, label);
+						          	layout.reflow()
+
+						          	var rtnCheck = true;
+
+							        if('main-chartGrid' == chartId) {
+							        	for(var i=0; i<$.main.legendData.length; i++) {
+
+								    		if(e.series.stack.group == $.main.legendData[i]) {
+								    			rtnCheck = false;
+								    		}
+							          	}
+
+							          	$.main.legendData.push(e.series.stack.group);
+							        }
+
+						          	if(rtnCheck) {
+							          	return layout;
+						          	}
+						        }
+					      	}
+						}
+						, legendItemClick : function (e) {
+							$.main.legendData = [];
+
+							if('main-chartGrid' == chartId) {
+								var series = e.sender.options.series;
+
+						        var stackId = e.series.stackId;
+						        var visibleCheck = e.series.visible;
+
+						        for (var i = 0; i < series.length; i++) {
+							        if(stackId == series[i].stackId) {
+							        	series[i].visible = !visibleCheck;
+							        }
+						        }
+
+						        this.redraw();
+								e.preventDefault();
+					        } else {
+
+					        }
+						}
+             			, dataSource: {
+				              data: []
+				        }
+						, seriesDefaults: {
+		                      type : "column"
+		                    , stack : true
+		                }
+		                , tooltip: {
+		                      visible: true
+	                    	, template: "#= series.stack.group # - #= series.typeName # : #= value #"
+		                }
+		                , pannable: {
+		                    lock: "y"
+		                }
+		                , zoomable: {
+		                    mousewheel: {
+		                        lock: "y"
+		                    }
+		                	, selection: {
+		                        lock: "y"
+		                    }
+		                }
+		                , zoom: function (e) {
+// 		                	console.log(e);
+// 		                	console.log(e.sender._mousewheelZoom.plotArea.children[0].axes[0].labels.length);
+
+// 							var chartGridSeries = $("#" + chartId).data("kendoChart").options.series;
+
+// 							if(5 < e.sender._mousewheelZoom.plotArea.children[0].axes[0].labels.length) {
+// 								for(var i=0; i<chartGridSeries.length; i++) {
+// 									if(chartGridSeries[i].labels.visible == true) {
+// 										chartGridSeries[i].labels.visible = false;
+// 										$.main.zoomData.push(chartGridSeries[i].labels);
+// 									}
+// 								}
+// 							} else if(5 >= e.sender._mousewheelZoom.plotArea.children[0].axes[0].labels.length){
+// 								if(0 < $.main.zoomData.length) {
+// 									for(var i=0; i<$.main.zoomData.length; i++) {
+// 										$.main.zoomData[i].visible = true;
+// 									}
+// 									$.main.zoomData = [];
+// 								}
+// 							}
+		                }
+		                , panes: [
+		                	{
+			                	  name : "top-pane"
+			                	, title : {
+			                		text: mint.label.getLabel('lb-349')
+			                    }
+		                	}
+		                ]
+		                , valueAxis : {
+							labels: {
+			                	format : "#,###" + mint.label.getLabel('lb-584')
+			                }
+						}
+		            	, categoryAxis: {
+		            		title: {
+								  text: mint.label.getLabel('lb-350')
+								, font : "10px"
+							}
+		                	, labels: {
+		                          format : "##" + mint.label.getLabel('lb-583')
+		                    	, rotation: "auto"
+		                    }
+					    }
+		            	, sort: [
+		            	        { "field": "typeId", "dir": "desc" }
+		            	]
+		            	, seriesClick: function(e) {
+							var tempStackId = e.series.stackId;
+							var tempTypeName = e.series.typeName;
+							var tempType = e.series.typeId;
+
+							if('main-chartGrid' == chartId) {
+								$.main.legendData = [];
+								$('.tab-name').text(e.series.stack.group);
+								$.main.chartDisplayDate = e.category;
+								$.main.fn_showSecondTab(tempStackId, tempTypeName, tempType, e.series.stack.group);
+							} else if('detail-chartGrid' == chartId) {
+								$.main.fn_showThirdTab(tempStackId, e.category);
+							}
+						}
+		            });
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.setChartGrid"});
+				}
+			}, // end setChartGrid()
+
+			//-----------------------------------------------------------------------
+			// Description :: 색깔 지정 리턴
+			//-----------------------------------------------------------------------
+			fn_returnChartColor : function(channelId, type) {
+				try {
+					var tempTypeNm = '';
+					var tempTypeColor = '';
+
+					if('CN00000001' == channelId) {
+            			//빨
+            			if(1 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-59');
+                   			tempTypeColor = '#cd1533';
+                   		} else if(2 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-60');
+                   			tempTypeColor = '#d43851';
+                   		} else if(3 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-61');
+                   			tempTypeColor = '#e47f8f';
+                   		} else if(4 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-62');
+                   			tempTypeColor = '#eba1ad';
+                   		}
+            		} else if('CN00000002' == channelId) {
+            			//파
+            			if(1 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-59');
+                   			tempTypeColor = '#009bd7';
+                   		} else if(2 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-60');
+                   			tempTypeColor = '#26aadd';
+                   		} else if(3 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-61');
+                   			tempTypeColor = '#73c8e9';
+                   		} else if(4 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-62');
+                   			tempTypeColor = '#99d7ef';
+                   		}
+            		} else if('CN00000003' == channelId) {
+            			//초
+            			if(1 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-59');
+                   			tempTypeColor = '#0f5a00';
+                   		} else if(2 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-60');
+                   			tempTypeColor = '#168700';
+                   		} else if(3 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-61');
+                   			tempTypeColor = '#46ab32';
+                   		} else if(4 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-62');
+                   			tempTypeColor = '#75c066';
+                   		}
+            		} else if('CN00000004' == channelId) {
+            			//황토
+            			if(1 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-59');
+                   			tempTypeColor = '#6e5006';
+                   		} else if(2 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-60');
+                   			tempTypeColor = '#a57809';
+                   		} else if(3 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-61');
+                   			tempTypeColor = '#bf9223';
+                   		} else if(4 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-62');
+                   			tempTypeColor = '#d4b66c';
+                   		}
+            		} else if('CN00000005' == channelId) {
+            			//노란색
+            			if(1 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-59');
+                   			tempTypeColor = '#dee009';
+                   		} else if(2 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-60');
+                   			tempTypeColor = '#f7f923';
+                   		} else if(3 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-61');
+                   			tempTypeColor = '#fbfc85';
+                   		} else if(4 == type) {
+                   			tempTypeNm = mint.label.getLabel('lb-62');
+                   			tempTypeColor = '#fdfdce';
+                   		}
+	        		} else if('CN00000006' == channelId) {//#BC3271
+	        			//보라색.
+	        			if(1 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-59');
+	               			tempTypeColor = '#584458';
+	               		} else if(2 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-60');
+	               			tempTypeColor = '#755A75';
+	               		} else if(3 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-61');
+	               			tempTypeColor = '#988398';
+	               		} else if(4 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-62');
+	               			tempTypeColor = '#CCC1CC';
+	               		}
+	        		} else if('CN00000007' == channelId) {
+	        			//자주색.
+	        			if(1 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-59');
+	               			tempTypeColor = '#8D2655';
+	               		} else if(2 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-60');
+	               			tempTypeColor = '#BC3271';
+	               		} else if(3 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-61');
+	               			tempTypeColor = '#CD6594';
+	               		} else if(4 == type) {
+	               			tempTypeNm = mint.label.getLabel('lb-62');
+	               			tempTypeColor = '#E6B2CA';
+	               		}
+	        		}
+
+
+					var rtnObject = new Object();
+					rtnObject.tempTypeNm = tempTypeNm;
+					rtnObject.tempTypeColor = tempTypeColor;
+
+					return rtnObject;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_returnChartColor"});
+				}
+			}, // end fn_returnChartColor()
+
+			//-----------------------------------------------------------------------
+			// Description :: search 버튼 클릭 이벤트
+			//-----------------------------------------------------------------------
+			fn_searchButtonClick : function() {
+				try {
+					$.main.legendData = [];
+
+					$('#progress-main-tab li:eq(1)').hide();
+					$('#progress-main-tab li:eq(2)').hide();
+					$('#progress-main-tab a:eq(0)').tab('show');
+
+					var searchChannel = new Object();
+					searchChannel.stMonth = mint.common.remakeYYMMDD($('#cb-month-select').data("kendoDatePicker").value()).substr(0, 6);
+					searchChannel.channelId = null;
+
+					$.main.showChartId = 'main-chartGrid';
+					$.main.chartDisplayDate = new Date().getDate();
+					mint.callService(searchChannel, 'AN-03-01-001', 'REST-R01-SU-05-05-000', '$.main.fn_getDailyChanne', {errorCall : true});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_searchButtonClick"});
+				}
+			},//end fn_searchButtonClick()
+
+			//-----------------------------------------------------------------------
+			// Description :: - 일솔루션별 개발진척률 조회
+			//-----------------------------------------------------------------------
+			fn_getDailyChanne : function(jsonData) {
+				try {
+					if(null != jsonData) {
+
+						var chartColumnList = [];	//컬럼데이터
+						var tempCategoryAxis = [];	//X축
+
+                        var lastDay = jsonData[0].cntList.length;
+
+                    	//X축 설정
+                        for(var j=1; j<lastDay+1; j++) {
+                     		tempCategoryAxis.push(j);
+                        }
+
+                    	for(var i=0; i<jsonData.length; i++) {
+
+                    		var rtnObject =	$.main.fn_returnChartColor(jsonData[i].channelId, jsonData[i].type);
+
+                    		var tempTypeNm = rtnObject.tempTypeNm;
+                    		var tempTypeColor = rtnObject.tempTypeColor;
+
+                    		var tempCntList = [];
+
+                    		for(var k=0; k<jsonData[i].cntList.length; k++) {
+                    			var tempObject = new Object();
+
+                    			tempObject.value = jsonData[i].cntList[k];
+                    			tempObject.valueIndex = k;
+                    			tempObject.perValue = jsonData[i].perList[k];
+                    			tempObject.valueColor = tempTypeColor;
+                    			tempObject.type = k+1;
+
+                    			tempCntList.push(tempObject);
+                    		}
+
+                       		var checkType = '';
+
+                       		for(var q=0; q<jsonData.length; q++) {
+                       			if(jsonData[i].channelId == jsonData[q].channelId) {
+                       				checkType = jsonData[q].type;
+                       			}
+                       		}
+
+                       		var tempLabelObject = new Object();
+
+                       		if(checkType == jsonData[i].type) {
+                       			tempLabelObject.visible = true;
+                           		tempLabelObject.template = "#= value == 0 ? '' : series.stack.group #";
+                       		} else {
+                       			tempLabelObject.visible = false;
+                       		}
+
+                    		chartColumnList.push ({
+                    			  stack			: {
+                                      group: jsonData[i].channelNm
+                                }
+                    			, stackId		: jsonData[i].channelId
+                    			, typeName		: tempTypeNm
+                    			, typeId		: jsonData[i].type
+                    			, colorField	: "valueColor"
+                    			, data			: tempCntList
+                    			, name 			: tempTypeNm
+//                     			, labels		: tempLabelObject
+                    			, categoryField : "type"
+//                     			, field 		: "value"
+                    		});
+                    	}
+
+
+
+                    	//min, max 계산
+                    	var todayDate =  $.main.chartDisplayDate;
+                    	var showMaxDate = 0;
+                    	var showMinDate = 0;
+                    	var gapDate = 0;
+
+                    	if(lastDay < todayDate+2) {
+                    		gapDate = todayDate+2 - lastDay;
+
+                    		showMaxDate = lastDay;
+                    		showMinDate = todayDate - 2 - gapDate;
+                    	} else if(1 > todayDate -2) {
+							gapDate = todayDate- 2 - 1;
+
+							showMaxDate = todayDate + 2 - gapDate;
+                    		showMinDate = 1;
+                    	} else {
+                    		showMaxDate = todayDate + 2;
+                    		showMinDate = todayDate - 2;
+                    	}
+
+						var chartGrid = $("#" + $.main.showChartId).data("kendoChart");
+
+						chartGrid.options.series = chartColumnList;
+						chartGrid.options.categoryAxis.categories = tempCategoryAxis;
+						chartGrid.options.categoryAxis.min = showMinDate - 1;
+						chartGrid.options.categoryAxis.max = showMaxDate - 1;
+
+						chartGrid.redraw();
+
+					} else {
+						var tempCategoryAxis = [];	//X축
+
+						var selectedDate = new Date($('#cb-month-select').data("kendoDatePicker").value());
+						var tmpDate = new Date(selectedDate.getFullYear(), (selectedDate.getMonth() + 1), "0");
+                        var lastDay = tmpDate.getDate();
+
+                    	//X축 설정
+                        for(var j=1; j<lastDay+1; j++) {
+                     		tempCategoryAxis.push(j);
+                        }
+
+						var chartGrid = $("#" + $.main.showChartId).data("kendoChart");
+						chartGrid.options.categoryAxis.categories = tempCategoryAxis;
+
+						chartGrid.dataSource.read();
+						chartGrid.refresh();
+					}
+				} catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDailyChanne"});
+				}
+			}, // end fn_getDailyChannel()
+
+			//-----------------------------------------------------------------------
+			// Description :: 2번째 차트 탭 오픈
+			//-----------------------------------------------------------------------
+			fn_showSecondTab : function(tempStackId, tempTypeName, tempType, tempStackNm) {
+				try {
+					//차트 세팅
+					$.main.showChartId = 'detail-chartGrid';
+					$.main.setChartGrid('detail-chartGrid', tempStackNm );
+
+					var searchChannel = new Object();
+					searchChannel.channelId = tempStackId;
+					searchChannel.stMonth = mint.common.remakeYYMMDD($('#cb-month-select').data("kendoDatePicker").value()).substr(0, 6);
+
+					mint.callService(searchChannel, 'AN-03-01-001', 'REST-R01-SU-05-05-000', '$.main.fn_getDailyChanne', {errorCall : true});
+
+					$('#progress-main-tab li:eq(0)').hide();
+					$('#progress-main-tab li:eq(0)').show();
+					$('#progress-main-tab li:eq(2)').hide();
+					$('#progress-main-tab li:eq(1)').show();
+
+					$('#progress-main-tab a:eq(1)').tab('show');
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_showSecondTab"});
+				}
+			}, // end fn_showSecondTab()
+
+			//-----------------------------------------------------------------------
+			// Description :: 3번째 그리드 탭 오픈
+			//-----------------------------------------------------------------------
+			fn_showThirdTab : function(tempStackId, xDay) {
+				try {
+					//차트 세팅
+					$('#progress-main-tab li:eq(1)').hide();
+					$('#progress-main-tab li:eq(1)').show();
+					$('#progress-main-tab li:eq(2)').show();
+
+					$('#progress-main-tab a:eq(2)').tab('show');
+
+					var tempDay = '';
+
+					if(10 > xDay) {
+						tempDay = '0' + xDay;
+					} else {
+						tempDay = '' + xDay;
+					}
+
+					var searchDay = ''
+
+					if('' == mint.common.remakeYYMMDD($('#cb-month-select').data("kendoDatePicker").value()).substr(0, 6)) {
+						searchDay = mint.common.remakeYYMMDD(new Date()).substr(0, 6) + tempDay;
+					} else {
+						searchDay = mint.common.remakeYYMMDD($('#cb-month-select').data("kendoDatePicker").value()).substr(0, 6) + tempDay;
+					}
+
+					var searchChannel = new Object();
+					searchChannel.stDate = searchDay;
+					searchChannel.channelId = tempStackId;
+
+					mint.callService(searchChannel, 'AN-03-01-001', 'REST-R04-SU-05-05-000', '$.main.fn_getDetailGridData', {errorCall : true});
+
+					if($.main.detailGridCheck) {
+						$.main.detailGridCheck = false
+						$.main.fn_setSearchResultGrid();
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_showThirdTab"});
+				}
+			}, // end fn_showThirdTab()
+
+			//-----------------------------------------------------------------------
+			// Description :: 검색 결과 - Grid 컬럼 Label 설정
+			//-----------------------------------------------------------------------
+			fn_setGridColumnLabel : function() {
+				try {
+					var returnObject = {
+						  '#lbl-channelNm'	: mint.label.getLabel('lb-80')
+						, '#lbl-biz' 		: mint.label.getLabel('lb-81')
+						, '#lbl-reqNm' 		: mint.label.getLabel('lb-83')
+						, '#lbl-interfaceNm': mint.label.getLabel('lb-153')
+						, '#lbl-integrationId': mint.label.getLabel('lb-154')
+						, '#lbl-source' 	:  {
+								 '#lbl-source' 		: mint.label.getLabel('lb-98')
+								,'#lbl-sysNm' 		: mint.label.getLabel('lb-82')
+								,'#lbl-resourceNm' 	: mint.label.getLabel('lb-86')
+							 	,'#lbl-svcNm' 		: mint.label.getLabel('lb-87')
+						}
+						, '#lbl-target' 	:  {
+							 	 '#lbl-target'		: mint.label.getLabel('lb-102')
+								,'#lbl-sysNm' 		: mint.label.getLabel('lb-82')
+								,'#lbl-resourceNm' 	: mint.label.getLabel('lb-86')
+								,'#lbl-svcNm' 		: mint.label.getLabel('lb-87')
+						}
+						, '#lbl-stat'		: mint.label.getLabel('lb-106')
+					};
+					return returnObject;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridColumnLabel"});
+				}
+			},//end fn_setGridColumnLabel()
+
+			//-----------------------------------------------------------------------
+			// Description ::  검색 결과 - Grid 설정
+			//-----------------------------------------------------------------------
+			fn_setSearchResultGrid : function() {
+				try {
+					var fixLeftGridWidth = ($('#detail-grid')[0].clientWidth / 10) * 7;
+					var fixLeftCoulmnWidth = fixLeftGridWidth / 4;
+
+					//컬럼 레이블 아이디 세팅
+					var labelCoulmn = $.main.fn_setGridColumnLabel();
+
+					var grid = $("#detail-grid").kendoGrid({
+						dataSource : {
+			 				  data: ""
+			 				, pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+						}
+					    , sortable : true
+						, selectable: "row"
+						, resizable: true
+						, pageable : {
+							  refresh 		: false
+							, pageSizes		: mint.ui.getPageSizesS()
+					    	, buttonCount 	: 5
+
+						}
+					    , toolbar: ["excel"]
+					    , excel: {
+					          allPages: true
+					        , filterable: true
+					        , fileName: mint.common.remakeYYMMDD(new Date()).substring(0, 14) + mint.label.getLabel('lb-15') + '.xlsx'
+					    }
+					    , messages: {
+					        commands: {
+					          excel: mint.label.getLabel('lb-508')
+					        }
+					    }
+					    , excelExport: function(e) {
+					    	//스타일 편집
+					        var sheet = e.workbook.sheets[0];
+					        for (var i = 0; i < sheet.rows.length; i++) {
+					        	for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+					            	sheet.rows[i].cells[ci].vAlign = "center";
+
+					            	//정렬 기준
+					            	if(0 == i || 1 == i) {
+					            		//컬럼 헤더일 경우
+					            		sheet.rows[i].cells[ci].hAlign = "center";
+					            		sheet.rows[i].cells[ci].bold = true;
+					            	} else {
+					            		//데이터 내용일 경우
+					            		if(1 == ci || 2 == ci || 3 == ci) {
+						            		sheet.rows[i].cells[ci].hAlign = "left";
+						            	} else {
+						            		sheet.rows[i].cells[ci].hAlign = "center";
+						            	}
+					            	}
+					        	}
+					    	}
+
+					        e.preventDefault();
+					        mint.downloadExcelFile(mint.common.remakeYYMMDD(new Date()).substring(0, 14) + mint.label.getLabel('lb-15') + '.xlsx', sheet, 'AN-03-01-001');
+				      	}
+					    , columns : [
+								{
+									  title 	: labelCoulmn['#lbl-channelNm']
+									, field 	: "interface.channel.channelNm"
+									, width 	: fixLeftCoulmnWidth / 2
+									, template	: "<span title='${interface.channel.channelNm}'>${interface.channel.channelNm}</span>"
+									, locked	: true
+									, headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}
+									, attributes: {
+							              style: 'text-align: center; white-space: nowrap;'
+						            }
+								}
+								, {
+									  title 	: labelCoulmn['#lbl-biz']
+									, field 	: "business.businessNm"
+									, width 	: fixLeftCoulmnWidth / 1.5
+									, template	: "<span title='${business.businessNm}'>${business.businessNm}</span>"
+									, locked	: true
+									, headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}
+									, attributes: {
+							              style: 'white-space: nowrap;'
+						            }
+								}
+								, {
+									  title 	: labelCoulmn['#lbl-reqNm']
+									, field 	: "requirementNm"
+									, width 	: fixLeftCoulmnWidth / 1.5
+									, template	: "<span title='${requirementNm}'>${requirementNm}</span>"
+									, locked	: true
+									, headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}
+									, attributes: {
+							              style: 'white-space: nowrap;'
+						            }
+								}
+								, {
+									  title 	: labelCoulmn['#lbl-interfaceNm']
+									, field 	: "interface.interfaceNm"
+									, width 	: fixLeftCoulmnWidth / 1.25
+									, template	: "<span title='${interface.interfaceNm}'>${interface.interfaceNm}</span>"
+									, headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}
+									, attributes: {
+							              style: 'white-space: nowrap;'
+						            }
+								}
+								, {
+									  title 	: labelCoulmn['#lbl-integrationId']
+									, field 	: "interface.integrationId"
+			 						, width 	: fixLeftCoulmnWidth / 1.7
+			 						, template	: "<span title='${interface.integrationId}'>${interface.integrationId}</span>"
+									, headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}
+									, attributes: {
+							              style: 'text-align: center; white-space: nowrap;'
+						            }
+								}
+								, {
+									  title 	: labelCoulmn['#lbl-source']['#lbl-source']
+									, field 	: "merage1"
+									, headerAttributes: {
+										 style: "text-align: center;  vertical-align:middle;"
+									}
+									, attributes: {
+										 style: "white-space: nowrap; text-align: center;"
+									}
+									, columns: [
+										{
+											  title		: labelCoulmn['#lbl-source']['#lbl-sysNm']
+											, field 	: "interface.senderSystemInfoList[0].systemNmCd"
+											, template	: "<span title='${interface.senderSystemInfoList[0].systemNmCd}'>${interface.senderSystemInfoList[0].systemNmCd}</span>"
+											, width 	: fixLeftCoulmnWidth / 2
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "white-space: nowrap; text-align: center;"
+											}
+										}
+										, {
+											  title		: labelCoulmn['#lbl-source']['#lbl-resourceNm']
+											, field 	: "interface.senderSystemInfoList[0].resourceNm"
+												, template : '#=$.main.fn_setSystemColumn(interface.senderSystemInfoList, "resourceNm")#'
+											, width 	: fixLeftCoulmnWidth / 2
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										}
+										, {
+											  title		: labelCoulmn['#lbl-source']['#lbl-svcNm']
+											, field 	: "interface.senderSystemInfoList[0].service"
+											, template : '#=$.main.fn_setSystemColumn(interface.senderSystemInfoList, "service")#'
+											, width 	: fixLeftCoulmnWidth / 2
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										}
+									]
+
+								}
+								, {
+									  title 	: labelCoulmn['#lbl-target']['#lbl-target']
+									, field 	: "merage2"
+									, headerAttributes: {
+										 style: "text-align: center;  vertical-align:middle;"
+									}
+									, columns: [
+										{
+											  title		: labelCoulmn['#lbl-target']['#lbl-sysNm']
+											, field 	: "interface.receiverSystemInfoList[0].systemNmCd"
+											, template	: "<span title='${interface.receiverSystemInfoList[0].systemNmCd}'>${interface.receiverSystemInfoList[0].systemNmCd}</span>"
+											, width 	: fixLeftCoulmnWidth / 2
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "white-space: nowrap; text-align: center;"
+											}
+										}
+										, {
+											  title		: labelCoulmn['#lbl-target']['#lbl-resourceNm']
+											, field 	: "interface.receiverSystemInfoList[0].resourceNm"
+											, template : '#=$.main.fn_setSystemColumn(interface.receiverSystemInfoList, "resourceNm")#'
+											, width 	: fixLeftCoulmnWidth / 2
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										}
+										, {
+											  title: labelCoulmn['#lbl-target']['#lbl-svcNm']
+											, field 	: "interface.receiverSystemInfoList[0].service"
+											, template : '#=$.main.fn_setSystemColumn(interface.receiverSystemInfoList, "service")#'
+											, width 	: fixLeftCoulmnWidth / 2
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										}
+									]
+								}
+								,{
+									  title 	: labelCoulmn['#lbl-stat']
+									, field 	: "statusNm"
+									, width 	: fixLeftCoulmnWidth / 2
+									, template	: "<span title='${statusNm}'>${statusNm}</span>"
+									, headerAttributes: {
+										 style: "text-align:center; vertical-align:middle;"
+									}
+									, attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+						]
+					    , dataBound: function (e) {
+					    	if(0 == $("#detail-grid").data().kendoGrid.dataSource.view().length) {
+					    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+					    		$("#detail-grid").children(".k-grid-content").height(gridHeight / 4);
+					    		$("#detail-grid").children(".k-grid-content-locked").height(gridHeight / 4);
+					    	} else {
+					    		$("#detail-grid").children(".k-grid-content").height('auto');
+						    	$("#detail-grid").children(".k-grid-content-locked").height('auto');
+					    	}
+					    }
+					}).data("kendoGrid");
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSearchResultGrid"});
+				}
+			},//end fn_setSearchResultGrid()
+
+			//-----------------------------------------------------------------------
+			// Description :: Grid System 컬럼 설정
+			//-----------------------------------------------------------------------
+			fn_setSystemColumn : function(systemInfoList, checkColumn) {
+				try {
+					var rtnColumnVal = '';
+
+					if(0 != systemInfoList.length) {
+						if('resourceNm' == checkColumn) {
+							rtnColumnVal = systemInfoList[0].resourceNm
+						} else if('service' == checkColumn) {
+							rtnColumnVal = systemInfoList[0].service
+						}
+					}
+					return "<span title='"+ rtnColumnVal +"'>"+ rtnColumnVal +"</span>";
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSystemColumn"});
+				}
+			},//end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: 3번째 그리드 탭 - 데이터 정보 표시
+			//-----------------------------------------------------------------------
+			fn_getDetailGridData : function(jsonData) {
+				try {
+					for(var i=0; i<jsonData.length; i++) {
+						if(0 >= jsonData[i].interface.senderSystemInfoList.length) {
+							var tempObj = new Object();
+							tempObj.systemNmCd = '';
+							tempObj.systemNm = '';
+							tempObj.systemCd = '';
+							jsonData[i].interface.senderSystemInfoList.push(tempObj);
+						} else {
+							for(var sendCount=0; sendCount<jsonData[i].interface.senderSystemInfoList.length; sendCount++) {
+								jsonData[i].interface.senderSystemInfoList[sendCount].systemNmCd =
+									jsonData[i].interface.senderSystemInfoList[sendCount].systemNm + '(' +
+									jsonData[i].interface.senderSystemInfoList[sendCount].systemCd + ')';
+							}
+						}
+
+						if(0 >= jsonData[i].interface.receiverSystemInfoList.length) {
+							var tempObj = new Object();
+							tempObj.systemNmCd = '';
+							tempObj.systemNm = '';
+							tempObj.systemCd = '';
+							jsonData[i].interface.receiverSystemInfoList.push(tempObj);
+						} else {
+							for(var receiveCount=0; receiveCount<jsonData[i].interface.receiverSystemInfoList.length; receiveCount++) {
+								jsonData[i].interface.receiverSystemInfoList[receiveCount].systemNmCd =
+									jsonData[i].interface.receiverSystemInfoList[receiveCount].systemNm + '(' +
+									jsonData[i].interface.receiverSystemInfoList[receiveCount].systemCd + ')';
+							}
+						}
+					}
+
+					var dataSource = new kendo.data.DataSource({
+						  data: jsonData
+					    , page:1
+					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+					});
+
+					//데이터 재설정
+					$("#detail-grid").data("kendoGrid").setDataSource(dataSource);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDetailGridData"});
+				}
+			}, // end fn_getDetailGridData()
+
+			//-----------------------------------------------------------------------
+			// Description :: 4번째 상세 페이지 이동
+			//-----------------------------------------------------------------------
+			fn_showFourthTab : function() {
+				try {
+					var entityGrid = $("#detail-grid").data("kendoGrid");
+			        var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+			        var options = new Object();
+		      		options.CRUDPS = 'R';
+		      		mint.common.setScreenParam("options", options);
+		      		mint.common.setScreenParam("requirementId", selectedItem.requirementId);
+
+		      		mint.setDetailView('Y');
+		      		mint.move('../sub-an/AN-01-00-003', options);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_showFourthTab"});
+				}
+			}, // end fn_showFourthTab()
+
+		}
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+	//-----------------------------------------------------------------------
+	$('#cb-month-select').keydown(function(event) {
+		$.main.fn_onKeyDownAN0301001();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 조회 버튼 Click 이벤트 설정 (상단)
+	//-----------------------------------------------------------------------
+	$(".btn-interface-status-search").bind("click", function () {
+		$.main.fn_searchButtonClick();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 그리드 Row DBClick 이벤트 설정 (상세 조회)
+	//-----------------------------------------------------------------------
+	$('#detail-grid').on('dblclick', "tr.k-state-selected", function () {
+		$.main.fn_showFourthTab();
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+
+
+</script>
+
+<style>
+	.k-grid tr td {
+	    border-bottom: 1px solid #C0C0C0;
+	}
+
+	.k-grid .k-detail-cell .k-grid-header {
+	  display: none;
+	}
+
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+</style>

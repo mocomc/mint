@@ -1,0 +1,9 @@
+	//,'REST-R01-OP-03-02'     : '/op/problems?method=GET'																		//장애관리 - 장애 목록 조회
+	//,'REST-R02-OP-03-02'     : '/op/problems/todo-list/{userId}?method=GET'					//장애관리 - To-Do List 장애 목록 조회
+	//,'REST-C01-OP-03-02'     : '/op/problems?method=POST'											//장애관리 - 장애 등록
+	//,'REST-U01-OP-03-02'     : '/op/problems/{problemId}?method=POST'							//장애관리 - 장애 수정
+	//,'REST-D01-OP-03-02'	 : '/op/problems/{problemId}?method=DELETE'						//장애관리 - 장애 삭제
+	//,'REST-R01-OP-03-03'     : '/op/problems/{problemId}?method=GET'							//장애관리 - 장애 상세 조회
+		//기관 관리.
+	//,'REST-R05-IM-01-06'	 : '/im/organizations/root?method=GET'               							//@depecated 시스템(그룹) ROOT 리스트 조회.
+	//,'REST-R06-IM-01-06'	 : '/im/organizations/{parentOrganizationId}/child?method=GET'		//@depecated 시스템(그룹) Child 리스트 조회.

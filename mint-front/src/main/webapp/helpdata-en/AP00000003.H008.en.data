@@ -1,0 +1,37 @@
+AP00000003$$$H008$$$en$$$연계시스템 Consumer$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕";'><font size="2">Link up System Consumer<br></font><font size="2">
+ 1. Definition of Consumer<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕";'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">* It means a data requester in general and
+it means a person in charge of Legacy in IIP<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">* Even though it is a Legacy, an
+Interface that starts with DB table becomes Provider.<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">2. Usage<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;</font></span><font size="2">a. Add<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">* After click "search"
+button on the right upper side of the page, and search/apply the
+"system" information in accordance with "consumer
+definition"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Enter "ARIS process",
+"Resource", "Service Name" on System information which is
+added at Grid<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;</font></span><font size="2">b. Delete<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Click "X" on the left
+side of the Grid<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">3. Main term<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;</font></span><font size="2">a. ARIS process : classification
+system of Samsung Electro-Mechanics buisiness code<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;</font></span><font size="2">b. Resource <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">Protocol method to link applications
+developed at business team<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">DB(TABLE), FILE, WS(SOAP), HTTP,
+API(offered library by IIB)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">Proxy(link SAP to SAP PO), RFC(link
+SAP to IIB)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;</font></span><font size="2">c. Service<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">It is a service name provided by
+Consumer/Provider and also called intraindividually <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">example) In the case of SAP, RFC name
+is a service</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

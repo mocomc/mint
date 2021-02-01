@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.EnvironmentMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertEnvironment">
+		<selectKey keyProperty="idx" resultType="string" order="BEFORE" >
+			SELECT (COALESCE(MAX(IDX), 0) + 1) FROM TSU0302 WHERE PACKAGE = #{pack} AND  ATTRIBUTE_ID =#{attrId}
+		</selectKey>
+
+		INSERT INTO TSU0302
+		(
+			PACKAGE,
+		    ATTRIBUTE_ID,
+		    IDX,
+		    ATTRIBUTE_NM,
+		    ATTRIBUTE_VALUE,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{pack, jdbcType=VARCHAR},
+			#{attrId, jdbcType=VARCHAR},
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			#{idx, jdbcType=VARCHAR}::numeric,
+        		</when>
+        		<otherwise>
+			#{idx, jdbcType=VARCHAR},
+        		</otherwise>
+        	</choose>
+			#{attrNm, jdbcType=VARCHAR},
+			#{attrVal, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<select id="getEnvironmentList" parameterType="Map" resultMap="envResultMap">
+		SELECT
+			  PACKAGE,
+			  ATTRIBUTE_ID,
+			  IDX,
+			  ATTRIBUTE_NM,
+			  ATTRIBUTE_VALUE,
+			  COMMENTS,
+			  DEL_YN,
+			  REG_DATE,
+			  REG_USER,
+			  MOD_DATE,
+			  MOD_USER
+		FROM TSU0302
+  		WHERE DEL_YN= 'N'
+		ORDER BY ATTRIBUTE_ID ASC
+	</select>
+
+	<resultMap type="Environment" id="envResultMap">
+		<id property="pack" 		column="PACKAGE"/>
+		<id property="attrId" 		column="ATTRIBUTE_ID"/>
+		<id property="idx" 			column="IDX"/>
+		<result property="attrNm"	column="ATTRIBUTE_NM"/>
+		<result property="attrVal"	column="ATTRIBUTE_VALUE"/>
+		<result property="comments"	column="COMMENTS"/>
+		<result property="regDate"	column="REG_DATE"/>
+		<result property="regId"	column="REG_USER"/>
+		<result property="modDate"	column="MOD_DATE"/>
+		<result property="modId"	column="MOD_USER"/>
+	</resultMap>
+
+	<update id="updateEnvironment">
+		UPDATE TSU0302
+		SET
+			ATTRIBUTE_NM	= #{attrNm, jdbcType=VARCHAR}
+		   	,ATTRIBUTE_VALUE= #{attrVal, jdbcType=VARCHAR}
+		    ,COMMENTS		= #{comments, jdbcType=VARCHAR}
+			,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+		WHERE PACKAGE = #{pack}
+		AND ATTRIBUTE_ID = #{attrId}
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+		AND IDX = #{idx}::numeric
+       		</when>
+       		<otherwise>
+		AND IDX = #{idx}
+       		</otherwise>
+       	</choose>
+	</update>
+
+	<delete id="deleteEnvironment">
+		UPDATE TSU0302
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE PACKAGE = #{pack}
+		AND ATTRIBUTE_ID = #{attrId}
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+		AND IDX = #{idx}::numeric
+       		</when>
+       		<otherwise>
+		AND IDX = #{idx}
+       		</otherwise>
+       	</choose>
+	</delete>
+
+	<select id="existEnvironment" parameterType="Map" resultMap="envResultMap">
+		SELECT
+			PACKAGE,
+			ATTRIBUTE_ID
+  		FROM TSU0302
+  		WHERE 1=1
+  		AND DEL_YN = 'N'
+		AND PACKAGE = #{pack}
+		AND ATTRIBUTE_ID = #{attrId}
+	</select>
+</mapper>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다.
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605,
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.LogPurgeJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getEnvironment" resultType="string">
+    	select ATTRIBUTE_VALUE from TSU0302 where PACKAGE = #{package} and ATTRIBUTE_ID = #{attributeId} and IDX = 1
+	</select>
+
+	<delete id="deleteTrLog">
+	<![CDATA[
+		DELETE FROM MASTERLOG
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogMasterlogCustom">
+	<![CDATA[
+		DELETE FROM MASTERLOG_CUSTOM
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDetaillog">
+	<![CDATA[
+		DELETE FROM DETAILLOG
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDetaillogCustom">
+	<![CDATA[
+		DELETE FROM DETAILLOG_CUSTOM
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDetaillogData">
+	<![CDATA[
+		DELETE FROM DETAILLOG_DATA
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDetaillogErr">
+	<![CDATA[
+		DELETE FROM DETAILLOG_ERR
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDevMasterlog">
+	<![CDATA[
+		DELETE FROM DEV_MASTERLOG
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDevMasterlogCustom">
+	<![CDATA[
+		DELETE FROM DEV_MASTERLOG_CUSTOM
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDevDetaillog">
+	<![CDATA[
+		DELETE FROM DEV_DETAILLOG
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDevDetaillogCustom">
+	<![CDATA[
+		DELETE FROM DEV_DETAILLOG_CUSTOM
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDevDetaillogData">
+	<![CDATA[
+		DELETE FROM DEV_DETAILLOG_DATA
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+	<delete id="deleteTrLogDevDetaillogErr">
+	<![CDATA[
+		DELETE FROM DEV_DETAILLOG_ERR
+		 WHERE MSG_DATETIME < #{toDate} || '000000000000'
+	]]>
+	</delete>
+
+
+
+	<!--
+	서비스호출로그
+	-->
+	<delete id="deleteTOP0199">
+	<![CDATA[
+		delete from TOP0199 where REQ_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	서버자원사용량로그
+	-->
+	<delete id="deleteTOP0801">
+	<![CDATA[
+		delete from TOP0801 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	서버프로세스상태로그
+	-->
+	<delete id="deleteTOP0802">
+	<![CDATA[
+		delete from TOP0802 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	큐매니저로그
+	-->
+	<delete id="deleteTOP0805">
+	<![CDATA[
+		delete from TOP0805 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	채널로그
+	-->
+	<delete id="deleteTOP0806">
+	<![CDATA[
+		delete from TOP0806 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	큐상태로그
+	-->
+	<delete id="deleteTOP0807">
+	<![CDATA[
+		delete from TOP0807 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	MI RUNNER 상태로그
+	-->
+	<delete id="deleteTOP0808">
+	<![CDATA[
+		delete from TOP0808 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	MI AGENT 상태로그
+	-->
+	<delete id="deleteTOP0809">
+	<![CDATA[
+		delete from TOP0809 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	IIP AGENT 상태로그
+	-->
+	<delete id="deleteTOP0810">
+	<![CDATA[
+		delete from TOP0810 where GET_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+
+	<!--
+	SMS LOG
+	-->
+	<delete id="deleteTOP0904">
+	<![CDATA[
+		delete from TOP0904 where REG_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	SMS LOG Mapping
+	-->
+	<delete id="deleteTOP0905">
+	<![CDATA[
+		DELETE FROM TOP0905 WHERE SMS_ID  IN (SELECT SMS_ID from TOP0904 where REG_DATE < #{toDate} || '000000000')
+	]]>
+	</delete>
+
+	<!--
+	EMAIL LOG
+	-->
+	<delete id="deleteTOP0901">
+	<![CDATA[
+		delete from TOP0901 where REG_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+	<!--
+	EMAIL LOG Mapping
+	-->
+	<delete id="deleteTOP0903">
+	<![CDATA[
+		DELETE FROM TOP0903 WHERE EMAIL_ID  IN (SELECT EMAIL_ID from TOP0901 where REG_DATE < #{toDate} || '000000000')
+	]]>
+	</delete>
+
+	<!--
+	BATCH LOG
+	-->
+	<delete id="deleteTBA0005">
+	<![CDATA[
+		delete from TBA0005 where START_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+
+	<!--
+	IIP AGENT 관리콘솔
+	-->
+	<delete id="deleteTIM0213">
+	<![CDATA[
+		delete from TIM0213 where RS_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+
+	<!--
+	로그인 사용자현황
+	-->
+	<delete id="deleteTOP0200">
+	<![CDATA[
+		delete from TOP0200 where LOGIN_DATE < #{toDate} || '000000000'
+	]]>
+	</delete>
+
+	<!--
+	TEST CALL MASTER HISTORY
+	-->
+	<delete id="deleteTIM0601">
+	<![CDATA[
+		delete from TIM0601 where TEST_DATE < #{toDate}
+	]]>
+	</delete>
+	<!--
+	TEST CALL DETAIL LOG
+	-->
+	<delete id="deleteTIM0602">
+	<![CDATA[
+		delete from TIM0602 where TEST_DATE < #{toDate}
+	]]>
+	</delete>
+
+</mapper>

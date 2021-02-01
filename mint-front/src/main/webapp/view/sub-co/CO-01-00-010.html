@@ -1,0 +1,377 @@
+﻿<!-- 팝업-->
+<div class="modal inmodal" id="CO-01-00-010" tabindex="-1"
+	role="dialog" aria-hidden="false">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					style="padding: 15px;">
+					<span aria-hidden="true">&times;</span> <span class="sr-only">Close</span>
+				</button>
+                <span style="float: right; font-size:15px; font-weight: bold; padding: 15px 0px 0px 0px;">
+                    <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000051','H001')"></a>
+                </span>				
+				<div>
+					<h2>
+						<lb class="lb-7"></lb>
+					</h2>
+				</div>
+			</div>
+
+			<!--modal-body-->
+			<div class="modal-body">
+				<!--ibox-content4-->
+				<div class="ibox-content4" style="padding: 5px 5px 5px 5px;">
+					<!--panel blank-panel-->
+					<div class="panel blank-panel">
+						<!--panel-body-->
+						<div class="panel-body">
+                            <div class="col-sm-5">
+								<div class="cursor componentList"></div>
+                            </div>
+                            <div class="col-sm-2" style="text-align:center; vertical-align:center;">
+                            	<br><hr class="hr-space">
+                            	<strong>Tip!</strong>  <i class="fa fa-comment-o"></i><hr class="hr-space">
+                            	<small><lb class="lb-480"></lb><br><lb class="lb-481"></lb></small>
+                                <div style="text-align:center; vertical-align:middle; height: 100%;">
+                                	<i class="fa fa-3x fa-exchange fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="cursor userList"></div>
+                            </div>
+						</div>
+						<!--panel-body-->
+					</div>
+					<!--panel blank-panel-->
+				</div>
+				<!--ibox-content4-->
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">			
+			<!--modal-body END-->
+			<!--modal-footer-->
+			<div class="modal-footer-original" style="clear: both">
+                <button id="bt-if-search-close" type="button" class="btn btn-primary btn-save"><i class="fa fa-check"></i>  <lb class="lb-310"></lb></button>
+				<button id="bt-if-search-close" type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+			</div>
+			<!--modal-footer END-->
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+
+<script>
+	$(document).ready(function () {
+		//=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "CO-01-00-010";
+		
+	    $.extend({
+	        sub : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+
+	            	
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+	            
+	            //-----------------------------------------------------------------------
+	            // Description :: 화면 초기화
+	            //-----------------------------------------------------------------------
+	            fn_init : function() {
+	                try {
+	                    mint.init('$.sub.fn_initCallback');
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+	                }
+	            },//end fn_init()   
+
+	            //-----------------------------------------------------------------------
+	            // Description :: 화면 초기화 콜백
+	            //-----------------------------------------------------------------------           
+	            fn_initCallback : function() {
+	                try{
+	                	var jsonData = [
+	                                    {"id":"0", "programId":"delay", "componentId":"cpDelay", "programNm":mint.label.getLabel('lb-49'), "isMulti":"N", "searchId":"", "searchName":""},
+	                                    {"id":"0", "programId":"proceed", "componentId":"cpProceed", "programNm":mint.label.getLabel('lb-53'), "isMulti":"N", "searchId":"", "searchName":""},
+	                                    {"id":"0", "programId":"interface", "componentId":"cpInterface", "programNm":mint.label.getLabel('lb-55'), "isMulti":"Y", "searchId":"", "searchName":""},
+	                                    {"id":"0", "programId":"system", "componentId":"cpSystem", "programNm":mint.label.getLabel('lb-56'), "isMulti":"Y", "searchId":"", "searchName":""}
+	                                    ]
+
+	                	$.sub.fn_setGrid('componentList', jsonData);
+	                	
+	                	var arrUserListData = new Array();
+                        var componentGrid = $(".componentList").data("kendoGrid");
+                        
+                        
+                        for(var i = 1; i < 7; i++) {
+                            var cpId = "component" + i;
+                            
+                            if(getCookie(cpId) != null && getCookie(cpId) != "") {
+                            	
+                                for(var j = 0; j < componentGrid.dataSource.total(); j++) {
+                                    if(getCookie(cpId).split("|")[1].indexOf(componentGrid.dataSource.data()[j].programId, 0) >= 0) {
+                                        var userList = new Object();
+                                        userList.id = componentGrid.dataSource.data()[j].id;
+                                        userList.programId = componentGrid.dataSource.data()[j].programId;
+                                        userList.componentId = componentGrid.dataSource.data()[j].componentId;
+                                        userList.programNm = componentGrid.dataSource.data()[j].programNm;
+                                        userList.isMulti = componentGrid.dataSource.data()[j].isMulti;
+                                        
+                                        if(getCookie(cpId).split("|").length > 2) {
+                                        	userList.searchId = getCookie(cpId).split("|")[2];
+                                        	userList.searchNm = getCookie(cpId).split("|")[3];
+                                        	if (userList.programId == "system") {
+                                        		userList.searchKey = getCookie(cpId).split("|")[4];
+                                        	}
+                                        }
+                                        
+                                        arrUserListData.push(userList);
+                                    }
+                                }
+                            }
+                        }
+                        
+	                	$.sub.fn_setGrid('userList', arrUserListData);
+	                	
+	                	//$.sub.fn_setUserListGrid();
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});                  
+	                }
+	            },// end fn_initCallback
+	            
+	            
+	            //-----------------------------------------------------------------------
+	            // Description :: 데이터 조회
+	            //-----------------------------------------------------------------------
+	            fn_setGrid : function(id, jsonData) {
+	               	var title = mint.label.getLabel('lb-482');
+	            	if( id === "userList" ) {
+	            		title = mint.label.getLabel('lb-483');
+	            	}	            	
+	                try{
+	                    $("." + id).kendoGrid({
+	                    dataSource : {
+	                        data : jsonData,
+	                        schema: {
+	                            model: {
+	                                fields: {
+	                                    programNm: {type: "string"}
+	                                }
+	                            }
+	                        },
+	                    },
+	                    scrollable : false,
+	                    selectable : true,
+	                    columns : [ {
+	                        field : "programNm",
+	                        title : title,
+	                        headerAttributes : {
+	                            style : "text-align: center"
+	                        },
+	                        attributes : {
+	                            style : "text-align: center"
+	                        },
+	                    }
+	                    ]
+	                    });
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setGrid"});                  
+	                }
+	            },
+	            
+                //-----------------------------------------------------------------------
+                // Description :: 선택 시 값 저장
+                //-----------------------------------------------------------------------           
+                fn_addSelectedData : function() {
+                    try{
+                    	var maxUserListCnt = 6;
+                    	var componentGrid = $(".componentList").data("kendoGrid");
+                        var selectedData = componentGrid.dataItem(componentGrid.select());
+                        var userGrid = $(".userList").data("kendoGrid");
+                        
+                        if(userGrid.dataSource.total() >= maxUserListCnt) {
+                        	mint.common.alert('BW00023', null);
+                        	return;
+                        }
+                        
+                        for(var i = 0; i < userGrid.dataSource.total(); i++) {
+                        	if(userGrid.dataSource.data()[i].isMulti == "N") {
+                        		if(selectedData.programId == userGrid.dataSource.data()[i].programId) {
+                        			mint.common.alert('BW00024', userGrid.dataSource.data()[i].programNm);
+                        			return;
+                        		}
+                        	}
+                        }
+                        
+                       	userGrid.dataSource.add({
+                       		id:         selectedData.id,
+                       		programId:  selectedData.programId,
+                       		componentId: selectedData.componentId,
+                       	    programNm:  selectedData.programNm,
+                       	    isMulti:    selectedData.isMulti,
+                       	    searchId:   selectedData.searchId,
+                       	    searchNm:   selectedData.searchNm
+                           });
+                    } catch( e ) {
+                        mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_addSelectedData"});                  
+                    }
+                },// end fn_initCallback
+                
+                //-----------------------------------------------------------------------
+                // Description :: 선택 row 삭제
+                //-----------------------------------------------------------------------           
+                fn_deleteRow : function() {
+                    try{
+                    	var grid = $(".userList").data("kendoGrid");
+                    	var selected = grid.select();
+                        if (selected && selected.length > 0) {
+                            grid.removeRow(grid.select());
+                        }
+                    } catch( e ) {
+                        mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_deleteRow"});                  
+                    }
+                },// end fn_initCallback
+                
+                //-----------------------------------------------------------------------
+                // Description :: 설정 저장
+                //-----------------------------------------------------------------------           
+                fn_saveUserConfig : function() {
+                	try {
+                		var mainName = "mainConfig";
+                		var cName = "";
+                		var cValue = "";
+                		var arrVal = [];
+                		var mainValue = "";
+                		
+                		var userGrid = $(".userList").data("kendoGrid");
+                		
+                		//쿠키 삭제
+                        for(var i = 1; i < 7; i++) {
+                            var cId = "component" + i;
+                            
+                            $.sub.fn_deleteCookie(cId);
+                        }
+                		
+                		for(var i = 0; i < userGrid.dataSource.total(); i++) {
+                		    
+                			var index = 1;
+                			
+                			for(var j = 0; j < arrVal.length; j++) {
+                				if(userGrid.dataSource.data()[i].programId == arrVal[j]) {
+                					index++;
+                				}
+                			}
+                			
+                			arrVal = arrVal.concat(userGrid.dataSource.data()[i].programId);
+                			
+                			if(userGrid.dataSource.data()[i].programId == "interface") {
+                                cName = "component" + (i + 1);
+                                cValue = "getInterfaceData|" + userGrid.dataSource.data()[i].programId + index;
+                                
+                            } else if(userGrid.dataSource.data()[i].programId == "system") {
+                                cName = "component" + (i + 1);
+                                cValue = "getSystemData|" + userGrid.dataSource.data()[i].programId + index;
+                                
+                            } else if(userGrid.dataSource.data()[i].programId == "delay") {
+                                cName = "component" + (i + 1);
+                                cValue = "getErrorData|" + userGrid.dataSource.data()[i].programId;
+                                
+                            } else if(userGrid.dataSource.data()[i].programId == "proceed") {
+                                cName = "component" + (i + 1);
+                                cValue = "getProceedData|" + userGrid.dataSource.data()[i].programId;
+                            }
+                			
+                			if(userGrid.dataSource.data()[i].searchId != null && userGrid.dataSource.data()[i].searchId != "") {
+                				if (userGrid.dataSource.data()[i].programId == "system") {
+                					cValue += "|" + userGrid.dataSource.data()[i].searchId + "|" + userGrid.dataSource.data()[i].searchNm + "|" + userGrid.dataSource.data()[i].searchKey ;
+                				}
+                				else {
+                					cValue += "|" + userGrid.dataSource.data()[i].searchId + "|" + userGrid.dataSource.data()[i].searchNm;
+                				}
+                			}
+                			
+                			$.sub.fn_setCookie(cName, cValue);
+                		}
+                		
+                		mint.move('../sub-co/CO-00-00-001');
+                		
+                		$.sub.fn_closePopup();
+                	} catch ( e ) {
+                		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_saveUserConfig"});
+                	}
+                },
+                
+                
+                //-----------------------------------------------------------------------
+                // Description :: 쿠키 저장
+                //-----------------------------------------------------------------------
+                fn_setCookie : function(cName, cValue) {
+                	try {
+                		var date = new Date();
+                        date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+                        
+                        var expires = "; expires=" + date.toGMTString();
+                        
+                        document.cookie = cName + "=" + escape(cValue) + expires + "; path=/";
+                	} catch ( e ) {
+                		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setCookie"});
+                	}
+                },
+                
+                fn_deleteCookie : function(cName) {
+                	try {
+                		var expireDate = new Date();
+                        
+                        //어제 날짜를 쿠키 소멸 날짜로 설정한다.
+                        expireDate.setDate( expireDate.getDate() - 5 );
+                        document.cookie = cName + "= " + "; expires=" + expireDate.toGMTString() + "; path=/";
+                	} catch (e) {
+                		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_deleteCookie"});
+                	}
+                },
+                
+                
+                //-----------------------------------------------------------------------
+                // Description :: 팝업 닫기
+                //-----------------------------------------------------------------------
+                fn_closePopup : function() {
+                    $('#CO-01-00-010').modal('hide');
+                }
+	        }
+	    });
+	    
+	    
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+	    $('.componentList').on('dblclick', function () {
+            $.sub.fn_addSelectedData();
+        });
+	    
+	    $('.userList').on('dblclick', function () {
+            $.sub.fn_deleteRow();
+        });
+	    
+	    $('.btn-save').on('click', function () {
+            $.sub.fn_saveUserConfig();
+        });
+	    
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+	        
+	    
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================       
+	    $.sub.fn_init();
+	    mint.label.attachLabel(null);
+	});
+</script>
+

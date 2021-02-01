@@ -1,0 +1,626 @@
+<!--
+	Screen ID : OP-01-01-602
+	Screen NM : ISM 온라인 처리 결과 상세
+		[변경 이력]
+	* YYYYMMDD-###
+
+-->
+
+<!--location -->
+<div id="detail-header-div" class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-891"></lb></h2>
+		<ol class="breadcrumb">
+	        <li><lb class="lb-30"></lb></li>
+	        <li class="active"><strong><lb class="lb-891"></lb></strong></li>
+ 		</ol>
+	</div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!--row-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			            <a class="btn btn-w-m btn-default btn-outline btn-back"><i class="fa fa-reply"></i> <lb class="lb-311">이전화면</lb> </a>
+					</div>
+				</div>
+				<!--ibox-content end-->
+						
+           	</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+	
+	<!--row start-->
+	<div class="row">
+		<!--col-lg-12-->
+ 		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+            <div class="ibox float-e-margins">
+				<!--ibox-title-->
+                <div class="ibox-title">
+                	<div class="row">
+                		<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb class="lb-3004"></lb></span>
+                			<input id="integrationName" name="integrationName" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						<div class="col-sm-3">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb class="lb-3005"></lb></span>
+                			<input id="integrationId" name="integrationId" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb class="lb-895"></lb></span>
+                			<input id="globalId" name="globalId" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						</div>
+						
+						<hr class="hr-space">
+						<div class="row">
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb class="lb-893"></lb></span>
+                			<input id="srcSystemNm" name="srcSystemNm" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						
+						<div class="col-sm-3">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb>User ID</lb></span>
+                			<input id="userId" name="userId" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb>Sync / Env</lb></span>
+                			<input id="syncAndEnv" name="syncAndEnv" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+					</div>
+						
+						<hr class="hr-space">
+						<div class="row">
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb class="lb-894"></lb></span>
+                			<input id="tgtSystemNm" name="tgtSystemNm" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						
+						<div class="col-sm-3">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb class="lb-227"></lb></span>
+                			<input id="tranId" name="tranId" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb>수신목적지</lb></span>
+                			<input id="targetUrl" name="targetUrl" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+					</div>
+						
+						<hr class="hr-space">
+						<div class="row">
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb>Service Name</lb></span>
+                			<input id="serviceNm" name="serviceNm" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						<div class="col-sm-3">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb>Method</lb></span>
+                			<input id="method" name="method" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+						<div class="col-sm-4">
+                		<div class="form-group">
+                			<span class="lable_tag"><lb>requestVo</lb></span>
+                			<input id="requestVo" name="requestVo" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled">
+                		</div>
+						</div>
+					</div>	
+						
+						
+					<div class="ibox-tools">
+                   		<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H001')"></a>
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>	
+					</div>
+					</div>
+				<!-- ibox-title end -->
+				
+				<!-- ibox-content -->
+				<div class="ibox-content">
+					<!-- kendo table -->
+					<div id="example">
+						<div id="grid_detail"></div>
+					</div>
+					<!-- kendo table end -->
+            	</div>
+				<!--ibox content end-->
+       		</div>
+       		<!-- ibox float-e-margins end -->
+       	</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+</div>
+
+<div id="grid"></div>
+<script type="text/x-kendo-template" id="template">
+	<div class="toolbar">
+		<label class="category-label" for="category">Page:</label>
+			<select id="category" style="width: 80px">
+			 	
+			</select>
+  	</div>
+</script>
+
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "OP-01-01-602";
+		var detailCallUrl = "";
+		
+		$.extend({
+			main_detail : {
+				
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.ui.initScreen();
+						$.main_detail.fn_setCallUrl();
+						$.main_detail.fn_setResultGrid();
+						$.main_detail.fn_initCallData();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_init"});
+					}
+				},//end fn_init()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 조회 url
+				//-----------------------------------------------------------------------
+				fn_setCallUrl : function() {
+
+					try {
+					//url
+						var envVal = mint.common.commonCodeMap.get("environmentalValues");
+						if( !mint.common.isEmpty(envVal) ) {
+							if( !mint.common.isEmpty(envVal["system.ism.log.url"]) ) {
+								detailCallUrl = envVal["system.ism.log.url"] + "/custom/log/online/detail";
+							}else {
+								//alert("bb");
+							}
+							
+						} else {
+							//alert("aa");
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setCallUrl"});
+					}
+					
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallData : function() {
+					try {
+				      	{				      		
+						   mint.callService($.main_detail.fn_getSearchObject(), screenName, 'REST-R01-OP-01-01-602', '$.main_detail.fn_getDetailGridDataSource', {errorCall : true});
+				      	}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initCallData"});
+					}
+				},//end fn_initCallback()
+				
+				
+	            //-----------------------------------------------------------------------
+	            // Description :: 검색 조건 조회 request object 세팅
+	            //-----------------------------------------------------------------------
+	            fn_getSearchObject : function() {
+	            	try {
+	                    var searchObject = new Object();
+	                    
+	                    searchObject.processDate = mint.common.getScreenParam("processDate");
+	                    searchObject.integrationServiceId = mint.common.getScreenParam("integrationServiceId");
+	                    searchObject.globalId = mint.common.getScreenParam("globalId");
+	                    searchObject.serverName = mint.common.getScreenParam("serverName");
+	                    
+						searchObject.callUrl = detailCallUrl;
+	
+	                    return searchObject;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getSearchObject"});
+	                }
+	            },
+	            
+	            
+
+				//-----------------------------------------------------------------------
+				// Description ::  검색 결과 - Grid 설정
+				//-----------------------------------------------------------------------
+				fn_setResultGrid : function() {
+					
+					try {
+						//컬럼 레이블 아이디 세팅
+						var labelCoulmn = $.main_detail.fn_setGridColumnLabel();
+
+						var grid_detail = $("#grid_detail").kendoGrid({
+							dataSource : {
+				 				  data : ""
+				 				, page : 1
+				 				, pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+							}
+						    , sortable : true
+							, selectable: true
+							, resizable: true
+						    , columns : [
+						          {
+										  title 	: labelCoulmn['#lbl-stepIndex']
+										, field 	: "stepIndex"
+				 						, width 	: "50px"
+				 						, template	: "<span title='${stepIndex}'>${stepIndex}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-modelId']
+										, field 	: "modelId"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${modelId}'>${modelId}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-processContents']
+										, field 	: "processContents"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${processContents}'>${processContents}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-serverName']
+										, field 	: "serverName"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${serverName}'>${serverName}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-startTime']
+										, field 	: "startTime"
+				 						, width 	: "100px"
+				                        , template : '#=$.main.fn_viewTime(startTime)#'
+				 						//, template	: "<span title='${startTime}'>${startTime}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-elapsedTime'] + '(ms)'
+										, field 	: "elapsedTime"
+				 						, width 	: "70px"
+				 						, template	: "<span title='${elapsedTime}'>${elapsedTime}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-resultCode']
+										, field 	: "resultCodeNm"
+				 						, width 	: "70px"
+				 						, template	: '#=$.main_detail.fn_setColor(resultCodeNm)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-errorCode']
+										, field 	: "errorCode"
+				 						, width 	: "70px"
+				 						, template	: "<span title='${errorCode}'>${errorCode}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   },
+								   
+								   {   width : "80px"
+									 , title : labelCoulmn['#lbl-Popup']
+								     , headerAttributes : {
+								    	 style : "text-align: center; vertical-align:middle; font-weight:bold;"
+								     }
+								     , attributes : {
+								    	 style : "text-align: center; white-space: nowrap;"
+								     }
+									   
+									 , command : [
+									            {
+									              name  : "전문보기",
+									              width : "60px",
+									              click : function(e) {
+									            	  var row = $(e.target).closest("tr");
+														var dataItem = this.dataItem(row);
+														if(dataItem.childCnt > 0) {
+															return;
+														}
+														this.select(row);
+														
+														//mint.setDetailView('Y');
+														mint.common.setScreenParam("caller", "OP-01-01-602");
+														mint.common.setScreenParam("processDate", mint.common.replaceAll($("#processDate").val(), "/", ""));
+														mint.common.setScreenParam("integrationServiceId", dataItem.integrationServiceId);
+												        mint.common.setScreenParam("stepIndex", dataItem.stepIndex);
+												        mint.common.setScreenParam("id", dataItem.id);
+												        mint.common.setScreenParam("globalId", dataItem.globalId);
+												        mint.common.setScreenParam("serverName", dataItem.serverName);
+														
+									            	    mint.common.searchPopup('../sub-op/OP-01-01-605.html','OP-01-01-605');
+									              }
+									             }
+									]},
+									
+									
+									 {   width : "100px"
+										 , title : labelCoulmn['#lbl-StackTrace']
+									     , headerAttributes : {
+									    	 style : "text-align: center; vertical-align:middle;"
+									     }
+									
+									 	 , attributes : {
+								    	   style : "text-align: center; white-space: nowrap;"
+								         }
+										   
+										 , command : [
+										            {
+										              name  : "StackTrace",
+										              visible : function(dataItem) {
+										            	  return dataItem.resultCode == '9'
+										              },
+										              width : "60px",
+										              click : function(e) {
+										            	    var row = $(e.target).closest("tr");
+															var dataItem = this.dataItem(row);
+															if(dataItem.childCnt > 0) {
+																return;
+															}
+															this.select(row);
+															
+															//mint.setDetailView('Y');
+															mint.common.setScreenParam("caller", "OP-01-01-602");
+															mint.common.setScreenParam("processDate", mint.common.replaceAll($("#processDate").val(), "/", ""));
+															mint.common.setScreenParam("integrationServiceId", dataItem.integrationServiceId);
+													        mint.common.setScreenParam("stepIndex", dataItem.stepIndex);
+													        mint.common.setScreenParam("id", dataItem.id);
+										                 
+										            	  mint.common.searchPopup('../sub-op/OP-01-01-606.html','OP-01-01-606');
+										              }
+										             }
+										]}
+									]
+								   
+						    , dataBound: function (e) {
+						    	if(0 == $("#grid_detail").data().kendoGrid.dataSource.view().length) {
+						    		$("#grid_detail").children(".k-grid-content").height('150');
+						    	} else {
+						    		$("#grid_detail").children(".k-grid-content").height('auto');
+						    	}
+						    }
+						}).data("kendoGrid");
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setResultGrid"});
+					}
+				},//end fn_setResultGrid()
+				
+				
+				//-----------------------------------------------------------------------
+	            // Description :: grid status color 변경
+	            //-----------------------------------------------------------------------
+	            fn_setColor : function(val) {
+	                try {
+	                    if (val && val != null && val == mint.label.getLabel('lb-571'))
+	                        return "<b style='color:red'>" + val + "</b>";
+	                    else if (val && val != null && val == mint.label.getLabel('lb-511'))
+	                        return "<b style='color:blue'>" + val + "</b>";
+	                    else
+	                        return val;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setColor"});
+	                }
+	            },
+
+				//-----------------------------------------------------------------------
+				// Description :: 검색 결과 - Grid 컬럼 Label 설정
+				//-----------------------------------------------------------------------
+				fn_setGridColumnLabel : function() {
+					try {
+						var returnObject = {
+								  '#lbl-integrationServiceId': mint.label.getLabel('lb-154')
+								, '#lbl-integratonServiceName': mint.label.getLabel('lb-153')
+								, '#lbl-syncType': mint.label.getLabel('lb-162')
+								, '#lbl-globalId': mint.label.getLabel('lb-895')
+								, '#lbl-stepIndex': mint.label.getLabel('lb-900')   // ISM -> 단계
+								, '#lbl-modelId': mint.label.getLabel('lb-896')   // ISM -> 모델컴포넌트명
+								, '#lbl-processContents': mint.label.getLabel('lb-82') + mint.label.getLabel('lb-422')   // ISM -> 시스템ID
+								, '#lbl-startTime': mint.label.getLabel('lb-509') + mint.label.getLabel('lb-510')
+								, '#lbl-endTime': mint.label.getLabel('lb-530') + mint.label.getLabel('lb-510')
+								, '#lbl-elapsedTime': mint.label.getLabel('lb-495') + mint.label.getLabel('lb-510')
+								, '#lbl-resultCode': mint.label.getLabel('lb-532')   // ISM -> 결과
+								, '#lbl-errorCode': mint.label.getLabel('lb-461') + mint.label.getLabel('lb-354')   // ISM -> 에러코드
+								, '#lbl-Popup' : mint.label.getLabel('lb-911')
+								, '#lbl-StackTrace' : mint.label.getLabel('lb-912')
+						};
+						return returnObject;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setGridColumnLabel"});
+					}
+				},//end fn_setGridColumnLabel()
+				
+				
+				//-----------------------------------------------------------------------
+				// Description :: 전문보기 버튼클릭 이벤트
+				//-----------------------------------------------------------------------
+				fn_moveRequirementDetil : function() {
+					
+					try {
+					    mint.setDetailView('Y');
+					    mint.common.setScreenParam("caller", "OP-01-01-602");
+						mint.common.setScreenParam("processDate", mint.common.replaceAll($("#processDate").val(), "/", ""));
+						mint.common.setScreenParam("integrationServiceId", dataItem.integrationServiceId);
+				        mint.common.setScreenParam("stepIndex", dataItem.stepIndex);
+				        mint.common.setScreenParam("id", dataItem.id);
+						
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setGridColumnLabel"});
+					}
+				},//end fn_setGridColumnLabel()
+				
+				
+				
+				//-----------------------------------------------------------------------
+				// Description :: detail Grid DataSource
+				//-----------------------------------------------------------------------
+				fn_getDetailGridDataSource : function(jsonData) {
+					try {
+						var count = Object.keys(jsonData.list).length;
+	            		for(var i = 0; i < count; i++) {
+							if( jsonData.list[i].resultCode == '1'){
+								 jsonData.list[i].resultCodeNm = '성공';
+							} else if( jsonData.list[i].resultCode == '9'){
+								 jsonData.list[i].resultCodeNm = '실패';
+							}
+	            		}
+	            		
+	            		
+	            		for(var i = 0; i < count; i++) {
+							if( jsonData.list[i].errorCode == null){
+								 jsonData.list[i].errorCode = '';
+							} else {
+								
+							}
+	            		}
+	            		
+	            		$('#integrationId').val(jsonData.integrationServiceId);
+	            		$('#globalId').val(jsonData.globalId);
+	            		$('#integrationName').val(jsonData.integrationServiceName);
+	            		$('#srcSystemNm').val(jsonData.srcSystemName);
+	            		$('#tgtSystemNm').val(jsonData.tgtSystemName);
+	            		$('#tranId').val(jsonData.tranId);
+	            		$('#targetUrl').val(jsonData.targetUrl);
+	            		
+	            		$('#syncAndEnv').val(jsonData.syncType + " / " + jsonData.env);
+	            		$('#userId').val(jsonData.userId);
+	            		$('#requestVo').val(jsonData.requestVo);
+	            		$('#serviceNm').val(jsonData.serviceNm);
+	            		$('#method').val(jsonData.method);
+	            		
+	            		
+						var dataSource = new kendo.data.DataSource({
+							  data: jsonData.list
+						    , page:1
+						    //, pageSize:mint.ui.getPageSizesS({'currentPage' : true})
+						    , pageSize:30
+						});
+						
+						console.log(jsonData);
+						
+						//데이터 재설정
+						$("#grid_detail").data("kendoGrid").setDataSource(dataSource);
+						
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getDetailGridDataSource"});
+					}
+				},//end fn_getDetailGridDataSource()
+
+			}// end main
+		});// end extends
+		
+		//-----------------------------------------------------------------------
+		// Description :: 목록 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-back').on('click', function(e) {
+			mint.back(null);
+		});
+		
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main_detail.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+
+</script>
+
+<style>
+
+#grid_detail .k-grid-header
+{
+   padding: 0 !important;
+}
+
+#grid_detail .k-grid-content
+{
+   overflow-y: visible;
+}
+
+.k-grid tr {
+    cursor : pointer;
+}
+</style>
+

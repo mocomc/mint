@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<context:component-scan base-package="
+						 pep.per.mint.batch
+						,pep.per.mint.batch.job.an
+						,pep.per.mint.batch.job.co
+						,pep.per.mint.batch.job.op
+						,pep.per.mint.batch.job.su" />
+
+
+	<!--
+	<context:component-scan base-package="pep.per.mint.database.mybatis.dao" />
+ 	-->
+
+ 	<!-- enable autowire -->
+    <context:annotation-config />
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+     <!--
+    <beans:bean id = "org.h2.tools.Server"
+            class="org.h2.tools.Server"
+            factory-method="createTcpServer"
+            init-method="start"
+            destroy-method="stop">
+    	<beans:constructor-arg value="-tcp,-tcpAllowOthers,-tcpPort,1621" />
+	</beans:bean>
+
+     <beans:bean id="org.h2.tools.Server-WebServer" class="org.h2.tools.Server"
+    	factory-method="createWebServer" init-method="start">
+    	<beans:constructor-arg value="-web,-webPort,8083" />
+    </beans:bean>
+    -->
+
+	<!-- Properties resource for h2 test datasource  -->
+	<!--
+	<util:properties id="datasourceProperties" location="classpath:/config/datasource.test.h2.properties"/>
+	-->
+	<!--  Properties resource for oracle test datasource-->
+	<util:properties id="datasourceProperties" location="classpath:/config/datasource.test.properties"/>
+
+	<util:properties id="ifmDatasourceProperties" location="classpath:/config/datasource.test.properties"/>
+
+
+	<!-- Datasource for Test -->
+	<!--
+	1. initialSize : 풀의 초기 커넥션 갯수
+	2. maxActive : 최대 커넥션 갯수
+	3. maxWait : 커넥션이 존재하지 않을 때, 커넥션을 얻기까지 대기하는 최대 대기시간
+	4. maxIdle : Idle상태에 풀이 소유한 최대 커넥션 갯수
+	5. testOnBorrow : 풀에서 커넥션을 가져올시 커넥션의 유효성 검사
+	6. testOnReturn : 풀에 커넥션을 리턴할 때 커넥션의 유효성 검사
+	7. validationQuery : validate Query
+	8. testWhileIdle : Idle상태에 커넥션의 유효성 검사
+	9. timeBetweenEvictionRunsMillis : 설정된 주기를 통해 Evict(유효하지 않는 커넥션/정의된 시간이 만료된 커넥션을 풀에서 제거) 쓰레드를 수행
+	10. minEvictableIdleTimeMiilis : Evict 쓰레드를 수행시, 만료여부를 체크할 시간을 정의
+	11. numTestsPerEvictionRun : Evict 쓰레드를 수행시 수행할 커넥션의 갯수
+	12. removeAbandonedTimeout : 유효하지 않은 커넥션의 삭제시의 타임아웃
+	13. removeAbandoned : 유효하지 않는 커넥션의 제거 여부
+	14. logAbandoned : 유효하지 않는 커넥션을 생성한 코드 위치 로그생성 여부
+	-->
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<beans:property name="driverClassName"	value="#{datasourceProperties['driverClassName']}" />
+		<beans:property name="url" 				value="#{datasourceProperties['url']}" />
+		<beans:property name="username" 		value="#{datasourceProperties['username']}" />
+		<beans:property name="password" 		value="#{datasourceProperties['password']}" />
+		<beans:property name="maxActive" 		value="4" />
+		<beans:property name="maxIdle" 			value="2"/>
+	    <beans:property name="maxWait" 			value="#{datasourceProperties['maxWait']}"/>
+	    <beans:property name="validationQuery" 	value="#{datasourceProperties['validationQuery']}"/>
+	    <beans:property name="testOnBorrow" 	value="#{datasourceProperties['testOnBorrow']}"/>
+	    <beans:property name="testOnReturn" 	value="#{datasourceProperties['testOnReturn']}"/>
+	    <beans:property name="testWhileIdle" 	value="#{datasourceProperties['testWhileIdle']}"/>
+	    <beans:property name="timeBetweenEvictionRunsMillis" value="#{datasourceProperties['timeBetweenEvictionRunsMillis']}"/>
+	</beans:bean>
+
+	<beans:bean id="ifmDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<beans:property name="driverClassName"	value="#{ifmDatasourceProperties['driverClassName']}" />
+		<beans:property name="url" 				value="#{ifmDatasourceProperties['url']}" />
+		<beans:property name="username" 		value="#{ifmDatasourceProperties['username']}" />
+		<beans:property name="password" 		value="#{ifmDatasourceProperties['password']}" />
+		<beans:property name="maxActive" 		value="4" />
+		<beans:property name="maxIdle" 			value="2"/>
+	    <beans:property name="maxWait" 			value="#{ifmDatasourceProperties['maxWait']}"/>
+	    <beans:property name="validationQuery" 	value="#{ifmDatasourceProperties['validationQuery']}"/>
+	    <beans:property name="testOnBorrow" 	value="#{ifmDatasourceProperties['testOnBorrow']}"/>
+	    <beans:property name="testOnReturn" 	value="#{ifmDatasourceProperties['testOnReturn']}"/>
+	    <beans:property name="testWhileIdle" 	value="#{ifmDatasourceProperties['testWhileIdle']}"/>
+	    <beans:property name="timeBetweenEvictionRunsMillis" value="#{ifmDatasourceProperties['timeBetweenEvictionRunsMillis']}"/>
+	</beans:bean>
+
+	<!-- transaction manager, use JtaTransactionManager for global tx -->
+    <beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="dataSource" />
+    </beans:bean>
+
+    <beans:bean id="ifmTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="ifmDataSource" />
+    </beans:bean>
+
+    <beans:bean id="gsspTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="dataSource" />
+    </beans:bean>
+
+	<!-- iip mapper interface scanner -->
+	<beans:bean id="tagMapperScannerConfigurer"  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<beans:property name="basePackage" value="pep.per.mint.batch.mapper.an, pep.per.mint.batch.mapper.co, pep.per.mint.batch.mapper.op, pep.per.mint.batch.mapper.su" />
+		<beans:property name="sqlSessionFactoryBeanName" value="sqlSessionFactiory"/>
+	</beans:bean>
+
+	<!-- ifm mapper interface scanner -->
+	<beans:bean id="ifmMapperScannerConfigurer"  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<beans:property name="basePackage" value="pep.per.mint.batch.mapper.ifm" />
+		<beans:property name="sqlSessionFactoryBeanName" value="ifmSqlSessionFactiory"/>
+	</beans:bean>
+
+	<!-- gssp mapper interface scanner -->
+	<beans:bean id="gsspMapperScannerConfigurer"  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<beans:property name="basePackage" value="pep.per.mint.batch.mapper.gssp" />
+		<beans:property name="sqlSessionFactoryBeanName" value="gsspSqlSessionFactiory"/>
+	</beans:bean>
+
+	<!-- sqlSessionFactory bean -->
+	<beans:bean id="sqlSessionFactiory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="typeAliasesPackage" value="pep.per.mint.common.data.basic" />
+	</beans:bean>
+
+	<!-- sqlSessionFactory bean For IFM -->
+	<beans:bean id="ifmSqlSessionFactiory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="ifmDataSource" />
+		<beans:property name="typeAliasesPackage" value="pep.per.mint.common.data.basic" />
+	</beans:bean>
+
+	<!-- sqlSessionFactory bean For GSSP -->
+	<beans:bean id="gsspSqlSessionFactiory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="typeAliasesPackage" value="pep.per.mint.common.data.basic" />
+	</beans:bean>
+
+	<!-- from mi manager(agent,broker) monitoring -->
+	<!--
+	<beans:bean id="miMonitor" class="pep.per.mint.solution.mi.service.MIMonitorService"/>
+	-->
+	<beans:bean id="batchManager" class="pep.per.mint.batch.BatchManager" init-method="loadJob" destroy-method="stopBachManager">
+		<beans:property name="sqlSessionFactory" ref="sqlSessionFactiory"/>
+		<beans:property name="ifmSqlSessionFactory" ref="ifmSqlSessionFactiory"/>
+        <beans:property name="gsspSqlSessionFactory" ref="gsspSqlSessionFactiory"/>
+	</beans:bean>
+
+
+
+</beans:beans>

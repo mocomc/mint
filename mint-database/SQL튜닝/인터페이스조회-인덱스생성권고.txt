@@ -1,0 +1,42 @@
+   - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A0001 on IIP.TSU0219("USER_ID");
+
+	CREATE INDEX IDX_01_TSU0219 on TSU0219("USER_ID");
+
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A0003 on IIP.TIM0302("P_BIZ_ID","C_BIZ_ID");
+
+ 	create index IDX_01_TIM0302 on TIM0302("P_BIZ_ID","C_BIZ_ID");
+
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A0004 on IIP.TAN0201("REG_USER","INTERFACE_ID");
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A0005 on IIP.TAN0213("INTERFACE_ID","RESOURCE_TYP
+    E","SYSTEM_ID");
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A0007 on IIP.TAN0213("INTERFACE_ID","SYSTEM_ID");
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A000A on IIP.TAN0219("INTERFACE_ID","USER_ID");
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A000D on IIP.TIM0002("CHANNEL_ID","CHANNEL_NM");
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A000F on IIP.TIM0102("C_SYS_ID");
+
+  - Consider running the Access Advisor to improve the physical schema design
+    or creating the recommended index.
+    create index IIP.IDX$$_105A0010 on IIP.TIM0403("SYSTEM_ID");

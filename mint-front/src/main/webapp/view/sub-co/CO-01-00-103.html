@@ -1,0 +1,98 @@
+<!-- Error Dialog -->
+<div class="modal-mint-alert inmodal-original" id="errorDialog" tabindex="-1" role="dialog"  aria-hidden="false">
+    <div class="modal-dialog-original">
+        <div class="modal-content-original animated fadeIn">
+            <div class="modal-header-original">
+                <button type="button" class="close" data-dismiss="modal">
+	                <span aria-hidden="true">&times;</span>
+	                <span class="sr-only">Close</span>
+                </button>
+                <i class="fa fa-times-circle modal-icon-original" style="color: orange; "></i>
+                <h3 id="CO-01-00-103-Title" class="modal-title-original" style="color: orange; "><lb class="lb-463"></lb></h3>
+                <large><lb class="lb-999999"></lb></large>
+            </div>
+            <div class="full-height-scroll">
+	            <div class="modal-body-original" style="height: 180px;" >
+					<p>
+						<h4><lb class="lb-505"></lb></h4>
+						<small id="CO-01-00-103-errorCd"></small>
+						<br><br>
+						<h4><lb class="lb-462"></lb></h4>
+						<small id="CO-01-00-103-errorMsg"></small>
+						<br><br>
+						<h4><lb class="lb-462"></lb> <lb class="lb-464"></lb></h4>
+						<small id="CO-01-00-103-errorDetail"></small>
+					</p>
+	            </div>
+            </div>
+            <div class="modal-footer-original">
+                <button type="button" class="btn btn-warning btn-pop-logout" data-dismiss="modal" style="display: none"><lb class="lb-6"></lb></button>
+                <button type="button" class="btn btn-danger btn-outline btn-pop-close" data-dismiss="modal"><lb class="lb-506"></lb></button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "CO-01-00-103";
+	$.extend({
+		error : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.ui.initScreen({isPopupScroll:true, isDraggable:false});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.error.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//TODO
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.error.fn_initCallback"});
+				}
+			}//end fn_initCallback()
+		}// end error
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+	$(document).keypress(function(event) {
+		var keycode = (event.keyCode ? event.keyCode : event.which);
+		if(keycode == '13' || keycode == '32' || keycode == '27'){
+			$('.btn-pop-close').click();
+		}
+	});
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.error.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>

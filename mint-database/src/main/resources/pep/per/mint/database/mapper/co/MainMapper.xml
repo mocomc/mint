@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.co.MainMapper">
+  	<!--
+  	<cache/>
+  	-->
+  	
+  	
+	 
+	<!-- 
+		오류 / 지연 현황 조회
+	-->
+	<select id="getErrorDelayList" parameterType="Map" resultMap="TRLogResult">
+		select
+              a.MASTERLOG_ID
+            , a.MSG_DATETIME
+            , a.GLOBAL_ID
+            , a.ERROR_MSG
+            , a.INTEGRATION_ID
+            , a.INTERFACE_ID
+            , a.INTERFACE_NM
+            , a.LOG_TIME
+        from
+            (
+            select
+                rownum as rnum
+                , MASTERLOG_ID
+                , MSG_DATETIME
+                , GLOBAL_ID
+                , ERROR_MSG
+                , INTEGRATION_ID
+                , INTERFACE_ID
+                , INTERFACE_NM
+                , LOG_TIME
+            from
+                (
+                select
+                    a.masterlog_id    AS MASTERLOG_ID
+                    , a.msg_datetime  AS MSG_DATETIME
+                    , a.global_id     AS GLOBAL_ID
+                    , a.error_msg     AS ERROR_MSG
+                    , b.intf_id       AS INTEGRATION_ID
+                    , c.INTERFACE_ID  as INTERFACE_ID
+                    , c.interface_nm  AS INTERFACE_NM
+                    , to_date(substr(a.msg_datetime, 0, 14), 'YYYY-MM-DD HH24:MI:SS') AS LOG_TIME
+                from
+                    (
+                        select
+                            rownum as rnum
+                            , masterlog_id
+                                , msg_datetime
+                                , global_id
+                                , error_msg
+                        from
+                            (    
+                            select
+                                masterlog_id
+                                , msg_datetime
+                                , global_id
+                                , '지연처리중입니다' as error_msg
+                            from
+                                masterlog
+                            where
+                                msg_status = '01'
+                                and to_date(substr(msg_datetime, 0, 14), 'YYYY-MM-DD HH24:MI:SS') between to_date(sysdate - 1/(24*60)*60*4, 'YYYY-MM-DD HH24:MI:SS') and to_date(sysdate - 1/(24*60)*10, 'YYYY-MM-DD HH24:MI:SS')
+                            order by 
+                                msg_datetime desc
+                            )
+                        where
+                            rownum <![CDATA[<=]]> 4
+                            
+                        union all
+                        
+                        select
+                            rownum as rnum
+                            , masterlog_id
+                            , msg_datetime
+                            , global_id
+                            , error_msg
+                        from
+                            (
+                            select 
+                                distinct a.masterlog_id
+                                , a.msg_datetime
+                                , a.global_id
+                                , b.error_msg
+                            from
+                                masterlog a, detaillog_err b
+                            where
+                                a.masterlog_id = b.masterlog_id
+                                and a.msg_datetime = b.msg_datetime
+                                and a.msg_status = '99'
+                                and to_char(to_date(substr(a.msg_datetime, 0, 8), 'yyyymmdd'), 'yyyymmdd') = to_char(sysdate, 'yyyymmdd')
+                            order by msg_datetime desc
+                            )
+                        where
+                            rownum <![CDATA[<=]]> 4
+                    ) a, masterlog_id_map b, tan0201 c
+                where
+                    a.masterlog_id = b.masterlog_id
+                    <!-- and b.intf_id = c.interface_id -->
+                    and b.intf_id = c.integration_id
+                order by
+                    a.msg_datetime desc
+                ) 
+            ) a
+            <if test="isInterfaceAdmin == null or isInterfaceAdmin eq 'N'.toString()">
+            inner join (
+            	select y.INTEGRATION_ID 
+            	from TAN0219 x, TAN0201 y 
+            	where x.INTERFACE_ID = y.INTERFACE_ID
+            	and x.DEL_YN = 'N'
+            	and x.USER_ID = #{userId}
+            ) b on b.INTEGRATION_ID = a.INTEGRATION_ID
+            </if>
+        where
+            a.rnum <![CDATA[<=]]> 4
+	</select>
+	
+	<resultMap id="TRLogResult" type="TRLog" >
+		<id property="id"                 column="MASTERLOG_ID"/>
+		<result property="logKey1"        column="MASTERLOG_ID" />
+		<result property="logKey2"        column="MSG_DATETIME" />
+		<result property="globalId"       column="GLOBAL_ID" />
+		<result property="errorMsg"       column="ERROR_MSG" />
+		<result property="interfaceId"    column="INTERFACE_ID" />
+		<result property="integrationId"    column="INTEGRATION_ID" />
+		<result property="interfaceNm"    column="INTERFACE_NM" />
+		<result property="logTime"    column="LOG_TIME" />
+	</resultMap> 
+	
+	
+	<!-- 
+                금일 / 전일 처리 현황
+    -->
+    <select id="getProceedList" parameterType="Map" resultMap="StatisticsResult">
+        select
+		    a.YEAR
+            , a.MONTH
+            , a.DAY
+            , a.HOUR
+		    , nvl((sum(d.st_processing) + sum(d.st_finished) + sum(d.st_send_err)), 0) AS TCNT
+		from
+		    (
+                SELECT
+		            time
+		            , SUBSTR(TIME, 0, 4) AS YEAR
+		            , SUBSTR(TIME, 5, 2) AS MONTH
+		            , SUBSTR(TIME, 7, 2) AS DAY
+		            , SUBSTR(TIME, 9, 2) AS HOUR
+		        FROM
+		            (
+				        SELECT 
+				            to_char(TIME,  'yyyyMMDDHH24') as time
+				        FROM 
+				            ( 
+				                SELECT 
+				                    TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + (LEVEL * 1 / 24) - 1 / 24 AS TIME  
+				                FROM DUAL 
+				                CONNECT BY LEVEL * 1 / 24 <![CDATA[<=]]> TO_DATE (#{searchStartDate}, 'yyyyMMDDHH24') - TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + 1 / 24
+				            ) 
+                    )
+		    ) a
+		    left outer join 
+                (
+                    select b.st_year, b.st_month, b.st_day, b.st_hour, b.st_processing, b.st_finished, b.st_send_err 
+                    from 
+                        SI_STAT_INTF_HOUR b
+                        <if test="isInterfaceAdmin == null or isInterfaceAdmin eq 'N'.toString()">
+                        <!-- inner join tan0219 c on b.intf_id = c.interface_id and c.del_yn = 'N' and c.user_id = #{userId} -->
+                        inner join (
+                        	select y.INTEGRATION_ID
+                        	from TAN0219 x, TAN0201 y 
+                        	where x.INTERFACE_ID = y.INTERFACE_ID
+	                        	and x.DEL_YN = 'N' 
+	                        	and x.USER_ID = #{userId}
+                        ) c on b.intf_id = c.INTEGRATION_ID 
+                        </if>
+                ) d on a.year = d.st_year and a.month = d.st_month and a.day = d.st_day and a.hour = d.st_hour
+		group by a.time, a.YEAR, a.month, a.day, a.hour
+		order by a.time asc
+    </select>
+    
+    <resultMap id="StatisticsResult" type="Statistics" >
+        <result property="year"        column="YEAR" />
+        <result property="month"        column="MONTH" />
+        <result property="day"       column="DAY" />
+        <result property="hour"       column="HOUR" />
+        <result property="tCnt"       column="TCNT" />
+    </resultMap> 
+    
+    <!-- 
+                업무시스템 별 현황
+    -->
+    <select id="getSystemList" parameterType="Map" resultMap="StatisticsResult">
+        select
+		    a.YEAR
+            , a.MONTH
+            , a.DAY
+            , a.HOUR
+		    , nvl((sum(d.st_processing) + sum(d.st_finished) + sum(d.st_send_err)), 0) AS TCNT
+		from    
+		    (
+                SELECT
+                    time
+                    , SUBSTR(TIME, 0, 4) AS YEAR
+                    , SUBSTR(TIME, 5, 2) AS MONTH
+                    , SUBSTR(TIME, 7, 2) AS DAY
+                    , SUBSTR(TIME, 9, 2) AS HOUR
+                FROM
+                    (
+				        SELECT 
+				            to_char(TIME,  'yyyyMMDDHH24') as time
+				        FROM 
+				            ( 
+				                SELECT 
+				                    TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + (LEVEL * 1 / 24) - 1 / 24 AS TIME  
+				                FROM DUAL 
+				                CONNECT BY LEVEL * 1 / 24 <![CDATA[<=]]> TO_DATE (#{searchStartDate}, 'yyyyMMDDHH24') - TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + 1 / 24
+				            )
+                    ) 
+		    ) a
+		    left outer join 
+		        (
+		        select
+		            b.st_processing
+		            , b.st_finished
+		            , b.st_send_err
+		            , b.st_year
+		            , b.st_month
+		            , b.st_day
+		            , b.st_hour
+		        from
+		            SI_STAT_INTF_HOUR b
+		            <if test="searchSystem != 'all'">
+		            <!-- inner join (select
+								    distinct 
+								    x.interface_id
+								from
+								    tim0101 a, tan0213 x
+								where
+								    a.system_id = x.system_id
+								    and x.node_type = 0
+								    and a.system_cd = #{searchSystem}
+                    ) c on b.intf_id = c.interface_id -->
+		            inner join (select
+								    distinct 
+								    y.INTEGRATION_ID 
+								from 
+								    tim0101 a, tan0213 x, TAN0201 y 
+								where 
+								    a.system_id = x.system_id 
+								    --and x.node_type = 0 
+								    and a.system_cd = #{searchSystem} 
+								    and x.INTERFACE_ID = y.INTERFACE_ID 
+                    ) c on b.intf_id = c.INTEGRATION_ID 
+		            </if>
+		            <if test="isInterfaceAdmin == null or isInterfaceAdmin eq 'N'.toString()">
+		            <!-- inner join (select interface_id from tan0219 where del_yn = 'N' and user_id = #{userId}) d on b.intf_id = d.interface_id -->
+		            inner join (
+		            	select y.INTEGRATION_ID 
+		            	from tan0219 x, TAN0201 y 
+		            	where x.INTERFACE_ID = y.INTERFACE_ID
+		            		and x.del_yn = 'N' 
+		            		and x.user_id = #{userId}
+		            ) d on b.intf_id = d.INTEGRATION_ID
+		            </if>
+                ) d on a.year = d.st_year and a.month = d.st_month and a.day = d.st_day and a.hour = d.st_hour
+		group by a.time, a.YEAR, a.month, a.day, a.hour
+		order by a.time asc
+    </select>
+    
+    <!-- 
+                인터페이스 별 현황
+    -->
+    <select id="getInterfaceList" parameterType="Map" resultMap="StatisticsResult">
+        select
+            a.YEAR
+            , a.MONTH
+            , a.DAY
+            , a.HOUR
+            , nvl((sum(b.st_processing) + sum(b.st_finished) + sum(b.st_send_err)), 0) AS TCNT
+        from
+            (
+                SELECT
+                    time
+                    , SUBSTR(TIME, 0, 4) AS YEAR
+                    , SUBSTR(TIME, 5, 2) AS MONTH
+                    , SUBSTR(TIME, 7, 2) AS DAY
+                    , SUBSTR(TIME, 9, 2) AS HOUR
+                FROM
+                    (
+		                SELECT 
+		                    to_char(TIME,  'yyyyMMDDHH24') as time
+		                FROM 
+		                    ( 
+		                        SELECT 
+		                            TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + (LEVEL * 1 / 24) - 1 / 24 AS TIME  
+		                        FROM DUAL 
+		                        CONNECT BY LEVEL * 1 / 24 <![CDATA[<=]]> TO_DATE (#{searchStartDate}, 'yyyyMMDDHH24') - TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + 1 / 24
+		                    )
+                    )
+            ) a
+            left outer join 
+                (
+                select
+                    b.st_processing
+                    , b.st_finished
+                    , b.st_send_err
+                    , b.st_year
+                    , b.st_month
+                    , b.st_day
+                    , b.st_hour
+                from
+                    SI_STAT_INTF_HOUR b
+                    <if test="isInterfaceAdmin == null or isInterfaceAdmin eq 'N'.toString()">
+                    <!-- inner join (select interface_id from tan0219 where del_yn = 'N' and user_id = #{userId}) d on b.intf_id = d.interface_id -->
+                    inner join (
+                    	select y.INTEGRATION_ID 
+                    	from tan0219 x, TAN0201 y
+                    	where x.INTERFACE_ID = y.INTERFACE_ID
+                    		and x.del_yn = 'N' 
+                    		and x.user_id = #{userId}
+                    ) d on b.intf_id = d.INTEGRATION_ID
+                    </if>
+                where
+                    1=1
+                     <if test="searchInterface != 'all'">
+                    and b.intf_id = #{searchInterface}
+                    </if>
+                ) b on a.year = b.st_year and a.month = b.st_month and a.day = b.st_day and a.hour = b.st_hour
+        group by a.time, a.YEAR, a.month, a.day, a.hour
+        order by a.time asc
+    </select>
+    
+    <!-- 
+                프로세스 별 현황
+    -->
+    <select id="getProcessList" parameterType="Map" resultMap="StatisticsResult">
+        select
+            substr(a.time, 0, 4)      AS YEAR
+            , substr(a.time, 5, 2)    AS MONTH
+            , substr(a.time, 7, 2)    AS DAY
+            , substr(a.time, 9, 2)    AS HOUR
+            , nvl((sum(b.st_processing) + sum(b.st_finished) + sum(b.st_send_err)), 0) AS TCNT
+        from
+            (
+                SELECT 
+                    to_char(TIME,  'yyyyMMDDHH24') as time
+                FROM 
+                    ( 
+                        SELECT 
+                            TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + (LEVEL * 1 / 24) - 1 / 24 AS TIME  
+                        FROM DUAL 
+                        CONNECT BY LEVEL * 1 / 24 <![CDATA[<=]]> TO_DATE (#{searchStartDate}, 'yyyyMMDDHH24') - TO_DATE (#{searchEndDate}, 'yyyyMMDDHH24') + 1 / 24
+                    ) 
+            ) a
+            left outer join SI_STAT_INTF_HOUR b on a.time = concat(concat(concat(b.st_year, b.st_month), b.st_day), b.st_hour) 
+            <if test="searchBusiness != 'all'">
+            and b.intf_id in (select distinct a.interface_id
+                              from TAN0218 a 
+                              inner join (select C_BIZ_ID from TIM0302 where P_BIZ_ID = #{searchBusiness}) b on a.BUSINESS_ID = b.C_BIZ_ID
+                             )
+            </if>
+        group by a.time, a.YEAR, a.month, a.day, a.hour
+        order by a.time asc
+    </select>
+    
+    
+    <!-- 
+               장애 발생 현황
+    -->
+	<select id="getErrorList" parameterType="Map" resultMap="StatisticsResult1">
+		select 
+			  a.PYEAR
+			, a.PMONTH
+			, a.PDAY
+			, nvl(b.REG_ECNT, 0) as REG_ECNT
+			, nvl(b.NOREG_ECNT, 0) as NOREG_ECNT
+		from
+		(
+			select
+				  chkDate
+				, substr(chkDate, 0, 4) as pYear
+				, substr(chkDate, 5, 2) as pMonth
+				, substr(chkDate, 7, 2) as pDay
+				, 'NOREGED' as isReged
+			from 
+			(
+				select to_char(chkDate, 'yyyyMMDD') as chkDate
+				from
+				(
+					select to_date(#{endDate}, 'yyyyMMDD') + (LEVEL ) - 1 AS chkDate 
+					from dual
+					connect by level <![CDATA[<=]]> to_date(#{startDate}, 'yyyyMMDD') - to_date(#{endDate}, 'yyyyMMDD') + 1
+				)
+			)
+		) a
+		left outer join 
+		(
+			select 
+				  pYEAR
+				, pMONTH
+				, pDAY
+				, REG_ECNT
+				, NOREG_ECNT
+			from 
+			(
+				select 
+					  pYEAR
+					, pMONTH
+					, pDAY
+					, sum(nvl(decode(ISREGED, 'REGED', 1), 0)) as REG_ECNT
+					, sum(nvl(decode(ISREGED, 'NOREGED', 1), 0)) as NOREG_ECNT
+				from 
+				(
+					
+					select
+						  'NOREGED' as ISREGED
+						, SUBSTR(i.START_DATE, 0, 4) as pYEAR
+						, SUBSTR(i.START_DATE, 5, 2) as pMONTH
+						, SUBSTR(i.START_DATE, 7, 2) as pDAY
+						, i.INTERFACE_ID
+						, i.START_DATE
+						, i.SEQ 
+					from 
+					(
+						select INTERFACE_ID, START_DATE, SEQ  
+						from TOP0309
+						where DEL_YN = 'N'
+						
+						minus 
+						
+						select INTERFACE_ID, START_DATE, SEQ  
+						from TOP0310
+					) i
+					inner join 
+					(
+						<!-- select distinct INTERFACE_ID 
+						from TAN0219
+						where DEL_YN = 'N'
+						<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							and USER_ID = #{userId}
+							</otherwise>
+						</choose>  -->
+						select distinct y.INTEGRATION_ID 
+						from TAN0219 x, TAN0201 y
+						where x.INTERFACE_ID = y.INTERFACE_ID
+							and x.DEL_YN = 'N'
+						<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							and x.USER_ID = #{userId}
+							</otherwise>
+						</choose> 
+					) j on j.INTEGRATION_ID = i.INTERFACE_ID
+					group by 
+						  SUBSTR(i.START_DATE, 0, 4) 
+						, SUBSTR(i.START_DATE, 5, 2) 
+						, SUBSTR(i.START_DATE, 7, 2) 
+						, i.INTERFACE_ID
+						, i.START_DATE
+						, i.SEQ
+					
+					
+					union
+					
+				
+					select 
+						  'REGED' as ISREGED
+						, SUBSTR(START_DATE, 0, 4) as pYEAR
+						, SUBSTR(START_DATE, 5, 2)as pMONTH
+						, SUBSTR(START_DATE, 7, 2)as pDAY
+						, INTERFACE_ID
+						, START_DATE
+						, SEQ 
+					from 
+					(
+						select m.INTERFACE_ID, m.START_DATE, m.SEQ
+						from 
+						(
+							select l.INTERFACE_ID, l.START_DATE, l.SEQ
+							from (
+								select PROBLEM_ID
+								from TOP0308
+								where DEL_YN = 'N'
+							) k
+							inner join 
+							(
+								select PROBLEM_ID, INTERFACE_ID, START_DATE, SEQ
+								from TOP0310
+							) l on l.PROBLEM_ID = k.PROBLEM_ID
+						) m
+						inner join
+						(
+							<!-- select distinct INTERFACE_ID
+							from TAN0219
+							where DEL_YN = 'N'
+							<choose>
+								<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+								</when>
+								<otherwise>
+								and USER_ID = #{userId}
+								</otherwise>
+							</choose> --> 
+							select distinct y.INTEGRATION_ID
+							from TAN0219 x, TAN0201 y
+							where x.INTERFACE_ID = y.INTERFACE_ID
+								and x.DEL_YN = 'N'
+							<choose>
+								<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+								</when>
+								<otherwise>
+								and x.USER_ID = #{userId}
+								</otherwise>
+							</choose>
+						) n on n.INTEGRATION_ID = m.INTERFACE_ID
+						
+						union
+						
+						select p.INTERFACE_ID, p.START_DATE, p.SEQ
+						from 
+						(
+							select PROBLEM_ID
+							from TOP0308
+							where DEL_YN = 'N'
+							<choose>
+								<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+								</when>
+								<otherwise>
+								and REG_USER = #{userId}
+								</otherwise>
+							</choose>
+						) o
+						inner join 
+						(
+							select PROBLEM_ID, INTERFACE_ID, START_DATE, SEQ
+							from TOP0310 
+						) p on p.PROBLEM_ID = o.PROBLEM_ID
+					)
+					group by 
+						  SUBSTR(START_DATE, 0, 4) 
+						, SUBSTR(START_DATE, 5, 2) 
+						, SUBSTR(START_DATE, 7, 2) 
+						, INTERFACE_ID
+						, START_DATE
+						, SEQ
+				)
+				group by 
+					  pYEAR
+					, pMONTH
+					, pDAY
+			)
+			
+		) b on b.pYEAR = a.pYEAR and b.pMONTH = a.pMONTH and b.pDAY = a.pDAY
+		order by 
+			  pYEAR, pMONTH, pDAY
+	</select>
+    
+     <resultMap id="StatisticsResult1" type="Statistics" >
+        <result property="year"        column="PYEAR" />
+        <result property="month"        column="PMONTH" />
+        <result property="day"       column="PDAY" />
+        <result property="eCntReg"       column="REG_ECNT" />
+        <result property="eCntNoreg"       column="NOREG_ECNT" />
+    </resultMap> 
+        
+    <!-- 
+               개발 진행 현황 - 개발/테스트/이행/완료 조회
+    -->
+    <select id="getDevProceedList" resultMap="devProceedResult">
+        select 
+        	  nvl(min(decode(STATUS_TYPE, '심의완료', cnt)), 0) as REVIEW_C_CNT 
+        	, nvl(min(decode(STATUS_TYPE, '결재완료', cnt)), 0) as APPROVAL_C_CNT 
+        	, nvl(min(decode(STATUS_TYPE, '개발완료', cnt)), 0) as DEV_C_CNT 
+        	, nvl(min(decode(STATUS_TYPE, '테스트완료', cnt)), 0) as TEST_C_CNT
+        	, nvl(min(decode(STATUS_TYPE, '이행결재완료', cnt)), 0) as REAL_APPROVAL_C_CNT
+        	, nvl(min(decode(STATUS_TYPE, '이행완료', cnt)), 0) as REAL_C_CNT
+        	
+        	, nvl(min(decode(STATUS_TYPE, '심의완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '결재완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '개발완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '테스트완료', cnt)), 0)
+        	  + nvl(min(decode(STATUS_TYPE, '이행결재완료', cnt)), 0) as T_R_CNT 
+        	
+        	, nvl(min(decode(STATUS_TYPE, '미지정', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '심의완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '결재완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '개발완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '이행완료', cnt)), 0) 
+        	  + nvl(min(decode(STATUS_TYPE, '이행결재완료', cnt)), 0)
+        	  + nvl(min(decode(STATUS_TYPE, '테스트완료', cnt)), 0) as T_CNT 
+        from 
+        (
+        	select 
+        		  STATUS_TYPE 
+        		, count(*) as cnt 
+        	from 
+        	( 
+        		select 
+        			CASE 
+	        			WHEN a.STATUS like 'D%' then '심의완료' 
+	        			WHEN (a.STATUS = 'F0' 
+                       		or a.STATUS = 'F1' 
+                       		or a.STATUS = 'F2' 
+                       		or a.STATUS = 'F3') then '결재완료'
+	        			WHEN a.STATUS = 'G0' then '개발완료' 
+	        			WHEN a.STATUS = 'H0' then '테스트완료' 
+	        			WHEN a.STATUS = 'F4' then '이행결재완료'
+	        			WHEN a.STATUS = 'I0' then '이행완료' 
+	        			ELSE '미지정' 
+	        		END AS STATUS_TYPE 
+	        	from TAN0101 a
+	        		inner join TAN0201 c on a.INTERFACE_ID = c.INTERFACE_ID and c.DEL_YN = 'N' 
+	        	<if test="isInterfaceAdmin == null or isInterfaceAdmin eq 'N'.toString()">
+	        		inner join TAN0219 b on a.INTERFACE_ID = b.INTERFACE_ID and b.DEL_YN = 'N' and b.USER_ID = #{userId}
+	        	</if> 
+	        	where a.DEL_YN = 'N'
+	        ) 
+	    group by 
+	    	STATUS_TYPE
+	    )
+        
+    </select>
+    
+    <resultMap id="devProceedResult" type="DevelopmentProceed" >
+    	<result property="reviewCCnt"     column="REVIEW_C_CNT" />
+    	<result property="approvalCCnt"     column="APPROVAL_C_CNT" />
+    	<result property="devCCnt"     column="DEV_C_CNT" />
+    	<result property="testCCnt"     column="TEST_C_CNT" />
+    	<result property="realApprovalCCnt"     column="REAL_APPROVAL_C_CNT" />
+    	<result property="realCCnt"     column="REAL_C_CNT" />
+    	<result property="tRCnt"     column="T_R_CNT" />
+        <result property="tCnt"     column="T_CNT" />
+    </resultMap> 
+</mapper>

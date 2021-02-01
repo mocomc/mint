@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.zz.BusinessPathMigBatchMapper">
+  	<!--
+  	<cache/>
+  	-->
+ 
+	<!-- 
+	public List<Map<String, String>>selectMappingList();
+	 -->
+	<select id="selectMappingList" resultMap="businessMap">
+		select 
+			 businessId
+  			,add_To_businessId
+		from tmp_biz_leaf_map
+	</select>
+	
+	<resultMap type="java.util.Map" id="businessMap">
+		<result property="businessId" column="businessId"/>
+		<result property="addToBusinessId" column="add_To_businessId"/>
+	</resultMap>
+	
+	<insert id="insertL1Business">
+		INSERT INTO TIM0302
+			(P_BIZ_ID, C_BIZ_ID, DEPTH, DEL_YN, REG_DATE, REG_USER)
+			SELECT
+			  a.P_BIZ_ID    ,
+			  #{businessId} ,
+			  decode(a.DEPTH,0,1,2) ,
+			  'N',
+			  to_char(sysdate,'yyyymmddHH24miss'),
+			  'iip'
+			FROM TIM0302 a
+			WHERE a.C_BIZ_ID = #{addToBusinessId}
+			UNION ALL
+			SELECT
+			  #{businessId},
+			  #{businessId},
+			  0,
+			  'N',
+			  to_char(sysdate,'yyyymmddHH24miss'),
+			  'iip'
+			from dual
+		
+	</insert>
+	
+	 
+	 
+</mapper>

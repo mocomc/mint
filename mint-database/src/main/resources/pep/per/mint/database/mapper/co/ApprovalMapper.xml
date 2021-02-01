@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.co.ApprovalMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<!-- 심의결재등록 -->
+	<insert id="insertApproval" parameterType="Approval">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+            SELECT COALESCE(MAX(SEQ) + 1, 0) AS seq
+			FROM TCO0101
+			WHERE APPROVAL_ITEM_ID   = #{approvalItemId, jdbcType=VARCHAR}
+			AND APPROVAL_ITEM_TYPE = #{approvalItemType, jdbcType=VARCHAR}
+		</selectKey>
+
+		INSERT INTO TCO0101 (
+			 APPROVAL_ITEM_ID
+			,APPROVAL_ITEM_TYPE
+			,SEQ
+			,MISID
+			,REQ_USER_ID
+			,REQ_DATE
+			,REQ_TYPE
+			,SUBJECT
+			,REQ_COMMENTS
+			,DEL_YN
+		) VALUES (
+			 #{approvalItemId   , jdbcType=VARCHAR}
+			,#{approvalItemType , jdbcType=VARCHAR}
+			,#{seq 	 			, jdbcType=NUMERIC}
+			,#{misid            , jdbcType=VARCHAR}
+			,#{reqUserId 		, jdbcType=VARCHAR}
+			,#{reqDate 	 		, jdbcType=NUMERIC}
+			,#{reqType 	 		, jdbcType=NUMERIC}
+			,#{subject 	 		, jdbcType=NUMERIC}
+			,#{reqComments 		, jdbcType=NUMERIC}
+			,'N'
+		)
+	</insert>
+
+	<!-- 심의결재자등록 -->
+	<insert id="insertApprovalUser" parameterType="ApprovalUser">
+		<!--
+		<selectKey keyProperty="admUserSeq" resultType="int" order="BEFORE" >
+			select nvl(max(ADM_USER_SEQ) + 1, 0) as admUserSeq
+			  from TCO0102
+			 where APPROVAL_ITEM_ID   = #{approvalItemId  , jdbcType=VARCHAR}
+			   and APPROVAL_ITEM_TYPE = #{approvalItemType, jdbcType=NUMERIC}
+			   and SEQ 			      = #{seq 		      , jdbcType=NUMERIC}
+		</selectKey>
+		-->
+		INSERT INTO TCO0102 (
+			 APPROVAL_ITEM_ID
+			,APPROVAL_ITEM_TYPE
+			,SEQ
+			,ADM_USER_SEQ
+			,ADM_USER_ID
+			,ROLE_TYPE
+			,DEL_YN
+		) VALUES (
+			 #{approvalItemId   , jdbcType=VARCHAR}
+			,#{approvalItemType , jdbcType=VARCHAR}
+			,#{seq 	 		    , jdbcType=NUMERIC}
+			,#{admUserSeq 	    , jdbcType=NUMERIC}
+			,#{admUserId 	    , jdbcType=VARCHAR}
+			,#{roleType 	    , jdbcType=NUMERIC}
+			,'N'
+		)
+	</insert>
+
+	<select id="getApproval" resultMap="approvalResultMap">
+		SELECT
+			 A.APPROVAL_ITEM_ID
+			,A.APPROVAL_ITEM_TYPE
+			,A.SEQ
+			,A.REQ_TYPE
+			,A.REQ_USER_ID
+			,A.MISID
+			,C.USER_NM AS REQ_USER_NM
+			,A.SUBJECT
+			,A.REQ_COMMENTS
+			,A.REQ_DATE
+			,B.ADM_USER_SEQ
+			,B.ADM_USER_ID
+			,D.USER_NM AS ADM_USER_NM
+			,B.ROLE_TYPE
+			,CDAN05.NM AS ROLE_NM
+		FROM TCO0101 A
+		LEFT OUTER JOIN TCO0102 B
+		ON A.APPROVAL_ITEM_ID = B.APPROVAL_ITEM_ID
+		AND A.APPROVAL_ITEM_TYPE = B.APPROVAL_ITEM_TYPE
+		AND A.SEQ = B.SEQ
+		AND B.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0101 C
+		ON C.DEL_YN = 'N'
+		AND C.USER_ID = A.REQ_USER_ID
+		LEFT OUTER JOIN TSU0101 D
+		ON D.DEL_YN = 'N'
+		AND D.USER_ID = B.ADM_USER_ID
+		LEFT OUTER JOIN TSU0301 CDAN05
+		ON CDAN05.DEL_YN = 'N'
+		AND CDAN05.LEVEL1 = 'AN'
+		AND CDAN05.LEVEL2 = '05'
+		AND B.ROLE_TYPE = CDAN05.CD
+		WHERE 1 = 1
+		AND A.APPROVAL_ITEM_ID = #{approvalItemId}
+		AND A.APPROVAL_ITEM_TYPE = #{approvalItemType}
+		AND A.SEQ = (SELECT MAX(SEQ) FROM TCO0101 WHERE APPROVAL_ITEM_ID = #{approvalItemId} AND APPROVAL_ITEM_TYPE = #{approvalItemType})
+		AND A.DEL_YN = 'N'
+	</select>
+
+	<resultMap id="approvalResultMap" type="Approval">
+		<id property="approvalItemId"       column="APPROVAL_ITEM_ID"/>
+		<id property="approvalItemType"     column="APPROVAL_ITEM_TYPE"/>
+		<id property="seq"    				column="SEQ"/>
+		<result property="reqType"          column="REQ_TYPE"/>
+		<result property="reqUserId"        column="REQ_USER_ID"/>
+		<result property="misid"			column="MISID"/>
+		<result property="reqUserNm"        column="REQ_USER_NM"/>
+		<result property="subject"          column="SUBJECT"/>
+		<result property="reqComments"      column="REQ_COMMENTS"/>
+		<result property="reqDate"          column="REQ_DATE"/>
+		<collection property="approvalUsers" ofType="ApprovalUser">
+			<id property="approvalItemId"   column="APPROVAL_ITEM_ID"/>
+			<id property="approvalItemType" column="APPROVAL_ITEM_TYPE"/>
+			<id property="seq"    			column="SEQ"/>
+			<id property="admUserSeq"       column="ADM_USER_SEQ"/>
+			<id property="admUserId"        column="ADM_USER_ID"/>
+			<result property="admUserNm"    column="ADM_USER_NM"/>
+			<result property="roleType"     column="ROLE_TYPE"/>
+			<result property="roleNm"       column="ROLE_NM"/>
+		</collection>
+	</resultMap>
+
+	<insert id="insertApprovalLink" parameterType="string">
+		INSERT INTO TCO0103 ( LINK_KEY, REQ_USER_ID, REQ_DATE, DEL_YN ) VALUES ( #{linkKey} , #{reqUserId}, #{reqDate}, 'N')
+	</insert>
+
+	<delete id="clearApprovalLink">
+		DELETE FROM TCO0103
+		WHERE APPROVAL_ITEM_ID is null
+		AND APPROVAL_ITEM_TYPE is null
+		AND REQ_DATE <![CDATA[ < ]]> TO_CHAR(SYSDATE - 1,'yyyymmddHH24miss')
+	</delete>
+
+	<update id="updateApprovalLink" parameterType="string">
+		UPDATE TCO0103
+		SET APPROVAL_ITEM_ID = #{approvalItemId, jdbcType=VARCHAR}
+		    ,APPROVAL_ITEM_TYPE = #{approvalItemType, jdbcType=VARCHAR}
+		WHERE LINK_KEY = #{linkKey}
+	</update>
+
+	<select id="getApprovalLinkInfo" resultType="java.util.Map">
+		SELECT
+		 	 APPROVAL_ITEM_ID   AS "approvalItemId"
+			,APPROVAL_ITEM_TYPE AS "approvalItemType"
+		FROM TCO0103
+		WHERE LINK_KEY = #{linkKey} AND DEL_YN = 'N'
+	</select>
+
+	<select id="getApprovalUserList" resultMap="approvalUserResultMap">
+		SELECT
+			 a.USER_ID
+			,b.USER_NM
+			,b.COMPANY_NM
+			,b.DEPARTMENT_NM
+			,b.POSITION_NM
+			,a.ROLE_TYPE
+			,c.NM as ROLE_NM
+		FROM (
+			SELECT
+				USER_ID,
+				ROLE_TYPE
+			FROM TAN0219
+			WHERE INTERFACE_ID = #{interfaceId} AND DEL_YN = 'N'
+			UNION
+			SELECT
+				 USER_ID
+				,'1' as ROLE_TYPE
+			FROM TIM0003 where CHANNEL_ID = #{channelId}
+		) a
+		LEFT OUTER JOIN TSU0101 b ON a.USER_ID = b.USER_ID AND b.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0301 c ON a.ROLE_TYPE = c.CD AND c.LEVEL1 = 'IM' AND c.LEVEL2 = '09' AND c.DEL_YN = 'N'
+	</select>
+
+	<!--
+	<select id="getApprovalUserList" resultMap="approvalUserResultMap">
+		select
+		a.USER_ID
+		,b.USER_NM
+		,b.COMPANY_NM
+		,b.DEPARTMENT_NM
+		,b.POSITION_NM
+		,a.ROLE_TYPE
+		,c.NM as ROLE_NM
+		from (
+
+		SELECT
+		USER_ID,
+		'9' AS ROLE_TYPE
+		FROM TAN0219
+		WHERE INTERFACE_ID = #{interfaceId} AND DEL_YN = 'N' and ROLE_TYPE = '0'
+		UNION
+		SELECT
+		USER_ID,
+		'2' AS ROLE_TYPE
+		FROM TAN0219
+		WHERE INTERFACE_ID = #{interfaceId} AND DEL_YN = 'N' and ROLE_TYPE = '2'
+		UNION
+		SELECT
+		a.USER_ID
+		,a.ROLE_TYPE
+		FROM TSU0104 a INNER JOIN TSU0103 b ON a.GRP_ID = b.GRP_ID AND b.CHANNEL_ID = #{channelId}
+		) a
+		left outer join TSU0101 b on a.USER_ID = b.USER_ID and b.DEL_YN = 'N'
+		left outer join TSU0301 c on a.ROLE_TYPE = c.CD and c.LEVEL1 = 'AN' and c.LEVEL2 = '05' and c.DEL_YN = 'N'
+	</select>
+	-->
+
+	<select id="getApprovalLineUserList" resultMap="approvalUserResultMap">
+		SELECT
+			 a.USER_ID
+			,a.SEQ
+			,b.USER_NM
+			,b.COMPANY_NM
+			,b.DEPARTMENT_NM
+			,b.POSITION_NM
+			,a.ROLE_TYPE
+			,c.NM AS ROLE_NM
+		FROM TSU0104 a
+		LEFT OUTER JOIN TSU0101 b ON a.USER_ID = b.USER_ID AND b.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0301 c ON a.ROLE_TYPE = c.CD AND c.LEVEL1 = 'AN' AND c.LEVEL2 = '05' AND c.DEL_YN = 'N'
+		ORDER BY a.SEQ
+	</select>
+	<!--
+	<select id="getApprovalLineUserList" resultMap="approvalUserResultMap">
+		select
+			 a.USER_ID
+			,a.SEQ
+			,b.USER_NM
+			,b.COMPANY_NM
+			,b.DEPARTMENT_NM
+			,b.POSITION_NM
+			,a.ROLE_TYPE
+			,c.NM as ROLE_NM
+		from (
+		SELECT
+			 a.USER_ID
+			,a.ROLE_TYPE
+			,a.SEQ
+		  FROM TSU0104
+		) a
+		left outer join TSU0101 b on a.USER_ID = b.USER_ID and b.DEL_YN = 'N'
+		left outer join TSU0301 c on a.ROLE_TYPE = c.CD and c.LEVEL1 = 'AN' and c.LEVEL2 = '05' and c.DEL_YN = 'N'
+		order by a.SEQ
+	</select>
+	-->
+	<resultMap id="approvalUserResultMap" type="ApprovalUser">
+			<id property="admUserSeq"       column="ADM_USER_SEQ"/>
+			<id property="admUserId"        column="USER_ID"/>
+			<result property="admUserNm"    column="USER_NM"/>
+			<result property="companyNm"    column="COMPANY_NM"/>
+			<result property="departmentNm" column="DEPARTMENT_NM"/>
+			<result property="positionNm"   column="POSITION_NM"/>
+			<result property="roleType"     column="ROLE_TYPE"/>
+			<result property="roleNm"       column="ROLE_NM"/>
+	</resultMap>
+
+</mapper>

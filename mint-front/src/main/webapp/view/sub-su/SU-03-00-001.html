@@ -1,0 +1,1898 @@
+<!--
+	Screen ID : SU-03-00-001
+	Screen NM : KPI 대시보드.
+	[변경 이력]
+	* YYYYMMDD-001
+-->
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-33"></lb></h2>
+		<!--
+		<ol class="breadcrumb">
+			<li><lb class="lb-29"></lb></li>
+			<li class="active"><strong><lb class="lb-33"></lb></strong></li>
+		</ol>
+		  -->
+	</div>
+</div>
+<!--location end -->
+
+<!--row  border-bottom white-bg dashboard-header end-->
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content">
+	<div class="row">
+        <div class="col-lg-12">
+        	<div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div style="float: left; margin-right: 15px;">
+                        <h3><lb class="lb-421"></lb> <lb class="lb-418"></lb></h3>
+                    </div>
+                    <div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+					</div>
+                </div>
+                <div class="ibox-content">
+	                <div class="row">
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-442"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H001')"></a></h5>
+								<div class="text-center">
+									<input id="total-reg-interface-rate" type="text" class="dial" value="10" data-toggle="collapse" data-target="#reg-interface-rate"/>
+									<!--<span id="total-reg-interface-rate" class="no-margins font-bold text-navy" style="font-size:30px;">0</<span>-->
+								</div>
+						    </div>
+						    <div class="col-xs-12">
+						    	<div id="reg-interface-rate" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="reg-interface-rate-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+		                    </div>
+						</div>
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-39"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H007')"></a></h5>
+								<div class="text-center">
+									<input id="total-requirement-comply-rate" type="text" class="dial" value="0" data-fgColor="#7266BA" data-toggle="collapse" data-target="#requirement-comply-rate"/>
+								</div>						        
+						    </div>
+							<div class="col-xs-12">
+								<div id="requirement-comply-rate" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="requirement-comply-rate-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+	                        </div>
+						</div>
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-443"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H004')"></a></h5>
+								<div class="text-center">
+									<input id="total-reused-interface-rate" type="text" class="dial" value="0" data-fgColor="#FF902B" data-toggle="collapse" data-target="#reused-interface-rate"/>
+								</div>						        
+						    </div>
+							<div class="col-xs-12">
+								<div id="reused-interface-rate" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="reused-interface-rate-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+		                    </div>					    
+						</div>										
+					</div>
+				</div>
+            </div>                
+        </div>
+	</div>        
+	<br>
+	<div class="row">
+        <div class="col-lg-12">
+        	<div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div style="float: left; margin-right: 15px;">
+                        <h3><lb class="lb-592"></lb></h3>
+                    </div>
+                    <div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+					</div>
+                </div>
+                <div class="ibox-content">
+	                <div class="row">
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-445"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H002')"></a></h5>
+								<div class="text-center">
+									<input id="total-used-interface-rate-total" type="text" class="dial" value="0" data-fgColor="#2FBAE5" data-toggle="collapse" data-target="#used-interface-rate-total"/>
+								</div>							        
+						    </div>
+						    <div class="col-xs-12">
+						    	<div id="used-interface-rate-total" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="used-interface-rate-table-total">
+			                            </tbody>
+			                        </table>
+		                        </div>
+		                    </div>
+						</div>
+						
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-446"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H005')"></a></h5>
+								<div class="text-center">
+									<input id="total-status-interface-today-rate" type="text" class="dial" value="0" data-fgColor="#2FBAE5" data-toggle="collapse" data-target="#status-interface-today-rate"/>
+								</div>							        
+						    </div>
+							<div class="col-xs-12">
+								<div id="status-interface-today-rate" class="collapse in">							
+			                        <table class="table small m-t-sm">
+			                            <tbody id="status-interface-today-rate-table">
+				                            <tr>
+				                            	<td><strong>0</strong> <lb class="lb-447"></lb></td>
+				                            </tr>
+			                            </tbody>
+			                        </table>
+		                        </div>
+		                    </div>					    
+						</div>
+						
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-474"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H010')"></a></h5>						        
+								<div class="text-center">
+									<div id="total-data-size" data-toggle="collapse" data-target="#data-size" style="margin-bottom:-11px;"></div>
+								</div>													        
+						    </div>
+							<div class="col-xs-12">
+								<div id="data-size" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="data-size-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+	                        </div>
+						</div>								
+												
+						<div class="m-t-xs col-lg-4" style="display: none;">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-160"></lb> / <lb class="lb-159"></lb> <lb class="lb-552"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H003')"></a></h5>						        
+								<div class="text-center">
+									<div id="total-interface-rate" data-toggle="collapse" data-target="#interface-rate"></div>
+								</div>													        
+						    </div>
+							<div class="col-xs-12">
+								<div id="interface-rate" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="interface-rate-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+	                        </div>
+						</div>						
+							                
+						<div class="m-t-xs col-lg-4" style="display: none;">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-445"></lb>(<lb class="lb-160"></lb>) <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H002')"></a></h5>
+								<div class="text-center">
+									<input id="total-used-interface-rate-online" type="text" class="dial" value="0" data-fgColor="#2FBAE5" data-toggle="collapse" data-target="#used-interface-rate-online"/>
+								</div>							        
+						    </div>
+						    <div class="col-xs-12">
+						    	<div id="used-interface-rate-online" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="used-interface-rate-table-online">
+			                            </tbody>
+			                        </table>
+		                        </div>
+		                    </div>
+						</div>
+						<div class="m-t-xs col-lg-4" style="display: none;">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-445"></lb>(<lb class="lb-159"></lb>) <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H003')"></a></h5>
+								<div class="text-center">
+									<input id="total-used-interface-rate-batch" type="text" class="dial" value="0" data-fgColor="#2FBAE5" data-toggle="collapse" data-target="#used-interface-rate-batch"/>
+								</div>							        
+						    </div>
+							<div class="col-xs-12">
+								<div id="used-interface-rate-batch" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="used-interface-rate-table-batch">
+			                            </tbody>
+			                        </table>
+		                        </div>
+	                        </div>
+						</div>
+									
+					</div>
+				</div>
+            </div>                
+        </div>
+	</div>     	
+	<br>
+	<div class="row">
+        <div class="col-lg-12">
+        	<div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div style="float: left; margin-right: 15px;">
+                        <h3><lb class="lb-82"></lb> <lb class="lb-418"></lb></h3>
+                    </div>
+                    <div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+					</div>
+                </div>
+                <div class="ibox-content">
+	                <div class="row">
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-448"></lb> <lb class="lb-449"></lb> <lb class="lb-450"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H008')"></a></h5>
+			                    <div id="total-over-usage-cpu-count-box" class="widget style1 yellow-bg" data-toggle="collapse" data-target="#over-usage-cpu-count">
+			                        <div class="row vertical-align">
+			                            <div class="col-xs-3">
+			                                <i class="fa fa-tachometer fa-3x" style="opacity: 0.4;"></i>
+			                            </div>
+			                            <div class="col-xs-9 text-right">
+			                                <span id="total-over-usage-cpu-count" class="no-margins font-bold" style="font-size:30px;">0</span>
+			                            </div>
+			                        </div>
+			                    </div>
+						    </div>						
+						    <div class="col-xs-12">
+						    	<div id="over-usage-cpu-count" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="over-usage-cpu-count-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+		                    </div>							
+						</div>						
+						
+						<div class="m-t-xs col-lg-4">
+						    <div class="col-xs-12">
+						        <h5 class="m-b-xs"><lb class="lb-451"></lb> <lb class="lb-449"></lb> <lb class="lb-450"></lb> <a class="help-over-label" onclick="mint.ui.help(this, 'AP00000030','H008')"></a></h5>
+			                    <div id="total-over-usage-memory-count-box" class="widget style1 yellow-bg" data-toggle="collapse" data-target="#over-usage-memory-count">
+			                        <div class="row vertical-align">
+			                            <div class="col-xs-3">
+			                                <i class="fa fa-tachometer fa-3x" style="opacity: 0.4;"></i>
+			                            </div>
+			                            <div class="col-xs-9 text-right">
+			                                <span id="total-over-usage-memory-count" class="no-margins font-bold" style="font-size:30px;">0</span>
+			                            </div>
+			                        </div>
+			                    </div>
+						    </div>							    
+							<div class="col-xs-12">
+								<div id="over-usage-memory-count" class="collapse in">
+			                        <table class="table small m-t-sm">
+			                            <tbody id="over-usage-memory-count-table">
+			                            </tbody>
+			                        </table>
+		                        </div>
+	                        </div>
+						</div>
+					</div>
+				</div>
+            </div>                
+        </div>
+	</div> 
+ 
+</div>
+<!--wrapper wrapper-content end-->
+
+
+<script>
+/*
+$(function(){
+	
+});
+ */
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "SU-03-00-001";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			criticalColor: {
+				DEFAULT	:	"#FFDF24",
+				NORMAL	:	"#2FBAE5",
+				WARNING	:	"#FF902B",
+				DANGER	:	"#CD1533"
+			},
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================			
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------		
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					//Knob Component Initialize
+					//-----------------------------------------------------------------------
+					{
+						var knobOption = {
+								'width'        : 130,
+								'height'       : 130,
+								'inline'       : true,
+								'thickness'    : 0.2,
+								'displayInput' : true,
+								'readOnly'     : true,
+								//'fgColor'      : '#2FBAE5',
+								//'inputColor'   : '#2FBAE5',
+								'format'       : function( val ) {
+									return val + "%"
+								}
+						}
+						
+						$(".dial").knob(knobOption);
+					}
+
+					// 인터페이스 등록률 조회
+					$.main.fn_callRegInterfacesCountRateMonthly();
+					
+					// 납기준수율 조회
+					$.main.fn_callStatusRequirementComplyRate();
+					
+					// 인터페이스 재사용률 조회
+					$.main.fn_callReusedInterfacesCountRateYearly();
+					
+					// 인터페이스 사용률(온라인+배치) 조회
+					$.main.fn_callUseInterfacesCountRateTotal();
+					
+					
+					// 솔루션별 데이터 사이즈
+					$.main.fn_callDataSize();
+					
+					// 인터페이스 비율(온라인/배치)
+					//$.main.fn_callInterfaceRate();
+					
+					// 인터페이스 사용률(온라인) 조회
+					//$.main.fn_callUseInterfacesCountRateOnline();
+					
+					// 인터페이스 사용률(배치) 조회
+					//$.main.fn_callUseInterfacesCountRateBatch();
+					
+					// 인터페이스 처리 현황 (오늘) 조회
+					$.main.fn_callStatusInterfacesCountRateForToday();
+					
+					// 인터페이스 처리 현황 (이번달) 조회
+					//$.main.fn_callStatusInterfacesCountRateForMonth(); // 사용 안하여 주석처리
+					
+					// CPU Over Usage 건수
+					$.main.fn_callOverUsageCountForCPU();
+					
+					// MEMORY Over Usage 건수
+					$.main.fn_callOverUsageCountForMEMORY();
+					
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+				
+			}, // end fn_initCallback
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 등록률 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callRegInterfacesCountRateMonthly : function() {
+				try {
+					var searchCondition = {};
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-05-001', '$.main.fn_setRegInterfacesCountRateMonthly', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callRegInterfacesCountRateMonthly"});
+				}
+			}, // end fn_callRegInterfacesCountRateMonthly
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 등록률 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setRegInterfacesCountRateMonthly : function(jsonData) {
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						var regedRate = 0;
+						var tmpTableRows = [];
+						for (var i in jsonData) {
+							regedRate += jsonData[i].regedRate;
+							tmpTableRows.push(
+			                    	  "<tr data-value1='Reged' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "'>"
+			                    	+ "<td>" + mint.label.getLabel('lb-421') + " " + mint.label.getLabel('lb-349') +"</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + kendo.format("{0:n0}", jsonData[i].regedCnt) + " " +  mint.label.getLabel('lb-64') + "</strong></td>"
+			                    	+ "</tr>"
+							);
+							tmpTableRows.push(
+			                    	  "<tr data-value1='noReged' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "' style='cursor: pointer;'>"
+			                    	+ "<td>" + mint.label.getLabel('lb-452') + " " + mint.label.getLabel('lb-349') +"</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + kendo.format("{0:n0}", jsonData[i].noRegCnt) + " " +  mint.label.getLabel('lb-64') + "</strong></td>"
+			                    	+ "</tr>"									
+							);
+						}
+						
+						// Rate 계산.
+						var totalregedRate = regedRate;
+						
+						// 배경 색상 set
+						var rateBoxBgColor = "#FFDF24";
+						if (totalregedRate >= 90) {
+							rateBoxBgColor = $.main.criticalColor.NORMAL; //"#2FBAE5";
+						} else if (totalregedRate < 80) {
+							rateBoxBgColor = $.main.criticalColor.DANGER; //"#CD1533";
+						} else {
+							rateBoxBgColor = $.main.criticalColor.WARNING; // "#FF902B";
+						}
+						
+						
+						if ( (totalregedRate - parseInt(totalregedRate, 10)) == 0 ) {
+							totalregedRate = totalregedRate;
+						}
+						else {
+							totalregedRate = totalregedRate.toFixed(1);
+						}
+						
+						$('#total-reg-interface-rate').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-reg-interface-rate').css('color', rateBoxBgColor);
+						
+						$("#total-reg-interface-rate").val(totalregedRate).trigger('change');
+						
+						// 등록률 테이블 set
+						$("#reg-interface-rate-table").html(tmpTableRows.join(""));
+						
+					}
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRegInterfacesCountRateMonthly"});
+				}
+			}, // end fn_setRegInterfacesCountRateMonthly
+			
+			//-----------------------------------------------------------------------
+			// Description :: 납기준수율 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callStatusRequirementComplyRate : function() {
+				
+				try {
+
+					var searchCondition = {
+							scCategoryId : "ALL"
+					};
+					 
+					mint.callService(null, screenName, 'REST-R01-SU-03-05-004', '$.main.fn_setStatusRequirementComplyRate', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callStatusRequirementComplyRate"});
+				}
+			}, // end fn_callStatusRequirementComplyRate
+			
+			//-----------------------------------------------------------------------
+			// Description :: 납기준수율 조회 콜백
+			//-----------------------------------------------------------------------
+			fn_setStatusRequirementComplyRate : function(jsonData) {
+
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						
+						var tmpTableRows  = [];
+						var sumComplyRate = 0;
+						var totalCnt      = 0;
+						var finishCnt     = 0;
+						//var rowbgColor = "";
+						var tmpComplyKindCnt = 0;
+						for (var i in jsonData) {
+							sumComplyRate += jsonData[i].finishRate;
+							totalCnt      += jsonData[i].totalCnt;
+							finishCnt     += ( jsonData[i].finishCnt + jsonData[i].delayedFinishCnt );
+							
+							/*
+							if (jsonData[i].complyRate >= 90) {
+								rowbgColor = "info";
+							}
+							else if (jsonData[i].complyRate < 80) {
+								rowbgColor = "danger";
+							}
+							else {
+								rowbgColor = "warning";
+							}
+	       					
+							tmpTableRows.push(
+									  "<tr class='" + rowbgColor + "' data-value1='" + jsonData[i].statusId + "'>"
+									+ "<td style='text-align: center;'>" + jsonData[i].statusNm + "</td>"
+									+ "<td style='text-align: center;'>" + jsonData[i].complyRate + "%" + "</td>"
+									+ "</tr>"
+							);
+							*/
+							
+							tmpTableRows.push(
+			                    	  "<tr data-value1='" + jsonData[i].statusId + "' style='cursor: pointer;'>"
+			                    	+ "<td>" + jsonData[i].statusNm + "</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].finishRate + " %</strong></td>"
+			                    	+ "</tr>"									
+							);							
+							
+							tmpComplyKindCnt++;
+							
+						}
+												
+						
+						// 전체 사용률 평균 set
+						var totalComplyRate = 0;
+						totalComplyRate = Math.round( (finishCnt / totalCnt) * 100 );
+						/*
+						if (sumComplyRate > 0 && tmpComplyKindCnt > 0) {
+							totalComplyRate = Math.ceil( (sumComplyRate / tmpComplyKindCnt) * 10) / 10;
+						}
+						*/
+						
+						
+						// 배경 색상 set
+						var rateBoxBgColor = "#FFDF24";
+						if (totalComplyRate >= 90) {
+							//rateBoxBgColor = "#009BD7"; 
+							rateBoxBgColor = "#2FBAE5";
+						}
+						else if (totalComplyRate < 80) {
+							rateBoxBgColor = "#CD1533";
+						}
+						else {
+							//rateBoxBgColor = "#FFDF24";
+							rateBoxBgColor = "#FF902B";
+						}
+						
+						// 전체 비율 출력 문구 설정(소수점 정리)
+						if ( (totalComplyRate - parseInt(totalComplyRate, 10)) == 0 ) {
+							totalComplyRate = totalComplyRate + "%";
+						}
+						else {
+							totalComplyRate = totalComplyRate.toFixed(1) + "%";
+						}
+						
+						//$("#total-requirement-comply-rate-box").css('background-color', rateBoxBgColor);
+						//$("#total-requirement-comply-rate").html(totalComplyRate);
+						$('#total-requirement-comply-rate').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-requirement-comply-rate').css('color', rateBoxBgColor);
+						
+						$("#total-requirement-comply-rate").val(totalComplyRate).trigger('change');
+						// 처리 현황 테이블 set
+						$("#requirement-comply-rate-table").html(tmpTableRows.join(""));
+						
+					}
+					else
+					{
+						$("#total-requirement-comply-rate").html("0");
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setStatusRequirementComplyRate"});
+				}
+			}, // end fn_setStatusRequirementComplyRate			
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 재사용률 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callReusedInterfacesCountRateYearly : function() {
+				try {
+					var searchCondition = {};
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-05-003', '$.main.fn_setReusedInterfacesCountRateYearly', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callReusedInterfacesCountRateYearly"});
+				}
+			}, // end fn_callReusedInterfacesCountRateYearly
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 재사용률 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setReusedInterfacesCountRateYearly : function(jsonData) {
+				try {
+					if (jsonData) {
+						var reusedRate = 0;
+						var totalInterfaceCnt = 0;
+						var totalReuseInterfaceCnt = 0;
+						var tmpTableRows = [];
+
+						for (var i in jsonData) {
+							reusedRate += jsonData[i].reusedRate;
+							totalInterfaceCnt += jsonData[i].totalCnt;
+							totalReuseInterfaceCnt += jsonData[i].reusedCnt;
+							
+						}
+						
+						tmpTableRows.push(
+		                    	  "<tr data-value1='totalCnt' data-value2=''>"
+		                    	+ "<td>" + mint.label.getLabel('lb-251') + ' ' + mint.label.getLabel('lb-349') + "</td>"
+		                    	+ "<td style='text-align:right;'><strong>" + kendo.format("{0:n0}", totalInterfaceCnt) + " " + mint.label.getLabel('lb-64') +"</strong></td>"
+		                    	+ "</tr>"
+						);
+						tmpTableRows.push(
+		                    	  "<tr data-value1='reusedCnt' data-value2='' style='cursor: pointer;'>"
+		                        + "<td>" + mint.label.getLabel('lb-297') + ' ' + mint.label.getLabel('lb-349') + "</td>"
+		                    	+ "<td style='text-align:right;'><strong>" + kendo.format("{0:n0}", totalReuseInterfaceCnt) + " " + mint.label.getLabel('lb-64')  + "</strong></td>"
+		                    	+ "</tr>"									
+						);						
+						
+						// Rate 계산.
+						var totalreusedRate = 0;
+						totalreusedRate = Math.round( (totalReuseInterfaceCnt / totalInterfaceCnt) * 100 );
+						
+						if ( (totalreusedRate - parseInt(totalreusedRate, 10)) == 0 ) {
+							totalreusedRate = totalreusedRate;
+						} else {
+							totalreusedRate = totalreusedRate.toFixed(1);
+						}
+						
+						
+						// 배경 색상 set
+						var rateBoxBgColor = $.main.criticalColor.DEFAULT;
+						if (totalreusedRate >= 10) {
+							rateBoxBgColor = $.main.criticalColor.NORMAL; //"#2FBAE5";
+						} else if (totalreusedRate < 5) {
+							rateBoxBgColor = $.main.criticalColor.DANGER; //"#CD1533";
+						} else {
+							rateBoxBgColor = $.main.criticalColor.WARNING; //"#FF902B";
+						}
+						
+						$('#total-reused-interface-rate').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-reused-interface-rate').css('color', rateBoxBgColor);
+						
+						$("#total-reused-interface-rate").val(totalreusedRate).trigger('change');
+						
+						// 재사용률 테이블 set
+						$("#reused-interface-rate-table").html(tmpTableRows.join(""));
+						
+					}
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setReusedInterfacesCountRateYearly"});
+				}
+			}, // end fn_setReusedInterfacesCountRateYearly		
+			
+
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 사용률(온라인+배치) 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callUseInterfacesCountRateTotal : function() {
+				try {
+					var searchCondition = {};
+					searchCondition.scDataPrMethod = ""; // 배치:0, 온라인:1, 요청:2
+					searchCondition.scMode = "";
+					
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-05-002', '$.main.fn_setUseInterfacesCountRateTotal', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callUseInterfacesCountRateTotal"});
+				}
+			}, // end fn_callUseInterfacesCountRateTotal			
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 사용률(온라인+배치) 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setUseInterfacesCountRateTotal : function(jsonData) {
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						var usedRate = 0;
+						var totalCnt = 0;
+						var usedCnt  = 0;
+						var tmpTableRows = [];
+
+						var tmpUsedCnt = 0;
+						for (var i in jsonData) {
+							
+							if (jsonData[i].usedRate > 0) {
+								
+								usedRate += jsonData[i].usedRate;
+								totalCnt += jsonData[i].totalCnt;
+								usedCnt  += jsonData[i].usedCnt;
+
+								tmpTableRows.push(
+				                    	  "<tr data-value1='" + jsonData[i].categoryId + "' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "' style='cursor: pointer;'>"
+				                    	+ "<td>" + jsonData[i].categoryNm+ "</td>"
+				                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].usedRate + " %</strong></td>"
+				                    	+ "</tr>"									
+								);
+								
+								tmpUsedCnt++;
+							}
+							
+						}
+						
+						// Rate 계산.
+						var totalUsedRate = 0;
+						totalUsedRate = Math.round( (usedCnt / totalCnt) * 100 );
+						
+						if ( (totalUsedRate - parseInt(totalUsedRate, 10)) == 0 ) {
+							totalUsedRate = totalUsedRate + "%";
+						}
+						else {
+							totalUsedRate = totalUsedRate.toFixed(1) + "%";
+						}						
+						
+						// 배경 색상 set
+						var rateBoxBgColor = $.main.criticalColor.DEFAULT; //"#FFDF24";
+						if (totalUsedRate >= 90) {
+							rateBoxBgColor = $.main.criticalColor.NORMAL; //"#2FBAE5";
+						} else if (totalUsedRate < 80) {
+							rateBoxBgColor = $.main.criticalColor.DANGER; //"#CD1533";
+						} else {
+							rateBoxBgColor = $.main.criticalColor.WARNING; //"#FF902B";
+						}
+						
+						$('#total-used-interface-rate-total').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-used-interface-rate-total').css('color', rateBoxBgColor);
+						$("#total-used-interface-rate-total").val(totalUsedRate).trigger('change');
+						
+						// rate-grid
+						$("#used-interface-rate-table-total").html(tmpTableRows.join(""));
+						
+					}
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setUseInterfacesCountRateTotal"});
+				}
+			}, // end fn_setUseInterfacesCountRateTotal
+			
+			
+			//-----------------------------------------------------------------------
+			// Description :: Data Size
+			//-----------------------------------------------------------------------			
+			fn_callDataSize : function() {
+				try {
+					mint.callService(null, screenName, 'REST-R06-SU-03-00-001', function(jsonData) {
+						var totalSize  = 0;
+						var chartData = [];
+						var chartColor = [];
+						var chartColorPattern = ['#808000','#D2A5B8','#2080D0','#CDDF6A','#B4CC51'];
+
+						var tmpTableRows = [];
+				        if( jsonData ) {
+				        	/*
+				        	jsonData.push({CHANNEL_ID : '', CHANNEL_NM : 'DataStagessss', SIZES : 6890456});
+				        	jsonData.push({CHANNEL_ID : '', CHANNEL_NM : 'Taland', SIZES : 98904564646});
+				        	jsonData.push({CHANNEL_ID : '', CHANNEL_NM : 'B2Bi', SIZES : 168904});
+				        	console.log(jsonData);
+							*/
+				        	
+				        	var colorPatternIndex = 0;
+							var size     = 0;
+							var sizeUnit = 'M';
+				        	for(var i in jsonData ) {
+				        		totalSize += jsonData[i].SIZES;
+				        		
+				        		//Chart Data Setting
+								chartData.push([jsonData[i].CHANNEL_NM, jsonData[i].SIZES]);
+								
+				        		//Chart Color Setting
+								if( jsonData[i].CHANNEL_ID === 'CN00000001' ) {
+									chartColor.push($.main.criticalColor.NORMAL);
+								} else if( jsonData[i].CHANNEL_ID === 'CN00000002' ) {
+									chartColor.push($.main.criticalColor.WARNING);
+								} else {
+									chartColor.push( chartColorPattern[colorPatternIndex]);
+									colorPatternIndex = colorPatternIndex +1;
+								}
+				        		
+								tmpTableRows.push(
+				                    	  "<tr style='cursor: pointer;'>"
+				                    	+ "<td>" + jsonData[i].CHANNEL_NM + "</td>"
+				                    	+ "<td style='text-align:right;'><strong>" + $.main.fn_getSizeUnit(jsonData[i].SIZES)  + " </strong></td>"
+				                    	+ "</tr>"									
+								);				        		
+				        	}
+				        	
+				        	tmpTableRows.unshift(
+			                    	  "<tr style='cursor: pointer;'>"
+			                    	+ "<td>" + mint.label.getLabel('lb-89') + "</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + $.main.fn_getSizeUnit(totalSize) + " </strong></td>"
+			                    	+ "</tr>"				        			
+				        	);
+
+				        	var chart = c3.generate({
+				        		bindto: '#total-data-size',
+				        		donut: {
+				        			title: "",
+				        			//expand: true,
+				        			width: 40
+				        		},
+				        		/*
+				        		pie: {
+				        			label: {
+				        				format: function(value, ratio, id) {
+				        					var reValue = (value / 1024);
+				        					return (d3.format(',')(Math.round(reValue))) + ' Kb';
+				        				}
+				        			}
+				        		},
+				        		*/
+				        		tooltip: {
+				        			format: {
+				        				value: function(value, ration, id) {
+				        					//var reValue = (value / 1024);
+				        					//return (d3.format(',')(Math.round(reValue))) + ' Kb';
+				        					return (d3.format(',')(value)) + ' Byte';
+				        				}
+				        			}
+				        		},
+				        	    padding: {
+				        	       	top: 0,
+				        	        right: 0,
+				        	        bottom: 0,
+				        	        left: 0,
+				        	    },				        		
+				        		size: {
+				        			width :  380,
+				        			height : 146
+				        		},
+				        		data: {
+				        			type: 'pie',
+				        			labels: true,
+				        			columns: chartData,
+				        		},
+			        			color: {
+				        			pattern:chartColor
+			        			},
+				        		legend: {
+				        			show:true,
+				        			position: 'inset',
+				        			inset: {
+				        				anchor: 'top-right',
+				        				x: 15,
+				        				y: 30,
+				        				step: chartData.length
+				        			}
+			        				
+				        		}
+				        	});
+				        	
+                         	// rate-grid
+    						$("#data-size-table").html(tmpTableRows.join(""));
+				        }
+					}, { errorCall : false });	
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callDataSize"});
+				}
+				
+			},
+			
+			//-----------------------------------------------------------------------
+			// Description :: 사이즈 단위 리턴
+			//-----------------------------------------------------------------------				
+			fn_getSizeUnit : function(size) {
+				try {
+					var returnSize = '';
+	        		//Gb
+	        		if( (size / 1024 / 1024 / 1024) > 1 ) {
+	        			returnSize = d3.format(',')(Math.round((size / 1024 / 1024 / 1024))) + ' Gb ( ' + d3.format(',')(size) + ' byte )';
+	        		//Mb		
+	        		} else if( (size / 1024 / 1024) > 1 ) {
+	        			returnSize = d3.format(',')(Math.round((size / 1024 / 1024))) + ' Mb ( ' + d3.format(',')(size) + ' byte )';
+	        		//Kb	
+	        		} else if( (size / 1024) > 1 ) {
+	        			returnSize = d3.format(',')(Math.round((size / 1024))) + ' Kb ( ' + d3.format(',')(size) + ' byte )';
+	        		//Byte	
+	        		} else {
+	        			returnSize = d3.format(',')(size) + ' Byte';
+	        		}
+	        		return returnSize;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getSizeUnit"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 비율
+			//-----------------------------------------------------------------------			
+			fn_callInterfaceRate : function() {
+				try {
+					mint.callService(null, screenName, 'REST-R05-SU-03-00-001', function(jsonData) {
+	
+						var totalCnt  = 0;
+						var chartData = [];
+						var tmpTableRows = [];
+				        if( jsonData ) {
+				        	
+				        	for(var i in jsonData ) {
+				        		totalCnt += jsonData[i].COUNT;
+				        		var itemName = jsonData[i].DATA_PR_METHOD == '0' ? mint.label.getLabel('lb-159') : mint.label.getLabel('lb-160');
+								chartData.push([itemName, jsonData[i].COUNT]);
+								tmpTableRows.push(
+				                    	  "<tr style='cursor: pointer;'>"
+				                    	+ "<td>" + itemName + "</td>"
+				                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].COUNT + " " + mint.label.getLabel('lb-64') + "</strong></td>"
+				                    	+ "</tr>"									
+								);				        		
+				        	}
+				        	
+				        	tmpTableRows.unshift(
+			                    	  "<tr style='cursor: pointer;'>"
+			                    	+ "<td>" + mint.label.getLabel('lb-421') + " " + mint.label.getLabel('lb-349') + "</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + totalCnt + " " + mint.label.getLabel('lb-64') + "</strong></td>"
+			                    	+ "</tr>"				        			
+				        	);
+				        	
+				        	var chart = c3.generate({
+				        		bindto: '#total-interface-rate',
+				        		donut: {
+				        			title: "",
+				        			//expand: true,
+				        			width: 40
+				        		},
+				        	    padding: {
+				        	       	top: 0,
+				        	        right: 0,
+				        	        bottom: 0,
+				        	        left: 0,
+				        	    },				        		
+				        		size: {
+				        			width : 160,
+				        			height : 160
+				        		},
+				        		data: {
+				        			type: 'pie',
+				        			columns: chartData,
+				        		},
+			        			color: {
+			        				//pattern: ['#76A7EE','#FF902B' ]
+				        			//pattern:['#FF902B','#CD1533']
+			        				pattern:['#604B7A','#A08BB9']
+			        			},					        		
+				        		legend: {
+				        			position: 'bottom',
+				        			inset: {
+				        				anchor: 'top-right',
+				        				x: -60,
+				        				y: 1,
+				        				sttep:1
+				        			}
+				        		}
+				        	});
+				        	
+                         	// rate-grid
+    						$("#interface-rate-table").html(tmpTableRows.join(""));
+				        }
+					}, { errorCall : false });	
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callInterfaceRate"});
+				}
+				
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 사용률(온라인) 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callUseInterfacesCountRateOnline : function() {
+				
+				try {
+					
+					var searchCondition = {};
+					
+					searchCondition.scDataPrMethod = "1"; // 배치:0, 온라인:1, 요청:2
+					searchCondition.scMode = "";
+					
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-05-002', '$.main.fn_setUseInterfacesCountRateOnline', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callUseInterfacesCountRateOnline"});
+				}
+			}, // end fn_callUseInterfacesCountRateOnline
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 사용률(온라인) 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setUseInterfacesCountRateOnline : function(jsonData) {
+				
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						var usedRate = 0;
+						var totalCnt = 0;
+						var usedCnt  = 0;
+						var tmpTableRows = [];
+						//var rowbgColor = "";
+						var tmpUsedCnt = 0;
+						for (var i in jsonData) {
+							
+							if (jsonData[i].usedRate > 0) {
+								
+								usedRate += jsonData[i].usedRate;
+								totalCnt += jsonData[i].totalCnt;
+								usedCnt  += jsonData[i].usedCnt;
+								
+								/*
+								if (jsonData[i].usedRate >= 90) {
+									rowbgColor = "info";
+								}
+								else if (jsonData[i].usedRate < 80) {
+									rowbgColor = "danger";
+								}
+								else {
+									rowbgColor = "warning";
+								}
+		       					
+								tmpTableRows.push(
+										  "<tr class='" + rowbgColor + "' data-value1='" + jsonData[i].categoryId + "' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "'>"
+										+ "<td style='text-align: center;'>" + jsonData[i].categoryNm + "</td>"
+										+ "<td style='text-align: center;'>" + jsonData[i].usedRate + "%" + "</td>"
+										+ "</tr>"
+								);
+								*/
+								tmpTableRows.push(
+				                    	  "<tr data-value1='" + jsonData[i].categoryId + "' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "' style='cursor: pointer;'>"
+				                    	+ "<td>" + jsonData[i].categoryNm+ "</td>"
+				                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].usedRate + " %</strong></td>"
+				                    	+ "</tr>"									
+								);
+								
+								tmpUsedCnt++;
+							}
+							
+						}
+						
+						// 전체 사용률 평균 set
+						var totalUsedRate = 0;
+						totalUsedRate = Math.round( (usedCnt / totalCnt) * 100 );
+						/*
+						if (usedRate > 0 && tmpUsedCnt > 0) {
+							totalUsedRate = Math.floor( (usedRate / tmpUsedCnt) * 10) / 10;
+						}
+						*/
+						// 배경 색상 set
+						var rateBoxBgColor = "#FFDF24";
+						if (totalUsedRate >= 90) {
+							//rateBoxBgColor = "#009BD7"; 
+							rateBoxBgColor = "#2FBAE5";
+						}
+						else if (totalUsedRate < 80) {
+							rateBoxBgColor = "#CD1533";
+						}
+						else {
+							//rateBoxBgColor = "#FFDF24";
+							rateBoxBgColor = "#FF902B";
+						}
+						
+						if ( (totalUsedRate - parseInt(totalUsedRate, 10)) == 0 ) {
+							totalUsedRate = totalUsedRate + "%";
+						}
+						else {
+							totalUsedRate = totalUsedRate.toFixed(1) + "%";
+						}
+						
+						
+						//$("#total-used-interface-rate-box-online").css('background-color', rateBoxBgColor);
+						//$("#total-used-interface-rate-online").html(totalUsedRate);
+						$('#total-used-interface-rate-online').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-used-interface-rate-online').css('color', rateBoxBgColor);
+						
+						$("#total-used-interface-rate-online").val(totalUsedRate).trigger('change');
+						
+						// 솔루션별 사용률 테이블 set
+						$("#used-interface-rate-table-online").html(tmpTableRows.join(""));
+						
+					}
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setUseInterfacesCountRateOnline"});
+				}
+			}, // end fn_setUseInterfacesCountRateOnline
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 사용률(배치) 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callUseInterfacesCountRateBatch : function() {
+				
+				try {
+					
+					var searchCondition = {};
+					
+					searchCondition.scDataPrMethod = "0"; // 배치:0, 온라인:1, 요청:2
+					searchCondition.scMode = "";
+					
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-05-002', '$.main.fn_setUseInterfacesCountRateBatch', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callUseInterfacesCountRateBatch"});
+				}
+			}, // end fn_callUseInterfacesCountRateBatch
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 사용률(배치) 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setUseInterfacesCountRateBatch : function(jsonData) {
+
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						var usedRate = 0;
+						var totalCnt = 0;
+						var usedCnt  = 0;
+						var tmpTableRows = [];
+						//var rowbgColor = "";
+						var categoryKindCnt = 0;
+						for (var i in jsonData) {
+							
+							if (jsonData[i].usedRate > 0) {
+								
+								usedRate += jsonData[i].usedRate;
+								totalCnt += jsonData[i].totalCnt;
+								usedCnt  += jsonData[i].usedCnt;
+								
+								/*
+								if (jsonData[i].usedRate >= 90) {
+									rowbgColor = "info";
+								}
+								else if (jsonData[i].usedRate < 80) {
+									rowbgColor = "danger";
+								}
+								else {
+									rowbgColor = "warning";
+								}
+		       					
+								tmpTableRows.push(
+										  "<tr class='" + rowbgColor + "' data-value1='" + jsonData[i].categoryId + "' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "'>"
+										+ "<td style='text-align: center;'>" + jsonData[i].categoryNm + "</td>"
+										+ "<td style='text-align: center;'>" + jsonData[i].usedRate + "%" + "</td>"
+										+ "</tr>"
+								);
+								*/
+								tmpTableRows.push(
+				                    	  "<tr data-value1='" + jsonData[i].categoryId + "' data-value2='" + jsonData[i].searchFromPeriod + "' data-value3='" + jsonData[i].searchToPeriod + "' style='cursor: pointer;'>"
+				                    	+ "<td>" + jsonData[i].categoryNm+ "</td>"
+				                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].usedRate + " %</strong></td>"
+				                    	+ "</tr>"									
+								);								
+								categoryKindCnt++;
+							}
+							
+						}
+						
+						// 전체 사용률 평균 set
+						var totalUsedRate = 0;
+						totalUsedRate = Math.round( (usedCnt / totalCnt) * 100 );
+						/*
+						if(usedRate > 0 && categoryKindCnt > 0) {
+							totalUsedRate  = Math.floor( (usedRate / categoryKindCnt) * 10) / 10;
+						}*/
+						
+						// 배경 색상 set
+						var rateBoxBgColor = "#FFDF24";
+						if (totalUsedRate >= 90) {
+							//rateBoxBgColor = "#009BD7"; 
+							rateBoxBgColor = "#2FBAE5";
+						}
+						else if (totalUsedRate < 80) {
+							rateBoxBgColor = "#CD1533";
+						}
+						else {
+							//rateBoxBgColor = "#FFDF24";
+							rateBoxBgColor = "#FF902B";
+						}
+						
+						
+						if ((totalUsedRate - parseInt(totalUsedRate, 10)) == 0) {
+							totalUsedRate = totalUsedRate + "%";
+						}
+						else {
+							totalUsedRate = totalUsedRate.toFixed(1) + "%";
+						}
+						
+						
+						//$("#total-used-interface-rate-box-batch").css('background-color', rateBoxBgColor);
+						//$("#total-used-interface-rate-batch").html(totalUsedRate);
+						$('#total-used-interface-rate-batch').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-used-interface-rate-batch').css('color', rateBoxBgColor);
+						
+						$("#total-used-interface-rate-batch").val(totalUsedRate).trigger('change');
+						
+						// 솔루션별 사용률 테이블 set
+						$("#used-interface-rate-table-batch").html(tmpTableRows.join(""));
+						
+					}
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setUseInterfacesCountRateBatch"});
+				}
+			}, // end fn_setUseInterfacesCountRateBatch
+
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 처리 현황(오늘) 조회 싱행
+			//-----------------------------------------------------------------------		
+			fn_callStatusInterfacesCountRateForToday : function() {
+				
+				try {
+
+					var searchCondition = {
+							searchMode : "Days"
+					};
+					 
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-00-001', '$.main.fn_setStatusInterfacesCountRateForToday', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callStatusInterfacesCountRateForToday"});
+				}
+			}, // end fn_callStatusInterfacesCountRateForToday
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 처리 현황(오늘) 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setStatusInterfacesCountRateForToday : function(jsonData) {
+				try {
+
+					if (jsonData) {
+						var sumFinishedRate = 0;
+						var tmpTableRows    = [];
+						var totalCnt        = 0;
+						var finishedCnt     = 0;
+						//var rowbgColor = "";
+						var tmpFinishedCnt = 0;
+						for (var i in jsonData) {
+							sumFinishedRate += jsonData[i].finishedRate;
+							totalCnt        += jsonData[i].totalCnt;
+							finishedCnt     += jsonData[i].finishedCnt;
+							/*
+							if (jsonData[i].finishedRate >= 90) {
+								rowbgColor = "info";
+							}
+							else if (jsonData[i].finishedRate < 80) {
+								rowbgColor = "danger";
+							}
+							else {
+								rowbgColor = "warning";
+							}
+	       					
+							tmpTableRows.push(
+									  "<tr class='" + rowbgColor + "' data-value1='" + jsonData[i].channelId + "' data-value2='" + jsonData[i].searchYear + "' data-value3='" + jsonData[i].searchMonth + "' data-value4='" + jsonData[i].searchDay + "'>"
+									+ "<td style='text-align: center;'>" + jsonData[i].channelNm + "</td>"
+									+ "<td style='text-align: center;'>" + jsonData[i].finishedRate + "%" + "</td>"
+									+ "</tr>"
+							);
+							*/
+							tmpTableRows.push(
+			                    	  "<tr data-value1='" + jsonData[i].channelId + "' data-value2='" + jsonData[i].searchYear + "' data-value3='" + jsonData[i].searchMonth + "' data-value4='" + jsonData[i].searchDay + "' style='cursor: pointer;'>"
+			                    	+ "<td>" + jsonData[i].channelNm + "</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].finishedRate + " %</strong></td>"
+			                    	+ "</tr>"									
+							);							
+							tmpFinishedCnt++;
+						}
+						
+						// 전체 사용률 평균 set
+						var totalFinishedRate = 0;
+						totalFinishedRate = Math.round( (finishedCnt / totalCnt) * 100 );
+
+						/*
+						if (sumFinishedRate > 0 && tmpFinishedCnt > 0) {
+							totalFinishedRate = Math.ceil( (sumFinishedRate / tmpFinishedCnt) * 10) / 10;
+						}
+						*/
+						
+						// 배경 색상 set
+						var rateBoxBgColor = "#FFDF24";
+						if (totalFinishedRate >= 90) {
+							//rateBoxBgColor = "#009BD7"; 
+							rateBoxBgColor = "#2FBAE5";
+						}
+						else if (totalFinishedRate < 80) {
+							rateBoxBgColor = "#CD1533";
+						}
+						else {
+							//rateBoxBgColor = "#FFDF24";
+							rateBoxBgColor = "#FF902B";
+						}
+						
+						if ( (totalFinishedRate - parseInt(totalFinishedRate, 10)) == 0 ) {
+							totalFinishedRate = totalFinishedRate + "%";
+						}
+						else {
+							totalFinishedRate = totalFinishedRate.toFixed(1) + "%";
+						}
+						totalFinishedRate ='100%';
+						rateBoxBgColor = '#2FBAE5';
+						
+						//$("#total-status-interface-today-rate-box").css('background-color', rateBoxBgColor);
+						//$("#total-status-interface-today-rate").html(totalFinishedRate);
+						$('#total-status-interface-today-rate').trigger( 'configure', { 'fgColor': rateBoxBgColor } );
+						$('#total-status-interface-today-rate').css('color', rateBoxBgColor);
+						
+						$("#total-status-interface-today-rate").val(totalFinishedRate).trigger('change');
+						
+						// 처리현황 테이블 set
+						$("#status-interface-today-rate-table").html(tmpTableRows.join(""));
+						
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setStatusInterfacesCountRateForToday"});
+				}
+			}, // end fn_setStatusInterfacesCountRateForToday
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 처리 현황(이번달) 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callStatusInterfacesCountRateForMonth : function() {
+				
+				try {
+
+					var searchCondition = {
+							searchMode : "Months"
+					};
+					 
+					mint.callService(searchCondition, screenName, 'REST-R02-SU-03-00-001', '$.main.fn_setStatusInterfacesCountRateForMonth', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callStatusInterfacesCountRateForMonth"});
+				}
+			}, // end fn_callStatusInterfacesCountRateForMonth
+			
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 처리 현황(이번달) 조회 콜백
+			//-----------------------------------------------------------------------		
+			fn_setStatusInterfacesCountRateForMonth : function(jsonData) {
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						var sumFinishedRate = 0;
+						var tmpTableRows = [];
+						//var rowbgColor = "";
+						var tmpFinishedCnt = 0;
+						for (var i in jsonData) {
+							sumFinishedRate += jsonData[i].finishedRate;
+							
+							if (jsonData[i].finishedRate >= 90) {
+								rowbgColor = "info";
+							}
+							else if (jsonData[i].finishedRate < 80) {
+								rowbgColor = "danger";
+							}
+							else {
+								rowbgColor = "warning";
+							}
+	       					
+							tmpTableRows.push(
+									  "<tr class='" + rowbgColor + "' data-value1='" + jsonData[i].channelId + "' data-value2='" + jsonData[i].searchYear + "' data-value3='" + jsonData[i].searchMonth + "'>"
+									+ "<td style='text-align: center;'>" + jsonData[i].channelNm + "</td>"
+									+ "<td style='text-align: center;'>" + jsonData[i].finishedRate + "%" + "</td>"
+									+ "</tr>"
+							);
+							
+							tmpFinishedCnt++;
+						}
+						
+						// 전체 사용률 평균 set
+						var totalFinishedRate = 0;
+						if (sumFinishedRate > 0 && tmpFinishedCnt > 0) {
+							totalFinishedRate = Math.ceil( (sumFinishedRate / tmpFinishedCnt) * 10) / 10;
+						}
+
+						// 배경 색상 set
+						/*
+						var rateBoxBgColor = "#FFDF24";
+						if (totalFinishedRate >= 90) {
+							//rateBoxBgColor = "#009BD7"; 
+							rateBoxBgColor = "#2FBAE5";
+						}
+						else if (totalFinishedRate < 80) {
+							rateBoxBgColor = "#CD1533";
+						}
+						else {
+							//rateBoxBgColor = "#FFDF24";
+							rateBoxBgColor = "#FF902B";
+						}
+						*/
+						
+						if ( (totalFinishedRate - parseInt(totalFinishedRate, 10)) == 0) {
+							totalFinishedRate = totalFinishedRate + "%";
+						}
+						else {
+							totalFinishedRate = totalFinishedRate.toFixed(1) + "%";
+						}
+						
+						
+						//$("#total-status-interface-month-rate-box").css('background-color', rateBoxBgColor);
+						$("#total-status-interface-month-rate").html(totalFinishedRate);
+						
+						// 처리 현황 테이블 set
+						$("#status-interface-month-rate-table").html(tmpTableRows.join(""));
+						
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setStatusInterfacesCountRateForMonth"});
+				}
+			}, // end fn_setStatusInterfacesCountRateForMonth
+			
+			//-----------------------------------------------------------------------
+			// Description :: CPU Over Usage Count 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callOverUsageCountForCPU : function() {
+				
+				try {
+
+					var searchCondition = {
+							searchOverUsage : 80
+					};
+					 
+					mint.callService(searchCondition, screenName, 'REST-R03-SU-03-00-001', '$.main.fn_setOverUsageCountForCPU', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callOverUsageCountForCPU"});
+				}
+			}, // end fn_callOverUsageCountForCPU
+			
+			//-----------------------------------------------------------------------
+			// Description :: CPU Over Usage Count 조회 콜백
+			//-----------------------------------------------------------------------
+			fn_setOverUsageCountForCPU : function(jsonData) {
+				
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						
+						var tmpTableRows = [];
+						var sumOverUsageCnt = 0;
+						//var rowbgColor = "";
+						for (var i in jsonData) {
+							sumOverUsageCnt += jsonData[i].occurCnt;
+							/*
+							if (jsonData[i].occurCnt > 0) {
+								rowbgColor = "danger";
+							}
+							else {
+								rowbgColor = "info";
+							}
+	       					
+							tmpTableRows.push(
+									  "<tr class='" + rowbgColor + "' data-value1='CPU' data-value2='" + jsonData[i].systemIp + "'>"
+									+ "<td style='text-align: center;'>" + jsonData[i].systemNm + "</td>"
+									+ "<td style='text-align: center;'>" + jsonData[i].occurCnt + " 건" + "</td>"
+									+ "</tr>"
+							);
+							*/
+							tmpTableRows.push(
+			                    	  "<tr data-value1='CPU' data-value2='" + jsonData[i].systemIp + "' style='cursor: pointer;'>"
+			                    	+ "<td>" + jsonData[i].systemNm + "</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].occurCnt + " " +  mint.label.getLabel('lb-64') + "</strong></td>"
+			                    	+ "</tr>"									
+							);							
+						}
+												
+						// 배경 색상 set
+						/*
+						var resultBoxBgColor = "#FFDF24";
+						if (sumOverUsageCnt > 0) {
+							resultBoxBgColor = "#CD1533";
+						}
+						else {
+							resultBoxBgColor = "#009BD7";
+						}
+						*/
+						
+						//$("#total-over-usage-cpu-count-box").css('background-color', resultBoxBgColor);
+						//yellow-bg, red-bg, navy-bg, lazur-bg 
+						$("#total-over-usage-cpu-count-box").removeClass('yellow-bg');
+						if (sumOverUsageCnt > 0) {
+							$("#total-over-usage-cpu-count-box").addClass('yellow-bg'); // red-bg
+						}
+						else {
+							$("#total-over-usage-cpu-count-box").addClass('lazur-bg');
+						}
+						
+						$("#total-over-usage-cpu-count").html(kendo.format("{0:n0}", sumOverUsageCnt) + " " + mint.label.getLabel('lb-64'));
+						
+						// 처리 현황 테이블 set
+						$("#over-usage-cpu-count-table").html(tmpTableRows.join(""));
+						
+					}
+					else
+					{
+						$("#total-over-usage-cpu-count").html("0");
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setOverUsageCountForCPU"});
+				}
+			}, // end fn_setOverUsageCountForCPU
+			
+			//-----------------------------------------------------------------------
+			// Description :: MEMORY Over Usage Count 조회 실행
+			//-----------------------------------------------------------------------		
+			fn_callOverUsageCountForMEMORY : function() {
+				
+				try {
+
+					var searchCondition = {
+							searchOverUsage : 80
+					};
+					 
+					mint.callService(searchCondition, screenName, 'REST-R04-SU-03-00-001', '$.main.fn_setOverUsageCountForMEMORY', { errorCall : false });
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_callOverUsageCountForMEMORY"});
+				}
+			}, // end fn_callOverUsageCountForMEMORY
+			
+			//-----------------------------------------------------------------------
+			// Description :: CPU Over Usage Count 조회 콜백
+			//-----------------------------------------------------------------------
+			fn_setOverUsageCountForMEMORY : function(jsonData) {
+				
+				try {
+					//console.log(jsonData);
+					if (jsonData) {
+						
+						var tmpTableRows = [];
+						var sumOverUsageCnt = 0;
+						//var rowbgColor = "";
+						for (var i in jsonData) {
+							sumOverUsageCnt += jsonData[i].occurCnt;
+							/*
+							if (jsonData[i].occurCnt > 0) {
+								rowbgColor = "danger";
+							}
+							else {
+								rowbgColor = "info";
+							}
+	       					
+							tmpTableRows.push(
+									  "<tr class='" + rowbgColor + "' data-value1='MEMORY' data-value2='" + jsonData[i].systemIp + "'>"
+									+ "<td style='text-align: center;'>" + jsonData[i].systemNm + "</td>"
+									+ "<td style='text-align: center;'>" + jsonData[i].occurCnt + " 건" + "</td>"
+									+ "</tr>"
+							);
+							*/
+							tmpTableRows.push(
+			                    	  "<tr data-value1='MEMORY' data-value2='" + jsonData[i].systemIp + "' style='cursor: pointer;'>"
+			                    	+ "<td>" + jsonData[i].systemNm + "</td>"
+			                    	+ "<td style='text-align:right;'><strong>" + jsonData[i].occurCnt  + " " + mint.label.getLabel('lb-64') + "</strong></td>"
+			                    	+ "</tr>"									
+							);							
+						}
+												
+						// 배경 색상 set
+						/*
+						var resultBoxBgColor = "#FFDF24";
+						if (sumOverUsageCnt > 0) {
+							resultBoxBgColor = "#CD1533";
+						}
+						else {
+							resultBoxBgColor = "#009BD7";
+						}
+						*/
+						//$("#total-over-usage-memory-count-box").css('background-color', resultBoxBgColor);
+						//yellow-bg, red-bg, navy-bg, lazur-bg 
+						$("#total-over-usage-memory-count-box").removeClass('yellow-bg');
+						if (sumOverUsageCnt > 0) {
+							$("#total-over-usage-memory-count-box").addClass('yellow-bg'); //red-bg
+						}
+						else {
+							$("#total-over-usage-memory-count-box").addClass('lazur-bg');
+						}
+						
+						$("#total-over-usage-memory-count").html(kendo.format("{0:n0}", sumOverUsageCnt) + " " + mint.label.getLabel('lb-64'));
+						
+						// 처리 현황 테이블 set
+						$("#over-usage-memory-count-table").html(tmpTableRows.join(""));
+						
+					}
+					else
+					{
+						$("#total-over-usage-memory-count").html("0");
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setOverUsageCountForMEMORY"});
+				}
+			}, // end fn_setOverUsageCountForMEMORY
+			
+
+			
+			fn_sparkline_pie : function(value) {
+				try {
+					
+				} catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_sparkline_pie"});
+				}
+			}
+			
+		}// end main
+		
+	});//end extends
+	
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+		
+	//-----------------------------------------------------------------------	
+	// 인터페이스 사용률(온라인+배치) 상세 테이블 클릭 이벤트
+	//-----------------------------------------------------------------------
+	$('#used-interface-rate-total').on('click', 'tr', function(e) {
+		e.preventDefault();
+		try {
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0305002_DataPrMethod", "");
+			mint.common.setScreenParam("SU0305002_CategoryId", $(this).data("value1"));
+			mint.common.setScreenParam("SU0305002_searchFromPeriod", $(this).data("value2"));
+			mint.common.setScreenParam("SU0305002_searchToPeriod", $(this).data("value3"));
+			
+			mint.move('../sub-su/SU-03-05-002');
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "used-interface-rate-total > tr.click"});
+		}
+		
+	}); 		
+		
+		
+	// 인터페이스 사용률(온라인) 상세 테이블 클릭 이벤트
+	$('#used-interface-rate-online').on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") + "::::::" + $(this).data("value2")  + "::::::" + $(this).data("value3"));
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0305002_DataPrMethod", "1"); // 배치:0, 온라인:1, 요청:2
+			mint.common.setScreenParam("SU0305002_CategoryId", $(this).data("value1"));
+			mint.common.setScreenParam("SU0305002_searchFromPeriod", $(this).data("value2"));
+			mint.common.setScreenParam("SU0305002_searchToPeriod", $(this).data("value3"));
+			
+			mint.move('../sub-su/SU-03-05-002');
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "used-interface-rate > tr.click"});
+		}
+		
+	}); 
+	
+	// 인터페이스 사용률(배치) 상세 테이블 클릭 이벤트
+	$('#used-interface-rate-batch').on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") + "::::::" + $(this).data("value2")  + "::::::" + $(this).data("value3"));
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0305002_DataPrMethod", "0"); // 배치:0, 온라인:1, 요청:2
+			mint.common.setScreenParam("SU0305002_CategoryId", $(this).data("value1"));
+			mint.common.setScreenParam("SU0305002_searchFromPeriod", $(this).data("value2"));
+			mint.common.setScreenParam("SU0305002_searchToPeriod", $(this).data("value3"));
+			
+			mint.move('../sub-su/SU-03-05-002');
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "used-interface-rate > tr.click"});
+		}
+		
+	}); 
+	
+	// 인터페이스 등록률 상세 테이블 - 미등록 건수 클릭 이벤트
+	$('#reg-interface-rate').on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") + "::::::" + $(this).data("value2")  + "::::::" + $(this).data("value3"));
+			
+			if ($(this).data("value1") == "noReged") {
+				
+				mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+				mint.common.setScreenParam("SU0305001_fromSearchPeriod", $(this).data("value2"));
+				mint.common.setScreenParam("SU0305001_toSearchPeriod", $(this).data("value3"));
+				
+				/*
+				var yyyyMM = String($(this).data("value2"));
+				
+				// 해당 검색월의 마지막 날 구하기
+				var searchYear = yyyyMM.substring(0,4);
+				var searchMonth = yyyyMM.substring(4,6);
+				var lastDay = (new Date(searchYear, searchMonth, 0)).getDate();
+				
+				//console.log(searchYear + "/" + searchMonth + "/" + lastDay +".");
+			
+				mint.common.setScreenParam("SU0305001_fromSearchPeriod", yyyyMM + "01");
+				mint.common.setScreenParam("SU0305001_toSearchPeriod", yyyyMM + lastDay);
+				*/
+				mint.move('../sub-su/SU-03-05-001'); 
+			}
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "reg-interface-rate > tr.click"});
+		}
+		
+	}); 
+	
+	// 인터페이스 재사용률 상세 테이블 - 재사용 건수 클릭 이벤트
+	$('#reused-interface-rate').on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") + "::::::" + $(this).data("value2") );
+			
+			if ($(this).data("value1") == "reusedCnt") {
+				
+				mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+				mint.common.setScreenParam("SU0305003_SearchYear", $(this).data("value2"));
+				
+				mint.move('../sub-su/SU-03-05-003'); 
+			} 
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "reused-interface-rate > tr.click"});
+		}
+		
+	}); 
+	
+	// 인터페이스 처리 현황(오늘) 상세 테이블 클릭 이벤트
+	$('#status-interface-today-rate').on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") + "::::::" + $(this).data("value2") + "::::::" + $(this).data("value3") + "::::::" + $(this).data("value4") );
+			
+			var searchChannelId = $(this).data("value1").toString();
+			var searchYear = $(this).data("value2").toString();
+			var searchMonth = $(this).data("value3").toString();
+			var searchDay = $(this).data("value4").toString();
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0304001_SearchCategory", "channel");
+			mint.common.setScreenParam("SU0304001_SearchChannelId", searchChannelId);
+			mint.common.setScreenParam("SU0304001_fromSearchPeriod", searchYear + searchMonth + searchDay);
+			mint.common.setScreenParam("SU0304001_toSearchPeriod", searchYear + searchMonth + searchDay);
+			
+			mint.move('../sub-su/SU-03-04-001'); 
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "status-interface-today-rate > tr.click"});
+		}
+		
+	}); 
+	
+	// 인터페이스 처리 현황(이번달) 상세 테이블 클릭 이벤트
+	$('#status-interface-month-rate').on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") + "::::::" + $(this).data("value2") + "::::::" + $(this).data("value3") );
+			
+			var searchChannelId = $(this).data("value1").toString();
+			var searchYear = $(this).data("value2").toString();
+			var searchMonth = $(this).data("value3").toString();
+			
+			var lastDay = (new Date(searchYear, searchMonth, 0)).getDate();
+			//console.log(new Date(searchYear, searchMonth, 0));
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0304001_SearchCategory", "channel");
+			mint.common.setScreenParam("SU0304001_SearchChannelId", searchChannelId);
+			mint.common.setScreenParam("SU0304001_fromSearchPeriod", searchYear + searchMonth + "01");
+			mint.common.setScreenParam("SU0304001_toSearchPeriod", searchYear + searchMonth + lastDay);
+			
+			mint.move('../sub-su/SU-03-04-001'); 
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "status-interface-month-rate > tr.click"});
+		}
+		
+	}); 
+	
+	//납기준수율 상세 테이블 클릭 이벤트
+	$("#requirement-comply-rate").on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") );
+			
+			var searchCategoryId = $(this).data("value1").toString();
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0305004_SearchCategoryId", searchCategoryId);
+			
+			mint.move('../sub-su/SU-03-05-004'); 
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "requirement-comply-rate > tr.click"});
+		}
+		
+	}); 
+	
+	
+	$("#over-usage-cpu-count").on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			//console.log( $(this).data("value1") );
+			
+			var searchCategory = $(this).data("value1").toString();
+			var searchApServerIp = $(this).data("value2").toString();
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0306001_SearchCategory", searchCategory);
+			mint.common.setScreenParam("SU0306001_SearchAPServer", searchApServerIp);
+			mint.common.setScreenParam("SU0306001_SearchFromHour", "00");
+			mint.common.setScreenParam("SU0306001_SearchToHour", "23");
+			mint.common.setScreenParam("SU0306001_SearchOverUsage", "80");
+			
+			mint.move('../sub-su/SU-03-06-001'); 
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "over-usage-cpu-count > tr.click"});
+		}
+		
+	});
+	
+	$("#over-usage-memory-count").on('click', 'tr', function(e) {
+		
+		e.preventDefault();
+		
+		try {
+			console.log( $(this).data("value1") + " |||| " + $(this).data("value2"));
+			
+			var searchCategory = $(this).data("value1").toString();
+			var searchApServerIp = $(this).data("value2").toString();
+			
+			mint.common.setScreenParam("LinkedFromScreenName", screenName); 
+			mint.common.setScreenParam("SU0306001_SearchCategory", searchCategory);
+			mint.common.setScreenParam("SU0306001_SearchAPServer", searchApServerIp);
+			mint.common.setScreenParam("SU0306001_SearchFromHour", "00");
+			mint.common.setScreenParam("SU0306001_SearchToHour", "23");
+			mint.common.setScreenParam("SU0306001_SearchOverUsage", "80");
+			
+			mint.move('../sub-su/SU-03-06-001'); 
+			
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "over-usage-cpu-count > tr.click"});
+		}
+		
+	});
+	
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================		
+	
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================		
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	
+});//end document.ready()
+</script>

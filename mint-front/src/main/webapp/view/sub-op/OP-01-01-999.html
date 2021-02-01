@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>WebSocket Test</title>
+<script language="javascript" type="text/javascript">
+
+	//var wsUri = "ws://iip.mocomsys.com:8080/mint/push/dashboard/prototype";
+	var wsUri = "ws://iip.mocomsys.com:8080/mint/push/front";
+	//var wsUri = "ws://localhost:8082/mint/push/front";
+	var output;
+
+
+	function init() {
+		output = document.getElementById("output");
+		document.cookie = "name=Ethan";
+		document.cookie = "favoriteColor=Blue";
+
+		var btnServiceOn = document.getElementById("service-on-btn");
+		var msgServiceOn = document.getElementById("service-on-msg");
+		btnServiceOn.onclick = function(evt){
+			doSend(msgServiceOn.value);
+		}
+
+		var btnServiceOff = document.getElementById("service-off-btn");
+		var msgServiceOff = document.getElementById("service-off-msg");
+		btnServiceOff.onclick = function(evt){
+			doSend(msgServiceOff.value);
+		}
+		wsUri = "ws://"+ window.location.host+"/mint/push/front";
+		alert(wsUri);
+		testWebSocket();
+	}
+
+	function testWebSocket() {
+		try{
+			websocket = new WebSocket(wsUri);
+			websocket.onopen = function(evt) {
+				onOpen(evt)
+			};
+			websocket.onclose = function(evt) {
+				onClose(evt)
+			};
+			websocket.onmessage = function(evt) {
+				onMessage(evt)
+			};
+			websocket.onerror = function(evt) {
+				onError(evt)
+			};
+		}catch(e){
+			console.error(e)
+		}
+	}
+
+	function onOpen(evt) {
+		writeToScreen("CONNECTED");
+
+		//doSend("WebSocket rocks");
+
+
+	}
+
+	function onClose(evt) {
+		writeToScreen("DISCONNECTED");
+	}
+
+	function onMessage(evt) {
+		writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
+		//websocket.close();
+	}
+
+	function onError(evt) {
+		writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+	}
+
+	function doSend(message) {
+		writeToScreen("SENT: " + message);
+		websocket.send(message);
+	}
+
+	/* function writeToScreen(message) {
+		var pre = document.createElement("p");
+		pre.style.wordWrap = "break-word";
+		pre.innerHTML = message;
+		output.appendChild(pre);
+	}  */
+
+	function writeToScreen(message) {
+		output.innerHTML = message;
+	}
+
+	//window.addEventListener("load", init, false);
+	init();
+</script>
+
+<h2>WebSocket PUSH Test</h2>
+<br>
+<div id="service-on">
+	<input id="service-on-btn" type="button" value="serviceOn">
+	<textarea id="service-on-msg" rows="16" cols="80">
+{
+  "objectType": "ComMessage",
+  "requestObject":null,
+  "startTime": "20150701120001001",
+  "endTime": null,
+  "errorCd":"0",
+  "errorMsg":"",
+  "userId": "iip",
+  "appId": "AN-01-00-001",
+  "extension":{
+  	"objectType": "Extension",
+  	"serviceCd" : "WS0001",
+  	"msgType" : "ON"
+  }
+}
+	</textarea>
+</div>
+<br>
+<div id="service-off">
+	<input id="service-off-btn" type="button" value="serviceOff">
+	<textarea id="service-off-msg" rows="16" cols="80">
+{
+  "objectType": "ComMessage",
+  "requestObject":null,
+  "startTime": "20150701120001001",
+  "endTime": null,
+  "errorCd":"0",
+  "errorMsg":"",
+  "userId": "iip",
+  "appId": "AN-01-00-001",
+  "extension":{
+  	"objectType": "Extension",
+  	"serviceCd" : "WS0001",
+  	"msgType" : "OFF"
+  }
+}
+	</textarea>
+</div>
+<br>
+<div id="output"></div>

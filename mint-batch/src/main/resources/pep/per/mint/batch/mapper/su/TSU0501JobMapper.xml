@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0501JobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="getUnknownInterfaceInfoList" resultMap="unknownInterfaceInfoResultMap">
+    <![CDATA[
+        SELECT DISTINCT SUBSTR(B.MSG_DATETIME, 1, 8) AS CHECK_DATE
+        	  ,A.INTF_ID AS INTERFACE_ID
+        	  ,CASE WHEN C.MASTER01 IS NULL THEN A.HOST_ID END AS SND_HOST
+        	  ,C.MASTER02 AS SND_SERVICE
+        	  ,C.MASTER03 AS RCV_SERVICE
+        	  ,D.TRAN_CNT
+          FROM MASTERLOG_ID_MAP A
+               INNER JOIN MASTERLOG B ON A.MASTERLOG_ID = B.MASTERLOG_ID
+                                     AND B.MSG_DATETIME >= #{fromDate} || '000000000000'
+                                     AND B.MSG_DATETIME  < #{toDate}   || '999999999999'
+               LEFT OUTER JOIN MASTERLOG_CUSTOM C ON B.MASTERLOG_ID = C.MASTERLOG_ID
+                                                 AND B.MSG_DATETIME = C.MSG_DATETIME
+               LEFT OUTER JOIN (SELECT INTF_ID, SUM(ST_PROCESSING + ST_FINISHED + ST_SEND_ERR) AS TRAN_CNT
+                                  FROM SI_STAT_INTF_HOUR
+                                 WHERE ST_YEAR  = substr(#{fromDate} ,1 ,4)
+								   AND ST_MONTH = substr(#{fromDate} ,5 ,2)
+								   AND ST_DAY   = substr(#{fromDate} ,7 ,2)
+						         GROUP BY INTF_ID) D ON D.INTF_ID = A.INTF_ID
+         WHERE A.INTF_ID IN (SELECT DISTINCT D.INTF_ID
+                               FROM MASTERLOG_ID_MAP D, MASTERLOG E
+                              WHERE D.MASTERLOG_ID = E.MASTERLOG_ID
+                                AND E.MSG_DATETIME >= #{fromDate} || '0000000000'
+                                AND E.MSG_DATETIME  < #{toDate}   || '9999999999'
+                              MINUS
+                             SELECT DISTINCT F.INTEGRATION_ID
+                               FROM TAN0201 F, TAN0101 G
+                              WHERE F.INTERFACE_ID = G.INTERFACE_ID
+                                AND G.DEL_YN = 'N')
+    ]]>
+    </select>
+
+    <!--
+    <select id="getUnknownInterfaceInfoList" resultMap="unknownInterfaceInfoResultMap">
+        <![CDATA[
+        SELECT DISTINCT SUBSTR(B.MSG_DATETIME, 1, 8) AS CHECK_DATE
+        	  ,A.INTF_ID AS INTERFACE_ID
+        	  ,CASE WHEN C.MASTER01 IS NULL THEN A.HOST_ID END AS SND_HOST
+        	  ,C.MASTER02 AS SND_SERVICE
+        	  ,C.MASTER03 AS RCV_SERVICE
+        	  ,D.TRAN_CNT
+          FROM MASTERLOG_ID_MAP A
+               INNER JOIN MASTERLOG B ON A.MASTERLOG_ID = B.MASTERLOG_ID
+                                     AND B.MSG_DATETIME >= #{fromDate} || '000000000000'
+                                     AND B.MSG_DATETIME  < #{toDate}   || '999999999999'
+               LEFT OUTER JOIN MASTERLOG_CUSTOM C ON B.MASTERLOG_ID = C.MASTERLOG_ID
+                                                 AND B.MSG_DATETIME = C.MSG_DATETIME
+               LEFT OUTER JOIN (SELECT INTF_ID, SUM(ST_PROCESSING + ST_FINISHED + ST_SEND_ERR) AS TRAN_CNT
+                                  FROM SI_STAT_INTF_HOUR
+                                 WHERE ST_YEAR = TO_CHAR(SYSDATE - 1, 'YYYY')
+								   AND ST_MONTH = TO_CHAR(SYSDATE - 1, 'MM')
+								   AND ST_DAY = TO_CHAR(SYSDATE - 1, 'DD')
+								   AND ST_HOUR >= '00'
+								   AND ST_HOUR < TO_CHAR(SYSDATE - 1, 'HH24')
+						         GROUP BY INTF_ID) D ON D.INTF_ID = A.INTF_ID
+         WHERE A.INTF_ID IN (SELECT DISTINCT D.INTF_ID
+                               FROM MASTERLOG_ID_MAP D, MASTERLOG E
+                              WHERE D.MASTERLOG_ID = E.MASTERLOG_ID
+                                AND E.MSG_DATETIME >= #{fromDate} || '000000000000'
+                                AND E.MSG_DATETIME  < #{toDate}   || '999999999999'
+                              MINUS
+                             SELECT DISTINCT F.INTEGRATION_ID
+                               FROM TAN0201 F, TAN0101 G
+                              WHERE F.INTERFACE_ID = G.INTERFACE_ID
+                                AND G.DEL_YN = 'N')
+    ]]>
+    </select>
+    -->
+
+    <resultMap id="unknownInterfaceInfoResultMap" type="UnknownInterfaceInfo" >
+    	<result property="checkDate" 		column="CHECK_DATE"/>
+        <result property="interfaceId" 		column="INTERFACE_ID"/>
+        <result property="consumerSystem"	column="SND_HOST"/>
+        <result property="consumerService"	column="SND_SERVICE" />
+        <result property="providerService"	column="RCV_SERVICE" />
+        <result property="txCount"	 		column="TRAN_CNT" />
+    </resultMap>
+    
+    <select id="getMatchingCount" resultType="int">
+    	SELECT COUNT(*) FROM TSU0501 WHERE INTERFACE_ID = #{interfaceId}
+    </select>
+
+	<insert id="insertUnknownInterfaceInfo">
+		INSERT INTO TSU0501(
+            CHECK_DATE, INTERFACE_ID, SOURCE_HOST, SOURCE_SERVICE, TARGET_SERVICE, TRAN_CNT, REG_YN
+        )VALUES(
+            #{checkDate},
+            #{interfaceId},
+            #{consumerSystem , jdbcType=VARCHAR},
+            #{consumerService, jdbcType=VARCHAR},
+            #{providerService, jdbcType=VARCHAR},
+            #{txCount},
+            'N'
+        )
+	</insert>
+
+    <update id="updateUnknownInterfaceInfo" >
+		UPDATE TSU0501
+            SET CHECK_DATE     = #{checkDate},
+                SOURCE_HOST    = #{consumerSystem, jdbcType=VARCHAR},
+                SOURCE_SERVICE = #{consumerService, jdbcType=VARCHAR},
+                TARGET_SERVICE = #{providerService, jdbcType=VARCHAR},
+                TRAN_CNT = #{txCount}
+	     WHERE INTERFACE_ID = #{interfaceId}
+    </update>
+
+</mapper>

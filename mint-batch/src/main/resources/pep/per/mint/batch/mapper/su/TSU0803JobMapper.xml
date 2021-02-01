@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0803JobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="selectOneTSU0803" resultType="int">
+    <![CDATA[
+		SELECT COUNT(*) AS CNT
+        FROM TSU0803 a
+        WHERE a.INTERFACE_ID = #{interfaceId}
+        AND a.TR_DATE = #{trDate}
+		AND a.SEQ = 1
+    ]]>
+    </select>
+
+    <select id="selectInterfaceInfo" resultType="map">
+    <![CDATA[
+        SELECT
+			MAX(a.DATA_PR_DIR) AS "dataPrDr"
+        	,MAX(a.INTERFACE_ID) AS "interfaceId"
+        FROM TAN0201 a
+        WHERE a.INTEGRATION_ID = #{integrationId}
+        OR a.INTEGRATION_ID = #{groupId} || #{delimeter} || #{integrationId}
+    ]]>
+    </select>
+
+    <select id="selectInterfaceInfoList" resultType="map">
+    <![CDATA[
+		SELECT
+			(a.DATA_PR_DIR) AS "dataPrDr"
+        	,(a.INTERFACE_ID) AS "interfaceId"
+        	,(a.INTEGRATION_ID) AS "intergatrionId"
+		FROM TAN0201 a
+		WHERE DEL_YN='N'
+    ]]>
+    </select>
+
+	<insert id="insertTSU0803">
+		INSERT INTO TSU0803(
+			 INTERFACE_ID
+			,TR_DATE
+			,SEQ
+			,DATA_SIZE
+			,SUCCESS_CNT
+			,ERROR_CNT
+			,PROCESS_CNT
+			,REG_DATE
+			,REG_APP
+        ) VALUES (
+             #{interfaceId, jdbcType=VARCHAR}
+            ,#{trDate, 		jdbcType=VARCHAR}
+            ,1
+            ,#{dataSize, 	jdbcType=NUMERIC}
+            ,#{successCnt,	jdbcType=NUMERIC}
+            ,#{errorCnt, 	jdbcType=NUMERIC}
+            ,#{processCnt, 	jdbcType=NUMERIC}
+            ,#{regDate,		jdbcType=VARCHAR}
+            ,#{regApp,		jdbcType=VARCHAR}
+        )
+	</insert>
+
+    <update id="updateTSU0803" >
+		UPDATE TSU0803
+		SET
+			 DATA_SIZE		= #{dataSize, 	jdbcType=NUMERIC}
+			,SUCCESS_CNT	= #{successCnt,	jdbcType=NUMERIC}
+			,ERROR_CNT		= #{errorCnt, 	jdbcType=NUMERIC}
+			,PROCESS_CNT	= #{processCnt, jdbcType=NUMERIC}
+			,REG_DATE		= #{regDate,	jdbcType=VARCHAR}
+			,REG_APP		= #{regApp,		jdbcType=VARCHAR}
+		WHERE INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+		AND TR_DATE = #{trDate, jdbcType=VARCHAR}
+        AND SEQ = 1
+    </update>
+
+
+    <update id="deleteTSU0803" >
+		DELETE FROM TSU0803
+		WHERE INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+		AND TR_DATE = #{trDate, jdbcType=VARCHAR}
+        AND SEQ = 1
+    </update>
+
+    <insert id="insertZeroDataTSU0803">
+		INSERT INTO TSU0803(
+		   INTERFACE_ID
+		  ,TR_DATE
+		  ,SEQ
+		  ,DATA_SIZE
+		  ,SUCCESS_CNT
+		  ,ERROR_CNT
+		  ,PROCESS_CNT
+		  ,REG_DATE
+		  ,REG_APP
+		)
+		SELECT
+		    a.INTERFACE_ID
+			<choose>
+				<when test="_databaseId == 'altibase'">
+			,'${trDate}'
+			,0 AS SEQ
+			,0 AS DATA_SIZE
+			,0 AS SUCCESS_CNT
+			,0 AS ERROR_CNT
+			,0 AS PROCESS_CNT
+			,#{regDate, jdbcType=VARCHAR}
+			,#{regApp,  jdbcType=VARCHAR}
+		FROM (
+			SELECT INTERFACE_ID FROM TAN0201 WHERE DEL_YN = 'N'
+			MINUS
+			SELECT INTERFACE_ID FROM TSU0803 WHERE TR_DATE = #{trDate, jdbcType=VARCHAR}
+		    	</when>
+				<when test="_databaseId == 'postgres'">
+			,#{trDate, jdbcType=VARCHAR}
+			,0 AS SEQ
+			,0 AS DATA_SIZE
+			,0 AS SUCCESS_CNT
+			,0 AS ERROR_CNT
+			,0 AS PROCESS_CNT
+			,#{regDate, jdbcType=VARCHAR}
+			,#{regApp,  jdbcType=VARCHAR}
+			FROM (
+		  		SELECT INTERFACE_ID FROM TAN0201 WHERE DEL_YN = 'N'
+		  		EXCEPT
+		  		SELECT INTERFACE_ID FROM TSU0803 WHERE TR_DATE = #{trDate, jdbcType=VARCHAR}
+		    	</when>
+		    	<otherwise>
+			,#{trDate, jdbcType=VARCHAR}
+			,0 AS SEQ
+			,0 AS DATA_SIZE
+			,0 AS SUCCESS_CNT
+			,0 AS ERROR_CNT
+			,0 AS PROCESS_CNT
+			,#{regDate, jdbcType=VARCHAR}
+			,#{regApp,  jdbcType=VARCHAR}
+			FROM (
+		  		SELECT INTERFACE_ID FROM TAN0201 WHERE DEL_YN = 'N'
+		  		MINUS
+		  		SELECT INTERFACE_ID FROM TSU0803 WHERE TR_DATE = #{trDate, jdbcType=VARCHAR}
+		    	</otherwise>
+			</choose>
+		  ) a
+    </insert>
+
+    <select id="getEnvironment" resultType="string">
+    	SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = #{package} AND ATTRIBUTE_ID = #{attributeId} AND IDX = 1
+	</select>
+
+</mapper>

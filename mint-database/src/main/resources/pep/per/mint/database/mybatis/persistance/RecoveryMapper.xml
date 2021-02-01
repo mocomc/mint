@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.RecoveryMapper">
+  	<!--
+  	<cache/>
+  	-->
+  	
+  	
+  	<!-- RecoveryFieldSet -->
+  	
+  	<select id="getRecoveryFieldSet" parameterType="string" resultMap="recoveryFieldSetResult">
+		select
+			* 
+	     from TB_RUL_RECOVERY_FIELDSET
+	    where RECOVERY_FIELDSET_ID = #{id} 
+  	</select>
+
+  	<resultMap id="recoveryFieldSetResult" type="RecoveryFieldSet">
+  		<id property="id" column="RECOVERY_FIELDSET_ID"/>
+		<result property="name" 	    column="RECOVERY_FIELDSET_NM"/>
+		<result property="messageSetId"	column="MSGSET_ID"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+	</resultMap>
+
+  	<select id="getRecoveryFieldSetDetail" parameterType="string" resultMap="recoveryFieldSetDetailResult">
+		select
+			* 
+	     from TB_RUL_RECOVERY_FIELDSET_DETAIL
+	    where RECOVERY_FIELDSET_ID = #{id} 
+  	</select>
+   	
+  	<resultMap id="recoveryFieldSetDetailResult" type="map">
+  		<id property="fieldSetId"       column="RECOVERY_FIELDSET_ID"/>
+		<id property="fieldPath" 	    column="RECOVERY_FIELD_PATH"/>
+		<result property="fieldType" 	column="RECOVERY_FIELD_TYPE"/>
+		<result property="seq" 			column="SEQ"/>
+	</resultMap>
+	
+	
+   	<insert id="insertRecoveryFieldSet" parameterType="RecoveryFieldSet">
+   		insert into TB_RUL_RECOVERY_FIELDSET (
+	   		 RECOVERY_FIELDSET_ID
+			,RECOVERY_FIELDSET_NM
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+		) values (
+			 #{id}
+			,#{name}
+			,#{regId}
+			,#{regDate}
+			,#{modId}
+			,#{modDate}
+		)
+   	</insert>	
+
+   	<insert id="insertRecoveryFieldSetDetail" parameterType="RecoveryFieldSetDetail">
+   		insert into TB_RUL_RECOVERY_FIELDSET_DETAIL (
+	   		 RECOVERY_FIELDSET_ID
+			,RECOVERY_FIELD_PATH
+			,RECOVERY_FIELD_TYPE
+			,SEQ
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+		) values (
+			 #{fieldSetId}
+			,#{fieldPath}
+			,#{fieldType}
+			,#{seq}
+			,#{regId}
+			,#{regDate}
+			,#{modId}
+			,#{modDate}
+		)
+   	</insert>
+   	
+   	<update id="updateRecoveryFieldSet" parameterType="RecoveryFieldSet">
+   		update TB_RUL_RECOVERY_FIELDSET
+   		set  RECOVERY_FIELDSET_NM = #{name}
+			,MOD_ID = #{modId}
+			,MOD_DATE = #{modDate}
+		where RECOVERY_FIELDSET_ID = #{id}
+   	</update>
+   	
+   	<update id="updateRecoveryFieldSetDetail" parameterType="RecoveryFieldSetDetail">
+   		update TB_RUL_RECOVERY_FIELDSET_DETAIL
+	   	set  RECOVERY_FIELD_TYPE = #{fieldType}
+			,SEQ = #{seq}
+			,REG_ID = #{regId}
+			,REG_DATE = #{regDate} 
+			,MOD_ID = #{modId}
+			,MOD_DATE = #{modDate}
+		where RECOVERY_FIELDSET_ID = #{fieldSetId} and
+		      RECOVERY_FIELD_PATH = #{fieldPath}
+   	</update>
+   	
+   	<delete id="deleteRecoveryFieldSet" parameterType="RecoveryFieldSet">
+   		delete
+   		from TB_RUL_RECOVERY_FIELDSET
+		where RECOVERY_FIELDSET_ID = #{id}
+   	</delete>
+   	
+   	<delete id="deleteRecoveryFieldSetDetail" parameterType="RecoveryFieldSetDetail">
+   		delete
+   		from TB_RUL_RECOVERY_FIELDSET_DETAIL
+		where RECOVERY_FIELDSET_ID = #{fieldSetId} and
+		      RECOVERY_FIELD_PATH = #{fieldPath}
+   	</delete>   	   		   			
+	
+	
+	<!-- RecoveryInfo -->
+	
+	<select id="getRecoveryInfo" parameterType="string" resultMap="recoveryInfoResult">
+		select
+		   *
+		from TB_RUL_RECOVERY_INFO
+		where RECOVERY_KEY = #{recoveryKey}
+	</select>
+	
+	<resultMap id="recoveryInfoResult" type="RecoveryInfo">
+		<id property="id" column="RECOVERY_KEY"/>
+		<result property="recoveryKey" column="RECOVERY_KEY"/>
+		<result property="sessionId" column="USER_SESSION_ID"/>
+		<result property="senderId" column="REQUEST_SERVER_ID"/>
+		<result property="regId" column="REG_ID"/>
+		<result property="regDate" column="REG_DATE"/>
+		<result property="modId" column="MOD_ID"/>
+		<result property="modDate" column="MOD_DATE"/>		
+		<collection property="fieldData" javaType="ArrayList" column="RECOVERY_KEY" ofType="RecoveryFieldData" select="getRecoveryFieldData"/>
+	</resultMap>
+	
+  	<select id="getRecoveryFieldData" parameterType="string" resultMap="recoveryFieldDataResult">
+        select A.*
+        from TB_RUL_RECOVERY_FIELDDATA  A, TB_RUL_RECOVERY_FIELDSET_DETAIL B
+        where A.RECOVERY_KEY = #{recoveryKey}
+              and A.RECOVERY_FIELDSET_ID = B.RECOVERY_FIELDSET_ID
+              and A.RECOVERY_FIELD_PATH = B.RECOVERY_FIELD_PATH
+        order by B.SEQ asc	    
+  	</select>
+
+  	<resultMap id="recoveryFieldDataResult" type="RecoveryFieldData">
+  		<id property="id" column="RECOVERY_KEY"/>
+  		<result property="recoveryKey"	column="RECOVERY_KEY"/>
+		<result property="fieldSetId" 	column="RECOVERY_FIELDSET_ID"/>
+		<result property="fieldPath" 	column="RECOVERY_FIELD_PATH"/>
+		<result property="fieldValue" 	column="FIELD_VALUE"/>
+		<result property="regDate"		column="REG_DATE"/>
+	</resultMap>
+	
+   	<insert id="insertRecoveryInfo" parameterType="RecoveryInfo">
+   		insert into TB_RUL_RECOVERY_INFO (
+	   		 RECOVERY_KEY
+			,USER_SESSION_ID
+			,REQUEST_SERVER_ID
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+		) values (
+			 #{recoveryKey}
+			,#{sessionId}
+			,#{senderId}
+			,#{regId}
+			,#{regDate}
+			,#{modId}
+			,#{modDate}
+		)
+   	</insert>	
+
+   	<insert id="insertRecoveryFieldData" parameterType="RecoveryFieldData">
+   		insert into TB_RUL_RECOVERY_FIELDDATA (
+	   		 RECOVERY_KEY
+			,RECOVERY_FIELDSET_ID
+			,RECOVERY_FIELD_PATH
+			,FIELD_VALUE
+			,REG_DATE
+		) values (
+		     #{recoveryKey}
+			,#{fieldSetId}
+			,#{fieldPath}
+			,#{fieldValue}
+			,#{regDate}
+		)
+   	</insert>
+   	
+   	<delete id="deleteRecoveryInfo" parameterType="RecoveryInfo">
+   		delete 
+   		from TB_RUL_RECOVERY_INFO
+   		where RECOVERY_KEY = #{recoveryKey}
+   	</delete>	
+
+   	<delete id="deleteRecoveryFieldData" parameterType="RecoveryFieldData">
+   		delete
+   		from TB_RUL_RECOVERY_FIELDDATA
+   		where RECOVERY_KEY = #{recoveryKey}
+   	</delete>   		   	
+   	   	
+</mapper>

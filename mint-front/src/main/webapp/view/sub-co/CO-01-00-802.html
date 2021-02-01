@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><lb class="lb-440"></lb> <lb class="lb-375"></lb></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<style>
+		body{
+			font-family:'NanumGothic','Gulim','Dotum','Arial','AppleGothic','sans-serif';
+			font-size:13px;
+		}
+		.template-ibox {
+			clear: both;
+			margin-bottom: 10px;
+			margin-top: 0;
+			padding: 0;
+		}
+		
+		.template-float-e-margins {
+			margin-bottom: 5px;
+		}
+		
+		.template-ibox-content h1,
+		.template-ibox-content h2,
+		.template-ibox-content h3,
+		.template-ibox-content h4,
+		.template-ibox-content h5,
+		.template-ibox-title h1,
+		.template-ibox-title h2,
+		.template-ibox-title h3,
+		.template-ibox-title h4,
+		.template-ibox-title h5 {
+		  margin-top: 5px;
+		}
+		
+		.template-ibox-title {
+			-moz-border-bottom-colors: none;
+			-moz-border-left-colors: none;
+			-moz-border-right-colors: none;
+			-moz-border-top-colors: none;
+			background-color: #ffffff;
+			border-color: #1AB394;
+			border-image: none;
+			border-style: solid solid none;
+			border-width: 4px 0px 0;
+			color: inherit;
+			margin-bottom: 0;
+			padding:7px 15px 8px;
+			min-height: 15px;
+			width:100%;
+		}
+		
+		.template-ibox-content {
+			background-color: #ffffff;
+			color: inherit;
+			padding: 15px 20px 20px 20px;
+			border-color: #e7eaec;
+			border-image: none;
+			border-style: solid solid none;
+			border-width: 1px 0px;
+		}
+		
+		.template-ibox-content {
+			clear: both;
+		}
+		
+		.template-ibox-heading {
+			background-color: #f3f6fb;
+			border-bottom: none;
+		}
+		
+		.template-ibox-heading h3 {
+			font-weight: 200;
+			font-size: 24px;
+		}		
+				
+				
+		.template-ibox-content.text-box {
+			padding-bottom: 0px;
+			padding-top: 15px;
+		}
+
+		.template-feed-activity-list .template-feed-element {
+			border-bottom: 1px solid #e7eaec;
+		}
+	
+		.template-pull-right {
+			float: right !important;
+			margin-left: 10px;
+		}		
+
+		/* COLORS */
+		.template-text-navy {
+			color: #1ab394;
+		}
+		.template-text-primary {
+			color: inherit;
+		}
+		.template-text-success {
+			color: #1c84c6;
+		}
+		.template-text-info {
+			color: #23c6c8;
+		}
+		.template-text-warning {
+			color: #f8ac59;
+		}
+		.template-text-danger {
+			color: #ed5565;
+		}
+		.template-text-muted {
+			color: #888888;
+		}
+
+
+		
+		.template-subtitle-group {
+			width:100% ;
+			background-color:#FFFFFF;
+			padding:2px 0px 2px 0px;
+			border-bottom: 5px;
+			clear:both;
+		}
+		
+		.template-lable-textfield-group {
+			height:25px;
+			width:100% ;
+			color:#736A6C;
+			background-color:#FFFFFF;
+			padding:2px 0px 2px 0px;
+			border-bottom: 5px;
+			clear:both;
+		}
+		
+		.template-lable-center {
+			background-color: #f3f3f4;
+			border: 1px solid #e7eaec;
+			border-radius: 3px;
+			color: inherit;
+			text-align:center;
+			font-weight:bold;
+			margin-right: 5px;
+			padding:5px 0px 5px 0px;
+			display:block;
+			width:35%;
+			float:left;
+		}
+		.template-input-left {
+			background-color: #ffffff;
+			border: 1px solid #e7eaec;
+			border-radius: 3px;
+			color: inherit;
+			text-align:left;
+			margin-left: 2px;
+			margin-right: 5px;
+			padding:5px 0px 5px 10px;
+			display:block;
+			width:35%;
+			float:left;
+			height:15px;
+			box-sizing:content-box;
+		}
+		
+		.template-newLine {
+			padding:5px 0px 5px 5px;
+			float:left;
+			clear:left;
+		}
+						
+		.template-subtitle {
+			height:25px;
+			width:100% ;
+			background-color:#FFFFFF;
+			padding:2px 0px 0px 0px;
+			border-bottom: 0px dotted #1ab394;
+			clear:both;
+		}
+		
+		.template-subtitle-depth1 {
+			font-size:12px;
+			height:25px;
+			width:100% ;
+			color:#676A83;
+			background-color:#FFFFFF;
+			padding:2px 0px 0px 20px;
+			border-bottom: 0px dotted #1ab394;
+			clear:both;
+		}
+				
+		
+		.template-hr-space {
+			width:100%;height:6px;margin:0px;border-color:#ffffff
+		}		
+
+		td {color:#736A6C; line-height:20px;}
+
+		.template-table-title {                               
+		    font-weight:bold;
+		    color:#736A6C;
+		    height:22px;
+		    text-decoration:none;
+		    background-color:#F3F3F4;
+		    align:center;
+		} 
+		
+		.template-td-line {
+			height:3px;
+			background-color:#1ab394;	
+		}
+		
+		.template-tr-content {
+			border-top: 1px solid #e7eaec;
+			border-bottom: 1px solid #e7eaec;
+		}		
+		
+		.template-td-title {
+			font-weight:bold;
+		    color:#736A6C;
+		    height:22px;
+		    text-align:center;
+		    text-decoration:none;
+		    background-color:#F3F3F4;
+		    border-left: 1px solid #e7eaec;
+		    border-right: 1px solid #e7eaec;
+		    padding-left:2px;
+		    
+		}		
+
+		.template-td-content {
+		    color:#736A6C;
+		    height:22px;
+		    text-align:center;
+		    text-decoration:none;
+		    background-color:#FFFFFF;
+		    border-left: 1px solid #e7eaec;
+		    border-right: 1px solid #e7eaec;
+		    padding-left:2px;
+		}
+		
+		.template-table-one {
+			background-color: #ffffff;
+			border: 0px solid #e7eaec;
+			border-radius: 3px;
+			text-align:left;
+			margin-left: 2px;
+			margin-right: 5px;
+			padding:0px 0px 0px 0px;
+			display:block;
+			width:100%;
+			clear:both;
+		}
+		
+		.template-table-two {
+			background-color: #ffffff;
+			border: 0px solid #e7eaec;
+			border-radius: 3px;
+			text-align:left;
+			margin-left: 2px;
+			margin-right: 5px;
+			padding:0px 0px 0px 0px;
+			display:block;
+			width:100%;
+			width:48%;
+			float:left;
+		}		
+	</style>
+</head>
+<body>
+	<div class="template-ibox template-float-e-margins">
+		<div class="template-ibox-title">
+		    <h5></h5>
+		</div>
+		<div class="template-ibox-content template-ibox-heading" style="text-align: center">
+		    <h3><i class="fa fa-envelope-o"></i> <lb class="lb-400"></lb></h3>
+		    <!--<small><i class="fa fa-tim"></i>Test Message</small>  -->
+		</div>
+		<div class="template-ibox-content">
+		
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-467"></lb> <lb class="lb-152"></lb></strong>
+			</div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-467"></lb> <lb class="lb-68"></lb></span>
+					<span class="template-input-left" id="popupProblemSubject" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-467"></lb> <lb class="lb-494"></lb></span>
+					<span class="template-input-left" id="popupType" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-467"></lb> <lb class="lb-478"></lb></span>
+					<span class="template-input-left" id="popupProblemType"style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-495"></lb> <lb class="lb-473"></lb></span>
+					<span class="template-input-left" id="popupStatus"style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-467"></lb> <lb class="lb-82"></lb></span>
+					<span class="template-input-left" id="popupSystemNm" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-497"></lb></span>
+					<span class="template-input-left" id="popupImportance" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-467"></lb> <lb class="lb-50"></lb></span>
+					<span class="template-input-left" id="popupStartDate" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-467"></lb> <lb class="lb-479"></lb></span>
+					<span class="template-input-left" id="popupEndDate" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+
+			</div>
+
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle-depth1" style="display:none;">
+			    <strong>▶ <lb class="lb-467"></lb> <lb class="lb-498"></lb></strong>
+			</div>				
+			<div class="template-subtitle-group" style="display:none;">
+				<div class="template-lable-textfield-group">
+					<div class="template-input-left" id="popupProblemContents" cols="78" rows="6"  style="width:100%;height:50px; overflow-y:auto;" disabled></div>
+				</div>
+			</div>
+			<div class="template-subtitle-group">
+			</div>			
+
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle-depth1">
+			    <strong>▶ <lb class="lb-499"></lb> <lb class="lb-500"></lb></strong>
+			</div>				
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<div class="template-input-left" id="popupCauseContents" cols="78" rows="6"  style="width:100%;height:50px; overflow-y:auto;" disabled></div>
+				</div>
+			</div>
+			<div class="template-subtitle-group">
+			</div>			
+
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle-depth1">
+			    <strong>▶ <lb class="lb-468"></lb></strong>
+			</div>				
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<div class="template-input-left" id="popupResultContents" cols="78" rows="6"  style="width:100%;height:50px; overflow-y:auto;" disabled></div>
+				</div>
+			</div>
+			<div class="template-subtitle-group">
+			</div>			
+
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle-depth1">
+			    <strong>▶ <lb class="lb-501"></lb> <lb class="lb-502"></lb></strong>
+			</div>				
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<div class="template-input-left" id="popupPlanContents" cols="78" rows="6"  style="width:100%;height:50px; overflow-y:auto;" disabled></div>
+				</div>
+			</div>
+			<div class="template-subtitle-group">
+			</div>			
+		</div>
+		
+		<div class="template-ibox-content template-ibox-heading" style="text-align: center; padding:10px 10px 1px 10px">
+		    <h4><lb class="lb-151"></lb> <span id="expand-interface-info-title"></span></h4>
+		</div>		
+		<div class="template-ibox-content">
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-152"></lb></strong>
+			</div>			
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-80"></lb></span>
+					<span class="template-input-left" id="popupChannelNm" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-153"></lb></span>
+					<span class="template-input-left" id="popupInterfaceNm" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-154"></lb></span>
+					<span class="template-input-left" id="popupInterfaceId" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-155"></lb></span>
+					<span class="template-input-left" id="popupDataPrDirNm" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-162"></lb></span>
+					<span class="template-input-left" id="popupAppPrMethodNm" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-158"></lb></span>
+					<span class="template-input-left" id="popupDataPrMethodNm" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-180"></lb></strong>
+			</div>
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<span class="template-table-one">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr><td class="template-td-line"></td></tr>
+						<tr><td class="template-table-title" align="center">Consumer</td></tr>
+						<tr> 
+							<td align="center" valign="top">
+								<table width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC" class="sndSystem">
+									<thead>
+									<tr class="template-tr-content"> 
+										<td class="template-td-title" width="21%"><lb class="lb-82"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-86"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-87"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-81"></lb></td>
+									</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>								
+							</td>
+						</tr>
+					</table>
+				</span>	
+				<div class="template-hr-space"></div>
+				<span class="template-table-one">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr><td class="template-td-line"></td></tr>
+						<tr><td class="template-table-title" align="center">Provider</td></tr>
+						<tr> 
+							<td align="center" valign="top">
+								<table width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC" class="recvSystem">
+									<thead>
+									<tr class="template-tr-content"> 
+										<td class="template-td-title" width="21%"><lb class="lb-82"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-86"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-87"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-81"></lb></td>
+									</tr>
+									</thead>
+									<tbody>
+									</tbody>			              
+								</table>								
+							</td>
+						</tr>
+					</table>
+				</span>						
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+						
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-209"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>		
+			<div class="template-subtitle-group">
+				<span class="template-table-one">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr><td class="template-td-line"></td></tr>  
+						<tr> 
+							<td align="center" valign="top">
+								<table width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC" class="adminInfo">
+									<thead>
+									<tr class="template-tr-content"> 
+										<td class="template-td-title" width="15%"><lb class="lb-210"></lb></td>
+										<td class="template-td-title" width="20%"><lb class="lb-211"></lb></td>
+										<td class="template-td-title" width="20%"><lb class="lb-212"></lb></td>
+										<td class="template-td-title" width="20%"><lb class="lb-213"></lb></td>
+										<td class="template-td-title" width="25%"><lb class="lb-214"></lb></td>
+									</tr>
+									</thead>
+									<tbody>
+									</tbody>			              
+								</table>								
+							</td>
+						</tr>
+					</table>
+				</span>	
+			</div>
+		</div>
+		
+		<div class="template-ibox-content">
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-441"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span><a id="pop-tf-linkId" href="#" target="_blank">http://wwww.iip.com/mint/?sdkjkljklfjskljdkljkljkl=?sdfklsjkdkjrkfS>fsdf</a></span>
+				</div>
+			</div>
+		</div>		
+	</div>
+</body>
+</html>

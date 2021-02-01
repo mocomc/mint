@@ -1,0 +1,653 @@
+﻿<!--
+	Screen ID : SU-01-01-001
+	Screen NM : 사용자 업무 이관
+	[변경 이력]
+-->
+
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-26"></lb></h2>
+	    <ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="lb-26"></lb></strong></li>
+	    </ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" ></div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						<span><lb class="lb-366"></lb></span>
+					</h5>
+					<div class="ibox-tools">
+						<span style="padding: 0px 20px 0px 0px;">
+							<div class="checkbox checkbox-warning checkbox-inline" style="padding-left:20px; padding-top:3px; display:none;">
+								<input type="checkbox" id="rd-search-range" name="rd-search-range" value="0">
+								<label for="rd-search-range" style="font-size: 13px;"><lb class="lb-607"></lb></label>
+							</div>
+						</span>
+						<a class="collapse-link">
+						    <i class="fa fa-chevron-up"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div>
+						<span class="k-widget k-autocomplete" style="width: 80%;">
+							<input id="tf-interface-user" type="text" class="k-input" placeholder="Search..." style="width: 100%;">
+						</span>
+						<span style="float: right;">
+							<button id="btn-search-interface-user" type="button" class="btn btn-default btn-sm btn-outline btn-search" style="padding: 4px 25px 4px 25px;"><i class="fa fa-search"></i><lb class="lb-351"></lb></button>
+						</span>
+					</div>
+					<hr class="hr-space">
+	           		<div id="tab01-grid"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						<span><lb class="lb-90"></lb> <lb class="lb-108"></lb></span>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+						    <i class="fa fa-chevron-up"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div>
+						<span class="lable_tag6"><lb class="lb-209"></lb></span>
+						<span class="k-widget k-autocomplete" style="width: 60%;">
+							<input id="tab2-name" type="text" class="k-input" style="background-color: #f3f3f4; text-align:center; width: 100%;" readonly="readonly" disabled="disabled">
+						</span>
+						<span style="float: right;">
+							<a href="#" class="btn btn-success btn-sm btn-interface-move" style="padding: 4px 15px 4px 15px;"><i class="fa fa-check" ></i> <lb class="lb-410"></lb> <lb class="lb-369"></lb> </a>
+						</span>
+					</div>
+					<hr class="hr-space">
+	              	<div id="tab02-grid"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<script>
+	$(document).ready(function() {
+	    //=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main/main_detail, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "SU-01-01-001";
+
+	    $.extend({
+	        main : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+	           	infterfaceListCheckbox : {},
+	           	tab2InterfaceUserId : '',
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_initTab01();
+						$.main.fn_initTab02();
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab01 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab01 : function() {
+					try {
+						//사용자 그리드
+						$("#tab01-grid").kendoGrid({
+				          	dataSource : {
+				 				  data : ""
+				 				, page : 1
+				 				, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+					            , schema: {
+					            	model: {
+					            		fields: {
+					            			companyNm: {editable: false, type: "string", nullable: true, defaultValue: ""},
+					            			departmentNm: {editable: false, type: "string", nullable: true, defaultValue: ""},
+					            			userNm: {editable: false}
+					            		}
+					            	}
+					            }
+							}
+				            , sortable: true
+				            , selectable: true
+				            , pageable : {
+								  refresh 		: false
+						    	, buttonCount 	: 5
+						    	, pageSizes		: mint.ui.getPageSizesXS()
+						    	, input : true
+							}
+							, columns: [
+									{
+										field : "companyNm",
+										template : '#=$.main.fn_setGridCompanyNm(mint.common.isEmpty(companyNm) ? "" : companyNm, retired)#',
+										title : mint.label.getLabel('lb-371'),
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "departmentNm",
+										title : mint.label.getLabel('lb-407'),
+										template : "<span title='${mint.common.isEmpty(departmentNm) ? '' : departmentNm }'>${mint.common.isEmpty(departmentNm) ? '' : departmentNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "userNm",
+										title : mint.label.getLabel('lb-211'),
+										template : "<span title='${userNm}'>${userNm}</span>",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "interfaceCnt",
+										template : '#=$.main.fn_setGridInterfaceCheck(interfaceCnt)#',
+										title : mint.label.getLabel('lb-90'),
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+							]
+							, dataBound: function (e) {
+								if('undefined' != typeof $("#tab01-grid").data()) {
+									if(0 == $("#tab01-grid").data().kendoGrid.dataSource.view().length) {
+										var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+							    		$("#tab01-grid").children(".k-grid-content").height(gridHeight /3.5);
+							    	} else {
+							    		$("#tab01-grid").children(".k-grid-content").height('auto');
+							    	}
+								}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab01"});
+					}
+				},//end fn_initTab01
+
+				//-----------------------------------------------------------------------
+				// Description :: 소속 표시
+				//-----------------------------------------------------------------------
+				fn_setGridCompanyNm : function(companyNm, retired) {
+					try {
+						var rtnCompanyNm = '';
+
+						if('Y' ==  retired) {
+							rtnCompanyNm = mint.label.getLabel('lb-411');
+						} else {
+							rtnCompanyNm = companyNm;
+						}
+						return "<span title='" + rtnCompanyNm + "'>" + rtnCompanyNm + "</span>";
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridCompanyNm"});
+					}
+				},//end fn_setGridCompanyNm()
+
+				//-----------------------------------------------------------------------
+				// Description :: 업무 이관 완료 여부 체크
+				//-----------------------------------------------------------------------
+				fn_setGridInterfaceCheck : function(interfaceCnt) {
+					try {
+						var rtnInterfaceCheck = '';
+
+						if(0 ==  interfaceCnt) {
+							rtnInterfaceCheck = mint.label.getLabel('lb-412');
+						} else {
+							rtnInterfaceCheck = mint.label.getLabel('lb-413');
+						}
+						return "<span title='" + interfaceCnt + mint.label.getLabel('lb-64') + "'>" + interfaceCnt + mint.label.getLabel('lb-64') +"</span>";
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridInterfaceCheck"});
+					}
+				},//end fn_setGridInterfaceCheck()
+
+				//-----------------------------------------------------------------------
+				// Description :: Tab02 초기화
+				//-----------------------------------------------------------------------
+				fn_initTab02 : function() {
+					try {
+						$("#tab02-grid").kendoGrid({
+				          	dataSource : {
+				 				  data : ""
+				 				, page : 1
+				 				, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+							}
+				            , sortable: true
+				            , selectable: true
+				            , pageable : {
+								  refresh 		: false
+						    	, buttonCount 	: 5
+						    	, pageSizes		: mint.ui.getPageSizesXS()
+						    	, input : true
+					            , change:function(e) {
+					            	$.main.infterfaceListCheckbox = {};
+					            	$("#interface-list-checkbox-checkAll").prop('checked', false);
+						       	}
+							}
+							, columns: [
+									{
+										title : "<input type='checkbox' id='interface-list-checkbox-checkAll'>",
+										template : "<input type='checkbox' name='interface-list-checkbox' class='if-popup-ifCheckbox' onclick='$.main.fn_checkInterfaceGridRow(this)' >",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+										, width : "7%"
+									}
+									, {
+										field : "channelNm",
+										title : mint.label.getLabel('lb-80'),
+										template : "<span title='${channelNm}'>${channelNm}</span>",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "integrationId",
+										title : mint.label.getLabel('lb-154'),
+										template : "<span title='${integrationId}'>${integrationId}</span>",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "interfaceNm",
+										title : mint.label.getLabel('lb-153'),
+										template : "<span title='${interfaceNm}'>${interfaceNm}</span>",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										field : "roleNm",
+										title : mint.label.getLabel('lb-210'),
+										template : "<span title='${roleNm}'>${roleNm}</span>",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+							]
+							, dataBound: function (e) {
+								if('undefined' != typeof $("#tab02-grid").data()) {
+									if(0 == $("#tab02-grid").data().kendoGrid.dataSource.view().length) {
+										var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+							    		$("#tab02-grid").children(".k-grid-content").height(gridHeight / 3.5);
+							    	} else {
+							    		$("#tab02-grid").children(".k-grid-content").height('auto');
+							    	}
+								}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTab01"});
+					}
+				},//end fn_initTab02
+
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 리스트 - 그리드 체크박스 클릭 이벤트 (인터페이스 상세 이동)
+				//-----------------------------------------------------------------------
+				fn_checkInterfaceGridRow : function(node) {
+					try {
+					    var checked = node.checked,
+					    row = $(node).closest("tr"),
+					    grid = $("#tab02-grid").data("kendoGrid"),
+					    dataItem = grid.dataItem(row);
+
+					    $.main.infterfaceListCheckbox[dataItem.uid] = {'checked':checked, 'dataItem':dataItem};
+
+					    if (checked) {
+					        //-select the row
+					        row.addClass("k-state-selected");
+					    } else {
+					        //-remove selection
+					        row.removeClass("k-state-selected");
+					    }
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkInterfaceGridRow"});
+					}
+				},//end fn_checkInterfaceGridRow()
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 버튼 Click 이벤트 - 인터페이스 담당자 Grid Data 설정
+				//-----------------------------------------------------------------------
+				fn_setInterfaceUserGridData : function(jsonData) {
+					try {
+						var dataSource = new kendo.data.DataSource({
+							  data: jsonData
+						    , page:1
+						    , pageSize: mint.ui.getPageSizesXS({'currentPage' : true})
+				            , schema: {
+				            	model: {
+				            		fields: {
+				            			companyNm: {editable: false, type: "string", nullable: true, defaultValue: ""},
+				            			departmentNm: {editable: false, type: "string", nullable: true, defaultValue: ""},
+				            			userNm: {editable: false}
+				            		}
+				            	}
+				            }
+						});
+
+						//데이터 재설정
+						$("#tab01-grid").data("kendoGrid").setDataSource(dataSource);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setInterfaceUserGridData"});
+					}
+				},//end fn_setGridData()
+
+				//-----------------------------------------------------------------------
+				// Description :: 담당 인터페이스 목록 Grid Data 설정
+				//-----------------------------------------------------------------------
+				fn_setInterfaceListGridData : function(jsonData) {
+					try {
+						var dataSource = new kendo.data.DataSource({
+							  data: jsonData
+						    , page:1
+						    , pageSize: mint.ui.getPageSizesXS({'currentPage' : true})
+						});
+
+						//데이터 재설정
+						$("#tab02-grid").data("kendoGrid").setDataSource(dataSource);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setInterfaceListGridData"});
+					}
+				},//end fn_setGridData()
+
+				//-----------------------------------------------------------------------
+				// Description :: 업무 인수자 리턴
+				//-----------------------------------------------------------------------
+				moveInterfaceListToNewUser : function(newUserData) {
+					try {
+
+						var moveinterfaceList = [];
+
+			 			for(var j in $.main.infterfaceListCheckbox){
+		 					if($.main.infterfaceListCheckbox[j].checked) {
+			 					var interfaceUser = new Object();
+
+			 					interfaceUser.userId 		= $.main.tab2InterfaceUserId;
+			 					interfaceUser.interfaceId 	= $.main.infterfaceListCheckbox[j].dataItem.interfaceId;
+			 					interfaceUser.newUserId 	= newUserData.userId;
+			 					interfaceUser.roleType 		= $.main.infterfaceListCheckbox[j].dataItem.roleType;
+			 					interfaceUser.regDate 		= mint.common.remakeYYMMDD(new Date());
+			 					interfaceUser.regId 		= mint.session.getUserId();
+
+			 					moveinterfaceList.push(interfaceUser);
+		 					}
+		 	        	}
+
+						mint.callService(
+							  moveinterfaceList
+			     			, 'SU-01-01-001'
+			     			, 'REST-U01-AN-02-19-000'
+			     			, '$.main.fn_complateMoveInterfaceList'
+			     			, {
+			     				errorCall : true
+			     				, params : {
+			     					userId : $.main.tab2InterfaceUserId
+								}
+							}
+			      		);
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.moveInterfaceListToNewUser"});
+					}
+				},//end moveInterfaceListToNewUser()
+
+				//-----------------------------------------------------------------------
+				// Description :: 업무 이관 처리 완료
+				//-----------------------------------------------------------------------
+				fn_complateMoveInterfaceList : function(jsonData) {
+					try {
+						$.main.infterfaceListCheckbox = {};
+						$("#interface-list-checkbox-checkAll").prop('checked', false);
+
+						mint.common.alert('BI00011', null);
+
+			      		mint.callService(
+			     			  null
+			     			, 'SU-01-01-001'
+			     			, 'REST-R02-AN-02-19-000'
+			     			, '$.main.fn_setInterfaceListGridData'
+			     			, {
+			     				errorCall : true
+			     				, params : {
+			     					userId : $.main.tab2InterfaceUserId
+								}
+							}
+			      		);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_complateMoveInterfaceList"});
+					}
+				},//end fn_setGridData()
+	        }
+	    });
+
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+
+	    //-----------------------------------------------------------------------
+		// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+		//-----------------------------------------------------------------------
+		$('#tf-interface-user').keydown(function(event) {
+			if(event.keyCode == 13) {
+				var interfaceUser = new Object();
+		    	interfaceUser.userNm = $('#tf-interface-user').val();
+		    	interfaceUser.onlyRetiredEmp = $('input[name=rd-search-range]').is(':checked') == true ? 'Y' : 'N';
+
+		    	mint.callService(interfaceUser, 'SU-01-01-001', 'REST-R01-AN-02-19-000', '$.main.fn_setInterfaceUserGridData', {errorCall : true});
+
+		    	$.main.infterfaceListCheckbox = {};
+		    	$('#interface-user-main-tab a:eq(0)').tab('show');
+		    	//$('.btn-interface-move').hide();
+		    }
+		});
+
+	    //-----------------------------------------------------------------------
+		// Description :: 조회 버튼에 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+	    $("#btn-search-interface-user").click(function () {
+	    	var interfaceUser = new Object();
+	    	interfaceUser.userNm = $('#tf-interface-user').val();
+	    	interfaceUser.onlyRetiredEmp = $('input[name=rd-search-range]').is(':checked') == true ? 'Y' : 'N';
+
+	    	mint.callService(interfaceUser, 'SU-01-01-001', 'REST-R01-AN-02-19-000', '$.main.fn_setInterfaceUserGridData', {errorCall : true});
+
+	    	$.main.infterfaceListCheckbox = {};
+	    	$('#interface-user-main-tab a:eq(0)').tab('show');
+	    	//$('.btn-interface-move').hide();
+	    });
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 그리드 Row DBClick 이벤트 설정 (상세 조회)
+		//-----------------------------------------------------------------------
+		$('#tab01-grid').on('dblclick', "tr.k-state-selected", function () {
+			var entityGrid = $("#tab01-grid").data("kendoGrid");
+	        var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+	        $('#tab2-name').val(selectedItem.userNm);
+	        $.main.tab2InterfaceUserId = selectedItem.userId;
+
+      		mint.callService(
+     			  null
+     			, 'SU-01-01-001'
+     			, 'REST-R02-AN-02-19-000'
+     			, '$.main.fn_setInterfaceListGridData'
+     			, {
+     				errorCall : true
+     				, params : {
+     					userId : selectedItem.userId
+					}
+				}
+      		);
+
+    		$('#interface-user-main-tab a:eq(1)').tab('show');
+    		$('.btn-interface-move').show();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: tab0 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$("#interface-user-main-tab a:eq(0)").click(function () {
+			$('.btn-interface-move').hide();
+	    });
+
+		//-----------------------------------------------------------------------
+		// Description :: tab1 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$("#interface-user-main-tab a:eq(1)").click(function () {
+			$('.btn-interface-move').show();
+	    });
+
+		//-----------------------------------------------------------------------
+		// Description :: 업무이관 팝업창 생성
+		//-----------------------------------------------------------------------
+		$(".btn-interface-move").click(function () {
+			var checkboxCount = $("input[name=interface-list-checkbox]:checked").length;
+			if(0 != checkboxCount) {
+				mint.common.setScreenParam("caller", "SU-01-01-001");
+				mint.common.searchPopup('../sub-co/CO-01-00-004.html','CO-01-00-004');
+				/* $.ajax({
+		     		url: "../sub-co/CO-01-00-004.html",
+		     		success:function(data){
+		     			$("#personModal").html('');
+		         		$("#personModal").html(data);
+
+		         		$('#personSearchPop').modal({
+		    				backdrop: 'static'
+		    			});
+		     		}
+		 		}); */
+			} else {
+				mint.common.alert('BW00022', null);
+			}
+	    });
+
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================
+	    $.main.fn_init();
+	    mint.label.attachLabel(null);
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 2번째 인터페이스 목록 Grid 전체 Check Click 이벤트
+		//-----------------------------------------------------------------------
+		$("#interface-list-checkbox-checkAll").on('click', function() {
+
+			$("input[name=interface-list-checkbox]:checkbox").each(function() {
+				$(this).prop("checked", $("#interface-list-checkbox-checkAll").is(':checked'));
+
+				var checked = $("#interface-list-checkbox-checkAll").is(':checked'),
+			    row = $(this).closest("tr"),
+			    grid = $("#tab02-grid").data("kendoGrid"),
+			    dataItem = grid.dataItem(row);
+
+				$.main.infterfaceListCheckbox[dataItem.uid] = {'checked':checked, 'dataItem':dataItem};
+
+			    if (checked) {
+			        //-select the row
+			        row.addClass("k-state-selected");
+			    } else {
+			        //-remove selection
+			        row.removeClass("k-state-selected");
+			    }
+			});
+		});
+	});
+</script>
+
+<style>
+
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr {
+	    cursor : pointer;
+	}
+</style>

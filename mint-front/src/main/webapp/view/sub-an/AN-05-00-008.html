@@ -1,0 +1,1871 @@
+﻿<!--
+	Screen ID : AN-05-00-008
+	Screen NM : 복합유형 등록/수정
+	[변경 이력]
+	* 20170131-001
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div id="oldPath" class="col-lg-5">
+ 		<h2 class="lb-change"><!-- <lb class="lb-12"></lb> -->복합유형 등록</h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-832"></lb></li>
+	        <li><lb class="lb-833"></lb></li>
+	        <li class="active"><strong class="lb-change"><!-- <lb class="lb-12"></lb> -->복합유형 등록</strong></li>
+		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-1008"></lb></h5>
+                    <div class="ibox-tools" id="requirement-help">
+                    	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			            <a class="btn btn-w-m btn-default btn-outline btn-init"><i class="fa fa-check "></i> <lb class="lb-79"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-save"><i class="fa fa-save"></i> <lb class="lb-310"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-update" style="display:none;"><!-- <i class="fa fa-pencil"></i> <lb class="lb-12"></lb> --><i class="fa fa-save"></i> <lb class="lb-310"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-tmp-save"><i class="fa fa-archive"></i> <lb class="lb-1010"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-tmp-read"><i class="fa fa-history"></i> <lb class="lb-1011"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-back" style="display:none;"><i class="fa fa-reply"></i> <lb class="lb-311"></lb></a>
+						<!-- 상세 페이지 완료되면 삭제 -->
+			            <a class="btn btn-w-m btn-default btn-outline btn-approval" style="display:none;"><i class="fa fa-pencil-square-o"></i> <lb class="lb-389"></lb></a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-delete" style="display:none;"><i class="fa fa-trash-o"></i> <lb class="lb-343"></lb></a>
+					</div>
+				</div>
+
+              	<div class="ibox-content">
+
+                   	<div class="row">
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-1001">전문명</lb></label>
+                               		<input id="tf-dataSetNm" name="dataSetNm" type="text" class="input-tag-4 k-textbox" placeholder="">
+                               		<input id="hd-dataSetId" name="hd-dataSetId" type="hidden">
+
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-1006">전문명</lb></label>
+                               		<input id="tf-dataSetCd" name="dataSetCd" type="text" class="input-tag-4 k-textbox" placeholder="">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4"  style="display:none;">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="label-tag-4"><lb class="lb-1007">승인여부</lb></label>
+									<input id="tf-statusNm" name="statusNm" type="text" class="input-tag-4 input-tag-disabled k-textbox" style="text-align:center;" placeholder="" readonly="readonly" disabled="disabled">
+									<input id="hd-statusCd" name="statusCd" type="hidden">
+								</div>
+							</div>
+						</div>
+						<hr class="hr-space">
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-1012"></lb></label>
+                               		<input id="tf-length" name="tf-length" type="text" placeholder="" style="width: 63%;">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+									<span class="lable_tag"><lb class="lb-48"></lb></span>
+									<input id="cb-msgType" type="text" placeholder="Search..." style="width: 63%;">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4" style="display:none">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+									<span class="lable_tag"><lb class="lb-1002"></lb></span>
+									<span style="padding: 0px 0px 0px 0px;">
+						            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+			                                <span class="radio-info" style="padding-right:0px 20px;"><input id="radio0" type="radio" name="rd-search-standard" value="Y" checked="checked"><label for="radio0"><lb class="lb-1004"></label></span>
+			                                <span class="radio-info" style="padding:0px 20px;"><input id="radio1" type="radio" name="rd-search-standard" value="N"><label for="radio1"><lb class="lb-1005"></label></span>
+	                                	</div>
+	                                </span>
+                              	</div>
+							</div>
+						</div>
+						<hr class="hr-space">
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-535">등록자</lb></label>
+                               		<input id="tf-regUserNm"    name="regUserNm"    type="text" class="input-tag-4 input-tag-disabled k-textbox" style="text-align:center;" placeholder="" readonly="readonly" disabled="disabled">
+                               		<input id="hd-regUserId"    name="regUserId"    type="hidden">
+                               		<input id="hd-regCellPhone" name="regCellPhone" type="hidden">
+                               		<input id="hd-regPhone"     name="regPhone"     type="hidden">
+                               		<input id="hd-regEmail"     name="regEmail"     type="hidden">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+	                            	<label class="label-tag-4"><lb class="lb-71">등록일</lb></label>
+                                	<input id="tf-regDate" name="regDate" type="dates" class="input-tag-4 input-tag-disabled k-textbox" style="text-align:center;" placeholder="" readonly="readonly" disabled="disabled">
+                              	</div>
+							</div>
+						</div>
+					</div><!-- end row -->
+
+           		</div>
+           	</div>
+       	</div>
+   	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="tabs-container">
+				<div class="tabs-lefts">
+					<ul id="tab-interface-info" class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#tab01"><lb class="lb-1033"></lb></a></li>
+						<li class=""><a data-toggle="tab" href="#tab02"><lb class="lb-218"></lb></a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="tab01" class="tab-pane active">
+							<div class="panel-body">
+
+		                 		<div class="row">
+		 							<div class="col-lg-12">
+		 	  							<div id="gd-field"></div>
+			               			</div>
+		    					</div>
+							</div><!-- end panel-body -->
+						</div><!-- end tab-pane -->
+
+						<div id="tab02" class="tab-pane">
+							<div class="panel-body">
+		                        <div class="row">
+		                        	<div class="col-sm-12">
+		                        	<textarea id="ta-description" rows="5" cols="30" style="height:200px"></textarea>
+		                        	</div>
+		                        </div>
+								<hr class="hr-space">
+								<hr class="hr-space">
+							</div><!-- end panel-body -->
+						</div><!-- end tab-pane -->
+
+					</div><!--  end tab-content -->
+				</div><!-- end tab-position -->
+			</div><!-- end tabs-container -->
+       	</div><!--  end col-sm-12 -->
+	</div><!-- end row -->
+</div><!-- end wrapper -->
+
+
+<script type="text/x-kendo-template" id="template-fieldInfo">
+	<div>
+		<span id="btn-add" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;" onclick="return $.main_detail.fn_btn_add_click()">
+			<i class='fa fa-plus-square-o'></i> <lb class="lb-370"></lb></span>
+		</span>
+		<span id="btn-down" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;" onclick="return $.main_detail.fn_btn_down_click()">
+			<i class='fa fa-level-down'></i> <lb class="lb-1035"></lb></span>
+		</span>
+		<span id="btn-up" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;" onclick="return $.main_detail.fn_btn_up_click()">
+			<i class='fa fa-level-up'></i> <lb class="lb-1034"></lb></span>
+		</span>
+		<span id="btn-copy" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;" onclick="return $.main_detail.fn_btn_copy_click()">
+			<i class='fa fa-copy'></i> <lb class="lb-313"></lb></span>
+		</span>
+		<span id="btn-meta-add" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;">
+			<i class='fa fa-plus-square-o'></i> <lb class="lb-1013" onclick="return $.main_detail.fn_btn_add_metafield_click()"></lb></span>
+		</span>
+	</div>
+</script>
+
+
+<script>
+	var record = 0;
+	var gridSelectEvt;
+	$(document).ready(function(){
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "AN-05-00-008";
+		$.extend({
+			main_detail : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				isModify : false,
+				dataSetId : "",
+				screenType : "",
+				currDataSet : null,
+				isRoot : "N",  // DataSet Y , FieldSet N
+				currFieldItem : null,
+				tmpDataFieldModify : null,			//TreeList작업-node추가시 날아가는 컬럼값들 임시 저장하는 Object
+				orgTrigger : false,
+				orgFieldType : null,
+				orgFieldSetId : "",
+				orgFieldNodes : null,
+				
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main_detail.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						var isModify = mint.common.getScreenParam("isModify");
+						if( !mint.common.isEmpty(isModify) && isModify == true ) {
+							$.main_detail.isModify = true;
+							//lb-12 : 수정
+							$('.lb-change').text( mint.label.getLabel('lb-12') );
+						} else {
+							$.main_detail.isModify = false;
+						}
+
+						$.main_detail.screenType = mint.common.getScreenParam('screenType');
+						$.main_detail.dataSetId = mint.common.getScreenParam('dataSetId');
+						//$.main_detail.dataSet = mint.common.getScreenParam('dataSet');
+						$.main_detail.fn_initComponent(null);
+						$.main_detail.fn_enableComponent($.main_detail.isModify);
+
+						//수정시 초기데이터 처리
+						if(( $.main_detail.isModify ) || ($.main_detail.screenType =='R' )) {
+				      		if( ! mint.common.isEmpty( $.main_detail.dataSetId ) ) {
+								mint.callService(null, 'AN-05-00-008', 'REST-R02-AN-05-01', '$.main_detail.fn_setDataSetInfo',
+									{
+								    	  errorCall : true
+								    	, params : {dataSetId : $.main_detail.dataSetId}
+								    }
+								);
+				      		}
+				      		/*  else if (! mint.common.isEmpty( $.main_detail.dataSet )){
+				      			$.main_detail.fn_setDataSetInfo($.main_detail.dataSet);
+				      		} */
+						}
+						{
+							mint.common.removeScreenParam('isModify');
+							mint.common.removeScreenParam('dataSetId');
+							//mint.common.removeScreenParam('dataSet');
+						}
+
+					    mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: component enable/disable
+				//-----------------------------------------------------------------------
+				fn_enableComponent : function(flag) {
+					try {
+							if(flag){  // Update
+								$('.btn-save').hide();
+								$('.btn-init').hide();
+								$('.btn-update').show();
+								$('.btn-back').show();
+								$('.btn-tmp-save').show();
+								$('.btn-tmp-read').show();
+
+								$('.btn-approval').hide();
+								$('.btn-delete').hide();
+							}else{  // create
+								$('.btn-save').show();
+								$('.btn-init').show();
+								$('.btn-update').hide();
+								$('.btn-back').show();
+								$('.btn-tmp-save').show();
+								$('.btn-tmp-read').show();
+
+								$('.btn-approval').hide();
+								$('.btn-delete').hide();
+							}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_enableComponent"});
+					}
+				},//end fn_enableComponent()
+
+				//-----------------------------------------------------------------------
+				// Description :: component 초기화
+				//-----------------------------------------------------------------------
+				fn_initComponent : function(options) {
+					try {
+						//공통코드에 넣든가 하자.
+						var YesNoValue = [{ nm: 'Yes', value: 'Y' }, { nm: 'No', value: 'N' }];
+	 					mint.ui.setDropDownList('cb-msgType', mint.common.commonCodeMap.get("cds").AN07   , 0, 'nm'       , 'cd'       );
+
+	 					mint.ui.setNumericWithoutMax('tf-length', 0, 1, 'n0'        );
+						//-----------------------------------------------------------------------
+						// 필드 그리드
+						//-----------------------------------------------------------------------
+						$.main_detail.fn_initFieldGrid();
+
+						// 등록자 정보
+						$('#tf-regUserNm').val( mint.session.getUserNm() );
+						$('#hd-regUserId').val( mint.session.getUserId() );
+
+						$('#tf-regDate').val( mint.common.getTodayDate()  );
+
+						$('input[type=number]').css("text-align", 'right');
+
+						// Description
+						$("#ta-description").kendoEditor({
+				        });
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initComponent"});
+					}
+				},//end fn_initComponent()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: init User Grid
+				//-----------------------------------------------------------------------
+				fn_initFieldGrid : function(jsonData) {
+					try {
+
+						$("#gd-field").kendoTreeList({
+				          	dataSource : $.main_detail.fn_getFieldGridDataSource([])
+							, filterable: false
+							, resizable: true
+				            , sortable: true
+				            , selectable: true
+				            //, height: 500
+				            , editable:{
+				                mode: "inline"
+				            }
+		                    , pageable: {
+		                          numeric: false,
+		                          previousNext: false,
+		                           messages: {
+		                                display: "Showing {2} data items"
+		                           }
+		                     }
+		                    , batch: true
+				            , toolbar : kendo.template( $("#template-fieldInfo").html() )
+				            //, detailInit: $.main_detail.fn_detailInit
+				            // , change: $.main_detail.fn_onChange
+							, columns: [
+										/* {
+											field : ""
+											, title : ""
+											, width 	: "30px"
+											, headerAttributes: {
+												 style: "text-align: center; vertical-align:middle;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										},
+										{
+											field : "rowIndex",
+											title : "",
+											width : "60px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "seq",
+											title : mint.common.isEmpty(mint.label.getLabel('lb-665')) ? "행번호" : mint.label.getLabel('lb-665'),
+											width : "60px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											}
+										}, */
+										{
+											field : "name1",
+											title : mint.label.getLabel('lb-1015')+'(*)',
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: left; white-space: nowrap;"
+											},
+											width: "100px",
+										},
+										{
+											field : "name2",
+											title : mint.label.getLabel('lb-1014')+'(*)',
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "100px",
+										},
+										{
+											field : "typeNm",
+											title :  mint.label.getLabel('lb-48')+'(*)',
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : function(container, options){
+												mint.ui.gridEditorFieldTypeComboBox(container, options, '$.main_detail.fn_complexPopup(this)');
+											},
+											width: "100px",
+										},
+										{
+											field : "offset",
+											title : mint.label.getLabel('lb-1016'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "100px",
+										},
+										{
+											field : "length",
+											title : mint.label.getLabel('lb-1012'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "80px",
+										},
+
+										{
+											field : "defaultValue",
+											title : mint.label.getLabel('lb-1017'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "100px",
+										},
+										{
+											field : "encryptTypeNm",
+											title : mint.label.getLabel('lb-1018'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorEncryptTypeComboBox,
+											width: "100px",
+										},
+										{
+											field : "isLengthField",
+											title : mint.label.getLabel('lb-1019'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorYesOrNoComboBox,
+											width: "100px",
+										},
+										{
+											field : "hasRepeatCountField",
+											title : mint.label.getLabel('lb-1020'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorYesOrNoComboBox,
+											width: "100px",
+										},
+										{
+											field : "repeatFieldId",
+											title : mint.label.getLabel('lb-1021'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "100px",
+										},
+										{
+											field : "repeatCount",
+											title : mint.label.getLabel('lb-1022'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "100px",
+										},
+										{
+											field : "justifyNm",
+											title : mint.label.getLabel('lb-1023'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorJustifyComboBox,
+											width: "100px",
+										},
+										{
+											field : "padding",
+											title : mint.label.getLabel('lb-1024'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											width: "80px",
+										},
+										{	field : "seq", hidden : true },
+										{	field : "type", hidden : true },
+										{	field : "typeCd", hidden : true },
+										{	field : "encryptType", hidden : true },
+										{	field : "justify", hidden : true },
+										{	field : "dataFieldId", hidden : true },
+										{	field : "fieldSetId", hidden : true },
+										{	field : "id", hidden : true },
+										{ command: [
+											{ name: "edit", className: "btn-edit" },
+										    {
+								            	name: "remove",
+								              	text: "",
+								              	className:"btn-remove",
+								              	imageClass: "k-i-delete", // show delete icon
+								              	click: function(e) {
+								            	  	var tr = $(e.target).closest("tr"); // get the current table row (tr)
+								                   // get the data bound to the current table row
+								                  	var data = this.dataItem(tr);
+								            	  	this.dataSource.remove(data);
+								            	 	//his.destroy(data);
+								                    //console.log("Details for: " + data.name1);
+								                    //console.log("Details for: " +JSON.stringify(data) );
+									            } 
+									        }
+
+										],width: "185px"}
+
+
+							]
+							, change: function(e) {
+					     		$.main_detail.currFieldItem = this.dataItem(this.select());
+
+						 	/*	var selectedRows = this.select();
+					     		selectedRows.removeClass("k-state-selected");
+					     		var dataItem = this.dataItem(selectedRows[0]);
+					     		var dataRows = $("#" + e.sender.wrapper[0].id).data("kendoGrid").items();
+					     		var selectdIndex = dataRows.index(this.select());
+					     		currFieldItem = dataItem; */
+
+							}
+ 							/*, edit : function(e) {
+								var col = this.tbody.find("td[data-role='editable']");
+								this.select(col.parent());
+							} */
+							, dataBound: function (e) {
+						    	if(0 == $("#gd-field").data().kendoTreeList.dataSource.view().length) {
+						    		$("#gd-field").children(".k-grid-content").height('150');
+						    	} else {
+						    		$("#gd-field").children(".k-grid-content").height('auto');
+						    	}
+
+						    	//복합유형 컬럼 버튼 숨기기
+						    	$.main_detail.fn_btnVisible(e);
+
+						  /*	
+							var entityGrid = $("#gd-field").data("kendoTreeList").dataSource.view();
+						    	var childNodeCheck = /\-/;
+						    	for(var i=0; i<entityGrid.length; i++){						    		
+						    		if( childNodeCheck.test(entityGrid[i].id) ){
+						    			var currenRow = this.tbody.find("tr[data-uid='" + entityGrid[i].uid + "']");
+			                            var editButton = $(currenRow).find(".btn-edit");
+			                            var removeButton = $(currenRow).find(".btn-remove");
+			                            editButton.prop('style', 'display:none');
+			                            removeButton.prop('style', 'display:none');
+						    		}
+						    	} */
+ 							}
+							/* , expand : function(e){
+								$.main_detail.fn_btnVisible(e);
+							}*/
+							, collapse : function(e){
+								//접히지 않도록 설정
+								e.preventDefault();
+							}
+							, beforeEdit : function(e){
+								//기존 등록 edit 중 cancel할 때, 기존 하위 노드들을 유지할수 있도록 관련 정보 임시 저장
+								if($.main_detail.orgTrigger == false){
+									$.main_detail.orgTrigger = true;
+									$.main_detail.orgFieldType	= e.model.typeNm;
+									$.main_detail.orgFieldSetId	= e.model.fieldSetId;
+									$.main_detail.orgFieldNodes = e.sender.dataSource.childNodes(e.model);
+								}
+							}
+							, save : function(e){
+								//edit-update 처리 시, 임시저장해뒀던 이전 값 정보 초기화 
+								$.main_detail.orgTrigger	= false;
+								$.main_detail.orgFieldType	= null;
+								$.main_detail.orgFieldSetId	= null;
+								$.main_detail.orgFieldNodes = null;
+							}
+							, cancel : function(e){
+
+								//cancel 시도시 기존 필드 타입에 따라 처리
+								// 1)기존 타입이 complex이고 바뀐 타입이 complex가 아닐 때, 혹은 2)바뀐 타입도 complex지만 해당 FieldSetId가 다를 때, 기존 하위 노드로 되돌림    
+								if($.main_detail.orgFieldType=="complex"){
+									if(e.model.typeNm != $.main_detail.orgFieldType || e.model.fieldSetId != $.main_detail.orgFieldSetId ){
+										//추가되었던 노드 삭제
+										var delFieldNodes = e.sender.dataSource.childNodes(e.model);
+										for(var i = 0; i< delFieldNodes.length; i++){
+											e.sender.dataSource.remove(delFieldNodes[i]);
+										}
+
+										//edit 이전 하위 노드 다시 추가
+										for(var i = 0; i< $.main_detail.orgFieldNodes.length; i++){
+											e.sender.dataSource.add($.main_detail.orgFieldNodes[i]);
+										}
+									}
+								// 3)기존 타입이 complex가 아닐 경우, 추가되었던 노드 삭제
+								} else if($.main_detail.orgFieldType!="complex"){
+									var delFieldNodes = e.sender.dataSource.childNodes(e.model);
+									for(var i = 0; i< delFieldNodes.length; i++){
+										e.sender.dataSource.remove(delFieldNodes[i]);
+									}
+								}
+
+								//edit-cancel 시 관련 로직 처리 후, 임시저장해뒀던 이전 값 정보 초기화 
+								$.main_detail.orgTrigger	= false;
+								$.main_detail.orgFieldType	= null;
+								$.main_detail.orgFieldSetId	= null;
+								$.main_detail.orgFieldNodes = null;
+							}
+						});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initFieldGrid"});
+					}
+				},//end fn_initFieldGrid()
+
+				//-----------------------------------------------------------------------
+				// Description ::RecordCount 초기화 - record는 TreeList id 값에 사용(중복되지 않도록 설정)
+				//-----------------------------------------------------------------------
+				fn_initRecordCount : function(){
+					var dataFieldGridView = $("#gd-field").data().kendoTreeList.dataSource.view();
+					for(var i=0; i < dataFieldGridView.length; i++) {
+						if(dataFieldGridView[i].parentId === null){
+							if(record < dataFieldGridView[i].id){
+								record=dataFieldGridView[i].id;
+							}
+						}
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description ::버튼 보이기
+				//-----------------------------------------------------------------------
+				fn_btnVisible : function(e){
+					/* var entityGrid2 = $("#gd-field").data().kendoTreeList;
+					var selectedItem = entityGrid.dataItem(entityGrid2.select()); */
+
+					var entityGrid = $("#gd-field").data("kendoTreeList").dataSource.data();
+					//childNode id는 'X-Y-Z' 형태로 설정되어 있어, 우선 '-'가 들어가는 정규식으로 하위 노드 여부 체크
+			    	var childNodeCheck = /\-/;
+			    	for(var i=0; i<entityGrid.length; i++){
+			    		var currenRow = $("#gd-field").data().kendoTreeList.tbody.find("tr[data-uid='" + entityGrid[i].uid + "']");
+
+                        var editButton = $(currenRow).find(".btn-edit");
+                        var removeButton = $(currenRow).find(".btn-remove");
+
+			    		if( childNodeCheck.test(entityGrid[i].id) ){
+                            editButton.prop('style', "display:none");
+                            removeButton.prop('style', "display:none");
+			    		} else {
+			    			editButton.prop('style', "display:visible");
+                            removeButton.prop('style', "display:visible");
+			    		}
+			    	}
+				},
+				
+				//-----------------------------------------------------------------------
+				// Description :: Field Grid DataSource
+				//-----------------------------------------------------------------------
+				fn_getFieldGridDataSource : function(jsonData) {
+					try {
+						var	dataSource = new kendo.data.TreeListDataSource({
+								  data: jsonData
+							    , page:1
+							    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+							    , schema: {
+							    	model: $.main_detail.fn_getFieldGridModel()
+							    }
+								,error: function (e) {
+				                    // handle data operation error
+				                    alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+				                }
+								,
+								change: function(e) {
+								}
+								,parameterMap: function (data, type) {
+			                     	if (type == "update") {
+			                             // send the created data items as the "models" service parameter encoded in JSON
+			                              //return { models: kendo.stringify(data.models) };
+			                    	   alert('Update');
+			                     	}
+			                    }
+							});
+
+						return dataSource;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getFieldGridDataSource"});
+					}
+				},//end fn_getFieldGridDataSource()
+
+				//-----------------------------------------------------------------------
+				// Description :: Field Grid Model
+				//-----------------------------------------------------------------------
+				fn_getFieldGridModel : function() {
+					try {
+
+						var DataFieldGridModel = new kendo.data.TreeListModel.define({
+							id:"id",
+							parentId: "parentId",
+		            		fields: {
+		            			//seq	        : {editable: false, nullable: false, defaultValue: ""},
+			            		name1 	    : {editable: true, nullable: false, defaultValue: ""},
+			            		name2	    : {editable: true, nullable: false, defaultValue: ""},
+			            		typeNm		: {editable: true, nullable: false, defaultValue: ""},
+			            		offset		: {type: "number",validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: "0"},
+		            			length		: {type: "number",validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: "0"},
+		            			defaultValue: {editable: true, nullable: false, defaultValue: ""},
+		            			encryptTypeNm : {editable: true, nullable: false, defaultValue: ""},
+		            			isLengthField : {editable: true, nullable: false, defaultValue: ""},
+		            			hasRepeatCountField : {editable: true, nullable: false, defaultValue: ""},
+		            			repeatFieldId : {editable: true, nullable: false, defaultValue: ""},
+		            			repeatCount : {type: "number",validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: "0"},
+		            			justifyNm : {editable: true, nullable: false, defaultValue: ""},
+		            			padding : {editable: true, nullable: false, defaultValue: ""},
+		            			fieldSetId :{editable:false, nullable: true },
+		            			dataFieldId:{editable:false, nullable: false },
+		            			id: { editable: false, nullable: false },
+		            			parentId: { nullable: true }
+		            		},
+		            		//Tree 구조 접혀있는지 여부
+		            		expanded: true
+						});
+
+						return DataFieldGridModel;
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getFieldGridModel"});
+					}
+				}, //end fn_getFieldGridModel()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 저장
+				//-----------------------------------------------------------------------
+				fn_save : function() {
+					try {
+
+						if( $.main_detail.fn_validationCheck() ) {
+							$.main_detail.fn_saveInterface();
+						} else {
+
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_save"});
+					}
+				},//end fn_save()
+
+
+				//-----------------------------------------------------------------------
+				// Description ::  Validation 체크
+				//-----------------------------------------------------------------------
+				fn_validationCheck : function() {
+					try {
+
+						//-----------------------------------------------------------------------
+						// top-pannel
+						//-----------------------------------------------------------------------
+						if( mint.common.isEmpty($('#tf-dataSetNm').val()) ) {
+							mint.common.alert('CW00001', mint.label.getLabel('lb-1001'));
+							$('#tf-dataSetNm').focus();
+							return;
+						}
+
+						if( mint.common.isEmpty($('#tf-dataSetCd').val()) ) {
+							mint.common.alert('CW00001', mint.label.getLabel('lb-1006'));
+							$('#tf-dataSetCd').focus();
+							return;
+						}
+
+						//-----------------------------------------------------------------------
+						// tab1
+						//-----------------------------------------------------------------------
+						var fieldGridData = $("#gd-field").data().kendoTreeList.dataSource.view();
+
+						if(fieldGridData.length<=0){
+							alert("필드정보를 입력하세요.");
+							return;
+						}
+						for(var i=0; i<fieldGridData.length; i++){
+							if( mint.common.isEmpty(fieldGridData[i].name1) ) {
+								mint.common.alert('CW00001', mint.label.getLabel('lb-1015'));
+								$('#gd-field').focus();
+								return;
+							}
+							
+							if( mint.common.isEmpty(fieldGridData[i].name2) ) {
+								mint.common.alert('CW00001', mint.label.getLabel('lb-1014'));
+								$('#gd-field').focus();
+								return;
+							}
+
+							if( mint.common.isEmpty(fieldGridData[i].typeNm) ) {
+								mint.common.alert('CW00001', mint.label.getLabel('lb-48'));
+								$('#gd-field').focus();
+								return;
+							}
+			           	}
+
+						return true;
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_validationCheck"});
+					}
+				},//end fn_validationCheck()
+
+				//-----------------------------------------------------------------------
+				// Description :: DataSet Object 생성
+				//-----------------------------------------------------------------------
+				fn_getDataSetObject : function() {
+					try {
+
+						//-----------------------------------------------------------------------
+						// DataField Object
+						//-----------------------------------------------------------------------
+					 	var dataFieldList             = [];
+
+						var dataFieldGridView = $("#gd-field").data().kendoTreeList.dataSource.view();
+						for(var i=0; i < dataFieldGridView.length; i++) {
+							if(dataFieldGridView[i].parentId === null){
+
+							var dataField = new Object;
+							dataField.objectType  	= 'DataField';
+							dataField.name1    		= dataFieldGridView[i].name1;
+							dataField.name2   		= dataFieldGridView[i].name2;
+							dataField.seq         	= i;
+
+							//dataField.type			= dataFieldGridView[i].typeCd;
+							dataField.type 			= mint.common.isEmpty(dataFieldGridView[i].typeNm) ? '0' : mint.common.findCommonCode(mint.common.commonCodeMap.get("cds").AN09, 'nm',  dataFieldGridView[i].typeNm).cd;
+							dataField.typeNm 		= mint.common.isEmpty(dataFieldGridView[i].typeNm) ? '0' : dataFieldGridView[i].typeNm;
+							dataField.offset		= mint.common.isEmpty(dataFieldGridView[i].offset) ? '0' : dataFieldGridView[i].offset;
+							dataField.length		= mint.common.isEmpty(dataFieldGridView[i].length) ? '0' : dataFieldGridView[i].length;
+							dataField.defaultValue	= mint.common.isEmpty(dataFieldGridView[i].defaultValue) ? '' : dataFieldGridView[i].defaultValue.trim();
+							dataField.encryptType 	= mint.common.isEmpty(dataFieldGridView[i].encryptTypeNm) ? '' : mint.common.findCommonCode(mint.common.commonCodeMap.get("cds").AN08, 'nm',  dataFieldGridView[i].encryptTypeNm).cd;
+							dataField.encryptTypeNm = mint.common.isEmpty(dataFieldGridView[i].encryptTypeNm) ? '' : dataFieldGridView[i].encryptTypeNm;
+
+							dataField.isLengthField =  mint.common.isEmpty(dataFieldGridView[i].isLengthField) ? 'N' : dataFieldGridView[i].isLengthField.trim();
+							dataField.hasRepeatCountField =	mint.common.isEmpty(dataFieldGridView[i].isRepeatCountField) ? 'N' : dataFieldGridView[i].isRepeatCountField.trim();
+							dataField.repeatFieldId = mint.common.isEmpty(dataFieldGridView[i].repeatFieldId) ? '0' : dataFieldGridView[i].repeatFieldId;
+							dataField.repeatCount 	= mint.common.isEmpty(dataFieldGridView[i].repeatCount) ? '0' : dataFieldGridView[i].repeatCount;
+							dataField.justify	 	= mint.common.isEmpty(dataFieldGridView[i].justifyNm) ? '' : mint.common.findCommonCode(mint.common.commonCodeMap.get("cds").AN13, 'nm',  dataFieldGridView[i].justifyNm).cd;
+							dataField.justifyNm	 	= mint.common.isEmpty(dataFieldGridView[i].justifyNm) ? '' : dataFieldGridView[i].justifyNm;
+							dataField.padding 		= mint.common.isEmpty(dataFieldGridView[i].padding) ? '' : dataFieldGridView[i].padding.trim();
+
+							dataField.fieldSetId	= mint.common.isEmpty(dataFieldGridView[i].fieldSetId) ? '' : dataFieldGridView[i].fieldSetId.trim();
+							dataField.dataFieldId	= mint.common.isEmpty(dataFieldGridView[i].dataFieldId) ? '' : dataFieldGridView[i].dataFieldId;
+							dataField.id			= mint.common.isEmpty(dataFieldGridView[i].id) ? '' : dataFieldGridView[i].id;
+							dataField.parentId		= mint.common.isEmpty(dataFieldGridView[i].parentId) ? '' : dataFieldGridView[i].parentId;
+							dataField.cd		= mint.common.isEmpty(dataFieldGridView[i].cd) ? '' : dataFieldGridView[i].cd;
+
+							// TODO
+							if(dataField.type == '4' && mint.common.isEmpty(dataFieldGridView[i].fieldSetId)){
+								alert("복합유형으로 지정한 경우 해당 필드를 지정해야 합니다.");
+								return null;
+							}
+							dataField.modDate     = mint.common.remakeYYMMDD(new Date());
+							dataField.modId       = mint.session.getUserId();
+							dataField.regDate     = mint.common.remakeYYMMDD(new Date());
+							dataField.regId       = mint.session.getUserId();
+
+							dataFieldList.push(dataField);
+							}
+						}
+
+						//-----------------------------------------------------------------------
+						// Requirement - 등록유저
+						//-----------------------------------------------------------------------
+						var regUserObject = new Object();
+						regUserObject.objectType = 'User';
+						if( $.main_detail.isModify ) {
+							regUserObject.userId    = $('#hd-regUserId').val();
+							regUserObject.userNm    = $('#tf-regUserNm').val();
+							regUserObject.cellPhone = $('#hd-regCellPhone').val();
+							regUserObject.phone     = $('#hd-regPhone').val();
+							regUserObject.email     = $('#hd-regEmail').val();
+						} else {
+							regUserObject.userId    = mint.session.getUserId();
+							regUserObject.userNm    = mint.session.getUserNm();
+							regUserObject.cellPhone = mint.session.getCellPhone();
+							regUserObject.phone     = mint.session.getPhone();
+							regUserObject.email     = mint.session.getEmail();
+						}
+
+
+						//-----------------------------------------------------------------------
+						// DataSet Object
+						//-----------------------------------------------------------------------
+						var dataSetObject = new Object();
+
+			 			dataSetObject.objectType      	= 'DataSet';
+						dataSetObject.dataSetId   		= $("#hd-dataSetId").val();
+						dataSetObject.dataFieldList  	= dataFieldList;
+						dataSetObject.name1			   = $("#tf-dataSetNm").val();
+						dataSetObject.name2			   = $("#tf-dataSetNm").val();
+						dataSetObject.cd			   = $("#tf-dataSetCd").val();
+						dataSetObject.dataFormat	   = $("#cb-msgType").data("kendoDropDownList").value();
+
+						dataSetObject.length	        = $("#tf-length").data("kendoNumericTextBox").value();
+						dataSetObject.isStandard        = $('input:radio[name="rd-search-standard"]:checked').val();
+						dataSetObject.regUser         	= regUserObject;
+						dataSetObject.comments		  	= $("#ta-description").data("kendoEditor").value();
+						dataSetObject.delYn           	= 'N';
+						dataSetObject.isRoot			= $.main_detail.isRoot;
+
+						dataSetObject.regDate         	= mint.common.remakeYYMMDD(new Date());
+						dataSetObject.regId           	= mint.session.getUserId();
+						dataSetObject.modDate         	= mint.common.remakeYYMMDD(new Date());
+						dataSetObject.modId           	= mint.session.getUserId();
+
+						return dataSetObject;
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getDataSetObject"});
+					}
+				},//end fn_getDataSetObject()
+
+				//-----------------------------------------------------------------------
+				// Description :: 저장 - DataSet
+				//-----------------------------------------------------------------------
+				fn_saveInterface : function() {
+					try {
+						var datasetObject = $.main_detail.fn_getDataSetObject();
+
+						if( !mint.common.isEmpty($('#hd-dataSetId').val()) && $.main_detail.isModify == true ) {
+							// 수정일 경우
+							mint.callService(datasetObject, screenName, 'REST-U01-AN-05-01', '$.main_detail.fn_saveComplete',
+									{
+										  errorCall : true
+										, notificationView : false
+										, params 	: {dataSetId : $("#hd-dataSetId").val()}
+									}
+							);
+						} else {
+							// 등록일 경우
+							mint.callService(datasetObject, screenName, 'REST-C01-AN-05-01', '$.main_detail.fn_saveComplete',
+								{
+									  errorCall : true
+									, notificationView : false
+								}
+							);
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_saveInterface"});
+					}
+				},//end fn_saveInterface()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 저장 콜백
+				//-----------------------------------------------------------------------
+				fn_saveComplete : function(jsonObject) {
+					try {
+						if( !mint.common.isEmpty(jsonObject) ) {
+							//-----------------------------------------------------------------------
+							// - Alert Message 를 Display 한다.
+							//-----------------------------------------------------------------------
+							var msgCode = null;
+							if( mint.common.isEmpty($('#hd-dataSetId').val()) ) {
+								msgCode = 'CI00101';
+							} else {
+								msgCode = 'CI00102';
+							}
+							mint.common.alert(msgCode, null);
+
+							//-----------------------------------------------------------------------
+							// - 공통코드를 재조회 한다.
+							//-----------------------------------------------------------------------
+							mint.getCommonCode(function(){
+								mint.setDetailView('Y');
+								mint.common.setScreenParam("dataSetId", jsonObject.dataSetId);
+
+						        mint.common.setScreenParam("screenType", "R");
+						        mint.common.setScreenParam("isModify", false );
+								mint.move('../sub-an/AN-05-00-904');
+							}, true);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_saveComplete"});
+					}
+				},//end fn_saveComplete()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: DataSet 정보 셋팅
+				//-----------------------------------------------------------------------
+				fn_setDataSetInfo : function(jsonData) {
+					try {
+						if(null != jsonData) {
+						//	$.main_detail.fn_visibleButton(jsonData.status);
+
+							currDataSet = jsonData;
+							$('#hd-dataSetId').val( jsonData.dataSetId );
+							$('#tf-dataSetNm').val( jsonData.name2 );
+							$('#tf-dataSetCd').val( jsonData.cd );
+							//$('#tf-length').val( jsonData.length );
+							$('#tf-length').data("kendoNumericTextBox").value(jsonData.length );
+
+							if(jsonData.use == 'Y'){
+								$('#tf-statusNm').val( mint.label.getLabel('lb-1029'));
+								$('.btn-approval').hide();
+							}
+							else{
+								$('#tf-statusNm').val( mint.label.getLabel('lb-1028') );
+							}
+
+							$('#tf-regDate').val( mint.common.isEmpty( jsonData.regDate) ? '' : mint.common.formatDate(jsonData.regDate) );
+							//$('#tf-modDate').val( mint.common.isEmpty( jsonData.modDate) ? '' : mint.common.formatDate(jsonData.modDate) );
+
+							/* var regUserObject = jsonData.regUser;
+							$('#tf-regUserNm').val( regUserObject.userNm );
+							$('#hd-regUserId').val( regUserObject.userId );
+							$('#hd-regCellPhone').val( regUserObject.cellPhone );
+							$('#hd-regPhone').val( regUserObject.phone );
+							$('#hd-regEmail').val( regUserObject.email ); */
+
+							$("#cb-msgType").data("kendoDropDownList").value(jsonData.dataFormat);
+
+							$('input:radio[name=rd-search-standard]:input[value='+jsonData.isStandard+']').prop("checked", true);
+
+							//-----------------------------------------------------------------------
+							// DataField
+							//-----------------------------------------------------------------------
+							/* var dataFieldObjectList = [];
+		 					for( var i=0; i<jsonData.dataFieldList.length; i++ ) {
+		 						//jsonData.dataFieldList[i].systemDisplayNm = receiverSystemObject[i].systemNm + mint.lb + receiverSystemObject[i].systemCd + mint.rb;
+		 						//jsonData.dataFieldList[i].orgDisplayNm    = receiverSystemObject[i].orgNm + mint.lb + receiverSystemObject[i].orgCd + mint.rb;
+		 						//jsonData.dataFieldList[i].nodeTypeCd      = receiverSystemObject[i].nodeType;
+		 						jsonData.dataFieldList[i].reUseDelYn      = 'Y';
+		 						jsonData.dataFieldList[i].parentId      = null;
+		 						jsonData.dataFieldList[i].id      = jsonData.dataFieldList[i].dataFieldId;
+		 						dataFieldObjectList.push(jsonData.dataFieldList[i]);
+							}
+							$('#gd-field').data('kendoTreeList').setDataSource( $.main_detail.fn_getFieldGridDataSource(dataFieldObjectList) ); */
+
+							//임시저장-complex 오류 수정을 위한 테스트 임시 코드
+							for( var i=0; i<jsonData.dataFieldList.length; i++ ) {
+								var node= new kendo.data.Node(
+									{ 	id: jsonData.dataFieldList[i].dataFieldId,
+										dataFieldId:jsonData.dataFieldList[i].dataFieldId,
+										name1: jsonData.dataFieldList[i].name1,
+										name2: jsonData.dataFieldList[i].name2,
+										parentId:null,
+										typeNm: jsonData.dataFieldList[i].typeNm,
+										offset:jsonData.dataFieldList[i].offset,
+										length:jsonData.dataFieldList[i].length,
+										defaultValue:jsonData.dataFieldList[i].defaultValue,
+										encryptTypeNm:jsonData.dataFieldList[i].encryptTypeNm,
+										encryptType:jsonData.dataFieldList[i].encryptType,
+										isLengthField:jsonData.dataFieldList[i].isLengthField,
+										hasRepeatCountField:jsonData.dataFieldList[i].hasRepeatCountField,
+										repeatFieldId:jsonData.dataFieldList[i].repeatFieldId,
+										repeatCount:jsonData.dataFieldList[i].repeatCount,
+										justifyNm:jsonData.dataFieldList[i].justifyNm,
+										padding:jsonData.dataFieldList[i].padding,
+										fieldSetId:jsonData.dataFieldList[i].fieldSetId,
+										reUseDelYn:'Y'
+									});
+									$('#gd-field').data().kendoTreeList.dataSource.pushCreate(node);
+							}
+
+							var complexList = [];
+
+							//복합 필드 노드 추가
+							for( var j=0; j<jsonData.dataFieldList.length; j++ ) {
+		 						if(jsonData.dataFieldList[j].type=='4'){
+		 							var complexField = jsonData.complexTypeMap[jsonData.dataFieldList[j].fieldSetId];
+		 							for( var k=0; k<complexField.dataFieldList.length; k++ ) {
+		 								var node =  new kendo.data.Node(
+		 	           					{ 	id: complexField.dataFieldList[k].dataFieldId+'-' + jsonData.dataFieldList[j].dataFieldId,
+		 	           						dataFieldId:complexField.dataFieldList[k].dataFieldId,
+		 	           						name1: complexField.dataFieldList[k].name1,
+		 	           						name2: complexField.dataFieldList[k].name2,
+		 	           						parentId:jsonData.dataFieldList[j].dataFieldId,
+		 	           						typeNm: complexField.dataFieldList[k].typeNm,
+		 	           						offset:complexField.dataFieldList[k].offset,
+		 	           						length:complexField.dataFieldList[k].length,
+		 	           						defaultValue:complexField.dataFieldList[k].defaultValue,
+		 	           						encryptTypeNm:complexField.dataFieldList[k].encryptTypeNm,
+		 	           						encryptType:complexField.dataFieldList[k].encryptType,
+		 	           						isLengthField:complexField.dataFieldList[k].isLengthField,
+		 	           						hasRepeatCountField:complexField.dataFieldList[k].hasRepeatCountField,
+		 	           						repeatFieldId:complexField.dataFieldList[k].repeatFieldId,
+		 	           						repeatCount:complexField.dataFieldList[k].repeatCount,
+		 	           						justifyNm:complexField.dataFieldList[k].justifyNm,
+		 	           						padding:complexField.dataFieldList[k].padding,
+		 	           						fieldSetId:complexField.dataFieldList[k].fieldSetId,
+		 	           						reUseDelYn:'N'
+		 	           					});
+		 								$('#gd-field').data().kendoTreeList.dataSource.pushCreate(node);
+		 								complexList.push(complexField.dataFieldList[k]);
+									}
+		 						}
+							}
+							//-----------------------------------------------------------------------
+							// Description
+							//-----------------------------------------------------------------------
+							$("#ta-description").data("kendoEditor").value(jsonData.comments);
+							$($('#ta-description').data().kendoEditor.body).prop('contenteditable', false);
+							$($('#ta-description').data().kendoEditor.body).prop('disabled', false);
+							$("#ta-description").data("kendoEditor").refresh();
+
+							//-----------------------------------------------------------------------
+							// TreeList에서 사용할 record 변수 설정
+							//-----------------------------------------------------------------------
+							$.main_detail.fn_initRecordCount();
+
+						} else {
+							mint.common.alert('BW00009', null);
+							mint.back(null);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setDataSetInfo"});
+					}
+				},//end fn_setDataSetInfo()
+
+				//-----------------------------------------------------------------------
+				// Description :: DataSet  삭제
+				//-----------------------------------------------------------------------
+				fn_dataSetDelete : function() {
+					try {
+						if($.main_detail.fn_isModifyer()) {
+							var confirmCheck = mint.common.confirm('CI00003',$('#tf-dataSetNm').val()+'/'+$('#tf-dataSetCd').val() );
+							if(confirmCheck) {
+								mint.callService(null, screenName, 'REST-D01-AN-05-01'
+									,function(jsonData) {
+										mint.common.alert('CI00103', null);
+							      		mint.move('../sub-an/AN-05-00-001');
+									}
+									,{
+										 errorCall : true
+										,params : { dataSetId : $.main_detail.dataSetId }
+									}
+								);
+							}
+						} else {
+							mint.common.alert('CW00007', null);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_dataSetDelete"});
+					}
+				},//end fn_dataSetDelete()
+
+				//-----------------------------------------------------------------------
+				// Description :: DataSet  승인요청
+				//-----------------------------------------------------------------------
+				fn_dataSetApproval : function() {
+					try {
+						mint.callService(null, screenName, 'REST-S02-AN-05-01'
+							,function(jsonData) {
+							 	mint.common.alert('CI00106');
+								$('#tf-statusNm').val( mint.label.getLabel('lb-1029'));
+							}
+							,{
+								 errorCall : true
+								,params : { dataSetId : $.main_detail.dataSetId }
+							}
+						);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_dataSetDelete"});
+					}
+				},//end fn_dataSetDelete()
+
+				//-----------------------------------------------------------------------
+				// Description :: DataSet  승인요청
+				//-----------------------------------------------------------------------
+				fn_moveSelectedRow : function(grid, direction) {
+					try {
+				        var record = $.main_detail.currFieldItem;
+				        if (!record) {
+				            return;
+				        }
+				        $.main_detail.currFieldItem=null;
+				        var newIndex = index = grid.dataSource.indexOf(record);
+				        direction < 0?newIndex--:newIndex++;
+				        if (newIndex < 0 || newIndex >= grid.dataSource.total()) {				        	
+				            return;
+				        }
+				        grid.dataSource.remove(record);
+				        grid.dataSource.insert(newIndex, record);
+				        
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_moveSelectedRow"});
+					}
+				},//end fn_moveSelectedRow()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_btn_down_click
+				//-----------------------------------------------------------------------
+				fn_btn_down_click : function() {
+					try {
+						var grid = $("#gd-field").data().kendoTreeList;
+						$.main_detail.fn_moveSelectedRow(grid, 1);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_down_click"});
+					}
+				},//end fn_btn_down_click()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_btn_down_click
+				//-----------------------------------------------------------------------
+				fn_btn_up_click : function() {
+					try {
+						var grid = $("#gd-field").data().kendoTreeList;
+						$.main_detail.fn_moveSelectedRow(grid, -1);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_up_click"});
+					}
+				},//end fn_btn_up_click()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_complexPopup
+				//-----------------------------------------------------------------------
+				fn_complexPopup : function(dataItem) {
+					try {
+						var currFieldItem = $.main_detail.currFieldItem;
+						
+						if(mint.common.findCommonCode(mint.common.commonCodeMap.get("cds").AN09, 'nm',  currFieldItem.typeNm).cd == '4')
+						{
+							mint.common.setScreenParam('callback', '$.main_detail.fn_setComplexField');
+							mint.common.searchPopup('../sub-an/AN-05-00-502.html','AN-05-00-502');
+						}else{
+							// TODO
+							var entityGrid = $("#gd-field").data().kendoTreeList;
+							var children = entityGrid.dataSource.childNodes(currFieldItem);
+							
+							if( !mint.common.isEmpty(children) && children.length > 0){
+								// 기존 등록된   complexType 삭제.								
+								currFieldItem.set("fieldSetId", "");
+
+								//필드 수정 임시저장데이터
+								$.main_detail.fn_saveTmpDataFieldModify(currFieldItem);
+
+								var tmpTypeNm = currFieldItem.typeNm;
+
+								for( var i=0; i<children.length; i++ ) {
+									entityGrid.dataSource.remove(children[i])
+								}
+								
+								//필드 수정 임시저장데이터 불러오기
+								$.main_detail.fn_loadTmpDataFieldModify(entityGrid);
+							}
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_complexPopup"});
+					}
+				},//end fn_complexPopup()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_setComplexField
+				//-----------------------------------------------------------------------
+				fn_setComplexField : function(selectedItem) {
+					try {
+						var entityGrid = $("#gd-field").data("kendoTreeList");
+						var dataItem = entityGrid.dataItem(entityGrid.select());
+						var fieldSetId = selectedItem.dataSetId;
+						var dataItemId = dataItem.id;
+
+						//필드 수정 임시저장데이터
+						$.main_detail.fn_saveTmpDataFieldModify(dataItem);
+
+						// 하위 삭제
+						var children = entityGrid.dataSource.childNodes(dataItem);
+						for( var i=0; i<children.length; i++ ) {
+							entityGrid.dataSource.remove(children[i])
+						}
+
+						for( var k=0; k<selectedItem.dataFieldList.length; k++ ) {
+							var node =  new kendo.data.Node(
+	           				{ 	id: dataItemId+'-'+fieldSetId+'-'+selectedItem.dataFieldList[k].dataFieldId,
+ 	           					dataFieldId:selectedItem.dataFieldList[k].dataFieldId,
+ 	           					name1: selectedItem.dataFieldList[k].name1,
+ 	           					name2: selectedItem.dataFieldList[k].name2,
+ 	           					parentId:dataItemId,
+ 	           					typeNm: selectedItem.dataFieldList[k].typeNm,
+ 	           					offset: selectedItem.dataFieldList[k].offset,
+ 	           					length: selectedItem.dataFieldList[k].length,
+ 	           					defaultValue: selectedItem.dataFieldList[k].defaultValue,
+ 	           					encryptTypeNm: selectedItem.dataFieldList[k].encryptTypeNm,
+ 	           					encryptType: selectedItem.dataFieldList[k].encryptType,
+ 	           					isLengthField: selectedItem.dataFieldList[k].isLengthField,
+ 	           					hasRepeatCountField:selectedItem.dataFieldList[k].hasRepeatCountField,
+ 	           					repeatFieldId:selectedItem.dataFieldList[k].repeatFieldId,
+ 	           					repeatCount:selectedItem.dataFieldList[k].repeatCount,
+ 	           					justifyNm:selectedItem.dataFieldList[k].justifyNm,
+ 	           					padding:selectedItem.dataFieldList[k].padding,
+ 	           					fieldSetId:selectedItem.dataFieldList[k].fieldSetId,
+ 	           					reUseDelYn:'N'
+ 	           				});
+
+							dataItem.fieldSetId = selectedItem.dataSetId;
+
+ 							//$('#gd-field').data().kendoTreeList.dataSource.pushCreate(node);
+ 							$('#gd-field').data().kendoTreeList.dataSource.add(node);
+		 					//complexList.push(complexField.dataFieldList[k]);
+
+						}
+
+	 					//임시 수정값 재입력
+						$.main_detail.fn_loadTmpDataFieldModify(entityGrid);
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setComplexField"});
+					}
+				},//end fn_setComplexField()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_saveTmpDataFieldModify - 컬럼추가삭제 작업시 날아가는 데이터 임시저장
+				//-----------------------------------------------------------------------
+				fn_saveTmpDataFieldModify : function(dataItem){
+
+					var tmpDataFieldModify = new Object();
+
+					tmpDataFieldModify.id					=dataItem.id;
+					tmpDataFieldModify.dataFieldid			=dataItem.dataFieldId;
+					tmpDataFieldModify.name1				=dataItem.name1
+					tmpDataFieldModify.name2				=dataItem.name2
+					tmpDataFieldModify.typeNm				=dataItem.typeNm
+					tmpDataFieldModify.offset				=dataItem.offset
+					tmpDataFieldModify.length				=dataItem.length
+					tmpDataFieldModify.defaultValue			=dataItem.defaultValue
+					tmpDataFieldModify.encryptTypeNm		=dataItem.encryptTypeNm
+					tmpDataFieldModify.isLengthField		=dataItem.isLengthField
+					tmpDataFieldModify.hasRepeatCountField	=dataItem.hasRepeatCountField
+					tmpDataFieldModify.repeatFieldId		=dataItem.repeatFieldId
+					tmpDataFieldModify.repeatCount			=dataItem.repeatCount
+					tmpDataFieldModify.justifyNm			=dataItem.justifyNm
+					tmpDataFieldModify.padding				=dataItem.padding
+
+					$.main_detail.tmpDataFieldModify = tmpDataFieldModify;
+				},
+				
+				//-----------------------------------------------------------------------
+				// Description :: fn_loadTmpDataFieldModify - 컬럼추가삭제 작업시 날아가는 데이터 임시저장 불러오기
+				//-----------------------------------------------------------------------
+				fn_loadTmpDataFieldModify : function(entityGrid){
+
+					var tmpDataFieldModify = $.main_detail.tmpDataFieldModify;
+
+ 					entityGrid.editRow(entityGrid.select());
+
+ 					var dataItem = entityGrid.dataItem(entityGrid.select());
+
+ 					dataItem.set("name1", tmpDataFieldModify.name1);
+ 					dataItem.set("name2", tmpDataFieldModify.name2);
+ 					dataItem.set("typeNm", tmpDataFieldModify.typeNm);
+ 					dataItem.set("offset", tmpDataFieldModify.offset);
+ 					dataItem.set("length", tmpDataFieldModify.length);
+ 					dataItem.set("defaultValue", tmpDataFieldModify.defaultValue);
+ 					dataItem.set("encryptTypeNm", tmpDataFieldModify.encryptTypeNm);
+ 					dataItem.set("isLengthField", tmpDataFieldModify.isLengthField);
+ 					dataItem.set("hasRepeatCountField", tmpDataFieldModify.hasRepeatCountField);
+ 					dataItem.set("repeatFieldId", tmpDataFieldModify.repeatFieldId);
+ 					dataItem.set("repeatCount", tmpDataFieldModify.repeatCount);
+ 					dataItem.set("justifyNm", tmpDataFieldModify.justifyNm);
+ 					dataItem.set("padding", tmpDataFieldModify.padding);
+
+ 					$.main_detail.tmpDataFieldModify = null;
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_onChange
+				//-----------------------------------------------------------------------
+				/* fn_onChange :function (e) {
+					   grid = e.sender;
+					   var currentDataItem = grid.dataItem(this.select());
+					   console.log(currentDataItem);
+			           var selected = $.map(this.select(), function(item) {
+	                        return $(item).text();
+	                    });
+			           console.log("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
+                }, */
+
+              //-----------------------------------------------------------------------
+				// Description :: fn_btn_add_click
+				//-----------------------------------------------------------------------
+				fn_btn_add_click : function() {
+					var node =  new kendo.data.Node({
+						reUseDelYn:'Y',
+						rowIndex:record++,
+						seq:record,
+						name1:'',
+						name2:'',
+						typeNm:'',
+						offset:0,
+						length:0,
+						defaultValue:'',
+						encryptTypeNm:'',
+						isLengthField:'N',
+						hasRepeatCountField:'N',
+						repeatFieldId:'',
+						repeatCount:0,
+						justifyNm:'',
+						padding:'',
+						fieldSetId:null,
+						id:record,
+						dataFieldId:record,
+						parentId:null
+					});
+
+					$('#gd-field').data().kendoTreeList.dataSource.pushCreate(node);
+
+				}, //fn_btn_add_click
+				
+				//-----------------------------------------------------------------------
+				// Description :: 수정 삭제 및 심의 가능 여부 체크
+				//-----------------------------------------------------------------------
+				fn_isModifyer : function() {
+					try {
+						var isModifyer = false;
+						//등록자 및 어드민 검사
+						if($('#hd-regUserId').val() == mint.session.getUserId() || mint.session.isInterfaceAdmin() == 'Y') {
+							isModifyer = true;
+						}
+						return isModifyer;
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_isModifyer"});
+					}
+				},//end fn_isModifyer()
+
+				//-----------------------------------------------------------------------
+				// Description :: 복사
+				//-----------------------------------------------------------------------
+				fn_btn_copy_click : function() {
+					try {
+						mint.common.setScreenParam("caller", "AN-05-00-008");
+						mint.common.setScreenParam('callback', '$.main_detail.fn_addDataSet');
+						mint.common.searchPopup('../sub-an/AN-05-00-505.html','AN-05-00-505');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_add_metafield_click"});
+					}
+				},//fn_btn_copy_click
+
+				//-----------------------------------------------------------------------
+				// Description :: MetaField 추가.
+				//-----------------------------------------------------------------------
+				fn_btn_add_metafield_click : function() {
+					try {
+						mint.common.setScreenParam("caller", "AN-05-00-008");
+						mint.common.setScreenParam('callback', '$.main_detail.fn_setMetaField');
+						mint.common.searchPopup('../sub-an/AN-05-00-503.html','AN-05-00-503');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_btn_add_metafield_click"});
+					}
+				},//end fn_btn_add_metafield_click()
+
+				//-----------------------------------------------------------------------
+				// Description :: 데이터셋 임시저장
+				//-----------------------------------------------------------------------
+				fn_tempDataSetSave : function() {
+					try {
+						var datasetObject = $.main_detail.fn_getDataSetObject();
+						//console.log(datasetObject);
+						mint.callService(datasetObject, screenName, 'REST-S02-AN-05-01', '$.main_detail.fn_saveComplete',
+							{
+								  errorCall : true
+								, notificationView : false
+							}
+						);
+						
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_tempDataSetSave"});
+					}
+				},//end fn_tempDataSetSave()
+				
+				//-----------------------------------------------------------------------
+				// Description :: 임시저장 불러오기
+				//-----------------------------------------------------------------------
+				fn_tempDataSetRead : function() {
+					try {
+						//mint.common.setScreenParam("caller", "AN-05-00-008");
+						mint.common.setScreenParam('callback', '$.main_detail.fn_setTempDataSet');
+						mint.common.searchPopup('../sub-an/AN-05-00-504.html','AN-05-00-504');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_tempDataSetRead"});
+					}
+				},//end fn_tempDataSetRead()
+				
+				
+				//-----------------------------------------------------------------------
+				// Description :: 임시저장 불러오기 콜백
+				//-----------------------------------------------------------------------
+				fn_setTempDataSet : function() {
+					/*var requestObject = new Object();
+					requestObject.userId = tmpDataSetInfo.userId;
+					requestObject.fromDate = tmpDataSetInfo.date;
+					requestObject.toDate = tmpDataSetInfo.date;
+
+					mint.callService(requestObject, 'AN-05-00-504', 'REST-R08-AN-05-01', '$.main_detail.fn_setDataSetInfo', {errorCall : true, params : { userId : requestObject.userId }}); */
+
+					$.main_detail.dataSet = mint.common.getScreenParam('dataSet');
+					$.main_detail.fn_setDataSetInfo($.main_detail.dataSet);
+					mint.common.removeScreenParam('dataSet');
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: 메타필드 추가.
+				//-----------------------------------------------------------------------
+				fn_setMetaField : function(metaItem) {
+					try {
+						var node =  new kendo.data.Node({
+							reUseDelYn:'Y',
+							rowIndex:record++,
+							seq:'',
+							name1:metaItem.name1,
+							name2:metaItem.name2,
+							type:metaItem.type,
+							typeNm:metaItem.typeNm,
+							offset:'',
+							length:metaItem.length,
+							defaultValue:metaItem.defaultValue,
+							encryptType:metaItem.encryptType,
+							encryptTypeNm:metaItem.encryptTypeNm,
+							isLengthField:'N',
+							hasRepeatCountField:'N',
+							repeatFieldId:'',
+							repeatCount:0,
+							justifyNm:metaItem.justifyNm,
+							justify:metaItem.justify,
+							padding:metaItem.padding,
+							fieldSetId:'',
+							id:record,
+							dataFieldId:record,
+							parentId:null
+								})
+						$('#gd-field').data().kendoTreeList.dataSource.pushCreate(node);
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setMetaField"});
+					}
+				},//end fn_setMetaField()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_detailInit
+				//-----------------------------------------------------------------------
+				/* fn_detailInit :function (e) {
+					gridSelectEvt = e;
+					console.log(e);
+
+					var selectedItem = e.data;
+					console.log(currDataSet.complexTypeMap);
+					console.log(currDataSet.complexTypeMap[1]);//dataFieldList
+ 					if(selectedItem.type == '4'){ // complex Type
+ 	                     $("<div/>").appendTo(e.detailCell).kendoGrid({
+	                         dataSource: currDataSet.complexTypeMap[selectedItem.fieldSetId].dataFieldList,
+	                         scrollable: false,
+	                         sortable: true,
+	                         pageable: true,
+	                     	 columns: [
+										{
+											field : "name1",
+											title : mint.label.getLabel('lb-1015'),
+											headerAttributes : {
+												style : "text-align: left"
+											},
+											attributes : {
+												style : "text-align: left; white-space: nowrap;"
+											},
+										},
+										{
+											field : "name2",
+											title : mint.label.getLabel('lb-1014'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "typeNm",
+											title :  mint.label.getLabel('lb-48'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorFieldTypeComboBox,
+										},
+										{
+											field : "offset",
+											title : mint.label.getLabel('lb-1016'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor: mint.ui.gridEditorNumbericTextBox,
+										},
+										{
+											field : "length",
+											title : mint.label.getLabel('lb-1012'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor: mint.ui.gridEditorNumbericTextBox,
+										},
+
+										{
+											field : "defaultValue",
+											title : mint.label.getLabel('lb-1017'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "encryptTypeNm",
+											title : mint.label.getLabel('lb-1018'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorEncryptTypeComboBox,
+										},
+										{
+											field : "isLengthField",
+											title : mint.label.getLabel('lb-1019'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorYesOrNoComboBox,
+										},
+										{
+											field : "hasRepeatCountField",
+											title : mint.label.getLabel('lb-1020'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorYesOrNoComboBox,
+										},
+										{
+											field : "repeatFieldId",
+											title : mint.label.getLabel('lb-1021'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "repeatCount",
+											title : mint.label.getLabel('lb-1022'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorNumbericTextBox,
+										},
+										{
+											field : "justifyNm",
+											title : mint.label.getLabel('lb-1023'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											editor : mint.ui.gridEditorJustifyComboBox,
+										},
+										{
+											field : "padding",
+											title : mint.label.getLabel('lb-1024'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+
+										{	field : "seq", hidden : true },
+										{	field : "type", hidden : true },
+										{	field : "encryptType", hidden : true },
+										{	field : "justify", hidden : true },
+										{	field : "dataFieldId", hidden : true },
+							]
+	                     });
+					}
+                }, */
+
+				//-----------------------------------------------------------------------
+				// Description :: fnclearDataSetArea 화면 초기화
+				//-----------------------------------------------------------------------
+                fn_clearDataSetArea : function() {
+        			$('#tf-dataSetNm').val('');
+        			$('#tf-dataSetCd').val('');
+        			$('#tf-length').data("kendoNumericTextBox").value('');
+        			$('#cb-msgType').data('kendoDropDownList').select(0);
+        			$('#gd-field').data('kendoTreeList').setDataSource('');
+        			$("#ta-description").data("kendoEditor").value('');
+                	
+                },
+
+
+			}// end main
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//-----------------------------------------------------------------------
+		// Description :: 저장 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-save').on('click', function() {
+			$.main_detail.fn_save();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 초기화 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-init').on('click', function() {
+			$.main_detail.fn_clearDataSetArea();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 이전 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-back').on('click', function(e) {
+			mint.back(null);
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 승인요청 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-approval').click(function(e) {
+			if($.main_detail.fn_isModifyer()) {
+				var confirmCheck =   mint.common.confirm('CI00006',null);
+				if(confirmCheck) {
+					$.main_detail.fn_dataSetApproval();
+				}
+			} else {
+				mint.common.alert('CW00007', null);
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 이행완료취소 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-delete').on('click', function(e) {
+			$.main_detail.fn_dataSetDelete();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 수정 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-update').on('click', function(e) {
+			if($.main_detail.fn_isModifyer()) {
+				var confirmCheck = mint.common.confirm('CI00002',null);
+				if(confirmCheck) {
+					$.main_detail.fn_save();
+				}
+			} else {
+				mint.common.alert('CW00007', null);
+			}
+        });
+		//-----------------------------------------------------------------------
+		// Description :: 임시저장 불러오기 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-tmp-save').on('click', function(e) {
+			$.main_detail.fn_tempDataSetSave();
+        });
+		//-----------------------------------------------------------------------
+		// Description :: 임시저장 불러오기 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-tmp-read').on('click', function(e) {
+			$.main_detail.fn_tempDataSetRead();
+        });
+
+		$('#gd-field').on('click', "table", function(e) {
+			$.main_detail.fn_btnVisible(e)
+        });
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main_detail.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+</script>

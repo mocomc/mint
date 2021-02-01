@@ -1,0 +1,439 @@
+﻿<!--
+	Screen ID : AN-01-00-004
+	Screen NM : 인터페이스 개발완료/테스트완료/이행완료 갱신 및 산출물 첨부 팝업
+-->
+
+<div class="modal inmodal" id="AN-01-00-004" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only"><lb class="lb-298"></lb></span>
+				</button>
+				<div>
+					<h2 id="popup-title"></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-lg-12">
+						<div class="bs-callout01" style="padding: 5px 5px 55px 5px; margin-top:0px; border-left-width: 5px; background-color: #FAFAFB; border-left-color: #1C84C6">
+							<div class="col-sm-6">
+	                           	<h4><i class="fa fa-square text-success"></i> <lb class="lb-218">부가정보</lb></h4>
+	                           	<h5>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-arrow-circle-right text-success"></i> 업데이트할 내용과 산출물이 있으면 기술 및 첨부 하십시요</h5>
+
+							</div>
+						</div>
+
+						<hr class="hr-space">
+
+						<div class="form-group">
+							<textarea id="popup-ta-description" rows="5" cols="30" style="height:180px"></textarea>
+						</div>
+
+						<hr class="hr-space">
+
+						<div id="popup-fileupload-div" class="form-group">
+							<input id="popup-fu-uploadFile" name="uploadFile" type="file" />
+						</div>
+
+						<hr class="hr-space">
+						<!--
+						<div class="form-group">
+							<textarea id="popup-ta-html" class="alert alert-success" rows="2" cols="30" placeholder="외부 HTML 페이지 를 포함하려면 여기에 입력하세요" style="width:100%;height:50px;background-color:#FFFFFF;"></textarea>
+						</div>
+						-->
+
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+
+            <div class="modal-footer-original">
+                <button type="button" class="btn btn-primary btn-save" ><i class="fa fa-check"></i>  <lb class="lb-310"></lb></button>
+                <button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-143"></lb></button>
+            </div>
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "AN-01-00-004";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			actionFlag              : '',
+			requirementId           : '',
+			uploadFileSelectedCount : 0,
+			uploadFileCount         : 0,
+			uploadFileInfoList      : [],
+			requirementObject       : new Object(),
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.sub.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// Screen Parameter
+					//-----------------------------------------------------------------------
+					$.sub.actionFlag       = mint.common.getScreenParam('actionFlag');
+					$.sub.requirementId    = mint.common.getScreenParam('requirementId');
+
+					{
+						var title = '';
+						switch( $.sub.actionFlag ) {
+						case 'G0' :
+							title = mint.label.getLabel('lb-140');
+							break;
+						case 'H0' :
+							title = mint.label.getLabel('lb-141');
+							break;
+						case 'I0' :
+							title = mint.label.getLabel('lb-142');
+							break;
+						default :
+							break;
+						}
+						$('#popup-title').html(title);
+
+	                	$("#popup-ta-description").kendoEditor({
+	                		resizable: { content: true, toolbar: false }
+	                	});
+	                	$.sub.fn_initFileUpload([]);
+
+					}
+
+					if( mint.common.isEmpty($.sub.requirementId) ) {
+						//$.sub.fn_initFileUpload([]);
+					} else {
+						mint.callService(null, 'AN-01-00-002', 'REST-R02-AN-01-00',
+								function( jsonData ) {
+
+									$.sub.requirementObject = JSON.parse(JSON.stringify(jsonData));
+									//-----------------------------------------------------------------------
+									// 첨부파일
+									//-----------------------------------------------------------------------
+									var uploadFiles = [];
+
+									if(0 < jsonData.attatchFileList.length) {
+										for(var i=0; i<jsonData.attatchFileList.length; i++) {
+											var fileObject = new Object;
+
+											fileObject.name      = jsonData.attatchFileList[i].fileNm;
+											fileObject.size      = '';
+											fileObject.extension = '';
+											fileObject.fileNm    = jsonData.attatchFileList[i].fileNm;
+											fileObject.fileId    = jsonData.attatchFileList[i].fileId;
+											fileObject.filePath  = jsonData.attatchFileList[i].filePath;
+											fileObject.regId     = jsonData.attatchFileList[i].regId;
+											fileObject.regDate   = jsonData.attatchFileList[i].regDate;
+
+											uploadFiles.push(fileObject);
+										}
+									}
+
+									//$.sub.fn_initFileUpload(uploadFiles);
+
+									//-----------------------------------------------------------------------
+									// Description
+									//-----------------------------------------------------------------------
+									//$("#popup-ta-description").data("kendoEditor").value($.sub.requirementObject.comments);
+								},
+								{
+							    	  errorCall : true
+							    	, params : {requirementId : $.sub.requirementId}
+							    }
+						);
+					}
+
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			}, //end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: init File Upload
+			//-----------------------------------------------------------------------
+			fn_initFileUpload : function(jsonData) {
+				try {
+			 		$("#popup-fu-uploadFile").kendoUpload({
+			 			 files: jsonData,
+			 			 async: {
+			 				saveUrl: "/mint/ut/file/upload",//TODO: REST 정보에 관리되도록 조치할것.
+			 				removeUrl: "remove",
+			 				autoUpload: false
+				 		},
+			 			localization: {
+			 				select: mint.label.getLabel('lb-220')
+			 			},
+			 			select : function(e) {
+	                    	for( var i = 0; i < e.files.length; i++ ) {
+	                    		if( e.files[i].size == 0 ) {
+	                    			mint.common.alert('CW00013', e.files[i].name);
+	                    			e.preventDefault();
+	                    		}
+
+	                    		if( mint.common.invalidFileName(e.files[i].name) ) {
+	                    			mint.common.alert('CW00015', e.files[i].name);
+	                    			e.preventDefault();
+	                    		}
+	                    	}
+			 				$.sub.uploadFileSelectedCount = e.files.length;
+			 			},
+			 			upload: function(e) {
+							e.data = {userId:mint.session.getUserId()};
+			 			},
+			 			progress: function(e) {
+			 				$.sub.fn_uploadProgress(e);
+			 			},
+			 			cancel: function(e) {
+
+			 			},
+			 			error: function(e) {
+			 				$.sub.fn_uploadCheck(e.XMLHttpRequest);
+			 			},
+			 			success: function(e) {
+			 				$.sub.fn_uploadCheck(e.XMLHttpRequest);
+			 			},
+			 			complete: function(e) {
+			 				$.sub.fn_uploadComplete(e);
+			 			},
+			 			remove: function(e) {
+							$.sub.fn_removeFile(e);
+			 		    },
+
+			 		});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initFileUpload"});
+				}
+			},//end fn_initFileUpload()
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드 상태 체크
+			//-----------------------------------------------------------------------
+			fn_uploadCheck : function( xhr ) {
+				try {
+					var httpStatus = xhr.status;
+					if( httpStatus == 200 ) {
+						//-----------------------------------------------------------------------
+						// Response ComMessage
+						//-----------------------------------------------------------------------
+						var msg = JSON.parse(xhr.responseText);
+						if( msg.errorCd == 0 ) {
+
+							var responseObject = msg.responseObject;
+							if( !mint.common.isEmpty(responseObject) && !mint.common.isEmpty(responseObject[0]) ) {
+								var uploadFileInfo = new Object();
+								uploadFileInfo.fileNm   = responseObject[0].fileNm;
+								uploadFileInfo.filePath = responseObject[0].filePath;
+								$.sub.uploadFileInfoList.push(uploadFileInfo);
+
+								$.sub.uploadFileCount ++;
+							}
+
+						} else {
+							mint.common.errorDialog('Service', msg.errorCd, msg.errorMsg, msg.errorDetail);
+							{
+								$("#popup-fileupload-div .k-upload-files.k-reset").find("li").remove();
+								$.sub.uploadFileSelectedCount = 0;
+								$.sub.uploadFileCount = 0;
+								$.sub.uploadFileInfoList = [];
+							}
+						}
+
+					} else {
+						switch( httpStatus ) {
+							case 12029 : //server shutdown
+								alertMsg = mint.message.getMessage('CE12029', null);
+								break;
+							case 404 :
+								alertMsg = mint.message.getMessage('CE10404', null);
+								break;
+							default :
+								alertMsg = mint.message.getMessage('CE10000', httpStatus);
+								break;
+						}
+						mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_uploadCheck"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드시 진행시.
+			//-----------------------------------------------------------------------
+			fn_uploadProgress : function(event) {
+				try {
+					mint.waitingLoad(true);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_uploadProgress"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드 완료시.
+			//-----------------------------------------------------------------------
+			fn_uploadComplete : function(event) {
+				try {
+					mint.waitingLoad(false);
+					//파일 업로드가 최종적으로 완료되면, save 호출.
+					if( $.sub.uploadFileCount == $.sub.uploadFileSelectedCount ) {
+						$.sub.fn_save();
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_uploadComplete"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 파일 업로드시 선택된 파일 삭제
+			//-----------------------------------------------------------------------
+			fn_removeFile : function(event) {
+				try {
+	 				var files = event.files;
+
+	 		       	for(var i=0; i<$('#popup-fu-uploadFile').data("kendoUpload").options.files.length; i++) {
+	 		   			if(files[0].uid == $('#popup-fu-uploadFile').data("kendoUpload").options.files[i].uid) {
+	 		   				$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+	 		   				$('#popup-fu-uploadFile').data("kendoUpload").options.files.splice(i, 1);
+	 		   				event.preventDefault();
+	 		   			}
+	 		   		}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_removeFile"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_save
+			//-----------------------------------------------------------------------
+			fn_save : function() {
+				try {
+					var requirementObject = $.sub.requirementObject;
+					//-----------------------------------------------------------------------
+					// Requirement - 첨부파일
+					//-----------------------------------------------------------------------
+					if( $.sub.uploadFileInfoList.length > 0 ) {
+						for(var i=0; i<$.sub.uploadFileInfoList.length; i++) {
+							var attachFileObject = new Object();
+							attachFileObject.objectType    = 'RequirementAttatchFile';
+							attachFileObject.requirementId = $.sub.requirementId;
+							attachFileObject.fileId        = '';
+							attachFileObject.fileNm        = $.sub.uploadFileInfoList[i].fileNm;
+							attachFileObject.filePath      = $.sub.uploadFileInfoList[i].filePath;
+							attachFileObject.regDate       = mint.common.remakeYYMMDD(new Date());
+							attachFileObject.regId         = mint.session.getUserId();
+
+							requirementObject.attatchFileList.push(attachFileObject);
+						}
+			        }
+					//-----------------------------------------------------------------------
+					// Requirement - Description
+					//-----------------------------------------------------------------------
+					requirementObject.comments = requirementObject.comments + $("#popup-ta-description").data("kendoEditor").value();
+					//-----------------------------------------------------------------------
+					// Interface - tag
+					// TODO: 태그 처리 어떻게 좀 해야것넹....
+					//-----------------------------------------------------------------------
+					requirementObject.interface.tagList = [];
+					//-----------------------------------------------------------------------
+					// Requirement - Description
+					//-----------------------------------------------------------------------
+					requirementObject.status = $.sub.actionFlag;
+					//-----------------------------------------------------------------------
+					// Service Call
+					// 1) 인터페이스요건 수정 호출 ( 첨부파일, description 수정하기 위함)
+					// 2) 인터페이스상태 정보 호출 ( 개발완료/테스트완료/이행완료 :: 결재요청 히스토리 테이블에 기록됨 )
+					//-----------------------------------------------------------------------
+					mint.callService(requirementObject, screenName, 'REST-U01-AN-01-00',
+							function(jsonObject) {
+								if( !mint.common.isEmpty(jsonObject) ) {
+									mint.callService(null, screenName, 'REST-U03-AN-01-00'
+										,function(jsonObject) {
+											mint.common.alert('CI00101', null);
+											mint.setDetailView('Y');
+											mint.common.setScreenParam("requirementId", $.sub.requirementId);
+								      		mint.move('../sub-an/AN-01-00-003');
+								      		$('#AN-01-00-004').modal('hide');
+										}
+										,{
+											 errorCall : true
+											,params : {
+												  requirementId : $.sub.requirementId
+												, status		: $.sub.actionFlag
+												, date			: mint.common.remakeYYMMDD(new Date()).substring(0,8)
+											}
+										}
+									);
+								}
+							},
+							{
+								  errorCall : true
+								, notificationView : false
+								, params 	: {requirementId : $.sub.requirementId}
+							}
+					);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_save"});
+				}
+
+			}, // end fn_save()
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 개발완료/테스트완료/이행완료 저장
+	//-----------------------------------------------------------------------
+	$(".btn-save").click(function(e) {
+		if( $.sub.uploadFileSelectedCount > 0 ) {
+			$('#popup-fu-uploadFile').data('kendoUpload').upload();
+		} else {
+			$.sub.fn_save();
+		}
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>

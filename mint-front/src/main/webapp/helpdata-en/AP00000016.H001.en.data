@@ -1,0 +1,42 @@
+AP00000016$$$H001$$$en$$$조회조건$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Search
+Conditions<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">Check interface normal/error as
+individual unit <br></font><font size="2">
+&nbsp; 1. Related Search<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. "whole company solution" +
+"ARIS process" + "system" + "interface name" are
+reflected to mutual search result.<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">example) 1) check "whole
+company solution" as an IIB<br></font><font size="2">
+</font><font size="2"><span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; </span><span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp;&nbsp;</span></font><font size="2">2) if you choose ComboBox of
+"system", lists only related to IIB will be shown</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">&gt; check<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">3) if you choose ComboBox
+of "infertace name", interfaces only related to "whole company
+solution + system" will be shown<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. sequence of 4 items of related
+search is not important, but if it has selected, change is impossible<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. change of already selected content
+could be done by "initialization " button<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Status<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Change status to "Error",
+"Progressing" and select/search by extending the scope of the
+"search range" <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Normal : Status from Interface linkup
+start to end is normal/complete<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Progressing : An Interface has occured,
+but status is not normal/complete but delaying<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">If it lasts for more than a
+hour, it automatically changes its status to an "Error" in IIP<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Error : Status of Interface errors have
+occured (Check error content at detail Information)<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 3. Max result value<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. Limit the number of results to
+1000 to prevent Out of Memory when there is a lot of search results<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. Encourage narrowing range of search
+by changing search time space</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font color="#000000" face="굴림" size="3"><br></font></p><p style="margin: 0cm 0cm 0pt; line-height: normal; -ms-word-break: keep-all; mso-pagination: widow-orphan;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp;</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

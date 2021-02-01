@@ -1,0 +1,928 @@
+﻿<!--
+	Screen ID : SU-03-05-001
+	Screen NM : 등록률.
+	[변경 이력]
+	* YYYYMMDD-001
+-->
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-5">
+        <h2 id="t1"><lb class="lb-36"></lb></h2>
+        <ol class="breadcrumb">
+            <li id="d1"><lb class="lb-631"></lb></li>
+            <li id="d2"><lb class="lb-33"></lb></li>
+            <li id="d3" class="active"><strong><lb class="lb-36"></lb></strong></li>
+        </ol>
+    </div>
+    <!--button-->
+    <div class="col-lg-7">
+        <div class="title-action">
+
+        </div>
+    </div>
+    <!--button end-->
+</div>
+<!--location end-->
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!--row-->
+    <div class="row">
+        <!--col-lg-12-->
+        <div class="col-lg-12">
+            <!--ibox float-e-margins-->
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><lb class="lb-78"></lb></h5>
+                    <div class="ibox-tools">
+	                	<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+						<!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="#">Config option 1</a></li>
+							<li><a href="#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i></a> -->
+	                </div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			            <a class="btn btn-w-m btn-default btn-outline btn-search"><i class="fa fa-search "></i> <lb class="lb-10"></lb> </a>
+			            <a class="btn btn-w-m btn-default btn-outline btn-status-KPI" style="display: none;"><i class="fa fa-reply"></i> <lb class="lb-33"></lb></a>
+					</div>					
+                </div>
+                <!--ibox-content-->
+                <div class="ibox-content">
+                    <!--row-->
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <span class="lable_tag4" style="width: 17%;"><lb class="lb-302"></lb></span>
+								<input id="sc-su0305001-from-period" tabIndex="2" style="text-align:center; width: 19.1%" /> 
+								<span style="padding: 0px 5px;"> ~ </span>
+								<input id="sc-su0305001-to-period" tabIndex="2" style="text-align:center; width: 19.1%" />
+                            </div>
+                        </div>
+                    </div>
+                    <!--row end-->
+                </div>
+                <!--ibox-content end-->
+            </div>
+            <!--ibox float-e-margins end-->
+        </div>
+        <!--col-lg-12 end-->
+    </div>
+    <!--row end-->
+    
+    <!--row start-->
+    <div class="row">
+        <!--col-lg-12-->
+        <div class="col-lg-12">
+            <!--ibox float-e-margins-->
+            <div class="ibox float-e-margins">
+                <!--ibox-title-->
+                <div class="ibox-title">
+                    <h5><lb class="lb-91"></lb></h5>
+                    <div class="ibox-tools">
+                    	<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000036','H002')"></a>
+                        <a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+                        <!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a></li>
+                            <li><a href="#">Config option 2</a></li>
+                        </ul>
+                        <a class="close-link"> <i class="fa fa-times"></i>
+                        </a> -->
+                    </div>
+                </div>
+                <!--ibox-title end-->
+                <!--ibox-content-->
+                <div class="ibox-content">
+                    <div class="tabs-container">
+						<ul id="tabs-menu-list" class="nav nav-tabs">
+		                    <li class="active"><a data-toggle="tab" href="#tab-01"><lb class="lb-442"></lb></a></li>
+		                    <li class=""><a data-toggle="tab" href="#tab-02"><lb class="lb-599"></lb></a></li>
+		                </ul>
+					</div>
+					<div class="tab-content">
+						<div id="tab-01" class="tab-pane active">
+	                        <div class="panel-body">
+	                            <div id="grid_su0305001" class="grid_su0305001"></div>
+	                        </div>
+	                    </div>
+						
+	                    <div id="tab-02" class="tab-pane">
+	                        <div class="panel-body">
+	                            <div id="grid_su0305001_detail" class="grid_su0305001_detail"></div>
+	                        </div>
+	                    </div>
+					</div>
+                </div>
+                <!--ibox-content end-->
+            </div>
+            <!--ibox float-e-margins end-->
+        </div>
+        <!--col-lg-12 end-->
+    </div>
+    <!--row end-->
+</div>
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "SU-03-05-001";
+    
+    $.extend({
+        main : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+            modRegYn : "",
+            modRegDate : "",
+            searchCondition : {},
+            isInitNoRegInterfacesDetailGrid : true,
+            	
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+            
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.main.fn_initCallback');
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+                }
+            },//end fn_init()   
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------           
+            fn_initCallback : function() {
+                try{
+                    //검색조건 세팅
+                    // 검색년월
+                	$('#sc-su0305001-from-period').kendoDatePicker({
+						  start: "year"
+						, depth: "year"
+						, format: "yyyy/MM"
+					    , culture: "ko-KR"
+					});
+                    
+                	// 검색년월
+                	$('#sc-su0305001-to-period').kendoDatePicker({
+						  start: "year"
+						, depth: "year"
+						, format: "yyyy/MM"
+					    , culture: "ko-KR"
+					});
+					
+					$('#sc-su0305001-from-period').data("kendoDatePicker").value(new Date());
+					
+					$('#sc-su0305001-to-period').data("kendoDatePicker").value(new Date());
+					
+                    
+                 	// 그리드 초기화
+					// 탭 자동 이동
+		    		$('#tabs-menu-list li:eq(1)').hide();
+					
+		    		$('#tabs-menu-list li:eq(0)').show();
+		    		$('#tabs-menu-list a:eq(0)').tab('show');
+		    		
+                    $.main.fn_initRegInterfacesRateGrid();
+                    
+                    
+                 	// start. 연계 조회(자동) 여부 체크 및 조회
+					var linkedFromDate = mint.common.getScreenParam("SU0305001_fromSearchPeriod");
+					var linkedToDate = mint.common.getScreenParam("SU0305001_toSearchPeriod");
+					
+					var linkedFromScreenName = mint.common.getScreenParam("LinkedFromScreenName");
+					
+					if ( linkedFromDate != null && linkedToDate != null ) {
+						//console.log(linkedFromDate + "~" + linkedToDate);
+						/*
+						var tmpFromDate = new Date(linkedFromDate.toString().substring(0,4), Number(linkedFromDate.toString().substring(4,6)) - 1, linkedFromDate.toString().substring(6,8));
+						$("#startDate").data("kendoDatePicker").value(tmpFromDate);
+						
+						var tmpToDate = new Date(linkedToDate.toString().substring(0,4), Number(linkedToDate.toString().substring(4,6)) - 1, linkedToDate.toString().substring(6,8));
+						$("#endDate").data("kendoDatePicker").value(tmpToDate);
+						*/
+						
+						if (linkedFromScreenName == "SU-03-00-001") {
+							$(".btn-status-KPI").show();
+						}
+						else {
+							$(".btn-status-KPI").hide();
+						}
+						
+						var searchFromYear = linkedFromDate.toString().substring(0,4);
+						var searchFromMonth = linkedFromDate.toString().substring(4,6);
+						
+						var tmpFromDate = new Date(searchFromYear, Number(searchFromMonth) - 1);
+						$("#sc-su0305001-from-period").data("kendoDatePicker").value(tmpFromDate);
+						
+						var searchToYear = linkedToDate.toString().substring(0,4);
+						var searchToMonth = linkedToDate.toString().substring(4,6);
+						
+						var tmpToDate = new Date(searchToYear, Number(searchToMonth) - 1);
+						$("#sc-su0305001-to-period").data("kendoDatePicker").value(tmpToDate);
+						
+						
+						$.main.fn_getData();
+					}
+					mint.common.setScreenParam("SU0305001_fromSearchPeriod", null);
+					mint.common.setScreenParam("SU0305001_toSearchPeriod", null);
+					
+					mint.common.setScreenParam("LinkedFromScreenName", null); 
+					// end. 연계 조회(자동) 여부 체크 및 조회
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});                  
+                }
+            }, // end fn_initCallback
+            
+          	//-----------------------------------------------------------------------
+            // Description :: 인터페이스 등록률 그리드 초기화
+            //-----------------------------------------------------------------------   
+            fn_initRegInterfacesRateGrid : function() {
+            	
+            	try {
+            		$("#grid_su0305001").kendoGrid({
+						dataSource : {
+								data: [],
+								pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+						},
+						//selectable: "row",
+						resizable: true,
+						pageable : {
+								refresh : false,
+								pageSizes : mint.ui.getPageSizesS(),
+								buttonCount : 5
+						},
+						toolbar: ["excel"],
+						excel: {
+							  allPages: true
+							, filterable: true
+							, fileName: mint.label.getLabel('lb-36') + ".xlsx"
+						}, 
+						messages: {
+							commands: {
+							  excel: mint.label.getLabel('lb-508')
+							}
+						}, excelExport: function(e) {
+							//스타일 편집
+							var sheet = e.workbook.sheets[0];
+							
+							//console.log(sheet);
+							// columns 기준
+							for(var cw=0; cw<sheet.columns.length; cw++) {
+								//sheet.columns[cw].autoWidth = true;
+								sheet.columns[cw].width = 20;
+							}
+							
+							// rows 기준
+							for (var i = 0; i < sheet.rows.length; i++) {
+								for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+									sheet.rows[i].cells[ci].vAlign = "center";
+									
+									//정렬 기준
+									if(0 == i) {
+										//컬럼 헤더일 경우
+										sheet.rows[i].cells[ci].hAlign = "center";
+										sheet.rows[i].cells[ci].bold = true;
+									} else {
+										//데이터 내용일 경우
+										/*
+										if(1 == ci || 2 == ci || 3 == ci) {
+										   sheet.rows[i].cells[ci].hAlign = "left";
+										} else {
+										   sheet.rows[i].cells[ci].hAlign = "center";
+										}
+										*/
+										sheet.rows[i].cells[ci].hAlign = "center";
+										
+										if (ci == 3) {
+											sheet.rows[i].cells[ci].value += " %"; 
+										}
+									}
+								}
+							}
+							
+							e.preventDefault();
+							var createExcelFileName = mint.label.getLabel('lb-36') + ".xlsx";
+							mint.downloadExcelFile(createExcelFileName, sheet, screenName);
+							
+						},
+						columns : [ 
+								{
+									field : "searchFromPeriod",
+									hidden : true 
+								}
+								, {
+									field : "searchToPeriod",
+									hidden : true 
+								}
+								, {
+									field : "totalCnt",
+									title : mint.label.getLabel('lb-89') + " " + mint.label.getLabel('lb-349'),
+									//width : "25%",
+									template: '#=kendo.format("{0:n0}", totalCnt)#',
+									headerAttributes: {
+										style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "regedCnt",
+									title : mint.label.getLabel('lb-421') + " " + mint.label.getLabel('lb-349'),
+									//width : "25%",
+									template: '#=kendo.format("{0:n0}", regedCnt)#',
+									headerAttributes: {
+										style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "noRegCnt",
+									title : mint.label.getLabel('lb-452') + " " + mint.label.getLabel('lb-349'),
+									//width : "25%",
+									//template: '#=kendo.format("{0:n0}", noRegCnt)#',
+									template: '#=$.main.fn_noRegCntTemplate(noRegCnt, searchFromPeriod, searchToPeriod)#',
+									headerAttributes: {
+										style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										style: "text-align: center; white-space: nowrap; color: red;"
+									}
+								}
+								, {
+									field : "regedRate",
+									title : mint.label.getLabel('lb-442'),
+									//width : "25%",
+									template : '#=regedRate# %',
+									headerAttributes: {
+										style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										style: "text-align: center; white-space: nowrap;"
+									}
+								}
+						],
+						dataBound: function (e) {
+							if(1 > $("#grid_su0305001").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+								
+								$("#grid_su0305001").children(".k-grid-content").height(gridHeight /2.5);
+								$("#grid_su0305001").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#grid_su0305001").children(".k-grid-content").height('auto');
+								$("#grid_su0305001").children(".k-grid-content-locked").height('auto');
+							}
+							
+						}
+					});
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initRegInterfacesRateGrid"});
+            	}
+            }, // end fn_initRegInterfacesRateGrid
+            
+
+			fn_noRegCntTemplate : function (noRegCnt, searchFromPeriod, searchToPeriod) {
+				
+				try {
+					
+					var tmpHtml = "<span onClick='$.main.fn_noRegIntfList(\""+ searchFromPeriod + "\" , \"" + searchToPeriod + "\");' style='cursor: pointer;'>" + kendo.format("{0:n0}", noRegCnt) + "</span>";
+					
+					return tmpHtml;
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_noRegCntTemplate"});
+				}
+				
+			}, // fn_noRegCntTemplate
+			
+			fn_noRegIntfList : function(searchFromPeriod, searchToPeriod) {
+				
+				try {
+					
+			        if ($.main.isInitNoRegInterfacesDetailGrid) {
+			        	
+			        	$("#grid_su0305001_detail").empty();
+			        	
+			    		$.main.fn_initNoRegInterfacesDetailGrid();
+			        }
+			        
+			        
+			        // 미등록 인터페이스 조회
+			        var searchObject = {};
+			        
+			        var tmpToDate = searchToPeriod.toString();
+			        var searchYear = tmpToDate.substring(0,4);
+					var searchMonth = tmpToDate.substring(4,6);
+					var lastDay = (new Date(searchYear, searchMonth, 0)).getDate();
+					
+					//console.log(searchYear + "/" + searchMonth + "/" + lastDay +".");
+			        
+			        
+			        searchObject.startDate = searchFromPeriod.toString() + "01";
+			        searchObject.endDate = searchToPeriod.toString() + lastDay;
+			        searchObject.regYn = "N";
+			        
+			        mint.callService(searchObject, screenName, 'REST-R01-SU-03-05-001', '$.main.fn_setNoRegInterfacesDetailGrid', {errorCall : true });
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_noRegIntfList"});
+				}
+			}, // end fn_noRegIntfList
+			
+          	//-----------------------------------------------------------------------
+            // Description :: 인터페이스 등록률 조회 콜백
+            //-----------------------------------------------------------------------   
+            fn_setRegInterfacesRateGrid : function(jsonData) {
+            	
+            	try {
+            		//console.log(jsonData);
+            		var customData = $.main.fn_get_SU0305001_GridData_Custom(jsonData);
+            		
+            		var dataSource = new kendo.data.DataSource({
+						  data: customData
+					    , page:1
+					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+					});
+					
+					//데이터 재설정
+					$("#grid_su0305001").data("kendoGrid").setDataSource(dataSource);
+					
+					
+					// 탭 자동 이동
+					$('#tabs-menu-list li:eq(1)').hide();
+					
+					$('#tabs-menu-list li:eq(0)').show();
+					$('#tabs-menu-list a:eq(0)').tab('show');
+					
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRegInterfacesRateGrid"});
+            	}
+            	
+            }, // end fn_setRegInterfacesRateGrid
+            
+          	//-----------------------------------------------------------------------
+            // Description :: 인터페이스 등록률 조회 콜백 Data Custom 설정
+            //-----------------------------------------------------------------------   
+            fn_get_SU0305001_GridData_Custom : function(jsonData) {
+            	
+            	try {
+            		var regedInterfacesRateList = [];
+            		var regedInterfacesRateData = {};
+            		
+            		if (jsonData) {
+            			
+            			for(var i in jsonData) {
+            				regedInterfacesRateData = {};
+            				
+            				regedInterfacesRateData.searchFromPeriod = jsonData[i].searchFromPeriod;
+            				regedInterfacesRateData.searchToPeriod = jsonData[i].searchToPeriod;
+            				regedInterfacesRateData.totalCnt = jsonData[i].totalCnt;
+            				regedInterfacesRateData.regedCnt = jsonData[i].regedCnt;
+            				regedInterfacesRateData.noRegCnt = jsonData[i].noRegCnt;
+            				regedInterfacesRateData.regedRate = jsonData[i].regedRate;
+            				
+            				regedInterfacesRateList.push(regedInterfacesRateData);
+            			}
+            		}
+            		
+            		return regedInterfacesRateList;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_get_SU0305001_GridData_Custom"});
+            	}
+            }, // fn_get_SU0305001_GridData_Custom
+            
+          	//-----------------------------------------------------------------------
+			// Description :: - 미등록 인터페이스  그리드 초기화
+			//-----------------------------------------------------------------------
+            fn_initNoRegInterfacesDetailGrid : function() {
+            	
+				try {
+            		
+					$(".grid_su0305001_detail").kendoGrid({
+                        dataSource : {
+                        data : [],
+                        schema : {
+                            model : {
+                            	id:"id",
+                                fields : {
+		                            	checkDate         : {editable: false, type : "string"},
+		                                integrationId       : {editable: false, type : "string"},
+		                                sourceHost        : {editable: false, type : "string"},
+		                                sourceService     : {editable: false, type : "string"},
+		                                targetHost        : {editable: false, type : "string"},
+		                                targetService     : {editable: false, type : "string"},
+		                                tranCnt           : {editable: false, type : "string"},
+		                                cfInterfaceId     : {type : "string"},
+                                        regYn             : {type : "string"},
+                                        regDate           : {type : "date"}
+                                    }
+                                }
+                            },
+                            pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+                        },
+                        sortable : true,
+                        scrollable : true,
+                        resizable: true,
+                        pageable : {
+                            refresh       : false
+                          , pageSizes     : mint.ui.getPageSizesS()
+                          , buttonCount   : 5
+                          
+                        },
+                        cancel: function(e) {
+                            //this.refresh();
+                            $.main.fn_getData();
+                        },
+                        editable: "inline",
+                        save: $.main.fn_updateData,
+                        toolbar: ["excel"],
+						excel: {
+							  allPages: true
+							, filterable: true
+							, fileName: mint.label.getLabel('lb-452') + " " + mint.label.getLabel('lb-395') + " " + mint.label.getLabel('lb-353') + ".xlsx"
+						}, 
+						messages: {
+							commands: {
+							  excel: mint.label.getLabel('lb-508')
+							}
+						}, excelExport: function(e) {
+							//스타일 편집
+							var sheet = e.workbook.sheets[0];
+							
+							//console.log(sheet);
+							// columns 기준
+							for(var cw=0; cw<sheet.columns.length; cw++) {
+								
+								if (cw == 0 || cw == 1 || cw == 6) {
+									//sheet.columns[cw].autoWidth = true;
+									sheet.columns[cw].width = 100;
+								}
+								else {
+									sheet.columns[cw].autoWidth = true;
+								}
+							}
+							
+							// rows 기준
+							for (var i = 0; i < sheet.rows.length; i++) {
+								for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+									sheet.rows[i].cells[ci].vAlign = "center";
+									
+									//정렬 기준
+									if(0 == i) {
+										//컬럼 헤더일 경우
+										sheet.rows[i].cells[ci].hAlign = "center";
+										sheet.rows[i].cells[ci].bold = true;
+									} else {
+										//데이터 내용일 경우
+										/*
+										if(1 == ci || 2 == ci || 3 == ci) {
+										   sheet.rows[i].cells[ci].hAlign = "left";
+										} else {
+										   sheet.rows[i].cells[ci].hAlign = "center";
+										}
+										*/
+										sheet.rows[i].cells[ci].hAlign = "center";
+									}
+								}
+							}
+							
+							e.preventDefault();
+							var createExcelFileName = mint.label.getLabel('lb-452') + " " + mint.label.getLabel('lb-395') + " " + mint.label.getLabel('lb-353') + ".xlsx";
+							mint.downloadExcelFile(createExcelFileName, sheet, screenName);
+							
+						},
+                        columns : [ {
+                            field : "checkDate",
+                            title : mint.label.getLabel('lb-50'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template: "<span title='${checkDate}'>#=$.main.fn_replaceNull(checkDate)#</span>"
+                        },{
+                            field : "integrationId",
+                            title : mint.label.getLabel('lb-597'),
+                            width : "120px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template: "<span title='${integrationId}'>#=$.main.fn_replaceNull(integrationId)#</span>"
+                        },{
+                            field : "sourceHost",
+                            title : mint.label.getLabel('lb-509') + " " + mint.label.getLabel('lb-359'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template: "<span title='${sourceHost}'>#=$.main.fn_replaceNull(sourceHost)#</span>"
+                        },{
+                            field : "sourceService",
+                            title : mint.label.getLabel('lb-509') + " " + mint.label.getLabel('lb-87'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template: "<span title='${sourceService}'>#=$.main.fn_replaceNull(sourceService)#</span>"
+                        },{
+                            field : "targetHost",
+                            title : mint.label.getLabel('lb-530') + " " + mint.label.getLabel('lb-359'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template: "<span title='${targetHost}'>#=$.main.fn_replaceNull(targetHost)#</span>"
+                        },{
+                            field : "targetService",
+                            title : mint.label.getLabel('lb-530') + " " + mint.label.getLabel('lb-87'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template: "<span title='${targetService}'>#=$.main.fn_replaceNull(targetService)#</span>"
+                        },{
+                            field : "tranCnt",
+                            title : mint.label.getLabel('lb-528') + mint.label.getLabel('lb-349'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            template : "#=$.main.fn_setNumberFormat(tranCnt)#"
+                        }
+                        ],
+                        dataBound: function (e) {
+							if(1 > $(".grid_su0305001_detail").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+								
+								$(".grid_su0305001_detail").children(".k-grid-content").height(gridHeight /2.5);
+								$(".grid_su0305001_detail").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$(".grid_su0305001_detail").children(".k-grid-content").height('auto');
+								$(".grid_su0305001_detail").children(".k-grid-content-locked").height('auto');
+							}
+						}
+                    });
+            		
+            		
+            		$.main.isInitNoRegInterfacesDetailGrid = false;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initNoRegInterfacesDetailGrid"});
+            	}
+            }, // fn_initNoRegInterfacesDetailGrid
+            
+            fn_replaceNull : function(data) {
+            	try {
+            		if(data == null || data == "") {
+                		return "";
+                	} else {
+                		return data;
+                	}
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_replaceNull"});
+            	}
+            	
+            }, // end fn_replaceNull
+            
+            fn_setNumberFormat : function(val) {
+            	try {
+            		if(val != null && val != "") {
+                		return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                	} else {
+                		return "";
+                	}
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setNumberFormat"});
+            	}
+            	
+            }, // end fn_setNumberFormat            
+            
+         	 //-----------------------------------------------------------------------
+			// Description :: - 미등록 인터페이스 조회 콜백
+			//-----------------------------------------------------------------------
+            fn_setNoRegInterfacesDetailGrid : function(jsonData) {
+            	
+            	try {
+            		//console.log(jsonData);
+           			//var gridData = $.main.fn_getNoRegInterfacesDetailGridData_custom(jsonData);
+           			
+           			var dataSource = new kendo.data.DataSource({
+  						  data: jsonData
+  						, schema : {
+                            model : {
+                            	id:"id",
+                                fields : {
+		                            	checkDate         : {editable: false, type : "string"},
+		                                integrationId       : {editable: false, type : "string"},
+		                                sourceHost        : {editable: false, type : "string"},
+		                                sourceService     : {editable: false, type : "string"},
+		                                targetHost        : {editable: false, type : "string"},
+		                                targetService     : {editable: false, type : "string"},
+		                                tranCnt           : {editable: false, type : "string"},
+		                                cfInterfaceId     : {type : "string"},
+                                        regYn             : {type : "string"},
+                                        regDate           : {type : "date"}
+                                    }
+                                }
+  						}
+  					    , page:1
+  					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+  					});
+            		
+           			//데이터 재설정
+					$("#grid_su0305001_detail").data("kendoGrid").setDataSource(dataSource);
+           		
+            		// 탭 자동 이동
+					$('#tabs-menu-list li:eq(1)').show();
+					$('#tabs-menu-list a:eq(1)').tab('show');
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setNoRegInterfacesDetailGrid"});
+            	}
+            	
+            }, // end fn_setNoRegInterfacesDetailGrid 
+            /* 
+            fn_getNoRegInterfacesDetailGridData_custom : function(jsonData) {
+            	
+            	try {
+            		console.log(jsonData);
+            		var noRegInterfaceList = [];
+            		var noRegInterfaceData = {};
+            		
+            		if (jsonData) {
+
+            			for (var i in jsonData) {
+            				noRegInterfaceData = {};
+                			
+                			noRegInterfaceData = jsonData[i];
+                			
+                			noRegInterfaceList.push(noRegInterfaceData);
+                		}
+            		}
+            		
+            		return noRegInterfaceList;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getNoRegInterfacesDetailGridData_custom"});
+            	}
+            }, // fn_getNoRegInterfacesDetailGridData_custom
+             */
+             
+           	//-----------------------------------------------------------------------
+ 			// Description :: - get 선택 조회 조건 Data
+ 			//-----------------------------------------------------------------------
+            fn_getRequestObject : function() {
+            	try {
+            		var searchObject = new Object();
+                    
+            		searchObject.searchFromYear = kendo.toString($("#sc-su0305001-from-period").data("kendoDatePicker").value(), 'yyyy');
+            		searchObject.searchFromMonth = kendo.toString($("#sc-su0305001-from-period").data("kendoDatePicker").value(), 'MM');
+            		searchObject.searchToYear = kendo.toString($("#sc-su0305001-to-period").data("kendoDatePicker").value(), 'yyyy');
+            		searchObject.searchToMonth = kendo.toString($("#sc-su0305001-to-period").data("kendoDatePicker").value(), 'MM');
+                    
+                    return searchObject;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getRequestObject"});
+            	}
+                
+            }, // end fn_getRequestObject
+            
+          	//-----------------------------------------------------------------------
+			// Description :: - 인터페이스 등록률 조회 실행
+			//-----------------------------------------------------------------------
+            fn_getData : function() {
+                try{
+                	$.main.searchCondition = $.main.fn_getRequestObject();
+                	
+                	mint.callService($.main.searchCondition, screenName, 'REST-R02-SU-03-05-001', '$.main.fn_setRegInterfacesRateGrid', {errorCall : true });
+                	
+                    //mint.callService($.main.fn_getRequestObject(), screenName, 'REST-R01-SU-03-05-001', '$.main.fn_setGrid', {errorCall : true });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getData"});                  
+                }
+            }, // end fn_getData 
+            
+          //-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDownSU0305001 : function(event) {
+				try {
+					if(event.keyCode == 13) {
+						$.main.fn_getData();
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownSU0305001"});
+				}
+			} // end fn_onKeyDownSU0305001
+        }
+    });
+    
+    
+    //=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+    // 조회 버튼 클릭 이벤트
+    $('.btn-search').on('click', function() {
+    	
+    	try {
+			// 조회 실행
+    		$.main.fn_getData();
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-search.click"});
+		}
+        
+    });
+    
+    
+	$(".btn-status-KPI").bind("click", function () {
+		
+		try {
+			mint.move('../sub-su/SU-03-00-001');
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-status-KPI.click"});
+		}
+		
+	});
+	
+	
+	//-----------------------------------------------------------------------
+	// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+	//-----------------------------------------------------------------------
+	$('#sc-su0305001-from-period').keydown(function(event) {
+		$.main.fn_onKeyDownSU0305001(event);
+	});	
+	
+	$('#sc-su0305001-to-period').keydown(function(event) {
+		$.main.fn_onKeyDownSU0305001(event);
+	});
+	
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+        
+    
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================       
+    $.main.fn_init();
+    mint.label.attachLabel(null);
+    
+});
+
+</script>
+
+
+<style>
+
+
+.k-grid-header
+{
+   padding: 0 !important;
+}
+
+.k-grid-content
+{
+   overflow-y: visible;
+}
+
+
+.k-grid tr {
+    cursor : default !important;
+}
+</style>

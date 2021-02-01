@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>mint</artifactId>
+		<groupId>pep.per</groupId>
+		<version>3.0.0</version>
+	</parent>
+
+	<artifactId>mint-migration</artifactId>
+	<packaging>war</packaging>
+	<name>mint-migration</name>
+
+	<properties>
+		<mybatis-spring-version>1.2.0</mybatis-spring-version>
+		<org.mybatis-version>3.1.0</org.mybatis-version>
+		<commons-dbcp-version>20030825.184428</commons-dbcp-version>
+		<commons-pool-version>20030825.183949</commons-pool-version>
+		<commons-collections-version>20040616</commons-collections-version>
+		<com.oracle.ojdbc6-version>11.2.0.3</com.oracle.ojdbc6-version>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
+
+		<repository>
+			<id>ta-repository</id>
+			<!-- 
+			<url>http://10.10.1.54:8081/nexus/content/groups/public/</url>
+			 -->
+			<url>http://idc.mocomsys.com:28081/nexus/content/groups/public/</url>
+		</repository>
+
+	</repositories>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- mint-common -->
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-common</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+
+		<!-- mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${org.mybatis-version}</version>
+		</dependency>
+
+		<!-- mybatis-spring -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring-version}</version>
+		</dependency>
+
+		<!-- commons -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons-dbcp-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>${commons-pool-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${commons-collections-version}</version>
+		</dependency>
+
+		<!-- Oracle JDBC -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>${com.oracle.ojdbc6-version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<!-- START of profiles -->
+	<profiles>
+		<!-- START of product mode profile -->
+		<profile>
+
+			<id>mint-2.0.0</id>
+			<build>
+				<finalName> ${project.artifactId}-product-${project.version}</finalName>
+				<directory>${basedir}/target-version-2.0.0</directory>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+
+						<!--<version>3.0.0</version> --><!-- 초기 로컬 PC에서 maven build시 주석 풀구할 것 , 이후 network 단절되어도 추가 download
+							시도 안함 -->
+						<configuration>
+							<warSourceDirectory>src/main/webapp</warSourceDirectory>
+							<warSourceExcludes>
+								view_design/**,
+								view_dev/**,
+								sample/**,
+								foo.html,
+								index.html
+							</warSourceExcludes><!-- 특정 폴더 제외 -->
+							<failOnMissingWebXml>false</failOnMissingWebXml>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- START of develop mode profile -->
+		<profile>
+			<id>mint-develop-2.0.0</id>
+			<build>
+				<finalName> ${project.artifactId}-test-${project.version}</finalName>
+				<directory>${basedir}/target-test-version-2.0.0</directory>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/test/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+					<resource>
+						<directory>${basedir}/src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+							<exclude>log4j.xml</exclude>
+							<exclude>config/**</exclude>
+							<exclude>config</exclude>
+						</excludes>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+
+						<!--<version>3.0.0</version> --><!-- 초기 로컬 PC에서 maven build시 주석 풀구할 것 , 이후 network 단절되어도 추가 download
+							시도 안함 -->
+						<configuration>
+							<warSourceDirectory>src/main/webapp</warSourceDirectory>
+							<warSourceExcludes>
+								view_design/**,
+								view_dev/**,
+								sample/**,
+								foo.html,
+								index.html
+							</warSourceExcludes><!-- 특정 폴더 제외 -->
+							<failOnMissingWebXml>false</failOnMissingWebXml>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- END of develop mode profile -->
+
+
+		<!-- START of product mode profile -->
+		<profile>
+			<id>mint-3.0.0</id>
+
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<finalName> ${project.artifactId}-product-${project.version}</finalName>
+				<directory>${basedir}/target-version-3.0.0</directory>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+
+						<!--<version>3.0.0</version> --><!-- 초기 로컬 PC에서 maven build시 주석 풀구할 것 , 이후 network 단절되어도 추가 download
+							시도 안함 -->
+						<configuration>
+							<warSourceDirectory>src/main/webapp</warSourceDirectory>
+							<warSourceExcludes>
+								view_design/**,
+								view_dev/**,
+								sample/**,
+								foo.html,
+								index.html
+							</warSourceExcludes><!-- 특정 폴더 제외 -->
+							<failOnMissingWebXml>false</failOnMissingWebXml>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- START of develop mode profile -->
+
+
+
+	</profiles>
+	<!-- END of profiles -->
+</project>

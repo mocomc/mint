@@ -1,0 +1,21 @@
+AP00000060$$$H001$$$en$$$조회조건$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Search
+Condition<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2"> &nbsp; </font></span><font size="2">Search CPU/MEMORY usage state by daily unit<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">Connection to "CPU threshold
+exceed", "MEMORY threshold exceed" out of "KPI status"<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 1. AP Server<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Select business system in ComboBox
+List<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Inquiry separation<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">CPU or Memory<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 3. minimum usage rate<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Set CPU and MEMORY threshold<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 4. Search period<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">It searchs for results as a daily
+unit, and possible to search information of up until 2 days ago. <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">You can ask the person in charge of IIP
+to extend the accumulation term if needed.</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

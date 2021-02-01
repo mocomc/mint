@@ -1,0 +1,470 @@
+﻿<!-- 팝업-->
+<div class="modal inmodal" id="serverSearchPop" tabindex="-1" role="dialog"  aria-hidden="true">
+ 	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<div><h2>서버 조회</h2></div>
+			</div>
+			<!--modal-body--> 
+			<div class="modal-body">
+ 				<!--ibox-content3--> 
+				<div class="ibox-content3">
+           			<!--col-sm-4 1 -->   
+                    <div class="col-sm-4">
+						<form class="form-horizontal">
+                        	<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">서버 명</span>
+								<!--comboBox-->
+								<input id="search_server_name" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+						</form>
+					</div>
+					<!--col-sm-4 1 end -->
+
+					<!--col-sm-4 2 -->   
+                    <div class="col-sm-4">
+						<form class="form-horizontal">
+                       		<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">서버코드</span>
+ 	 							<!--comboBox-->
+ 	 							<input id="search_server_code" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+						</form>
+					</div>
+					<!--col-sm-4 2 end -->
+					<hr class="hr-space" >
+                       
+					<!--col-sm-4 3 -->   
+                    <div class="col-sm-4">
+						<form class="form-horizontal">
+                        	<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">OS</span>
+								<!--comboBox-->
+								<input id="search_server_os" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+							<hr class="hr-space">
+							<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">시스템 명</span>
+								<!--comboBox-->
+								<input id="search_server_systemname" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+		
+						</form>
+					</div>
+					<!--col-sm-4 3 end -->
+
+					<!--col-sm-4 4 -->   
+                    <div class="col-sm-4">
+						<form class="form-horizontal">
+                        	<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">Hostname</span>
+								<!--comboBox-->
+								<input id="search_server_hostname" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+							<hr class="hr-space">
+							<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">Stage</span>
+								<!--comboBox-->
+								<input id="search_server_stage" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+						</form>
+					</div>
+					<!--col-sm-4 4 end -->
+
+					<!--col-sm-4 5 -->   
+                    <div class="col-sm-4">
+						<form class="form-horizontal">
+                          	<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">Area</span>
+								<!--comboBox-->
+								<input id="search_server_area" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+							<hr class="hr-space">
+							<!--form-group -->
+							<div class="form-group">
+ 								<span class="lable_tag">H/W Location</span>
+							 	 <!--comboBox-->
+							 	 <input id="search_server_hwlocation" type="text" placeholder="Search..." style="width: 54%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+						</form>
+					</div>
+					<!--col-sm-4 5 end -->
+
+					<div class="col-sm-12"  style="padding-top:10px">
+						<div class="b-col">
+							<span style="float:right;padding-top:10px">
+								<a href="#" id="modal_server_search_button" class="btn btn-white"><i class="fa fa-search"></i> 조회 </a>
+							</span>
+						</div>
+					</div>
+
+
+				</div>
+				<!--ibox-content3--> 
+					  
+				<div class="col-sm-12">	
+					<div class="ibox-content3">		
+						<!-- kendo table-->
+          				<div id="example">
+ 	     					<div id="modal_server_grid"></div>
+						</div>
+						<!--kendo table end-->
+					</div>
+					<!--ibox-content3-->
+					<div style="float:right;margin:15px 0px;">
+						<button id="modal_server_apply_button" class="btn btn-info " type="button"><i class="fa fa-check"></i> 적용</button>
+					</div>
+				</div>
+				<!--col-sm-12-->
+  
+			</div>
+			<!--modal-body END--> 
+			<!--modal-footer--> 
+			<div class="modal-footer" style="clear:both">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				<!--<button type="button" class="btn btn-primary">Save changes</button>-->
+			</div>
+			<!--modal-footer END--> 
+  
+		</div>
+		<!--modal-content animated fadeIn END--> 
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<!-- modal inmodal END-->
+<!-- 팝업-->
+                            
+
+
+<script>
+
+	var ServerModalCheckedIds = {};
+	
+	$(document).ready(function () {
+		
+		//모달 검색조건 - 콤보박스 세팅
+		setServerModalkendoComboBox();
+		
+		//모달 검색 결과 - 그리드 세팅
+		setServerModalKendoGrid();
+		
+		// 체크 박스 모두 체크
+		$("#server-modal-checkAll").click(function() {
+			$("input[name=server-modal-checkbox]:checkbox").each(function() {
+				$(this).prop("checked", $("#server-modal-checkAll").is(':checked'));
+				
+				var checked = $("#server-modal-checkAll").is(':checked'),
+			    row = $(this).closest("tr"),
+			    grid = $("#modal_server_grid").data("kendoGrid"),
+			    dataItem = grid.dataItem(row);
+
+				ServerModalCheckedIds[dataItem.uid] = {'checked':checked, 'dataItem':dataItem};
+			    
+			    if (checked) {
+			        //-select the row
+			        row.addClass("k-state-selected");
+			    } else {
+			        //-remove selection
+			        row.removeClass("k-state-selected");
+			    }
+			});
+		});
+	   
+		//적용 버튼 클릭
+		$("#modal_server_apply_button").bind("click", function () {
+			
+			
+	// 		var grid = $("#modal_server_grid").data("kendoGrid");
+	// 		var row = grid.select() ;
+	// 		var uid = row.data("uid");
+	// 		var tr_first=$('[data-uid="'+uid+'"] td:first').text();
+	// 		alert(tr_first);
+	
+			var entityGrid = $("#modal_server_grid").data("kendoGrid");
+			var selectedItem = entityGrid.dataItem(entityGrid.select());
+			alert(entityGrid.select().length + "개 아이템 선택");
+	   	});
+		
+		var serverModalSearchCount = 0;
+		
+		//조회버튼
+		$("#modal_server_search_button").bind("click", function () {
+			$("#server-modal-checkAll").prop("checked", false);
+			ServerModalCheckedIds = {};
+			
+			var serverName = $("#search_server_name").val();
+			var serverCode = $("#search_server_code").val();
+
+			var os = $("#search_server_os").val();
+			var hostname = $("#search_server_hostname").val();
+			var area = $("#search_server_area").val();
+			
+// 			var systemName = $("#search_server_systemname").val();
+			var stage = $("#search_server_stage").val();
+			var hwlocation = $("#search_server_hwlocation").val();
+			
+			
+			if(0 == serverModalSearchCount) {
+				//데이터 세팅
+				setServerModalGridData();
+				serverModalSearchCount++
+			}
+			
+			var ServerModalgrid = $("#modal_server_grid").data("kendoGrid");
+			
+			ServerModalgrid.dataSource.query({
+		    	page:1,
+				pageSize: mint.ui.getPageSizesXS({'currentPage' : true}),
+		      	filter:{
+		        	logic:"and",
+		          	filters:[
+						  {field : "serverName", 	operator : "contains", value : serverName}
+		        		, {field : "serverCode", 	operator : "contains", value : serverCode}
+		        		
+		        		, {field : "os", 	operator : "contains", value : os}
+		        		, {field : "hostname", 	operator : "contains", value : hostname}
+		        		, {field : "area", 	operator : "contains", value : area}
+		        		
+// 		        		, {field : "systemName", 	operator : "contains", value : systemName}
+		        		, {field : "stage", 	operator : "contains", value : stage}
+		        		, {field : "hwlocation", 	operator : "contains", value : hwlocation}
+		        		
+		            ]
+				}
+			});
+		});
+	});
+	
+
+	/**
+	 * 모달 검색조건 - 콤보박스 세팅
+	 */
+	function setServerModalkendoComboBox() {
+		var searchserverName 		= [{ text: "GERP개발#1" }, { text: "GERP개발#2" }, { text: "GERP운영#1" }, { text: "GERP운영#2" }, { text: "XXX" }];
+		var searchserverCode 		= [{ text: "SVR_GERPD1" }, { text: "SVR_GERPD2" }, { text: "SVR_GERPP1" }, { text: "SVR_GERPP2" }, { text: "XXX" }];
+		
+		var searchServerOs 			= [{ text: "AIX 3.1" }, { text: "AIX 4.1" }, { text: "AIX 5.1" }, { text: "AIX 6.1" }, { text: "XXX" }];
+		var searchServerHostname 	= [{ text: "erpdev01" }, { text: "erpdev02" }, { text: "erpdev03" }, { text: "erpdev04" }, { text: "XXX" }];
+		var searchServerArea	= [{ text: "수원" }, { text: "수원2" }, { text: "수원3" }, { text: "수원4" }, { text: "XXX" }];
+		
+		var searchServerSystemname	= [{ text: "system1" }, { text: "system2" }, { text: "system3" }, { text: "system4" }, { text: "XXX" }];
+		var searchServerStage	= [{ text: "개발" }, { text: "운영" }, { text: "XXX" }];
+		var searchServerHwlocation	= [{ text: "ITC-수원센터#1" }, { text: "ITC-수원센터#2" }, { text: "ITC-수원센터#3" }, { text: "XXX" }];
+		
+		setComboBox('search_server_name', searchserverName, 'NO');
+		setComboBox('search_server_code', searchserverCode, 'NO');
+		
+		setComboBox('search_server_os', searchServerOs, 'NO');
+		setComboBox('search_server_hostname', searchServerHostname, 'NO');
+		setComboBox('search_server_area', searchServerArea, 'NO');
+		
+		setComboBox('search_server_systemname', searchServerSystemname, 'NO');
+		setComboBox('search_server_stage', searchServerStage, 'NO');
+		setComboBox('search_server_hwlocation', searchServerHwlocation, 'NO');
+		
+	}
+	
+	/**
+	 * 모달 검색 결과 - 그리드 세팅
+	 */
+	function setServerModalKendoGrid() {
+	
+		serverModalSearchCount = 0;
+		
+		var grid = $("#modal_server_grid").kendoGrid({
+			dataSource : {
+ 				  data : ""
+ 				, pageSize :mint.ui.getPageSizesXS({'currentPage' : true})
+			}
+		    , height : 250
+		    , sortable : true
+		    , pageable : {
+				  refresh 		: true
+		    	, buttonCount 	: 5
+				
+			}
+		    , selectable: "row"
+		    , columns : [
+					{
+						  title 	: "<input type='checkbox' id='server-modal-checkAll',  />"
+						, template	: '<input type="checkbox" name="server-modal-checkbox" class="server-modal-checkbox-option" />'
+						, width 	: 27
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+						, attributes: {
+							 style: "text-align: center;"
+						}
+					}
+					, {
+						  title 	: "순번"
+						, template	: "<span class='server-modal-row-number'></span>"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+						, attributes: {
+							 style: "text-align: center;"
+						}
+						
+					}
+					, {
+						  title 	: "서버 명"
+						, field 	: "serverName"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "서버 코드"
+						, field 	: "serverCode"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "hostname"
+						, field 	: "hostname"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "stage"
+						, field 	: "stage"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "OS"
+						, field 	: "os"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "ip"
+						, field 	: "ip"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "Area"
+						, field 	: "area"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+					, {
+						  title 	: "H/W Location"
+						, field 	: "hwlocation"
+						, headerAttributes: {
+							 style: "text-align: center; vertical-align:middle;"
+						}
+					}
+			]
+		    , dataBound: function (e) {
+		    	
+				//순번 세팅
+		        var rows = this.items();
+		        $(rows).each(function () {
+		            var index = $(this).index() + 1;
+		            var rowLabel = $(this).find(".server-modal-row-number");
+		            $(rowLabel).html(index);
+		        });
+		        
+		        if(0 == serverModalSearchCount) {
+		        	serverModalSearchCount ++;
+		        } else {
+		        	//데이터가 없을 경우
+			        var grid = e.sender;
+		            if (grid.dataSource.total() == 0) {
+		            	alert('데이터가 없습니다');
+		            }
+		        }
+		        
+		    }
+		}).data("kendoGrid");
+		
+		grid.table.on("click", ".server-modal-checkbox-option" , ServerModalSelectRow);
+	}
+	
+	/**
+	 * 검색 결과 - 그리드 체크박스 클릭 이벤트
+	 */
+	function ServerModalSelectRow() {
+		
+	    var checked = this.checked,
+	    row = $(this).closest("tr"),
+	    grid = $("#modal_server_grid").data("kendoGrid"),
+	    dataItem = grid.dataItem(row);
+
+	    ServerModalCheckedIds[dataItem.uid] = {'checked':checked, 'dataItem':dataItem};
+	    
+	    if (checked) {
+	        //-select the row
+	        row.addClass("k-state-selected");
+	    } else {
+	        //-remove selection
+	        row.removeClass("k-state-selected");
+	    }
+	}
+	
+	function setServerModalGridData() {
+		
+		var gridDataSource = [
+		         			 { serverName: "GERP개발#1", serverCode: "SVR_GERPD1", hostname: "erpdev01", stage: "개발", os:"AIX 6.1", ip: "10.10.10.111", area:"수원", hwlocation:"ITC-수원센터#1"}
+		         			,{ serverName: "GERP개발#2", serverCode: "SVR_GERPD2", hostname: "erpdev02", stage: "개발1", os:"AIX 6.2", ip: "10.10.10.112", area:"수원1", hwlocation:"ITC-수원센터#2"}
+		         			,{ serverName: "GERP개발#3", serverCode: "SVR_GERPD3", hostname: "erpdev03", stage: "개발2", os:"AIX 6.3", ip: "10.10.10.113", area:"수원2", hwlocation:"ITC-수원센터#3"}
+		         			,{ serverName: "GERP개발#4", serverCode: "SVR_GERPD4", hostname: "erpdev04", stage: "개발3", os:"AIX 6.4", ip: "10.10.10.114", area:"수원3", hwlocation:"ITC-수원센터#4"}
+		         			,{ serverName: "GERP개발#5", serverCode: "SVR_GERPD5", hostname: "erpdev05", stage: "개발4", os:"AIX 6.5", ip: "10.10.10.115", area:"수원4", hwlocation:"ITC-수원센터#5"}
+		         			,{ serverName: "GERP개발#6", serverCode: "SVR_GERPD6", hostname: "erpdev06", stage: "개발5", os:"AIX 6.6", ip: "10.10.10.116", area:"수원5", hwlocation:"ITC-수원센터#6"}
+		         			,{ serverName: "GERP개발#7", serverCode: "SVR_GERPD7", hostname: "erpdev07", stage: "개발6", os:"AIX 6.7", ip: "10.10.10.117", area:"수원6", hwlocation:"ITC-수원센터#7"}
+		         			,{ serverName: "GERP개발#8", serverCode: "SVR_GERPD8", hostname: "erpdev08", stage: "개발7", os:"AIX 6.8", ip: "10.10.10.118", area:"수원7", hwlocation:"ITC-수원센터#8"}
+		] ;
+		
+		
+		var dataSource = new kendo.data.DataSource({
+		    data: gridDataSource
+		});
+		
+		var grid = $("#modal_server_grid").data("kendoGrid");
+		
+		//데이터 재설정
+		grid.setDataSource(dataSource);
+		
+	}
+	
+	
+</script>
+
+
+     

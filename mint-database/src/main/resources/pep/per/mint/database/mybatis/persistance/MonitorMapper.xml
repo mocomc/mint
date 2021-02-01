@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.MonitorMapper">
+  	<!--
+  	<cache/>
+  	--> 
+  	
+  
+   	<select id="getTRLogList" resultMap="trLogListResult">
+   		<![CDATA[
+		select 
+			 A.LOG_ID				
+			,A.INTERFACE_ID
+			,B.INTERFACE_NM	
+			,A.LOG_DATE			
+			,A.SERVER_ID	
+			,C.SERVER_NM	
+			,A.STEP					
+			,A.GROUP_KEY		
+			,A.ERR_CD				
+			,A.ERR_MSG			
+			,A.LOG					
+			,A.REG_DATE			
+		  from TB_MON_LOG as A left join TB_INT_INTERFACE as B on A.INTERFACE_ID = B.INTERFACE_ID, TB_SYS_SERVER C
+		 where A.LOG_DATE >= #{fromDate} and A.LOG_DATE <= #{toDate}
+		]]>
+		 <if test="interfaceId != null">
+		   and A.INTERFACE_ID like '%'||#{interfaceId}||'%'
+		   and A.INTERFACE_ID = B.INTERFACE_ID
+		 </if>
+		   and A.SERVER_ID = C.SERVER_ID
+		 order by A.INTERFACE_ID DESC, A.LOG_DATE ASC  
+   	</select>
+   	
+   	<resultMap id="trLogListResult" type="TRLog" >
+   		<id property="logId" 			column="LOG_ID"/>
+   		<result property="interfaceId" 	column="INTERFACE_ID"/>
+   		<result property="interfaceNm" 	column="INTERFACE_NM"/>
+		<result property="logDate" 		column="LOG_DATE"/>
+		<result property="serverId"		column="SERVER_ID"/>
+		<result property="serverNm"		column="SERVER_NM"/>
+		<result property="step" 		column="STEP"/>
+		<result property="groupKey" 	column="GROUP_KEY"/>
+		<result property="errCd" 		column="ERR_CD"/>
+		<result property="errMsg" 		column="ERR_MSG"/>
+		<result property="log" 			column="LOG"/>
+		<result property="regDate" 		column="REG_DATE"/>
+   	</resultMap>
+	
+   	<insert id="insertTRLog" parameterType="TRLog">
+   		insert into TB_MON_LOG (
+	   		 LOG_ID
+			,INTERFACE_ID
+			,LOG_DATE
+			,SERVER_ID
+			,STEP
+			,GROUP_KEY
+			,ERR_CD
+			,ERR_MSG
+			,LOG
+			,REG_DATE
+		) values (
+			 #{logId}
+			,#{interfaceId}
+			,#{logDate}
+			,#{serverId}
+			,#{step}
+			,#{groupKey}
+			,#{errCd}
+			,#{errMsg}
+			,#{log}
+			,#{regDate}
+		)
+   	</insert>
+   	
+   	 	
+</mapper>

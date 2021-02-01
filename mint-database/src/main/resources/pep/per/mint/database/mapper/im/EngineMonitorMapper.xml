@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.EngineMonitorMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertAgent">
+		<selectKey keyProperty="agentId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'AG' || LPAD((COALESCE(MAX(SUBSTR(AGENT_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0211
+        		</when>
+        		<otherwise>
+			SELECT 'AG' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(AGENT_ID,3)),'0')) + 1),8,'0') FROM TIM0211
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0211 (
+		    AGENT_ID,
+		    SERVER_ID,
+		    AGENT_CD,
+		    AGENT_NM,
+		    STATUS,
+		    TYPE,
+		    HOSTNAME,
+		    PORT,
+		    LOG_LEVEL,
+		    LOG_DELAY,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{agentId},
+			#{server.serverId, jdbcType=VARCHAR},
+			#{agentCd, jdbcType=VARCHAR},
+			#{agentNm, jdbcType=VARCHAR},
+			'0',
+			'0',
+			#{hostname, jdbcType=VARCHAR},
+			#{port, jdbcType=INTEGER},
+			#{logLevel, jdbcType=VARCHAR},
+			#{logDelay, jdbcType=INTEGER},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getAgentList" parameterType="Map" resultMap="agentResultMap">
+		SELECT
+			a.AGENT_ID
+			,a.AGENT_NM
+			,a.AGENT_CD
+			,a.TYPE
+			,cdim24.NM AS TYPE_NM
+			,a.STATUS
+			,a.HOSTNAME
+			,a.PORT
+			,a.LOG_LEVEL
+			,a.LOG_DELAY
+			,a.COMMENTS
+			,k.SERVER_ID
+			,k.SERVER_CD
+			,k.SERVER_NM
+		FROM TIM0211 a
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '24' AND DEL_YN = 'N') cdim24 ON a.TYPE = cdim24.CD
+		LEFT OUTER JOIN TIM0201 k ON a.SERVER_ID = k.SERVER_ID
+		WHERE a.DEL_YN = 'N'
+		<if test="agentId != null">
+		AND a.AGENT_ID = #{agentId}
+		</if>
+		ORDER BY a.AGENT_NM ASC
+	</select>
+
+	<resultMap type="IIPAgentInfo" id="agentResultMap">
+		<id property="agentId" 			column="AGENT_ID"/>
+		<result property="agentNm"			column="AGENT_NM"/>
+		<result property="agentCd"			column="AGENT_CD"/>
+		<result property="hostname"			column="HOSTNAME"/>
+		<result property="port"				column="PORT"/>
+		<!--
+		<result property="type"				column="TYPE"/>
+		<result property="typeNm"			column="TYPE_NM"/>
+		 -->
+		<result property="status"			column="STATUS"/>
+		<result property="logLevel"			column="LOG_LEVEL"/>
+		<!--
+		<result property="logLevelNm"		column="LOG_LEVEL_NM"/>
+		 -->
+		<result property="logDelay"			column="LOG_DELAY"/>
+		<result property="comments"			column="COMMENTS"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverCd" 	column="SERVER_CD" />
+			<result property="serverNm" 	column="SERVER_NM" />
+		</association>
+<!--
+		<association property="serverResourceList" javaType="ServerResource">
+			<id property="resourceId"			column="RESOURCE_ID"/>
+			<result property="resourceNm"		column="RESOURCE_NM"/>
+			<result property="type" 			column="SR_TYPE"/>
+			<result property="typeNm" 			column="SR_TYPE_NM"/>
+			<result property="limit" 			column="SR_LIMIT"/>
+			<result property="info1" 			column="SR_INFO1"/>
+			<result property="info2" 			column="SR_INFO2"/>
+			<result property="info3" 			column="SR_INFO3"/>
+			<result property="comments" 		column="SR_COMMENTS"/>
+		</association>
+
+		<association property="serverProcessList" javaType="ServerProcess">
+			<id property="processId"			column="PROCESS_ID"/>
+			<result property="processNm"		column="PROCESS_NM"/>
+			<result property="checkValue"		column="SP_CHECK_VAL"/>
+			<result property="checkCnt"			column="SP_CHECK_CNT"/>
+			<result property="comments" 		column="SP_COMMENTS"/>
+		</association>
+
+		<association property="qmgrList" javaType="QueueManager">
+			<id property="qmgrId" 			column="QM_QMGR_ID"/>
+			<result property="qmgrNm"			column="QM_QMGR_NM"/>
+			<result property="ip" 				column="QM_IP"/>
+			<result property="port" 			column="QM_PORT"/>
+			<result property="status" 			column="QM_STATUS"/>
+			<result property="comments" 		column="QM_COMMENTS"/>
+
+			<association property="queueList" javaType="Queue">
+				<id property="queueId" 		column="QU_QUEUE_ID"/>
+				<result property="queueNm" 	column="QU_QUEUE_NM"/>
+				<result property="limit" 	column="QU_LIMIT"/>
+				<result property="limitOpt" column="QU_LIMIT_OPT"/>
+				<result property="depth" 	column="QU_DEPTH"/>
+				<result property="perDepth" column="QU_PER_DEPTH"/>
+				<result property="comments" column="QU_COMMENTS"/>
+			</association>
+
+			<association property="channelList" javaType="QmgrChannel">
+				<id property="channelId" 		column="QC_CHANNEL_ID"/>
+				<result property="channelNm" 	column="QC_CHANNEL_NM"/>
+				<result property="xQname" 		column="QC_XQNAME"/>
+				<result property="status"		column="QC_STATUS"/>
+				<result property="comments"		column="QC_COMMENTS"/>
+			</association>
+		</association>
+ -->
+	</resultMap>
+
+	<select id="getAgentDetail" parameterType="Map" resultMap="agentResultMap">
+		SELECT
+			a.AGENT_ID
+			,a.AGENT_NM
+			,a.AGENT_CD
+			,a.TYPE
+			,cdim24.NM AS TYPE_NM
+			,a.STATUS
+			,a.HOSTNAME
+			,a.PORT
+			,a.LOG_LEVEL
+			,a.LOG_DELAY
+			,cdim25.NM  AS LOG_LEVEL_NM
+			,a.COMMENTS
+			,k.SERVER_ID
+			,k.SERVER_CD
+			,k.SERVER_NM
+		FROM TIM0211 a
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '24' AND DEL_YN = 'N') cdim24 ON a.TYPE = cdim24.CD
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '25' AND DEL_YN = 'N') cdim25 ON a.LOG_LEVEL = cdim25.CD
+		LEFT OUTER JOIN TIM0201 k ON a.SERVER_ID = k.SERVER_ID
+		WHERE a.DEL_YN = 'N'
+		AND a.AGENT_ID = #{agentId}
+	</select>
+
+	<select id="getAgentIDInfo" parameterType="Map" resultType="java.lang.String">
+		SELECT a.AGENT_ID
+		FROM TIM0211 a
+		WHERE a.DEL_YN = 'N'
+		AND a.AGENT_NM = #{agentNm}
+	</select>
+
+	<select id="existAgent" parameterType="Map" resultMap="agentResultMap">
+		SELECT
+			AGENT_ID,
+			AGENT_NM
+  		FROM TIM0211
+  		WHERE DEL_YN = 'N'
+		AND  AGENT_NM = #{agentNm}
+		<if test="agentId != null">
+		AND AGENT_ID &lt;&gt; #{agentId}
+		</if>
+	</select>
+
+	<update id="updateAgent">
+		UPDATE TIM0211
+		SET AGENT_CD 	= #{agentCd, jdbcType=VARCHAR}
+			,AGENT_NM  	= #{agentNm, jdbcType=VARCHAR}
+			,TYPE	  	= type
+			,HOSTNAME   = #{hostname, jdbcType=VARCHAR}
+			,PORT		= #{port, jdbcType=INTEGER}
+			,LOG_LEVEL 	= #{logLevel, jdbcType=VARCHAR}
+			,LOG_DELAY	= #{logDelay, jdbcType=INTEGER}
+			,SERVER_ID	= #{server.serverId, jdbcType=VARCHAR}
+			,COMMENTS 	= #{comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE AGENT_ID = #{agentId}
+	</update>
+
+	<delete id="deleteAgent">
+		UPDATE TIM0211
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE AGENT_ID = #{agentId}
+	</delete>
+
+	<select id="getEngineMonitor" resultMap="agentResultMap">
+	   SELECT
+			a.AGENT_ID
+			,a.AGENT_NM
+			,a.AGENT_CD
+			,a.TYPE
+			,cdim24.NM AS TYPE_NM
+			,a.STATUS
+			,a.HOSTNAME
+			,a.PORT
+			,a.LOG_LEVEL
+			,a.LOG_DELAY
+			,cdim25.NM AS LOG_LEVEL_NM
+			,a.COMMENTS
+			,k.SERVER_ID
+			,k.SERVER_CD
+			,k.SERVER_NM
+		FROM TIM0211 a
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '24' AND DEL_YN = 'N') cdim24 ON a.TYPE = cdim24.CD
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '25' AND DEL_YN = 'N') cdim25 ON a.LOG_LEVEL = cdim25.CD
+		LEFT OUTER JOIN TIM0201 k ON a.SERVER_ID = k.SERVER_ID1
+		WHERE a.DEL_YN = 'N'
+	</select>
+
+	<insert id="insertEngineMonitorMapping">
+		<selectKey keyProperty="seq" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT (COALESCE(MAX(seq),'0')::numeric+1)::text FROM TIM0212 WHERE AGENT_ID = #{agentId}
+        		</when>
+        		<otherwise>
+			SELECT TO_CHAR(TO_NUMBER(NVL(MAX(seq),'0')) + 1) FROM TIM0212 WHERE AGENT_ID = #{agentId}
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0212 (
+		    AGENT_ID,
+		    ITEM_ID,
+		    ITEM_TYPE,
+		    SEQ
+		) VALUES (
+			#{agentId, jdbcType=VARCHAR},
+			#{itemId},
+			#{itemType, jdbcType=VARCHAR},
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			#{seq}::numeric
+        		</when>
+        		<otherwise>
+			#{seq}
+        		</otherwise>
+        	</choose>
+		)
+	</insert>
+
+	<insert id="insertEngineMonitorResource">
+		<selectKey keyProperty="serverResource.resourceId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'SR' || LPAD((COALESCE(MAX(SUBSTR(RESOURCE_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0204
+        		</when>
+        		<otherwise>
+			SELECT 'SR' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(RESOURCE_ID,3)),'0')) + 1),8,'0') FROM TIM0204
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0204 (
+		    SERVER_ID,
+		    RESOURCE_ID,
+		    RESOURCE_NM,
+		    TYPE,
+		    <choose>
+        		<when test="_databaseId == 'postgres'">
+		    "LIMIT",
+        		</when>
+        		<otherwise>
+		    LIMIT,
+        		</otherwise>
+        	</choose>
+		    INFO1,
+		    INFO2,
+		    INFO3,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{serverId, jdbcType=VARCHAR},
+			#{serverResource.resourceId},
+			#{serverResource.resourceName, jdbcType=VARCHAR},
+			#{serverResource.type, jdbcType=VARCHAR},
+			#{serverResource.limit, jdbcType=VARCHAR},
+			#{serverResource.info1, jdbcType=VARCHAR},
+			#{serverResource.info2, jdbcType=VARCHAR},
+			#{serverResource.info3, jdbcType=VARCHAR},
+			#{serverResource.comments, jdbcType=VARCHAR},
+			'N',
+			#{serverResource.regDate, jdbcType=VARCHAR},
+			#{serverResource.regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertEngineMonitorProcess">
+		<selectKey keyProperty="serverProcess.processId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'SP' || LPAD((COALESCE(MAX(SUBSTR(PROCESS_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0205
+        		</when>
+        		<otherwise>
+			SELECT 'SP' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(PROCESS_ID,3)),'0')) + 1),8,'0') FROM TIM0205
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0205 (
+		    SERVER_ID,
+		    PROCESS_ID,
+		    PROCESS_NM,
+		    DISPLAY_NM,
+		    CHECK_VALUE,
+		    CHECK_CNT,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{serverId, jdbcType=VARCHAR},
+			#{serverProcess.processId},
+			#{serverProcess.processNm, jdbcType=VARCHAR},
+			#{serverProcess.displayNm, jdbcType=VARCHAR},
+			#{serverProcess.checkValue, jdbcType=VARCHAR},
+			#{serverProcess.checkCount, jdbcType=VARCHAR},
+			#{serverProcess.comments, jdbcType=VARCHAR},
+			'N',
+			#{serverProcess.regDate, jdbcType=VARCHAR},
+			#{serverProcess.regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertEngineMonitorQmgr">
+		<selectKey keyProperty="qmgr.qmgrId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'QM' || LPAD((COALESCE(MAX(SUBSTR(QMGR_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0206
+        		</when>
+        		<otherwise>
+			SELECT 'QM' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(QMGR_ID,3)),'0')) + 1),8,'0') FROM TIM0206
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0206 (
+		    QMGR_ID,
+		    SERVER_ID,
+		    QMGR_NM,
+		    TYPE,
+		    IP,
+		    PORT,
+		    STATUS,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{qmgr.qmgrId},
+			#{serverId, jdbcType=VARCHAR},
+			#{qmgr.qmgrNm, jdbcType=VARCHAR},
+			#{qmgr.type, jdbcType=VARCHAR},
+			#{qmgr.ip, jdbcType=VARCHAR},
+			#{qmgr.port, jdbcType=VARCHAR},
+			'0',
+			#{qmgr.comments, jdbcType=VARCHAR},
+			'N',
+			#{qmgr.regDate, jdbcType=VARCHAR},
+			#{qmgr.regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertEngineMonitorChannel">
+		<selectKey keyProperty="qmgrChannel.channelId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'QC' || LPAD((COALESCE(MAX(SUBSTR(CHANNEL_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0207
+        		</when>
+        		<otherwise>
+			SELECT 'QC' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(CHANNEL_ID,3)),'0')) + 1),8,'0') FROM TIM0207
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0207 (
+		    QMGR_ID,
+		    CHANNEL_ID,
+		    CHANNEL_NM,
+		    XQNAME,
+		    TYPE,
+		    STATUS,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{qmgrId},
+			#{qmgrChannel.channelId, jdbcType=VARCHAR},
+			#{qmgrChannel.channelNm, jdbcType=VARCHAR},
+			#{qmgrChannel.xqName, jdbcType=VARCHAR},
+			#{qmgrChannel.type, jdbcType=VARCHAR},
+			'0',
+			#{qmgrChannel.comments, jdbcType=VARCHAR},
+			'N',
+			#{qmgrChannel.regDate, jdbcType=VARCHAR},
+			#{qmgrChannel.regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertEngineMonitorQueue">
+		<selectKey keyProperty="queue.queueId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'QU' || LPAD((COALESCE(MAX(SUBSTR(QUEUE_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0208
+        		</when>
+        		<otherwise>
+			SELECT 'QU' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(QUEUE_ID,3)),'0')) + 1),8,'0') FROM TIM0208
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0208 (
+		    QMGR_ID,
+		    QUEUE_ID,
+		    QUEUE_NM,
+	    <choose>
+       		<when test="_databaseId == 'postgres'">
+		    "LIMIT",
+       		</when>
+       		<otherwise>
+		    LIMIT,
+       		</otherwise>
+       	</choose>
+		    LIMIT_OPT,
+		    TYPE,
+		    STATUS,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{qmgrId},
+			#{queue.queueId, jdbcType=VARCHAR},
+			#{queue.queueNm, jdbcType=VARCHAR},
+			#{queue.limit, jdbcType=VARCHAR},
+			#{queue.limitOpt, jdbcType=VARCHAR},
+			#{queue.type, jdbcType=VARCHAR},
+			'0',
+			#{queue.comments, jdbcType=VARCHAR},
+			'N',
+			#{queue.regDate, jdbcType=VARCHAR},
+			#{queue.regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<delete id="deleteEngineMonitorMapping">
+		DELETE FROM TIM0212
+		WHERE AGENT_ID = #{agentId}
+		AND ITEM_ID = #{itemId}
+	</delete>
+
+	<select id="getEngineMoitorResource" parameterType="Map" resultMap="resourceResultMap">
+		SELECT
+			a.RESOURCE_ID
+			,a.RESOURCE_NM
+			,a.TYPE AS SR_TYPE
+			,cdim17.NM AS SR_TYPE_NM
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+			,a."LIMIT" AS SR_LIMIT
+       		</when>
+       		<otherwise>
+			,a.LIMIT AS SR_LIMIT
+       		</otherwise>
+       	</choose>
+			,a.INFO1 AS SR_INFO1
+			,a.INFO2 AS SR_INFO2
+			,a.INFO3 AS SR_INFO3
+			,a.COMMENTS AS SR_COMMENTS
+			,a.SERVER_ID AS SR_SERVER_ID
+			,a.STATUS
+		FROM TIM0204 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.RESOURCE_ID AND k.item_type='0' AND k.AGENT_ID = #{agentId}
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '17' AND DEL_YN = 'N') cdim17 ON a.TYPE = cdim17.CD
+		WHERE a.DEL_YN = 'N'
+	</select>
+
+	<resultMap type="ResourceInfo" id="resourceResultMap">
+		<id property="resourceId"			column="RESOURCE_ID"/>
+		<result property="resourceName"		column="RESOURCE_NM"/>
+		<result property="type" 			column="SR_TYPE"/>
+		<result property="typeNm" 			column="SR_TYPE_NM"/>
+		<result property="limit" 			column="SR_LIMIT"/>
+		<result property="info1" 			column="SR_INFO1"/>
+		<result property="info2" 			column="SR_INFO2"/>
+		<result property="info3" 			column="SR_INFO3"/>
+		<result property="comments" 		column="SR_COMMENTS"/>
+		<result property="serverId" 		column="SR_SERVER_ID"/>
+		<result property="status" 			column="STATUS"/>
+	</resultMap>
+
+	<select id="getEngineMoitorProcess" parameterType="Map" resultMap="processResultMap">
+		SELECT
+			a.PROCESS_ID
+			,a.PROCESS_NM
+			,a.DISPLAY_NM
+			,a.CHECK_VALUE  AS SP_CHK_VALUE
+			,a.CHECK_CNT  	AS SP_CHK_CNT
+			,a.COMMENTS		AS SP_COMMENTS
+			,a.STATUS
+		FROM TIM0205 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.PROCESS_ID AND k.item_type='1' AND k.AGENT_ID = #{agentId}
+		WHERE a.DEL_YN = 'N'
+	</select>
+
+	<resultMap type="ProcessInfo" id="processResultMap">
+		<id property="processId"			column="PROCESS_ID"/>
+		<result property="processNm"		column="PROCESS_NM"/>
+		<result property="displayNm"		column="DISPLAY_NM"/>
+		<result property="checkValue" 		column="SP_CHK_VALUE"/>
+		<result property="checkCount" 		column="SP_CHK_CNT"/>
+		<result property="comments" 		column="SP_COMMENTS"/>
+		<result property="status" 			column="STATUS"/>
+	</resultMap>
+
+	<select id="getEngineMoitorQmgr" parameterType="Map" resultMap="qmgrResultMap">
+		SELECT
+			a.QMGR_ID
+			,a.QMGR_NM
+			,a.IP  		AS QM_IP
+			,a.PORT  	AS QM_PORT
+			,a.TYPE  	AS QM_TYPE
+			,cdim30.NM 	AS QM_TYPE_NM
+			,a.STATUS  	AS QM_STATUS
+			,a.COMMENTS	AS QM_COMMENTS
+		FROM TIM0206 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.QMGR_ID AND k.item_type='2' AND k.AGENT_ID = #{agentId}
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '30' AND DEL_YN = 'N') cdim30 ON a.TYPE = cdim30.CD
+		WHERE a.DEL_YN = 'N'
+	</select>
+
+	<select id="getEngineMoitorQmgrWithSystem" parameterType="Map" resultMap="qmgrResultMap">
+		SELECT
+			a.QMGR_ID
+			,a.QMGR_NM
+			,a.IP  		AS QM_IP
+			,a.PORT  	AS QM_PORT
+			,a.TYPE  	AS QM_TYPE
+			,cdim30.NM 	AS QM_TYPE_NM
+			,a.STATUS  	AS QM_STATUS
+			,a.COMMENTS	AS QM_COMMENTS
+			,system.SYSTEM_ID AS SYSTEM_ID
+			,system.SYSTEM_NM AS SYSTEM_NM
+			,system.SYSTEM_CD AS SYSTEM_CD
+		FROM TIM0206 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.QMGR_ID AND k.item_type='2' AND k.AGENT_ID = #{agentId}
+		LEFT OUTER JOIN ( SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '30' AND DEL_YN = 'N') cdim30 ON a.TYPE = cdim30.CD
+		LEFT OUTER JOIN ( SELECT B.SYSTEM_CD, B.SYSTEM_NM, B.SYSTEM_ID, d.QMGR_ID FROM TIM0101 B
+		INNER JOIN TIM0604  d ON d.SYSTEM_ID = B.SYSTEM_ID
+		WHERE B.DEL_YN = 'N') system ON a.QMGR_ID = system.QMGR_ID
+		WHERE a.DEL_YN = 'N'
+	</select>
+
+	<resultMap type="QmgrInfo" id="qmgrResultMap">
+		<id property="qmgrId"			column="QMGR_ID"/>
+		<result property="qmgrNm"		column="QMGR_NM"/>
+		<result property="ip" 			column="QM_IP"/>
+		<result property="port" 		column="QM_PORT"/>
+		<result property="type" 		column="QM_TYPE"/>
+		<result property="typeNm" 		column="QM_TYPE_NM"/>
+		<result property="status" 		column="QM_STATUS"/>
+		<result property="system" 		column="QM_STATUS"/>
+		<result property="comments" 		column="QM_COMMENTS"/>
+		<association property="system" javaType="pep.per.mint.common.data.basic.System">
+				<id property="systemId" 				column="SYSTEM_ID"/>
+				<result property="systemNm" 			column="SYSTEM_NM"/>
+				<result property="systemCd" 			column="SYSTEM_CD"/>
+		</association>
+<!-- 		<collection property="system" ofType="System"> -->
+<!-- 				<id property="systemId" 				column="SYSTEM_ID"/> -->
+<!-- 				<result property="systemNm" 			column="SYSTEM_NM"/> -->
+<!-- 				<result property="systemCd" 			column="SYSTEM_CD"/> -->
+<!-- 		</collection> -->
+	</resultMap>
+
+	<select id="getEngineMoitorChannel" parameterType="Map" resultMap="qmgChannelResultMap">
+		SELECT
+			a.CHANNEL_ID
+			,a.CHANNEL_NM
+			,a.XQNAME	AS QC_XQNM
+			,a.TYPE		AS QC_TYPE
+			,cdim29.NM	AS QC_TYPE_NM
+			,a.STATUS  	AS QC_STATUS
+			,a.COMMENTS	AS QC_COMMENTS
+		FROM TIM0207 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.CHANNEL_ID AND k.item_type='3' AND k.AGENT_ID=#{agentId}
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '29' AND DEL_YN = 'N') cdim29 ON a.TYPE = cdim29.CD
+		WHERE a.DEL_YN = 'N' AND a.QMGR_ID = #{qmgrId}
+	</select>
+
+	<resultMap type="ChannelInfo" id="qmgChannelResultMap">
+		<id property="channelId"		column="CHANNEL_ID"/>
+		<result property="channelNm"		column="CHANNEL_NM"/>
+		<result property="xqName" 			column="QC_XQNM"/>
+		<result property="type" 			column="QC_TYPE"/>
+		<result property="typeNm" 			column="QC_TYPE_NM"/>
+		<result property="status" 			column="QC_STATUS"/>
+		<result property="comments" 		column="QC_COMMENTS"/>
+	</resultMap>
+
+	<select id="getEngineMoitorQueue" parameterType="Map" resultMap="qmgQueueResultMap">
+		SELECT
+			a.QUEUE_ID
+			,a.QUEUE_NM
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			,a."LIMIT"		AS QU_LIMIT
+        		</when>
+        		<otherwise>
+			,a.LIMIT		AS QU_LIMIT
+        		</otherwise>
+        	</choose>
+			,a.LIMIT_OPT	AS QU_LIMIT_OPT
+			,cdim18.NM  	AS QU_LIMIT_OPT_NM
+			,a.TYPE			AS QU_TYPE
+			,cdim28.NM  	AS QU_TYPE_NM
+			,a.COMMENTS		AS QU_COMMENTS
+			,a.STATUS
+		FROM TIM0208 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.QUEUE_ID AND k.item_type='4' AND k.AGENT_ID=#{agentId}
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '18' AND DEL_YN = 'N') cdim18 ON a.LIMIT_OPT = cdim18.CD
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '28' AND DEL_YN = 'N') cdim28 ON a.TYPE = cdim28.CD
+		WHERE a.DEL_YN = 'N' AND a.QMGR_ID = #{qmgrId}
+	</select>
+
+	<resultMap type="QueueInfo" id="qmgQueueResultMap">
+		<id property="queueId"			column="QUEUE_ID"/>
+		<result property="queueNm"		column="QUEUE_NM"/>
+		<result property="limit" 			column="QU_LIMIT"/>
+		<result property="limitOpt" 		column="QU_LIMIT_OPT"/>
+		<result property="limitOptNm" 		column="QU_LIMIT_OPT_NM"/>
+		<result property="type" 			column="QU_TYPE"/>
+		<result property="typeNm" 			column="QU_TYPE_NM"/>
+		<result property="comments" 		column="QU_COMMENTS"/>
+		<result property="status" 			column="STATUS"/>
+	</resultMap>
+
+	<update id="updateEngineMonitorResource">
+		UPDATE TIM0204
+		SET RESOURCE_NM = #{serverResource.resourceName, jdbcType=VARCHAR}
+			,TYPE	  	= #{serverResource.type, jdbcType=VARCHAR}
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			,"LIMIT"    = #{serverResource.limit, jdbcType=VARCHAR}
+        		</when>
+        		<otherwise>
+			,LIMIT    	= #{serverResource.limit, jdbcType=VARCHAR}
+        		</otherwise>
+        	</choose>
+			,INFO1		= #{serverResource.info1, jdbcType=VARCHAR}
+			,INFO2 		= #{serverResource.info2, jdbcType=VARCHAR}
+			,INFO3		= #{serverResource.info3, jdbcType=VARCHAR}
+			,COMMENTS 	= #{serverResource.comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{serverResource.modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{serverResource.modId, jdbcType=VARCHAR}
+		WHERE RESOURCE_ID = #{serverResource.resourceId}
+	</update>
+
+	<update id="updateEngineMonitorProcess">
+		UPDATE TIM0205
+		SET PROCESS_NM		= #{serverProcess.processNm, jdbcType=VARCHAR}
+		   	,DISPLAY_NM		= #{serverProcess.displayNm, jdbcType=VARCHAR}
+			,CHECK_VALUE	= #{serverProcess.checkValue, jdbcType=VARCHAR}
+			,CHECK_CNT	 	= #{serverProcess.checkCount, jdbcType=VARCHAR}
+			,COMMENTS 		= #{serverProcess.comments, jdbcType=VARCHAR}
+			,MOD_DATE 		= #{serverProcess.modDate, jdbcType=VARCHAR}
+			,MOD_USER 		= #{serverProcess.modId, jdbcType=VARCHAR}
+		WHERE PROCESS_ID = #{serverProcess.processId}
+	</update>
+
+	<update id="updateEngineMonitorQmgr">
+		UPDATE TIM0206
+		SET QMGR_NM 	= #{qmgr.qmgrNm, jdbcType=VARCHAR}
+		 	,TYPE		= #{qmgr.type, jdbcType=VARCHAR}
+			,IP			= #{qmgr.ip, jdbcType=VARCHAR}
+			,PORT		= #{qmgr.port, jdbcType=VARCHAR}
+			,COMMENTS 	= #{qmgr.comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{qmgr.modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{qmgr.modId, jdbcType=VARCHAR}
+		WHERE QMGR_ID = #{qmgr.qmgrId}
+	</update>
+
+	<update id="updateEngineMonitorChannel">
+		UPDATE TIM0207
+		SET CHANNEL_NM 	= #{qmgrChannel.channelNm, jdbcType=VARCHAR}
+			,XQNAME		= #{qmgrChannel.xqName, jdbcType=VARCHAR}
+			,TYPE		= #{qmgrChannel.type, jdbcType=VARCHAR}
+			,COMMENTS 	= #{qmgrChannel.comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{qmgrChannel.modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{qmgrChannel.modId, jdbcType=VARCHAR}
+		WHERE CHANNEL_ID = #{qmgrChannel.channelId}
+	</update>
+
+	<update id="updateEngineMonitorQueue">
+		UPDATE TIM0208
+		SET QUEUE_NM 	= #{queue.queueNm, jdbcType=VARCHAR}
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			,"LIMIT"	= #{queue.limit, jdbcType=VARCHAR}
+        		</when>
+        		<otherwise>
+			,LIMIT		= #{queue.limit, jdbcType=VARCHAR}
+        		</otherwise>
+        	</choose>
+			,LIMIT_OPT	= #{queue.limitOpt, jdbcType=VARCHAR}
+			,TYPE		= #{queue.type, jdbcType=VARCHAR}
+			,COMMENTS 	= #{queue.comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{queue.modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{queue.modId, jdbcType=VARCHAR}
+		WHERE QUEUE_ID = #{queue.queueId}
+	</update>
+
+	<update id="deleteEngineMonitorResource">
+		UPDATE TIM0204
+		SET DEL_YN 		='Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE RESOURCE_ID = #{resourceId}
+	</update>
+
+	<update id="deleteEngineMonitorProcess">
+		UPDATE TIM0205
+		SET DEL_YN 		='Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE PROCESS_ID = #{processId}
+	</update>
+
+
+	<update id="deleteEngineMonitorQmgr">
+		UPDATE TIM0206
+		SET DEL_YN 		='Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE QMGR_ID = #{qmgrId}
+	</update>
+
+	<update id="deleteEngineMonitorChannel">
+		UPDATE TIM0207
+		SET DEL_YN 		= 'Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE CHANNEL_ID = #{channelId}
+	</update>
+
+	<update id="deleteEngineMonitorQueue">
+		UPDATE TIM0208
+		SET DEL_YN 		= 'Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE QUEUE_ID = #{queueId}
+	</update>
+
+	<update id="deleteEngineMonitorChannelOfQmgr">
+		UPDATE TIM0207
+		SET DEL_YN 		= 'Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE QMGR_ID = #{qmgrId}
+	</update>
+
+	<update id="deleteEngineMonitorQueueOfQmgr">
+		UPDATE TIM0208
+		SET DEL_YN 		= 'Y'
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE QMGR_ID = #{qmgrId}
+	</update>
+
+	<delete id="deleteAllEngineMonitorMapping">
+		DELETE FROM TIM0212 WHERE AGENT_ID = #{agentId}
+	</delete>
+
+	<update id="deleteAllEngineMonitorResource">
+		UPDATE  TIM0204
+		SET DEL_YN = 'Y'
+		WHERE RESOURCE_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '0' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<update id="deleteAllEngineMonitorProcess">
+		UPDATE TIM0205
+		SET DEL_YN = 'Y'
+		WHERE PROCESS_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '1' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<update id="deleteAllEngineMonitorQmgr">
+		UPDATE TIM0206
+		SET DEL_YN = 'Y'
+		WHERE QMGR_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '2' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<update id="deleteAllEngineMonitorChannel">
+		UPDATE TIM0207
+		SET DEL_YN = 'Y'
+		WHERE CHANNEL_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '3' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<update id="deleteAllEngineMonitorQueue">
+		UPDATE TIM0208
+		SET DEL_YN = 'Y'
+		WHERE QUEUE_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '4' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+
+	<delete id="deleteEngineMonitorMappingChannel">
+		DELETE FROM TIM0212
+		WHERE AGENT_ID = #{agentId}
+		AND ITEM_TYPE = '3'
+		AND ITEM_ID IN (
+			SELECT CHANNEL_ID FROM TIM0207 WHERE QMGR_ID = #{qmgrId}
+		)
+	</delete>
+
+	<delete id="deleteEngineMonitorMappingQueue">
+		DELETE FROM TIM0212
+		WHERE AGENT_ID = #{agentId}
+		AND ITEM_TYPE='4'
+		AND ITEM_ID IN (
+			SELECT QUEUE_ID FROM TIM0208 WHERE QMGR_ID=#{qmgrId}
+		)
+	</delete>
+
+	<update id="updateEngineMonitorResourceforServer">
+		UPDATE TIM0204
+		SET SERVER_ID = #{serverId}
+		WHERE RESOURCE_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '0' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<update id="updateEngineMonitorProcessforServer">
+		UPDATE TIM0205
+		SET SERVER_ID = #{serverId}
+		WHERE PROCESS_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE  ITEM_TYPE = '1' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<update id="updateEngineMonitorQmgrforServer">
+		UPDATE TIM0206
+		SET SERVER_ID = #{serverId}
+		WHERE QMGR_ID IN (
+			SELECT ITEM_ID FROM TIM0212
+			WHERE ITEM_TYPE = '2' AND AGENT_ID = #{agentId}
+		)
+	</update>
+
+	<select id="getEngineMoitorAllQmgr" parameterType="Map" resultMap="qmgrResultMap">
+		SELECT
+			a.QMGR_ID
+			,a.QMGR_NM
+			,a.IP  		AS QM_IP
+			,a.PORT  	AS QM_PORT
+			,a.TYPE  	AS QM_TYPE
+			,cdim30.NM 	AS QM_TYPE_NM
+			,a.STATUS  	AS QM_STATUS
+			,a.COMMENTS	AS QM_COMMENTS
+		FROM TIM0206 a
+		INNER JOIN TIM0212 k ON k.ITEM_ID = a.QMGR_ID AND k.item_type = '2'
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '30' AND DEL_YN = 'N') cdim30 ON a.TYPE = cdim30.CD
+		WHERE a.DEL_YN = 'N'
+	</select>
+
+	<update id="deleteEngineMonitorQmgrWidthSystem">
+		DELETE FROM TIM0604 WHERE QMGR_ID = #{qmgrId}
+	</update>
+
+	<insert id="insertEngineMonitorQmgrSystemMapping">
+		INSERT INTO TIM0604 (
+		    SYSTEM_ID,
+		    QMGR_ID
+		) VALUES (
+			#{systemId, jdbcType=VARCHAR},
+			#{qmgrId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateEngineMonitorQmgrSystemMapping">
+		UPDATE TIM0604
+		SET SYSTEM_ID = #{systemId}
+		WHERE QMGR_ID = #{qmgrId, jdbcType=VARCHAR}
+	</update>
+</mapper>

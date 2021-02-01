@@ -1,0 +1,2170 @@
+<!--
+	Screen ID : AN-06-03-002
+	Screen NM : Interface-Layout Mapping
+	Reference :
+-->
+<div id="mint-attachDiv">
+	<div class="mint-content-item" style="display:none;height:100%;">
+		<div class="mint-content-item-left">
+			<div class="mint-widget-wrapper">
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-hover no-margins">
+							<thead>
+								<tr style="height:45px;">
+									<th class="mint-th-m-left">
+										<lb class="lb-9999">인터페이스 기본정보</lb>
+									</th>
+									<th class="mint-th-m-right">
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="mint-td-m-left">
+										<button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button>
+										<lb class="lb-154"></lb>
+									</td>
+									<td class="mint-td-m-left">
+										<span id="layout-integrationId" name="layout-integrationId"></span>
+										<input id="layout-interfaceId" name="layout-interfaceId" type="hidden">
+									</td>
+								</tr>
+								<tr>
+									<td class="mint-td-m-left">
+										<button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button>
+										<lb class="lb-153"></lb>
+									</td>
+									<td class="mint-td-m-left">
+										<span id="layout-interfaceNm" name="layout-interfaceNm"></span>
+									</td>
+								</tr>
+								<tr>
+									<td class="mint-td-m-left">
+										<button type="button" class="btn btn-default m-r-sm mint-chart-label-m"></button>
+										<lb class="lb-3017"></lb>
+									</td>
+									<td class="mint-td-m-left">
+										<span id="layout-dataPrDirNm" name="layout-dataPrDirNm"></span>
+										<input id="layout-dataPrDirCd" name="layout-dataPrDirCd" type="hidden">
+									</td>
+								</tr>
+								<tr>
+									<td class="mint-td-m-left">
+										<button type="button" class="btn btn-default m-r-sm mint-chart-label-m"></button>
+										<lb class="lb-3019"></lb>
+									</td>
+									<td class="mint-td-m-left">
+										<span id="layout-appPrMethodNm" name="layout-appPrMethodNm"></span>
+										<input id="layout-appPrMethodCd" name="layout-appPrMethodCd" type="hidden">
+									</td>
+								</tr>
+								<tr>
+									<td class="mint-td-m-left">
+										<button type="button" class="btn btn-default m-r-sm mint-chart-label-m"></button>
+										<lb class="lb-191"></lb>
+									</td>
+									<td class="mint-td-m-left">
+										<span id="layout-interface-pattern" name="layout-interface-pattern"></span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<hr class="hr-space">
+					<hr class="hr-space">
+
+					<div id="layout-interface-pattern-image" class="col-sm-12" style="text-align: center;">
+						<img src="../../img/empty.png">
+					</div>
+
+					<hr class="hr-space">
+					<hr class="hr-space">
+
+					<div class="col-sm-12">
+						<div id="gd-system-division"></div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+        <div class="mint-content-item-center">
+			<div class="mint-widget-wrapper animated">
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-hover no-margins">
+							<thead>
+								<tr style="height:45px;">
+									<th class="mint-th-m-left">전문 I/O & 맵핑</th>
+									<th class="mint-th-m-right">
+										<div style="float: right; padding: 0px 20px 0px 0px;">
+										</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+
+					<hr class="hr-space">
+					<hr class="hr-space">
+
+					<div class="col-sm-12">
+						<div class="col-sm-12 mint-col-0">
+							<div id="mappingToolBar" styles="background-color: white; border: 0px;"></div>
+						</div>
+						<hr class="hr-space">
+
+						<div class="col-sm-12 mint-col-default" style="display:none;">
+							<div class="panel panel-default mint-panel">
+								<div class="panel-body mint-panel-content">
+									<div class="col-sm-6">
+										<span class="label-tag-4 k-textbox"><lb class="lb-9999">Direction</lb></span>
+										<span style="padding:0px 10px;">
+											<input id="rd-iotype-0" type="radio" name="rd-iotype" class="k-radio" value="0" checked="checked">
+											<label class="k-radio-label" for="rd-iotype-1"><lb class="lb-9999">Source to Target</lb></label>
+										</span>
+										<span style="padding:0px 10px;">
+											<input id="rd-iotype-1" type="radio" name="rd-iotype" class="k-radio" value="1">
+											<label class="k-radio-label" for="rd-iotype-0"><lb class="lb-9999">Target to Source</lb></label>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-5 mint-col-0">
+							<div class="panel panel-default mint-panel">
+								<div class="panel-heading mint-panel-title mint-align-center layout-left-title-css">
+									<h5><span class="layout-left-title">Source</span> - 기본정보</h5>
+						            <div class="mint-panel-tools-nw"></div>
+								</div>
+								<div class="panel-body mint-panel-content layout-left-css">
+									<div>
+										<span class="label-tag-4 mint-bd-default"><lb class="lb-9999">기관</lb></span>
+										<input class="input-tag-4 k-textbox mint-readonly" id="layout-left-org-nm">
+									</div>
+									<hr class="hr-space-2">
+
+									<div>
+										<span class="label-tag-4 mint-bd-default"><lb class="lb-86"></lb></span>
+										<input class="input-tag-4 k-textbox mint-readonly" id="layout-left-resource-nm">
+									</div>
+
+									<div>
+										<input id="layout-left-system-id" name="layout-left-system-id" type="hidden">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-2 mint-col-default">
+							<div class="text-center" style="margin-top: 15px;">
+								<p class="fa fa-arrow-right big-icon"></p>
+							</div>
+						</div>
+
+						<div class="col-sm-5 mint-col-0">
+							<div class="panel panel-default mint-panel">
+								<div class="panel-heading mint-panel-title mint-align-center layout-right-title-css">
+									<h5><span class="layout-right-title">Target</span> - 기본정보</h5>
+			                        <div class="mint-panel-tools-nw"></div>
+								</div>
+								<div class="panel-body mint-panel-content layout-right-css">
+									<div>
+										<span class="label-tag-4 mint-bd-default"><lb class="lb-9999">기관</lb></span>
+										<input class="input-tag-4 k-textbox mint-readonly" id="layout-right-org-nm">
+									</div>
+									<hr class="hr-space-2">
+
+									<div class="form-horizontals">
+										<span class="label-tag-4 mint-bd-default"><lb class="lb-86"></lb></span>
+										<input class="input-tag-4 k-textbox mint-readonly" id="layout-right-resource-nm">
+									</div>
+
+									<div>
+										<input id="layout-right-system-id" name="layout-right-system-id" type="hidden">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<hr class="hr-space">
+
+						<div class="col-sm-5 mint-col-0">
+							<div class="panel panel-default mint-panel">
+								<div class="panel-heading mint-panel-title mint-align-center layout-left-title-css">
+									<h5><span class="layout-left-title">Source</span> - 전문 I/O</h5>
+			                        <div class="mint-panel-tools-nw">
+			                            <a id="load-source-layout" class="load-layout" style="display:none;"><i class="fa fa-search"></i></a>
+			                        </div>
+								</div>
+								<div class="panel-body mint-panel-content layout-left-css">
+									<div>
+										<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">코드(CD)</lb></span>
+										<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">한글명</lb></span>
+										<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">영문명</lb></span>
+									</div>
+									<hr class="hr-space-2">
+									<div>
+										<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetId" type="hidden">
+										<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetCd" style="width:32.7777%">
+										<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetNm1" style="width:32.7777%">
+										<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetNm2" style="width:32.7777%">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-2 mint-col-default">
+							<div class="panel panel-default mint-panel">
+								<div class="panel-heading mint-panel-title mint-align-center">
+									<h5><lb class="lb-9999">Mapping	</lb></h5>
+			                        <div class="mint-panel-tools-nw">
+			                            <a id="load-mapping" class="load-mapping" style="display:none;"><i class="fa fa-search"></i></a>
+			                        </div>
+								</div>
+								<div class="panel-body mint-panel-content">
+									<input class="input-tag-5 k-textbox mint-align-center mint-readonly" id="layout-mapping-nm" placeholder="Mapping Name">
+									<hr class="hr-space-2">
+									<input class="input-tag-5 k-textbox mint-align-center mint-readonly" id="layout-mapping-cd" placeholder="Mapping Code">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-5 mint-col-0">
+							<div class="panel panel-default mint-panel">
+								<div class="panel-heading mint-panel-title mint-align-center layout-right-title-css">
+									<h5><span class="layout-right-title">Target</span> - 전문 I/O</h5>
+			                        <div class="mint-panel-tools-nw">
+			                            <a id="load-target-layout" class="load-layout" style="display:none;"><i class="fa fa-search"></i></a>
+			                        </div>
+								</div>
+								<div class="panel-body mint-panel-content layout-right-css">
+									<div>
+										<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">코드(CD)</lb></span>
+										<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">한글명</lb></span>
+										<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">영문명</lb></span>
+									</div>
+									<hr class="hr-space-2">
+									<div>
+										<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetId" type="hidden">
+										<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetCd" style="width:32.7777%">
+										<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetNm1" style="width:32.7777%">
+										<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetNm2" style="width:32.7777%">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<hr class="hr-space">
+
+						<div class="col-sm-12 mint-col-0">
+							<div class="mapping">
+								<div class="mappingContainer">
+									<div class="col-sm-5" style="padding-right:0px; padding-left:0px; margin-right:0px; margin-left:0px;">
+										<div class="mappingSource"></div>
+									</div>
+									<div class="col-sm-2" style="padding:0px;margin:0px;">
+										<div class="mappingDiv"></div>
+									</div>
+									<div class="col-sm-5" style="padding-right:0px; padding-left:0px; margin-right:0px; margin-left:0px;">
+						                <div class="mappingTarget"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+    	</div>
+	</div>
+</div>
+
+
+<script type="text/x-kendo-template" id="template-mint-window">
+<div id="mint-window">
+	<div id="mint-toolbar"></div>
+	<div id="mint-content" style="box-sizing: border-box; height:100%"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-mint-title">
+<h6 style="float:none; display:inline; padding-bottom:2px;">
+	<span><i class="fa fa-circle text-success"></i> </span>
+	<span><i class="fa fa-circle text-warning"></i> </span>
+	<span><i class="fa fa-circle text-danger"></i> </span>
+	<span style="font-size:13px; font-weight:600;"> Interface & Layout Mapping </span>
+</h6>
+</script>
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "AN-06-03-002";
+	$.extend({
+		main_layout : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			dataset:[],
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main_layout.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Init Component
+					//-----------------------------------------------------------------------
+					$.main_layout.fn_initComponent();
+
+					//-----------------------------------------------------------------------
+					// Init Interface
+					//-----------------------------------------------------------------------
+					$.main_layout.fn_initInterface();
+
+					//-----------------------------------------------------------------------
+					// Description :: 패널 초기화
+					//-----------------------------------------------------------------------
+					$.main_layout.fn_mainWindowOpen();
+
+                    $(".mint-content-item").kendoSplitter({
+                        panes: [
+                            { collapsible: true, max: '100%', size: '20%'},
+                            { collapsible: false, max: '100%',},
+                        ]
+                    });
+
+
+					//-----------------------------------------------------------------------
+					// Scroll
+					//-----------------------------------------------------------------------
+					mint.ui.attachScrollY($('.mint-widget-wrapper'), {size: '10px', alwaysVisible:true});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_initCallback"});
+				}
+
+			}, // end fn_initCallback
+
+
+
+
+
+
+
+			//=======================================================================
+			// ▶ 윈도우 툴바 설정
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initToolbar
+			//-----------------------------------------------------------------------
+			fn_initToolbar : function(color, options) {
+				try {
+					$('#mint-toolbar').kendoToolBar({
+						items: [
+							{ type: "button", text: "<span class='glyphicon glyphicon-th' aria-hidden='true'></span>", overflow: "never" },
+
+                            { type: "separator" },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-save'></i> <span><lb class='lb-310'>저장</lb></span>", overflow: "never", click : function(e) {
+								$.main_layout.fn_toolbarSaveEvent(e);
+							} },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-files-o'></i> <span><lb class='lb-309'>다른이름으로 저장</lb></span>", overflow: "never", click : function(e) {
+								$.main_layout.fn_toolbarSaveAsEvent(e);
+							} },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-folder-open-o'></i> <span><lb class='lb-308'>불러오기</lb></span>", overflow: "never", click : function(e) {
+								$.main_layout.fn_loadWindowOpen(e);
+							} },
+						]
+					});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_initToolbar"});
+				}
+			},
+
+			//=======================================================================
+			// ▶ 윈도우 툴바 버튼 이벤트
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_toolbarSaveEvent
+			//-----------------------------------------------------------------------
+			fn_toolbarSaveEvent : function(e) {
+				try {
+					if( $.main_layout.loadInfo.isLoaded ) {
+						$.main_layout.fn_savePersonalization(e, true);
+					} else {
+						$.main_layout.fn_saveWindowOpen(e);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_toolbarSaveEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_toolbarSaveAsEvent
+			//-----------------------------------------------------------------------
+			fn_toolbarSaveAsEvent : function(e) {
+				try {
+					$.main_layout.fn_saveWindowOpen(e);
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_toolbarSaveAsEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_toolbarLoadEvent
+			//-----------------------------------------------------------------------
+			fn_toolbarLoadEvent : function(e) {
+				try {
+					$.main_layout.fn_loadWindowOpen(e);
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_toolbarLoadEvent"});
+				}
+			},
+
+			//=======================================================================
+			// ▶ 윈도우 Open
+			//=======================================================================
+			//-----------------------------------------------------------------------
+			// Description :: fn_mainWindowOpen
+			//-----------------------------------------------------------------------
+			fn_mainWindowOpen : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 템플릿을 읽어 드린다
+					//-----------------------------------------------------------------------
+					var layout = kendo.template($('#template-mint-window').html());
+					var title  = kendo.template($('#template-mint-title').html());
+
+					//-----------------------------------------------------------------------
+					// DIV 에 템플릿에서 불러온 레이아웃을 붙인다
+					//-----------------------------------------------------------------------
+					var attachDiv = $('#mint-attachDiv').prepend( layout );
+					var windowDiv = $('#mint-window');
+
+					//-----------------------------------------------------------------------
+					// 윈도우를 오픈한다
+					//-----------------------------------------------------------------------
+					mint.ui.windowOpen(attachDiv, windowDiv, title, function(evt) {
+						//-----------------------------------------------------------------------
+						// DIV Resize
+						//-----------------------------------------------------------------------
+						//var footerHeight = 40;
+						//var pHeight = $(window).height() - $('.navbar-static-top')[0].clientHeight - $('.footer.fixed')[0].clientHeight - footerHeight;
+						//$('.mint-content-item').height(pHeight);
+						$('.mint-content-item').hide();
+
+						//-----------------------------------------------------------------------
+						// 윈도우가 Close 되면 컨텐츠를 원래 DIV 에 붙인다
+						//-----------------------------------------------------------------------
+						//attachDiv.html( $('.mint-content-item') );
+						attachDiv.html( '' );
+
+					}, {windowScroll:false});
+
+					//-----------------------------------------------------------------------
+					// 레이아웃에 대시보드 컨텐츠를 붙인다.( 순서주의-윈도우 오픈후 컨텐츠 붙임 )
+					// TODO: 절차 정리가 필요할듯 합니다...
+					//-----------------------------------------------------------------------
+					{
+						//$('#mint-toolbar').html('');
+						$('#mint-toolbar').html('');
+						$('#mint-content').html( $('.mint-content-item') );
+						//$.main_layout.fn_initToolbar();
+						$('.mint-content-item').show();
+
+						//-----------------------------------------------------------------------
+						// DIV Resize
+						//-----------------------------------------------------------------------
+						var footerHeight = 5;
+						var pHeight = $(window).height() - $('.k-window-titlebar')[0].clientHeight - $('#mint-toolbar')[0].clientHeight - footerHeight;
+						//$('.mint-menu-viewpot').height(pHeight - $('.mint-menu-logo')[0].clientHeight - $("#searchText")[0].clientHeight);
+						$('.mint-content-item-center').height(pHeight);
+
+						//-----------------------------------------------------------------------
+						// restrict key event
+						//-----------------------------------------------------------------------
+						windowDiv.attr("tabindex", "");
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_mainWindowOpen"});
+				}
+
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_mainWindowClose
+			//-----------------------------------------------------------------------
+			fn_mainWindowClose : function(e, options) {
+				try {
+					var windowDiv = $('#mint-window').data('kendoWindow');
+					windowDiv.close();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_mainWindowClose"});
+				}
+			},
+
+
+
+
+
+
+
+
+
+			//=======================================================================
+			// ▶ 윈도우 Contents
+			//=======================================================================
+			//-----------------------------------------------------------------------
+			// Description :: fn_initComponent
+			//-----------------------------------------------------------------------
+			fn_initComponent : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Mapping Toolbar
+					//-----------------------------------------------------------------------
+					{
+						$('#mappingToolBar').kendoToolBar({
+							items: [
+	                            { type: 'separator' },
+	                            { type: 'separator' },
+								{
+									type: 'buttonGroup',
+									buttons: [
+										{id: 'layout-direction-0', text: '요청(송신)-전문I/O 설정', togglable: true, group: 'direction', toggle: $.main_layout.fn_layoutDirectionEvent, icon: 'arrow-right', selected: true},
+										{id: 'layout-direction-1', text: '응답(수신)-전문I/O 설정', togglable: true, group: 'direction', toggle: $.main_layout.fn_layoutDirectionEvent, icon: 'arrow-left', enable:false}
+									],
+								},
+
+							]
+
+						});
+
+						//-----------------------------------------------------------------------
+						// 20201125-주석처리
+						//-----------------------------------------------------------------------
+						//$('#layout-loadType-2').trigger('click');
+						//{
+						//	$('.load-layout').css('display', 'inline');
+						//	$('.load-mapping').css('display', 'inline');
+						//}
+						//-----------------------------------------------------------------------
+					}
+
+					//-----------------------------------------------------------------------
+					// Init Input Field(readOnly)
+					//-----------------------------------------------------------------------
+					{
+						$(':input[class*="mint-readonly"]').each(function(){
+							$(this).prop("readonly", true);
+							$(this).prop("disabled", true);
+						});
+					}
+
+					//-----------------------------------------------------------------------
+					// Init Grid
+					//-----------------------------------------------------------------------
+					$.main_layout.fn_initSystemDivisionGrid();
+					$.main_layout.fn_initLayoutTreeList();
+
+
+					//-----------------------------------------------------------------------
+					// Layout Setting Callback
+					//-----------------------------------------------------------------------
+					$.main_layout.callback = mint.common.getScreenParam('callback');
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_initComponent"});
+				}
+			}, // fn_initComponent
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_layoutDirectionEvent
+			//-----------------------------------------------------------------------
+			fn_layoutDirectionEvent : function(e) {
+				try {
+					if(e.id === 'layout-direction-0') {
+						$('input:radio[name="rd-iotype"]:radio[value="0"]').prop('checked', true);
+					} else {
+						$('input:radio[name="rd-iotype"]:radio[value="1"]').prop('checked', true);
+					}
+
+					$.main_layout.fn_systemDivisionDetail();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_layoutDirectionEvent"});
+				}
+			}, // fn_layoutDirectionEvent
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_layoutLoadTypeEvent
+			//-----------------------------------------------------------------------
+			fn_layoutLoadTypeEvent : function(e) {
+				try {
+					if(e.id === 'layout-loadType-1') {
+						$('.load-layout').css('display', 'inline');
+						$('.load-mapping').css('display', 'none');
+					} else {
+						$('.load-layout').css('display', 'none');
+						$('.load-mapping').css('display', 'inline');
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_layoutLoadTypeEvent"});
+				}
+			}, // fn_layoutLoadTypeEvent
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initInterface
+			//-----------------------------------------------------------------------
+			fn_initInterface : function() {
+				try {
+
+					$.main_layout._modelObject = mint.common.getScreenParam('modelObject');
+					//-----------------------------------------------------------------------
+					// 호출화면에서 modelObject 는 넘겨줘야함.
+					//-----------------------------------------------------------------------
+					if( !mint.common.isEmpty($.main_layout._modelObject) ) {
+						var interfaceMid = $.main_layout._modelObject.mid;
+						var interfaceId = $.main_layout._modelObject.interfaceId;
+						var stage = $.main_layout._modelObject.stage;
+
+						//-----------------------------------------------------------------------
+						// Interface Info
+						//-----------------------------------------------------------------------
+						if( ! mint.common.isEmpty(interfaceId) ) {
+							// remote call
+							$.main_layout.fn_loadRemoteInterface(interfaceId)
+							.done(function(){
+								$.main_layout.fn_loadModelObject(interfaceMid)
+								.done(function(e) {
+									$('#layout-direction-0').trigger('click');
+								});
+							});
+						} else {
+							// local call
+							$.main_layout.fn_loadLocalInterface()
+							.done(function(){
+								$.main_layout.fn_loadModelObject(interfaceMid)
+								.done(function(e) {
+									$('#layout-direction-0').trigger('click');
+								});
+							});
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Screen Parameter Clear
+					//-----------------------------------------------------------------------
+			        {
+			        	mint.common.removeScreenParam('modelObject');
+			        }
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_initInterface"});
+				}
+			}, // fn_initInterface
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadRemoteInterface
+			//-----------------------------------------------------------------------
+			fn_loadRemoteInterface : function(interfaceId) {
+				var deferred = $.Deferred();
+				try {
+					//-----------------------------------------------------------------------
+					// 인터페이스 정보 조회
+					//-----------------------------------------------------------------------
+					var REST_ID = 'REST-R02-CO-01-00-008';
+					mint.callService(null, 'AN-06-03-002', REST_ID,
+						function(responseData, errCd, errMsg) {
+							if( responseData ) {
+								//-----------------------------------------------------------------------
+								// Interface Panel
+								//-----------------------------------------------------------------------
+								$('#layout-integrationId').text(responseData.integrationId);
+								$('#layout-interfaceNm').text(responseData.interfaceNm);
+								$('#layout-dataPrDirNm').text(responseData.dataPrDirNm);
+								$('#layout-appPrMethodNm').text(responseData.appPrMethodNm);
+
+								$('#layout-interfaceId').val(responseData.interfaceId);
+								$('#layout-dataPrDirCd').val(responseData.dataPrDir);
+
+								$('#layout-appPrMethodCd').val(responseData.appPrMethod);
+								//-----------------------------------------------------------------------
+								// System Division Panel
+								//-----------------------------------------------------------------------
+								$.main_layout.fn_parseRemoteSystemDivision(responseData);
+								//-----------------------------------------------------------------------
+								// Pattern Image(System Division Setting 이후 drawing)
+								//-----------------------------------------------------------------------
+								$.main_layout.fn_setPatternImage();
+								//-----------------------------------------------------------------------
+								// Layout Toolbar Panel
+								//-----------------------------------------------------------------------
+								console.log(responseData.dataPrDir);
+								$('#mappingToolBar').data('kendoToolBar').enable('#layout-direction-1', (responseData.dataPrDir == '1' ? true : false) );
+
+								deferred.resolve('fn_loadRemoteInterface complete');
+							}
+						},
+						{
+						   	errorCall : true,
+						   	params: {interfaceId: interfaceId}
+						}
+					);
+
+				} catch( e ) {
+					deferred.reject(e);
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadRemoteInterface"});
+				} finally {
+					return deferred.promise();
+				}
+			},//end fn_loadRemoteInterface()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLocalInterface
+			//-----------------------------------------------------------------------
+			fn_loadLocalInterface : function(interfaceObject) {
+				var deferred = $.Deferred();
+				try {
+					//-----------------------------------------------------------------------
+					// 인터페이스 등록 화면에서 호출시, 해당 페이지 직접 참조
+					//-----------------------------------------------------------------------
+					{
+						//-----------------------------------------------------------------------
+						// Interface Panel
+						//-----------------------------------------------------------------------
+						$('#layout-integrationId').text($('#tf-integrationId').val());
+						$('#layout-interfaceNm').text($('#tf-interfaceNm').val());
+						$('#layout-dataPrDirNm').text($('#cb-dataPrDirNm').data("kendoDropDownList").dataItem().nm);
+						$('#layout-appPrMethodNm').text($('#cb-appPrMethodNm').data("kendoDropDownList").dataItem().nm);
+
+						$('#layout-interfaceId').val(mint.common.isEmpty($('#hd-interfaceId').val()) ? '' : $('#hd-interfaceId').val());
+						$('#layout-dataPrDirCd').val($('#cb-dataPrDirNm').data("kendoDropDownList").dataItem().cd);
+						$('#layout-appPrMethodCd').val($('#cb-appPrMethodNm').data("kendoDropDownList").dataItem().cd);
+						//-----------------------------------------------------------------------
+						// System Division Panel
+						//-----------------------------------------------------------------------
+						$.main_layout.fn_parseLocalSystemDivision();
+						//-----------------------------------------------------------------------
+						// Pattern Image Panel(System Division Setting 이후 drawing)
+						//-----------------------------------------------------------------------
+						$.main_layout.fn_setPatternImage();
+						//-----------------------------------------------------------------------
+						// Layout Toolbar Panel
+						//-----------------------------------------------------------------------
+						$('#mappingToolBar').data('kendoToolBar').enable('#layout-direction-1', ($('#layout-dataPrDirCd').val() == '1' ? true : false) );
+
+						deferred.resolve('fn_loadLocalInterface complete');
+					}
+
+				} catch( e ) {
+					deferred.reject(e);
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadLocalInterface"});
+				} finally {
+					return deferred.promise();
+				}
+			},//end fn_loadLocalInterface()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadModelObject
+			//-----------------------------------------------------------------------
+			fn_loadModelObject : function(interfaceMid) {
+				var deferred = $.Deferred();
+				try {
+					//-----------------------------------------------------------------------
+					// Interface Layout Info
+					//-----------------------------------------------------------------------
+					if( ! mint.common.isEmpty(interfaceMid) ) {
+						$.main_layout.fn_loadRemoteModelObject(interfaceMid)
+						.done(function(e){
+							deferred.resolve('fn_loadModelObject > fn_loadRemoteModelObject complete');
+						});
+
+					} else {
+						$.main_layout.fn_loadLocalModelObject()
+						.done(function(e){
+							deferred.resolve('fn_loadModelObject > fn_loadLocalModelObject complete');
+						});
+					}
+
+				} catch( e ) {
+					deferred.reject(e);
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadModelObject"});
+				} finally {
+					return deferred.promise();
+				}
+			},//end fn_loadModelObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLocalModelObject
+			//-----------------------------------------------------------------------
+			fn_loadLocalModelObject : function(init) {
+				var deferred = $.Deferred();
+				try {
+					//-----------------------------------------------------------------------
+					// TODO :: 정리필요
+					//-----------------------------------------------------------------------
+					$('.mapping').mintModel(null, {interfaceDirection:$('#layout-dataPrDirCd').val()} );
+
+					var modelObject = $('.mapping').data('mintModel').getModelObject();
+					var _modelObject = $.main_layout._modelObject;
+
+
+					var _appModels = _modelObject.appModels;
+
+					var isApply = false;
+					_appModels.forEach(function(_v, _i, _a) {
+
+						var appModelObject = new AppModelObject({
+							interfaceMid: _v.interfaceMid,
+							appMid: _v.mid,
+							appModelNm: _v.name,
+							appModelCd: _v.cd,
+							appModelType: _v.cd,
+							systemId: _v.systemId,
+							systemType: _v.nodeType,
+							seq: _v.seq,//TODO::
+							serverId: _v.serverId,
+						});
+
+						var _msgs = _v.msgs;
+						if( mint.common.isEmpty(_msgs) || init == true) {
+							_msgs = [];
+						} else {
+
+							_msgs.forEach(function(_vv, _ii, _aa) {
+								var msgModelObject = new MsgModelObject({
+									interfaceMid: _vv.interfaceMid,
+									appMid: _vv.appMid,
+									msgMid: _vv.mid,
+									msgModelNm: _vv.name,
+									dataSetId: _vv.dataSetId,
+									msgIoType: _vv.type,
+									comments: _vv.comments,
+									regDate: '',
+									regId: '',
+									dataSet: _vv.dataSet
+								});
+								appModelObject.msgModelList.push(msgModelObject);
+							});
+						}
+						if( mint.common.isEmpty(_mappings) || init == true) {
+							_mappings = [];
+						} else {
+							var _mappings = _v.mappings;
+							_mappings.forEach(function(_vv, _ii, _aa) {
+								var mapModelObject = new MapModelObject({
+									interfaceMid: _vv.interfaceMid,
+									appMid: _vv.appMid,
+									mapMid: _vv.mid,
+									mapModelNm: _vv.name,
+									mapId: _vv.mapId,
+									mapIoType: _vv.type,
+									comments: _vv.comments,
+									regDate: '',
+									regId: '',
+									dataMap: _vv.dataMap
+								});
+								appModelObject.mapModelList.push(mapModelObject);
+							});
+						}
+
+						modelObject.appModelList.push(appModelObject);
+					});
+
+					deferred.resolve('fn_loadLocalModelObject complete');
+				} catch( e ) {
+					deferred.reject(e);
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadLocalModelObject"});
+				} finally {
+					return deferred.promise();
+				}
+			},//end fn_loadLocalModelObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadRemoteModelObject
+			//-----------------------------------------------------------------------
+			fn_loadRemoteModelObject : function(_interfaceMid) {
+				var deferred = $.Deferred();
+				try {
+					var requestObject = { interfaceMid: _interfaceMid };
+					mint.callService(requestObject, 'AN-06-03-002', 'REST-R02-AN-06-03',
+						function(responseData, errCd, errMsg) {
+							$('.mapping').mintModel(responseData, {interfaceDirection:$('#layout-dataPrDirCd').val()} );
+							deferred.resolve('fn_loadRemoteModelObject complete');
+						},
+						{
+					    	errorCall : true,
+						   	waitingView : true,
+						   	notificationView: false,
+					    }
+					);
+				} catch( e ) {
+					deferred.reject(e);
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadRemoteModelObject"});
+				} finally {
+					return deferred.promise();
+				}
+			},//end fn_loadRemoteModelObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_parseRemoteSystemDivision
+			//-----------------------------------------------------------------------
+			fn_parseRemoteSystemDivision : function(interfaceObject) {
+				try {
+					//-----------------------------------------------------------------------
+					//시스템 그리드를 source/target 으로 분리하여 display
+					//-----------------------------------------------------------------------
+					var sourceSystem = [];
+					var targetSystem = [];
+
+					interfaceObject.senderSystemInfoList.forEach(function(v, i, a) {
+						if( v.nodeTypeCd == '0' || v.nodeType == '0') {
+							v.systemDivisionType = 'source';
+							sourceSystem.push(v);
+						}
+
+						if( v.nodeTypeCd == '2' || v.nodeType == '2') {
+							v.systemDivisionType = 'target';
+							targetSystem.push(v);
+						}
+					});
+
+					interfaceObject.receiverSystemInfoList.forEach(function(v, i, a) {
+						if( v.nodeTypeCd == '0' || v.nodeType == '0') {
+							v.systemDivisionType = 'source';
+							sourceSystem.push(v);
+						}
+
+						if( v.nodeTypeCd == '2' || v.nodeType == '2') {
+							v.systemDivisionType = 'target';
+							targetSystem.push(v);
+						}
+					});
+
+					$.main_layout.fn_setSystemDivision(sourceSystem, targetSystem);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_parseRemoteSystemDivision"});
+				}
+			},//end fn_parseRemoteSystemDivision()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_parseLocalSystemDivision
+			//-----------------------------------------------------------------------
+			fn_parseLocalSystemDivision : function(interfaceObject) {
+				try {
+					//-----------------------------------------------------------------------
+					//시스템 그리드를 source/target 으로 분리하여 display
+					//-----------------------------------------------------------------------
+					var sourceSystem = [];
+					var targetSystem = [];
+
+					//-----------------------------------------------------------------------
+					// 인터페이스 등록화면을 직접 참조
+					//-----------------------------------------------------------------------
+					var systemGrid = $('#gd-system').data('kendoGrid');
+					if( systemGrid ) {
+						var dataItem = systemGrid.dataSource.data().toJSON();
+
+						//Source System
+						sourceSystem = dataItem.filter(function(v, i, a) {
+							if( v.nodeTypeCd == '0' || v.nodeType == '0') {
+								v.systemDivisionType = 'source';
+								return true;
+							}
+						});
+
+						//Target System
+						targetSystem = dataItem.filter(function(v, i, a) {
+							if( v.nodeTypeCd == '2' || v.nodeType == '2') {
+								v.systemDivisionType = 'target';
+								return true;
+							}
+						});
+					}
+
+					$.main_layout.fn_setSystemDivision(sourceSystem, targetSystem);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_parseLocalSystemDivision"});
+				}
+			},//end fn_parseLocalSystemDivision()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setSystemDivision
+			//-----------------------------------------------------------------------
+			fn_setSystemDivision : function(sourceSystem, targetSystem) {
+				try {
+
+					if(sourceSystem.length == 0 || targetSystem.length == 0 ) {
+						mint.common.alert('Source/Target 은 1:1/1:N/N:1 관계만 허용됩니다');
+						return;
+					}
+
+					var systemDivisionGridItems = [];
+					if( sourceSystem.length == targetSystem.length ) {
+						//1:1
+						targetSystem.forEach(function(v, i, a) {
+							v.sourceSystemId   = sourceSystem[0].systemId;
+							v.sourceSystemNm   = sourceSystem[0].systemNm;
+							v.sourceOrgNm      = sourceSystem[0].orgNm;
+							v.sourceResourceNm = sourceSystem[0].resourceNm;
+							v.sourceSystemType = sourceSystem[0].nodeType;
+							v.sourceSystemSeq  = sourceSystem[0].seq;
+							v.targetSystemId   = v.systemId;
+							v.targetSystemNm   = v.systemNm;
+							v.targetOrgNm      = v.orgNm;
+							v.targetResourceNm = v.resourceNm;
+							v.targetSystemType = v.nodeType;
+							v.targetSystemSeq  = v.seq;
+							v.interfacePattern = '1:1';
+						});
+						systemDivisionGridItems = targetSystem;
+						$('#layout-interface-pattern').text('1:1');
+					}
+
+					if( sourceSystem.length < targetSystem.length ) {
+						//1:N
+						targetSystem.forEach(function(v, i, a) {
+							v.sourceSystemId   = sourceSystem[0].systemId;
+							v.sourceSystemNm   = sourceSystem[0].systemNm;
+							v.sourceOrgNm      = sourceSystem[0].orgNm;
+							v.sourceResourceNm = sourceSystem[0].resourceNm;
+							v.sourceSystemType = sourceSystem[0].nodeType;
+							v.sourceSystemSeq  = sourceSystem[0].seq;
+							v.targetSystemId   = v.systemId;
+							v.targetSystemNm   = v.systemNm;
+							v.targetOrgNm      = v.orgNm;
+							v.targetResourceNm = v.resourceNm;
+							v.targetSystemType = v.nodeType;
+							v.targetSystemSeq  = v.seq;
+							v.interfacePattern = '1:N';
+						});
+						systemDivisionGridItems = targetSystem;
+						$('#layout-interface-pattern').text('1:N');
+					}
+
+					if( sourceSystem.length > targetSystem.length ) {
+						//N:1
+						sourceSystem.forEach(function(v, i, a) {
+							v.sourceSystemId   = v.systemId;
+							v.sourceSystemNm   = v.systemNm;
+							v.sourceOrgNm      = v.orgNm;
+							v.sourceResourceNm = v.resourceNm;
+							v.sourceSystemType = v.nodeType;
+							v.sourceSystemSeq  = v.seq;
+							v.targetSystemId   = targetSystem[0].systemId;
+							v.targetSystemNm   = targetSystem[0].systemNm;
+							v.targetOrgNm      = targetSystem[0].OrgNm;
+							v.targetResourceNm = targetSystem[0].resourceNm;
+							v.targetSystemType = targetSystem[0].nodeType;
+							v.targetSystemSeq  = targetSystem[0].seq;
+							v.interfacePattern = 'N:1';
+						});
+						systemDivisionGridItems = sourceSystem;
+						$('#layout-interface-pattern').text('N:1');
+					}
+
+					var systemDivisionGridDataSource = $.main_layout.fn_getSystemDivisionGridDataSource(systemDivisionGridItems);
+					$('#gd-system-division').data('kendoGrid').setDataSource(systemDivisionGridDataSource);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setSystemDivision"});
+				}
+			},//end fn_setSystemDivision()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setPatternImage
+			//-----------------------------------------------------------------------
+			fn_setPatternImage : function() {
+				try {
+					var directionType = $('#layout-dataPrDirCd').val();
+					var pattern       = $('#layout-interface-pattern').text();
+					var syncType      = $('#layout-appPrMethodCd').val();
+					var patternImage  = 'empty.png';
+
+					if( directionType == '0' ) {
+						if( pattern == '1:1') {
+							patternImage = 'pattern04.png';
+						} else if( pattern == '1:N' ) {
+							patternImage = 'pattern05.png';
+						} else if( pattern == 'N:1' ) {
+							patternImage = 'pattern08.png';
+						}
+					}
+
+					if( directionType == '1' ) {
+						if( pattern == '1:1') {
+							patternImage = 'pattern02.png';
+						} else if( pattern == '1:N' ) {
+							// 양방향 1:N은 aggregation  case
+							patternImage = 'pattern03.png';
+						} else if( pattern == 'N:1' ) {
+							//동기(0), 비동기(1) 분기
+							if( syncType == '0' ) {
+								patternImage = 'pattern01.png';
+							} else {
+								patternImage = 'pattern09.png';
+							}
+						}
+					}
+
+					if(patternImage) {
+						$("#layout-interface-pattern-image > img").prop('src', '../../img/'+ patternImage);
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setPatternImage"});
+				}
+			}, // fn_setPatternImage
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setSystemDivision
+			//-----------------------------------------------------------------------
+			fn_setSystemDivision_old : function(jsonObject) {
+				try {
+					//-----------------------------------------------------------------------
+					//시스템 그리드를 source/target 으로 분리하여 display
+					//-----------------------------------------------------------------------
+					var systemGrid = $('#gd-system').data('kendoGrid');
+					if( systemGrid ) {
+						var dataItem = systemGrid.dataSource.data().toJSON();
+
+						//Source System
+						var sourceSystem = dataItem.filter(function(v, i, a) {
+							if( v.nodeTypeCd == '0' || v.nodeType == '0') {
+								v.systemDivisionType = 'source';
+								return true;
+							}
+						});
+
+						//Target System
+						var targetSystem = dataItem.filter(function(v, i, a) {
+							if( v.nodeTypeCd == '2' || v.nodeType == '2') {
+								v.systemDivisionType = 'target';
+								return true;
+							}
+						});
+
+						if(sourceSystem.length == 0 || targetSystem.length == 0 ) {
+							mint.common.alert('Source/Target 은 1:1/1:N/N:1 관계만 허용됩니다');
+							return;
+						}
+
+						var systemDivisionGridItems = [];
+						if( sourceSystem.length == targetSystem.length ) {
+							//1:1
+							targetSystem.forEach(function(v, i, a) {
+								v.sourceSystemId   = sourceSystem[0].systemId;
+								v.sourceSystemNm   = sourceSystem[0].systemNm;
+								v.sourceOrgNm      = sourceSystem[0].orgNm;
+								v.sourceResourceNm = sourceSystem[0].resourceNm;
+								v.targetSystemId   = v.systemId;
+								v.targetSystemNm   = v.systemNm;
+								v.targetOrgNm      = v.orgNm;
+								v.targetResourceNm = v.resourceNm;
+								v.interfacePattern = '1:1';
+							});
+							systemDivisionGridItems = targetSystem;
+							$('#layout-interface-pattern').text('1:1');
+						}
+
+						if( sourceSystem.length < targetSystem.length ) {
+							//1:N
+							targetSystem.forEach(function(v, i, a) {
+								v.sourceSystemId   = sourceSystem[0].systemId;
+								v.sourceSystemNm   = sourceSystem[0].systemNm;
+								v.sourceOrgNm      = sourceSystem[0].orgNm;
+								v.sourceResourceNm = sourceSystem[0].resourceNm;
+								v.targetSystemId   = v.systemId;
+								v.targetSystemNm   = v.systemNm;
+								v.targetOrgNm      = v.orgNm;
+								v.targetResourceNm = v.resourceNm;
+								v.interfacePattern = '1:N';
+							});
+							systemDivisionGridItems = targetSystem;
+							$('#layout-interface-pattern').text('1:N');
+						}
+
+						if( sourceSystem.length > targetSystem.length ) {
+							//N:1
+							sourceSystem.forEach(function(v, i, a) {
+								v.sourceSystemId   = v.systemId;
+								v.sourceSystemNm   = v.systemNm;
+								v.sourceOrgNm      = v.orgNm;
+								v.sourceResourceNm = v.resourceNm;
+								v.targetSystemId   = targetSystem[0].systemId;
+								v.targetSystemNm   = targetSystem[0].systemNm;
+								v.targetOrgNm      = targetSystem[0].OrgNm;
+								v.targetResourceNm = targetSystem[0].resourceNm;
+								v.interfacePattern = 'N:1';
+							});
+							systemDivisionGridItems = sourceSystem;
+							$('#layout-interface-pattern').text('N:1');
+						}
+
+						var systemDivisionGridDataSource = $.main_layout.fn_getSystemDivisionGridDataSource(systemDivisionGridItems);
+						$('#gd-system-division').data('kendoGrid').setDataSource(systemDivisionGridDataSource);
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setSystemDivision"});
+				}
+			},//end fn_setSystemDivision()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initSystemDivisionGrid
+			//-----------------------------------------------------------------------
+			fn_initSystemDivisionGrid : function() {
+				try {
+					var hCSSCenter = {style: 'text-align: center; vertical-align:middle;'};
+					var aCSSCenter = {style: 'text-align: center; white-space: nowrap;'};
+					var aCSSLeft = {style: 'text-align: left; white-space: nowrap;'};
+
+					var gridTemplate = function(gridId) {
+						return {
+							dataSource : $.main_layout.fn_getSystemDivisionGridDataSource([]),
+							filterable: false,
+							scrollable: true,
+							resizable: true,
+							sortable: true,
+							selectable: true,
+							columns:[
+								{
+									field: "merge",
+									title: "Source / Target System",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									columns: [
+										{
+											field : "sourceSystemNm",
+											title : "Source",
+											headerAttributes: hCSSCenter, attributes: aCSSLeft,
+										},
+										{
+											field : "targetSystemNm",
+											title : "Target",
+											headerAttributes: hCSSCenter, attributes: aCSSLeft,
+										},
+										{ field : "sourceSystemId"   , hidden : true },
+										{ field : "sourceSystemCd"   , hidden : true },
+										{ field : "targetSystemId"   , hidden : true },
+										{ field : "targetSystemCd"   , hidden : true },
+									],
+								}
+							],
+							dataBound: function (e) {
+								if(0 == $("#" + gridId).data().kendoGrid.dataSource.view().length) {
+									$("#" + gridId).children(".k-grid-content").height('150');
+								} else {
+									$("#" + gridId).children(".k-grid-content").height('auto');
+								}
+
+								mint.ui.gridVerticalScrollBar(e);
+							}
+						}//end Template
+					};
+
+					$("#gd-system-division").kendoGrid(gridTemplate('gd-system-division'));
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_initSystemDivisionGrid"});
+				}
+			},//end fn_initSystemDivisionGrid()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getSystemDivisionGridDataSource
+			//-----------------------------------------------------------------------
+			fn_getSystemDivisionGridDataSource : function(jsonData) {
+				try {
+
+					var	dataSource = new kendo.data.DataSource({
+							  data: jsonData
+						    , page:1
+						    , schema: {
+						    	model: $.main_layout.fn_getSystemDivisionGridModel()
+						    }
+						});
+
+					return dataSource;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getSystemDivisionGridDataSource"});
+				}
+			},//end fn_getSystemDivisionGridDataSource()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getSystemDivisionGridModel
+			//-----------------------------------------------------------------------
+			fn_getSystemDivisionGridModel : function() {
+				try {
+
+					var LayoutItems = new kendo.data.Model.define({
+	            		fields: {
+	            			mapData		: {editable: false, nullable: false, defaultValue: {}},
+	            			srcDataSet	: {editable: false, nullable: false, defaultValue: {}},
+	            			tagDataSet	: {editable: false, nullable: false, defaultValue: {}},
+	            		}
+					});
+
+					var SystemGridModel = new kendo.data.Model.define({
+						id: "systemId",
+						fields: {
+							seq             : {editable: true,   nullable: false,  defaultValue: ""},
+							nodeTypeNm      : {editable: true,   nullable: false,  defaultValue: ""},
+							orgDisplayNm    : {editable: false,  nullable: false,  defaultValue: ""},
+							systemDisplayNm : {editable: false,  nullable: false,  defaultValue: ""},
+							resourceNm      : {editable: true,   nullable: false,  defaultValue: ""},
+							service         : {editable: true,   nullable: false,  defaultValue: ""},
+							serviceDesc     : {editable: true,   nullable: false,  defaultValue: ""},
+	            			systemId	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			systemCd	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			systemNm	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			orgId	        : {editable: false,  nullable: false,  defaultValue: ""},
+	            			orgCd	        : {editable: false,  nullable: false,  defaultValue: ""},
+	            			orgNm	        : {editable: false,  nullable: false,  defaultValue: ""},
+	            			businessId	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			businessCd	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			businessNm	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			nodeTypeCd 	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			resourceCd 	    : {editable: false,  nullable: false,  defaultValue: ""},
+	            			dataSetId       : {editable: false,   nullable: false,  defaultValue: ""},
+	            			dataSetCd       : {editable: false,   nullable: false,  defaultValue: ""},
+	            			dataSetNm       : {editable: false,   nullable: false,  defaultValue: ""},
+
+
+	            			sourceSystemId : {editable: false,  nullable: false,  defaultValue: ""},
+	            			sourceSystemCd : {editable: false,  nullable: false,  defaultValue: ""},
+	            			sourceSystemNm : {editable: false,  nullable: false,  defaultValue: ""},
+	            			sourceOrgNm : {editable: false,  nullable: false,  defaultValue: ""},
+	            			sourceReousrceNm : {editable: false,  nullable: false,  defaultValue: ""},
+	            			targetSystemId : {editable: false,  nullable: false,  defaultValue: ""},
+	            			targetSystemCd : {editable: false,  nullable: false,  defaultValue: ""},
+	            			targetSystemNm : {editable: false,  nullable: false,  defaultValue: ""},
+	            			targetOrgNm : {editable: false,  nullable: false,  defaultValue: ""},
+	            			targetResourceNm : {editable: false,  nullable: false,  defaultValue: ""},
+						}
+					});
+
+					return SystemGridModel;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getSystemDivisionGridModel"});
+				}
+			}, //end fn_getSystemDivisionGridModel()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initLayoutTreeList
+			//-----------------------------------------------------------------------
+			fn_initLayoutTreeList : function(jsonData) {
+				try {
+					var hCSSCenter = {style: 'text-align: center; vertical-align:middle;'};
+					var aCSSCenter = {style: 'text-align: center; white-space: nowrap;'};
+					var aCSSLeft = {style: 'text-align: left; white-space: nowrap;'};
+					var locked = false;
+
+					var treeListTemplate = function() {
+						var treeListTemplate = {
+					          	dataSource : $.main_layout.fn_getTreeListDataSource([]),
+								filterable: false,
+								resizable: true,
+					            //sortable: true,
+					            selectable: true,
+					            scrollable: true,
+					            noRecords: false,
+					            editable: {
+					            	move: false
+					            },
+								columns: [
+									{
+										field: "name1",
+										title: mint.label.getLabel('lb-1014'),
+										headerAttributes: hCSSCenter, attributes: aCSSLeft,
+										width: "150px", expandable: false, locked: locked,
+									},
+									{
+										field: "name2",
+										title: mint.label.getLabel('lb-1015'),
+										headerAttributes: hCSSCenter, attributes : aCSSCenter,
+										width: "150px", locked: locked,
+									},
+									{
+										field: "typeNm",
+										title:  mint.label.getLabel('lb-48'),
+										headerAttributes: hCSSCenter, attributes: aCSSCenter,
+										editor : function(container, options) {
+											mint.ui.gridEditorFieldTypeComboBox(container, options, '$.main_layout.fn_fieldTypeCheck');
+										},
+										width: "90px", locked: locked,
+									},
+
+									{
+										field: "length",
+										title: mint.label.getLabel('lb-1012'),
+										headerAttributes: hCSSCenter, attributes: aCSSCenter,
+										width: "80px",
+									},
+									{
+										field: "offset",
+										title: mint.label.getLabel('lb-1016'),
+										headerAttributes: hCSSCenter, attributes: aCSSCenter,
+										width: "80px",
+										hidden:true
+									},
+
+									{ field : "seq", hidden : true },
+									{ field : "type", hidden : true },
+									{ field : "typeCd", hidden : true },
+									{ field : "encryptType", hidden : true },
+									{ field : "justify", hidden : true },
+									{ field : "dataFieldId", hidden : true },
+									{ field : "fieldSetId", hidden : true },
+									{ field : "dataSetId", hidden : true },
+									{ field : "id", hidden : true },
+
+								],
+								beforeEdit: function(e) {
+								},
+								edit: function(e) {
+									e.container.find("button[class*='k-button']").each(function(){
+										var command = $(this).data('command');
+										if( command === 'update' || command === 'canceledit' ) {
+											var span = $(this).find('span')[0];
+											$(this).addClass('mint-i-btn');
+											$(this).html(span);
+										}
+									});
+								},
+	 							change: function(e) {
+								},
+								collapse: function(e) {
+									e.preventDefault();
+								},
+								dataBound: function (e) {
+									//-----------------------------------------------------------------------
+									// ROW / COL CSS 처리
+									//-----------------------------------------------------------------------
+									var items = e.sender.dataItems();
+									if( items.length > 0 ) {
+										for(var i = 0; i < items.length; i++ ) {
+											var tr = e.sender.wrapper.find("tr[data-uid='" + items[i].uid + "']:first");
+											tr.attr('data-offset', items[i].id);
+											tr.attr('data-name', items[i].Name);
+											$(tr).data('item', $.main_layout.fn_getTreeListItemObject(items[i], '1'));
+										}
+									}
+
+									mint.ui.gridVerticalScrollBar(e);
+	 							},
+							}
+						return treeListTemplate;
+					};
+
+
+					$(".mappingSource").kendoTreeList(treeListTemplate());
+					$(".mappingTarget").kendoTreeList(treeListTemplate());
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_initLayoutTreeList"});
+				}
+			},//end fn_initLayoutTreeList()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListItemObject
+			//-----------------------------------------------------------------------
+			fn_getTreeListItemObject : function(item, ioType) {
+				try {
+					var itemObject = {
+						objectType: 'DataMapItemField',
+						dataSetId: item.dataSetId,
+						dataFieldId: item.dataFieldId,
+						seq: item.seq,
+						mapId: '',
+						mapItemId: '',
+						ioType: ioType
+					};
+
+					return itemObject;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getTreeListItemObject"});
+				}
+			},//end fn_getTreeListItemObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListDataSource
+			//-----------------------------------------------------------------------
+			fn_getTreeListDataSource : function(jsonData) {
+				try {
+					var	dataSource = new kendo.data.TreeListDataSource({
+							data: jsonData,
+						    schema: {
+						    	model: $.main_layout.fn_getTreeListModel()
+						    },
+						});
+					return dataSource;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getTreeListDataSource"});
+				}
+			},//end fn_getTreeListDataSource()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListModel
+			//-----------------------------------------------------------------------
+			fn_getTreeListModel : function() {
+				try {
+					var model = {
+						id: "id",
+						parentId: "parentId",
+	            		fields: {
+	            			objectType: {type: "string", editable:false, nullable:false, defaultValue: "DataField"},
+	            			id: {type: "string", editable:true, nullable: false},
+	            			parentId: {type: "string", editable:true, nullable: true},
+	            			dataSetId:   {type: "string", editable:false, nullable: false, defaultValue: ""},
+	            			dataFieldId: {type: "string", editable:false, nullable: false, defaultValue: ""},
+	            			fieldSetId:  {type: "string", editable:false, nullable: true, defaultValue: ""},
+	            			seq:         {type: "string", editable: false, nullable: false, defaultValue: ""},
+		            		name1:       {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		name2:       {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		cd:          {type: "string", editable: false, nullable: true, defaultValue: ""},
+		            		type:        {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		typeCd:      {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		typeNm:      {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		offset:      {type: "number", validation: { required: true, min: 0, step: 1, format: 'n0', decimals: 1 } , editable: true, nullable: false, defaultValue: 0},
+	            			length:      {type: "number", validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: 0},
+	            			encryptType : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			encryptTypeNm : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			isLengthField : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatCount : {type: "number", validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: 0},
+	            			hasRepeatCountField : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatDataSetId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatFieldId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			defaultValue: {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			justify : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			justifyNm : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			padding : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			regDate : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			regId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			modDate : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			modId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            		},
+	            		expanded: true
+					};
+
+					var TreeListModel = new kendo.data.TreeListModel.define(model);
+					return TreeListModel;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getTreeListModel"});
+				}
+			}, //end fn_getTreeListModel()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadInterface
+			//-----------------------------------------------------------------------
+			fn_loadInterface : function() {
+				try {
+					mint.common.setScreenParam('callback', '$.main_detail.fn_loadInterface');
+					mint.common.searchPopup('../sub-co/CO-01-00-008.html','srchInterface');
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadInterface"});
+				}
+
+			}, // end fn_loadInterface
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLayout
+			// - source/target 레이아웃만 설정시
+			//-----------------------------------------------------------------------
+			fn_loadLayout : function(caller) {
+				try {
+					mint.common.setScreenParam("caller", caller);
+					mint.common.setScreenParam('callback', '$.main_layout.fn_loadLayoutCallback');
+					mint.common.searchPopup('../sub-an/AN-06-02-001.html','AN-06-02-001');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_btnDataSetSearchClickEvent"});
+				}
+			},//end fn_loadLayout()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLayoutCallback( callback )
+			//-----------------------------------------------------------------------
+			fn_loadLayoutCallback : function(selectedItem) {
+				try {
+					if( !mint.common.isEmpty(selectedItem) ) {
+						var caller = mint.common.getScreenParam('caller');
+						mint.common.removeScreenParam('caller');
+
+						var responseData = {
+							mapData: {mapId: '', name: '', cd: '', dataMapItemList: []},
+							srcDataSet: caller === 'both' ? selectedItem : (caller === 'source' ? selectedItem : null),
+							tagDataSet: caller === 'both' ? selectedItem : (caller === 'target' ? selectedItem : null)
+						};
+
+						$.main_layout.fn_setLayoutBinding(responseData, (caller === 'both' ? null : caller));
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadLayoutCallback"});
+				}
+			},//end fn_loadLayoutCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLayoutMapping
+			//-----------------------------------------------------------------------
+			fn_loadLayoutMapping : function() {
+				try {
+					mint.common.setScreenParam('callback', '$.main_layout.fn_loadLayoutMappingCallback');
+					mint.common.searchPopup('../sub-an/AN-06-02-002.html','AN-06-02-002');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadLayoutMapping"});
+				}
+			},//end fn_loadLayoutMapping()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLayoutMappingCallback( callback )
+			// - source/target mapping 정보로 레이아웃 설정시
+			//-----------------------------------------------------------------------
+			fn_loadLayoutMappingCallback : function(selectedItem) {
+				try {
+		      		if( !mint.common.isEmpty( selectedItem.mapId ) ) {
+						mint.callService(null, 'AN-06-01-002', 'REST-R02-AN-06-01',
+							function(responseData) {
+								$.main_layout.fn_setLayoutBinding(responseData, null);
+							},
+							{
+						    	errorCall : true,
+						    	params : {mapId : selectedItem.mapId}
+						    }
+						);
+		      		}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_loadLayoutMappingCallback"});
+				}
+			},//end fn_loadLayoutMappingCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: (1) fn_setLayoutBinding
+			// - 레이이웃 선처리
+			//-----------------------------------------------------------------------
+			fn_setLayoutBinding : function(responseData, caller) {
+				try {
+		      		if( !mint.common.isEmpty(responseData) ) {
+		      			{
+			      			responseData.mapData = mint.common.isEmpty(responseData.mapData) ? $.main_layout.fn_getLayoutModel('map') : responseData.mapData;
+			      			responseData.srcDataSet = mint.common.isEmpty(responseData.srcDataSet) ? $.main_layout.fn_getLayoutModel('layout') : responseData.srcDataSet;
+			      			responseData.tagDataSet = mint.common.isEmpty(responseData.tagDataSet) ? $.main_layout.fn_getLayoutModel('layout') : responseData.tagDataSet;
+		      			}
+						//-----------------------------------------------------------------------
+						// systemDivisionGrid binging
+						//-----------------------------------------------------------------------
+						var flag = $.main_layout.fn_setLayoutBindingPreCheck(responseData);
+
+						//-----------------------------------------------------------------------
+						// layoutMapping binging
+						//-----------------------------------------------------------------------
+						if( flag ) {
+							$.main_layout.fn_setLayoutMapping(responseData, caller);
+						}
+
+		      		}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setLayoutBinding"});
+				}
+			},//end fn_setLayoutBinding()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getLayoutModel
+			//-----------------------------------------------------------------------
+			fn_getLayoutModel : function(layoutType) {
+				try {
+
+					var MapModel = {
+						mapId: '',
+						name: '',
+						cd: '',
+						dataMapItemList: []
+					};
+
+					var DataSetModel = {
+						dataSetId: '',
+						cd: '',
+						name1: '',
+						name2: '',
+						dataFieldList: []
+					};
+
+					var LayoutModel = {
+						mapData: MapModel,
+						srcDataSet: DataSetModel,
+						tagDataSet: DataSetModel
+					};
+
+					if(layoutType == 'map') {
+						return MapModel;
+					} if(layoutType == 'layout') {
+						return DataSetModel;
+					} else {
+						return LayoutModel;
+					}
+
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getLayoutModel"});
+				}
+			},//end fn_getLayoutModel()
+
+			//-----------------------------------------------------------------------
+			// Description :: (2) fn_setLayoutBindingPreCheck
+			// - 디비전 그리드에 레이아웃 바인딩
+			// - 디비전 그리드에 설정된 레이아웃이 실제 반영, 나머지는 모두 Display 용도
+			//-----------------------------------------------------------------------
+			fn_setLayoutBindingPreCheck : function(responseData, caller) {
+				try {
+
+					if( !mint.common.isEmpty(responseData) ) {
+
+						var selectedIoType = $('input:radio[name="rd-iotype"]:checked').val();
+						var systemDivisionGrid = $('#gd-system-division').data('kendoGrid');
+						var systemDivisionItem = systemDivisionGrid.dataItem(systemDivisionGrid.select());
+
+
+						if( systemDivisionItem ) {
+
+							var mapData = responseData.mapData;
+							var srcDataSet = responseData.srcDataSet;
+							var tagDataSet = responseData.tagDataSet;
+
+							var modelObject = $('.mapping').data('mintModel');
+							modelObject.setSelectedItem(selectedIoType, systemDivisionItem);
+
+							//-----------------------------------------------------------------------
+							// source layout binding & check
+							//-----------------------------------------------------------------------
+							if( !mint.common.isEmpty(srcDataSet.dataSetId) ) {
+								if(!modelObject.setSrcMsgModel(srcDataSet, mapData))
+									return false;
+							}
+
+							//-----------------------------------------------------------------------
+							// target layout binding & check
+							//-----------------------------------------------------------------------
+							if( !mint.common.isEmpty(tagDataSet.dataSetId) ) {
+								if(!modelObject.setTagMsgModel(tagDataSet, mapData))
+									return false;
+							}
+
+							modelObject.setMapModel(mapData);
+						}// end systemDivisionItem check
+					}// end responseData check
+					return true;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setLayoutBindingPreCheck"});
+				}
+			},//end fn_setLayoutBindingPreCheck()
+
+			//-----------------------------------------------------------------------
+			// Description :: (3) fn_setLayoutMapping
+			// - Layout Layer :: 맵핑 정보 binding
+			//-----------------------------------------------------------------------
+			fn_setLayoutMapping : function(responseData, caller) {
+				try {
+
+					if( !mint.common.isEmpty(responseData) ) {
+						//-----------------------------------------------------------------------
+						// init
+						//-----------------------------------------------------------------------
+						var mapData = responseData.mapData;
+						var srcDataSet = responseData.srcDataSet;
+						var tagDataSet = responseData.tagDataSet;
+
+						var srcDiv = $('.mappingSource');
+						var tagDiv = $('.mappingTarget');
+
+						var srcTreeList = srcDiv.data('kendoTreeList');
+						var tagTreeList = tagDiv.data('kendoTreeList');
+
+						//-----------------------------------------------------------------------
+						// Source/Target Layout
+						//-----------------------------------------------------------------------
+						if( caller ) {
+							$.main_layout.fn_setLayout(caller, caller == 'source' ? srcDataSet : tagDataSet);
+						} else {
+							$.main_layout.fn_setLayout('source', srcDataSet);
+							$.main_layout.fn_setLayout('target', tagDataSet);
+						}
+
+						//-----------------------------------------------------------------------
+						// Mapping Basic Info
+						//-----------------------------------------------------------------------
+						$('#layout-mapId').val( mapData.mapId );
+						$('#layout-mapping-nm').val( mapData.name );
+						$('#layout-mapping-cd').val( mapData.cd );
+
+						//-----------------------------------------------------------------------
+						// Mapping Item Setting
+						//-----------------------------------------------------------------------
+						var mappingObject = mapData.dataMapItemList;
+						mappingObject.forEach(function(value, index, array) {
+							value.items.filter(function(v, i, a) {
+								if( v.ioType === "0" ) {
+									value.src = v.dataFieldId;
+								} else if( v.ioType === "1") {
+									value.tag = v.dataFieldId;
+								}
+							});
+						});
+
+						//-----------------------------------------------------------------------
+						// Mapping Draw
+						//-----------------------------------------------------------------------
+						var input = {
+							Lists: [
+								{
+									"name": "Source Fields",
+									"list" : []
+								},
+								{
+									"name": "Target Fields",
+									"list" : [],
+									"mandatories" :[]
+								}
+							],
+							existingLinks: mappingObject
+						};
+
+						$(".mapping").mintMapper(input, $.main_layout.fn_getMapperOptions());
+
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setLayoutMapping"});
+				}
+			},//end fn_setLayoutMapping()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getMapperOptions
+			//-----------------------------------------------------------------------
+			fn_getMapperOptions : function() {
+				try {
+					var mapperOptions = {
+						associationMode: 'manyToMany', // oneToOne, manyToMany
+						lineStyle: 'square-ends',
+						buttonErase: 'Erase Links',
+						addAttributes: {mapId: '', mapItemId: '', seq: 0, mapCtrlType: '0'},
+						isDisabled: true
+					}
+
+					return mapperOptions;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_getMapperOptions"});
+				}
+			},//end fn_getMapperOptions()
+
+			//-----------------------------------------------------------------------
+			// Description :: (4) fn_setLayout
+			// - Layout Layer :: source/target 간 layout 바인딩
+			//-----------------------------------------------------------------------
+			fn_setLayout : function(caller, dataSetItem) {
+				try {
+
+					if(caller == 'source') {
+						var bindingTreeList = $('.mappingSource').data("kendoTreeList");
+					} else {
+						var bindingTreeList = $('.mappingTarget').data("kendoTreeList");
+					}
+
+					//-----------------------------------------------------------------------
+					// Layout(DataSet) 기본 정보
+					//-----------------------------------------------------------------------
+					$('.layout-' + caller + '-dataSetId').val(dataSetItem.dataSetId);
+					$('.layout-' + caller + '-dataSetCd').val(dataSetItem.cd);
+					$('.layout-' + caller + '-dataSetNm1').val(dataSetItem.name1);
+					$('.layout-' + caller + '-dataSetNm2').val(dataSetItem.name2);
+
+					//-----------------------------------------------------------------------
+					// Layout(DataField) List
+					//-----------------------------------------------------------------------
+					bindingTreeList.setDataSource($.main_layout.fn_getTreeListDataSource(dataSetItem.dataFieldList));
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_setLayout"});
+				}
+			},//end fn_setLayout()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_systemDivisionDetail
+			//-----------------------------------------------------------------------
+			fn_systemDivisionDetail: function() {
+				try {
+					var selectedIoType = $('input:radio[name="rd-iotype"]:checked').val();
+					var systemDivisionGrid = $('#gd-system-division').data('kendoGrid');
+					var systemDivisionItem = systemDivisionGrid.dataItem(systemDivisionGrid.select());
+					if(mint.common.isEmpty(systemDivisionItem)) {
+						systemDivisionGrid.select('tr:eq(0)');
+						systemDivisionItem = systemDivisionGrid.dataItem(systemDivisionGrid.select());
+					}
+
+					//-----------------------------------------------------------------------
+					// left/rigth-title Display
+					//-----------------------------------------------------------------------
+					{
+						var sourceBg = '#f0f8ff';//#e6e6fa
+						var targetBg = '#faebd7';//#dcdcdc
+
+						//var sourceBg = '#e6e6fa';//#
+						//var targetBg = '#dcdcdc';//#dcdcdc
+
+
+						if(selectedIoType == 0) {
+							$('.layout-left-title').text(systemDivisionItem.sourceSystemNm);
+							$('.layout-right-title').text(systemDivisionItem.targetSystemNm);
+
+							$('#layout-left-org-nm').val( systemDivisionItem.sourceOrgNm );
+							$('#layout-left-system-nm').val( systemDivisionItem.sourceSystemNm );
+							$('#layout-left-resource-nm').val( systemDivisionItem.sourceResourceNm );
+							$('#layout-left-system-id').val( systemDivisionItem.sourceSystemId );
+
+							$('#layout-right-org-nm').val( systemDivisionItem.targetOrgNm );
+							$('#layout-right-system-nm').val( systemDivisionItem.targetSystemNm );
+							$('#layout-right-resource-nm').val( systemDivisionItem.targetResourceNm );
+							$('#layout-right-system-id').val( systemDivisionItem.targetSystemId );
+
+							$('.layout-left-css').css('background-color', sourceBg);
+							$('.layout-right-css').css('background-color', targetBg);
+						}
+
+						if(selectedIoType == 1) {
+							$('.layout-left-title').text(systemDivisionItem.targetSystemNm);
+							$('.layout-right-title').text(systemDivisionItem.sourceSystemNm);
+
+							$('#layout-left-org-nm').val( systemDivisionItem.targetOrgNm );
+							$('#layout-left-system-nm').val( systemDivisionItem.targetSystemNm );
+							$('#layout-left-resource-nm').val( systemDivisionItem.targetResourceNm );
+							$('#layout-left-system-id').val( systemDivisionItem.targetSystemId );
+
+							$('#layout-right-org-nm').val( systemDivisionItem.sourceOrgNm );
+							$('#layout-right-system-nm').val( systemDivisionItem.sourceSystemNm );
+							$('#layout-right-resource-nm').val( systemDivisionItem.sourceResourceNm );
+							$('#layout-right-system-id').val( systemDivisionItem.sourceSystemId );
+
+							$('.layout-left-css').css('background-color', targetBg);
+							$('.layout-right-css').css('background-color', sourceBg);
+						}
+					}
+
+
+					//-----------------------------------------------------------------------
+					// 시스템 기본정보 Display
+					//-----------------------------------------------------------------------
+					{
+						$('#layout-source-org-nm').val( systemDivisionItem.sourceOrgNm );
+						$('#layout-source-system-nm').val( systemDivisionItem.sourceSystemNm );
+						$('#layout-source-resource-nm').val( systemDivisionItem.sourceResourceNm );
+						$('#layout-source-system-id').val( systemDivisionItem.sourceSystemId );
+
+						$('#layout-target-org-nm').val( systemDivisionItem.targetOrgNm );
+						$('#layout-target-system-nm').val( systemDivisionItem.targetSystemNm );
+						$('#layout-target-resource-nm').val( systemDivisionItem.targetResourceNm );
+						$('#layout-target-system-id').val( systemDivisionItem.targetSystemId );
+					}
+
+					var modelObject = $('.mapping').data('mintModel');
+					modelObject.setSelectedItem(selectedIoType, systemDivisionItem);
+
+					if(  mint.common.isEmpty(modelObject) ) {
+						//비어있으면, 서비스호출로 불러온다
+					}
+
+					var layoutItem = modelObject.getLayoutItem();
+
+					$.main_layout.fn_setLayoutMapping(layoutItem, null);
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_systemDivisionDetail"});
+				}
+			},// end fn_systemDivisionDetail
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_layout_init
+			//-----------------------------------------------------------------------
+			fn_layout_init : function() {
+				try {
+					$.main_layout.fn_loadLocalModelObject(true);
+					$.main_layout.fn_systemDivisionDetail();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_layout_init"});
+				}
+			},//end fn_layout_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_layout_save
+			//-----------------------------------------------------------------------
+			fn_layout_save : function() {
+				try {
+
+					var modelObject = $('.mapping').data('mintModel').getModelObject();
+					var _modelObject = $.main_layout._modelObject;
+					console.log(modelObject);
+					console.log(_modelObject);
+
+					if( modelObject ) {
+						var appModelList = modelObject.appModelList;
+						var _appModels = _modelObject.appModels;
+
+						var isApply = false;
+						appModelList.forEach(function(v, i, a) {
+							_appModels.forEach(function(_v, _i, _a) {
+								if(v.systemId == _v.systemId && v.systemType == _v.nodeType && v.seq == _v.seq) {
+									//-----------------------------------------------------------------------
+									// Copy Layout
+									//-----------------------------------------------------------------------
+									var msgModelList = v.msgModelList;
+									_v.msgs = [];
+									msgModelList.forEach(function(vv, ii, aa) {
+										_v.msgs.push({
+											interfaceMid: vv.interfaceMid,
+											appMid: vv.appMid,
+											mid: vv.msgMid,
+											name: vv.msgModelNm,
+											dataSetId: vv.dataSetId,
+											type: vv.msgIoType,
+											comments: vv.comments,
+											regDate: '',
+											regId: '',
+											dataSet: vv.dataSet
+										});
+										isApply = true;
+									});
+									//-----------------------------------------------------------------------
+									// Copy Mapping
+									//-----------------------------------------------------------------------
+									var mapModelList = v.mapModelList;
+									_v.mappings = [];
+									mapModelList.forEach(function(vv, ii, aa) {
+										_v.mappings.push({
+											interfaceMid: vv.interfaceMid,
+											appMid: vv.appMid,
+											mid: vv.mapMid,
+											name: vv.mapModelNm,
+											mapId: vv.mapId,
+											type: vv.mapIoType,
+											comments: vv.comments,
+											regDate: '',
+											regId: '',
+											dataMap: vv.dataMap
+										});
+									});
+								}
+							});
+						});
+
+
+						//-----------------------------------------------------------------------
+						// CallBack
+						//-----------------------------------------------------------------------
+						if( !isApply ) {
+							mint.common.alert('CW00003', 'Layout');
+							return;
+						}
+						var fn_callback = mint.common.fn_callback($.main_layout.callback);
+						if( fn_callback ) {
+							var isModify = true;
+							fn_callback(_modelObject, isModify);
+						} else {
+							mint.common.alert('CE90000');
+							return;
+						}
+
+						//-----------------------------------------------------------------------
+						// 저장(임시)
+						//-----------------------------------------------------------------------
+						/*
+						mint.callService(modelObject.getModelObject(), 'AN-06-01-002', 'REST-U01-AN-06-03',
+							function(responseData) {
+								//console.log(responseData);
+							},
+							{
+							   	errorCall : true,
+							}
+						);
+						*/
+					}
+
+					//-----------------------------------------------------------------------
+					// Close()
+					//-----------------------------------------------------------------------
+					$.main_layout.fn_mainWindowClose();
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_layout.fn_layout_save"});
+				}
+			},//end fn_layout_save()
+
+		}// end main
+
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+	$('#load-mapping').on('click', function(e) {
+		$.main_layout.fn_loadLayoutMapping();
+	});
+
+	$('#load-source-layout').on('click', function(e) {
+		$.main_layout.fn_loadLayout('source');
+	});
+
+	$('#load-target-layout').on('click', function(e) {
+		$.main_layout.fn_loadLayout('target');
+	});
+
+	$('#gd-system-division').on('click', "tr.k-state-selected", function(e) {
+		$.main_layout.fn_systemDivisionDetail();
+	});
+
+	$('.btn-layout-init').on('click', function(e) {
+		$.main_layout.fn_layout_init();
+	});
+
+	$('.btn-layout-save').on('click', function(e) {
+		$.main_layout.fn_layout_save();
+	});
+
+	$('.btn-layout-cancel').on('click', function(e) {
+		$.main_layout.fn_mainWindowClose();
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main_layout.fn_init();
+	mint.label.attachLabel(null);
+	//mint.ui.draggablePannels();
+
+});//end document.ready()
+</script>

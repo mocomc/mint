@@ -1,0 +1,211 @@
+<!--
+	Screen ID : CO-01-00-016
+	Screen NM : 비밀번호 변경
+	TODO
+	  1) 라벨정리할것
+ -->
+
+<div class="modal inmodal-original" id="CO-01-00-016" tabindex="-1" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog-original">
+		<div class="modal-content-original animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					style="padding: 15px;">
+					<span aria-hidden="true">&times;</span> <span class="sr-only">Close</span>
+				</button>
+				<div>
+					<h2 class="popupTitle">패스워드 변경</h2>
+				</div>
+			</div>
+			<div class="modal-body-original">
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<div>
+							<div>* 일정 기간 이내에 패스워드가 변경되어야 합니다.</div>
+							<hr class="hr-space">
+							<div class="form-group-original">
+								<input id="value" type="password" class="k-textbox" style="width: 60%;" placeholder="현재 암호" required="" value="">
+							</div>
+							<hr class="hr-space">
+							<div class="form-group-original">
+								<input id="newValue" type="password" class="k-textbox" style="width: 60%;" placeholder="새 암호" required="" value="">
+							</div>
+							<hr class="hr-space">
+							<div class="form-group-original">
+								<input id="conValue" type="password" class="k-textbox" style="width: 60%;" placeholder="암호 확인" required="" value="">
+							</div>
+
+							<div>* 문자, 숫자, 특수문자로 이루어진 최소길이 8자 이상</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer-original">
+					<button type="submit" class="btn btn-success btn-passwds-change" ><i class="fa fa-check"></i>변경</button>
+					<button type="button" class="btn btn-danger btn-passwds-cancel" data-dismiss="modal"><i class="fa fa-ban"></i>취소</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "CO-01-00-016";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			userId : '',
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					$.sub.fn_initCallback();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//TODO: Label 정리할것.
+					var popupTitle = '패스워드 변경'; //mint.label.getLabel('lb-xxx');
+					$('.popupTitle').text(popupTitle);
+					//-----------------------------------------------------------------------
+					// UserID Set
+					//-----------------------------------------------------------------------
+					{
+						$.sub.userId = mint.common.getScreenParam('userId');
+						// 세션이 있을경우, 세션정보의 ID 사용
+					    if(!mint.common.isEmpty(mint.session)){
+					    	$.sub.userId = mint.session.getUserId();
+					    }
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description : 패스워드 변경
+			//-----------------------------------------------------------------------
+			fn_changePassword : function( callback ) {
+				try {
+
+					var requestObject = {
+						ObjectType : "Map",
+						userId : $.sub.userId,
+						value : $('#value').val(),
+						newValue : $('#newValue').val(),
+						conValue : $('#conValue').val()
+					}
+
+					//패스워드 변경 서비스
+					mint.callService(requestObject, screenName, 'REST-U01-CO-04-03',
+						function (jsonData) {
+							var fn_callback = mint.common.fn_callback('$.sub.fn_changePasswordCallback');
+							if( fn_callback ){
+								fn_callback( requestObject );
+							}
+						},{errorCall : false}
+					);
+
+					// Parameter Clear
+					mint.common.removeScreenParam('userId');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_changePassword"});
+
+				}
+			},//end fn_changePassword
+
+			//-----------------------------------------------------------------------
+			// Description :: changePassword 콜백
+			//   - 패스워드가 변경되면 로그인 서비스 호출한다
+			//-----------------------------------------------------------------------
+			fn_changePasswordCallback : function( params ) {
+				try {
+					var callPage = '../main/index.jsp' + location.search;
+					//-----------------------------------------------------------------------
+					// 로그인 안되어있는 상태일 때 로그인 처리
+					//-----------------------------------------------------------------------
+					if( mint.common.isEmpty(mint.session) ){
+
+						var requestObject = {
+							objectType : "LoginInfo",
+							userId : params.userId,
+							password : params.newValue
+						};
+
+						mint.callService(requestObject, 'CO-00-00-003', 'REST-S01-CO-00-00-003',
+							function(jsonData) {
+								window.location = callPage;
+							}, { errorCall : false }
+						);
+					} else {
+						window.location = callPage;
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_changePasswordCallback"});
+				}
+			},//end fn_changePasswordCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDown : function() {
+				try {
+					if(event.keyCode == 13) {
+						$.sub.fn_changePassword();
+			     	}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_onKeyDown"});
+				}
+			},//end fn_onKeyDown()
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+	//-----------------------------------------------------------------------
+	// Description :: EnterKey Event 설정
+	//-----------------------------------------------------------------------
+	$("#conValue").keydown($.sub.fn_onKeyDown);
+
+	//-----------------------------------------------------------------------
+	// Description :: 변경 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-passwds-change').on('click', function(e) {
+		try{
+			$.sub.fn_changePassword();
+		} catch( e ){
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btnChange.click"});
+		}
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>

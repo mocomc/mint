@@ -1,0 +1,461 @@
+﻿<!--
+	Screen ID : SU-01-09-001
+	Screen NM : 공통코드
+	[변경 이력]
+	* 20170614-001
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim whoana">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-867">공통코드편집</lb></h2>
+	    <ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="lb-867">공통코드편집</lb></strong></li>
+	    </ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" ></div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="col-lg-12">
+		<div class="tabs-container">
+			<div class="tabs-lefts">
+				<ul id="tab-commoncode-info" class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#code-tab01" class="dataPrDirGrid"><lb class="lb-3017">DATA처리방향</lb></a></li>
+					<li class=""><a data-toggle="tab" href="#code-tab02" class="dataPrMethodGrid"><lb class="lb-3018">DATA처리방식</lb></a></li>
+					<li class=""><a data-toggle="tab" href="#code-tab03" class="appPrMethodGrid"><lb class="lb-3019">APP처리방식</lb></a></li>
+					<li class=""><a data-toggle="tab" href="#code-tab04" class="dataFrequencyGrid"><lb class="lb-3021">발생주기</lb></a></li>
+					<li class=""><a data-toggle="tab" href="#code-tab05" class="resourceGrid"><lb class="lb-3038">리소스</lb></a></li>
+				</ul>
+				<div class="tab-content">
+					<!-- 기본정보 -->
+					<div id="code-tab01" class="tab-pane active">
+						<div class="panel-body">
+							<div id="dataPrDir-grid"></div>
+						</div>
+					</div>
+
+					<div id="code-tab02" class="tab-pane">
+						<div class="panel-body">
+							<div id="dataPrMethod-grid"></div>
+						</div>
+					</div>
+
+					<div id="code-tab03" class="tab-pane">
+						<div class="panel-body">
+							<div id="appPrMethod-grid"></div>
+						</div>
+					</div>
+					<div id="code-tab04" class="tab-pane">
+						<div class="panel-body">
+							<div id="dataFrequency-grid"></div>
+						</div>
+					</div>
+					<div id="code-tab05" class="tab-pane">
+						<div class="panel-body">
+							<div id="resource-grid"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/x-kendo-template" id="template-001">
+	<div>
+		<span class="appAdd" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;">
+			<i class='fa fa-plus-square'></i> <lb class="template-001-change"></lb></span>
+		</span>
+	</div>
+</script>
+<script>
+	$(document).ready(function() {
+	    //=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main/main_detail, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "SU-01-09-001";
+	    targetGridId = "dataPrDir-grid";
+
+	    $.extend({
+	        main : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+				selectedItem: '',
+				contextSelectedItem: '',
+
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_initGrid("dataPrDir-grid");
+						$.main.fn_initGrid("dataPrMethod-grid");
+						$.main.fn_initGrid("appPrMethod-grid");
+						$.main.fn_initGrid("dataFrequency-grid");
+						$.main.fn_initGrid("resource-grid");
+						$.main.fn_searchGridList("IM", "01");
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid 초기화
+				//-----------------------------------------------------------------------
+				fn_initGrid : function(gridId) {
+					try {
+
+						$("#"+gridId).kendoGrid({
+		                    dataSource : {
+			                	data : []
+			                	, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+		                    },
+		                    toolbar : kendo.template( $("#template-001").html() ),
+		                    editable: "inline",
+						    width  : "100%",
+							selectable: "row",
+							resizable: true,
+		                    sortable : true,
+		                    save : function(e) {
+								var dataItem = e.model;
+								$.main.fn_saveDataItem(dataItem);
+				            },
+							pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesXS()
+						    	, buttonCount 	: 5
+						    	, input : true
+							},
+		                    columns : [
+
+		   							{
+		   								field : "nm",
+		   								title : mint.label.getLabel('lb-211'),
+		   								headerAttributes : {
+		   									style : "text-align: center; vertical-align:middle;"
+		   								},
+		   								attributes : {
+		   									style : "text-align: center; white-space: nowrap;"
+		   								}
+		   							},
+		   							{
+		   							    field : "comments",
+		   							    title : mint.label.getLabel('lb-398'),
+		   							    headerAttributes : {
+		   							        style : "text-align: center; vertical-align:middle;"
+		   							    },
+		   							    attributes : {
+		   							        style : "text-align: center; white-space: nowrap;"
+		   							    }
+		   							}
+		   							, {
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										},
+										command : [
+												{
+													name  : "edit",
+												  	text  :
+													{
+														edit   : mint.label.getLabel('lb-342'),
+													  	update : mint.label.getLabel('lb-310'),
+													  	cancel : mint.label.getLabel('lb-143')
+													},
+													click : function(e) {
+														var row = this.tbody.find("tr[data-role='editable']");
+														this.select(row);
+													}
+												},
+											  	{
+													name  : "deletes",
+												  	text  : "<span class='k-icon k-i-close'></span>" + mint.label.getLabel('lb-343'),
+												  	click : function(e) {
+														var row = $(e.target).closest("tr");
+														var dataItem = this.dataItem(row);
+														if(dataItem.childCnt > 0) {
+															return;
+														}
+														this.select(row);
+														$.main.fn_deleteDataItem(dataItem);
+												    }
+												}
+										]
+									},
+   									{field : "level1",hidden:true},
+   									{field : "level2",hidden:true},
+   									{field : "cd",hidden:true},
+   									{field : "nm2",hidden:true},
+   									{field : "level1Nm",hidden:true},
+   									{field : "level2Nm",hidden:true}
+		   	                    ]
+						    , dataBound: function (e) {
+						    	if(0 == $("#"+gridId).data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height());
+
+						    		$("#"+gridId).children(".k-grid-content").height(gridHeight /2.5);
+						    	} else {
+						    		$("#"+gridId).children(".k-grid-content").height('auto');
+						    	}
+						    }
+				        }).data("kendoGrid");
+						$('.template-001-change').text(mint.label.getLabel('lb-370'));
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+					}
+				},//end fn_initGrid
+
+				//-----------------------------------------------------------------------
+				// Description ::  프로그램 검색
+				//-----------------------------------------------------------------------
+				fn_searchGridList : function(param1, param2) {
+					try {
+						var requestObject = new Object();
+						mint.callService(requestObject, screenName, 'REST-R01-CO-02-00-005', '$.main.fn_setGridData',{errorCall : true, params : {level1 : param1, level2 : param2}, includeRequest: true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_searchGridList"});
+					}
+
+				},//end fn_searchGridList()
+
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 데이터 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function(requestObject, jsonObject) {
+					try {
+
+						var dataSource = new kendo.data.DataSource({
+						    data: jsonObject
+							, page:1
+							, pageSize:mint.ui.getPageSizesXS({'currentPage' : true})
+						});
+						$("#"+targetGridId).data('kendoGrid').setDataSource(dataSource);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+
+				fn_saveDataItem : function(dataItem) {
+					try {
+
+						var requestObject = new Object();
+						requestObject.objectType = 'CommonCode';
+
+						requestObject.nm     = dataItem.nm;
+						requestObject.nm2     = dataItem.nm;
+						requestObject.comments   = dataItem.comments;
+						requestObject.regDate    = mint.common.getStartTime();
+						requestObject.regId      = mint.session.getUserId();
+						requestObject.modDate    = mint.common.getStartTime();
+						requestObject.modId      = mint.session.getUserId();
+
+						if(dataItem.nm == null || dataItem.nm == ''){
+							mint.common.alert('CW00001', mint.label.getLabel('lb-211'));
+							return;
+						}
+						if( mint.common.isEmpty(dataItem.cd) ) {
+
+							if(targetGridId == "dataPrDir-grid") {
+								requestObject.level1 = "IM";
+								requestObject.level2 = "01";
+								requestObject.level1Nm = "개발";
+								requestObject.level2Nm = "DATA처리흐름";
+							} else if(targetGridId == "dataPrMethod-grid") {
+								requestObject.level1 = "IM";
+								requestObject.level2 = "12";
+								requestObject.level1Nm = "개발";
+								requestObject.level2Nm = "DATA처리방식";
+							} else if(targetGridId == "appPrMethod-grid") {
+								requestObject.level1 = "IM";
+								requestObject.level2 = "02";
+								requestObject.level1Nm = "개발";
+								requestObject.level2Nm = "APP처리방식";
+							} else if(targetGridId == "dataFrequency-grid") {
+								requestObject.level1 = "IM";
+								requestObject.level2 = "03";
+								requestObject.level1Nm = "개발";
+								requestObject.level2Nm = "발생주기";
+							} else if(targetGridId == "resource-grid") {
+								requestObject.level1 = "IM";
+								requestObject.level2 = "04";
+								requestObject.level1Nm = "개발";
+								requestObject.level2Nm = "리소스";
+							}
+
+							//-----------------------------------------------------------------------
+							//신규 등록
+							//-----------------------------------------------------------------------
+							mint.callService(requestObject, screenName, 'REST-C01-CO-02-00-001', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(jsonData) ) {
+									mint.common.alert('CI00101', null); //저장을 완료했습니다.
+									$.main.fn_searchGridList(requestObject.level1, requestObject.level2);
+								}
+							}, { errorCall : true } );
+
+						} else {
+
+							requestObject.level1			= dataItem.level1;
+							requestObject.level2			= dataItem.level2;
+							requestObject.cd				= dataItem.cd;
+
+							//-----------------------------------------------------------------------
+							//수정
+							//-----------------------------------------------------------------------
+							mint.callService(requestObject, screenName, 'REST-U01-CO-02-00-001', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+									mint.common.alert('CI00102', null); //수정을 완료했습니다.
+									$.main.fn_searchGridList(requestObject.level1, requestObject.level2);
+								}
+							}, { errorCall : true } );
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_saveDataItem"});
+					}
+				},//end fn_saveDataItem()
+
+				//-----------------------------------------------------------------------
+				// Description :: dataItem delete
+				//-----------------------------------------------------------------------
+				fn_deleteDataItem : function(dataItem) {
+					try {
+
+						if( mint.common.confirm('CI00003', null) ) {
+							var requestObject = new Object();
+							requestObject.objectType ="CommonCode";
+							requestObject.level1			= dataItem.level1;
+							requestObject.level2			= dataItem.level2;
+							requestObject.cd				= dataItem.cd;
+							requestObject.modDate    = mint.common.getStartTime();
+							requestObject.modId      = mint.session.getUserId();
+							mint.callService(requestObject, screenName, 'REST-D01-CO-02-00-001', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+									mint.common.alert('CI00103', null); //삭제를 완료했습니다.
+									$.main.fn_searchGridList(dataItem.level1, dataItem.level2);
+								}
+							},
+							{
+								errorCall : true,
+								params : { menuId : dataItem.menuId,
+											}
+							});
+
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_deleteDataItem"});
+					}
+				},//end fn_deleteDataItem()
+
+				/* fn_getGridId : function() {
+					try {
+						var tabLen = $("#tab-commoncode-info > li").length;
+						var gridId = "";
+						for(var i=0; i<tabLen; i++) {
+							if(!mint.common.isEmpty($("#tab-commoncode-info > li:eq("+i+")").attr("class"))) {
+								gridId = $("#tab0"+(i+1) + "> div > div").attr("id");
+							}
+						}
+						return gridId;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridId"});
+					}
+				},//end fn_getGridId() */
+	        }
+
+	    });
+
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================
+	    $.main.fn_init();
+	    mint.label.attachLabel(null);
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$('.dataPrDirGrid').on('click', function(e) {
+			targetGridId = "dataPrDir-grid";
+			$.main.fn_searchGridList("IM", "01");
+		});
+
+		$('.dataPrMethodGrid').on('click', function(e) {
+			targetGridId = "dataPrMethod-grid";
+			$.main.fn_searchGridList("IM", "12");
+		});
+
+		$('.appPrMethodGrid').on('click', function(e) {
+			targetGridId = "appPrMethod-grid";
+			$.main.fn_searchGridList("IM", "02");
+		});
+
+		$('.dataFrequencyGrid').on('click', function(e) {
+			targetGridId = "dataFrequency-grid";
+			$.main.fn_searchGridList("IM", "03");
+		});
+
+		$('.resourceGrid').on('click', function(e) {
+			targetGridId = "resource-grid";
+			$.main.fn_searchGridList("IM", "04");
+		});
+
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$('.appAdd').on('click', function(e) {
+			$("#"+targetGridId).data("kendoGrid").addRow();
+		});
+	});
+
+
+</script>
+
+<style>
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr {
+	    cursor : pointer;
+	}
+
+</style>

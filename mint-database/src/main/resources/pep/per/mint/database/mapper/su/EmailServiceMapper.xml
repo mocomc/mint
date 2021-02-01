@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.EmailServiceMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<select id="selectStDateEmailResourceForTracking" resultType="string">
+		select substr(nvl(max(KEY2),to_char(sysdate,'yyyymmddHH24MISS')||'000000'),1,17) from TOP0903
+	</select>
+
+	<resultMap type="EmailResourceForTracking" id="emailResourceForTrackingResultMap">
+		<id property="key1" 				column="MASTERLOG_ID"/>
+		<id property="key2" 				column="MSG_DATETIME"/>
+		<result property="interfaceId" 		column="INTERFACE_ID"/>
+		<result property="integrationId"	column="INTEGRATION_ID"/>
+		<result property="interfaceNm"		column="INTERFACE_NM"/>
+	</resultMap>
+
+
+    <select id="getEmailResourceForTracking" resultMap="emailResourceForTrackingResultMap">
+        select
+            rownum as IDX,
+            a.MASTERLOG_ID,
+		    a.MSG_DATETIME,
+		    c.INTERFACE_ID,
+		    c.INTEGRATION_ID,
+		    nvl(c.INTERFACE_NM,'미식별인터페이스('||b.INTF_ID||')') as INTERFACE_NM
+		  from MASTERLOG a
+          inner join MASTERLOG_ID_MAP b
+             on b.MASTERLOG_ID = a.MASTERLOG_ID
+            and a.MSG_STATUS = '99'
+		    and a.MSG_DATETIME <![CDATA[>=]]> #{stDate}
+            and a.MSG_DATETIME <![CDATA[<=]]> '99991231235959999999'
+            and (a.MASTERLOG_ID, a.MSG_DATETIME) not in (select KEY1, KEY2 from TOP0903 where KEY2 <![CDATA[>=]]> #{stDate} and KEY2 <![CDATA[<=]]> '99991231235959999999')
+        left outer join TAN0201 c
+		     on c.INTEGRATION_ID = b.INTF_ID
+	</select>
+
+    <!--
+	<select id="getEmailResourceForTracking" resultMap="emailResourceForTrackingResultMap">
+		select
+		    a.IDX,
+		    a.MASTERLOG_ID,
+		    a.MSG_DATETIME,
+		    c.INTERFACE_ID,
+		    c.INTEGRATION_ID,
+		    nvl(c.INTERFACE_NM,'미식별인터페이스('||b.INTF_ID||')') as INTERFACE_NM
+		  from (
+		    select
+		        /*+INDEX_ASC(IX_MASTERLOG_MSDT_01)*/
+		        ROWNUM as IDX,
+		        MASTERLOG_ID,
+		        MSG_DATETIME
+		      from MASTERLOG
+		     where MSG_STATUS = '99'
+		       and MSG_DATETIME <![CDATA[>=]]> #{stDate}
+               and MSG_DATETIME <![CDATA[<=]]> '99991231235959999999'
+		    ) a
+		     inner join MASTERLOG_ID_MAP b
+		    on b.MASTERLOG_ID = a.MASTERLOG_ID
+		   and a.IDX <![CDATA[<=]]> #{fetchCount}
+		left outer join TAN0201 c
+		    on c.INTEGRATION_ID = b.INTF_ID
+	</select>
+   -->
+
+    <select id="existEmailResource" resultType="string">
+        select 'true' from TOP0903 where KEY1 = #{key1} and KEY2 = #{key2}
+    </select>
+
+	<resultMap type="Recipient" id="recipientResultMap">
+		<id property="address" 			column="EMAIL_ADDRESS"/>
+		<id property="type" 			column="RECIPIENT_TYPE"/>
+		<result property="userId" 		column="USER_ID"/>
+		<result property="nickName"		column="NICKNAME"/>
+		<result property="regDate"		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate"		column="MOD_DATE"/>
+		<result property="modId"		column="MOD_USER"/>
+		<result property="delYn"		column="DEL_YN"/>
+	</resultMap>
+
+	<select id="getEmailRecipients" parameterType="string" resultMap="recipientResultMap">
+		select
+		     EMAIL_ADDRESS
+		    ,RECIPIENT_TYPE
+		    ,USER_ID
+		    ,NICKNAME
+		    ,REG_DATE
+		    ,REG_USER
+		    ,MOD_DATE
+		    ,MOD_USER
+		    ,DEL_YN
+		 from TOP0902
+		where DEL_YN = 'N'
+		  and RECIPIENT_TYPE = #{type}
+	</select>
+
+	<select id="getEmailRecipientsForAlarm" resultType="String">
+		select distinct a.EMAIL
+		  from TSU0101 a
+    inner join TSU0302 b
+		    on a.ROLE_ID = b.ATTRIBUTE_VALUE
+		   and a.DEL_YN = 'N'
+		   and b.PACKAGE = 'user'
+		   and b.ATTRIBUTE_ID = 'role.alarm.receiver'
+		   and b.DEL_YN = 'N'
+		   and a.EMAIL is not null
+	</select>
+
+	<!-- <insert id="insertEmail">
+		<selectKey keyProperty="emailId" resultType="string" order="BEFORE" >
+			  select to_char(nvl(max(to_number(EMAIL_ID)) + 1,1)) from TOP0901
+		</selectKey>
+		insert into TOP0901 (
+			 EMAIL_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,REFERS
+			,HIDDEN_REFERS
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{emailId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{refers, 		jdbcType=VARCHAR}
+			,#{hiddenRefers,jdbcType=VARCHAR}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+
+	</insert> -->
+
+
+	<insert id="insertEmail">
+
+		insert into TOP0901 (
+			 EMAIL_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,REFERS
+			,HIDDEN_REFERS
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{emailId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{refers, 		jdbcType=VARCHAR}
+			,#{hiddenRefers,jdbcType=VARCHAR}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+
+
+	<insert id="insertEmailResourceForTracking">
+		insert into TOP0903 (
+			 EMAIL_ID
+			,TYPE
+			,KEY1
+			,KEY2
+		) values (
+			 #{emailId}
+			,#{type}
+			,#{key1}
+			,#{key2}
+		)
+	</insert>
+
+	<resultMap type="Email" id="emailForTrackingResultMap">
+		<id property="emailId" 			column="EMAIL_ID"/>
+		<id property="type" 			column="TYPE"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<result property="contents"		column="CONTENTS"/>
+		<result property="sender"		column="SENDER"/>
+		<result property="recipients" 	column="RECIPIENTS"/>
+		<result property="refers"		column="REFERS"/>
+		<result property="hiddenRefers"	column="HIDDEN_REFERS"/>
+		<result property="format" 		column="FORMAT"/>
+		<result property="sndReqDate"	column="SND_REQ_DATE"/>
+		<result property="sndYn"		column="SND_YN"/>
+		<result property="resDate" 		column="RES_DATE"/>
+		<result property="resCd"		column="RES_CD"/>
+		<result property="resMsg"		column="RES_MSG"/>
+		<result property="regDate"		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate"		column="MOD_DATE"/>
+		<result property="modId"		column="MOD_USER"/>
+		<result property="delYn"		column="DEL_YN"/>
+	</resultMap>
+
+	<select id="getEmailsForTracking" resultMap="emailForTrackingResultMap">
+		select
+		     EMAIL_ID
+		    ,TYPE
+		    ,SUBJECT
+		    ,CONTENTS
+		    ,SENDER
+		    ,RECIPIENTS
+		    ,REFERS
+		    ,HIDDEN_REFERS
+		    ,FORMAT
+		    ,SND_REQ_DATE
+		    ,SND_YN
+		    ,RES_DATE
+		    ,RES_CD
+		    ,RES_MSG
+		    ,REG_DATE
+		    ,REG_USER
+		    ,MOD_DATE
+		    ,MOD_USER
+		    ,DEL_YN
+		  from TOP0901
+		 where SND_YN = 'N'
+		   and REG_DATE <![CDATA[>=]]> #{fromDate}
+ 		   and ROWNUM <![CDATA[<=]]> #{fetchCount}
+	</select>
+
+	<update id="updateEmail">
+		update
+			 TOP0901
+		   set
+			 SUBJECT 		= #{subject, 		jdbcType=VARCHAR}
+			,CONTENTS 		= #{contents, 		jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,SENDER 		= #{sender, 		jdbcType=VARCHAR}
+			,RECIPIENTS 	= #{recipients, 	jdbcType=VARCHAR}
+			,REFERS 		= #{refers, 		jdbcType=VARCHAR}
+			,HIDDEN_REFERS 	= #{hiddenRefers, 	jdbcType=VARCHAR}
+			,FORMAT 		= #{format, 		jdbcType=VARCHAR}
+			,SND_REQ_DATE 	= #{sndReqDate, 	jdbcType=VARCHAR}
+			,SND_YN 		= #{sndYn, 			jdbcType=VARCHAR}
+			,RES_DATE 		= #{resDate, 		jdbcType=VARCHAR}
+			,RES_CD 		= #{resCd, 			jdbcType=VARCHAR}
+			,RES_MSG 		= #{resMsg, 		jdbcType=VARCHAR}
+			,MOD_DATE 		= #{modDate, 		jdbcType=VARCHAR}
+			,MOD_USER 		= #{modId, 			jdbcType=VARCHAR}
+			,DEL_YN 		= #{delYn, 			jdbcType=VARCHAR}
+		 where EMAIL_ID = #{emailId}
+		   and TYPE = #{type}
+	</update>
+
+
+</mapper>

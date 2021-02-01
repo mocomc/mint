@@ -1,0 +1,271 @@
+﻿<!--
+	Screen ID : SU-01-09-001
+	Screen NM : 공통코드
+	[변경 이력]
+	* 20170614-001
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim whoana">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-867">공통코드편집</lb></h2>
+	    <ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="lb-867">공통코드편집</lb></strong></li>
+	    </ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" ></div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="tabs-container">
+				<div class="panel-body">
+					<hr class="hr-space">
+               		<div id="spreadsheet"></div>
+               	</div>
+			</div>
+		</div>
+    </div>
+</div>
+<!--
+<script type="text/x-kendo-template" id="template-001">
+	<div>
+		<span class="appAdd" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;">
+			<i class='fa fa-plus-square'></i> <lb class="template-001-change"></lb></span>
+		</span>
+	</div>
+</script>
+ -->
+
+<script>
+	$(document).ready(function() {
+	    //=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main/main_detail, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "SU-01-09-001";
+
+	    $.extend({
+	        main : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_initSheet();
+						$.main.fn_searchGridList();
+
+						mint.common.siteMenuPath(screenName);
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid 초기화
+				//-----------------------------------------------------------------------
+				fn_initSheet : function() {
+					try {
+						$("#spreadsheet").kendoSpreadsheet({
+							columns: 20,
+					        rows: 300,
+					        sheetsbar: false});
+
+						//$('.template-001-change').text(mint.label.getLabel('lb-370'));
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initSheet"});
+					}
+				},//end fn_initSheet
+
+				//-----------------------------------------------------------------------
+				// Description ::  프로그램 검색
+				//-----------------------------------------------------------------------
+				fn_searchGridList : function() {
+					try {
+						//var tempObject = new Object();
+						//mint.callService(tempObject, screenName, 'REST-R01-SU-01-07', '$.main.fn_setGridData',{errorCall : true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_searchGridList"});
+					}
+				},//end fn_searchGridList()
+
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 데이터 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function(jsonObject) {
+					try {
+
+						/* var dataSource = new kendo.data.DataSource({
+						    data: jsonObject
+							, page:1
+							, pageSize:mint.ui.getPageSizesXS({'currentPage' : true})
+						});
+
+						$('#appl-grid').data('kendoGrid').setDataSource(dataSource); */
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+
+				fn_saveDataItem : function(dataItem) {
+					try {
+
+						/* var dataObj = new Object();
+						dataObj.objectType ="Environment";
+						dataObj.pack 		= dataItem.pack;
+						dataObj.attrId  	= dataItem.attrId;
+						dataObj.idx 		= dataItem.idx;
+						dataObj.attrNm 		= dataItem.attrNm;
+						dataObj.attrVal		= dataItem.attrVal;
+						dataObj.comments   	= dataItem.comments;
+						dataObj.regDate    	= mint.common.getStartTime();
+						dataObj.regId      	= mint.session.getUserId();
+						dataObj.modDate    	= mint.common.getStartTime();
+						dataObj.modId      	= mint.session.getUserId();
+
+						if(dataItem.pack == null || dataItem.pack == ''){
+							mint.common.alert('CW00001', mint.label.getLabel('lb-866'));
+							return;
+						}
+
+						if(dataItem.attrId == null || dataItem.attrId == ''){
+							mint.common.alert('CW00001', mint.label.getLabel('lb-422'));
+							return;
+						}
+
+						if( mint.common.isEmpty(dataItem.idx) ) {
+							//-----------------------------------------------------------------------
+							//신규 등록
+							//-----------------------------------------------------------------------
+							mint.callService(dataObj, screenName, 'REST-C01-SU-01-07', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(jsonData) && errorCd == 0 ) {
+									mint.common.alert('CI00101', null); //저장을 완료했습니다.
+									$.main.fn_searchGridList();
+								}else{
+									$('#appl-grid').data("kendoGrid").cancelChanges();
+								}
+							}, { errorCall : true } );
+
+						} else {
+							//-----------------------------------------------------------------------
+							//수정
+							//-----------------------------------------------------------------------
+							mint.callService(dataObj, screenName, 'REST-U01-SU-01-07', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+									mint.common.alert('CI00102', null); //수정을 완료했습니다.
+									$.main.fn_searchGridList();
+								}else{
+									$('#appl-grid').data("kendoGrid").cancelChanges();
+								}
+							}, { errorCall : true } );
+						} */
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_saveDataItem"});
+					}
+				},//end fn_saveDataItem()
+
+				//-----------------------------------------------------------------------
+				// Description :: dataItem delete
+				//-----------------------------------------------------------------------
+				fn_deleteDataItem : function(dataItem) {
+					try {
+						/* if(dataItem.idx == null || dataItem.idx == ''){
+							$('#appl-grid').data('kendoGrid').dataSource.remove(dataItem);
+							return;
+						}
+
+						if( mint.common.confirm('CI00003', null) ) {
+							var dataObj = new Object();
+							dataObj.objectType ="Environment";
+							dataObj.pack 	= dataItem.pack;
+							dataObj.attrId  = dataItem.attrId;
+							dataObj.idx 	= dataItem.idx;
+							mint.callService(dataObj, screenName, 'REST-D01-SU-01-07', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+									mint.common.alert('CI00103', null); //삭제를 완료했습니다.
+									$.main.fn_searchGridList();
+								}
+							},
+							{
+								errorCall : true,
+							});
+
+						} */
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_deleteDataItem"});
+					}
+				},//end fn_deleteDataItem()
+
+	        }
+	    });
+
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================
+	    $.main.fn_init();
+	    mint.label.attachLabel(null);
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		/* $('.appAdd').on('click', function(e) {
+			$('#appl-grid').data("kendoGrid").addRow();
+		}); */
+
+	});
+</script>
+
+<!-- <style>
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr td {
+	    border-bottom: 1px solid #C0C0C0;
+	}
+
+	.k-grid .k-dirty {
+	  display: none;
+	}
+
+</style> -->
+

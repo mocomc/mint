@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.DeployMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<select id="getDeployInterfaceResults" resultMap="deploymentResultMap">
+
+	 	select
+			 a.REQ_DATE
+			,a.INTERFACE_ID
+			,a.SEQ
+			,a.VERSION
+			,a.TARGET_TYPE
+			,im10.NM as TARGET_TYPE_NM
+			,a.REQ_USER_ID
+			,b.USER_NM as REQ_USER_NM
+			,a.DEPLOY_KEY
+			,a.RESULT_CD
+			,a.RESULT_MSG
+			,a.RES_DATE
+    	from TOP0401 a
+		left outer join TSU0301 im10 on a.TARGET_TYPE = im10.CD and im10.LEVEL1 = 'IM' and im10.LEVEL2 = '10'
+		left outer join TSU0101 b on a.REQ_USER_ID = b.USER_ID
+	   where 1 = 1
+	   <if test="targetType != null">
+	     and a.TARGET_TYPE = #{targetType}
+	   </if>
+	   <if test="interfaceId != null">
+	     and a.INTERFACE_ID = (select INTERFACE_ID from TAN0201 where INTEGRATION_ID  = #{interfaceId})
+	   </if>
+	   	   <if test="version != null">
+	     and a.VERSION = #{version}
+	   </if>
+	   	   <if test="fromDate != null">
+	     and a.REQ_DATE <![CDATA[>=]]> #{fromDate} || '000000000'
+	   </if>
+	   	   <if test="toDate != null">
+	     and a.REQ_DATE <![CDATA[<=]]> #{toDate} || '235959999'
+	   </if>
+	   	<!-- <if test="reqUserId != null">
+	     and a.REQ_USER_ID = #{reqUserId}
+	   </if> -->
+		 order by a.REQ_DATE DESC
+	</select>
+
+
+	<select id="getDeployInterfaceResult" resultMap="deploymentResultMap">
+
+	 	select
+			 a.REQ_DATE
+			,a.INTERFACE_ID
+			,a.SEQ
+			,a.VERSION
+			,a.TARGET_TYPE
+			,im10.NM as TARGET_TYPE_NM
+			,a.REQ_USER_ID
+			,b.USER_NM as REQ_USER_NM
+			,a.DEPLOY_KEY
+			,a.RESULT_CD
+			,a.RESULT_MSG
+			,a.RES_DATE
+    	from TOP0401 a
+		left outer join TSU0301 im10 on a.TARGET_TYPE = im10.CD and im10.LEVEL1 = 'IM' and im10.LEVEL2 = '10'
+		left outer join TSU0101 b on a.REQ_USER_ID = b.USER_ID
+       where a.REQ_DATE = #{reqDate}
+         and a.INTERFACE_ID = #{interfaceId}
+         and a.SEQ = #{seq}
+
+	</select>
+
+
+	<resultMap id="deploymentResultMap" type="Deployment" >
+
+		<id property="reqDate" 					column="REQ_DATE"/>
+		<id property="interface.interfaceId" 	column="INTERFACE_ID"/>
+		<id property="seq" 						column="SEQ"/>
+		<result property="version" 				column="VERSION"/>
+		<result property="targetType" 			column="TARGET_TYPE"/>
+		<result property="targetTypeNm" 		column="TARGET_TYPE_NM"/>
+		<result property="requesterId" 			column="REQ_USER_ID"/>
+		<result property="requesterNm" 			column="REQ_USER_NM"/>
+		<result property="requestKey" 			column="DEPLOY_KEY"/>
+		<result property="resultCd" 			column="RESULT_CD"/>
+		<result property="resultMsg" 			column="RESULT_MSG"/>
+		<result property="resDate" 				column="RES_DATE"/>
+
+		<association property="interface" javaType="Interface" column="INTERFACE_ID" select="selectInterfaceDetail"/>
+
+	</resultMap>
+
+
+	<select id="selectInterfaceDetail" resultMap="pep.per.mint.database.mapper.CoreMapper.interfaceResultMap">
+
+		<include refid="pep.per.mint.database.mapper.CoreMapper.interfaceDetail"/>
+		and a.INTERFACE_ID = #{interfaceId}
+
+	</select>
+
+	<select id="getInterfaceLastVersion" resultType="string">
+
+		select nvl(max(VERSION),'1') as VERSION from TAN0322 where INTERFACE_ID = #{interfaceId}
+
+	</select>
+
+
+	<insert id="insertDeployment">
+
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+			select nvl(max(SEQ),0) + 1 as seq from TOP0401 where REQ_DATE = #{reqDate,jdbcType=VARCHAR} and INTERFACE_ID = #{interface.interfaceId,jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TOP0401 (
+			 REQ_DATE
+			,INTERFACE_ID
+			,SEQ
+			,VERSION
+			,TARGET_TYPE
+			,REQ_USER_ID
+			,DEPLOY_KEY
+			,RESULT_CD
+			,RESULT_MSG
+			,RES_DATE
+		) values (
+			 #{reqDate,jdbcType=VARCHAR}
+			,#{interface.interfaceId,jdbcType=VARCHAR}
+			,#{seq,jdbcType=NUMERIC}
+			,#{version,jdbcType=VARCHAR}
+			,#{targetType,jdbcType=VARCHAR}
+			,#{requesterId,jdbcType=VARCHAR}
+			,#{requestKey,jdbcType=VARCHAR}
+			,#{resultCd,jdbcType=VARCHAR}
+			,#{resultMsg,jdbcType=VARCHAR}
+			,#{resDate,jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+</mapper>

@@ -1,0 +1,23 @@
+[
+	{
+		"objectType": "ApplicationInfo",
+		"applicationNm": "WMQ",
+		"home": "C:\\IBM\\WMQ",
+		"type": "00",
+		"binaryPath": ""
+	},
+	{
+		"objectType": "ApplicationInfo",
+		"applicationNm": "MTE Maria DB",
+		"home": "C:\\iip\\mte",
+		"type": "10",
+		"binaryPath": "C:\\iip\\mte\\memra_v3.5.5.17.exe"
+	},
+	{
+		"objectType": "ApplicationInfo",
+		"applicationNm": "TMax Adapter",
+		"home": "C:\\iip\\tmax",
+		"type": "20",
+		"binaryPath": ""
+	}
+]

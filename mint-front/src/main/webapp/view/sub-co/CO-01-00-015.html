@@ -1,0 +1,484 @@
+﻿<!--
+	Screen ID : CO-01-00-015
+	Screen NM : 데이터 접근 권한 팝업
+	[변경 이력]
+	* 20170413-001
+-->
+
+<div class="modal inmodal-original" id="CO-01-00-015" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog-original">
+		<div class="modal-content-original animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<div>
+					<h2><lb class="lb-845">데이터 접근 권한</lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<input id="popup-tf-searchText" type="text" class="input-tag-12 k-textbox" style="width:80%" placeholder="Search...">
+						<button id="popup-btn-clear" type="button" class="btn btn-default btn-sm btn-outline btn-input-side"><i class="fa fa-check"></i> <lb class="lb-79"></lb></button>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+            <div class="modal-body-original" style='height: 500px;'>
+				<div class='full-height-scroll' >
+					<div id="popup-tv-accessrole"></div>
+				</div>
+            </div>
+            <div class="modal-footer-original">
+                <button id="popup-btn-apply" type="button" class="btn btn-primary" ><i class="fa fa-check"></i>  <lb class="lb-358"></lb></button>
+                <button id="popup-btn-close" type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+            </div>
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "CO-01-00-901";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			interfaceId : '',
+			treeData: null,
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.sub.fn_initCallback', {isPopupScroll:true});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+
+					$.sub.fn_initTree();
+					$.sub.fn_getRootNode();
+
+					$.sub.interfaceId = mint.common.getScreenParam('interfaceId');
+					//$.sub.fn_setTreeImage();
+					//-----------------------------------------------------------------------
+					// Screen Parameter Clear
+					//-----------------------------------------------------------------------
+					{
+						mint.common.removeScreenParam('interfaceId');
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+
+			fn_initTree : function() {
+				try {
+					$("#popup-tv-accessrole").kendoTreeView({
+
+						dataTextField: 'objName',
+						dataValueField :'id',
+			            loadOnDemand: false,
+			            dataSpriteCssClassField: 'siba',
+			            checkboxes: {
+			                checkChildren: false,
+			            },
+			            check: function(e) {
+			            	$.sub.fn_setCheckedParentNodes(this, e.node);
+			            },
+						collapse: function(e) {
+							mint.ui.treeViewCollapse(e.node);
+						},
+						expand: function(e) {
+							mint.ui.treeViewExpand(e.node);
+						}
+
+	                });
+					//var tree = $("#popup-tv-accessrole").data("kendoTreeView");
+					//tree.wrapper.off("click")
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTree"});
+				}
+			},//end fn_initTree
+
+
+			//-----------------------------------------------------------------------
+			// Description :: Root Node 검색
+			//-----------------------------------------------------------------------
+			fn_getRootNode : function() {
+				try {
+					mint.callService(null, screenName, 'REST-R05-SU-01-02', function(jsonData) {
+						if( ! mint.common.isEmpty(jsonData) ) {
+							$.sub.fn_setRootNode(jsonData);
+							$.sub.treeData = JSON.parse(JSON.stringify(jsonData));
+						};
+					}, { errorCall : true, notificationView : false } );
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getRootNode"});
+				}
+			},//end fn_getRootNode()
+
+			//-----------------------------------------------------------------------
+			// Description :: Root Node 검색
+			//-----------------------------------------------------------------------
+			fn_setRootNode : function(jsonData) {
+				try {
+					if( ! mint.common.isEmpty(jsonData) ) {
+						var dataSource  = new kendo.data.HierarchicalDataSource({
+							data:jsonData,
+							schema: {
+								data: "roots",
+								model: {
+									id: "id",
+									hasChildren: function (node) {
+										return mint.ui.treeViewHasChildren(node);
+									},
+									children: "items",
+									text: "text",
+									parent: "parent",
+									group: "group",
+									root: "root"
+								}
+							}
+						});
+						$("#popup-tv-accessrole").hide();
+						var treeView = $("#popup-tv-accessrole").data("kendoTreeView");
+					    treeView.setDataSource(dataSource);
+					    treeView.expand('.k-item');
+					    //mint.ui.treeViewSort(treeView.dataSource.view());
+
+					    $.sub.fn_getDataAccessRole();
+			            setTimeout(function () {
+			            	$("#popup-tv-accessrole").fadeIn(1000);
+			            },200);
+
+				 	};
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setRootNode"});
+				}
+			},//end fn_setRootNode()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setTreeImage
+			//-----------------------------------------------------------------------
+			fn_setTreeImage : function() {
+				try {
+		            setTimeout(function () {
+		            	$('.html').removeClass('k-sprite');
+		            	$('.html').addClass('fa fa-li fa-folder-o');
+		            },5000);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setTreeImage"});
+				}
+			},// end fn_setTreeImage
+
+			//-----------------------------------------------------------------------
+			// Description :: 인터페이스 별, 데이터 접근 권한 조회
+			//-----------------------------------------------------------------------
+			fn_getDataAccessRole : function() {
+				try {
+					mint.callService(null, screenName, 'REST-R10-SU-01-02', function(jsonData) {
+						if( ! mint.common.isEmpty(jsonData) ) {
+			            	var treeview = $("#popup-tv-accessrole").data("kendoTreeView");
+			            	var nodes    = treeview.dataSource.view();
+							var roleIds  = Object.keys(jsonData);
+				            if ( !mint.common.isEmpty(roleIds) && roleIds.length > 0) {
+				            	for( var i = 0; i < roleIds.length; i++ ) {
+				            		$.sub.fn_setCheckedNodes(nodes, roleIds[i]);
+				            	}
+				            }
+				           treeview.dataSource.sync();
+						};
+					}, { errorCall : true, notificationView: false, params : { interfaceId : $.sub.interfaceId }  } );
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getDataAccessRole"});
+				}
+			},// end fn_getDataAccessRole
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setCheckedNodes
+			//-----------------------------------------------------------------------
+	        fn_setCheckedNodes: function(nodes, roleId) {
+	        	try {
+		            var node = null;
+		            for (var i = 0; i < nodes.length; i++) {
+		                node = nodes[i];
+		                if( node.id == roleId ) {
+		                	node.checked = true;
+		                	break;
+		                }
+		                if (node.hasChildren) {
+		                    $.sub.fn_setCheckedNodes(node.children.view(), roleId);
+		                }
+		            }
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setCheckedNodes"});
+				}
+
+	        },//end fn_setCheckedNodes
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCheckedItems
+			//-----------------------------------------------------------------------
+			fn_getCheckedItems : function(treeview) {
+	        	try {
+		            var nodes = treeview.dataSource.view();
+		            return $.sub.fn_getCheckedNodes(nodes);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getCheckedItems"});
+				}
+	        }, //end fn_getCheckedItems
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCheckedNodes
+			//-----------------------------------------------------------------------
+	        fn_getCheckedNodes: function(nodes) {
+	        	try {
+		            var node = null;
+		            var childCheckedNodes = null;;
+		            var checkedNodes = [];
+
+		            for (var i = 0; i < nodes.length; i++) {
+		                node = nodes[i];
+
+		                if (node.checked) {
+							$.sub.fn_setNodePath(node);
+		                    checkedNodes.push(node);
+		                }
+
+		                if (node.hasChildren) {
+		                    childCheckedNodes = $.sub.fn_getCheckedNodes(node.children.view());
+		                    if (childCheckedNodes.length > 0) {
+		                        checkedNodes = checkedNodes.concat(childCheckedNodes);
+		                    }
+		                }
+
+		            }
+		            return checkedNodes;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getCheckedNodes"});
+				}
+
+	        },//end fn_getCheckedNodes
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setNodePath
+			//-----------------------------------------------------------------------
+	        fn_setNodePath: function(node) {
+	        	try {
+		        	var nodePath   = node.objName;
+		        	var searchNode = '';
+		        	while( true ) {
+		        		if( mint.common.isEmpty(searchNode) ) {
+		        			searchNode = node;
+		        		}
+		        		searchNode = searchNode.parentNode();
+
+		        		if( !mint.common.isEmpty(searchNode) ) {
+		        			if( mint.common.isEmpty(nodePath) )
+		        				nodePath = searchNode.objName;
+		        			else
+		        				nodePath = searchNode.objName  + ' > ' + nodePath;
+		        		} else {
+		        			break;
+		        		}
+		        	}
+					node.nodePath = nodePath;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setNodePath"});
+				}
+	        },// end fn_setNodePath
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setCheckedParentNodes
+			//-----------------------------------------------------------------------
+	        fn_setCheckedParentNodes: function(treeview, node) {
+	        	try {
+					var currentNode = node;
+	            	var parentNode  = treeview.parent(currentNode);
+
+	            	if( mint.common.isEmpty( treeview.dataItem(parentNode) ) ) {
+	            		// nothing to do
+	            	} else {
+
+	            		var isChecked = $(currentNode).find('input[type=checkbox]').is(':checked');
+	            		if( isChecked ) {
+		            		//-----------------------------------------------------------------------
+		            		// 선택한 노드가 체크되어 있으면, 부모 노드도 체크
+		            		//-----------------------------------------------------------------------
+	            			$(parentNode).find('input[type=checkbox]:eq(0)').prop('checked', true);
+	            			treeview.dataItem(parentNode).checked = true;
+	            		} else {
+
+	            			var isChildChecked = $(parentNode).find('input[type=checkbox]:gt(0)').is(':checked');
+							if( isChildChecked ) {
+			            		//-----------------------------------------------------------------------
+			            		// 자식 노드에 하나라도 체크된게 있으면, 부모 노드도 체크
+			            		//-----------------------------------------------------------------------
+								$(parentNode).find('input[type=checkbox]:eq(0)').prop('checked', true);
+								treeview.dataItem(parentNode).checked = true;
+							} else {
+			            		//-----------------------------------------------------------------------
+			            		// 자식 노드가 모드 체크 해제 되어 있으면, 부모 노드도 체크 해제
+			            		//-----------------------------------------------------------------------
+								$(parentNode).find('input[type=checkbox]:eq(0)').prop('checked', false);
+								treeview.dataItem(parentNode).checked = false;
+							}
+
+	            		}
+	            		$.sub.fn_setCheckedParentNodes(treeview, parentNode);
+	            	}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setCheckedParentNodes"});
+				}
+
+	        },//end fn_setCheckedParentNodes
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_doFilter
+			//-----------------------------------------------------------------------
+	        fn_doFilter: function(dataSource, query) {
+	        	try {
+	                mint.ui.treeViewFilter(dataSource, query);
+	                $('#popup-tv-accessrole .k-in:containsIgnoreCase("' + query + '")').each(function () {
+	                	var lastElementChild = $(this).context.lastElementChild;
+	                	var prefix = !mint.common.isEmpty( lastElementChild ) ? lastElementChild.outerHTML : '';
+	                    var index = $(this).text().toLowerCase().indexOf(query.toLowerCase());
+	                    var length = query.length;
+	                    var original = $(this).text().substr(index, length);
+	                    var newText = $(this).text().replace(original, "<span class='query-match'>" + original + "</span>");
+	                    $(this).html(prefix + newText);
+
+	                });
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_doFilter"});
+				}
+	        }// end fn_setNodePath
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+	//-----------------------------------------------------------------------
+	// Description :: 적용 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('#popup-btn-apply').click(function(e) {
+		try {
+	        var treeView     = $("#popup-tv-accessrole").data("kendoTreeView");
+	        var selectedItem = $.sub.fn_getCheckedItems(treeView);
+
+	        //-----------------------------------------------------------------------
+	        // 선택된 데이터가 없더라도 처리 하도록 구현함.
+	        //-----------------------------------------------------------------------
+			var requestObject = new Object();
+			requestObject.list = [];
+
+			for( var i = 0; i < selectedItem.length; i++ ) {
+				var accessRoleMapping = new Object();
+				accessRoleMapping.roleId      = selectedItem[i].id;
+				accessRoleMapping.interfaceId = $.sub.interfaceId;
+				accessRoleMapping.seq         = (i+1);
+
+				requestObject.list.push(accessRoleMapping);
+			}
+
+			mint.callService(requestObject, screenName, 'REST-C10-SU-01-02', function(jsonData) {
+				if( ! mint.common.isEmpty(jsonData) ) {
+					var callback = mint.common.getScreenParam('callback');
+					var fn_callback = mint.common.fn_callback(callback);
+					if( fn_callback ) {
+						mint.common.setScreenParam('callback', null);
+						fn_callback(selectedItem);
+					} else {
+						mint.common.alert('CE90000');
+						return;
+					}
+				};
+			}, { errorCall : true, params : { interfaceId : $.sub.interfaceId }  } );
+
+	        //-----------------------------------------------------------------------
+	        // 선택된 데이터가 없을 경우 Alert 이 필요하면 아래 주석 해제후 로직 구현.
+	        //-----------------------------------------------------------------------
+	        /*
+			if( mint.common.isEmpty(selectedItem) || selectedItem.length == 0 ) {
+				mint.common.alert('CW00003', '데이터 접근 권한');
+				return;
+			} else {
+				//TODO
+				//여기에 로직 작성
+			}
+	        */
+
+			$('#CO-01-00-015').modal('hide');
+
+		} catch( e ) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "popup-btn-apply.click"});
+		}
+
+
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 초기화 버튼 클릭 이벤트
+	//-----------------------------------------------------------------------
+	$('#popup-btn-clear').on("click", function(e) {
+		try {
+			$("#popup-tf-searchText").val('');
+			$.sub.fn_setRootNode($.sub.treeData);
+		} catch( e ) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "popup-btn-clear.click"});
+		}
+	});
+  	//-----------------------------------------------------------------------
+	// Description :: 검색어 필드 입력 이벤트
+	//-----------------------------------------------------------------------
+    $("#popup-tf-searchText").on("keyup", function() {
+        var query = $(this).val().toLowerCase();
+        if( mint.common.isEmpty(query) ) {
+        	mint.ui.treeViewFilter('popup-tv-accessrole', query);
+        } else {
+            setTimeout(function () {
+            	mint.ui.treeViewFilter('popup-tv-accessrole', query);
+            }, 200);
+        }
+    });
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>

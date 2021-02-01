@@ -1,0 +1,1674 @@
+<!--
+	Screen ID : OP-02-01-001
+	Screen NM : 대시보드 V3.0
+	Reference : NH농협
+-->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+
+		<div class="nhbank-title" style="padding-top:23px; display:none;">
+			<span style="font-size:14px;"><img id=logo src="../../img/site/nhbank.png" width="150px" height="23px"></span>
+			<span class="dashboard-title" style="font-size:15px; margin: 0px 0px 0px 1px;">EAI</span>
+		</div>
+		<div class="nonghyup-title" style="padding-top:23px; display:none;">
+			<span style="font-size:14px;"><img id=logo src="../../img/site/nonghyup.png" width="137px" height="24px"></span>
+			<span class="dashboard-title" style="font-size:15px; margin: 0px 0px 0px 1px;">EAI</span>
+		</div>
+		<h2 class="default-title" style="display:none;"><lb class="lb-31"></lb></h2>
+	</div>
+	<div class="col-lg-7">
+		<div class="mint-page-top-group" >
+            <a class="btn btn-white btn-page-expand"><i class="fa fa-window-maximize"></i> <lb class="lb-999">전체화면</lb></a>
+		</div>
+	</div>
+</div>
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" id="dashboard-attachDiv">
+	<div class="dashboard-item dashboard-layout-default">
+
+		<div class="row">
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0035" name="WS0035" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-270">처리건수(인터페이스)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand" style="display:none;"></i>
+                            </a>
+                            <a class="throughput-question">
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </a>
+                        </div>
+					</div>
+
+					<div class="panel-body mint-panel-content mint-widget-top">
+						<div class="col-sm-3" style="padding-right:3px;">
+							<div id="chart-throughput-summary">
+								<div class="mint-widget-valign-center">
+									<div class="widget mint-widget-bg mint-widget-m-box">
+										<div class="row">
+											<div><small><lb class="lb-690">금일누적건수</lb></small></div>
+											<div><h3 class="font-bold mint-widget-font today-total-count">0</h3></div>
+										</div>
+									</div>
+								</div>
+								<div class="mint-widget-valign-center">
+									<div class="widget mint-widget-bg mint-widget-m-box">
+										<div class="row">
+											<div><small><lb class="lb-691">초당처리건수</lb></small></div>
+											<div><h3 class="font-bold mint-widget-font today-tps">0</h3></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-9">
+							<div id="chart-throughput-daily" class="table-responsive">
+			                    <table class="table table-hover no-margins">
+			                        <thead>
+				                        <tr style="height:45px;">
+				                        	<th></th>
+				                            <th class="mint-th-m-right">건수</th>
+				                        </tr>
+			                        </thead>
+			                        <tbody>
+				                        <tr>
+				                        	<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button><lb class="lb-89">전체</lb></td>
+				                            <td class="mint-td-m-right">0</td>
+				                        </tr>
+				                        <tr>
+				                        	<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button><lb class="lb-412">완료</lb></td>
+				                            <td class="mint-td-m-right mint-success">0</td>
+				                        </tr>
+<!-- 				                        <tr> -->
+<!-- 				                        	<td class="mint-td-m-left"><button type="button" class="btn btn-warning m-r-sm mint-td-i-badge"></button><lb class="lb-511">처리중</lb></td> -->
+<!-- 				                            <td class="mint-td-m-right mint-warning">0</td> -->
+<!-- 				                        </tr> -->
+				                        <tr>
+				                        	<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button><lb class="lb-32">오류</lb></td>
+				                           	<td class="mint-td-m-right mint-danger">0</td>
+				                        </tr>
+			                        </tbody>
+			                    </table>
+		                    </div>
+	                    </div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0038" name="WS0038" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-682">SMS 전송 로그</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand" style="display:none;"></i>
+                            </a>
+                            <a class="sms-question">
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content mint-widget-top">
+						<div class="table-responsive" style="min-height: 152px; height:100%; overflow:hidden;">
+							<div id="chart-sms-log" style="overflow:hidden;"></div>
+	                    </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0039" name="WS0039" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-271">오류 인터페이스</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="cursor:pointer; display: none" onmouseover="this.style.backgroundColor='#ed5565'" onmouseout="this.style.backgroundColor='#7c8286'"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand" style="display:none;"></i>
+                            </a>
+                            <a class="error-count-top-question">
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content mint-widget-top">
+						<div id="chart-error-count-top" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                            <th class="mint-th-m-right"><lb class="lb-153">인터페이스명</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-154">인터페이스ID</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-240">오류건수</lb></th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+
+		<div class="row">
+			<div class="col-lg-6 mint-col-default">
+				<div id="WS0040" name="WS0040" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-35"></lb>(<lb class="lb-215"></lb>)</h5> <!-- 시스템별 거래현황(송신) -->
+						<div class="mint-panel-tools">
+							<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+							<a class="fullscreen-link">
+								<i class="fa fa-expand"></i>
+							</a>
+							<a class="system-panel-question">
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </a>
+						</div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div id="system-panel" name="system-panel">
+							<div class="mint-center-container" style="min-height: 340px; height:340px;">
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div id="system-chart-layout-snd" name="system-chart-layout" class="mint-center-centered" ></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mint-panel-footer">
+						<span style="float:right;">
+							<span class="system-panel-up"><i class="fa fa-arrow-up"></i></span>
+							<span class="system-panel-down"><i class="fa fa-arrow-down"></i></span>
+						</span>
+						<p>   </p>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 mint-col-default">
+				<div id="WS0040" name="WS0040" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-35"></lb>(<lb class="lb-217"></lb>)</h5> <!-- 시스템별 거래현황(수신) -->
+						<div class="mint-panel-tools">
+							<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+							<a class="fullscreen-link">
+								<i class="fa fa-expand"></i>
+							</a>
+							<a class="system-panel-question">
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </a>
+						</div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div id="system-panel" name="system-panel">
+							<div class="mint-center-container" style="min-height: 340px; height:340px;">
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div id="system-chart-layout-rcv" name="system-chart-layout" class="mint-center-centered" ></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mint-panel-footer">
+						<span style="float:right;">
+							<span class="system-panel-up"><i class="fa fa-arrow-up"></i></span>
+							<span class="system-panel-down"><i class="fa fa-arrow-down"></i></span>
+						</span>
+						<p>   </p>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+
+		<div class="row">
+			<div class="col-lg-12 mint-col-default">
+				<div id="WS0009" name="WS0009" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-278">알림 이벤트</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand" style="display:none;"></i>
+                            </a>
+                            <a class="state-question">
+                                <i class="fa fa-lg fa-question-circle"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<ul class="mint-list">
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-1 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="mint-chart-square-large btn btn-outline btn-success dim btn-state-cpu" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-448">CPU</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-1 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-memory" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-451">MEMORY</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-1 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-disk" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-294">DISK</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-4 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-process" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-472">PROCESS</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-5 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-qmgr" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-263">큐매니져</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-6 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-channel" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-265">채널</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-7 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-qdepth" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-266">큐깊이</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<div class="mint-center-outer">
+									<div class="mint-center-inner" >
+										<div class="alarm-type-8 mint-center-centered mint-marking-01"></div>
+									</div>
+								</div>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-iipagent" type="button">
+									<span><h2>0</h2></span>
+									<span><h3>IIP <lb class="lb-260">AGENT</lb></h3></span>
+								</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+	</div><!-- dashboard-layout -->
+</div><!-- wrapper wrapper-content -->
+<div class='wsNotification' style='display:none;'></div>
+
+
+
+<script type="text/x-kendo-template" id="template-chart-throughput-daily">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr style="height:45px;">
+		# for ( var i = 0; i < data.length; i++ ) { #
+			<th class="mint-th-m-right">#= data[i].categoryNm #</th>
+		# } #
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-89') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right" onclick="$.main.fn_moveTracking({status: '', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].totalCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-412') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-success" onclick="$.main.fn_moveTracking({status: '00', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].successCnt + data[i].processCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button>#= mint.label.getLabel('lb-32') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-danger" onclick="$.main.fn_moveTracking({status: '99', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].errorCnt) #</td>
+        # } #
+		</tr>
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-throughput-daily-old">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+		# for ( var i = 0; i < data.length; i++ ) { #
+			<th class="mint-th-m-right">#= data[i].categoryNm #</th>
+		# } #
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-89') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right" onclick="$.main.fn_moveTracking({status: '', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].totalCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-412') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-success" onclick="$.main.fn_moveTracking({status: '00', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].successCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-warning m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-511') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-warning" onclick="$.main.fn_moveTracking({status: '01', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].processCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button>#= mint.label.getLabel('lb-32') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-danger" onclick="$.main.fn_moveTracking({status: '99', dataPrMethod:'#= data[i].categoryId #'});">#= mint.common.addComma(data[i].errorCnt) #</td>
+        # } #
+		</tr>
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-sms-log">
+<div id="SMS-#= data.smsId #" class="mint-console-m-left" style="color: #= $.main.fn_getColor(data.type)#;background-color: #= $.main.fn_getBackgroundColor(data.type) #">■ #= data.contents #</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-error-count-top">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-395') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-215') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-217') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-240') #</th>
+		</tr>
+	</thead>
+	<tbody>
+	# for ( var i = 0; i < data.length; i++ ) { #
+		# if ( mint.common.isEmpty(data[i].integrationId) ) { #
+		<tr>
+        # } else {#
+		<tr onclick="$.main.fn_moveTracking({status: '99', accRoleId:'', interfaceId: '#= data[i].interfaceId #', integrationId: '#= data[i].integrationId #', fromDate: '#= data[i].fDate #', toDate: '#= data[i].tDate #' });">
+        # } #
+			<td class="mint-td-m-right">#= data[i].integrationId #&nbsp;</td>
+			<td class="mint-td-m-right">#= data[i].sndSystemNm #&nbsp;</td>
+			<td class="mint-td-m-right">#= data[i].rcvSystemNm #&nbsp;</td>
+			<td class="mint-td-m-right">#= mint.common.addComma(data[i].errorCnt) #&nbsp;</td>
+		</tr>
+	# } #
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-system-chart-pie">
+<div id="#= chartId #-PANNEL" class="mint-col-default mint-center-blocks-160-150">
+	<div id="#= chartId #-CHART" style="width:100%; height:100%;" class="mint-center-containers"></div>
+	<div id="#= chartId #-TABLE" style="width:100%;">
+		<span class="mint-td-xs-left mint-success" style="width:30%;" id="#= chartId #-TABLE-FCNT">0</span>
+		<span class="mint-td-xs-right" style="width:20%;">/</span>
+		<span class="mint-td-xs-left mint-warning" style="width:30%;" id="#= chartId #-TABLE-ECNT">0</span>
+	</div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-pie-overlay">
+<div id="#= chartId #-OVERLAY" class="mint-pie-overlay">
+	<div>No Data</div>
+</div>
+</script>
+
+
+
+
+<script type="text/x-kendo-template" id="template-dashboard-window">
+<div id="dashboard-window">
+	<div id="dashboard-toolbar"></div>
+	<div id="dashboard-content" class="col-lg-12" style="box-sizing: border-box;"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-title">
+<h6 style="float:none; display:inline; padding-bottom:2px;">
+	<!--<span><i class="fa fa-circle text-success"></i> </span>
+	<span><i class="fa fa-circle text-warning"></i> </span>
+	<span><i class="fa fa-circle text-danger"></i> </span>-->
+	# if(siteCode == "nhbank") { #
+		<span style="font-size:14px;"><img id=logo src="../../img/site/nhbank.png" width="130px" height="21px"></span>
+		<span class="dashboard-title" style="font-size:15px; margin: -2px 0 0 3px;">EAI</span>
+	# } else if(siteCode == "nonghyup") { #
+		<span style="font-size:14px;"><img id=logo src="../../img/site/nonghyup.png" width="130px" height="22px"></span>
+		<span class="dashboard-title" style="font-size:15px; margin: -2px 0 0 3px;">EAI</span>
+	# } else { #
+		<span style="font-size:14px;">#= mint.label.getLabel('lb-31') #</span>
+	# } #
+</h6>
+</script>
+
+
+
+
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "OP-02-01-001";
+	siteCode = "";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Description :: 패널 초기화
+					//-----------------------------------------------------------------------
+					{
+						var env = mint.common.getEnvorinment();
+	            		siteCode = env['system.site.detail.code'];
+
+	            		if( siteCode == "nhbank" ) {
+	            			$('.nhbank-title').show();
+	            		} else if( siteCode == "nonghyup") {
+	            			$('.nonghyup-title').show();
+	            		} else {
+	            			$('.default-title').show();
+	            		}
+
+						$('.alarm-type-1').css('background-color', $.main.fn_getColor('1') );
+						$('.alarm-type-4').css('background-color', $.main.fn_getColor('4') );
+						$('.alarm-type-5').css('background-color', $.main.fn_getColor('5') );
+						$('.alarm-type-6').css('background-color', $.main.fn_getColor('6') );
+						$('.alarm-type-7').css('background-color', $.main.fn_getColor('7') );
+						$('.alarm-type-8').css('background-color', $.main.fn_getColor('8') );
+
+						$.main.fn_getWidgetConfig();
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: 웹소켓 서비스 호출
+					//-----------------------------------------------------------------------
+					if( mint.wsSupported() ) {
+
+						$.main.fn_getDailyThroughput();
+						$.main.fn_getThroughputPerSecond();
+						$.main.fn_getSMSLog();
+						$.main.fn_getErrorCountTop();
+						$.main.fn_getDailyCountBySystem();
+						$.main.fn_getAlarmEvent();
+
+ 						$.main.fn_getWS0040_01()
+ 						.done(function() {
+ 							$.main.fn_getCountBySystem();
+ 						})
+ 						.fail(function() {});
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: 알림 이벤트 RollOver
+					//-----------------------------------------------------------------------
+					var intervalObj = mint.common.addInterval( function(){
+						$('button.btn-success.dim').removeClass('active');
+						$('button.btn-danger.dim').toggleClass('active');
+					}, (1000 * 1) );
+
+					//-----------------------------------------------------------------------
+					// Description :: Scroll Attach
+					//-----------------------------------------------------------------------
+					mint.ui.attachScrollX($('#chart-throughput-daily'));
+					mint.ui.attachScrollX($('#chart-error-count-top'));
+					mint.ui.attachScrollY($('div[name=system-panel]'), {'size' : '10px', 'positionY' : 'left'});
+					mint.ui.attachScrollAll($('#chart-sms-log'), {'startY' : 'bottom', 'disableFadeOut': true});
+
+					//-----------------------------------------------------------------------
+					// Description :: HealthCheck
+					//-----------------------------------------------------------------------
+					mint.healthCheck();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+
+
+
+			}, // end fn_initCallback
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getWidgetConfig
+			//-----------------------------------------------------------------------
+			fn_getWidgetConfig : function() {
+				try {
+					var requestObject = new Object();
+					requestObject.serviceCd = ['WS0009','WS0035','WS0036','WS0037','WS0038','WS0039','WS0040','WS0041'];
+
+				    mint.callService(requestObject, screenName, 'REST-R99-CO-99-00',
+				   	function(jsonData, errorCd) {
+
+						if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+							//-----------------------------------------------------------------------
+							// intervalTime Display
+							//-----------------------------------------------------------------------
+							{
+								var length = jsonData.length
+								for( var i = 0; i < length; i++ ) {
+									var intervalLabel = $('div[name=' + jsonData[i].serviceCd+']').find('.interval-label');
+									intervalLabel.html($.main.fn_intervalTimeDisplay(jsonData[i].schedule));
+									intervalLabel.show();
+								}
+							}
+						}
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getWidgetConfig"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDailyThroughput
+			//-----------------------------------------------------------------------
+			fn_getDailyThroughput : function() {
+				try {
+					var serviceCd = 'WS0035';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+
+						    	var firstData = {categoryId:'', categoryNm:'', totalCnt:0, successCnt:0, processCnt:0, errorCnt:0};
+						    	if( !mint.common.isEmpty(msg) ) {
+
+						    		if( msg.length > 0 ) {
+
+										var totalObject = new Object();
+										totalObject.categoryId = '';
+										totalObject.categoryNm = mint.label.getLabel('lb-89'); //전체
+										totalObject.totalCnt   = 0;
+										totalObject.successCnt = 0;
+										totalObject.processCnt = 0;
+										totalObject.errorCnt   = 0;
+
+										for( var i = 0; i < msg.length; i++ ) {
+											totalObject.totalCnt += msg[i].totalCnt;
+											totalObject.successCnt += msg[i].successCnt;
+											totalObject.processCnt += msg[i].processCnt;
+											totalObject.errorCnt   += msg[i].errorCnt;
+										}
+
+										msg.unshift(totalObject);
+
+
+						    		} else {
+						    			msg[0].categoryNm = mint.label.getLabel('lb-349'); //'건수'
+						    		}
+
+						    	} else {
+						    		msg = [];
+						    		var emptyObject = new Object();
+						    		emptyObject.totalCnt   = 0;
+						    		emptyObject.successCnt = 0;
+						    		emptyObject.processCnt = 0;
+						    		emptyObject.errorCnt   = 0;
+						    		emptyObject.categoryId = '';
+						    		emptyObject.categoryNm = mint.label.getLabel('lb-349'); //'건수'
+						    		msg.push(emptyObject);
+						    	}
+						    	//-----------------------------------------------------------------------
+						    	// 그리드 첫번째 데이터에 라벨정보를 추가한다.( 그리드 맨 첫번째 TD )
+						    	//-----------------------------------------------------------------------
+					    		msg.unshift(firstData);
+						    	//-----------------------------------------------------------------------
+						    	// 그리드에 데이터를 바인딩 한다.
+						    	//-----------------------------------------------------------------------
+					    		var htmlTemplate = kendo.template($('#template-chart-throughput-daily').html());
+								$('#chart-throughput-daily').html( htmlTemplate(msg) );
+
+								$('.today-total-count').countup(totalObject.totalCnt);
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#' + serviceCd).find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDailyThroughput"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getThroughputPerSecond
+			//-----------------------------------------------------------------------
+			fn_getThroughputPerSecond : function() {
+				try {
+					var serviceCd = 'WS0037';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								$('.today-tps').countup(msg);
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getThroughputPerSecond"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getSMSLog
+			//-----------------------------------------------------------------------
+			fn_getSMSLog : function() {
+				try {
+					var serviceCd = 'WS0038';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+								var htmlTemplate = kendo.template($('#template-chart-sms-log').html());
+								if( !mint.common.isEmpty(msg) ) {
+									for(var i = 0 ; i < msg.length; i++ ) {
+										if( $('#SMS-' + msg[i].smsId).size() > 0 ) {
+											continue;
+										} else {
+											$('#chart-sms-log').append( htmlTemplate({data: msg[i]}) );
+										}
+
+									}
+
+									//scroll-position :: bottom
+									{
+										var size = mint.ui.elementSize( $('#chart-sms-log') );
+										mint.ui.attachScrollY($('#chart-sms-log'), {scrollByY : size.scrollHeight });
+									}
+
+									//-----------------------------------------------------------------------
+									// pushTime Display
+									//-----------------------------------------------------------------------
+									{
+										var timeLabel = $('#' + serviceCd).find('.time-label');
+										timeLabel.html($.main.fn_checkTimeDisplay(time));
+										timeLabel.show();
+									}
+
+
+								} else {
+									//doSomething()
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getSMSLog"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getErrorCountTop
+			//-----------------------------------------------------------------------
+			fn_getErrorCountTop : function() {
+				try {
+					var serviceCd = 'WS0039';
+					var requestObject = new Object();
+					requestObject.max = 4;
+
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+						    	if( mint.common.isEmpty(msg) ) {
+							    	jsonData = [];
+						    		for( var i = 0; i < requestObject.max; i++ ) {
+						    			//msg.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',errorCnt:'&nbsp;'});
+						    			msg.push({interfaceNm:'',integrationId:'',errorCnt:'', sndSystemNm:'', rcvSystemNm:''});
+						    		}
+							    } else {
+
+							    	if( msg.length > 0) {
+								    	var intervalLabel = $('#' + serviceCd).find('.interval-label');
+										intervalLabel.data("fromDate",msg[0].fDate);
+										intervalLabel.data("toDate",msg[0].tDate);
+							    	}
+
+							    	if( msg.length < requestObject.max ) {
+							    		var pushCnt = requestObject.max - msg.length;
+							    		for( var i = 0; i < pushCnt; i++ ) {
+							    			//msg.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',errorCnt:'&nbsp;'});
+							    			msg.push({interfaceNm:'',integrationId:'',errorCnt:'', sndSystemNm:'', rcvSystemNm:''});
+							    		}
+							    	}
+							    }
+
+						    	//-----------------------------------------------------------------------
+						    	// 그리드에 데이터를 바인딩 한다.
+						    	//-----------------------------------------------------------------------
+					    		var htmlTemplate = kendo.template($('#template-chart-error-count-top').html());
+								$('#chart-error-count-top').html( htmlTemplate(msg) );
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#' + serviceCd).find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getErrorCountTop"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getWS004001
+			//-----------------------------------------------------------------------
+			fn_getWS0040_01 : function() {
+				try {
+					var deferred = $.Deferred();
+					var requestObject = new Object();
+
+				    mint.callService(requestObject, screenName, 'REST-R99-CO-99-01',
+				   	function(jsonData, errorCd) {
+
+						if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+							var htmlTemplate = kendo.template($('#template-dashboard-system-chart-pie').html());
+							var $frag = $(document.createDocumentFragment());
+							for( var i = 0; i < jsonData.length; i++ ) {
+								var systemId = jsonData[i].systemId;
+								var systemCd = jsonData[i].systemCd;
+								var systemNm = jsonData[i].systemNm;
+								$('#system-chart-layout-snd').append( htmlTemplate({chartId: systemId+"snd", finishCnt: 0, errorCnt: 0}) );
+								$('#system-chart-layout-rcv').append( htmlTemplate({chartId: systemId+"rcv", finishCnt: 0, errorCnt: 0}) );
+								$.main.fn_initPieChart(systemId + 'snd-CHART', systemCd, systemNm);
+								$.main.fn_initPieChart(systemId + 'rcv-CHART', systemCd, systemNm);
+								$.main.fn_initCountBySystemClick(systemId + 'snd-CHART');
+								$.main.fn_initCountBySystemClick(systemId + 'rcv-CHART');
+							}
+
+							deferred.resolve();
+						} else {
+							deferred.reject();
+						}
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+
+				    return deferred.promise();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getWS0040_01"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initPieChart
+			//-----------------------------------------------------------------------
+			fn_initPieChart : function(chartId, chartCd, chartNm) {
+				try {
+					//ChartColor {#1C84C6,#ed5565} {#2FBAE5,#CD1533} {#7977C2, #FF7800}
+					var center;
+					var radius;
+                    $('#' + chartId).kendoChart({
+                        //renderAs: "canvas",
+                        //theme: "metro",
+                        theme: "uniform",
+                        transitions: true,
+                        title: {
+                        	chartCd: chartCd, //custom field
+                            text:  chartNm,
+                            font: "12px Arial",
+                            color: "#676a6c"
+                        },
+                        dataSource: {
+                        	data:[]
+                        },
+                        seriesDefaults: {
+			                labels: {
+			                	visible: true,
+			                	position: "center",
+			                	padding: {left:0, top:0, right:0, bottom:0},
+			                	margin: {left:0, top:0, right:0, bottom:0},
+			                	distance: 0,
+			                	background: "transparent",
+			                	format: "{0:n0}"
+			                }
+                        },
+                        tooltip: {
+                        	visible: true,
+                        	shared: true,
+                        	template: "[ #= category # ] #= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: false,
+                            position: "top",
+                            orientation: "horizontal",
+                        },
+                        /* chartArea: {
+                        	background: "transparent"
+                        }, */
+                        series: [{
+                        	type: "donut",
+                        	holeSize:40,
+                        	padding:-5,
+                        	field: "value",
+                        	categoryField: "key",
+                        	colorField: "color",
+                        	visual: function(e) {
+                                center = e.center;
+                                radius = e.radius;
+                                return e.createVisual();
+                              },
+                        	data: []
+                        }],
+                        dataBound: function(e) {
+                        	var view = e.sender.dataSource.view();
+                        	var chartId = e.sender.wrapper.context.id;
+
+                        	if( view.length === 0 ) {
+                        		if( $('#'+ chartId + '-OVERLAY').size() == 0 ) {
+    								var htmlTemplate = kendo.template( $('#template-pie-overlay').html() );
+                            		$('#'+ chartId).append( htmlTemplate({chartId: chartId}) );
+                        		}
+                        	} else {
+                        		$('#'+ chartId + '-OVERLAY').remove();
+                        	}
+                        },
+                       /* seriesClick: function(e) {
+                        	var param = {
+                        		status: e.dataItem.status,
+                        		fromDate: e.dataItem.fromDate,
+                        		toDate: e.dataItem.toDate,
+                        		systemId: e.dataItem.systemId,
+                        		systemCd: e.sender.options.title.chartCd,
+                        		systemNm: e.sender.options.title.text
+                        	}
+							$.main.fn_moveTracking(param);
+                        }, */
+                        render : function(e) {
+
+                            var view = e.sender.dataSource.view();
+                            var title = e.sender.options.title;
+                            if(view.length > 0 ) {
+                            	if(view[1].value != "0") {
+		                        	var draw = kendo.drawing;
+		                            var geom = kendo.geometry;
+		                            var chart = e.sender;
+		                            var circleGeometry = new geom.Circle(center, radius);
+		                            var bbox = circleGeometry.bbox();
+	                            	var text = new draw.Text(view[1].value, [0, 0], {
+	                                    font: "18px Verdana,Arial,sans-serif"
+	                                    });
+
+									text.options.fill.color = "#cd1634";
+
+	                            	draw.align([text], bbox, "center");
+	                                draw.vAlign([text], bbox, "center");
+	                                e.sender.surface.draw(text);
+                            	}
+                            }
+                        }
+                    });
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initPieChart"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCountBySystem
+			//-----------------------------------------------------------------------
+			fn_getCountBySystem : function() {
+				try {
+					var serviceCd = 'WS0040';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+								if(!mint.common.isEmpty(msg) && msg.length > 0 ) {
+									for( var i = 0; i < msg.length; i++ ) {
+										var systemId = msg[i].systemId;
+										var sndFCnt     = msg[i].sndFCnt;
+										var sndECnt     = msg[i].sndECnt;
+										var rcvFCnt     = msg[i].rcvFCnt;
+										var rcvECnt     = msg[i].rcvECnt;
+										var fDate    = msg[i].fDate;
+										var tDate    = msg[i].tDate;
+
+										var items = [];
+										if( sndFCnt != 0 || sndECnt != 0 ) {
+											items.push(
+												{"key": mint.label.getLabel('lb-412'), "value" : sndFCnt, "systemId": systemId, "fromDate": fDate, "toDate": tDate, "status": "00", "color" : "#1C84C6"},
+												{"key": mint.label.getLabel('lb-32') , "value" : sndECnt, "systemId": systemId, "fromDate": fDate, "toDate": tDate, "status": "99", "color" : "#ed5666"}
+											);
+										}
+
+										var dataSource = null;
+										dataSource = new kendo.data.DataSource( {
+											  data: items
+										});
+
+										var chart = null;
+										chart = $('#' + systemId + 'snd-CHART').data("kendoChart");
+										if( !mint.common.isEmpty(chart) )
+											chart.setDataSource(dataSource);
+
+
+										items = [];
+										if( rcvFCnt != 0 || rcvECnt != 0 ) {
+											items.push(
+												{"key": mint.label.getLabel('lb-412'), "value" : rcvFCnt, "systemId": systemId, "fromDate": fDate, "toDate": tDate, "status": "00", "color" : "#1C84C6"},
+												{"key": mint.label.getLabel('lb-32') , "value" : rcvECnt, "systemId": systemId, "fromDate": fDate, "toDate": tDate, "status": "99", "color" : "#ed5666"}
+											);
+										}
+
+										var dataSource = new kendo.data.DataSource( {
+											  data: items
+										});
+
+										chart = $('#' + systemId + 'rcv-CHART').data("kendoChart");
+										if( !mint.common.isEmpty(chart) )
+											chart.setDataSource(dataSource);
+
+										//-----------------------------------------------------------------------
+										// pushTime Display
+										//-----------------------------------------------------------------------
+										{
+											var timeLabel = $('div[name=' + serviceCd+']').find('.time-label');
+											timeLabel.html($.main.fn_checkTimeDisplay(time));
+											timeLabel.show();
+										}
+
+									}
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getCountBySystem"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDailyCountBySystem
+			//-----------------------------------------------------------------------
+			fn_getDailyCountBySystem : function() {
+				try {
+					var serviceCd = 'WS0041';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg) && msg.length > 0 ) {
+									for( var i = 0; i < msg.length; i++ ) {
+										var systemId = msg[i].systemId;
+										var sndFCnt     = msg[i].sndFCnt;
+										var sndECnt     = msg[i].sndECnt;
+										var rcvFCnt     = msg[i].rcvFCnt;
+										var rcvECnt     = msg[i].rcvECnt;
+										$('#' + systemId + 'snd-TABLE-FCNT').text( mint.common.addComma( sndFCnt ) );
+										$('#' + systemId + 'snd-TABLE-ECNT').text( mint.common.addComma( sndECnt ) );
+										$('#' + systemId + 'rcv-TABLE-FCNT').text( mint.common.addComma( rcvFCnt ) );
+										$('#' + systemId + 'rcv-TABLE-ECNT').text( mint.common.addComma( rcvECnt ) );
+									}
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDailyCountBySystem"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getAlarmEvent
+			//-----------------------------------------------------------------------
+			fn_getAlarmEvent : function() {
+				try {
+					var requestObject = new Object();
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0009', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg,time){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-cpu', msg);
+								}
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#WS0009').find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0010', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-memory', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0011', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-disk', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0012', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-process', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0015', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-qmgr', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0016', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-channel', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0017', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-qdepth', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, 'OP-02-01-001', 'WS0019', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-iipagent', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getCountBySystem"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setAlarmEvent
+			//-----------------------------------------------------------------------
+			fn_setAlarmEvent : function(chartId, count) {
+				try {
+
+					var cssSuccess = 'btn-success';
+					var cssWarning = 'btn-warning';
+					var cssDanger  = 'btn-danger';
+					var cssRemove  = 'btn-success btn-warning btn-danger';
+
+
+					$('.' + chartId + ' > span > h2').html(count);
+					$('.' + chartId).removeClass(cssRemove);
+					if(count > 0) {
+						$('.' + chartId).addClass(cssDanger);
+					} else {
+						$('.' + chartId).addClass(cssSuccess);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setAlarmEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dashboardWindowOpen
+			//-----------------------------------------------------------------------
+			fn_dashboardWindowOpen : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 템플릿을 읽어 드린다
+					//-----------------------------------------------------------------------
+					var layout = kendo.template($('#template-dashboard-window').html());
+					var title  = kendo.template($('#template-dashboard-title').html());
+
+					//-----------------------------------------------------------------------
+					// DIV 에 템플릿에서 불러온 레이아웃을 붙인다
+					//-----------------------------------------------------------------------
+					var attachDiv = $('#dashboard-attachDiv').prepend( layout );
+					var windowDiv = $('#dashboard-window');
+
+					//-----------------------------------------------------------------------
+					// 윈도우를 오픈한다
+					//-----------------------------------------------------------------------
+					mint.ui.windowOpen(attachDiv, windowDiv, title, function(evt) {
+						//-----------------------------------------------------------------------
+						// 윈도우가 Close 되면 대시보드 컨텐츠를 원래 DIV 에 붙인다
+						//-----------------------------------------------------------------------
+						attachDiv.html( $('.dashboard-item') );
+					}, null);
+
+					//-----------------------------------------------------------------------
+					// 레이아웃에 대시보드 컨텐츠를 붙인다.( 순서주의-윈도우 오픈후 컨텐츠 붙임 )
+					//-----------------------------------------------------------------------
+					{
+						$('#dashboard-toolbar').html('');
+						$('#dashboard-content').html( $('.dashboard-item') );
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dashboardWindowOpen"});
+				}
+
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_moveTracking
+			//-----------------------------------------------------------------------
+			fn_moveTracking : function(options) {
+				try {
+					//TODO : Tracking Page 를 환경변수에서 참조하여 호출하도록 보완필요!!
+					if( !mint.common.isEmpty(options) ) {
+						mint.common.setScreenParam('caller', 'dashboard');
+						mint.common.setScreenParam('options', options);
+						mint.move('../sub-op/OP-01-01-102');
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_moveTracking"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_intervalTimeDisplay
+			//-----------------------------------------------------------------------
+			fn_intervalTimeDisplay : function(time) {
+				try {
+					return '<i class="fa fa-bell-o"> ' + time+ ' ' + mint.label.getLabel('lb-169') + '</i>';
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_intervalTimeDisplay"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_checkTimeDisplay
+			//-----------------------------------------------------------------------
+			fn_checkTimeDisplay : function(time) {
+				try {
+					return '<i class="fa fa-clock-o"> ' + kendo.toString(kendo.parseDate(time, 'yyyyMMddHHmmsssss'), 'HH:mm:ss') + ' ' + mint.label.getLabel('lb-998') + '</i>';
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkTimeDisplay"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_nodeTypeParsing
+			// 농협 요구사항으로 추가된 부분
+			// INTEGRATION_ID 의 앞에서 4자리는 수신, 이후 2자리는 송신으로 판단
+			//-----------------------------------------------------------------------
+			fn_nodeTypeParsing : function(integrationId, type) {
+				try {
+					var returnVal = '';
+					if( mint.common.isEmpty(integrationId) ) {
+						returnVal = '';
+					} else {
+						// type == 0 이면 송신
+						if( type === '0' ) {
+							returnVal =  integrationId.substr(4,2);
+						}
+						// type == 2 이면 수신
+						if( type === '2' )  {
+							returnVal = integrationId.substr(0,4);
+						}
+					}
+					return returnVal;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkTimeDisplay"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getColor
+			//-----------------------------------------------------------------------
+			fn_getColor : function(type) {
+				try {
+					var color = 'inherit';
+					switch( type ) {
+						case '0': //interface
+							color = '#5E5E5E';
+							break;
+						case '1': //resource(cpu/memory/disk)
+							color = '#7977C2';
+							break;
+						case '2': //mi-agent
+							color = '#8E8E8E';
+							break;
+						case '3': //mi-runner
+							color = '#880275';
+							break;
+						case '4': //process
+							color = '#5EC232';
+							break;
+						case '5': //qmanager
+							color = '#FF0000';
+							break;
+						case '6': //channel
+							color = '#604800';
+							break;
+						case '7': //queue
+							color = '#E5A005';
+							break;
+						case '8': //iip-agent
+							color = '#277ED4';
+							break;
+						default:
+							break;
+					}
+					return color;
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getColor"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getBackgroundColor
+			//-----------------------------------------------------------------------
+			fn_getBackgroundColor : function(type) {
+				try {
+					var color = 'inherit';
+					switch( type ) {
+						case '0': //interface
+							color = '#f2f7f9';
+							break;
+						default:
+							break;
+					}
+					return color;
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getBackgroundColor"});
+				}
+			},
+
+			fn_initCountBySystemClick : function(systemId) {
+	            $("#"+systemId).on('click', function(e) {
+	            	var chartData = $("#"+systemId).data("kendoChart");
+
+	            	if(chartData.dataSource.options.data.length > 0 ) {
+	            		if(chartData.dataSource.options.data[1].value > 0 ) {
+			            	var param = {
+		                		status: chartData.dataSource.options.data[1].status,
+		                		fromDate: chartData.dataSource.options.data[1].fromDate,
+		                		toDate: chartData.dataSource.options.data[1].toDate,
+		                		systemId: chartData.dataSource.options.data[1].systemId,
+		                		systemCd: chartData.options.title.chartCd,
+		                		systemNm:chartData.options.title.text
+			                }
+							$.main.fn_moveTracking(param);
+	            		}
+	            	}
+	            });
+			}
+		}// end main
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 시스템 거래현황 패널 확장
+	//-----------------------------------------------------------------------
+	$('.system-panel-down').on('click', function(evt){
+		try {
+			var attachHeight = 170;
+			var divObj = $("div[name=system-panel]").children();
+
+			var divHeight = divObj.height();
+			var chartHeight = $('div[name=system-chart-layout]').height();
+
+			if( ( divHeight + attachHeight ) >= chartHeight ) {
+				divHeight = chartHeight;
+			} else {
+				divHeight = divHeight + attachHeight;
+			}
+
+			mint.ui.divReHeight(divObj, divHeight, {isAnimate : true});
+		} catch (e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "system-panel-down.click()"});
+		}
+	});
+
+	$("#WS0039").find('.interval-label').on('click', function(e) {
+		var params = null;
+		var intervalLabel = $('div[name=WS0039]').find('.interval-label');
+
+		if( !mint.common.isEmpty(intervalLabel.data("fromDate")) && !mint.common.isEmpty(intervalLabel.data("toDate")) ) {
+			fromDate = intervalLabel.data("fromDate");
+			toDate = intervalLabel.data("toDate");
+		} else {
+			mint.common.alert('CW00010', mint.label.getLabel('lb-271'));
+			return;
+		}
+
+		params = {
+			fromDate : fromDate,
+			toDate : toDate
+		}
+		mint.common.setScreenParam('detailKey', params);
+		mint.common.searchPopup('../sub-co/CO-01-00-610.html','CO-01-00-610');
+    });
+	//-----------------------------------------------------------------------
+	// Description :: 시스템 거래현황 패널 축소
+	//-----------------------------------------------------------------------
+	$('.system-panel-up').on('click', function(evt){
+		try {
+			var attachHeight = 170;
+			var divObj = $("div[name=system-panel]").children();
+			var divHeight = divObj.height() - attachHeight;
+			mint.ui.divReHeight(divObj, divHeight, {isAnimate : true});
+		} catch (e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "system-panel-up.click()"});
+		}
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - cpu
+	//-----------------------------------------------------------------------
+	$('.btn-state-cpu').on('click', function () {
+		mint.common.setScreenParam('state-item', 'cpu');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - memory
+	//-----------------------------------------------------------------------
+	$('.btn-state-memory').on('click', function () {
+		mint.common.setScreenParam('state-item', 'memory');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - disk
+	//-----------------------------------------------------------------------
+	$('.btn-state-disk').on('click', function () {
+		mint.common.setScreenParam('state-item', 'disk');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - disk
+	//-----------------------------------------------------------------------
+	$('.btn-state-process').on('click', function () {
+		mint.common.setScreenParam('state-item', 'process');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - qmgr
+	//-----------------------------------------------------------------------
+	$('.btn-state-qmgr').on('click', function () {
+		mint.common.setScreenParam('state-item', 'qmgr');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - channel
+	//-----------------------------------------------------------------------
+	$('.btn-state-channel').on('click', function () {
+		mint.common.setScreenParam('state-item', 'channel');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - qdepth
+	//-----------------------------------------------------------------------
+	$('.btn-state-qdepth').on('click', function () {
+		mint.common.setScreenParam('state-item', 'qdepth');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - iipAgent
+	//-----------------------------------------------------------------------
+	$('.btn-state-iipagent').on('click', function () {
+		mint.common.setScreenParam('state-item', 'iipagent');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 대시보드 전체 화면
+	//-----------------------------------------------------------------------
+	$('.btn-page-expand').on('click', function () {
+		$.main.fn_dashboardWindowOpen();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 처리건수 도움말
+	//-----------------------------------------------------------------------
+	$('.throughput-question').on('click', function () {
+		mint.ui.help(this, screenName,'throughput');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 이벤트내역 도움말
+	//-----------------------------------------------------------------------
+	$('.sms-question').on('click', function () {
+		mint.ui.help(this, screenName,'sms');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 오류인터페이스 도움말
+	//-----------------------------------------------------------------------
+	$('.error-count-top-question').on('click', function () {
+		mint.ui.help(this, screenName,'errorCountTop');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 시스템별 거래현황 도움말
+	//-----------------------------------------------------------------------
+	$('.system-panel-question').on('click', function () {
+		mint.ui.help(this, screenName,'systemPanel');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 알림이벤트 도움말
+	//-----------------------------------------------------------------------
+	$('.state-question').on('click', function () {
+		mint.ui.help(this, screenName,'status');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 윈도우 리사이즈 이벤트
+	//-----------------------------------------------------------------------
+	$(window).on('resize', function(e) {
+        mint.ui.resize();
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	//mint.ui.draggablePannels();
+
+});//end document.ready()
+</script>
+<style>
+.dashboard-title {
+	border-radius: 10px 10px 10px 10px;
+	height: 21px;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 19px;
+	background-color: #547a9a;
+	color: #ffffff;
+	padding: 0 10px 0 10px;
+	font-weight: 900;
+}
+</style>

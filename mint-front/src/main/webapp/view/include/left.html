@@ -1,0 +1,189 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<nav class="navbar-default navbar-static-side iip-menu" role="navigation">
+	<div class="sidebar-collapse" id="iip-menu">
+		<ul class="nav" id="side-menu">
+			<li class="nav-header" style="padding-bottom: 21px; padding-top: 20px;">
+				<div class="dropdown profile-element">
+					<span class="block">
+						<strong class="font-bold">
+							<font color="white">
+								<a onclick="mint.goMain(); return false;"><lb class="lb-1">통합 인터페이스 포탈</lb></a>
+							</font>
+						</strong>
+					</span>
+				</div>
+				<div class="logo-element">
+				    IIP
+				</div>
+			</li>
+ 		</ul>
+	</div>
+</nav>
+
+<script type="text/x-kendo-template" id="template-leftMenu">
+# for ( var i = 0; i < data.length; i++ ) { #
+	#if(i==0){#
+		<li class="nav-first-group active">
+	#}else{#
+		<li class="nav-first-group">
+	#}#
+	#if(data[i].appList.length>0){#
+		# var  appTemp  =   data[i].appList[0] #
+		<a onclick="mint.move('..#= appTemp.appUri #'); return false;">
+	#}else{#
+		<a>
+	#}#
+		<i class="menu-icon fa fa-lg fa-cogs"></i><span class="nav-first-group-title">
+		# if(!mint.common.isEmpty(data[i].menuOpt)){ #
+			# var menuOpt =  JSON.parse(data[i].menuOpt); #
+			<lb class="#=menuOpt.label #">#= data[i].menuNm # </lb>
+		#}else{#
+			<lb class="">#= data[i].menuNm # </lb>
+		#}#
+
+		#if(data[i].childMenuList.length>0){#
+			</span><span class="fa arrow fa-lg"></span>
+		#}#
+		</a>
+
+		#if(data[i].childMenuList.length>0){#
+			<ul class="nav nav-first-level">
+		#}#
+		# for ( var j = 0; j < data[i].childMenuList.length; j++ ) { #
+    		# var  menuTemp  =    data[i].childMenuList[j]    #
+				<li>
+				#if(menuTemp.appList.length>0){#
+					# var  appTemp1  =   menuTemp.appList[0]    #
+					# if(!mint.common.isEmpty(menuTemp.menuOpt)){ #
+						# var menuOpt1 =  JSON.parse(menuTemp.menuOpt); #
+						# if(!mint.common.isEmpty(menuTemp.menuOpt) && !mint.common.isEmpty(menuOpt1.detailView )){ #
+							<a onclick="mint.move('..#= appTemp1.appUri #',#= menuOpt1.detailView #); return false;">
+						#}else{#
+							<a onclick="mint.move('..#= appTemp1.appUri #'); return false;">
+						#}#
+					#}else{#
+						<a onclick="mint.move('..#= appTemp1.appUri #'); return false;">
+					#}#
+
+				#}else{#
+					<a>
+				#}#
+				<i class="fa fa-pencil-square"></i><span class="nav-label">
+				# if(!mint.common.isEmpty(menuTemp.menuOpt)){ #
+					# var menuOpt1 =  JSON.parse(menuTemp.menuOpt); #
+					<lb class="#=menuOpt1.label #">#= menuTemp.menuNm #</lb>
+				#}else{#
+					<lb class="">#= menuTemp.menuNm # </lb>
+				#}#
+
+				#if(menuTemp.childMenuList.length>0){#
+					</span><span class="fa arrow"></span>
+				#}#
+				</a>
+
+				#if(menuTemp.childMenuList.length>0){#
+					<ul class="nav nav-second-level">
+				#}#
+				# for ( var k = 0; k < menuTemp.childMenuList.length; k++ ) { #
+
+					# var  menuTemp2  =    menuTemp.childMenuList[k]    #
+						<li>
+						#if(menuTemp2.appList.length>0){#
+							# var  appTemp2  =   menuTemp2.appList[0]    #
+							# if(!mint.common.isEmpty(menuTemp2.menuOpt)){ #
+								# var menuOpt2 =  JSON.parse(menuTemp2.menuOpt); #
+								# if(!mint.common.isEmpty(menuTemp2.menuOpt) && !mint.common.isEmpty(menuOpt2.detailView)){ #
+									<a onclick="mint.move('..#= appTemp2.appUri #',#= menuOpt2.detailView #); return false;">
+								#}else{#
+									<a onclick="mint.move('..#= appTemp2.appUri #'); return false;">
+								#}#
+							#}else{#
+								<a onclick="mint.move('..#= appTemp2.appUri #'); return false;">
+							#}#
+
+						#}else{#
+							<a>
+						#}#
+						<i class="fa fa-caret-right"></i>
+						# if(!mint.common.isEmpty(menuTemp2.menuOpt)){ #
+							# var menuOpt2 =  JSON.parse(menuTemp2.menuOpt); #
+							<lb class="#=menuOpt2.label #">#= menuTemp2.menuNm #</lb>
+						#}else{#
+							<lb class="">#= menuTemp2.menuNm #</lb>
+						#}#
+						</a>
+						</li>
+
+				# } #
+				#if(menuTemp.childMenuList.length>0){#
+					</ul>
+				#}#
+				</li>
+
+		# } #
+		#if(data[i].childMenuList.length>0){#
+			</ul>
+		#}#
+	</li>
+# } #
+</script>
+
+<script>
+//=======================================================================
+//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+//=======================================================================
+screenName = "include.left";
+$(document).ready(function () {
+	$.extend({
+		left : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					if(! mint.common.isEmpty(mint.session) ) {
+						mint.callService(
+								null
+						 		, screenName
+								, 'REST-R01-CO-03-00-001'
+								, function(jsonData) {
+									if( !mint.common.isEmpty(jsonData) ) {
+										var htmlTemplate = kendo.template($('#template-leftMenu').html());
+										$('#side-menu').append( htmlTemplate(jsonData) );
+										$('#side-menu').metisMenu('dispose');
+										$('#side-menu').metisMenu();
+										mint.label.attachLabel(null);
+									}
+								}
+								, { errorCall : true, waitingView: false }
+						);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.left.fn_init"});
+				}
+			}
+		}// end left
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (5) 기타 Function 정의 ( 모듈 단위로 정의 할것 )
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+});
+</script>

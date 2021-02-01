@@ -1,0 +1,47 @@
+insert into MIM0001 (
+	SITE_ID,
+	SITE_NM,
+	SITE_CD,
+	SNM,
+	CONTRACT_YN,
+	DATA_UP_LEVEL,
+	WAS_CD,
+	SERVICE_START_DATE,
+	SERVICE_END_DATE,
+	MANAGER_NM,
+	MANAGER_TEL,
+	MANAGER_EMAIL,
+	OS,
+	IIP_DEP_VER,
+	IIP_LAST_DEP_DATE,
+	DEPLOYER_ID,
+	COMMENTS,
+	DEL_YN,
+	REG_DATE,
+	REG_USER
+) values ('WELC','근로복지공단','WELC','근복단','Y','0','tomcat8','20180321','29991231','김이수','‭01031085505‬','kesowga@mocomsys.com','linux','2','','','모델데이터사이트','N','201803291536','iip');
+
+insert into MIM0001 (
+	SITE_ID,
+	SITE_NM,
+	SITE_CD,
+	SNM,
+	CONTRACT_YN,
+	DATA_UP_LEVEL,
+	WAS_CD,
+	SERVICE_START_DATE,
+	SERVICE_END_DATE,
+	MANAGER_NM,
+	MANAGER_TEL,
+	MANAGER_EMAIL,
+	OS,
+	IIP_DEP_VER,
+	IIP_LAST_DEP_DATE,
+	DEPLOYER_ID,
+	COMMENTS,
+	DEL_YN,
+	REG_DATE,
+	REG_USER
+) values ('NH','NH농협','NH','NH농협','Y','0','tomcat8','20180518','29991231','김이수','‭01031085505‬','kesowga@mocomsys.com','windows','2','','','모델데이터사이트','N','201805181536','iip');
+
+ COMMIT;

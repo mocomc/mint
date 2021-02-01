@@ -1,0 +1,38 @@
+#===============================================================
+# IIP Troubleshooting
+#---------------------------------------------------------------
+# when : 2018.02.07
+# doc  : mint/troubleshooting/IIP-TBS-0001.txt
+# category : LIBRARY
+#---------------------------------------------------------------
+[현상]
+IIP가 실행 중인 TTA 서버(리눅스 OS)상에 open file 범위 초과로 인해 클라이언트 브라우저가 더 이상 접속 불능한 상태가 됨.
+
+[분석]
+IIP 배치중 MI에이전트 및 러너 상태 체크를 위한 배치잡 MIAgentStateCheckJob 실행시 사용되는 MI API(mi-server.jar)
+내부에서 사용된 리소스 해제를 제대로 해주주 않아서 발생됨.
+
+[상세분석]
+mi-server.jar 상의 com.mococo.mi.server.api 패키지 내
+ClinetSocket.close() 시 앞서 connect 수행 시에 열어 두었던 selector 2개를 해제해 주지 않아서 오픈 파일 개수가 계속 증가 했던 것으로 파악됨.
+ClinetSocket.close() 함수를 아래 와 같이 수정하여 정상 작동함을 확인함.
+
+[소스 수정 부분, 5,6 라인]
+ 1:	public void close() {
+ 2:        if(!m_bStartThread) {
+ 3:            try {
+ 4:                this.getSocketChannel().close();
+ 5:                this.rs.close(); //추가부분1
+ 6:                this.ws.close(); //추가부분2
+ 7:            } catch (IOException e) {
+ 8:                e.printStackTrace();
+ 9:            }
+10:        }
+11:        this.stopSocket();
+12:    } 
+
+[패치]
+패치된 mi-server.jar를 개발팀으로 부터 전달받음.
+전달받은 패치는 mint/mint-solution-mi/install-mi-lib/lib/mi_server_api.jar 로 대체함.
+전달받은 라이브러리 mi_server_api.jar SVN 커밋완료함.
+mint/mint-solution-mi/install-mi-lib/mi-server-install.sh 쉘을 이용하여 메이븐 로컬 디렉토리 .m2에 패치된 라이브러리를 재설치함.  

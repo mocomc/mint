@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><lb class="lb-440"></lb></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<style>
+		body{
+			font-family:'NanumGothic','Gulim','Dotum','Arial','AppleGothic','sans-serif';
+			font-size:13px;
+		}
+		.template-ibox {
+			clear: both;
+			margin-bottom: 10px;
+			margin-top: 0;
+			padding: 0;
+		}
+		
+		.template-float-e-margins {
+			margin-bottom: 5px;
+		}
+		
+		.template-ibox-content h1,
+		.template-ibox-content h2,
+		.template-ibox-content h3,
+		.template-ibox-content h4,
+		.template-ibox-content h5,
+		.template-ibox-title h1,
+		.template-ibox-title h2,
+		.template-ibox-title h3,
+		.template-ibox-title h4,
+		.template-ibox-title h5 {
+		  margin-top: 5px;
+		}
+		
+		.template-ibox-title {
+			-moz-border-bottom-colors: none;
+			-moz-border-left-colors: none;
+			-moz-border-right-colors: none;
+			-moz-border-top-colors: none;
+			background-color: #ffffff;
+			border-color: #1AB394;
+			border-image: none;
+			border-style: solid solid none;
+			border-width: 4px 0px 0;
+			color: inherit;
+			margin-bottom: 0;
+			padding:7px 15px 8px;
+			min-height: 15px;
+			width:100%;
+		}
+		
+		.template-ibox-content {
+			background-color: #ffffff;
+			color: inherit;
+			padding: 15px 20px 20px 20px;
+			border-color: #e7eaec;
+			border-image: none;
+			border-style: solid solid none;
+			border-width: 1px 0px;
+		}
+		
+		.template-ibox-content {
+			clear: both;
+		}
+		
+		.template-ibox-heading {
+			background-color: #f3f6fb;
+			border-bottom: none;
+		}
+		
+		.template-ibox-heading h3 {
+			font-weight: 200;
+			font-size: 24px;
+		}		
+				
+		.template-ibox-content.text-box {
+			padding-bottom: 0px;
+			padding-top: 15px;
+		}
+
+		.template-feed-activity-list .template-feed-element {
+			border-bottom: 1px solid #e7eaec;
+		}
+	
+		.template-pull-right {
+			float: right !important;
+			margin-left: 10px;
+		}		
+
+		/* COLORS */
+		.template-text-navy {
+			color: #1ab394;
+		}
+		.template-text-primary {
+			color: inherit;
+		}
+		.template-text-success {
+			color: #1c84c6;
+		}
+		.template-text-info {
+			color: #23c6c8;
+		}
+		.template-text-warning {
+			color: #f8ac59;
+		}
+		.template-text-danger {
+			color: #ed5565;
+		}
+		.template-text-muted {
+			color: #888888;
+		}
+		
+		.template-subtitle-group {
+			width:100% ;
+			background-color:#FFFFFF;
+			padding:2px 0px 2px 0px;
+			border-bottom: 5px;
+			clear:both;
+		}
+		
+		.template-lable-textfield-group {
+			height:25px;
+			width:100% ;
+			color:#736A6C;
+			background-color:#FFFFFF;
+			padding:2px 0px 2px 0px;
+			border-bottom: 5px;
+			clear:both;
+		}
+		
+		.template-lable-center {
+			background-color: #f3f3f4;
+			border: 1px solid #e7eaec;
+			border-radius: 3px;
+			color: inherit;
+			text-align:center;
+			font-weight:bold;
+			margin-right: 5px;
+			padding:5px 0px 5px 0px;
+			display:block;
+			width:35%;
+			float:left;
+		}
+		
+		.template-lable-center2 {
+			background-color: #f3f3f4;
+			border: 1px solid #e7eaec;
+			border-radius: 3px;
+			color: inherit;
+			text-align:center;
+			font-weight:bold;
+			margin-right: 5px;
+			padding:5px 0px 5px 0px;
+			display:block;
+			width:25%;
+			float:left;
+		}
+		
+		.template-input-left {
+			background-color: #ffffff;
+			border: 1px solid #e7eaec;
+			border-radius: 3px;
+			color: inherit;
+			text-align:left;
+			margin-left: 2px;
+			margin-right: 5px;
+			padding:5px 0px 5px 10px;
+			display:block;
+			width:35%;
+			float:left;
+			height:15px;
+			box-sizing:content-box;
+		}
+		
+		.template-newLine {
+			padding:5px 0px 5px 5px;
+			float:left;
+			clear:left;
+		}
+						
+		.template-subtitle {
+			height:25px;
+			width:100% ;
+			background-color:#FFFFFF;
+			padding:2px 0px 0px 0px;
+			border-bottom: 0px dotted #1ab394;
+			clear:both;
+		}		
+		
+		.template-hr-space {
+			width:100%;height:6px;margin:0px;border-color:#ffffff
+		}		
+
+		td {color:#736A6C; line-height:20px;}
+
+		.template-table-title {                               
+		    font-weight:bold;
+		    color:#736A6C;
+		    height:22px;
+		    text-decoration:none;
+		    background-color:#F3F3F4;
+		    align:center;
+		} 
+		
+		.template-td-line {
+			height:3px;
+			background-color:#1ab394;	
+		}
+		
+		.template-tr-content {
+			border-top: 1px solid #e7eaec;
+			border-bottom: 1px solid #e7eaec;
+		}		
+		
+		.template-td-title {
+			font-weight:bold;
+		    color:#736A6C;
+		    height:22px;
+		    text-align:center;
+		    text-decoration:none;
+		    background-color:#F3F3F4;
+		    border-left: 1px solid #e7eaec;
+		    border-right: 1px solid #e7eaec;
+		    padding-left:2px;
+		    
+		}		
+
+		.template-td-content {
+		    color:#736A6C;
+		    height:22px;
+		    text-align:center;
+		    text-decoration:none;
+		    background-color:#FFFFFF;
+		    border-left: 1px solid #e7eaec;
+		    border-right: 1px solid #e7eaec;
+		    padding-left:2px;
+		}
+		
+		.template-table-one {
+			background-color: #ffffff;
+			border: 0px solid #e7eaec;
+			border-radius: 3px;
+			text-align:left;
+			margin-left: 2px;
+			margin-right: 5px;
+			padding:0px 0px 0px 0px;
+			display:block;
+			width:100%;
+			clear:both;
+		}
+		
+		.template-table-two {
+			background-color: #ffffff;
+			border: 0px solid #e7eaec;
+			border-radius: 3px;
+			text-align:left;
+			margin-left: 2px;
+			margin-right: 5px;
+			padding:0px 0px 0px 0px;
+			display:block;
+			width:100%;
+			width:48%;
+			float:left;
+		}		
+	</style>
+</head>
+<body>
+	<div class="template-ibox template-float-e-margins">
+		<div class="template-ibox-title">
+		    <h5></h5>
+		</div>
+		<div class="template-ibox-content template-ibox-heading" style="text-align: center">
+		    <h3><i class="fa fa-envelope-o"></i> <span id="pop-title-interface">인터페이스 개발 의뢰</span></h3>
+		    <!--<small><i class="fa fa-tim"></i>Test Message</small>  -->
+		</div>
+		<div class="template-ibox-content">
+		
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-109"></lb></strong>
+			</div>
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-81"></lb></span>
+					<span id="pop-tf-businessNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-83"></lb></span>
+					<span id="pop-tf-requirementNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>●  <lb class="lb-152"></lb></strong>
+			</div>			
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-80"></lb></span>
+					<span id="pop-tf-channelNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-153"></lb></span>
+					<span id="pop-tf-interfaceNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-154"></lb></span>
+					<span id="pop-tf-integrationId" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-155"></lb></span>
+					<span id="pop-tf-dataPrDirNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-162"></lb></span>
+					<span id="pop-tf-appPrMethodNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-165"></lb></span>
+					<span id="pop-tf-dataOrder" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-158"></lb></span>
+					<span id="pop-tf-dataPrMethod" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-166"></lb></span>
+					<span id="pop-tf-dataFrequency" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-174"></lb></span>
+					<span id="pop-tf-dataFrequency-detail" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-175"></lb></span>
+					<span id="pop-tf-caseSize" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-176"></lb></span>
+					<span id="pop-tf-weekCase" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-177"></lb></span>
+					<span id="pop-tf-dayCount" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-178"></lb></span>
+					<span id="pop-tf-daySum" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>																																								
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-180"></lb></strong>
+			</div>
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<span class="template-table-one">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr><td class="template-td-line"></td></tr>
+						<tr><td class="template-table-title" align="center"><lb class="lb-98"></lb></td></tr>
+						<tr> 
+							<td align="center" valign="top">
+								<table id="pop-source-grid" width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
+									<tr class="template-tr-content"> 
+										<td class="template-td-title" width="21%"><lb class="lb-82"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-86"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-87"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-556"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-81"></lb></td>
+									</tr>
+								</table>								
+							</td>
+						</tr>
+					</table>
+				</span>	
+				<div class="template-hr-space"></div>
+				<span class="template-table-one">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr><td class="template-td-line"></td></tr>
+						<tr><td class="template-table-title" align="center"><lb class="lb-102"></lb></td></tr>
+						<tr> 
+							<td align="center" valign="top">
+								<table id="pop-target-grid" width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
+									<tr class="template-tr-content"> 
+										<td class="template-td-title" width="21%"><lb class="lb-82"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-86"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-87"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-556"></lb></td>
+										<td class="template-td-title" width="21%"><lb class="lb-81"></lb></td>
+									</tr>
+								</table>								
+							</td>
+						</tr>
+					</table>
+				</span>						
+			</div>
+						
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-195"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-196"></lb></span>
+					<span id="pop-rb-importance" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-200"></lb></span>
+					<span id="pop-tf-maxDelayTime" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-201"></lb></span>
+					<span id="pop-tf-maxErrorTime" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-202"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-203"></lb></span>
+					<span id="pop-tf-devExpYmd" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group finYmdVisible" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-204"></lb></span>
+					<span id="pop-tf-devFinYmd" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-205"></lb></span>
+					<span id="pop-tf-testExpYmd" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group finYmdVisible" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-206"></lb></span>
+					<span id="pop-tf-testFinYmd" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-207"></lb></span>
+					<span id="pop-tf-realExpYmd" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+				<div class="template-lable-textfield-group finYmdVisible" style="display:none;">
+					<span class="template-lable-center" style="width:20%;"><lb class="lb-208"></lb></span>
+					<span id="pop-tf-realFinYmd" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+				</div>
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+						
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-209"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>		
+			<div class="template-subtitle-group">
+				<span class="template-table-one">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr><td class="template-td-line"></td></tr>  
+						<tr> 
+							<td align="center" valign="top">
+								<table id="pop-person-in-charge-grid" width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
+									<tr class="template-tr-content"> 
+										<td class="template-td-title" width="15%"><lb class="lb-210"></lb></td>
+										<td class="template-td-title" width="20%"><lb class="lb-211"></lb></td>
+										<td class="template-td-title" width="20%"><lb class="lb-212"></lb></td>
+										<td class="template-td-title" width="20%"><lb class="lb-213"></lb></td>
+										<td class="template-td-title" width="25%"><lb class="lb-214"></lb></td>
+									</tr>
+								</table>								
+							</td>
+						</tr>
+					</table>
+				</span>	
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div id="pop-interface-mapping-div">
+				<div class="template-text-navy template-subtitle">
+				    <strong>● <lb class="lb-321"></lb></strong>
+				</div>				
+				<div class="template-hr-space"></div>
+				<div class="template-subtitle-group">
+					<div class="template-lable-textfield-group">
+						<span class="template-lable-center" style="width:20%;"><lb class="lb-325"></lb></span>
+						<span id="pop-tf-interfaceMapKey" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+					</div>
+				</div>			
+			</div>
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div id="pop-b2bi-metadata-div">
+				<div class="template-text-navy template-subtitle">
+				    <strong>● <lb class="lb-638">B2Bi 기준정보</lb></strong>
+				</div>				
+				<div class="template-hr-space"></div>
+				<div class="template-subtitle-group">
+					<div class="template-lable-textfield-group">
+						<span class="template-lable-center" style="width:20%;"><lb class="lb-641">업체명</lb></span>
+						<span id="pop-tf-b2bi-companyNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+					</div>
+					<div class="template-lable-textfield-group">
+						<span class="template-lable-center" style="width:20%;"><lb class="lb-642">문서명</lb></span>
+						<span id="pop-tf-b2bi-docNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+					</div>
+					<div class="template-lable-textfield-group">
+						<span class="template-lable-center" style="width:20%;"><lb class="lb-410">업무</lb></span>
+						<span id="pop-tf-b2bi-bizNm" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+					</div>
+					<div class="template-lable-textfield-group">
+						<span class="template-lable-center" style="width:20%;"><lb class="lb-643">송/수신</lb></span>
+						<span id="pop-tf-b2bi-direction" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+					</div>
+					<div class="template-lable-textfield-group">
+						<span class="template-lable-center" style="width:20%;"><lb class="lb-644">Protocol</lb></span>
+						<span id="pop-tf-b2bi-protocol" class="template-input-left" style="width:70%;" readonly="readonly" disabled="disabled"></span>
+					</div>
+				</div>			
+			</div>							
+			
+			
+			
+			
+
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-398"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<div id="pop-ta-description" class="template-input-left" cols="78" rows="6"  style="width:100%; overflow-y:auto;"></div>
+				</div>
+			</div>
+			<div class="template-subtitle-group">
+			</div>			
+			
+			<div class="template-hr-space"></div>
+			<div class="template-hr-space"></div>
+			
+			<div class="template-text-navy template-subtitle">
+			    <strong>● <lb class="lb-441"></lb></strong>
+			</div>				
+			<div class="template-hr-space"></div>
+			<div class="template-subtitle-group">
+				<div class="template-lable-textfield-group">
+					<span><a id="pop-tf-linkId-before" href="#" target="_blank">http://wwww.iip.com/mint/?sdkjkljklfjskljdkljkljkl=?sdfklsjkdkjrkfS>fsdf</a></span>
+					<br>
+					<span><a id="pop-tf-linkId-after" href="#" target="_blank">http://wwww.iip.com/mint/?sdkjkljklfjskljdkljkljkl=?sdfklsjkdkjrkfS>fsdf</a></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id="change-div-main-check">
+			<div id="change-div-main"></div>
+			<div id="change-dive-main2">
+				<div id="change-div"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

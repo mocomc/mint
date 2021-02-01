@@ -1,0 +1,1145 @@
+﻿<!--
+	Screen ID : SU-01-04-001
+	Screen NM : 메뉴관리
+	[변경 이력]
+	* 20161228-001
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-847"></lb></h2>
+	    <ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="lb-847"></lb></strong></li>
+	    </ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" ></div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="col-lg-12">
+			<div class="tabs-container">
+				<div class="tabs-lefts">
+					<ul id="tab-interface-info" class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#tab01" class="menuGrid"><lb class="lb-848">매뉴목록</lb></a></li>
+						<li class=""><a data-toggle="tab" href="#tab02" class="menuTree"><lb class="lb-847">매뉴관리</lb></a></li>
+					</ul>
+					<div class="tab-content">
+						<!-- 기본정보 -->
+						<div id="tab01" class="tab-pane active">
+							<div class="panel-body animated fadeInRight">
+								<div id="appl-grid"></div>
+							</div>
+						</div>
+
+						<div id="tab02" class="tab-pane ">
+							<div class="panel-body">
+
+								<div class="wrapper wrapper-content animated fadeInRight">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="ibox float-e-margins">
+												<div class="ibox-content">
+													<div class="row">
+										                <div class="col-sm-6">
+															<div class="form-group">
+																<span class="lable_tag"><lb class="lb-78"></lb></span>
+																<span style="padding: 0px 0px 0px 0px;">
+													            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+																		<span class="radio-danger" style="padding-right: 20px;"><input id="rd-search-range" type="radio" name="rd-search-range" value="N" checked="true"><label for="radio0"><lb class="lb-211"></lb></label></span>
+																		<span class="radio-info"   style="padding:0px 20px;"><input id="rd-search-range" type="radio" name="rd-search-range" value="Y"><label for="radio1"><lb class="lb-354"></lb></label></span>
+																	</div>
+									                             </span>
+															</div>
+														</div>
+								 						 <div class="col-sm-6">
+															<span class="k-widget k-autocomplete" style="width: 60%;">
+																<input id="searchText" type="text" class="k-input" placeholder="Search..." style="width: 100%;">
+															</span>
+															<span style="float: right;">
+																<button id="btn-search" type="button" class="btn btn-default btn-sm btn-outline btn-search" style="padding: 4px 25px 4px 25px;"><i class="fa fa-search"></i><lb class="lb-10"></lb></button>
+															</span>
+														</div>
+													</div>
+													<div class='scrollable' style='height: 500px; overflow: auto;'>
+										           		<div id="menu-treeview"></div>
+										           	</div>
+										        </div>
+
+											</div>
+										</div>
+
+										<div class="col-lg-6">
+											<div class="ibox float-e-margins">
+												<div class="ibox-content">
+													<div class="row">
+									                    <!--담당자 ibox-content2 -->
+														<div class="ibox-content" style="border-style: none none none;">
+															<h3><lb class="lb-848"></lb></h3>
+										                 	<div class="row">
+																<div class="col-lg-12">
+										         					<div id="menu-list-grid"></div>
+										                 		</div>
+															</div>
+														</div>
+														<!--담당자 ibox-content2 end-->
+
+
+														<!--연계시스템 ibox-content2-->
+														<div id="appGridDiv" class="ibox-content" style="border-style: none; display:none">
+															<div class="ibox-title">
+																<h5><lb class="lb-849"></lb></h5>
+																<div style="float: right; padding: 0px 20px 0px 0px;">
+																	<a id="btnModify" class="btn btn-w-m btn-default btn-outline" ><i class="fa fa-pencil"></i> <lb class="lb-342"></lb> </a>
+																</div>
+															</div>
+											               	<div class="row">
+																<div class="col-lg-12" >
+											       	     			<div id="menu-app-grid" ></div>
+																</div>
+															</div>
+														</div>
+														<!--연계시스템 ibox-content2 end-->
+								                    </div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+
+<ul id="menu" class="demo-section k-content wide">
+    <li data-item="delete"><lb class="lb-343"></lb></li>
+</ul>
+
+<script type="text/x-kendo-template" id="template-001">
+	<div>
+		<span class="appAdd" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;">
+			<i class='fa fa-plus-square'></i> <lb class="template-001-change"></lb></span>
+		</span>
+	</div>
+</script>
+<script>
+	$(document).ready(function() {
+	    //=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main/main_detail, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "SU-01-04-001";
+
+	    $.extend({
+	        main : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+				selectedItem: '',
+				contextSelectedItem: '',
+
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_initGrid();
+						$.main.fn_searchGridList();
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid 초기화
+				//-----------------------------------------------------------------------
+				fn_initGrid : function() {
+					try {
+
+						$("#appl-grid").kendoGrid({
+		                    dataSource : {
+			                	data : []
+			                	, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+		                    },
+		                    toolbar : kendo.template( $("#template-001").html() ),
+		                    filterable: true,
+		                    editable: {
+		                    	mode : "popup",
+		                    	window : {
+		                    		pinned: true,
+		                    		width : "400px"
+		                    	}
+		                    },
+						    width  : "100%",
+							selectable: "row",
+							resizable: true,
+		                    sortable : true,
+		                    save : function(e) {
+								var dataItem = e.model;
+								$.main.fn_saveDataItem(dataItem);
+				            },
+							pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesXS()
+						    	, buttonCount 	: 5
+						    	, input : true
+							},
+		                    columns : [
+
+		   							{
+		   								field : "menuNm",
+		   								title : mint.label.getLabel('lb-211'),
+		   								headerAttributes : {
+		   									style : "text-align: center; vertical-align:middle;"
+		   								},
+		   								attributes : {
+		   									style : "text-align: center; white-space: nowrap;"
+		   								},
+		   								filterable: { multi: true, search: true }
+		   							},
+			   						{
+			   							field : "menuCd",
+			   							title : mint.label.getLabel('lb-354'),
+			   							headerAttributes : {
+			   								style : "text-align: center; vertical-align:middle;"
+			   							},
+			   							attributes : {
+			   								style : "text-align: center; white-space: nowrap;"
+			   							},
+			   							filterable: { multi: true, search: true }
+			   						},
+		   							{
+		   								field : "rootYn",
+		   								title : mint.label.getLabel('lb-817'),
+		   								headerAttributes : {
+		   								    style : "text-align: center; vertical-align:middle;"
+		   								},
+		   								attributes : {
+		   								    style : "text-align: center; white-space: nowrap;"
+		   								},
+		   								editor : mint.ui.gridEditorYesOrNoComboBox,
+		   								filterable: { multi: true, search: true }
+
+		   							},
+		   							{
+		   							    field : "menuOpt",
+		   							    title : mint.label.getLabel('lb-494'),
+		   							    headerAttributes : {
+		   							        style : "text-align: center; vertical-align:middle;"
+		   							    },
+		   							    attributes : {
+		   							        style : "text-align: center; white-space: nowrap;"
+		   							    },
+		   							 	filterable: { multi: true, search: true }
+		   							},
+		   							{
+		   							    field : "comments",
+		   							    title : mint.label.getLabel('lb-398'),
+		   							    headerAttributes : {
+		   							        style : "text-align: center; vertical-align:middle;"
+		   							    },
+		   							    attributes : {
+		   							        style : "text-align: center; white-space: nowrap;"
+		   							    },
+		   							 	filterable: { multi: true, search: true }
+		   							}
+		   							, {
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										},
+										command : [
+												{
+													name  : "edit",
+												  	text  :
+													{
+														edit   : mint.label.getLabel('lb-342'),
+													  	update : mint.label.getLabel('lb-310'),
+													  	cancel : mint.label.getLabel('lb-143')
+													},
+													click : function(e) {
+														var row = this.tbody.find("tr[data-role='editable']");
+														this.select(row);
+													}
+												},
+											  	{
+													name  : "deletes",
+												  	text  : "<span class='k-icon k-i-close'></span>" + mint.label.getLabel('lb-343'),
+												  	click : function(e) {
+														var row = $(e.target).closest("tr");
+														var dataItem = this.dataItem(row);
+														if(dataItem.childCnt > 0) {
+															return;
+														}
+														this.select(row);
+														$.main.fn_deleteDataItem(dataItem);
+												    }
+												}
+										]
+									}
+		   	                    ]
+						    , dataBound: function (e) {
+						    	if(0 == $("#appl-grid").data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height());
+
+						    		$("#appl-grid").children(".k-grid-content").height(gridHeight /2.5);
+						    	} else {
+						    		$("#appl-grid").children(".k-grid-content").height('auto');
+						    	}
+						    }
+				        }).data("kendoGrid");
+						$('.template-001-change').text(mint.label.getLabel('lb-370'));
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+					}
+				},//end fn_initGrid
+
+				//-----------------------------------------------------------------------
+				// Description ::  프로그램 검색
+				//-----------------------------------------------------------------------
+				fn_searchGridList : function() {
+					try {
+						var tempChannel = new Object();
+						mint.callService(tempChannel, screenName, 'REST-R01-SU-01-04', '$.main.fn_setGridData',{errorCall : true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_searchGridList"});
+					}
+				},//end fn_searchGridList()
+
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 데이터 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function(jsonObject) {
+					try {
+
+						var dataSource = new kendo.data.DataSource({
+						    data: jsonObject
+							, page:1
+							, pageSize:mint.ui.getPageSizesXS({'currentPage' : true})
+						});
+						$('#appl-grid').data('kendoGrid').setDataSource(dataSource);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+
+				fn_saveDataItem : function(dataItem) {
+					try {
+
+						var requestObject = new Object();
+						requestObject.objectType = 'Menu';
+
+
+						requestObject.menuId   	 = dataItem.menuId;
+						requestObject.menuNm     = dataItem.menuNm;
+						requestObject.menuCd     = dataItem.menuCd;
+						requestObject.menuOpt    = dataItem.menuOpt;
+
+						requestObject.comments   = dataItem.comments;
+						requestObject.regDate    = mint.common.getStartTime();
+						requestObject.regId      = mint.session.getUserId();
+						requestObject.modDate    = mint.common.getStartTime();
+						requestObject.modId      = mint.session.getUserId();
+
+						if(dataItem.menuNm == null || dataItem.menuNm == ''){
+							mint.common.alert('CW00001', mint.label.getLabel('lb-211'));
+							return;
+						}
+						if( mint.common.isEmpty(dataItem.menuId) ) {
+
+							requestObject.rootYn     = dataItem.rootYn.value;
+							//-----------------------------------------------------------------------
+							//신규 등록
+							//-----------------------------------------------------------------------
+							mint.callService(requestObject, screenName, 'REST-C01-SU-01-04', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(jsonData) && ! mint.common.isEmpty(jsonData.menuId) ) {
+									mint.common.alert('CI00101', null); //저장을 완료했습니다.
+									$.main.fn_searchGridList();
+								}
+							}, { errorCall : true } );
+
+						} else {
+							requestObject.rootYn     = dataItem.rootYn;
+							//-----------------------------------------------------------------------
+							//수정
+							//-----------------------------------------------------------------------
+							mint.callService(requestObject, screenName, 'REST-U01-SU-01-04', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+									mint.common.alert('CI00102', null); //수정을 완료했습니다.
+									$.main.fn_searchGridList();
+								}
+							}, { errorCall : true } );
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_saveDataItem"});
+					}
+				},//end fn_saveDataItem()
+
+				//-----------------------------------------------------------------------
+				// Description :: dataItem delete
+				//-----------------------------------------------------------------------
+				fn_deleteDataItem : function(dataItem) {
+					try {
+						if(dataItem.menuId == null || dataItem.menuId == ''){
+							$('#appl-grid').data('kendoGrid').dataSource.remove(dataItem);
+							return;
+						}
+
+						if( mint.common.confirm('CI00003', null) ) {
+							var channelObj = new Object();
+							channelObj.objectType ="Menu";
+							mint.callService(channelObj, screenName, 'REST-D01-SU-01-04', function(jsonData, errorCd, errorMsg) {
+								if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+									mint.common.alert('CI00103', null); //삭제를 완료했습니다.
+									$.main.fn_searchGridList();
+								}
+							},
+							{
+								errorCall : true,
+								params : { menuId : dataItem.menuId,
+											}
+							});
+
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_deleteDataItem"});
+					}
+				},//end fn_deleteDataItem()
+	        },
+
+
+	        sub : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+				selectedItem: '',
+				contextSelectedItem: '',
+
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.sub.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+
+						$.sub.fn_subGrid();
+						//$.sub.fn_searchSubGrid();
+
+						$.sub.fn_initTree();
+						//$.sub.fn_requireTreeSystem();
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				fn_subGrid : function(){
+					try{
+			 			//담당자 - 그리드 세팅
+				        $("#menu-list-grid").kendoGrid({
+		                    dataSource : {
+			                	data : []
+			                	, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+		                  	}
+				        	, sortable: true
+				        	, editable: false
+				        	, selectable: true
+				        	, filterable: true
+							, pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesXS()
+						    	, buttonCount 	: 5
+						    	, input : true
+							}
+				   			,columns : [
+		   							{
+		   								field : "menuNm",
+		   								title : mint.label.getLabel('lb-211'),
+		   								headerAttributes : {
+		   									style : "text-align: center; vertical-align:middle;"
+		   								},
+		   								attributes : {
+		   									style : "text-align: center; white-space: nowrap;"
+		   								},
+		   								filterable: { multi: true, search: true }
+		   							},
+		   							{
+		   							    field : "comments",
+		   							    title : mint.label.getLabel('lb-398'),
+		   							    headerAttributes : {
+		   							        style : "text-align: center; vertical-align:middle;"
+		   							    },
+		   							    attributes : {
+		   							        style : "text-align: center; white-space: nowrap;"
+		   							    },
+		   							 	filterable: { multi: true, search: true }
+		   							}
+				        	]
+					        , dataBound: function (e) {
+						    	if(0 == $("#menu-list-grid").data().kendoGrid.dataSource.view().length) {
+						    		$("#menu-list-grid").children(".k-grid-content").height('100');
+						    	} else {
+						    		$("#menu-list-grid").children(".k-grid-content").height('auto');
+						    	}
+						    }
+				        });
+
+						//연계시스템 - 송신(요청) 그리드
+						$("#menu-app-grid").kendoGrid({
+				              sortable: true
+				            , editable: false
+				            , selectable: true
+				            //, change: onChange
+							, columns: [
+									{
+									  title 	: mint.label.getLabel('lb-849')
+												+ "<a id='source-help' style='margin-left: 10px; float:right;' class='help-over-label' onclick='$.sub.fn_helpTemp(this)'></a>"
+												+ "<span id='popupAppSearchPop' style='float:right; cursor: pointer;'><i class='fa fa-plus-square'></i> <lb class='lb-327'></lb></span>"
+									, headerAttributes: {
+										 style: "text-align: center;"
+									}
+									, columns: [
+										{
+											  template	: '#=$.sub.fn_setComboboxStyleCheck(reUseDelYn, "menu-app-grid")#'
+											, width 	: "30px"
+											, headerAttributes: {
+												 style: "text-align: center; vertical-align:middle;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										}
+										,{
+											  title		: mint.label.getLabel('lb-211')
+											, field 	: "appNm"
+											, template : '#=$.sub.fn_setStyleCheck(appNm, reUseDelYn)#'
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+
+										}
+										, {
+											  title		: mint.label.getLabel('lb-354')
+											, field 	: "appCd"
+											, template : '#=$.sub.fn_setStyleCheck(appCd, reUseDelYn)#'
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+											, attributes: {
+												 style: "text-align: center; white-space: nowrap;"
+											}
+										}
+
+										, {
+											field 	: "appId"
+											, hidden	: true
+											, headerAttributes: {
+												 style: "text-align: center;"
+											}
+										}
+										, {
+											  title		: "reUseDelYn"
+											, field 	: "reUseDelYn"
+											, hidden	: true
+										}
+									]
+								}
+				            ]
+							 , dataBound: function (e) {
+						    	if(0 == $("#menu-app-grid").data().kendoGrid.dataSource.view().length) {
+						    		$("#menu-app-grid").children(".k-grid-content").height('150');
+						    	} else {
+						    		$("#menu-app-grid").children(".k-grid-content").height('auto');
+						    	}
+						    }
+				        });
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_subGrid"});
+					}
+				}, // end fn_subGrid
+
+				fn_searchSubGrid : function(){
+					try{
+			 			var menu = new Object();
+	    				// 등록되지 않은 메뉴 목록.
+	    				menu.rootYn = "N";
+						mint.callService(menu, screenName, 'REST-R04-SU-01-04', function(jsonData) {
+							if( ! mint.common.isEmpty(jsonData) ) {
+								var inlineDefault  = new kendo.data.DataSource({
+										data:jsonData ,
+										pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+								});
+								$("#menu-list-grid").data("kendoGrid").setDataSource(inlineDefault);
+							};
+						}, { errorCall : true, notificationView : false } );
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_searchSubGrid"});
+					}
+				}, // end fn_searchSubGrid
+
+				fn_initTree : function() {
+					try {
+						$("#menu-treeview").kendoTreeView({
+								dataTextField: 'text',
+								dataValueField :'id',
+								dataBound: function(){
+						          	this.expand('.k-item');
+						          }
+		                });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initTree"});
+					}
+				},//end fn_initTree
+
+				//-----------------------------------------------------------------------
+				// Description :: 시스템 트리 검색.
+				//-----------------------------------------------------------------------
+				fn_requireTreeSystem : function() {
+					try {
+						var organization = new Object();
+						organization.objectType 	= 'Menu';
+						mint.callService(organization, screenName, 'REST-R03-SU-01-04', function(jsonData) {
+							if( ! mint.common.isEmpty(jsonData) ) {
+								var inlineDefault  = new kendo.data.HierarchicalDataSource({
+										data:jsonData,
+				                        schema: {
+				                           data: "roots",
+					                       model: {
+					                           id: "id",
+					                           hasChildren: "hasChild",
+					                           children: "items",
+					                           text:"text",
+					                           parent: "parent",
+					                           group: "group",
+					                           root: "root"
+					                         }
+				                       }
+								});
+								inlineDefault.read();
+							    $("#menu-treeview").data("kendoTreeView").setDataSource(inlineDefault);
+							};
+						}, { errorCall : true, notificationView : false } );
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireTreeSystem"});
+					}
+				},//end fn_requireSystem()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 프로그램 목록 조회.
+				//-----------------------------------------------------------------------
+				fn_requireMenu: function(menuId) {
+					try {
+						var menuObj = new Object();
+						menuObj.objectType 	= 'Menu';
+						mint.callService(menuObj, screenName, 'REST-R02-SU-01-04', function(jsonData) {
+							if( ! mint.common.isEmpty(jsonData) ) {
+								var inlineDefault  = new kendo.data.DataSource({
+										data:jsonData.appList,
+					                    schema: {
+						                    model: {
+					                          reUseDelYn: "Y",
+					                        }
+					                    }
+								});
+							    $("#menu-app-grid").data("kendoGrid").setDataSource(inlineDefault);
+							};
+						}, { errorCall : true,
+							params:{
+								menuId: menuId
+							}
+						} );
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireMenu"});
+					}
+				},//end fn_requireMenu()
+
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 삭제 표시(편집 불가)
+				//-----------------------------------------------------------------------
+				fn_setComboboxStyleCheck : function(reUseDelYn, columnClass) {
+					try {
+						if('N' == reUseDelYn) {
+							return "<span></span>";
+						} else {
+							return "<span class='"+columnClass+"' onclick='$.sub.fn_removeGridData(this)' style='cursor: pointer;'>X</span>";
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setComboboxStyleCheck"});
+					}
+				},//end fn_setComboboxStyleCheck()
+
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 정보 - 그리드 로우 삭제 클릭 이벤트
+				//-----------------------------------------------------------------------
+				fn_removeGridData : function(node) {
+					try {
+						var grid = $("#" + node.className).data("kendoGrid");
+						var row = $(node).closest("tr");
+					    var	dataItem = grid.dataItem(row);
+					    var r;
+						if('menu-app-grid' ==  node.className && null != dataItem.appNm) {
+							r = mint.common.confirm('BI00003', dataItem.appNm);
+						}
+
+						if (r == true) {
+				        	grid.dataSource.remove(dataItem);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_removeGridData"});
+					}
+				},//end fn_removeGridData()
+
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 컬럼 스타일 변경(편집 불가)
+				//-----------------------------------------------------------------------
+				fn_setStyleCheck : function(columnValue, reUseDelYn) {
+					try {
+						if('N' == reUseDelYn) {
+							return "<span title='"+ columnValue +"' style='color:#C0C0C0'>" + columnValue + "</span>";
+						} else {
+							return "<span title='"+ columnValue +"'>" + columnValue + "</span>";
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setStyleCheck"});
+					}
+				},//end fn_setStyleCheck()
+
+				//-----------------------------------------------------------------------
+	            // Description :: 초기화
+	            //-----------------------------------------------------------------------
+				fn_editorClear : function() {
+
+					$("#menu-app-grid").data("kendoGrid").setDataSource( new kendo.data.DataSource());
+					$("#menu-list-grid").data("kendoGrid").setDataSource( new kendo.data.DataSource());
+
+					$.sub.isNew = false;
+				},//	end fn_editorClear
+
+		      	//-----------------------------------------------------------------------
+				// Description :: 프로그램 정보 셋팅
+				//-----------------------------------------------------------------------
+				fn_setAppInfo : function(selectedItem) {
+					try {
+						if( !mint.common.isEmpty(selectedItem) ) {
+							selectedItem.reUseDelYn='Y';
+ 							$('#menu-app-grid').data().kendoGrid.dataSource.add(selectedItem);
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setAppInfo"});
+					}
+				},//end fn_setAppInfo()
+
+		      	//-----------------------------------------------------------------------
+				// Description :: 메뉴 하위 등록.
+				//-----------------------------------------------------------------------
+				fn_gridMoveTreeView : function(pSelectedItem, menuID) {
+					try {
+						var requestObject = new Object();
+						requestObject.pid = pSelectedItem.id
+						requestObject.cid = menuID;
+						requestObject.regDate = mint.common.getStartTime();
+						requestObject.regId = mint.session.getUserId();
+	 					mint.callService(requestObject, screenName, 'REST-C02-SU-01-04', function(jsonData, errorCd, errorMsg) {
+							if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+								mint.common.alert('CI00101', null); //저장을 완료했습니다.
+								$.sub.fn_editorClear();
+								$.sub.fn_requireTreeSystem();
+								$.sub.fn_searchSubGrid();
+							}
+						}, { errorCall : true } );
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_gridMoveTreeView"});
+					}
+				},//end fn_gridMoveTreeView()
+
+
+		      	//-----------------------------------------------------------------------
+				// Description :: 메뉴 하위 등록.
+				//-----------------------------------------------------------------------
+				fn_deleteMenuPath : function(pSelectedItem) {
+					try {
+
+	 					mint.callService(null, screenName, 'REST-D03-SU-01-04', function(jsonData, errorCd, errorMsg) {
+							if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+								mint.common.alert('CI00101', null); //저장을 완료했습니다.
+								$.sub.fn_editorClear();
+								$.sub.fn_requireTreeSystem();
+								$.sub.fn_searchSubGrid();
+							}
+						}, { errorCall : true,
+							params :{menuId: pSelectedItem.id}
+							} );
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_deleteMenuPath"});
+					}
+				}, //end fn_deleteMenuPath()
+
+				//-----------------------------------------------------------------------
+				// Description :: 메뉴  update
+				//-----------------------------------------------------------------------
+				fn_saveSystem : function(dataItem) {
+					try {
+
+						var requestObject = new Object();
+						requestObject.objectType = 'Menu';
+						requestObject.menuId = dataItem.id;
+
+
+						var tempAppList = [];
+						var appGridView = $("#menu-app-grid").data().kendoGrid.dataSource.view();
+						for (var i = 0; i < appGridView.length; i++) {
+
+							var appObject = new Object();
+							appObject.objectType = 'Application';
+							appObject.seq = i;
+
+							appObject.appId = appGridView[i].appId;
+
+							appObject.regDate = mint.common.remakeYYMMDD(new Date());
+							appObject.regId = mint.session.getUserId();
+
+							tempAppList.push(appObject);
+						}
+
+						requestObject.appList = tempAppList;
+
+						//Overwrite
+						//-----------------------------------------------------------------------
+						//수정
+						//-----------------------------------------------------------------------
+						mint.callService(requestObject, screenName, 'REST-U02-SU-01-04', function(jsonData, errorCd, errorMsg) {
+							if (!mint.common.isEmpty(errorCd) && errorCd == 0) {
+								mint.common.alert('CI00102', null); //수정을 완료했습니다.
+							}
+						}, {
+							errorCall : true
+						});
+
+					} catch (e) {
+						mint.common.errorLog(e, {
+							"screenName" : screenName,
+							"fnName" : "$.main.fn_saveSystem"
+						});
+					}
+				}, //end fn_saveSystem()
+
+			},
+	    });
+
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+		//-----------------------------------------------------------------------
+		// Description :: 초기화.
+		//-----------------------------------------------------------------------
+		$("#btnClear").click(function () {
+			$.sub.fn_editorClear();
+        });
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 시스템 그룹 더블 클릭
+		//-----------------------------------------------------------------------
+		$('#menu-treeview').click( function () {
+			try {
+				var entityTree = $("#menu-treeview").data("kendoTreeView");
+				var selectedItem = entityTree.dataItem(entityTree.select());
+				if(selectedItem != null){
+					$.sub.selectedItem = selectedItem;
+
+					$("#appGridDiv").show();
+					$.sub.fn_requireMenu(selectedItem.id);
+
+				}
+
+			} catch( e ) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "menu-treeview.click"});
+			}
+		});
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 시스템 전체 조회
+		//-----------------------------------------------------------------------
+		$('#btn-search').click( function () {
+			try {
+				$.sub.fn_requireTreeSystem();
+			} catch( e ) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-search"});
+			}
+		});
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 시스템 filer 조회
+		//-----------------------------------------------------------------------
+	    $("#searchText").on("input", function() {
+	        var query = $(this).val().toLowerCase();
+	        if( mint.common.isEmpty(query) ) {
+	        	mint.ui.treeViewFilter('menu-treeview', query);
+	        } else {
+	            setTimeout(function () {
+	            	mint.ui.treeViewFilter('menu-treeview', query);
+	            }, 200);
+	        }
+	    });
+
+
+
+
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+	    $("#menu").kendoContextMenu({
+          	// listen to right-clicks on treeview container
+            target: "#menu-treeview",
+
+          	// show when node text is clicked
+          	filter: ".k-in",
+
+           	//open: onOpen,
+          	// handle item clicks
+           	select: function(e) {
+            	var button = $(e.item);
+            	var node = $(e.target);
+ 	        	var entityTree = $("#menu-treeview").data("kendoTreeView");
+ 				var selectedItem = entityTree.dataItem(node);
+
+ 				$.sub.fn_editorClear();
+ 	        	$.sub.contextSelectedItem = selectedItem;
+ 	        	$.sub.selectedItem = null;
+
+/*  				if($(e.item).data().item =="grp-reg"){
+
+ 					if(selectedItem.root == true  || selectedItem.group == true){
+ 	 					if(selectedItem.root == true){
+ 	 						$('#cbRootYn').data("kendoDropDownList").enable(true);
+ 	 					}else{
+ 	 						$('#cbRootYn').data("kendoDropDownList").enable(false);
+ 	 					}
+ 						$('#btnCreate').show();
+ 						$.main.isGroup=true;
+ 						$.main.isNew=true;
+ 					}else{
+ 						mint.common.alert('CW00009', 'System Group');
+ 					}
+ 				}else if($(e.item).data().item =="system-reg"){
+ 					if( selectedItem.root == true ||selectedItem.group == true){
+ 						$('#btnCreate').show();
+ 						$('#cbRootYn').data("kendoDropDownList").enable(false);
+ 						$.main.isGroup=false;
+ 						$.main.isNew=true;
+ 					}else{
+ 						mint.common.alert('CW00009', 'System Group');
+ 					}
+ 				} */
+ 				$.sub.fn_deleteMenuPath(selectedItem);
+
+
+          	}
+
+
+        });
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================
+	    $.main.fn_init();
+	    $.sub.fn_init();
+	    mint.label.attachLabel(null);
+
+		//-----------------------------------------------------------------------
+		// Description :: 프로ㅡ램 Search Click 이벤트 (팝업)
+		//-----------------------------------------------------------------------
+		$('#popupAppSearchPop').on('click', function(e) {
+			var entityTree = $("#menu-treeview").data("kendoTreeView");
+			var selectedItem = entityTree.dataItem(entityTree.select());
+			if(selectedItem != null  || $.main.isNew){
+				mint.common.setScreenParam("caller", "IM-01-00-004");
+				mint.common.setScreenParam('callback', '$.sub.fn_setAppInfo');
+				mint.common.searchPopup('../sub-su/SU-01-04-501.html','SU-01-04-501');
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$('.menuGrid').on('click', function(e) {
+			$.main.fn_searchGridList();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$('.menuTree').on('click', function(e) {
+			$.sub.fn_searchSubGrid();
+			$.sub.fn_requireTreeSystem();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$('.appAdd').on('click', function(e) {
+			$('#appl-grid').data("kendoGrid").addRow();
+		});
+		//-----------------------------------------------------------------------
+		// Description :: 수정.
+		//-----------------------------------------------------------------------
+		$('#btnModify').click(function(e) {
+	    	var entityTree = $("#menu-treeview").data("kendoTreeView");
+			var selectedItem = entityTree.dataItem(entityTree.select());
+
+			if(selectedItem == null){
+				mint.common.alert('CW00003', 'Menu');
+				return;
+			}
+
+			var confirmCheck = mint.common.confirm('CI00002', null);
+		    if (confirmCheck == true) {
+				$.sub.fn_saveSystem(selectedItem);
+		    }
+		});
+	});
+
+
+
+	var grid = $("#menu-list-grid").data("kendoGrid");
+	var treeview = $("#menu-treeview").data("kendoTreeView");
+	var itemUID ='';
+        grid.table.kendoDraggable({
+            cursorOffset: {
+                top: 5,
+                left: 5
+            },
+            filter: "tbody > tr",
+            group: "Grid",
+             hint: function (e) {
+                itemUID = e.attr(kendo.attr("uid"));
+                var z = $(e).find('.ZID');
+                itemUID = z.html();
+                return $('<div class="k-grid k-widget"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+            }
+         });
+
+        treeview.element.kendoDropTarget({
+        	filter: ".k-item",
+            group: "Grid",
+            drop: function (e) {
+                 treeview.select(treeview.findByText(e.target.textContent));
+                var selectedNode = treeview.select();
+                if (selectedNode.length == 0) {
+                    selectedNode = null;
+                }
+                var model = grid.dataItem(e.draggable.currentTarget);
+				$.sub.fn_gridMoveTreeView(treeview.dataItem(selectedNode) ,model.menuId);
+            }
+        });
+
+	function filter(dataSource, query) {
+	      var hasVisibleChildren = false;
+	      var data = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
+
+	      for (var i = 0; i < data.length; i++) {
+	        var item = data[i];
+	        var text = item.text.toLowerCase();
+	        var itemVisible =
+	            query === true // parent already matches
+	            || query === "" // query is empty
+	            || text.indexOf(query) >= 0; // item text matches query
+
+	        var anyVisibleChildren = filter(item.children, itemVisible || query); // pass true if parent matches
+
+	        hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
+
+	        item.hidden = !itemVisible && !anyVisibleChildren;
+	      }
+
+	      if (data) {
+	        // re-apply filter on children
+	        dataSource.filter({ field: "hidden", operator: "neq", value: true });
+	      }
+
+	      return hasVisibleChildren;
+	    }
+</script>
+
+<style>
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr {
+	    cursor : pointer;
+	}
+
+	div.menu-treeview
+	{
+	   overflow: visible;
+	}
+
+	#menu-treeview .k-sprite {
+		background-image: url("../../img/coloricons-sprite.png");
+    }
+     .rootfolder { background-position: 0 0; }
+     .folder     { background-position: 0 -16px; }
+     .pdf        { background-position: 0 -32px; }
+     .html       { background-position: 0 -48px; }
+     .image      { background-position: 0 -64px; }
+</style>

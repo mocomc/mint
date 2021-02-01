@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>pep.per</groupId>
+		<artifactId>mint</artifactId>
+		<version>3.0.0</version>
+	</parent>
+	
+	<groupId>pep.per</groupId>
+	<artifactId>mint-rest-client</artifactId>
+	<version>3.0.0</version>
+	<name>mint-rest-client</name>
+	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+		<jackson-version>2.9.5</jackson-version>
+		<org.springframework-version>4.3.17.RELEASE</org.springframework-version>
+		<javax.servlet.servlet-api-version>2.5</javax.servlet.servlet-api-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-common</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency> 
+		 
+		
+	</dependencies>
+
+</project>

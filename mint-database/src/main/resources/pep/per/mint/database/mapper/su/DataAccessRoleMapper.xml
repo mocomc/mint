@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.DataAccessRoleMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertDataAccessRole">
+		<selectKey keyProperty="roleId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				SELECT 'DR' || LPAD((COALESCE(MAX(SUBSTR(ROLE_ID,3)),'0')::numeric+1)::text,8,'0') FROM TSU0218
+        		</when>
+        		<otherwise>
+				SELECT 'DR' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(ROLE_ID,3)),'0')) + 1),8,'0') FROM TSU0218
+        		</otherwise>
+        	</choose>
+		</selectKey>
+		
+		INSERT INTO TSU0218
+		(
+			ROLE_ID,
+			ROLE_CD,
+			ROLE_NM,
+			COMMENTS,
+			ROOT_YN,
+			GRP_YN,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		  ) VALUES (
+		    #{roleId, jdbcType=VARCHAR},
+			#{roleCd, jdbcType=VARCHAR},
+			#{roleNm, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			#{rootYn, jdbcType=VARCHAR},
+			#{grpYn, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<select id="getDataAccessRoleList" parameterType="Map" resultMap="dataAccessRoleResultMap">
+		SELECT
+			ROLE_ID,
+			ROLE_CD,
+			ROLE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		FROM TSU0218
+  		WHERE DEL_YN= 'N'
+		ORDER BY ROLE_ID ASC
+	</select>
+
+	<resultMap type="DataAccessRole" id="dataAccessRoleResultMap">
+		<id property="roleId" 				column="ROLE_ID"/>
+		<result property="roleCd"				column="ROLE_CD"/>
+		<result property="roleNm"				column="ROLE_NM"/>
+		<result property="rootYn"				column="ROOT_YN"/>
+		<result property="grpYn"				column="GRP_YN"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+
+		<association property="parent" javaType="DataAccessRole">
+			<id property="roleId"			column="P_ROLE_ID"/>
+			<result property="roleNm" 		column="P_ROLE_NM" />
+			<result property="roleCd" 		column="P_ROLE_CD" />
+			<result property="rootYn" 		column="P_ROOT_YN" />
+			<result property="grpYn" 		column="P_GRP_YN" />
+			<result property="comments" 	column="P_COMMENTS" />
+		</association>
+
+		<collection property="relUsers" ofType="RelUser">
+			<id property="user.userId" 			column="SYS_USER_ID"/>
+			<id property="seq"					column="SYS_SEQ"/>
+			<association property="user" javaType="User">
+				<id property="userId" 				column="SYS_USER_ID"/>
+				<result property="userNm" 			column="SYS_USER_NM"/>
+				<result property="cellPhone" 		column="SYS_CELL_PHONE"/>
+				<result property="phone"			column="SYS_PHONE"/>
+				<result property="email"			column="SYS_EMAIL"/>
+			</association>
+		</collection>
+		<collection property="systemList" ofType="System">
+			<id property="systemId" 			column="SYSTEM_ID"/>
+			<id property="seq"					column="SV_SEQ"/>
+			<result property="systemNm"			column="SYSTEM_NM"/>
+			<result property="systemCd"			column="SYSTEM_CD"/>
+			<result property="comments"			column="SV_COMMENTS"/>
+		</collection>
+
+	</resultMap>
+
+	<update id="updateDataAccessRole">
+		UPDATE TSU0218
+		SET ROLE_CD = #{roleCd, jdbcType=VARCHAR}
+			,ROLE_NM = #{roleNm, jdbcType=VARCHAR}
+		    ,ROOT_YN = #{rootYn, jdbcType=VARCHAR}
+		    ,GRP_YN = #{grpYn, jdbcType=VARCHAR}
+		    ,COMMENTS = #{comments, jdbcType=VARCHAR}
+			,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+			,MOD_USER = #{modId, jdbcType=VARCHAR}
+		WHERE ROLE_ID = #{roleId}
+	</update>
+
+	<delete id="deleteDataAccessRole">
+		UPDATE TSU0218
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE ROLE_ID = #{roleId}
+	</delete>
+
+	<select id="existDataAccessRole" parameterType="Map" resultMap="dataAccessRoleResultMap">
+		SELECT
+			ROLE_ID,
+			ROLE_CD
+  		FROM TSU0218
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		AND  ROLE_CD = #{roleCd,jdbcType=VARCHAR}
+		<if test="roleId != null">
+		AND ROLE_ID &lt;&gt; #{roleId}
+		</if>
+	</select>
+
+	<select id="usedDataAccessRole" parameterType="Map" resultType="String">
+		SELECT
+			INTERFACE_ID
+  		FROM TSU0220
+  		WHERE 1=1
+		AND ROLE_ID = #{roleId}
+	</select>
+
+	<insert id="insertDataAccessRoleUsers">
+		<selectKey keyProperty="seq" resultType="Integer" order="BEFORE" >
+			SELECT COALESCE(MAX(seq),0)+1 FROM TSU0219 WHERE ROLE_ID=#{roleId}
+		</selectKey>
+		INSERT INTO TSU0219
+		(
+			ROLE_ID,
+			USER_ID,
+			SEQ
+		) VALUES (
+			#{roleId, jdbcType=VARCHAR},
+			#{userId, jdbcType=VARCHAR},
+			#{seq, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<select id="getDataAccessRoleUsersList" parameterType="Map" resultMap="pep.per.mint.database.mapper.su.UserRoleManagementMapper.userResultMap">
+		SELECT
+			 a.USER_ID
+			,COALESCE(a.USER_NM,' ') AS USER_NM
+			,COALESCE(a.CELL_PHONE,' ') AS CELL_PHONE
+			,COALESCE(a.PHONE,' ') AS PHONE
+			,COALESCE(a.EMAIL,' ') AS EMAIL
+			,COALESCE(a.COMPANY_NM,' ') AS COMPANY_NM
+			,COALESCE(a.DEPARTMENT_NM,' ') AS DEPARTMENT_NM
+			,COALESCE(a.POSITION_NM,' ') AS POSITION_NM
+			,COALESCE(a.ROLE_ID,' ') AS ROLE_ID
+			,b.SEQ AS SEQ
+		FROM TSU0101 a
+		INNER JOIN TSU0219 b ON a.USER_ID = b.USER_ID AND a.DEL_YN = 'N' AND b.ROLE_ID=#{roleId}
+		ORDER BY USER_ID
+	</select>
+
+	<delete id="deleteDataAccessRoleUsers">
+		DELETE FROM TSU0219 WHERE ROLE_ID = #{roleId} AND USER_ID = #{userId}
+	</delete>
+
+	<delete id="deleteAllDataAccessRoleUsers">
+		DELETE FROM TSU0219 WHERE ROLE_ID = #{roleId}
+	</delete>
+
+	<select id="existDataAccessPath" parameterType="string" resultType="string">
+		SELECT P_ROLE_ID FROM TSU0221 WHERE DEPTH = 0 AND P_ROLE_ID = #{roleId} AND C_ROLE_ID = #{roleId}
+	</select>
+
+	<delete id="deleteDataAccessRolePath">
+		DELETE FROM TSU0221 WHERE P_ROLE_ID IN
+   		(
+			SELECT c.C_ROLE_ID
+			FROM TSU0221 c
+			WHERE c.DEL_YN = 'N'
+			AND c.P_ROLE_ID = #{roleId}
+   		)
+	</delete>
+
+	<select id="getDataAccessRoleDetail" parameterType="string" resultMap="dataAccessRoleResultMap">
+		SELECT
+			 a.ROLE_ID
+			,a.ROLE_NM
+			,a.ROLE_CD
+			,a.ROOT_YN
+			,a.GRP_YN
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+			---------------------------
+			--  user
+			---------------------------
+			,h.USER_ID      AS SYS_USER_ID
+			,h.PASSWORD     AS SYS_PASSWORD
+			,h.USER_NM      AS SYS_USER_NM
+			,h.CELL_PHONE   AS SYS_CELL_PHONE
+			,h.PHONE        AS SYS_PHONE
+			,h.EMAIL        AS SYS_EMAIL
+			,h.ROLE_ID      AS SYS_ROLE_ID
+			---------------------------
+			-- system list
+			---------------------------
+			,d.SYSTEM_ID
+			,d.SEQ			AS SV_SEQ
+			,d.SYSTEM_NM
+			,d.SYSTEM_CD
+			,d.COMMENTS		AS SV_COMMENTS
+			--------------------------------------
+			--  group (parent)
+			--------------------------------------
+			,k.P_ROLE_CD
+			,k.P_ROLE_ID
+			,k.P_ROLE_NM
+			,k.P_ROOT_YN
+			,k.P_GRP_YN
+			,k.P_COMMENTS
+			,(SELECT COUNT(*) FROM TSU0221 WHERE P_ROLE_ID = a.ROLE_ID AND DEPTH > 0) AS CHILD_CNT
+		FROM TSU0218 a
+		LEFT OUTER JOIN (
+			SELECT
+				b.USER_ID
+				,b.PASSWORD
+				,b.USER_NM
+				,b.CELL_PHONE
+				,b.PHONE
+				,b.EMAIL
+        		,a.ROLE_ID
+			FROM TSU0219 a
+			INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		) h ON a.ROLE_ID = h.ROLE_ID
+		LEFT OUTER JOIN (
+			SELECT
+				 a.ROLE_ID
+				,a.SYSTEM_ID
+				,a.SEQ
+				,b.SYSTEM_NM
+				,b.SYSTEM_CD
+				,b.COMMENTS
+			FROM TSU0222 a
+			INNER JOIN TIM0101 b ON b.SYSTEM_ID = a.SYSTEM_ID ) d ON a.ROLE_ID = d.ROLE_ID
+		LEFT OUTER JOIN (
+			SELECT
+				a.C_ROLE_ID
+				,b.ROLE_ID AS P_ROLE_ID
+				,b.ROLE_NM AS P_ROLE_NM
+				,b.ROLE_CD AS P_ROLE_CD
+				,b.ROOT_YN AS P_ROOT_YN
+				,b.GRP_YN  AS P_GRP_YN
+				,b.COMMENTS AS P_COMMENTS
+			FROM TSU0221 a
+			INNER JOIN TSU0218 b ON a.P_ROLE_ID = b.ROLE_ID
+			WHERE a.DEPTH = 1
+		) k ON a.ROLE_ID = k.C_ROLE_ID
+		WHERE 1 = 1
+		AND a.DEL_YN = 'N'
+		AND a.ROLE_ID = #{roleId}
+	</select>
+
+	<insert id="insertDataAccessRolePath" parameterType="DataAccessRolePath">
+		INSERT INTO TSU0221 (
+			 P_ROLE_ID
+			,C_ROLE_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="createDataAccessRolePathRelation" parameterType="Map">
+		INSERT INTO TSU0221 (
+			 P_ROLE_ID
+			,C_ROLE_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		)
+		SELECT
+			 a.P_ROLE_ID
+			,b.C_ROLE_ID
+			,a.DEPTH + b.DEPTH +1
+			,'N'
+		<choose>
+        	<when test="_databaseId == 'altibase'">
+        	,'${regDate}'
+			,'${regId}'
+		FROM TSU0221 a, TSU0221 b
+        	</when>
+        	<otherwise>
+        	,#{regDate}
+			,#{regId}
+		FROM TSU0221 a CROSS JOIN TSU0221 b
+        	</otherwise>
+        </choose>
+		WHERE a.C_ROLE_ID = #{pid}
+		AND b.P_ROLE_ID = #{cid}
+	</insert>
+
+	<delete id="deleteDataAccessRoleRelativeUsersforUpdate">
+		DELETE FROM TSU0219 WHERE ROLE_ID = #{roleId}
+	</delete>
+
+	<insert id="insertDataAccessRoleRelativeUser">
+		INSERT INTO TSU0219
+		(
+			ROLE_ID,
+			USER_ID,
+			SEQ
+		) VALUES (
+			#{roleId, jdbcType=VARCHAR},
+			#{relUser.user.userId, jdbcType=VARCHAR},
+			#{relUser.seq, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<select id="getDataAccessRoleTreeWithModelParam" resultMap="dataAccessRoleWithModelResultMap">
+		SELECT
+			 a.P_ROLE_ID
+			,b.ROLE_CD AS P_ROLE_CD
+			,b.ROLE_NM AS P_ROLE_NM
+			,b.GRP_YN  AS P_GRP_YN
+			,b.ROOT_YN AS P_ROOT_YN
+			,a.C_ROLE_ID
+			,c.ROLE_CD AS C_ROLE_CD
+			,c.ROLE_NM AS C_ROLE_NM
+			,c.GRP_YN  AS C_GRP_YN
+			,a.DEPTH
+		FROM TSU0221 a
+		INNER JOIN (SELECT * FROM TSU0218 WHERE DEL_YN = 'N') b ON a.P_ROLE_ID = b.ROLE_ID
+		INNER JOIN (SELECT * FROM TSU0218 WHERE DEL_YN = 'N') c ON a.C_ROLE_ID = c.ROLE_ID
+		WHERE a.DEL_YN = 'N'
+	 	AND a.DEPTH = 0 AND b.ROOT_YN='Y'
+  		UNION ALL
+		SELECT
+			 a.P_ROLE_ID
+			,b.ROLE_CD AS P_ROLE_CD
+			,b.ROLE_NM AS P_ROLE_NM
+			,b.GRP_YN  AS P_GRP_YN
+			,b.ROOT_YN AS P_ROOT_YN
+			,a.C_ROLE_ID
+			,c.ROLE_CD AS C_ROLE_CD
+			,c.ROLE_NM AS C_ROLE_NM
+			,c.GRP_YN  AS C_GRP_YN
+			,a.DEPTH
+		FROM TSU0221 a
+		INNER JOIN (SELECT * FROM TSU0218 WHERE DEL_YN = 'N') b ON a.P_ROLE_ID = b.ROLE_ID
+		INNER JOIN (SELECT * FROM TSU0218 WHERE DEL_YN = 'N') c ON a.C_ROLE_ID = c.ROLE_ID
+		where a.DEL_YN = 'N'
+	 AND a.DEPTH = 1
+	</select>
+
+	<resultMap id="dataAccessRoleWithModelResultMap" type="java.util.Map">
+		<result property="parentId" 	column="P_ROLE_ID"/>
+		<result property="parentCd" 	column="P_ROLE_CD"/>
+		<result property="parentNm" 	column="P_ROLE_NM"/>
+		<result property="parentGrpYn" 	column="P_GRP_YN"/>
+		<result property="parentRootYn" column="P_ROOT_YN"/>
+		<result property="childId"  	column="C_ROLE_ID"/>
+		<result property="childCd"  	column="C_ROLE_CD"/>
+		<result property="childNm"  	column="C_ROLE_NM"/>
+		<result property="childGrpYn" 	column="C_GRP_YN"/>
+		<result property="depth"    	column="DEPTH" javaType="Integer" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<select id="existDataAccessRolePath" parameterType="string" resultType="string">
+		SELECT P_ROLE_ID FROM TSU0221 WHERE DEPTH = 0 AND P_ROLE_ID = #{roleId} AND C_ROLE_ID = #{roleId}
+	</select>
+
+	<insert id="insertDataAccessRoleSystemMap">
+		INSERT INTO TSU0222 (
+			 SYSTEM_ID
+			,ROLE_ID
+			,SEQ
+		) VALUES (
+			 #{system.systemId}
+			,#{roleId}
+			,#{system.seq}
+		)
+	</insert>
+
+	<delete id="deleteDataAccessRoleSystemMaps">
+		DELETE FROM TSU0222 WHERE ROLE_ID IN
+   		(
+   			SELECT c.C_ROLE_ID
+			FROM TSU0221 c
+			WHERE c.DEL_YN = 'N'
+		   	AND c.P_ROLE_ID = #{roleId}
+   		)
+	</delete>
+
+	<delete id="deleteDataAccessRoleSystemMapsforUpdate">
+		DELETE FROM TSU0222 WHERE ROLE_ID = #{roleId}
+	</delete>
+
+	<!-- 데이터접근권한 :: 인터페이스 맵핑 -->
+	<insert id="insertDataAccessRoleInterface">
+		<selectKey keyProperty="seq" resultType="Integer" order="BEFORE" >
+			SELECT COALESCE(MAX(SEQ),0)+1 FROM TSU0220 WHERE INTERFACE_ID = #{interfaceId}
+		</selectKey>
+		INSERT INTO TSU0220
+		(
+			ROLE_ID,
+			INTERFACE_ID,
+			SEQ
+		) VALUES (
+		    #{roleId,      jdbcType=VARCHAR},
+			#{interfaceId, jdbcType=VARCHAR},
+			#{seq,         jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- 데이터접근권한 :: 인터페이스 맵핑 삭제 -->
+	<delete id="deleteDataAccessRoleInterface">
+		DELETE FROM TSU0220 WHERE INTERFACE_ID = #{interfaceId}
+	</delete>
+
+	<select id="getDataAccessRoleInterface" resultMap="dataAccessRoleInterfaceResultMap">
+		SELECT
+			B.SEQ,
+			B.C_ROLE_ID,
+			B.P_ROLE_ID,
+			A.ROLE_CD,
+			A.ROLE_NM,
+			B.DEPTH
+		FROM TSU0218 A
+		INNER JOIN
+		(
+			SELECT
+				A.SEQ,
+				B.P_ROLE_ID,
+				B.C_ROLE_ID,
+				B.DEPTH
+			FROM TSU0220 A
+			INNER JOIN TSU0221 B ON A.ROLE_ID = B.C_ROLE_ID
+		    WHERE A.INTERFACE_ID = #{interfaceId}
+		    ORDER BY A.SEQ, B.DEPTH DESC
+		) B ON A.ROLE_ID = B.P_ROLE_ID
+		ORDER BY SEQ, DEPTH DESC
+	</select>
+
+	<resultMap id="dataAccessRoleInterfaceResultMap" type="java.util.LinkedHashMap">
+		<result property="seq" 	    column="SEQ"/>
+		<result property="cRoleId" 	column="C_ROLE_ID"/>
+		<result property="roleId" 	column="P_ROLE_ID"/>
+		<result property="roleCd" 	column="ROLE_CD"/>
+		<result property="roleNm"   column="ROLE_NM"/>
+		<result property="depth"  	column="DEPTH"/>
+	</resultMap>
+</mapper>

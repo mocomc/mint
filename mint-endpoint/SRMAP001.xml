@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><map xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="map.xsd">
+    <description>
+        <name>송수신맵핑1</name>
+        <cd>SRMAP001</cd>
+    </description>
+    <dataset>
+        <source id="S001"/>
+        <target id="R001"/>
+    </dataset>
+    <mapping>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/DATA_SIZE"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/DATA_SIZE"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/GLOBAL_ID"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/GLOBAL_ID"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/SVC_ID"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/SVC_ID"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/INTF_ID"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/INTF_ID"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/STATUS"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/STATUS"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/ERROR_CD"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/ERROR_CD"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/CommHeader/FILLER"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/CommHeader/FILLER"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/Data/FIELD01"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/Data/FIELD1"/>
+            </output>
+        </item>
+        <item>
+            <control id="move"/>
+            <input>
+                <field dataset="S001" path="/Data/FIELD02"/>
+            </input>
+            <output>
+                <field dataset="R001" path="/Data/FIELD3"/>
+            </output>
+        </item>
+    </mapping>
+</map>

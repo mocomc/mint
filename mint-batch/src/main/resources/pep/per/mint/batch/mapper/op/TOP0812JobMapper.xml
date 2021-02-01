@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605,
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.TOP0812JobMapper">
+    <!--
+    <cache/>
+    -->
+  <delete id="deleteTOP0812">
+    DELETE FROM TOP0812
+  </delete>
+
+  <insert id="insertTOP0812">
+        INSERT INTO TOP0812 (
+            STORE_CD, POS_NO, REG_DATE, REG_APP
+        )
+        SELECT
+            D.STORE_CD,
+            D.POS_NO,
+            #{regDate},
+            #{regApp}
+          FROM (
+            SELECT A.STORE_CD, A.POS_NO FROM TIM0501 A
+            WHERE NOT EXISTS
+	        (SELECT *
+	        FROM TIM0502 B
+	        WHERE A.STORE_CD       = B.STORE_CD
+	        AND A.POS_NO           = B.POS_NO
+	        AND B.POS_MONITOR_YN   = 'N'
+	        )
+	        AND NOT EXISTS
+	        (SELECT *
+	        FROM TIM0501
+	        WHERE A.CLOSED_DT <![CDATA[<]]> TO_CHAR(SYSDATE, 'YYYYMMDD')
+	        OR (A.HOLIDAY_START_DT <![CDATA[<=]]> TO_CHAR(SYSDATE, 'YYYYMMDD')
+	        AND NVL(A.HOLIDAY_END_DT,'99991231') <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDD'))
+	        )
+            MINUS
+            SELECT
+                C.STORE_CD,
+                C.POS_NO
+              FROM TOP0816 C
+             WHERE C.GET_DATE <![CDATA[>=]]> TO_CHAR(SYSDATE - #{posCheckHour}/24, 'yyyymmddhh24miss')
+               AND C.GET_DATE <![CDATA[<=]]> '99991231999999'
+        ) D
+  </insert>
+
+  <insert id="insertTOP0817">
+         INSERT INTO TOP0817 (
+            STORE_CD, POS_NO, REG_DATE, REG_APP
+        )
+        SELECT
+            D.STORE_CD,
+            D.POS_NO,
+            #{regDate},
+            #{regApp}
+          FROM (
+            SELECT A.STORE_CD, A.POS_NO FROM TIM0501 A
+            WHERE NOT EXISTS
+	        (SELECT *
+	        FROM TIM0502 B
+	        WHERE A.STORE_CD       = B.STORE_CD
+	        AND A.POS_NO           = B.POS_NO
+	        AND B.POS_MONITOR_YN   = 'N'
+	        )
+	        AND NOT EXISTS
+	        (SELECT *
+	        FROM TIM0501
+	        WHERE A.CLOSED_DT <![CDATA[<]]> TO_CHAR(SYSDATE, 'YYYYMMDD')
+	        OR (A.HOLIDAY_START_DT <![CDATA[<=]]> TO_CHAR(SYSDATE, 'YYYYMMDD')
+	        AND NVL(A.HOLIDAY_END_DT,'99991231') <![CDATA[>=]]> TO_CHAR(SYSDATE, 'YYYYMMDD'))
+	        )
+            MINUS
+            SELECT
+                C.STORE_CD,
+                C.POS_NO
+              FROM TOP0816 C
+             WHERE C.GET_DATE <![CDATA[>=]]> TO_CHAR(SYSDATE - #{posCheckHour}/24, 'yyyymmddhh24miss')
+               AND C.GET_DATE <![CDATA[<=]]> '99991231999999'
+        ) D
+  </insert>
+
+  <select id="getEnvironment" resultType="string">
+        select ATTRIBUTE_VALUE from TSU0302 where PACKAGE = #{package} and ATTRIBUTE_ID = #{attributeId} and IDX = 1
+    </select>
+
+</mapper>

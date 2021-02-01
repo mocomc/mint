@@ -1,0 +1,43 @@
+AP00000009$$$H001$$$en$$$TO-DO LIST$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">TO-DO LIST<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">You can see the list of
+approval/development/test/transition/failure and so on </font></span></b></p><p><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp; that the person in
+charge should deal with at the life cycle management and </font></span></b></p><p><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp; the person who wants
+to see TO-DO-LIST should be designated as the person in charge of all interfaces<br></font><font size="2">
+&nbsp; 1. interface approval<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. If development is requested, it shows
+approval list as a grid type<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. Click "Request for
+rating(Register)" on the right side &gt; Move to interface requirement
+details page &gt; Click "Request for rating"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. Move to previous page(TO-DO-LIST)
+after click the "List" on the right upper side of the page<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Status of Interface approval <br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. It shows list of progressing
+approval after bring up "Request for rating", <br></font><font size="2">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "Deliberation for transition" and so on<br>
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;</font></span><font size="2">b. "View Comment"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Pop-up shows title/content that you
+entered when you request approval<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. "View Content"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Move to Interface requirement details
+page<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;</font></span><font size="2">d. Move to previous page(TO-DO-LIST)
+after click the "List" on the right upper side of the page<br>&nbsp;<strong> </strong></font></span><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2"><strong>3.
+Interface Development/Test<br></strong></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. List of completed
+"approval"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. the person in charge of Consumer
+click "development complete", "test complete" &gt; Move to
+Interface requirement details page &gt; Click "development complete",
+"test complete" button<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. Check "Finished DEV",
+"scheduled TEST." <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">d. Move to previous page(TO-DO-LIST)
+after click the "List" on the right upper side of the page<br></font><font size="2">
+&nbsp;<strong> 4. List of Interface transition/failure <br>
+</strong></font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; </font></span><font size="2">The person in charge of solution
+proceeds this</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

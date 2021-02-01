@@ -1,0 +1,27 @@
+AP00000058$$$H002$$$ko$$$조회결과$$$<div><font color="#000000" face="굴림" size="3">
+
+</font><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font color="#000000" face="맑은 고딕" size="2">항복별 조회 결과</font></b></div><div><font color="#000000" face="굴림" size="3"><br></font><font color="#000000" face="굴림" size="3">
+
+</font></div><p style="margin: 0cm 0cm 10pt; text-indent: 9.75pt;"><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><font color="#000000" size="2">조회 시점을 기준으로 의뢰</font><span lang="EN-US"><font color="#000000" size="2">/</font></span><font color="#000000" size="2">개발</font><span lang="EN-US"><font color="#000000" size="2">/</font></span><font color="#000000" size="2">테스트</font><span lang="EN-US"><font color="#000000" size="2">/</font></span><font color="#000000" size="2">이행 상태의 인터페이스 건수를 표기</font></font></b></p><div><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp; </font></span><font color="#000000" size="2">1. </font></span><font color="#000000" size="2">조회 결과 </font></font></b></div><div><font color="#000000" face="굴림" size="3">
+
+<br></font></div><p style="margin: 0cm 0cm 10pt;"><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;</font></span><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp; </font></span><font color="#000000" size="2">“</font></span><font color="#000000" size="2">조회구분</font><span lang="EN-US"><font color="#000000" size="2">”</font></span><font color="#000000" size="2">에 선택된 내용을 제목으로 그리드로 표기</font></font></b></p><div><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><span lang="EN-US"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;&nbsp; a. </font></span><font color="#000000" size="2">의뢰건수</font></font></div><div><font color="#000000" face="굴림" size="3">
+
+<br></font></div><p style="margin: 0cm 0cm 10pt; text-indent: 9.75pt;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp; </font></span><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;</font></span></span><font color="#000000" size="2">의뢰요청</font><span lang="EN-US"><font color="#000000" size="2"> ~ </font></span><font color="#000000" size="2">테스트 과정까지의 진행된 인터페이스 건수</font></font></p><div><font color="#000000" face="굴림" size="3">
+
+&nbsp;&nbsp; </font><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp; </font></span><font color="#000000" size="2">b. </font></span><font color="#000000" size="2">이행완료</font></font></div><div><font color="#000000" face="굴림" size="3"><br></font><font color="#000000" face="굴림" size="3">
+
+</font></div><p style="margin: 0cm 0cm 10pt;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font></span></span><font color="#000000" size="2">운영중인 인터페이스 건수</font></font></p><div><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><font color="#000000" size="2">&nbsp; 2. </font></span><font color="#000000" size="2">화면 상세 보기</font></font></b></div><div><font color="#000000" face="굴림" size="3">
+
+<br></font></div><p style="margin: 0cm 0cm 10pt; text-indent: 20pt; mso-char-indent-count: 2.0;"><font face="맑은 고딕"><b style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp; </font></span></span></b><font color="#000000" size="2">해당 </font><span lang="EN-US"><font color="#000000" size="2">Row</font></span><font color="#000000" size="2">의 숫자
+</font><span lang="EN-US"><font color="#000000" size="2">Click &gt; </font></span><font color="#000000" size="2">인터페이스 목록</font><span lang="EN-US"><font color="#000000" size="2">(List) &gt; </font></span><font color="#000000" size="2">해당</font><span lang="EN-US"><font color="#000000" size="2"> Row Double Click &gt; </font></span><font color="#000000" size="2">인터페이스 상세 정보 </font></font></p><div><font color="#000000" face="굴림" size="3"><br></font><font color="#000000" face="굴림" size="3">
+
+</font></div>

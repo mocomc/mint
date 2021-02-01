@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.DashboardLogResetMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<!-- MI 러너상태로그 리셋 -->
+  	<select id="getMIRunnerLogCnt" resultType="map">
+		select AGENT_ID as "agentId", RUNNER_ID as "runnerId", count(*) as "cnt" from TOP0808 group by AGENT_ID, RUNNER_ID
+  	</select>
+	<delete id="resetMIRunnerLog" parameterType="map">
+		delete from TOP0808
+		where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0808 where AGENT_ID = #{agentId} and RUNNER_ID = #{runnerId}) and AGENT_ID = #{agentId} and RUNNER_ID = #{runnerId}
+	</delete>
+
+	<!-- MI 에이전트 로그 리셋 -->
+	<select id="getMIAgentLogCnt" resultType="map">
+		select AGENT_ID as "agentId", count(*) as "cnt" from TOP0809 group by AGENT_ID
+  	</select>
+	<delete id="resetMIAgentLog" parameterType="map">
+		delete from TOP0809
+		where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0809 where AGENT_ID = #{agentId}) and AGENT_ID = #{agentId}
+	</delete>
+
+	<!-- IIP 에이전트 로그 리셋 -->
+	<select id="getIIPAgentLogCnt" resultType="map">
+		select AGENT_ID as "agentId", count(*) as "cnt" from TOP0810 group by AGENT_ID
+  	</select>
+	<delete id="resetIIPAgentLog" parameterType="map">
+		delete from TOP0810
+		where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0810 where AGENT_ID = #{agentId}) and AGENT_ID = #{agentId}
+	</delete>
+
+	<!-- 리소스 로그 리셋 -->
+	<select id="getResourceLogCnt" resultType="map">
+		select RESOURCE_ID as "resourceId", count(*) as "cnt" from TOP0801 group by RESOURCE_ID
+  	</select>
+	<delete id="resetResourceLog" parameterType="map">
+		delete from TOP0801
+		where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0801 where RESOURCE_ID = #{resourceId}) and RESOURCE_ID = #{resourceId}
+	</delete>
+
+	<!-- 프로세스 로그 리셋 -->
+	<select id="getProcessLogCnt" resultType="map">
+		select PROCESS_ID as "processId", count(*) as "cnt" from TOP0802 group by PROCESS_ID
+  	</select>
+	<delete id="resetProcessLog" parameterType="map">
+		delete from TOP0802
+		where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0802 where PROCESS_ID = #{processId}) and PROCESS_ID = #{processId}
+	</delete>
+
+	<!-- 큐매니저 로그 리셋 -->
+	<select id="getQmgrLogCnt" resultType="map">
+		select QMGR_ID as "qmgrId", count(*) as "cnt" from TOP0805 group by QMGR_ID
+  	</select>
+	<delete id="resetQmgrLog" parameterType="map">
+		 delete from TOP0805
+		 where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0805 where QMGR_ID = #{qmgrId}) and QMGR_ID = #{qmgrId}
+	</delete>
+
+	<!-- 채널 로그 리셋 -->
+	<select id="getChannelLogCnt" resultType="map">
+		select QMGR_ID as "qmgrId", CHANNEL_ID as "channelId", count(*) as "cnt" from TOP0806 group by QMGR_ID, CHANNEL_ID
+  	</select>
+	<delete id="resetChannelLog" parameterType="map">
+		 delete from TOP0806
+		 where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0806 where QMGR_ID = #{qmgrId} and CHANNEL_ID = #{channelId}) and QMGR_ID = #{qmgrId} and CHANNEL_ID = #{channelId}
+	</delete>
+
+	<!-- 큐 로그 리셋 -->
+	<select id="getQueueLogCnt" resultType="map">
+		select QMGR_ID as "qmgrId", QUEUE_ID as "queueId", count(*) as "cnt" from TOP0807 group by QMGR_ID, QUEUE_ID
+  	</select>
+	<delete id="resetQueueLog" parameterType="map">
+		  delete from TOP0807
+		  where GET_DATE <![CDATA[<]]> ( select MAX(GET_DATE) from TOP0807 where QMGR_ID = #{qmgrId} and QUEUE_ID = #{queueId}) and QMGR_ID = #{qmgrId} and QUEUE_ID = #{queueId}
+	</delete>
+
+</mapper>

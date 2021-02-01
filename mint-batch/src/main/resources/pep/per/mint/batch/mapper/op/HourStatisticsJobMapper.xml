@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다. 
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605, 
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="pep.per.mint.batch.mapper.op.HourStatisticsJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<!--
+	<delete id="deleteSH">
+	<![CDATA[
+		DELETE FROM SI_STAT_INTF_HOUR 
+		 WHERE (ST_YEAR||ST_MONTH||ST_DAY||ST_HOUR) >= TO_CHAR(SYSDATE - 3/24, 'YYYYMMDDHH24')
+		   AND (ST_YEAR||ST_MONTH||ST_DAY||ST_HOUR) <= TO_CHAR(SYSDATE + 1/24, 'YYYYMMDDHH24')
+	]]>
+	</delete>
+
+	<insert id="insertSH">
+	<![CDATA[
+		INSERT INTO SI_STAT_INTF_HOUR (GROUP_ID, INTF_ID, HOST_ID, ST_YEAR, ST_MONTH, ST_DAY, ST_HOUR, 
+			ADAPTER_CODE, ST_PROCESSING, ST_FINISHED, ST_SEND_ERR, ST_N_COMPSIZE, ST_COMPSIZE, 
+			ST_P_RECORD_CNT, ST_F_RECORD_CNT, ST_E_RECORD_CNT)
+		(
+			SELECT A.GROUP_ID, A.INTF_ID, A.HOST_ID,
+				   SUBSTR(B.MSG_DATETIME, 1, 4) AS ST_YEAR,
+				   SUBSTR(B.MSG_DATETIME, 5, 2) AS ST_MONTH,
+				   SUBSTR(B.MSG_DATETIME, 7, 2) AS ST_DAYS,
+				   SUBSTR(B.MSG_DATETIME, 9, 2) AS ST_HOUR,
+				   'UNKNO',
+				   SUM(CASE WHEN B.MSG_STATUS = '01' THEN 1 ELSE 0 END) AS ST_PROCESSING,
+				   SUM(CASE WHEN B.MSG_STATUS = '01' THEN 1 ELSE 0 END) AS ST_FINISHED,
+				   SUM(CASE WHEN B.MSG_STATUS = '01' THEN 1 ELSE 0 END) AS ST_SEND_ERR,
+				   SUM(CASE WHEN B.COMPRESS_YN = 'N' THEN B.DATA_SIZE ELSE 0 END) AS ST_N_COMPSIZE,
+				   SUM(CASE WHEN B.COMPRESS_YN = 'Y' THEN B.COMPRESS_SIZE ELSE 0 END) AS ST_COMPSIZE,
+				   SUM(CASE WHEN B.MSG_STATUS = '01' THEN RECORD_CNT ELSE 0 END) AS ST_P_RECORD_CNT,
+				   SUM(CASE WHEN B.MSG_STATUS = '00' THEN RECORD_CNT ELSE 0 END) AS ST_F_RECORD_CNT,
+				   SUM(CASE WHEN B.MSG_STATUS = '99' THEN RECORD_CNT ELSE 0 END) AS ST_E_RECORD_CNT
+			  FROM MASTERLOG_ID_MAP A, MASTERLOG B
+			 WHERE A.MASTERLOG_ID = B.MASTERLOG_ID
+			   AND B.MSG_DATETIME >= TO_CHAR(SYSDATE - 3/24, 'YYYYMMDDHH24') || '0000000000'
+			   AND B.MSG_DATETIME <= TO_CHAR(SYSDATE + 1/24, 'YYYYMMDDHH24') || '9999999999'
+			 GROUP BY A.GROUP_ID, A.INTF_ID, A.HOST_ID, 
+			       SUBSTR(B.MSG_DATETIME, 1, 4),
+			       SUBSTR(B.MSG_DATETIME, 5, 2),
+			       SUBSTR(B.MSG_DATETIME, 7, 2),
+			       SUBSTR(B.MSG_DATETIME, 9, 2)
+		)
+	]]>
+	</insert>
+	-->
+
+
+	<!--
+		변경
+	 	일자 : 20160311
+		내용 : 기준시간을 파라메터로 받아서 처리하도록 변경함
+	-->
+	<delete id="deleteSH">
+		<![CDATA[
+		DELETE FROM SI_STAT_INTF_HOUR
+		 WHERE (ST_YEAR||ST_MONTH||ST_DAY||ST_HOUR) >= #{fromDate}
+		   AND (ST_YEAR||ST_MONTH||ST_DAY||ST_HOUR) <= #{toDate}
+	]]>
+	</delete>
+
+	<insert id="insertSH">
+		<![CDATA[
+
+INSERT INTO SI_STAT_INTF_HOUR
+      ( GROUP_ID , INTF_ID , HOST_ID , ST_YEAR , ST_MONTH , ST_DAY , ST_HOUR,
+       ST_PROCESSING , ST_FINISHED , ST_SEND_ERR , ST_COMPSIZE , ST_P_RECORD_CNT,ST_F_RECORD_CNT,ST_E_RECORD_CNT,
+       ST_N_COMPSIZE,ADAPTER_CODE)
+WITH V AS (
+select X.GROUP_ID , X.INTF_ID , X.HOST_ID , X.ST_YEAR , X.ST_MONTH , X.ST_DAYS , X.ST_HOUR,
+       X.ST_PROCESSING , X.ST_FINISHED , X.ST_SEND_ERROR , X.ST_COMPSIZE , X.ST_P_RECORD_CNT,X.ST_F_RECORD_CNT,X.ST_E_RECORD_CNT,
+       Y.SND_DATA_SIZE, Y.RCV_DATA_SIZE, Y.SNRC_DATA_SIZE,
+       (SELECT DISTINCT DATA_PR_DIR FROM TAN0201  WHERE INTEGRATION_ID = X.INTF_ID ) AS DATA_DIR
+FROM
+        ( SELECT A.GROUP_ID,
+                A.INTF_ID,
+                A.HOST_ID,
+                SUBSTR(B.MSG_DATETIME, 1, 4) AS ST_YEAR,
+                SUBSTR(B.MSG_DATETIME, 5, 2) AS ST_MONTH,
+                SUBSTR(B.MSG_DATETIME, 7, 2) AS ST_DAYS,
+                SUBSTR(B.MSG_DATETIME, 9, 2) AS ST_HOUR,
+                SUM(CASE WHEN B.MSG_STATUS='01' THEN 1 ELSE 0 END) AS ST_PROCESSING,
+                SUM(CASE WHEN B.MSG_STATUS='00' THEN 1 ELSE 0 END) AS ST_FINISHED,
+                SUM(CASE WHEN B.MSG_STATUS='99' THEN 1 ELSE 0 END) AS ST_SEND_ERROR,
+                SUM(CASE WHEN B.COMPRESS_YN='Y' THEN B.COMPRESS_SIZE ELSE 0 END) AS ST_COMPSIZE,
+                SUM(CASE WHEN B.MSG_STATUS='01' THEN RECORD_CNT ELSE 0 END) AS ST_P_RECORD_CNT,
+                SUM(CASE WHEN B.MSG_STATUS='00' THEN RECORD_CNT ELSE 0 END) AS ST_F_RECORD_CNT,
+                SUM(CASE WHEN B.MSG_STATUS='99' THEN RECORD_CNT ELSE 0 END) AS ST_E_RECORD_CNT
+           FROM  MASTERLOG_ID_MAP A ,
+                MASTERLOG B
+         WHERE  A.MASTERLOG_ID = B.MASTERLOG_ID
+           AND (
+            	B.MSG_DATETIME >=#{fromDate} || '0000000000' AND B.MSG_DATETIME <=  #{toDate} || '9999999999'
+            )
+         GROUP BY
+               A.GROUP_ID,
+               A.INTF_ID,
+               A.HOST_ID,
+               SUBSTR(B.MSG_DATETIME, 1, 4),
+               SUBSTR(B.MSG_DATETIME, 5, 2),
+               SUBSTR(B.MSG_DATETIME, 7, 2),
+               SUBSTR(B.MSG_DATETIME, 9, 2)  )  X ,
+        ( SELECT A.GROUP_ID,
+                A.INTF_ID,
+                A.HOST_ID,
+                SUBSTR(B.MSG_DATETIME, 1, 4) AS ST_YEAR,
+                SUBSTR(B.MSG_DATETIME, 5, 2) AS ST_MONTH,
+                SUBSTR(B.MSG_DATETIME, 7, 2) AS ST_DAYS,
+                SUBSTR(B.MSG_DATETIME, 9, 2) AS ST_HOUR,
+                SUM(CASE WHEN PR_PROCESS_MODE='SNDR' THEN DATA_SIZE ELSE 0 END ) AS SND_DATA_SIZE,
+                SUM(CASE WHEN PR_PROCESS_MODE='RCVR' THEN DATA_SIZE ELSE 0 END ) AS RCV_DATA_SIZE,
+                SUM(CASE WHEN PR_PROCESS_MODE='SNRC' THEN DATA_SIZE ELSE 0 END ) AS SNRC_DATA_SIZE
+           FROM MASTERLOG_ID_MAP A ,
+                DETAILLOG B
+          WHERE A.MASTERLOG_ID = B.MASTERLOG_ID
+            AND (
+            	B.MSG_DATETIME >=#{fromDate} || '0000000000' AND B.MSG_DATETIME <=  #{toDate} || '9999999999'
+            )
+          GROUP BY
+               A.GROUP_ID,
+               A.INTF_ID,
+               A.HOST_ID,
+               SUBSTR(B.MSG_DATETIME, 1, 4) ,
+               SUBSTR(B.MSG_DATETIME, 5, 2) ,
+               SUBSTR(B.MSG_DATETIME, 7, 2) ,
+               SUBSTR(B.MSG_DATETIME, 9, 2)  ) Y
+    WHERE X.GROUP_ID = Y.GROUP_ID
+      AND X.INTF_ID  = Y.INTF_ID
+      AND X.HOST_ID  = Y.HOST_ID
+      AND X.ST_YEAR  = Y.ST_YEAR
+      AND X.ST_MONTH = Y.ST_MONTH
+      AND X.ST_DAYS   = Y.ST_DAYS
+      AND X.ST_HOUR  = Y.ST_HOUR
+      ) --WITH END
+  SELECT GROUP_ID , INTF_ID , HOST_ID , ST_YEAR , ST_MONTH , ST_DAYS , ST_HOUR,
+         ST_PROCESSING , ST_FINISHED , ST_SEND_ERROR , ST_COMPSIZE , ST_P_RECORD_CNT,ST_F_RECORD_CNT,ST_E_RECORD_CNT,
+       ( CASE DATA_DIR WHEN '0' THEN SND_DATA_SIZE + SNRC_DATA_SIZE
+                       WHEN '1' THEN ( SND_DATA_SIZE + RCV_DATA_SIZE  + SNRC_DATA_SIZE)
+                       ELSE SND_DATA_SIZE END  + SNRC_DATA_SIZE),
+         'UNKO'
+      FROM  V
+
+
+	]]>
+	</insert>
+</mapper>

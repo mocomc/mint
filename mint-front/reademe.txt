@@ -1,0 +1,64 @@
+===========================================================================================
+- mint-front 
+--------------------------------------------------------------------------------------------
+1.프로젝트 모듈 개요
+	1) 프로젝트명 : mint
+	2) 모듈명  : mint-front
+	3) 용  도   : 모듈프로젝트를 통합하여 최종 RESTful 서비스 및 Viewer를 구성하는 프로젝트
+	
+2.모듈 개발 환경 구성을 위해 미리 준비해 두어야 할 것들
+	1) 자바설치 : 1.6 이상 설치
+	2) maven 3.X 설치 
+	3) 개발툴 설치 : 
+		스프링 프레임워크3.2 및 빌드툴 maven 플러그인을 지원하는 eclipse
+		예) STS 3.X(Spring Tool Suite)
+
+3.모듈 구성
+	[개발Directory]
+		/mint/mint-front	--> 모듈 최상위 위치
+		mint-front/src/main/java		--> 자바소스 위치
+		mint-front/src/test/java		--> Unit 테스트 자바소스 위치
+		mint-front/src/main/resources--> 자바외의 리소스 위치
+		mint-front/src/test/resources--> 자바외의 개발 리소스 위치
+		mint-front/src/main/webapp	--> web 어플리케이션 리소스 위치
+		mint-front/src				--> 소스 최상위 위치
+		mint-front/target			--> 모듈 jar 파일 빌드 위치
+		mint-front/target-test		--> 테스트 모듈 jar 파일 빌드 위치 
+		mint-front/pom.xml			--> maven 빌드 설정파일
+		mint-front/reademe.txt		--> 프로젝트 모듈 설명서
+	
+4.진행사항
+			
+	1) 2015.07.01 
+	[RESTful 서비스 Controller 구성]
+		패키지 pep.per.mint.front.controller 아래 Controller 클래스들을 작성하도록 한다.
+		Controller 클래스 작성예는 FooController를 참조한다.
+		
+		명영규칙은 자바(카멜네이밍) 기본 네이밍을 사용하고 Postfix로 "Controller"를 붙여주도록 한다.
+		클래스 작성시 반드시 주석을 작성해주도록 한다.
+		
+		RESTful HTTP METHOD규칙은 아래 기준을 따라 Controller의 RequestMapping 의 method를 설정한다.
+		 
+		 * RESTful URI Controller 호출 테스트를 위한 클래스 
+		 * -------------------------------------------
+		 * REST Method
+		 * ------------------------------------------- 
+		 * Create         - POST
+		 * Retrieve(List) - GET
+		 * Update         - PUT, PATCH
+		 * Delete         - DELETE
+		 * 기타 서비스       - POST
+		 * -------------------------------------------
+	
+	2) 2015.07.01
+	[UI 개발 리소스 디렉토리 ROOT 구성]
+		스프링의 뷰맵핑 위치를 다음과 같이 설정해 두었다. 
+		src/main/webapp/WEB-INF/views 
+		
+		뷰맵핑의 설정값 변경이나 뷰리졸버 추가는 
+		src/main/resources/config/front-context.xml 스프링 설정파일내에 해당 부분을 변경한다. 
+	
+    
+		
+		
+		

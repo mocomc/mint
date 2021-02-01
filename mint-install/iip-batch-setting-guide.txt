@@ -1,0 +1,193 @@
+======================================================================================================
+- IIP 배치 설정 가이드
+------------------------------------------------------------------------------------------------------
+- SVN:/trunk/mint/mint-install/iip-batch-setting-guide.txt
+- subject : 배치 설정 가이드
+- author  : whoana
+- begin   : 2019.02
+------------------------------------------------------------------------------------------------------
+본 문서에서는 IIP 배치 프로그램 수행을 위한 배치 프로그램 등록, 스케쥴 설정, 로그확인 등 배치관리를 위한 절차를 설명합니다. 
+
+1.배치 시스템 설정
+ 	1.1.배치 시스템 구성 테이블
+ 		TBA0001 배치프로그램 목록
+ 		TBA0002 배치그룹 목록
+ 		TBA0003 배치스케줄러 목록
+ 		TBA0004 배치스케줄리스트
+ 		TBA0005 배치 실행 로그
+
+ 		신규배치 등록 및 스케줄 변경은 관리 프로그램이 개발되지 않았으므로 테이블을 직접
+
+ 		1.1.1.배치 정보 등록하기
+ 			1.1.1.1.TBA0002 배치그룹 목록을 등록한다.
+ 				배치그룹은 현재 '1' - '기본그룹' 을 고정값으로 사용하고 있음.
+ 				그룹별 관리가 필요하다면 추가해 준다.
+
+ 				[TBA0002 배치그룹 목록 등록 예]
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		 		GRP_ID	GRP_NM
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 					1	기본그룹
+
+
+ 			1.1.1.2.TBA0001 배치프로그램 목록에 배치를 등록한다.
+	 			JOB_ID 	값은 순번으로 중복없도록 발번한다.
+	 			GRP_ID	값은 TBA0002 배치그룹 목록에서 참고한다.(현재는 '1'로 고정)
+	 			IMPL_CLASS	배치매니저가 스케쥴 실행 시점에 런타임 호출하는 배치구현 클래스명.
+	 			TYPE	배치유형(현재 '0'으로 고정)
+	 			TABLE_NMAE	배치가 처리하는 테이블정보(정보용)
+
+	 			[TBA0001 배치프로그램 목록 등록 예]
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		 		JOB_ID	GRP_ID	JOB_NM							IMPL_CLASS						TYPE	TABLE_NAME		COMMENTS
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					14	1		I/F 별 처리 건수 집계(시간별)			pep.per.mint.batch.job.su.TSU0803Job			0	TSU0803			I/F 별 처리 건수 집계(시간별)
+					15	1		MI에이전트/러너상태모니터링			pep.per.mint.batch.job.op.MIAgentStateCheckJob		0	TOP0809,TOP0810		MI에이전트/러너상태모니터링
+					16	1		I/F 별 처리 건수 집계(일)			pep.per.mint.batch.job.su.TSU0804Job			0	TSU0804			I/F 별 처리 건수 집계(일)
+					17	1		각종로그삭제배치				pep.per.mint.batch.job.op.LogPurgeJob			0	TSU08XX			각종로그삭제배치
+					18	1		I/F 별 처리 건수 집계(시간별)			pep.per.mint.batch.job.su.TSU0803NHJob			0	TSU0803			I/F 별 처리 건수 집계(시간별)
+					19	1		NH 인터페이스 오류 SMS 발송 대상 추출		pep.per.mint.batch.job.op.InterfaceLogErrorNHJob	0				NH 인터페이스 오류 SMS 발송 대상 추출
+					20	1		SimpleSendMailJob			pep.per.mint.batch.job.op.SimpleSendMailJob		0	TOP0901			이메일 발송 배치
+
+			1.1.1.3.TBA0003 배치스케줄러 목록을 등록한다.
+				USAGE	스케쥴 사용유무를 Y/N 값으로 등록한다.
+				[TBA0001 배치프로그램 목록 등록 예]
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		 		SCHEDULE_ID	SCHEDULE_NM	 					USAGE
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					14		I/F 별 처리 건수 집계(시간별)			N
+					16		I/F 별 처리 건수 집계(일)			Y
+					17		각종로그삭제배치						Y
+					18		I/F 별 처리 건수 집계(시간별)			Y
+					19		NH 인터페이스 오류 SMS 발송 대상 추출	Y
+					20		HelloJob Delay Schedule			Y
+
+			1.1.1.4.TBA0004 배치스케줄 리스트를 등록한다.
+				스케쥴과 잡을 맵핑하고 스케쥴값을 등록한다.
+				SEQ		SCHEDULE_ID, JOB_ID, GRP_ID 값들로 그룹핑하여 중복되지 않게 연번으로 발번한다. 동일한 잡에 하나 이상의 스케줄을 등록할 수 있다.
+				TYPE	스케쥴유형으로 아래 유형을 의미 한다.
+						crontab 유형 		: '0'
+						초단위 간격 실행	: '1'
+						분단위 간격 실행	: '2'
+						시간단위 간격 실행	: '3'
+						* 유형 1,2,3,은 이전 실행 잡이 존재하면 다음 실행 스케쥴이 도래해도 실행되지 않는다.
+				VALUE	스케쥴유형(TYPE) 값에 따라 형식에 맞는 값을 등록한다.
+						contab 유형(TYPE='0')일 경우 quartz 형식 참고 (http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/tutorial-lesson-06.html)
+
+				[TBA0001 배치프로그램 목록 등록 예]
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		 		SCHEDULE_ID		JOB_ID		GRP_ID		SEQ		TYPE	VALUE
+		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					14			14			1			0		0		0 0-59 * * * ?
+					16			16			1			0		0		0 0 1 * * ?
+					17			17			1			0		0		0 0,10,20,30,40,50 * * * ?
+					18			18			1			0		0		0 0/10 * * * ?
+					19			19			1			0		0		0 0/5 * * * ?
+					20			20			1			0		1		10
+
+ 	1.2.배치 환경 변수
+ 		포털환경변수[TSU0302]에 배치관련 환경 변수값을 등록 또는 조정한다.
+
+	 	2.1.1.system.batch.use.basic.hostname
+	 		특정 호스트(서버)에서만 배치를 수행하도록 설정하는 옵션 사용여부
+	 		값 : true/false
+
+	 	2.1.2.system.batch.basic.hostname
+			특정 호스트(서버)에서만 배치를 수행하도록 설정하는 옵션[2.1.1.system.batch.use.basic.hostname] 값이 true일 경우
+			실제 배치가 수행될 서버의 호스트명을 입력한다.
+			값 : {hostname}
+
+		2.1.3.system.batch.run.standalone
+			배치매니저를 WAS와 별도로 실행할지 선택하는 옵션
+			값이 true일 경 배치모듈[mint/mint-batch-manager]을 별도로 웹어플리케이션으로 구성하여 실행해 주어야 한다. 별도의 배치 어플리케이션 구성은 1.3.배치 실행 부분 참고
+			값 : true/false, default : false
+
+ 	1.3.배치 실행
+ 		1.3.1.배치 단독 실행
+ 			1) 포털환경설정값[system.batch.use.basic.hostname=true]을 설정한다.
+ 			2) mint/mint-batch-manager 모듈을 웹어플리케이션으로 배포한다.
+
+ 	1.4.배치 로그
+ 		1.4.1.배치 로그 설정 :
+			* 로그 고도화 작업시 온라인과 배치 분리방안 마련 예정
+
+ 			1) 기존 로그 설정에 파일 어펜더 추가 : /mint/mint-install/logback/logback.xml
+
+	 			<appender name="FILE-BATCH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+					<file>${IIP_LOG_HOME}//log//batch.log</file>
+					<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+						<!-- daily rollover -->
+						<fileNamePattern>${IIP_LOG_HOME}//log//batch.%i.log</fileNamePattern>
+						<minIndex>1</minIndex>
+						<maxIndex>30</maxIndex>
+					</rollingPolicy>
+					<triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+						<maxFileSize>20MB</maxFileSize>
+					</triggeringPolicy>
+					<encoder>
+						<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%25.25thread] %40.40C{3}:%4.4L - %m%n</Pattern>
+					</encoder>
+				</appender>
+
+				<appender name="FILE-BATCH-REPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+					<file>${IIP_LOG_HOME}//log//batch.report.log</file>
+					<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+						<!-- daily rollover -->
+						<fileNamePattern>${IIP_LOG_HOME}//log//batch.report.%i.log</fileNamePattern>
+						<minIndex>1</minIndex>
+						<maxIndex>30</maxIndex>
+					</rollingPolicy>
+					<triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+						<maxFileSize>5MB</maxFileSize>
+					</triggeringPolicy>
+					<encoder>
+						<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%25.25thread] %40.40C{3}:%4.4L - %m%n</Pattern>
+					</encoder>
+				</appender>
+
+				<logger name="pep.per.mint.batch.BatchManager.report" additivity="false">
+					<level value="info" />
+					<appender-ref ref="FILE-BATCH-REPORT"/>
+				</logger>
+
+				<logger name="pep.per.mint.batch" additivity="false">
+					<level value="${APP_LOG_LEVEL}" />
+					<appender-ref ref="FILE-BATCH"/>
+				</logger>
+
+ 			2) 배치 실행 후 기동 로그 확인
+				${IIP_LOG_HOME}/log/batch.report.log
+
+				================================================================================
+				⎯☛ ready to start BatchManager
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ BatchManger 단독 실행 옵션 체크
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ 배치단독실행환경설정(system.batch.run.standalone):true
+				⎯☛ BatchManger를 단독으로 실행합니다.
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ initializing variables
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯	☛ 포털환경변수[solution.mi.manager.username]:USER002
+				⎯	☛ 포털환경변수[solution.mi.manager.password]:USER002
+				⎯	☛ 포털환경변수[solution.mi.manager.ip]:10.10.1.145
+				⎯	☛ 포털환경변수[solution.mi.manager.port]:8991
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ finish initializing variables
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ starting BatchManger thread
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯	☛ 테스트모드 옵션:true
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ BatchManger 스케줄러 설정 시작
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯	☛ 1.16.I/F 별 처리 건수 집계(일) has been scheduled to run at: Sat Feb 23 01:00:00 KST 2019 and repeat based on expression: 0 0 1 * * ?
+				⎯	☛ 1.17.각종로그삭제배치 has been scheduled to run at: Fri Feb 22 16:20:00 KST 2019 and repeat based on expression: 0 0,10,20,30,40,50 * * * ?
+				⎯	☛ 1.18.I/F 별 처리 건수 집계(시간별) has been scheduled to run at: Fri Feb 22 16:20:00 KST 2019 and repeat based on expression: 0 0/10 * * * ?
+				⎯	☛ 1.19.NH 인터페이스 오류 SMS 발송 대상 추출 has been scheduled to run at: Fri Feb 22 16:20:00 KST 2019 and repeat based on expression: 0 0/5 * * * ?
+				⎯	☛ 1.20.SimpleSendMailJob has been scheduled to run at: Fri Feb 22 16:15:01 KST 2019 and repeat based on expression: delay(sec) : 10
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ 총5개의 스케줄 등록 완료.
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+				⎯☛ BatchManger 스케줄러 실행 완료
+				⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯

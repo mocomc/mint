@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.KABDashboardMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+    <select id="getTimeoutCount" resultType="java.lang.Integer">
+    SELECT
+		COUNT(M.MESSAGE_MANAGE_NO) AS CNT
+    FROM MESSAGE_LOG M
+	WHERE 1=1
+	AND M.REQ_PROCESS_DT BETWEEN TO_TIMESTAMP(TO_CHAR(SYSDATE,'YYYYMMDD') || '000000000000','YYYYMMDDHH24MISSFF9')
+	AND TO_TIMESTAMP(TO_CHAR(SYSDATE,'YYYYMMDD') || '235959999999','YYYYMMDDHH24MISSFF9')
+    AND (M.RES_PROCESS_DT IS NULL
+    OR M.RES_PROCESS_DT > M.REQ_PROCESS_DT + (40/24/60/60))
+    </select>
+
+    <select id="getConnectStatus" resultType="Map">
+    	<![CDATA[
+	    SELECT
+	 		'<b>' || b.SERVER_NM || '</b>[' || b.SERVER_CD || ']' ||
+	 	    '  --  (주소 : ' || b.IP || ', 점검 : ' ||
+	 	    TO_char(TO_TIMESTAMP(nvl(A.MOD_DATE, A.REG_DATE),'YYYYMMDDHH24MISSFF3'),'YYYY/MM/DD HH24:MI:SS') || ')' AS CHECK_RESULT
+	  	FROM TOP0818 a
+		INNER JOIN TIM0201 b
+	    ON a.SERVER_ID = b.SERVER_ID
+	    AND b.DEL_YN = 'N'
+	    AND a.STATE = '9'
+	    ORDER BY b.SERVER_NM
+	 	]]>
+	</select>
+
+</mapper>

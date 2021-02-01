@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.ProblemMapper">
+  	<!--
+  	<cache/>
+  	-->
+  	
+  	<!-- 
+  		장애 대장 / 장애 조회
+  	 -->
+  	 
+  	<select id="getProblemList" parameterType="Map" resultMap="ProblemResult">
+  		select
+              x.NODE_NAME
+              , X.SYSTEM_ID
+              , x.START_DATE
+              , x.END_DATE
+              , x.PROBLEM_ID
+              , x.CLASS_CD_NM
+              , x.CMT
+              , x.STATUS_NM
+              , x.INTERFACE_NM
+              , x.PROBLEM_SUBJECT
+              , x.CHANNEL_ID
+              , x.interface_id
+              , x.CLASS_CD
+          from
+              (
+            select 
+                case
+                    when z.system_nm is null or z.system_nm = '' then
+                        a.node_name
+                    else
+                        z.system_nm
+                end AS NODE_NAME
+                , z.system_id 			AS SYSTEM_ID
+                , a.start_date          AS START_DATE
+                , a.end_date            AS END_DATE
+                , a.problem_id          AS PROBLEM_ID
+                , b.nm                  AS CLASS_CD_NM
+                , b.cmt                 AS CMT
+                , c.nm                  AS STATUS_NM
+                , case
+                    when d.interface_nm is null or d.interface_nm = '' then
+                        'N/A'
+                    else
+                        d.interface_nm
+                end AS INTERFACE_NM
+                , a.problem_subject     AS PROBLEM_SUBJECT
+                , d.channel_id            AS CHANNEL_ID
+                , a.status
+                , d.interface_id
+                , a.class_cd
+            from
+                top0301 a
+                left outer join 
+                    (
+                        SELECT 
+                            class_cd
+                            , nm
+                            , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+                        FROM 
+                            top0302 
+                            START WITH parent_cd IS NULL and del_yn = 'N'
+                            CONNECT BY PRIOR class_cd = parent_cd 
+                        order by depth asc, sort_no asc
+                    ) b on a.class_cd = b.class_cd
+                left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+                left outer join top0304 d on a.problem_id = d.problem_id
+                left outer join tim0101 z on a.node_name = z.system_id and z.del_yn = 'N'
+                inner join (select interface_id 
+                			from tan0219 
+                			where del_yn = 'N'
+	              		<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+								<if test="isDashboardCall != null and isDashboardCall eq 'N'.toString()">
+								and user_id = #{userId}
+								</if>
+							</otherwise>
+						</choose> 
+                ) y on d.interface_id = y.interface_id
+            where
+                a.del_yn = 'N'
+    
+            union
+            
+            select 
+                case
+                    when z.system_nm is null or z.system_nm = '' then
+                        a.node_name
+                    else
+                        z.system_nm
+                end AS NODE_NAME
+                , z.system_id			AS SYSTEM_ID
+                , a.start_date          AS START_DATE
+                , a.end_date            AS END_DATE
+                , a.problem_id          AS PROBLEM_ID
+                , b.nm                  AS CLASS_CD_NM
+                , b.cmt                 AS CMT
+                , c.nm                  AS STATUS_NM
+                , case
+                    when d.interface_nm is null or d.interface_nm = '' then
+                        'N/A'
+                    else
+                        d.interface_nm
+                end AS INTERFACE_NM
+                , a.problem_subject     AS PROBLEM_SUBJECT
+                , d.channel_id            AS CHANNEL_ID
+                , a.status
+                , d.interface_id
+                , a.class_cd
+            from
+                top0301 a
+                left outer join 
+                    (
+                        SELECT 
+                            class_cd
+                            , nm
+                            , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+                        FROM 
+                            top0302 
+                            START WITH parent_cd IS NULL and del_yn = 'N'
+                            CONNECT BY PRIOR class_cd = parent_cd 
+                        order by depth asc, sort_no asc
+                    ) b on a.class_cd = b.class_cd
+                left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+                left outer join top0304 d on a.problem_id = d.problem_id
+                left outer join tim0101 z on a.node_name = z.system_id and z.del_yn = 'N'
+            where
+                a.del_yn = 'N'
+            <choose>
+				<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+				</when>
+				<otherwise>
+					<if test="isDashboardCall != null and isDashboardCall eq 'N'.toString()">
+					and a.reg_user = #{userId}
+					</if>
+				</otherwise>
+			</choose>
+            ) x 
+            
+            <if test="interfaceId != null and interfaceId != ''">
+            inner join (select problem_id from top0304 where interface_id = #{interfaceId}) e on x.problem_id = e.problem_id
+            </if>
+        where
+            x.start_date between #{startDate} and #{endDate}
+            
+            <if test="status != null and status != ''">
+            and x.status = #{status}
+            </if>
+            
+            <if test="systemCd != null and systemCd != ''">
+            <!-- and x.node_name = #{systemCd} -->
+            and x.SYSTEM_ID = #{systemCd}
+            </if>
+            
+            <if test="classCd != null and classCd != ''">
+            and x.class_cd in (
+                    SELECT class_cd 
+                    FROM top0302
+                    START WITH class_cd = #{classCd}
+                    CONNECT BY PRIOR class_cd = parent_cd
+                )
+			</if>
+        order by 
+            x.problem_id desc
+  	<!-- 
+  		select
+  			NODE_NAME
+  			, START_DATE
+  			, END_DATE
+  			, PROBLEM_ID
+  			, CLASS_CD_NM
+  			, CMT
+  			, STATUS_NM
+  			, INTERFACE_NM
+  			, PROBLEM_SUBJECT
+  			, CHANNEL_ID
+  		from
+  			(
+	        select 
+			    case
+	                when z.system_nm is null or z.system_nm = '' then
+	                    a.node_name
+	                else
+	                    z.system_nm
+	            end AS NODE_NAME
+	            , a.start_date          AS START_DATE
+	            , a.end_date            AS END_DATE
+	            , a.problem_id          AS PROBLEM_ID
+	            , b.nm                  AS CLASS_CD_NM
+	            , b.cmt                 AS CMT
+	            , c.nm                  AS STATUS_NM
+	            , case
+	                when d.interface_nm is null or d.interface_nm = '' then
+	                    'N/A'
+	                else
+	                    d.interface_nm
+	            end AS INTERFACE_NM
+	            , a.problem_subject     AS PROBLEM_SUBJECT
+	            , d.channel_id			AS CHANNEL_ID
+			from
+			    top0301 a
+			    left outer join 
+			        (
+			            SELECT 
+			                class_cd
+			                , nm
+			                , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+			            FROM 
+			                top0302 
+			                START WITH parent_cd IS NULL and del_yn = 'N'
+			                CONNECT BY PRIOR class_cd = parent_cd 
+			            order by depth asc, sort_no asc
+			        ) b on a.class_cd = b.class_cd
+			    left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+			    left outer join top0304 d on a.problem_id = d.problem_id
+			    left outer join tim0101 z on a.node_name = z.system_id and z.del_yn = 'N'
+			    <if test="interfaceId != null and interfaceId != ''">
+			    inner join (select problem_id from top0304 where interface_id = #{interfaceId}) e on a.problem_id = e.problem_id
+			    </if>
+			where
+			    a.del_yn = 'N'
+			    and a.start_date between #{startDate} and #{endDate}
+			    
+			    <if test="status != null and status != ''">
+			    and a.status = #{status}
+			    </if>
+			    
+			    <if test="systemCd != null and systemCd != ''">
+	            and a.node_name = #{systemCd}
+	            </if>
+			    
+			    <if test="classCd != null and classCd != ''">
+			    and a.class_cd in (
+	                SELECT class_cd 
+					FROM top0302
+					START WITH class_cd = #{classCd}
+					CONNECT BY PRIOR class_cd = parent_cd
+			    )
+			    </if>
+	
+			union
+			
+			select 
+	            case
+	                when z.system_nm is null or z.system_nm = '' then
+	                    a.node_name
+	                else
+	                    z.system_nm
+	            end AS NODE_NAME
+	            , a.start_date          AS START_DATE
+	            , a.end_date            AS END_DATE
+	            , a.problem_id          AS PROBLEM_ID
+	            , b.nm                  AS CLASS_CD_NM
+	            , b.cmt                 AS CMT
+	            , c.nm                  AS STATUS_NM
+	            , case
+	                when d.interface_nm is null or d.interface_nm = '' then
+	                    'N/A'
+	                else
+	                    d.interface_nm
+	            end AS INTERFACE_NM
+	            , a.problem_subject     AS PROBLEM_SUBJECT
+	            , d.channel_id			AS CHANNEL_ID
+	        from
+	            top0301 a
+	            left outer join 
+	                (
+	                    SELECT 
+	                        class_cd
+	                        , nm
+	                        , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+	                    FROM 
+	                        top0302 
+	                        START WITH parent_cd IS NULL and del_yn = 'N'
+	                        CONNECT BY PRIOR class_cd = parent_cd 
+	                    order by depth asc, sort_no asc
+	                ) b on a.class_cd = b.class_cd
+	            left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+	            left outer join top0304 d on a.problem_id = d.problem_id
+	            left outer join tim0101 z on a.node_name = z.system_id and z.del_yn = 'N'
+	        where
+	            a.del_yn = 'N'
+	            and a.reg_user = #{userId}
+	        )
+		order by 
+		    PROBLEM_ID desc -->
+	</select>
+	
+	<resultMap id="ProblemResult" type="ProblemManagement">
+        <result property="classCdNm"  column="CLASS_CD_NM" />
+        <result property="level1Nm"  column="LEVEL1_NM" />
+        <result property="level2Nm"  column="LEVEL2_NM" />
+        <result property="nodeName"  column="NODE_NAME" />
+        <result property="startDate"       column="START_DATE" />
+        <result property="endDate"    column="END_DATE" />
+        <result property="problemId"      column="PROBLEM_ID" />
+        <result property="statusNm"       column="STATUS_NM" />
+        <result property="interfaceNm"       column="INTERFACE_NM" />
+        <result property="interfaceId"       column="INTERFACE_ID" />
+        <result property="problemSubject"       column="PROBLEM_SUBJECT" />
+        <result property="type"       column="TYPE" />
+        <result property="status"       column="STATUS" />
+        <result property="importance"       column="IMPORTANCE" />
+        <result property="comment"       column="CMT" />
+        <result property="channelId"       column="CHANNEL_ID" />
+        <result property="isRegUser"       column="IS_REG_USER" />
+        <result property="approvalStatus"  column="APPROVAL_STATUS" />
+    </resultMap>
+	
+	
+	<select id="getProblemInfo" parameterType="Map" resultMap="ProblemInfoResult">
+        select
+            a.problem_id                  as PROBLEM_ID
+            , a.start_date                as START_DATE
+            , a.status                    as STATUS
+            , c.nm                        as STATUS_NM
+            , a.end_Date                  as END_DATE
+            , a.problem_subject           as PROBLEM_SUBJECT
+            , a.problem_contents          as PROBLEM_CONTENTS
+            , a.error_msg                 as ERROR_MSG
+            , a.result_contents           as RESULT_CONTENTS
+            , a.plan_contents             as PLAN_CONTENTS
+            , a.cause_contents            as CAUSE_CONTENTS
+            , a.importance                as IMPORTANCE
+            , d.nm                        as IMPORTANCE_NM
+            , a.node_name                 as NODE_NAME
+            , a.class_cd                  as CLASS_CD
+            , e.nm                        as CLASS_CD_NM
+            , e.cmt                       as CMT
+            , b.interface_id              as INTERFACE_ID
+            , a.type                      as TYPE
+            , f.nm                        as TYPE_NM
+            , g.file_id                   as FILE_ID
+            , g.file_nm                   as FILE_NM
+            , g.file_path                 as FILE_PATH
+            , a.approval_status			  as APPROVAL_STATUS
+            , z.nm						  as APPROVAL_STATUS_NM
+        from
+            top0301 a
+            left outer join top0304 b on a.problem_id = b.problem_id
+            left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+            left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '03' and del_yn = 'N') d on a.importance = d.cd
+            left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '05' and del_yn = 'N') z on a.approval_status = z.cd
+            left outer join 
+                (
+                    SELECT 
+                        class_cd
+                        , nm
+                        , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+                    FROM 
+                        top0302 
+                        START WITH parent_cd IS NULL and del_yn = 'N'
+                        CONNECT BY PRIOR class_cd = parent_cd 
+                    order by depth asc, sort_no asc
+                ) e on a.class_cd = e.class_cd
+            left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '04' and del_yn = 'N') f on a.type = f.cd
+            left outer join top0303 g on a.problem_id = g.problem_id and g.del_yn = 'N'
+        where
+            a.del_yn = 'N'
+            and a.problem_id = #{problemId}
+    </select>
+    
+    <resultMap id="ProblemInfoResult" type="ProblemManagement">
+        <result property="problemId"  column="PROBLEM_ID" />
+        <result property="startDate"  column="START_DATE" />
+        <result property="status"  column="STATUS" />
+        <result property="statusNm"  column="STATUS_NM" />
+        <result property="endDate"  column="END_dATE" />
+        <result property="problemSubject"  column="PROBLEM_SUBJECT" />
+        <result property="problemContents"  column="PROBLEM_CONTENTS" />
+        <result property="errorMsg"  column="ERROR_MSG" />
+        <result property="resultContents"  column="RESULT_CONTENTS" />
+        <result property="planContents"  column="PLAN_CONTENTS" />
+        <result property="causeContents"  column="CAUSE_CONTENTS" />
+        <result property="importance"  column="IMPORTANCE" />
+        <result property="importanceNm"  column="IMPORTANCE_NM" />
+        <result property="nodeName"  column="NODE_NAME" />
+        <result property="classCd"  column="CLASS_CD" />
+        <result property="classCdNm"  column="CLASS_CD_NM" />
+        <result property="comment"  column="CMT" />
+        <result property="interfaceId"  column="INTERFACE_ID" />
+        <result property="type"  column="TYPE" />
+        <result property="typeNm"  column="TYPE_NM" />
+        <result property="approvalStatus"  column="APPROVAL_STATUS" />
+        <result property="approvalStatusNm"  column="APPROVAL_STATUS_NM" />
+        
+        <collection property="problemAttachFile" ofType="ProblemAttachFile">
+            <id property="fileId"            column="FILE_ID"/>
+            <result property="fileNm"        column="FILE_NM"/>
+            <result property="filePath"      column="FILE_PATH"/>
+        </collection>
+    </resultMap>
+    
+    
+    <select id="getProblemInterfaceInfo" parameterType="Map" resultMap="interfaceResultMap">
+        select                                 
+		    a.INTERFACE_ID                    
+		    ,a.INTERFACE_NM
+		    ,a.CHANNEL_ID
+		    ,a.CHANNEL_NM
+		    ,a.CHANNEL_CD
+		    ,a.DATA_PR_DIR
+		    ,cdim01.nm as DATA_PR_DIR_NM
+		    ,a.APP_PR_METHOD
+		    ,cdim02.nm as APP_PR_METHOD_NM
+		    ,a.DATA_PR_METHOD
+		    ,cdim12.nm as DATA_PR_METHOD_NM
+		    ,d.SYSTEM_ID
+		    ,d.SYSTEM_CD
+		    ,d.SEQ as SYS_SEQ
+		    ,d.SERVICE
+		    ,d.NODE_TYPE as SYS_NODE_TYPE
+		    ,cdim08.NM as SYS_NODE_TYPE_NM
+		    ,d.RESOURCE_TYPE as RESOURCE_CD
+		    ,cdim04.NM as RESOURCE_NM
+		    ,d.SYSTEM_NM
+		    ,f.USER_ID
+		    ,f.USER_NM
+		    ,f.CELL_PHONE
+		    ,f.PHONE
+		    ,f.EMAIL
+		    ,F.ROLE_ID
+		    ,cdim09.nm as ROLE_NM
+		from 
+		    top0304 a
+		    inner join top0305 d on a.problem_id = d.problem_id and a.interface_id = d.interface_id
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '01' and DEL_YN = 'N') cdim01 on a.data_pr_dir = cdim01.CD
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '02' and DEL_YN = 'N') cdim02 on a.app_pr_method = cdim02.CD
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '04' and DEL_YN = 'N') cdim04 on d.RESOURCE_TYPE = cdim04.CD
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '08' and DEL_YN = 'N') cdim08 on d.NODE_TYPE = cdim08.CD
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '12' and DEL_YN = 'N') cdim12 on a.data_pr_method = cdim12.CD
+		    left outer join top0307 e on a.problem_id = e.problem_id and a.interface_id = e.interface_id
+		    left outer join tsu0101 f on e.user_id = f.user_id
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '09' and DEL_YN = 'N') cdim09 on e.role_type = cdim09.CD
+        where
+            a.problem_id = #{problemId} and a.interface_id = #{interfaceId}
+    </select>
+    
+    <resultMap id="interfaceResultMap" type="Interface">
+        <id property="interfaceId"          column="INTERFACE_ID" />
+        <result property="interfaceNm"      column="INTERFACE_NM" />
+        
+        <result property="dataPrDir"        column="DATA_PR_DIR"/>
+        <result property="dataPrDirNm"      column="DATA_PR_DIR_NM"/>
+        <result property="appPrMethod"      column="APP_PR_METHOD"/>
+        <result property="appPrMethodNm"    column="APP_PR_METHOD_NM"/>
+        <result property="dataPrMethod"     column="DATA_PR_METHOD"/>
+        <result property="dataPrMethodNm"     column="DATA_PR_METHOD_NM"/>
+        
+        <association property="channel" javaType="Channel">
+            <id property="channelId"            column="CHANNEL_ID"/>
+            <result property="channelNm"        column="CHANNEL_NM"/>
+            <result property="channelCd"        column="CHANNEL_CD"/>
+        </association>
+        
+        <collection property="systemList" ofType="System">
+            <id property="systemId"         column="SYSTEM_ID"/>
+            <id property="seq"              column="SYS_SEQ"/>
+            <result property="systemNm"     column="SYSTEM_NM"/>
+            <result property="systemCd"     column="SYSTEM_CD"/>
+            <result property="nodeType"     column="SYS_NODE_TYPE"/>
+            <result property="nodeTypeNm"   column="SYS_NODE_TYPE_NM"/>
+            <result property="service"      column="SERVICE"/>
+        </collection>
+        
+        <collection property="senderSystemInfoList" ofType="DisplaySystemInfo">
+            <discriminator javaType="string" column="SYS_NODE_TYPE">
+                <case value="0" resultMap="displaySystemInfoResultMap"/>
+            </discriminator>
+        </collection>
+
+        <collection property="receiverSystemInfoList" ofType="DisplaySystemInfo">
+            <discriminator javaType="string" column="SYS_NODE_TYPE">
+                <case value="2" resultMap="displaySystemInfoResultMap"/>
+            </discriminator>
+        </collection>
+        
+        <collection property="relUsers" ofType="RelUser">
+            <id property="user.userId"          column="USER_ID"/>
+            <result property="roleTypeNm"       column="ROLE_NM"/>
+            
+            <association property="user" javaType="User">
+                <id property="userId"           column="USER_ID"/>
+                <result property="userNm"       column="USER_NM"/>
+                <result property="cellPhone"    column="CELL_PHONE"/>
+                <result property="phone"        column="PHONE"/>
+                <result property="email"        column="EMAIL"/>
+            </association>      
+                     
+        </collection>
+    </resultMap>
+    
+    <resultMap type="DisplaySystemInfo" id="displaySystemInfoResultMap">
+        <id property="systemId"         column="SYSTEM_ID"/>
+        <id property="seq"              column="SYS_SEQ"/>
+        <result property="systemCd"     column="SYSTEM_CD"/>
+        <result property="systemNm"     column="SYSTEM_NM"/>
+        <result property="seq"          column="SYS_SEQ"/>
+        <result property="nodeType"     column="SYS_NODE_TYPE"/>
+        <result property="nodeTypeNm"   column="SYS_NODE_TYPE_NM"/>
+        <result property="service"      column="SERVICE"/>
+        <result property="resourceCd"      column="RESOURCE_CD"/>
+        <result property="resourceNm"      column="RESOURCE_NM"/>
+    </resultMap>
+    
+    
+    <!-- <insert id="insertRequirementApproval" parameterType="RequirementApproval">
+        <selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+            select nvl(max(SEQ) + 1, 0) as seq
+              from TAN0105
+             where REQUIREMENT_ID = #{requirementId, jdbcType=VARCHAR}
+        </selectKey>
+        insert into TAN0105 (
+             REQUIREMENT_ID
+            ,SEQ
+            ,REQ_USER_ID
+            ,REQ_DATE
+            ,REQ_TYPE
+            ,SUBJECT
+            ,REQ_COMMENTS
+            ,DEL_YN
+        ) values(
+             #{requirementId, jdbcType=VARCHAR}
+            ,#{seq          , jdbcType=NUMERIC}
+            ,#{reqUserId    , jdbcType=VARCHAR}
+            ,#{reqDate      , jdbcType=NUMERIC}
+            ,#{reqType      , jdbcType=NUMERIC}
+            ,#{subject      , jdbcType=NUMERIC}
+            ,#{reqComments  , jdbcType=NUMERIC}
+            ,'N'
+        )
+    </insert> -->
+    
+    <insert id="insertProblem" parameterType="ProblemManagement">
+        <selectKey keyProperty="problemId" resultType="String" order="BEFORE" >
+            select nvl(max(to_number(problem_id)) + 1, 0) as problemId
+              from TOP0301
+        </selectKey>
+        INSERT INTO TOP0301 (
+		   CAUSE_CONTENTS, 
+		   CLASS_CD, DEL_YN, 
+		   END_DATE, 
+		   ERROR_MSG, 
+		   IMPORTANCE, 
+		   KEY1, 
+		   KEY2, 
+		   KEY3, 
+<!-- 		   LEVEL1, 
+		   LEVEL2,  -->
+		   NODE_NAME, 
+		   PLAN_CONTENTS, 
+		   PROBLEM_CONTENTS, 
+		   PROBLEM_ID, 
+		   PROBLEM_SUBJECT, 
+		   REG_DATE, 
+		   REG_USER, 
+		   RESULT_CONTENTS, 
+		   START_DATE, 
+		   STATUS, TYPE) 
+		VALUES ( 
+		 #{causeContents      , jdbcType=VARCHAR},
+		 #{classCd            , jdbcType=VARCHAR},
+		 'N',
+		 #{endDate            , jdbcType=VARCHAR},
+		 '',
+		 #{importance         , jdbcType=VARCHAR},
+		 '',
+		 '',
+		 '',
+<!-- 		 #{level1             , jdbcType=VARCHAR},
+		 #{level2             , jdbcType=VARCHAR}, -->
+		 #{nodeName           , jdbcType=VARCHAR},
+		 #{planContents       , jdbcType=VARCHAR},
+		 #{problemContents    , jdbcType=VARCHAR},
+		 #{problemId          , jdbcType=VARCHAR},
+		 #{problemSubject     , jdbcType=VARCHAR},
+		 #{regDate            , jdbcType=VARCHAR},
+		 #{regUser            , jdbcType=VARCHAR},
+		 #{resultContents     , jdbcType=VARCHAR},
+		 #{startDate          , jdbcType=VARCHAR},
+		 #{status             , jdbcType=VARCHAR},
+		 #{type               , jdbcType=VARCHAR} )
+    </insert>
+    
+    
+    <update id="updateProblem" parameterType="ProblemManagement">
+        UPDATE TOP0301
+		SET    TYPE             = #{type, jdbcType=VARCHAR},
+		       STATUS           = #{status, jdbcType=VARCHAR},
+		       START_DATE       = #{startDate, jdbcType=VARCHAR},
+		       RESULT_CONTENTS  = #{resultContents, jdbcType=VARCHAR},
+		       PROBLEM_SUBJECT  = #{problemSubject, jdbcType=VARCHAR},
+		       PROBLEM_CONTENTS = #{problemContents, jdbcType=VARCHAR},
+		       PLAN_CONTENTS    = #{planContents, jdbcType=VARCHAR},
+		       NODE_NAME        = #{nodeName, jdbcType=VARCHAR},
+		       MOD_USER         = #{modUser, jdbcType=VARCHAR},
+		       MOD_DATE         = #{modDate, jdbcType=VARCHAR},
+<!-- 		       LEVEL2           = #{level2, jdbcType=VARCHAR},
+		       LEVEL1           = #{level1, jdbcType=VARCHAR}, -->
+		       IMPORTANCE       = #{importance, jdbcType=VARCHAR},
+		       END_DATE         = #{endDate, jdbcType=VARCHAR},
+		       CLASS_CD         = #{classCd, jdbcType=VARCHAR},
+		       CAUSE_CONTENTS   = #{causeContents, jdbcType=VARCHAR}
+		WHERE  PROBLEM_ID       = #{problemId, jdbcType=VARCHAR}
+		
+    </update>
+    
+    <update id="deleteProblem" parameterType="ProblemManagement">
+        UPDATE TOP0301 
+        SET 
+            del_yn = 'Y', 
+            MOD_USER         = #{modUser, jdbcType=VARCHAR},
+            MOD_DATE         = #{modDate, jdbcType=VARCHAR}
+        WHERE 
+            PROBLEM_ID = #{problemId, jdbcType=VARCHAR}
+    </update>
+    
+    <insert id="insertProblemAttachFile" parameterType="ProblemAttachFile">
+        <selectKey keyProperty="fileId" resultType="String" order="BEFORE" >
+            select nvl(max(to_number(file_id)) + 1, 0) as fileId
+              from TOP0303
+        </selectKey>
+        
+        INSERT INTO TOP0303 (
+		   PROBLEM_ID, 
+		   FILE_ID, 
+		   FILE_NM, 
+		   FILE_PATH, 
+		   <!-- FILE_CONTENTS, --> 
+		   DEL_YN, 
+		   REG_DATE, 
+		   REG_USER) 
+		VALUES ( 
+		 #{problemId, jdbcType=VARCHAR},
+		 #{fileId, jdbcType=VARCHAR},
+		 #{fileNm, jdbcType=VARCHAR},
+		 #{filePath, jdbcType=VARCHAR},
+		 <!-- '', -->
+		 'N',
+		 #{regDate, jdbcType=VARCHAR},
+		 #{regUser, jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <update id="deleteProblemAttachFile" parameterType="Map">
+        UPDATE TOP0303 SET DEL_YN = 'Y' WHERE FILE_ID = #{fileId}
+    </update>
+    
+    
+    <select id="getToDoProblemList" parameterType="Map" resultMap="ProblemResult">
+        select
+		    NODE_NAME
+		    , START_DATE
+		    , END_DATE
+		    , PROBLEM_ID
+		    , CLASS_CD_NM
+		    , STATUS_NM
+		    , INTERFACE_NM
+		    , INTERFACE_ID
+		    , PROBLEM_SUBJECT
+            , TYPE
+            , STATUS
+            , IMPORTANCE
+            , IS_REG_USER
+            , CHANNEL_ID
+            , APPROVAL_STATUS
+		from
+		    (
+		    select 
+		        case
+	                when z.system_nm is null or z.system_nm = '' then
+	                    a.node_name
+	                else
+	                    z.system_nm
+	            end AS NODE_NAME
+		        , a.start_date          AS START_DATE
+		        , a.end_date            AS END_DATE
+		        , a.problem_id          AS PROBLEM_ID
+		        , b.nm                  AS CLASS_CD_NM
+		        , b.cmt                 AS CMT
+		        , c.nm                  AS STATUS_NM
+		        , case
+		            when d.interface_nm is null or d.interface_nm = '' then
+		                'N/A'
+		            else
+		                d.interface_nm
+		        end AS INTERFACE_NM
+		        , d.interface_id		AS INTERFACE_ID
+		        , a.problem_subject     AS PROBLEM_SUBJECT
+		        , a.type AS TYPE
+                , a.status  AS STATUS
+                , a.importance AS IMPORTANCE
+                , 'N' as IS_REG_USER
+                , d.channel_id	as CHANNEL_ID
+                , a.APPROVAL_STATUS AS APPROVAL_STATUS
+		    from
+		        top0301 a
+		        left outer join 
+	                (
+	                    SELECT 
+	                        class_cd
+	                        , nm
+	                        , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+	                    FROM 
+	                        top0302 
+	                        START WITH parent_cd IS NULL and del_yn = 'N'
+	                        CONNECT BY PRIOR class_cd = parent_cd 
+	                    order by depth asc, sort_no asc
+	                ) b on a.class_cd = b.class_cd
+		        left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+		        left outer join top0304 d on a.problem_id = d.problem_id
+		        left outer join tim0101 z on a.node_name = z.system_id and z.del_yn = 'N'
+                inner join (select interface_id from tan0219 where del_yn = 'N' and user_id = #{userId}) x on d.interface_id = x.interface_id
+            where
+                a.del_yn = 'N'
+		
+		    union
+		
+		    select 
+		        case
+	                when z.system_nm is null or z.system_nm = '' then
+	                    a.node_name
+	                else
+	                    z.system_nm
+	            end AS NODE_NAME
+		        , a.start_date          AS START_DATE
+		        , a.end_date            AS END_DATE
+		        , a.problem_id          AS PROBLEM_ID
+		        , b.nm                  AS CLASS_CD_NM
+		        , b.cmt                 AS CMT
+		        , c.nm                  AS STATUS_NM
+		        , case
+		            when d.interface_nm is null or d.interface_nm = '' then
+		                'N/A'
+		            else
+		                d.interface_nm
+		        end AS INTERFACE_NM
+		        , d.interface_id		AS INTERFACE_ID
+		        , a.problem_subject     AS PROBLEM_SUBJECT
+		        , a.type AS TYPE
+                , a.status  AS STATUS
+                , a.importance AS IMPORTANCE
+                , 'Y' as IS_REG_USER 
+                , d.channel_id	as CHANNEL_ID
+                , a.APPROVAL_STATUS AS APPROVAL_STATUS
+		    from
+		        top0301 a
+		        left outer join 
+	                (
+	                    SELECT 
+	                        class_cd
+	                        , nm
+	                        , substr(sys_connect_by_path(nm,  ' > '), 4, length(sys_connect_by_path(nm,  ' > '))) as cmt
+	                    FROM 
+	                        top0302 
+	                        START WITH parent_cd IS NULL and del_yn = 'N'
+	                        CONNECT BY PRIOR class_cd = parent_cd 
+	                    order by depth asc, sort_no asc
+	                ) b on a.class_cd = b.class_cd
+		        left outer join (select cd, nm from tsu0301 where level1 = 'OP' and level2 = '02' and del_yn = 'N') c on a.status = c.cd
+		        left outer join top0304 d on a.problem_id = d.problem_id
+		        left outer join tim0101 z on a.node_name = z.system_id and z.del_yn = 'N'
+		    where
+		        a.del_yn = 'N'
+		        and a.reg_user = #{userId}
+		    )
+        where
+            to_char(sysdate - 5, 'yyyymmdd') <![CDATA[<]]> substr(start_date, 0, 8)
+        order by start_date desc
+            
+    </select>
+    
+    <insert id="insertProblemInterface" parameterType="Map">
+    	INSERT INTO TOP0304 (
+   			PROBLEM_ID, INTERFACE_ID, INTERFACE_NM, 
+   			CHANNEL_ID, CHANNEL_NM, CHANNEL_CD, 
+   			DATA_PR_DIR, APP_PR_METHOD, DATA_PR_METHOD) 
+		VALUES ( 
+			#{problemId		, jdbcType=VARCHAR},
+			#{interfaceId	, jdbcType=VARCHAR},
+			#{interfaceNm	, jdbcType=VARCHAR},
+			#{channelId		, jdbcType=VARCHAR},
+			#{channelNm		, jdbcType=VARCHAR},
+			#{channelCd		, jdbcType=VARCHAR},
+			#{dataPrDir		, jdbcType=VARCHAR},
+			#{appPrMethod	, jdbcType=VARCHAR},
+			#{dataPrMethod	, jdbcType=VARCHAR} 
+		)
+    </insert>
+    
+    <insert id="insertProblemInterfaceSystem" parameterType="Map">
+    	<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+            select 
+            	nvl(max(SEQ) + 1, 0) as seq
+            from TOP0305
+        </selectKey>
+        
+    	INSERT INTO TOP0305 (
+			PROBLEM_ID, INTERFACE_ID, SYSTEM_ID, 
+			SEQ, SYSTEM_NM, SYSTEM_CD, 
+			SERVICE, RESOURCE_TYPE, NODE_TYPE) 
+		VALUES ( 
+			#{problemId		, jdbcType=VARCHAR},
+			#{interfaceId	, jdbcType=VARCHAR},
+			#{systemId		, jdbcType=VARCHAR},
+			#{seq			, jdbcType=NUMERIC},
+			#{systemNm		, jdbcType=VARCHAR},
+			#{systemCd		, jdbcType=VARCHAR},
+			#{service		, jdbcType=VARCHAR},
+			#{resourceType	, jdbcType=VARCHAR},
+			#{nodeType		, jdbcType=VARCHAR} 
+		)
+    </insert>
+    
+    <insert id="insertProblemBusiness" parameterType="Map">
+    	<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+            select 
+            	nvl(max(SEQ) + 1, 0) as seq
+            from TOP0306
+        </selectKey>
+        
+	    INSERT INTO TOP0306 (
+			PROBLEM_ID, INTERFACE_ID, BUSINESS_ID, 
+			SEQ, BUSINESS_NM, BUSINESS_CD, 
+			NODE_TYPE) 
+		VALUES ( 
+			#{problemId		, jdbcType=VARCHAR},
+			#{interfaceId	, jdbcType=VARCHAR},
+			#{businessId	, jdbcType=VARCHAR},
+			#{seq			, jdbcType=NUMERIC},
+			#{businessNm	, jdbcType=VARCHAR},
+			#{businessCd	, jdbcType=VARCHAR},
+			#{nodeType	, jdbcType=VARCHAR}
+		)
+    </insert>
+    
+    <insert id="insertProblemAdmin" parameterType="Map">
+    	<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+            select 
+            	nvl(max(SEQ) + 1, 0) as seq
+            from TOP0307
+        </selectKey>
+        
+	    INSERT INTO TOP0307 (
+			PROBLEM_ID, INTERFACE_ID, USER_ID, 
+			SEQ, ROLE_TYPE) 
+		VALUES ( 
+			#{problemId		, jdbcType=VARCHAR},
+			#{interfaceId	, jdbcType=VARCHAR},
+			#{userId		, jdbcType=VARCHAR},
+			#{seq			, jdbcType=NUMERIC},
+			#{roleType		, jdbcType=VARCHAR}
+		)
+    </insert>
+    
+    <delete id="deleteProblemAdmin" parameterType="Map">
+	    DELETE FROM TOP0307 WHERE PROBLEM_ID = #{problemId}
+    </delete>
+    
+    <delete id="deleteProblemBusiness" parameterType="Map">
+    	DELETE FROM TOP0306 WHERE PROBLEM_ID = #{problemId}
+    </delete>
+    
+    <delete id="deleteProblemSystem" parameterType="Map">
+    	DELETE FROM TOP0305 WHERE PROBLEM_ID = #{problemId}
+    </delete>
+    
+    <delete id="deleteProblemInterface" parameterType="Map">
+    	DELETE FROM TOP0304 WHERE PROBLEM_ID = #{problemId}
+    </delete>
+    
+    <update id="updateProblemStatus" parameterType="String">
+    	UPDATE TOP0301 SET APPROVAL_STATUS = #{status}, mod_date = #{modDate}, mod_user = #{modId} WHERE PROBLEM_ID = #{problemId} 
+    </update>
+</mapper>

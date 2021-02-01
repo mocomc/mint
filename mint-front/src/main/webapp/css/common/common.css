@@ -1,0 +1,1804 @@
+.common{}
+
+/********************************************************************
+  bootstrap or inspina ui CSS overwirte
+*********************************************************************/
+/*------------------------------------------------------------------
+  bootstrap-inspina right-sidebar overwrite
+--------------------------------------------------------------------*/
+#right-sidebar {
+  background-color: #f3f3f4;
+  border-left: 1px solid #e7eaec;
+  border-top: 1px solid #e7eaec;
+  overflow: hidden;
+  position: fixed;
+  top: 60px;
+  width: 290px !important;
+  z-index: 1009;
+  bottom: 0;
+  right: -290px;
+}
+/*------------------------------------------------------------------
+  bootstrap popover overwirte
+--------------------------------------------------------------------*/
+.popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1060;
+  display: none;
+  max-width: 2048px;
+  padding: 1px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: left;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  white-space: normal;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+
+  line-break: auto;
+}
+/*------------------------------------------------------------------
+  reset everything to the default box model
+--------------------------------------------------------------------*/
+/*
+*, :before, :after
+{
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+*/
+
+/*------------------------------------------------------------------
+  set a border-box model only to elements that need it
+--------------------------------------------------------------------*/
+.form-control, /* if this class is applied to a Kendo UI widget, its layout may change */
+.container,
+.container-fluid,
+.row,
+.ibox, .ibox-title, .ibox-tools, .ibox-content,
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1,
+.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2,
+.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
+.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4,
+.col-xs-5, .col-sm-5, .col-md-5, .col-lg-5,
+.col-xs-6, .col-sm-6, .col-md-6, .col-lg-6,
+.col-xs-7, .col-sm-7, .col-md-7, .col-lg-7,
+.col-xs-8, .col-sm-8, .col-md-8, .col-lg-8,
+.col-xs-9, .col-sm-9, .col-md-9, .col-lg-9,
+.col-xs-10, .col-sm-10, .col-md-10, .col-lg-10,
+.col-xs-11, .col-sm-11, .col-md-11, .col-lg-11,
+.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12
+{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+
+/* MODAL(bootstrap-inspinia original) */
+.modal-mint-alert {
+  z-index: 5050;
+}
+.modal-mint-alert {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3050;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+.modal-open .modal-mint-alert {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+/*
+.modal-backdrop {
+  z-index: 2040 !important;
+}
+
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+
+.modal-backdrop.fade {
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.modal-backdrop.in {
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+*/
+.modal-content-original {
+  background-clip: padding-box;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  outline: 0 none;
+  position: relative;
+}
+.modal-dialog-original {
+  z-index: 2200;
+  position: relative;
+  width: 600px;
+  margin: 30px auto;
+}
+.modal-body-original {
+  padding: 20px 30px 30px 30px;
+}
+.inmodal-original .modal-body-original {
+  background: #f8fafb;
+}
+.inmodal-original .modal-header-original {
+  padding: 30px 15px;
+  text-align: center;
+}
+.animated.modal.fade-original .modal-dialog-original {
+  -webkit-transform: none;
+  -ms-transform: none;
+  -o-transform: none;
+  transform: none;
+}
+.inmodal-original .modal-title-original {
+  font-size: 26px;
+}
+.inmodal-original .modal-icon-original {
+  font-size: 84px;
+  color: #e2e3e3;
+}
+.modal-footer-original {
+  margin-top: 0;
+}
+
+.modal-body-original {
+  position: relative;
+  /*padding: 15px;*/
+}
+
+.modal-header-original {
+  /*min-height: 16.42857143px;*/
+  min-height:10px;
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.modal-title-original {
+  margin: 0;
+  line-height: 1.42857143;
+}
+
+.modal-footer-original {
+  margin-top: 0;
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5;
+}
+.modal-footer-original .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+.modal-footer-original .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+.modal-footer-original .btn-block + .btn-block {
+  margin-left: 0;
+}
+
+.form-group-original {
+  margin-bottom: 6px;
+}
+
+#waitingLoad {
+   width: 100%;
+   height: 100%;
+   top: 0px;
+   left: 0px;
+   position: fixed;
+   display: block;
+   opacity: 0.7;
+   background-color: rgba(255,255,255,0.01);
+   filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#80000000', endColorstr='#80000000');
+   z-index: 20000;
+   text-align: center;
+}
+
+#waitingLoad-image {
+  position: absolute;
+  top:50%;
+  left:50%;
+  margin-top:-25px;
+  margin-left:-25px;
+  vertical-align: middle;
+  z-index: 20001;
+}
+
+
+/*------------------------------------------------------------------
+  Tabs
+--------------------------------------------------------------------*/
+.tabs-container .panel-body {
+  background: #fff;
+  border: 1px solid #e7eaec;
+  border-radius: 2px;
+  padding: 20px;
+  position: relative;
+}
+.tabs-container .nav-tabs > li.active > a,
+.tabs-container .nav-tabs > li.active > a:hover,
+.tabs-container .nav-tabs > li.active > a:focus {
+  border: 1px solid #e7eaec;
+  border-bottom-color: transparent;
+  background-color: #fff;
+}
+.tabs-container .nav-tabs > li {
+  float: left;
+  margin-bottom: -1px;
+}
+.tabs-container .tab-pane .panel-body {
+  border-top: none;
+}
+.tabs-container .nav-tabs > li.active > a,
+.tabs-container .nav-tabs > li.active > a:hover,
+.tabs-container .nav-tabs > li.active > a:focus {
+  border: 1px solid #e7eaec;
+  border-bottom-color: transparent;
+}
+.tabs-container .nav-tabs {
+  border-bottom: 1px solid #e7eaec;
+}
+.tabs-container .tab-pane .panel-body {
+  border-top: none;
+}
+.tabs-container .tabs-left .tab-pane .panel-body,
+.tabs-container .tabs-right .tab-pane .panel-body {
+  border-top: 1px solid #e7eaec;
+}
+.tabs-container .nav-tabs > li a:hover {
+  background: transparent;
+  border-color: transparent;
+}
+.tabs-container .tabs-below > .nav-tabs,
+.tabs-container .tabs-right > .nav-tabs,
+.tabs-container .tabs-left > .nav-tabs {
+  border-bottom: 0;
+}
+.tabs-container .tabs-left .panel-body {
+  position: static;
+}
+.tabs-container .tabs-left > .nav-tabs,
+.tabs-container .tabs-right > .nav-tabs {
+  width: 20%;
+}
+.tabs-container .tabs-left .panel-body {
+  width: 80%;
+  margin-left: 20%;
+}
+.tabs-container .tabs-right .panel-body {
+  width: 80%;
+  margin-right: 20%;
+}
+.tabs-container .tab-content > .tab-pane,
+.tabs-container .pill-content > .pill-pane {
+  display: none;
+}
+.tabs-container .tab-content > .active,
+.tabs-container .pill-content > .active {
+  display: block;
+}
+.tabs-container .tabs-below > .nav-tabs {
+  border-top: 1px solid #e7eaec;
+}
+.tabs-container .tabs-below > .nav-tabs > li {
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+.tabs-container .tabs-below > .nav-tabs > li > a {
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+}
+.tabs-container .tabs-below > .nav-tabs > li > a:hover,
+.tabs-container .tabs-below > .nav-tabs > li > a:focus {
+  border-top-color: #e7eaec;
+  border-bottom-color: transparent;
+}
+.tabs-container .tabs-left > .nav-tabs > li,
+.tabs-container .tabs-right > .nav-tabs > li {
+  float: none;
+}
+.tabs-container .tabs-left > .nav-tabs > li > a,
+.tabs-container .tabs-right > .nav-tabs > li > a {
+  min-width: 74px;
+  margin-right: 0;
+  margin-bottom: 3px;
+}
+.tabs-container .tabs-left > .nav-tabs {
+  float: left;
+  margin-right: 19px;
+}
+.tabs-container .tabs-left > .nav-tabs > li > a {
+  margin-right: -1px;
+  -webkit-border-radius: 4px 0 0 4px;
+  -moz-border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px;
+}
+.tabs-container .tabs-left > .nav-tabs .active > a,
+.tabs-container .tabs-left > .nav-tabs .active > a:hover,
+.tabs-container .tabs-left > .nav-tabs .active > a:focus {
+  border-color: #e7eaec transparent #e7eaec #e7eaec;
+  *border-right-color: #ffffff;
+}
+.tabs-container .tabs-right > .nav-tabs {
+  float: right;
+  margin-left: 19px;
+}
+.tabs-container .tabs-right > .nav-tabs > li > a {
+  margin-left: -1px;
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius: 0 4px 4px 0;
+  border-radius: 0 4px 4px 0;
+}
+.tabs-container .tabs-right > .nav-tabs .active > a,
+.tabs-container .tabs-right > .nav-tabs .active > a:hover,
+.tabs-container .tabs-right > .nav-tabs .active > a:focus {
+  border-color: #e7eaec #e7eaec #e7eaec transparent;
+  *border-left-color: #ffffff;
+  z-index: 1;
+}
+
+/*------------------------------------------------------------------
+  Tabs - 팝업화면의 Tab
+--------------------------------------------------------------------*/
+.poupup-tabs-container .panel-body {
+  background: #fff;
+  /*border: 1px solid #e7eaec;*/
+  border-width: 1px;
+  border-style: solid none none none;
+  border-color: #e7eaec;
+  border-radius: 2px;
+  /*padding: 20px;*/
+  position: relative;
+}
+.poupup-tabs-container .nav-tabs > li.active > a,
+.poupup-tabs-container .nav-tabs > li.active > a:hover,
+.poupup-tabs-container .nav-tabs > li.active > a:focus {
+  border: 1px solid #e7eaec;
+  border-bottom-color: transparent;
+  background-color: #fff;
+}
+.poupup-tabs-container .nav-tabs > li {
+  float: left;
+  margin-bottom: -1px;
+}
+.poupup-tabs-container .tab-pane .panel-body {
+  border-top: none;
+}
+.poupup-tabs-container .nav-tabs > li.active > a,
+.poupup-tabs-container .nav-tabs > li.active > a:hover,
+.poupup-tabs-container .nav-tabs > li.active > a:focus {
+  border: 1px solid #e7eaec;
+  border-bottom-color: transparent;
+}
+.poupup-tabs-container .nav-tabs {
+  border-bottom: 1px solid #e7eaec;
+}
+.poupup-tabs-container .tab-pane .panel-body {
+  border-top: none;
+}
+.poupup-tabs-container .tabs-left .tab-pane .panel-body,
+.poupup-tabs-container .tabs-right .tab-pane .panel-body {
+  border-top: 1px solid #e7eaec;
+}
+.poupup-tabs-container .nav-tabs > li a:hover {
+  background: transparent;
+  border-color: transparent;
+}
+.poupup-tabs-container .tabs-below > .nav-tabs,
+.poupup-tabs-container .tabs-right > .nav-tabs,
+.poupup-tabs-container .tabs-left > .nav-tabs {
+  border-bottom: 0;
+}
+.poupup-tabs-container .tabs-left .panel-body {
+  position: static;
+}
+.poupup-tabs-container .tabs-left > .nav-tabs,
+.poupup-tabs-container .tabs-right > .nav-tabs {
+  width: 20%;
+}
+.poupup-tabs-container .tabs-left .panel-body {
+  width: 80%;
+  margin-left: 20%;
+}
+.poupup-tabs-container .tabs-right .panel-body {
+  width: 80%;
+  margin-right: 20%;
+}
+.poupup-tabs-container .tab-content > .tab-pane,
+.poupup-tabs-container .pill-content > .pill-pane {
+  display: none;
+}
+.poupup-tabs-container .tab-content > .active,
+.poupup-tabs-container .pill-content > .active {
+  display: block;
+}
+.poupup-tabs-container .tabs-below > .nav-tabs {
+  border-top: 1px solid #e7eaec;
+}
+.poupup-tabs-container .tabs-below > .nav-tabs > li {
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+.poupup-tabs-container .tabs-below > .nav-tabs > li > a {
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+}
+.poupup-tabs-container .tabs-below > .nav-tabs > li > a:hover,
+.poupup-tabs-container .tabs-below > .nav-tabs > li > a:focus {
+  border-top-color: #e7eaec;
+  border-bottom-color: transparent;
+}
+.poupup-tabs-container .tabs-left > .nav-tabs > li,
+.poupup-tabs-container .tabs-right > .nav-tabs > li {
+  float: none;
+}
+.poupup-tabs-container .tabs-left > .nav-tabs > li > a,
+.poupup-tabs-container .tabs-right > .nav-tabs > li > a {
+  min-width: 74px;
+  margin-right: 0;
+  margin-bottom: 3px;
+}
+.poupup-tabs-container .tabs-left > .nav-tabs {
+  float: left;
+  margin-right: 19px;
+}
+.poupup-tabs-container .tabs-left > .nav-tabs > li > a {
+  margin-right: -1px;
+  -webkit-border-radius: 4px 0 0 4px;
+  -moz-border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px;
+}
+.poupup-tabs-container .tabs-left > .nav-tabs .active > a,
+.poupup-tabs-container .tabs-left > .nav-tabs .active > a:hover,
+.poupup-tabs-container .tabs-left > .nav-tabs .active > a:focus {
+  border-color: #e7eaec transparent #e7eaec #e7eaec;
+  *border-right-color: #ffffff;
+}
+.poupup-tabs-container .tabs-right > .nav-tabs {
+  float: right;
+  margin-left: 19px;
+}
+.poupup-tabs-container .tabs-right > .nav-tabs > li > a {
+  margin-left: -1px;
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius: 0 4px 4px 0;
+  border-radius: 0 4px 4px 0;
+}
+.poupup-tabs-container .tabs-right > .nav-tabs .active > a,
+.poupup-tabs-container .tabs-right > .nav-tabs .active > a:hover,
+.poupup-tabs-container .tabs-right > .nav-tabs .active > a:focus {
+  border-color: #e7eaec #e7eaec #e7eaec transparent;
+  *border-left-color: #ffffff;
+  z-index: 1;
+}
+
+
+
+
+
+.badge-count {
+  background-color: #d1dade;
+  color: #5e5e5e;
+  font-family: 'Open Sans';
+  font-size: 11px;
+  font-weight: 600;
+  padding-bottom: 4px;
+  padding-left: 6px;
+  padding-right: 6px;
+  text-shadow: none;
+}
+
+/*.quote {border-left: 0.5em solid #E0CB52;padding: 0.5em;}*/
+.k-grid tbody tr {cursor: pointer;}
+
+
+/*------------------------------------------------------------------
+  Menu CSS
+--------------------------------------------------------------------*/
+.nav-disabled {
+	color: #6D6D68;
+}
+
+.nav-first-group {
+	border-top: 1px;
+	border-top-style: solid;
+	border-top-color: #47627a;
+}
+
+.nav-first-group-title {
+	font-size:14px;
+	color: #85d3c3;
+}
+
+.nav-first-level li {
+	padding-left:10px;
+}
+
+/*
+.nav-first-level ul {
+	padding-left:10px;
+}
+*/
+
+/*------------------------------------------------------------------
+  Menu CSS overwrite
+   external/bootstrap-inspinia/style.css 내용 overwrite
+--------------------------------------------------------------------*/
+.nav-second-level li a {
+  padding: 7px 10px 7px 10px;
+  padding-left: 32px;
+}
+
+.nav-third-level li a {
+  padding-left: 42px;
+}
+
+.nav-second-level ul {
+	padding-left: 15px;
+}
+
+/*------------------------------------------------------------------
+  Menu indicater
+   메뉴 선택시 왼쪽 indicater 재조정
+--------------------------------------------------------------------*/
+.nav > li.active {
+	border-left: 0px solid #19aa8d !important;
+}
+#side-menu > li.active {
+  border-left: 3px solid #19aa8d !important;
+  /*background: #293846; !important;*/
+}
+
+/*------------------------------------------------------------------
+  Pannel CSS overwrite
+   패널 타이틀 border 재조정
+--------------------------------------------------------------------*/
+.ibox-title {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #ffffff;
+  border-color: #e7eaec;
+  /*border-color: #1AB394 !important;*/
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 2px 0px 0 !important;
+  color: inherit;
+  margin-bottom: 0;
+  padding:7px 15px 8px;
+  min-height: 46px;
+}
+
+/*------------------------------------------------------------------
+  Menu icon visible
+   메뉴 접힐때 아이콘 보이도록 처리
+--------------------------------------------------------------------*/
+body.mini-navbar .navbar-default .nav .menu-icon {
+  display: block !important;
+}
+
+body:not(.mini-navbar) .navbar-default .nav .menu-icon {
+  display: none !important;
+}
+
+body.mini-navbar #side-menu > li.active > a{
+  background: #2F4050 !important;
+}
+
+/*------------------------------------------------------------------
+  Menu arrow
+   서브 메뉴 존재시 화살표 방향 변경
+--------------------------------------------------------------------*/
+.fa.arrow:before {
+  content: "\f105" !important;
+}
+
+
+/*------------------------------------------------------------------
+  kendo tooltip overwrite
+--------------------------------------------------------------------*/
+.k-callout-e {
+	border-left-color : rgba(100,100,100,0.9) !important;
+}
+
+.k-callout-w {
+	border-right-color : rgba(100,100,100,0.9) !important;
+}
+
+.k-callout-n {
+	border-bottom-color : rgba(100,100,100,0.9) !important;
+}
+
+.k-callout-s {
+	border-top-color : rgba(100,100,100,0.9) !important;
+}
+
+.k-tooltip {
+	border-width : 0px !important;
+}
+
+.k-widget.k-tooltip {
+	background-image : none                  !important;
+	border-color     : rgba(100,100,100,0.9) !important;
+	background-color : rgba(100,100,100,0.9) !important;
+	color            : #ffffff               !important;
+}
+
+
+/*------------------------------------------------------------------
+  summernote overwrite
+--------------------------------------------------------------------*/
+.note-editor {
+	border:0px !important;
+}
+.note-editor .panel-heading {
+  /*padding: 10px 15px;*/
+  padding: 3px 10px 7px 10px !important;
+}
+
+/*------------------------------------------------------------------
+  도움말 항목이 존재할때 CSS 처리
+--------------------------------------------------------------------*/
+.help-over-label {
+	color : #337ab7;
+}
+
+.help-over-pannel {
+	color : #337ab7;
+}
+
+/*------------------------------------------------------------------
+  체크박스 CSS overwrite
+--------------------------------------------------------------------*/
+.checkbox label::after {
+  	padding-top: 3px !important;
+}
+
+/*------------------------------------------------------------------
+  right-sidebar overwrite
+--------------------------------------------------------------------*/
+#right-sidebar {
+  	top: 56px !important;
+}
+
+/*------------------------------------------------------------------
+  scroll-top-button CSS
+--------------------------------------------------------------------*/
+#scroll-top-button {
+	position:absolute;
+	top:0;
+	right:10px;
+	bottom:10px;
+	z-index:100;
+	height: 38px;
+	width: 38px;
+	display: block;
+	padding: 6px 8px;
+	text-align: center;
+	opacity: 0.7;
+}
+
+
+
+
+/********************************************************************
+  kendo ui CSS overwirte
+*********************************************************************/
+
+/*------------------------------------------------------------------
+  description :: 그리드에 라인 설정
+--------------------------------------------------------------------*/
+.k-grid tr td {
+    border-bottom: 1px solid #C0C0C0;
+    font-size: 12px;
+}
+
+/*------------------------------------------------------------------
+  description :: 그리드 헤더에 멀티 컬럼 존재시 세로 라인 밀리는 현상 조치.
+--------------------------------------------------------------------*/
+/*
+.k-grid-header
+{
+   padding: 0 !important;
+}
+*/
+
+/*------------------------------------------------------------------
+  description :: 그리드 헤더에 멀티 컬럼 존재시 세로 라인 밀리는 현상 조치.
+--------------------------------------------------------------------*/
+/*
+.k-grid-content
+{
+   overflow-y: visible;
+}
+*/
+
+/*------------------------------------------------------------------
+  description :: GRID hierarchycal Title Row Hidden
+--------------------------------------------------------------------*/
+/*
+.k-grid .k-detail-cell .k-grid-header {
+  display: none;
+}
+*/
+
+/*------------------------------------------------------------------
+  description :: GRID no-scroll 상태일때 처리
+--------------------------------------------------------------------*/
+.no-scrollbar .k-grid-header
+{
+	padding: 0 !important;
+}
+
+.no-scrollbar .k-grid-content
+{
+	overflow-y: hidden;
+}
+
+/*------------------------------------------------------------------
+  description :: GRID content-locked overflow-x hidden(workaround)
+--------------------------------------------------------------------*/
+.no-overflow .k-grid-header {
+	padding: 0 !important;
+}
+
+.no-overflow .k-grid-content-locked {
+	overflow-x: hidden;
+	height: auto !important;
+}
+
+
+/*------------------------------------------------------------------
+  description :: GRID norecords default template modify
+--------------------------------------------------------------------*/
+.k-grid-norecords-template {
+    background-color: #fff;
+    border: 0px solid #d5d5d5;
+}
+
+/*------------------------------------------------------------------
+  description :: 네비게이션 CSS 마우스 오버시 색상 변경.
+--------------------------------------------------------------------*/
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+  background: transparent !important;
+}
+
+/*------------------------------------------------------------------
+  description :: Location 표시 아이콘 변경
+--------------------------------------------------------------------*/
+.breadcrumb {
+  background-color: #ffffff;
+  padding: 0;
+  margin-bottom: 0;
+  color: #a5a3a6 !important;
+}
+.breadcrumb > li + li:before {
+  padding: 0 5px;
+  color: #828183 !important;
+  /*content: "/\00a0";*/
+  content: ">" !important;
+}
+/*------------------------------------------------------------------
+  description :: button 변경
+--------------------------------------------------------------------*/
+.btn-white {
+  color: inherit;
+  background: white;
+  border: 1px solid #c2c2c2 !important;
+}
+
+
+/*------------------------------------------------------------------
+  description :: 파일업로드 사이즈 변경.
+--------------------------------------------------------------------*/
+.k-file-name {
+	max-width: 100%;
+}
+.k-upload-status {
+	top:initial;
+}
+
+.k-upload-status-total {
+	display:none;
+}
+
+.k-button.k-clear-selected,
+.k-button.k-upload-selected {
+	display:none;
+}
+
+/*------------------------------------------------------------------
+  TreeView
+   -
+-------------------------------------------------------------------*/
+.k-treeview {
+  /*border-width: 1px!important;*/
+  padding: 5px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.k-treeview .fa.k-sprite,
+.k-treeview .fa.k-sprite::before {
+   font-size: 12px;
+   line-height: 10px;
+   vertical-align: middle;
+}
+
+
+
+/*******************************************************************
+ *                         common.css                              *
+ *                                                                 *
+ *******************************************************************/
+ /*------------------------------------------------------------------
+  Tracking - Diagram
+-------------------------------------------------------------------*/
+ .tracking-diagram {
+	min-height: 20px;
+	/*padding: 19px;*/
+	margin-bottom: 20px;
+	background-color: #f5f5f5;
+	border: 1px solid #e3e3e3;
+	border-radius: 4px;
+}
+
+
+ /*------------------------------------------------------------------
+  Text Color
+   -
+-------------------------------------------------------------------*/
+.text-custom-01 {
+	color: #5a5757;
+}
+
+
+/*------------------------------------------------------------------
+  Label
+   - col-sm-xx name 기준으로 label tag 를 정리하였음.
+-------------------------------------------------------------------*/
+.label-tag-12,
+.label-tag-11,
+.label-tag-10,
+.label-tag-9,
+.label-tag-8,
+.label-tag-7,
+.label-tag-6,
+.label-tag-5,
+.label-tag-4,
+.label-tag-3,
+.label-tag-2,
+.label-tag-1 {
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  margin-bottom: 1px;
+  padding:5px 0px 6px 0px;
+  display:block;
+  float:left;
+}
+
+
+/* col-sm-12, 레이블 1개 배열*/
+.label-tag-12 {
+  width:18%;
+}
+
+/* col-sm-11 */
+.label-tag-11 {
+  width:12.3%;
+}
+
+/* col-sm-10 */
+.label-tag-10 {
+  width:100%;
+}
+
+/* col-sm-9 */
+.label-tag-9 {
+  width:15.12%;
+}
+
+/* col-sm-8 */
+.label-tag-8 {
+  width:100%;
+}
+
+/* col-sm-7 */
+.label-tag-7 {
+  width:19.5%;
+}
+
+/* col-sm-6, 레이블 2개 배열 */
+.label-tag-6 {
+  width:40%;
+}
+
+/* col-sm-5 */
+.label-tag-5 {
+  width:100%;
+}
+
+/* col-sm-4, 레이블 3개 배열 */
+.label-tag-4 {
+  width:35%;
+}
+
+/* col-sm-3 */
+.label-tag-3 {
+  width:100%;
+}
+
+/* col-sm-2 */
+.label-tag-2 {
+  width:100%;
+}
+
+/* col-sm-1 */
+.label-tag-1 {
+  width:100%;
+}
+
+.k-textbox.label-tag {
+	font: inherit;
+	font-weight:bold;
+	text-align:center;
+	vertical-align: middle;
+	background-color: #f3f3f4;
+	color: inherit;
+	padding:5px 0px 5px 0px;
+	float:inherit;
+}
+
+.mint-bd-default {
+ border-color: #c5c5c5;
+}
+
+/*------------------------------------------------------------------
+  Input
+   - col-sm-xx name 기준으로 label tag 를 정리하였음.
+   - label width 와 비례하여 설정됨.
+-------------------------------------------------------------------*/
+.input-tag-readonly {
+
+}
+
+.input-tag-disabled {
+  background-color:#eee !important;
+  /*cursor: not-allowed !important;*/
+}
+
+
+.input-tag-view {
+  text-align:center;
+  background-color:#eee !important;
+  /*opacity: 0.7;*/
+  /*cursor: not-allowed !important;*/
+}
+
+
+.input-tag-12,
+.input-tag-11,
+.input-tag-10,
+.input-tag-9,
+.input-tag-8,
+.input-tag-7,
+.input-tag-6,
+.input-tag-5,
+.input-tag-4,
+.input-tag-3,
+.input-tag-2,
+.input-tag-1 {
+  /*height:2.22em;*/
+}
+
+
+.input-tag-85p {
+  width:85%;
+}
+
+.input-tag-81p {
+  width:81%;
+}
+
+
+/* col-sm-12, 레이블 1개 배열*/
+.input-tag-12 {
+  width:63%;
+}
+
+/* col-sm-11 */
+.input-tag-11 {
+  width:12.3%;
+}
+
+/* col-sm-10 */
+.input-tag-10 {
+  width:100%;
+}
+
+/* col-sm-9 */
+.input-tag-9 {
+  width:15.12%;
+}
+
+/* col-sm-8 */
+.input-tag-8 {
+  width:100%;
+}
+
+/* col-sm-7 */
+.input-tag-7 {
+  width:19.5%;
+}
+
+/* col-sm-6, 레이블 2개 배열 */
+.input-tag-6 {
+  width:40%;
+}
+
+/* col-sm-5 */
+.input-tag-5 {
+  width:100%;
+}
+
+/* col-sm-4, 레이블 3개 배열 */
+.input-tag-4 {
+  width:63%;
+}
+
+/* col-sm-3 */
+.input-tag-3 {
+  width:100%;
+}
+
+/* col-sm-2 */
+.input-tag-2 {
+  width:100%;
+}
+
+/* col-sm-1 */
+.input-tag-1 {
+  width:100%;
+}
+
+@media (max-width: 1117px) {
+	.label-tag-4 {
+	  width:100%;
+	}
+	.input-tag-4 {
+	  width:100%;
+	}
+}
+
+
+/*------------------------------------------------------------------
+  검색필드 - 버튼
+   -
+-------------------------------------------------------------------*/
+.btn-input-side {
+  padding: 4px 25px 3px 25px;
+}
+
+
+/*------------------------------------------------------------------
+  hr-space
+   - 빈공백 삽입.
+-------------------------------------------------------------------*/
+.hr-space {
+  width:100%;
+  height:6px;
+  margin:0px;
+  border-color:transparent;
+  /*border-color:#ffffff*/
+}
+
+.hr-space-2 {
+  width:100%;
+  height:2px;
+  margin:0px;
+  border-color:transparent;
+  /*border-color:#ffffff*/
+}
+
+
+.input-width{
+  width:63%;
+}
+
+
+/*------------------------------------------------------------------
+  Grid - No Data Record Template
+-------------------------------------------------------------------*/
+.mint-grid-nodata-template {
+	width: 20em;
+	height: 4em;
+	line-height: 4em;
+	vertical-align: middle;
+	margin: 0 auto;
+	background-color: transparent;
+	border: 0px solid;
+	top: 50%;
+	left: 50%;
+}
+
+/*------------------------------------------------------------------
+  toast overwirte
+   -
+-------------------------------------------------------------------*/
+#toast-container > .toast-warning:before {
+  content: "\f071" !important;
+}
+#toast-container > .toast-error:before {
+  content: "\f071" !important;;
+}
+#toast-container > .toast-info:before {
+  content: "\f05a" !important;
+}
+#toast-container > .toast-success:before {
+  content: "\f00C" !important;
+}
+.toast-top-right {
+  top: 58px !important;
+  right: 12px;
+}
+
+/*------------------------------------------------------------------
+  selected-name
+   -
+-------------------------------------------------------------------*/
+.selected-name {
+	padding: 7px 10px;
+	background: #73747b; /*#6d6779;*/ /*#9a9eb1;*//*#aaa;*/ /*#ff833e;*/ /*#aaa;*/
+	color: white;
+	float: left;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	border-radius: 12px;
+}
+/*------------------------------------------------------------------
+  query-match
+-------------------------------------------------------------------*/
+.query-match {
+    color: red;
+}
+
+.bs-callout01 {
+  padding: 10px 15px 30px 15px;
+  margin-top:15px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #f8ac59;
+}
+
+.bs-callout02 {
+  padding: 10px 15px 30px 15px;
+  margin-bottom:15px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #1ab394;
+}
+
+.bs-callout03 {
+  padding: 10px 15px 90px 15px;
+  margin-top:10px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #1c84c6;
+}
+
+.bs-callout04 {
+  padding: 10px 15px 30px 15px;
+  margin-top:10px;
+  margin-bottom:20px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #ed5565;
+}
+
+.bs-callout05 {
+  padding: 10px 15px 110px 15px;
+  margin-top:10px;
+  margin-bottom:20px;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #1ab394;
+}
+
+.btn-sm2,
+.btn-group-sm2 > .btn2 {
+  padding: 14px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+
+
+.a2:link {color: #666666; text-decoration: none;}
+.a2:visited {color: #666666; text-decoration: none;}
+.a2:hover {color: #666666; text-decoration: none;}
+.a2:active {color: #666666; text-decoration: none;}
+
+/*popup*/
+
+
+/*TD 컬러*/
+.thbg{background-color:#f1f1f1;text-align:right}
+.thbg2{background-color:#f9f9f9;text-align:right}
+
+
+/*팝업 왼쪽영역*/
+.left-side{float:left;width:220px;}
+
+/*Interface Tracking 상세 OP-01-01-002.html, 시스템 등록 IM-01-01-002_02.html,서버 등록 IM-01-02-002.html,업무 등록 IM-01-03-002_02.html,IM-01-03-002_01.*/
+.left-side2{
+	float:left;
+	width: 33.33333333%;
+	position: relative;
+	min-height: 1px;
+	padding-left: 15px;
+}
+
+.left-title{height:70px;background-color:#e7e7e7;padding-left:20px;border-bottom:1px solid #e5e5e5;}
+
+/*Interface Tracking 상세 OP-01-01-002.html*/
+.left-title2{
+	height:70px;
+	background-color:#e7e7e7;
+	padding:8px 0px 0px 15px;
+	border-top: 1px solid #e5e5e5;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	}
+
+
+/*팝업 오른쪽 영역*/
+
+.right-side{float:left;width:658px;min-height:400px;overflow: hidden;padding:15px 0px 0px 20px;}
+.right-side2{float:left;width:640px;min-height:400px;overflow: hidden;padding:0px 0px 0px 20px;}
+
+.right-title{
+	height:55px;
+	background-color:#e7e7e7;
+	padding:10px 0px 0px 10px;
+	border-top: 1px solid #e5e5e5;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+}
+
+.right-title2{
+	height:55px;
+	background-color:#e7e7e7;
+	padding:10px 0px 0px 10px;
+	border-top: 1px solid #e5e5e5;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+}
+
+/* Added CSS */
+.title-action2 {
+  text-align: right;
+  bottom:0;
+}
+
+.small font{
+font-size:11px; color:#999999;
+}
+
+.mail-box-header2 {
+  border-bottom: 0;
+  padding: 0px 0px 15px 0px;
+}
+
+.hr-line{
+padding:17px;
+}
+
+.hr-line2 {
+
+float: left;
+width: 100%;
+min-height:1px;
+height:6px;
+
+}
+
+
+
+
+
+/*-----------------------------------------------------------------------------------------
+100% 화면에서 한행에 레이블 3개가 안정적입니다. col-sm-4,col-sm-7,col-sm-8.... css는 각각 div 넓이 사이즈가 다릅니다.
+레이블이 2개일때와 3개일때 각각 다른 div 넓이 사이즈를 알맞게 지정하셔야 화면에 제대로 보입니다.
+
+
+사용예)
+레이블이 3개일때 col-sm-4 div 사용하시고 적합한 레이블 CSS는 .lable_tag
+
+레이블이 2개일때 col-sm-6 div 사용하시고 적합한 레이블 CSS는 .lable_tag3
+
+기존에 만들어져 있는 화면들을 참고하세요.
+
+
+.lable_tag2, .lable_tag3, .lable_tag4, .lable_tag5, .lable_tag6 들은 레이블이 3개가 아닌경우 즉,레이블 2개나 한개로 넓은 영역을 차지하며 배치할때 넓이를 맞추기 위해 추가로 만들어진 것들입니다.
+적용된 파일이름들이 적혀있으니 참고하시면 됩니다. 화면구성에 따라서 작업자가 새로운 레이블 css를 만들어서 사용하셔도 됩니다.
+---------------------------------------------------------------------------------------------*/
+
+
+
+/* 100% 화면에서  레이블 3개 배열할때 사용*/
+/*col-sm-4*/
+.lable_tag {
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  padding:5px 0px;
+  display:block;
+  width:35%;
+  float:left;
+}
+
+
+
+
+/*col-sm-9*/
+/*AN-01-00-002.html 일일총전송량*/
+.lable_tag2 {
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  padding:5px 0px;
+  display:block;
+  width:15.12%;
+  float:left;
+  }
+
+
+
+/* 100% 화면에서 레이블 2개 배열할때 사용 */
+/*col-sm-6*/
+/*OP-03-02-002.html 연계채널 레이블*/
+  .lable_tag3 {
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  padding:5px 0px;
+  display:block;
+  width:40%;
+  float:left;
+  }
+
+
+
+
+ /*col-sm-11*/
+  /*OP-03-02-002.html 첨부파일*/
+ /* SU-03-02-005.html,SU-03-03-001.html, SU-03-03-002.html, SU-03-03-003.html,SU-03-03-004.html,SU-03-04-001.html, SU-03-04-002.html  검색 기간*/
+
+ .lable_tag4 {
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  padding:5px 0px;
+  display:block;
+  width:12.3%;
+  float:left;
+
+  }
+
+
+
+/*col-sm-7*/
+/*SU-03-02-001_daily.html 검색 기간 */
+/* SU-03-02-001_hourly.html, SU-03-02-001_monthly.html, SU-03-02-001_yearly.html 검색 기간*/
+ .lable_tag5{
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  padding:5px 0px;
+  display:block;
+  width:17.065%;
+  float:left;
+  }
+
+
+
+/*col-lg-12*/
+/*AN-01-00-002.html  인터페이스 맵핑, Tag,첨부파일*/
+ .lable_tag6 {
+  background-color: #f3f3f4;
+  border: 1px solid #e7eaec;
+  border-radius: 3px;
+  color: inherit;
+  text-align:center;
+  font-weight:bold;
+  margin-right: 5px;
+  padding:5px 0px;
+  display:block;
+  width:18%;
+  float:left;
+
+  }
+
+
+
+
+
+
+.title-action2 {
+  text-align: right;
+  padding-top: 15px;
+ }
+
+
+
+.ibox-content2 {
+  background-color: #ffffff;
+  color: inherit;
+  padding: 15px 20px 20px 20px;
+  border-color: #e7eaec;
+  border-image: none;
+  border-width: 1px 0px;
+}
+
+
+.ibox-content3 {
+  padding: 15px 0px 2px 0px;
+}
+.ibox-content4{
+  padding: 15px 15px 0px 15px;
+}
+
+
+.ibox-content5 {
+  background-color: #ffffff;
+  color: inherit;
+  padding: 5px 20px 0px;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 1px 0px;
+}
+
+
+
+.ibox-tools2 {
+  display: inline-block;
+  float: right;
+  /*margin-top: 5px;*/
+  position: relative;
+  padding: 0;
+}
+.ibox-tools2 a {
+  cursor: pointer;
+  margin-left: 5px;
+  color: #c4c4c4;
+}
+.ibox-tools2 a.btn-primary {
+  color: #fff;
+}
+.ibox-tools2 .dropdown-menu > li > a {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+
+.fh-breadcrumb2 {
+  height: calc(100% - 350px);
+  /*margin: 0 -15px;*/
+  position: relative;
+}
+
+.b-col {
+  border-top: 1px solid #e7eaec;
+}
+
+.b-bot {
+  border-bottom: 1px solid #e7eaec;
+}
+
+.b-left{
+  border-left: 1px solid #e7eaec;
+}
+
+
+.ibox-title2 {
+  margin-bottom: 0;
+  padding:10px 0px 0px 0px;
+  min-height: 46px;
+}
+.ibox-title2 h5 {
+  display: inline-block;
+  font-size: 16px;
+  /*margin: 0 0 7px;*/
+  padding: 0;
+  text-overflow: ellipsis;
+  float: left;
+ }
+
+ .lable-sm{
+ background-color: #bababa;
+  border-color: #bababa;
+  color: #FFFFFF;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+ }
+
+ .main-h2 {
+  font-size: 18px;
+  font-weight: 400;
+  margin-right:10px;
+  line-height:24px;
+}
+
+ .main-h3 {
+  font-size: 16x;
+  font-weight: 600;
+  margin-right:10px;
+  line-height:24px;
+}
+
+
+.pattern{
+border-radius:6px;
+background-color:#f5f5f5;
+border-color: #23c6c8;
+padding:10px;
+margin-bottom:15px;
+}
+
+
+@media only screen and (min-width : 1280px) and (max-width : 1440px) {
+ /* Styles */
+ .list-font{font-size:14px; font-weight:bold;clear:both;}
+ .circle-font{font-size:12px; font-weight:bold;}
+
+ .circle1 {
+ width:80px;
+ height:80px;
+ border-radius:40px;
+ -moz-border-radius :40px;
+ -webkit-border-radius :40px;
+ -ms-border-radius :40px;
+ -khtml-border-radius :40px;
+ -o-border-radius :40px;
+ background-color: #f8ac59;
+ background-image: -webkit-linear-gradient(#f79d3c, #f8ac59);
+ background-image: linear-gradient(#f79d3c, #f8ac59);
+ border-color: #5ca941;
+ font:normal 26px/80px "Verdana";
+ color:#fff;
+ text-align:center;
+ margin:10px 7px 82px 0px;
+}
+
+ .circle2{
+ width:80px;
+ height:80px;
+ border-radius:40px;
+ -moz-border-radius :40px;
+ -webkit-border-radius :40px;
+ -ms-border-radius :40px;
+ -khtml-border-radius :40px;
+ -o-border-radius :40px;
+ background-color: #ed5565;
+ background-image: -webkit-linear-gradient(#ea394c, #ed5565);
+ background-image: linear-gradient(#ea394c, #ed5565);
+ border-color: #5ca941;
+ font:normal 24px/80px "Verdana";
+ color:#fff;
+ text-align:center;
+ margin:10px 7px 82px 7px;
+}
+
+
+ .circle3{
+ width:80px;
+ height:80px;
+ border-radius:40px;
+ -moz-border-radius :40px;
+ -webkit-border-radius :40px;
+ -ms-border-radius :40px;
+ -khtml-border-radius :40px;
+ -o-border-radius :40px;
+ background-color: #ed5565;
+ background-image: -webkit-linear-gradient(#ea394c, #ed5565);
+ background-image: linear-gradient(#ea394c, #ed5565);
+ border-color: #5ca941;
+ font:normal 24px/80px "Verdana";
+ color:#fff;
+ text-align:center;
+ margin:10px 0px 82px 7px;
+}
+
+
+
+
+}
+
+
+ @media only screen and (min-width : 1600px) and (max-width : 1920px) {
+ /* Styles */
+.list-font{font-size:18px; font-weight:600;clear:both;}
+.circle-font{font-size:14px; font-weight:600;}
+.circle1 {
+ width:94px;
+ height:94px;
+ border-radius:47px;
+ -moz-border-radius :47px;
+ -webkit-border-radius :47px;
+ -ms-border-radius :47px;
+ -khtml-border-radius :47px;
+ -o-border-radius :47px;
+ background-color: #f8ac59;
+ background-image: -webkit-linear-gradient(#f79d3c, #f8ac59);
+ background-image: linear-gradient(#f79d3c, #f8ac59);
+ border-color: #5ca941;
+ font:normal 26px/94px "Verdana";
+ color:#fff;
+ text-align:center;
+ margin:10px 18px 63px 0px;
+}
+
+.circle2 {
+ width:94px;
+ height:94px;
+ border-radius:47px;
+ -moz-border-radius :47px;
+ -webkit-border-radius :47px;
+ -ms-border-radius :47px;
+ -khtml-border-radius :47px;
+ -o-border-radius :47px;
+ background-color: #ed5565;
+ background-image: -webkit-linear-gradient(#ea394c, #ed5565);
+ background-image: linear-gradient(#ea394c, #ed5565);
+ border-color: #5ca941;
+ font:normal 26px/94px "Verdana";
+ color:#fff;
+ text-align:center;
+ margin:10px 18px 63px 18px;
+}
+
+.circle3 {
+ width:94px;
+ height:94px;
+ border-radius:47px;
+ -moz-border-radius :47px;
+ -webkit-border-radius :47px;
+ -ms-border-radius :47px;
+ -khtml-border-radius :47px;
+ -o-border-radius :47px;
+ background-color: #ed5565;
+ background-image: -webkit-linear-gradient(#ea394c, #ed5565);
+ background-image: linear-gradient(#ea394c, #ed5565);
+ border-color: #5ca941;
+ font:normal 26px/94px "Verdana";
+ color:#fff;
+ text-align:center;
+ margin:10px 0px 63px 18px;
+}
+
+}
+
+.client-detail {
+  position: relative;
+  height: 620px;
+}
+.client-detail {
+  position: relative;
+  height:355px;
+}
+
+.main_footer {
+  background: none repeat scroll 0 0 white;
+  border-top: 1px solid #e7eaec;
+  bottom: 0;
+  left: 0;
+  padding: 10px 20px;
+  position: absolute;
+  right: 0;
+}
+
+.ibox2 {
+  clear: both;
+  margin-bottom: 25px;
+  margin-top: 0;
+  padding: 0;
+}
+
+.m {
+  margin: 15px;
+}
+
+.iip-menu {
+	position: fixed;
+	top:0;
+	left:0;
+}
+
+.k-dropzone {
+	padding: 0 !important;
+}
+
+.k-detail-row {
+	background-color:#fff !important;
+}

@@ -1,0 +1,1267 @@
+﻿<!DOCTYPE html>
+<html >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IPS (Interface Portal System)</title>
+	
+	
+	
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: common                                  -->
+		<!---------------------------------------------------------------------->		
+		<link rel="stylesheet" type="text/css" href="../../css/common/common.css">
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: bootstrap-inspina                       -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/font-awesome/css/font-awesome.css">		
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/animate.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/style.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: kendo                                   -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.common.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.rtl.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.default.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.default.min.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: JQuery                                             -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/jquery/js/jquery.min.js"></script>
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: bootstrap-inspina                                  -->
+		<!---------------------------------------------------------------------->
+		
+		
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/peity/jquery.peity.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/pace/pace.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/iCheck/icheck.min.js"></script>	
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/bootstrap.min.js"></script>  
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/inspinia.js"></script>		
+		
+
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/chartJs/Chart.min.js"></script>	
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/flot/jquery.flot.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/flot/jquery.flot.spline.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/flot/jquery.flot.pie.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+		
+		
+
+
+
+		
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: Kendo                                              -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/kendo/js/kendo.all.min.js"></script>
+		
+</head>
+
+<body>
+
+    <div id="wrapper">
+	<!--왼쪽메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+              <li class="nav-header">
+                  <div class="dropdown profile-element"><a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                      <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Interface Portal System</strong>
+                       </span> <span class="text-muted text-xs block">My page <b class="caret"></b></span> </span> </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="mailbox.html">Mailbox</a></li>
+                            <li class="divider"></li>
+                            <li><a href="login.html">Logout</a></li>
+                        </ul>
+                </div>
+                    <div class="logo-element">
+                        IN+
+                    </div>
+              </li>
+				<li>
+                    <a href="#"><span class="nav-label">* 라이프사이클 관리</span> </a>
+                </li>
+                <li class="#">
+                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">요건관리</span> <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li ><a href="index.html">요건조회</a></li>
+                        <li ><a href="dashboard_2.html">요건등록</a></li>
+                        <li ><a href="dashboard_3.html">요건 히스토리</a></li>
+                    </ul>
+                </li>
+              
+                <li>
+                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">인터페이스 관리<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="graph_flot.html">인터페이스 조회</a></li>
+                        <li><a href="graph_morris.html">인터페이스 등록</a></li>
+                        <li><a href="graph_rickshaw.html">인터페이스 히스토리</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><span class="nav-label">* 운영 관리</span> </a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">인프라</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="form_basic.html">시스템(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시스템(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+
+                        <li><a href="form_advanced.html">서버(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">서버(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">서버(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+                        <li><a href="form_wizard.html">업무(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">업무(그룹) 등록</a>
+                                </li>
+                            </ul>
+						</li>	
+                   	 </ul>
+                </li>
+
+				<li>
+                    <a href="#"><span class="nav-label">* 모니터링</span> </a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Data Tracking</span></a>
+                   
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">대시보드</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">자원 모니터링</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">장애관리</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="typography.html">장애대장</a></li>
+                        <li><a href="icons.html">장애 히스토리 관리</a></li>
+                    </ul>
+                </li>
+				<li>
+                    <a href="#"><span class="nav-label">* 통계/KPI</span> </a>
+                </li>
+
+                <li>
+                    <a href="grid_options.html"><i class="fa fa-laptop"></i> <span class="nav-label">표준화 준수율</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">인터페이스 재 사용율</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">진척률 통계</span></a>
+                    
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">인터페이스 통계</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">인터페이스 운영통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시간별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">일별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">월별 통계</a>
+                                </li>
+								<li>
+                                    <a href="#">년간 통계</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        
+						<li>
+                            <a href="#">인터페이스 현황통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+						<li>
+                            <a href="#">장애통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">장애발생 순위 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">장애 유형별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+					<!--nav nav-second-level 끝-->
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+	<!--왼쪽메뉴 끝-->
+	
+
+        <div id="page-wrapper" class="gray-bg">
+
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome to IPS (Interface Portal System)</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/img/a7.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <small class="pull-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/img/a4.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/img/profile.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="grid_options.html">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="login.html">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+		<!--header end-->
+     	
+		
+		<!--wrapper wrapper-content-->
+		<div class="row  border-bottom white-bg dashboard-header">
+		
+					<!--col-lg-12-->
+                    <div class="col-lg-12">
+					
+					<!--carousel slide-->
+					 <div class="carousel slide" id="carousel2" >
+						  <ol class="carousel-indicators">
+							   <li data-slide-to="0" data-target="#carousel2"  class="active"></li>
+							   <li data-slide-to="1" data-target="#carousel2"></li>
+							   <!--<li data-slide-to="2" data-target="#carousel2" class=""></li>-->
+							</ol>
+							<!--carousel-inner-->
+							 <div class="carousel-inner">
+							  <!--item group1-->
+								<div class="item active">
+								    <!--chart1-->
+									<div class="col-lg-4"> 
+									
+									<div style="float:left"><h3>오류/지연 현황</h3></div>
+									<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+										<div class="ibox-content">
+											 <table class="table table-hover margin bottom">
+                                                    <thead>
+                                                    <tr>
+                                                        <th style="width: 40%" class="text-center">장애발생일장</th>
+                                                        <th>장애 / 오류내역</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-center">2015-07-24 14:01:01</td>
+                                                        <td> Ora-0001:Unique Key Constraint Error</td>
+                                                    </tr>
+													<tr>
+                                                        <td class="text-center">2015-07-24 14:01:01</td>
+                                                        <td> Ora-0001:Unique Key Constraint Error</td>
+                                                    </tr>
+													<tr>
+                                                        <td class="text-center">2015-07-24 14:01:01</td>
+                                                        <td> Ora-0001:Unique Key Constraint Error</td>
+                                                    </tr>
+                                                   
+                                                    </tbody>
+                                                </table>
+										</div>
+										
+
+									
+									</div> 
+									<!--chart1 end-->
+									<!--chart2-->
+									<div class="col-lg-4">
+									<div style="float:left"><h3>IF 현황</h3></div>
+									<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+										<div class="ibox-content text-center">
+											<div class="flot-chart">
+											<div class="flot-chart-content" id="flot-line-chart-moving"></div>
+											</div>
+										</div>
+									</div>
+									<!--chart2 end-->
+									<!--chart3-->
+									<div class="col-lg-4"> 
+									<div style="float:left"><h3>프로세스별 현황</h3></div>
+									<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+									<div class="ibox-content">
+										<div class="col-lg-6">
+										<canvas id="polarChart" width="130" height="130"></canvas>
+										</div>
+										<div class="col-lg-6" style="padding-left:4em;">	
+										  총건수: <font class="main-h3">10,346</font></br>
+										  정상건수: <font class="main-h3">5,346</font></br>
+										  오류건수: <font class="main-h3">25</font>
+										</div>
+									</div>
+										
+									</div> 
+									<!--chart3 end-->				
+								</div>
+								<!--item group1 end-->
+								
+								
+								<!--item group2-->
+								<div class="item">
+									<!--chart1-->
+									<div class="col-lg-4">
+									<div style="float:left"><h3>업무 시스템별 현황</h3></div>
+									<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+									
+									<div class="ibox-content text-center">
+									  <div class="col-lg-6">
+										<canvas id="doughnutChart1" width="110" height="110"></canvas>
+											<h5>전일건수</h5>
+									  </div>
+									  <div class="col-lg-6">
+										<canvas id="doughnutChart2" width="110" height="110"></canvas>
+											<h5>금일건수</h5>
+									   </div>
+									</div>
+								
+									</div>
+									<!--chart1 end-->
+									 <!--chart2-->
+									 <div class="col-lg-4">
+										<div style="float:left"><h3>IF 현황2</h3></div>
+										<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+											
+										<div class="ibox-content">
+										
+										<div class="col-lg-6">
+										<span id="sparkline7"></span>
+										</div>
+										<div class="col-lg-6" style="padding-left:4em;>	
+										  총건수: <font class="main-h3">10,346</font></br>
+										  정상건수: <font class="main-h3">5,346</font></br>
+										  오류건수: <font class="main-h3">25</font>
+										</div>
+											
+										</div>
+									</div>
+									<!--chart2 end-->
+									<!--chart3-->
+									 <div class="col-lg-4">
+										<!--<div style="float:left"><h3>IF 현황3</h3></div>
+										<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+										<div class="ibox-content text-center">
+										<span id="sparkline8"></span>
+										</div>-->
+									</div>
+									<!--chart3 end-->
+									
+								</div>
+								<!--item group2 end-->
+								
+								
+								<!--item group3-->
+							 	<!--<div class="item">-->
+									 <!--chart1-->
+									 <!--<div class="col-lg-4">
+											<h4>Custom pie size example2</h4>
+										
+									</div>-->
+									<!--chart1 end-->
+									
+								<!--</div>-->
+							   <!--item group3 end-->
+							   
+							</div>
+							<!--carousel-inner end-->
+							 <a class="left carousel-control" href="#carousel2" role="button" data-slide="prev">
+								<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+								<span class="sr-only">Previous</span>
+						    </a>
+
+							 <a class="right carousel-control" href="#carousel2" role="button" data-slide="next">
+								<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								<span class="sr-only">Next</span>
+							 </a>
+
+                        </div>
+						<!--carousel slide end-->
+						
+                     </div>
+					 <!--col-lg-12 END-->
+			</div>
+			<!--row  border-bottom white-bg dashboard-header end-->	
+			
+			
+		<!--wrapper wrapper-content-->
+		<div class="wrapper wrapper-content">
+			
+			<!--row-->
+			  <div class="row">
+			  <!--col-lg-4 개발진행 현황 -->	
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <div style="float:left;margin-right:15px;"><h3>개발진행 현황</h3></div>
+								<div style="padding-top:5px">
+								<span class="label label-primary">Today</span>
+                               </div>
+								<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+								
+                            </div>
+							<!--ibox-content-->
+                            <div class="ibox-content">
+							<div class="flot-chart">
+							<div class="flot-chart-pie-content" id="flot-pie-chart"></div>
+							</div>
+                            </div>
+							<!--ibox-content END-->
+                        </div>
+                    </div>
+					<!--col-lg-4 개발진행 현황 END-->	
+					<!--col-lg-4 장애발생 현황 -->	
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <div style="float:left;margin-right:15px;"><h3>장애발생 현황</h3></div>
+								 <div style="padding-top:5px">
+								<span class="label label-info">Monthly</span>
+                               </div>
+								<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+                            </div>
+							<!--ibox-content-->
+                           <div class="ibox-content">
+							<div class="flot-chart">
+							<div class="flot-chart-pie-content" id="flot-pie-chart2"></div>
+							</div>
+                            </div>
+							<!--ibox-content END-->
+                        </div>
+                    </div>
+					<!--col-lg-4 장애발생 현황 END-->	
+					<!--col-lg-4 장애사전 예방-->	
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <div style="float:left;margin-right:15px;"><h3>장애사전 예방 Alert</h3></div>
+								<div style="padding-top:5px">
+								<span class="label label-warning">Annual</span>
+                               </div>
+								<div class="ibox-tools"> <a href="#" class="a2"><i class="fa fa-chevron-right"></i></a></div>
+                            </div>
+                            <div class="ibox-content">
+							 <table class="table table-hover margin bottom">
+                              <thead>
+                                <tr>
+                                 <th style="width: 40%" class="text-center">장애발생일장</th>
+                                 <th>장애 / 오류내역</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                 <td class="text-center">2015-07-24 14:01:01</td>
+                                 <td> Ora-0001:Unique Key Constraint Error</td>
+                                </tr>
+								<tr>
+                                 <td class="text-center">2015-07-24 14:01:01</td>
+                                 <td> Ora-0001:Unique Key Constraint Error</td>
+                                </tr>
+								<tr>
+                                 <td class="text-center">2015-07-24 14:01:01</td>
+                                 <td> Ora-0001:Unique Key Constraint Error</td>
+                                </tr>
+								<tr>
+                                 <td class="text-center">2015-07-24 14:01:01</td>
+                                 <td> Ora-0001:Unique Key Constraint Error</td>
+                                </tr> 
+								<tr>
+                                 <td class="text-center">2015-07-24 14:01:01</td>
+                                 <td> Ora-0001:Unique Key Constraint Error</td>
+                                </tr> 
+                              </tbody>
+                              </table>
+							
+							</div>
+                                <!--ibox-content END-->
+                            </div>
+							<!--ibox float-e-margins END-->
+                        </div>
+						<!--col-lg-4 장애사전 예방 END-->
+						
+                    </div>
+					<!--row END-->
+					
+					
+					<!--row-->
+				 <div class="row">
+				 <!--col-lg-6 공지사항-->
+                  <div class="col-lg-6">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>공지사항</h5>
+                                         <div class="ibox-tools">
+											<a class="collapse-link">
+												<i class="fa fa-chevron-up"></i>
+											</a>
+											<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+												<i class="fa fa-wrench"></i>
+											</a>
+											<ul class="dropdown-menu dropdown-user">
+												<li><a href="#">Config option 1</a>
+												</li>
+												<li><a href="#">Config option 2</a>
+												</li>
+											</ul>
+											<a class="close-link">
+												<i class="fa fa-times"></i>
+											</a>
+										</div>
+                                    </div>
+                                    <div class="ibox-content">
+                                       <table class="table table-hover margin bottom">
+                                                    <thead>
+                                                    <tr>
+                                                        <th style="width: 15%" class="text-center">번호</th>
+                                                        <th>제목</th>
+                                                        <th style="width: 20%" class="text-center">등록일</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-center">1</td>
+                                                        <td> 2015년 7월 24일 21:00 ~ 23:00까지  SAP ERP 정기 PM 작업이 예정되어 있습니다.</td>
+                                                        <td class="text-center small">2015-05-12</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">2</td>
+                                                        <td> IIB Library가 2015년 7월 19일자로 업데이트 되었습니다. </td>
+                                                        <td class="text-center small">2015-05-12</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">3</td>
+                                                        <td> 인터페이스 포탈시스템 신규 권한 부여했습니다. 담당자별 추가 신청 바랍니다.</td>
+                                                        <td class="text-center small">2015-05-12</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">4</td>
+                                                        <td> 2015년 7월 10일 21:00 ~ 23:00까지  MES시스템  긴급 패치 작업이 진행됩니다.</td>
+                                                        <td class="text-center small">2015-05-12</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">5</td>
+                                                        <td>인터페이스 신규등록 2015년 7월 5일까지 한시적으로 제한합니다. </td>
+                                                        <td class="text-center small">2015-05-12</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">6</td>
+                                                        <td>인터페이스 포탈시스템 요건조회기능이 추가되었습니다.</td>
+                                                        <td class="text-center small">2015-05-12</td>
+                                                    </tr>
+													
+                                                    </tbody>
+                                                </table>
+											</div>
+										</div>
+									</div>
+								<!--col-lg-6 공지사항 END-->
+							<!--col-lg-6 FAQ-->		
+                           <div class="col-lg-6">
+                          <div class="ibox float-e-margins">
+							<div class="ibox-title">
+                            <h5>FAQ</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">Config option 1</a>
+                                    </li>
+                                    <li><a href="#">Config option 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="panel-body" style="padding-top:0px">
+                                <div class="panel-group" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h5 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">1. SAP PO/IIB 연계 기준은 무엇인가요 ?</a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding:15px;" >
+                                                1. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">2. 발생시간: 2015-07-24 11:05:01 DLE1D0012(BPO ERP로 보내주는 ACK Answer) 오류 내용이 안보입니다. 어떻게 봐야 하는건가요?</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseTwo" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding:15px;">
+                                                2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">3. DB유형 연계 시 권한 부여 기준은 어떻게 되나요?</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseThree" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding:15px;">
+                                                3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+									
+									<div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">4. 다음과 같은 오류가 발생합니다.  어떻게 조치를 해야하나요?</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFour" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding:15px;">
+                                                4. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+									
+									<div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">5. 신규 인터페이스를 생성하려고합니다. 등록에 대하여 질문드립니다.</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseFive" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding:15px;">
+                                                5. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+									
+									<div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">6. IIB에 제공한 API 사용 시 아래와 같은 에러가 발생합니다.</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseSix" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding:15px;">
+                                                6. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+									
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					</div>
+					<!--col-lg-6 FAQ end-->	
+									
+            </div>
+			<!--row end-->	
+
+
+				
+				
+                </div>
+			<!--wrapper wrapper-content end-->	
+		
+		<!--footer-->
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2015
+            </div>
+        </div>
+		<!--footer end-->
+
+
+
+
+        </div>
+		<!--page-wrapper end-->
+
+        </div>
+		<!--wrapper end-->
+
+
+
+
+
+					<script>
+					
+					
+					$(document).ready(function() {
+					
+					//flot-dashboard-chart
+						/*var data1 = [
+							[0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]
+						];
+						var data2 = [
+							[0,1],[1,0],[2,2],[3,0],[4,1],[5,3],[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]
+						];
+						$("#flot-dashboard-chart").length && $.plot($("#flot-dashboard-chart"), [
+							data1, data2
+						],
+								{
+									series: {
+										lines: {
+											show: false,
+											fill: true
+										},
+										splines: {
+											show: true,
+											tension: 0.4,
+											lineWidth: 1,
+											fill: 0.4
+										},
+										points: {
+											radius: 0,
+											show: true
+										},
+										shadowSize: 2
+									},
+									grid: {
+										hoverable: true,
+										clickable: true,
+										tickColor: "#d5d5d5",
+										borderWidth: 1,
+										color: '#d5d5d5'
+									},
+									colors: ["#1ab394", "#464f88"],
+									xaxis:{
+									},
+									yaxis: {
+										ticks: 4
+									},
+									tooltip: false
+								}
+						);*/
+					
+					
+						//polarChart
+						var polarData = [
+							{
+								value: 300,
+								color: "#a3e1d4",
+								highlight: "#1ab394",
+								label: "App"
+							},
+							{
+								value: 140,
+								color: "#dedede",
+								highlight: "#1ab394",
+								label: "Software"
+							},
+							{
+								value: 200,
+								color: "#b5b8cf",
+								highlight: "#1ab394",
+								label: "Laptop"
+							}
+						];
+
+						var polarOptions = {
+							scaleShowLabelBackdrop: true,
+							scaleBackdropColor: "rgba(255,255,255,0.75)",
+							scaleBeginAtZero: true,
+							scaleBackdropPaddingY: 1,
+							scaleBackdropPaddingX: 1,
+							scaleShowLine: true,
+							segmentShowStroke: true,
+							segmentStrokeColor: "#fff",
+							segmentStrokeWidth: 2,
+							animationSteps: 100,
+							animationEasing: "easeOutBounce",
+							animateRotate: true,
+							animateScale: false,
+						};
+						var ctx = document.getElementById("polarChart").getContext("2d");
+						var Polarchart = new Chart(ctx).PolarArea(polarData, polarOptions);
+						
+						
+						
+						//doughnutChart
+						var doughnutData = [
+							{
+								value: 300,
+								color: "#a3e1d4",
+								highlight: "#1ab394",
+								label: "App"
+							},
+							{
+								value: 50,
+								color: "#dedede",
+								highlight: "#1ab394",
+								label: "Software"
+							},
+							{
+								value: 100,
+								color: "#b5b8cf",
+								highlight: "#1ab394",
+								label: "Laptop"
+							}
+						];
+
+						var doughnutOptions = {
+							segmentShowStroke: true,
+							segmentStrokeColor: "#fff",
+							segmentStrokeWidth: 2,
+							percentageInnerCutout: 45, // This is 0 for Pie charts
+							animationSteps: 100,
+							animationEasing: "easeOutBounce",
+							animateRotate: true,
+							animateScale: false,
+						};
+
+						var ctx1 = document.getElementById("doughnutChart1").getContext("2d");
+						var DoughnutChart1 = new Chart(ctx1).Doughnut(doughnutData, doughnutOptions);
+						var ctx2 = document.getElementById("doughnutChart2").getContext("2d");
+						var DoughnutChart2 = new Chart(ctx2).Doughnut(doughnutData, doughnutOptions);
+						
+						
+						//Flot Pie Chart
+						$(function() {
+
+							var data = [{
+								label: "전체건수",
+								data: 21,
+								color: "#7ea7b5",
+							}, {
+								label: "완료건수",
+								data: 52,
+								color: "#79d2c0",
+							}, {
+								label: "미완료건수",
+								data: 15,
+								color: "#d1dade",
+							}];
+
+							var plotObj = $.plot($("#flot-pie-chart"), data, {
+								series: {
+									pie: {
+										show: true
+									}
+								},
+								grid: {
+									hoverable: true
+								},
+								tooltip: true,
+								tooltipOpts: {
+									content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+									shifts: {
+										x: 20,
+										y: 0
+									},
+									defaultTheme: false
+								}
+							});
+
+						
+						});
+						
+						
+						
+						$(function() {
+
+							var data = [{
+								label: "전체건수",
+								data: 52,
+								color: "#1c84c6",
+							}, {
+								label: "완료건수",
+								data: 15,
+								color: "#23c6c8",
+							}, {
+								label: "미완료건수",
+								data: 21,
+								color: "#d1dade",
+							}];
+
+							var plotObj = $.plot($("#flot-pie-chart2"), data, {
+								series: {
+									pie: {
+										show: true
+									}
+								},
+								grid: {
+									hoverable: true
+								},
+								tooltip: true,
+								tooltipOpts: {
+									content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+									shifts: {
+										x: 20,
+										y: 0
+									},
+									defaultTheme: false
+								}
+							});
+						
+						});
+						
+						
+						
+						//flot-line-chart-moving
+						$(function() {
+
+							var container = $("#flot-line-chart-moving");
+
+							// Determine how many data points to keep based on the placeholder's initial size;
+							// this gives us a nice high-res plot while avoiding more than one point per pixel.
+
+							var maximum = container.outerWidth() / 2 || 300;
+
+							//
+
+							var data = [];
+
+							function getRandomData() {
+
+								if (data.length) {
+									data = data.slice(1);
+								}
+
+								while (data.length < maximum) {
+									var previous = data.length ? data[data.length - 1] : 50;
+									var y = previous + Math.random() * 10 - 5;
+									data.push(y < 0 ? 0 : y > 100 ? 100 : y);
+								}
+
+								// zip the generated y values with the x values
+
+								var res = [];
+								for (var i = 0; i < data.length; ++i) {
+									res.push([i, data[i]])
+								}
+
+								return res;
+							}
+
+							series = [{
+								data: getRandomData(),
+								lines: {
+									fill: true
+								}
+							}];
+
+
+							var plot = $.plot(container, series, {
+								grid: {
+
+									color: "#999999",
+									tickColor: "#D4D4D4",
+									borderWidth:0,
+									minBorderMargin: 20,
+									labelMargin: 10,
+									backgroundColor: {
+										colors: ["#ffffff", "#ffffff"]
+									},
+									margin: {
+										top: 8,
+										bottom: 20,
+										left: 20
+									},
+									markings: function(axes) {
+										var markings = [];
+										var xaxis = axes.xaxis;
+										for (var x = Math.floor(xaxis.min); x < xaxis.max; x += xaxis.tickSize * 2) {
+											markings.push({
+												xaxis: {
+													from: x,
+													to: x + xaxis.tickSize
+												},
+												color: "#fff"
+											});
+										}
+										return markings;
+									}
+								},
+								colors: ["#1ab394"],
+								xaxis: {
+									tickFormatter: function() {
+										return "";
+									}
+								},
+								yaxis: {
+									min: 0,
+									max: 110
+								},
+								legend: {
+									show: true
+								}
+							});
+
+							// Update the random dataset at 25FPS for a smoothly-animating chart
+
+							setInterval(function updateRandom() {
+								series[0].data = getRandomData();
+								plot.setData(series);
+								plot.draw();
+							}, 40);
+
+						});
+												
+					
+						
+                        /*Line Graph*/
+
+						/*var lineData = {
+							labels: ["1", "2", "3", "4", "5", "6", "7"],
+							datasets: [
+								{
+									label: "Example dataset",
+									fillColor: "rgba(220,220,220,0.5)",
+									strokeColor: "rgba(220,220,220,1)",
+									pointColor: "rgba(220,220,220,1)",
+									pointStrokeColor: "#fff",
+									pointHighlightFill: "#fff",
+									pointHighlightStroke: "rgba(220,220,220,1)",
+									data: [65, 59, 80, 81, 56, 55, 40]
+								},
+								{
+									label: "Example dataset",
+									fillColor: "rgba(26,179,148,0.5)",
+									strokeColor: "rgba(26,179,148,0.7)",
+									pointColor: "rgba(26,179,148,1)",
+									pointStrokeColor: "#fff",
+									pointHighlightFill: "#fff",
+									pointHighlightStroke: "rgba(26,179,148,1)",
+									data: [28, 48, 40, 19, 86, 27, 90]
+								}
+							]
+						};
+
+						var lineOptions = {
+							scaleShowGridLines: true,
+							scaleGridLineColor: "rgba(0,0,0,.05)",
+							scaleGridLineWidth: 1,
+							bezierCurve: true,
+							bezierCurveTension: 0.4,
+							pointDot: true,
+							pointDotRadius: 4,
+							pointDotStrokeWidth: 1,
+							pointHitDetectionRadius: 20,
+							datasetStroke: true,
+							datasetStrokeWidth: 2,
+							datasetFill: true,
+							responsive: true,
+						};
+
+
+						var ctx1 = document.getElementById("lineChart1").getContext("2d");
+						var myNewChart1 = new Chart(ctx1).Line(lineData, lineOptions);
+						
+						var ctx2 = document.getElementById("lineChart2").getContext("2d");
+						var myNewChart2 = new Chart(ctx2).Line(lineData, lineOptions);
+						
+						var ctx3 = document.getElementById("lineChart3").getContext("2d");
+						var myNewChart3 = new Chart(ctx3).Line(lineData, lineOptions);
+						
+						var ctx4 = document.getElementById("lineChart4").getContext("2d");
+						var myNewChart4 = new Chart(ctx4).Line(lineData, lineOptions);
+						*/
+						
+						
+					});
+					
+					
+					
+				</script>
+				
+				
+<script>
+$(function () {
+ 
+    $("#sparkline7").sparkline([52, 12, 44], {
+        type: 'pie',
+        height: '150px',
+        sliceColors: ['#1ab394', '#b3b3b3', '#e4f0fb']});
+		
+	$("#sparkline8").sparkline([5, 6, 7, 2, 0, 4, 2, 4, 5, 7, 2, 4, 12, 14, 4, 2, 14, 12, 7], {
+		type: 'bar',
+        barWidth: 8,
+        height: '150px',
+        barColor: '#1ab394',
+        negBarColor: '#c6c6c6'});
+
+
+});
+
+
+	</script>
+	
+	
+			
+				
+				
+
+</body>
+
+</html>

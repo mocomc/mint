@@ -1,0 +1,7 @@
+{
+	"objectType":"SiteInfo",
+		"applicationInfo":[],
+		"defInterfaceCallPath":"{IIPAGENT_HOME}/script/interfaceCall.sh",
+		"siteHomeInfo":[
+		]
+}

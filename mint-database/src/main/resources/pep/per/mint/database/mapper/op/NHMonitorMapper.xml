@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.NHMonitorMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<!-- getTrackingLogListTotalCount-->
+	<select id="getTrackingLogListTotalCount" parameterType="Map" resultType="int">
+	SELECT
+		COUNT(M.MSG_DT)
+            FROM(
+			SELECT
+				 /*+ use_hash(A) INDEX_DESC (A MSG_DT_IDX) */
+	             A.MSG_DT,
+	             A.MSG_INTF_ID
+			FROM MASTERLOG A
+			WHERE A.MSG_DT BETWEEN TO_TIMESTAMP(#{startDate} || '000000000','YYYYMMDDHH24MISSFF9') - (9/24) AND TO_TIMESTAMP(#{endDate} || '999999999','YYYYMMDDHH24MISSFF9') - (9/24)
+			<if test="status != null and status != ''">
+			AND MSG_STATUS = #{status}
+			</if>
+			<if test="msgHostId != null and msgHostId != ''">
+			AND MSG_HOST_ID LIKE '%'||#{msgHostId}||'%'
+			</if>
+			) M
+           	------------------------------
+			--if ( 필터링 조건이 존재하면 )
+			--필터링 조건 : 시스템, 인터페이스명 ,기타 ...
+			------------------------------
+			<choose>
+			<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+				LEFT OUTER JOIN
+				</when>
+				<otherwise>
+				INNER JOIN
+				</otherwise>
+			</choose>
+			(
+				SELECT
+		            A.INTEGRATION_ID
+				FROM TAN0201 A
+				WHERE exists(
+				   SELECT B.SYSTEM_ID
+				   FROM TAN0213 B
+				   WHERE A.INTERFACE_ID = B.INTERFACE_ID
+				   <if test="systemId != null and systemId != ''">
+					AND B.SYSTEM_ID = #{systemId}
+					</if>
+				   <if test="nodeType != null and nodeType != ''">
+					AND B.NODE_TYPE = #{nodeType}
+				   </if>
+				)
+				<if test="interfaceNm != null and interfaceNm != ''">
+				AND A.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+				</if>
+				<if test="integrationId != null and integrationId != ''">
+				AND A.INTEGRATION_ID = #{integrationId}
+				</if>
+				<if test="dataPrMethod != null and dataPrMethod != ''">
+				AND A.DATA_PR_METHOD = #{dataPrMethod}
+				</if>
+			) S ON M.MSG_INTF_ID = S.INTEGRATION_ID
+	</select>
+
+	<!--  getTrackingLogListA -->
+	<select id="getTrackingLogList" parameterType="Map" resultMap="TRLogResult">
+	SELECT
+        P.IDX,
+        P.MSG_HOST_ID		AS MSG_HOST_ID,
+        P.MSG_GROUP_ID		AS MSG_GROUP_ID,
+        P.INTEGRATION_ID        AS INTEGRATION_ID,
+        P.MSG_DATETIME		AS MSG_DATETIME,
+        P.MSG_DT	AS MSG_DT,
+        P.MSG_STATUS         AS MSG_STATUS,
+        P.STATUS_NM			 AS STATUS_NM,
+        S.INTERFACE_ID       AS INTERFACE_ID,
+        NVL(S.INTERFACE_NM, '미등록 인터페이스') 			AS INTERFACE_NM,
+        CASE WHEN SND_SYSTEM.SYSTEM_NM IS NOT NULL THEN SND_SYSTEM.SYSTEM_NM||'('||SND_SYSTEM.SYSTEM_CD||')' ELSE ' ' END AS SND_SYSTEM_NM,
+        CASE WHEN RCV_SYSTEM.SYSTEM_NM IS NOT NULL THEN RCV_SYSTEM.SYSTEM_NM||'('||RCV_SYSTEM.SYSTEM_CD||')' ELSE ' ' END AS RCV_SYSTEM_NM,
+        P.MSG_SEQ_NO AS MSG_SEQ_NO,
+        P.CORE_RMS_SVC_C AS CORE_RMS_SVC_C,
+        P.CORE_RZT_RMS_SVC_C AS CORE_RZT_RMS_SVC_C,
+        P.CORE_ORGTR_GBL_ID AS CORE_ORGTR_GBL_ID,
+        P.CORE_TRZ_GBL_ID AS CORE_TRZ_GBL_ID,
+        P.CORE_STD_GBL_ID AS CORE_STD_GBL_ID
+      FROM (
+            SELECT
+                N.IDX,
+                N.MSG_HOST_ID,
+                N.MSG_GROUP_ID,
+                N.MSG_INTF_ID	AS INTEGRATION_ID,
+                TO_CHAR(N.MSG_DT + INTERVAL '09' HOUR, 'yyyymmddhh24missff3')	AS MSG_DT,
+                N.MSG_DATETIME,
+                N.MSG_STATUS,
+                CASE
+                	WHEN N.MSG_STATUS = '00' THEN '완료'
+                	WHEN N.MSG_STATUS = '01' THEN '처리중'
+                    WHEN N.MSG_STATUS = '99' THEN '오류'
+                ELSE ''
+                END AS STATUS_NM,
+                N.MSG_SEQ_NO,
+                N.CORE_RMS_SVC_C,
+                N.CORE_RZT_RMS_SVC_C,
+                N.CORE_ORGTR_GBL_ID,
+                N.CORE_TRZ_GBL_ID,
+                N.CORE_STD_GBL_ID
+            FROM (
+                SELECT
+                    M.IDX,
+                    M.MSG_HOST_ID,
+                    M.MSG_INTF_ID,
+                    M.MSG_DATETIME,
+                    M.MSG_DT,
+                    M.MSG_STATUS,
+                    M.MSG_GROUP_ID,
+                    M.MSG_SEQ_NO,
+                    M.CORE_RMS_SVC_C,
+                    M.CORE_RZT_RMS_SVC_C,
+                    M.CORE_ORGTR_GBL_ID,
+                    M.CORE_TRZ_GBL_ID,
+                    M.CORE_STD_GBL_ID
+                FROM (
+                        SELECT
+                            /*+ use_hash(A) INDEX_DESC (A MSG_DT_IDX) */
+                            ROWNUM AS IDX,
+                            A.MSG_HOST_ID,
+                            A.MSG_INTF_ID,
+                            A.MSG_DATETIME,
+                            A.MSG_DT,
+                            A.MSG_STATUS,
+                            A.MSG_GROUP_ID,
+                            A.MSG_SEQ_NO,
+                            A.CORE_RMS_SVC_C,
+                            A.CORE_RZT_RMS_SVC_C,
+                            A.CORE_ORGTR_GBL_ID,
+                            A.CORE_TRZ_GBL_ID,
+                            A.CORE_STD_GBL_ID
+                        FROM MASTERLOG A
+                        <choose>
+                        <when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+                        WHERE A.MSG_DT BETWEEN TO_TIMESTAMP(#{startDate} || '000000000','YYYYMMDDHH24MISSFF9') - (9/24) AND TO_TIMESTAMP(#{endDate} || '999999999','YYYYMMDDHH24MISSFF9') - (9/24)
+                        </when>
+                        <otherwise>
+                        ,(SELECT
+                        	/*+ NO_MERGE */
+                        	A.INTEGRATION_ID
+                        	FROM TAN0201 A
+                        	WHERE
+                        	1=1
+                        	<if test="interfaceNm != null and interfaceNm != ''">
+					        AND A.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+					        </if>
+					        <if test="integrationId != null and integrationId != ''">
+					        AND A.INTEGRATION_ID = #{integrationId}
+					        </if>
+					        <if test="dataPrMethod != null and dataPrMethod != ''">
+							AND A.DATA_PR_METHOD = #{dataPrMethod}
+							</if>
+                        	AND EXISTS (
+                        		SELECT 1
+                        		FROM TAN0213 B
+                        		WHERE B.INTERFACE_ID = A.INTERFACE_ID
+                        		<if test="systemId != null and systemId != ''">
+                        		AND B.SYSTEM_ID = #{systemId}
+                        		</if>
+                        		<if test="nodeType != null and nodeType != ''">
+                        		AND B.NODE_TYPE = #{nodeType}
+                        		</if>
+                        	)
+                        ) B
+						WHERE A.MSG_DT BETWEEN TO_TIMESTAMP(#{startDate} || '000000000','YYYYMMDDHH24MISSFF9') - (9/24) AND TO_TIMESTAMP(#{endDate} || '999999999','YYYYMMDDHH24MISSFF9') - (9/24)
+						AND A.MSG_INTF_ID = B.INTEGRATION_ID
+						</otherwise>
+						</choose>
+						<if test="status != null and status != ''">
+						AND MSG_STATUS = #{status}
+						</if>
+						<if test="msgHostId != null and msgHostId != ''">
+						AND MSG_HOST_ID LIKE '%'||#{msgHostId}||'%'
+						</if>
+                    ) M
+				WHERE M.IDX <![CDATA[<]]>= #{endIndex}
+				ORDER BY M.MSG_DT DESC, M.MSG_INTF_ID DESC
+			) N
+			WHERE N.IDX <![CDATA[>]]>= #{startIndex}
+        ) P
+        LEFT OUTER JOIN TAN0201 S
+        ON S.INTEGRATION_ID = P.INTEGRATION_ID
+        ---------------------
+        -- 수신시스템 정보 조인
+        ---------------------
+        LEFT OUTER JOIN (
+            SELECT
+                A.INTERFACE_ID,
+                A.SYSTEM_ID,
+                A.NODE_TYPE,
+                A.RESOURCE_TYPE,
+                B.SYSTEM_NM,
+                B.SYSTEM_CD
+            FROM TAN0213 A
+            INNER JOIN TIM0101 B
+                ON A.SYSTEM_ID = B.SYSTEM_ID
+                AND A.NODE_TYPE = '0'
+                AND A.SEQ = (
+                    SELECT
+                        MAX(C.SEQ)
+                    FROM TAN0213 C
+                    WHERE C.SYSTEM_ID = A.SYSTEM_ID
+                    AND C.INTERFACE_ID = A.INTERFACE_ID
+                    AND C.NODE_TYPE = A.NODE_TYPE
+            )
+        ) SND_SYSTEM ON SND_SYSTEM.INTERFACE_ID = S.INTERFACE_ID
+        ---------------------
+        -- 수신시스템 정보 조인
+        ---------------------
+        LEFT OUTER JOIN (
+            SELECT
+                A.INTERFACE_ID,
+                A.SYSTEM_ID,
+                A.NODE_TYPE,
+                A.RESOURCE_TYPE,
+                B.SYSTEM_NM,
+                B.SYSTEM_CD
+            FROM TAN0213 A
+            INNER JOIN TIM0101 B
+              	ON A.SYSTEM_ID = B.SYSTEM_ID
+                AND A.NODE_TYPE = '2'
+                AND A.SEQ = (
+                    SELECT MAX(C.SEQ)
+                    FROM TAN0213 C
+                    WHERE C.INTERFACE_ID = A.INTERFACE_ID
+                    AND C.NODE_TYPE = A.NODE_TYPE
+            )
+        ) RCV_SYSTEM ON RCV_SYSTEM.INTERFACE_ID = S.INTERFACE_ID
+	</select>
+
+	<resultMap id="TRLogResult" type="NHTRLog" >
+		<result property="hostId"  column="MSG_HOST_ID" />
+		<result property="interfaceId"  column="INTERFACE_ID" />
+		<result property="integrationId"  column="INTEGRATION_ID" />
+		<result property="interfaceNm"   column="INTERFACE_NM" />
+		<result property="msgDt"         column="MSG_DT" />
+		<result property="msgDateTime" column="MSG_DATETIME" />
+		<result property="minPrDt"		 column="MIN_PR_DT" />
+		<result property="status"			 column="MSG_STATUS" />
+		<result property="statusNm"       column="STATUS_NM" />
+		<result property="groupId"          column="MSG_GROUP_ID" />
+		<result property="sndSystemId"   column="SND_SYSTEM_ID" />
+		<result property="sndSystemCd"  column="SND_SYSTEM_CD" />
+		<result property="sndSystemNm" column="SND_SYSTEM_NM" />
+		<result property="rcvSystemId"   column="RCV_SYSTEM_ID" />
+		<result property="rcvSystemCd"  column="RCV_SYSTEM_CD" />
+		<result property="rcvSystemNm" column="RCV_SYSTEM_NM" />
+		<result property="msgNo"        	  column="MSG_SEQ_NO" />
+		<result property="rmsSvc"			 column="CORE_RMS_SVC_C" />
+        <result property="rztRmsSvc"		 column="CORE_RZT_RMS_SVC_C" />
+        <result property="oGid"				 column="CORE_ORGTR_GBL_ID" />
+        <result property="tGid"				 column="CORE_TRZ_GBL_ID" />
+        <result property="sGid"				  column="CORE_STD_GBL_ID" />
+	</resultMap>
+
+
+	<select id="getTrackingLogDetail" parameterType="Map" resultMap="TRLogDetailResult">
+	SELECT
+        DETAIL.MSG_HOST_ID AS MSG_HOST_ID,
+        DETAIL.MSG_GROUP_ID AS MSG_GROUP_ID,
+        DETAIL.MSG_INTF_ID AS INTEGRATION_ID,
+        DETAIL.MSG_DATETIME AS MSG_DATETIME,
+        DETAIL.PR_PROCESS_MODE AS PR_PROCESS_MODE,
+        DETAIL.PR_HOST_ID AS PR_HOST_ID,
+        DETAIL.PR_PROCESS_ID AS PR_PROCESS_ID,
+        TO_CHAR(DETAIL.PR_DT, 'yyyymmddhh24missff3') AS PR_DT,
+        C.NM AS STATUS_NM,
+        DETAIL.MSG_STATUS AS STATUS,
+        DETAIL.RECORD_CNT AS RECORD_CNT,
+        DETAIL.FILE_SIZE AS FILE_SIZE,
+        DETAIL.RECORD_SIZE AS RECORD_SIZE,
+        DETAIL.DATA_SIZE AS DATA_SIZE,
+        DETAIL.CONV_SIZE AS CONV_SIZE,
+        DETAIL.COMPRESS_YN AS COMPRESS_YN,
+        DETAIL.ERROR_MSG AS ERROR_MSG,
+        DETAIL.MSG_DATA AS DATA,
+        DETAIL.DIRECTORY_NM AS DIRECTORY_NM,
+        DETAIL.FILE_NM AS FILE_NM,
+        DETAIL.MQMD_QMGR AS MQMD_QMGR,
+        DETAIL.CORE_TRZ_GBL_ID AS CORE_TRZ_GBL_ID,
+        DETAIL.CORE_ORGTR_GBL_ID AS CORE_ORGTR_GBL_ID,
+        DETAIL.CORE_STD_GBL_ID AS CORE_STD_GBL_ID,
+        CASE
+          WHEN NODE_INFO.NODE_IDX IS NULL THEN
+            NVL(PIDX.IDX,
+              CASE
+                WHEN DETAIL.PR_PROCESS_MODE IN('SNDR', 'ISND') THEN 1
+                WHEN DETAIL.PR_PROCESS_MODE IN('BRKR', 'IHUB') THEN 11
+                WHEN DETAIL.PR_PROCESS_MODE IN('SBRK', 'IREQ') THEN 21
+                WHEN DETAIL.PR_PROCESS_MODE IN('REPL') THEN 22
+                WHEN DETAIL.PR_PROCESS_MODE IN('RBRK', 'IRLY') THEN 23
+                WHEN DETAIL.PR_PROCESS_MODE IN('SNRC')         THEN 88
+                WHEN DETAIL.PR_PROCESS_MODE IN('RCVR', 'IRCV') THEN 1
+                WHEN DETAIL.PR_PROCESS_MODE = '' THEN 0
+              END
+              )
+          ELSE
+            NODE_INFO.NODE_IDX
+        END AS IDX
+    FROM DETAILLOG DETAIL
+    LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'OP' AND LEVEL2 = '01') C ON DETAIL.MSG_STATUS = C.CD
+    LEFT OUTER JOIN (SELECT IDX, ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'tracking' AND ATTRIBUTE_ID = 'process.mode.sort.index') PIDX ON DETAIL.PR_PROCESS_MODE = PIDX.ATTRIBUTE_VALUE
+    LEFT OUTER JOIN
+    (
+      SELECT
+        NODE_INFO.GROUP_ID,
+        NODE_INFO.INTF_ID,
+        NODE_INFO.NODE_ID,
+        NODE_INFO.NODE_NM,
+        NODE_INFO.HOST_ID,
+        NODE_INFO.NODE_TYPE,
+        NODE_INFO.NODE_GUBUN,
+        NVL(NODE_IDX.IDX, 0) AS NODE_IDX
+      FROM
+        NODEINFO NODE_INFO
+        LEFT OUTER JOIN
+        (
+          SELECT
+            DISTINCT GROUP_ID, INTF_ID, TO_NODE_ID AS NODE_ID, LEVEL AS IDX
+          FROM
+          (
+            SELECT
+              GROUP_ID,
+              INTF_ID,
+              FROM_NODE_ID,
+              TO_NODE_ID
+            FROM
+            (
+              SELECT
+                P.GROUP_ID,
+                P.INTF_ID,
+                '' AS FROM_NODE_ID,
+                P.FROM_NODE_ID AS TO_NODE_ID
+              FROM
+                LINKINFO P
+                LEFT OUTER JOIN LINKINFO C ON
+                  P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+                WHERE
+                  C.FROM_NODE_ID IS NULL
+                UNION
+                SELECT
+                  P.GROUP_ID,
+                  P.INTF_ID,
+                  P.FROM_NODE_ID,
+                  P.TO_NODE_ID
+                FROM
+                  LINKINFO P
+                  LEFT OUTER JOIN LINKINFO C ON
+                    P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+            )
+            WHERE
+              1=1
+              AND GROUP_ID = #{logKey2}
+              AND INTF_ID = #{logKey3}
+          )
+          START WITH FROM_NODE_ID IS NULL
+          CONNECT BY NOCYCLE FROM_NODE_ID = PRIOR TO_NODE_ID
+          ORDER BY GROUP_ID, INTF_ID, LEVEL, TO_NODE_ID
+        ) NODE_IDX ON
+          NODE_INFO.GROUP_ID = NODE_IDX.GROUP_ID
+          AND NODE_INFO.INTF_ID = NODE_IDX.INTF_ID
+          AND NODE_INFO.NODE_ID = NODE_IDX.NODE_ID
+        WHERE
+          1=1
+          AND NODE_INFO.GROUP_ID = #{logKey2}
+          AND NODE_INFO.INTF_ID = #{logKey3}
+        ORDER BY IDX NULLS FIRST, NODE_ID
+      ) NODE_INFO ON
+      NODE_INFO.NODE_ID = DETAIL.PR_PROCESS_ID
+    WHERE
+    DETAIL.MSG_HOST_ID = #{logKey1}
+    AND DETAIL.MSG_GROUP_ID = #{logKey2}
+    AND DETAIL.MSG_INTF_ID = #{logKey3}
+    AND DETAIL.MSG_DATETIME = #{logKey4}
+    ORDER BY IDX ASC
+	</select>
+
+	<select id="getTrackingLogDetailError" parameterType="Map" resultMap="TRLogDetailResult">
+    SELECT
+    	DETAIL.MSG_INTF_ID AS INTEGRATION_ID,
+    	DETAIL.PR_HOST_ID AS PR_HOST_ID,
+    	DETAIL.PR_PROCESS_MODE AS PR_PROCESS_MODE,
+    	DETAIL.MQMD_QMGR AS MQMD_QMGR,
+    	COUNT(*) AS ERROR_CNT
+	FROM DETAILLOG DETAIL
+	WHERE MSG_STATUS IN('99')
+	AND PR_DT BETWEEN TO_TIMESTAMP(#{logKey1},'YYYYMMDDHH24MISSFF6') AND TO_TIMESTAMP(#{logKey2},'YYYYMMDDHH24MISSFF6')
+	GROUP BY DETAIL.MSG_INTF_ID, DETAIL.PR_HOST_ID, DETAIL.PR_PROCESS_MODE, DETAIL.MQMD_QMGR
+	ORDER BY COUNT(*) DESC
+	</select>
+
+	<resultMap id="TRLogDetailResult" type="NHTRLogDetail">
+        <result property="msgHostId"           column="MSG_HOST_ID" />
+        <result property="groupId"          column="MSG_GROUP_ID" />
+        <result property="integrationId"          column="INTEGRATION_ID" />
+        <result property="logKey2"          column="MSG_DATETIME" />
+        <result property="hostId"           column="PR_HOST_ID" />
+        <result property="processMode"      column="PR_PROCESS_MODE" />
+        <result property="processId"        column="PR_PROCESS_ID" />
+        <result property="processTime"      column="PR_DT" />
+        <result property="statusNm"         column="STATUS_NM" />
+        <result property="status"           column="STATUS" />
+        <result property="recordCnt"        column="RECORD_CNT" />
+        <result property="fileSize"        column="FILE_SIZE" />
+        <result property="recordSize"        column="RECORD_SIZE" />
+        <result property="dataSize"        column="DATA_SIZE" />
+        <result property="convSize"        column="CONV_SIZE" />
+        <result property="compressYn"       column="COMPRESS_YN" />
+        <result property="errorMsg"         column="ERROR_MSG" />
+        <result property="msg"              column="DATA"  ></result>
+        <result property="directoryNm"      column="DIRECTORY_NM" />
+        <result property="fileNm"           column="FILE_NM" />
+        <result property="hopCnt"           column="IDX" />
+        <result property="mqmdQmgr"           column="MQMD_QMGR" />
+        <result property="tGid"				column="CORE_TRZ_GBL_ID" />
+        <result property="oGid"				column="CORE_ORGTR_GBL_ID" />
+        <result property="sGid"				column="CORE_STD_GBL_ID" />
+        <result property="errorCnt"				column="ERROR_CNT" />
+    </resultMap>
+
+    <select id="getTrackingNodeInfo" parameterType="Map" resultMap="TRNodeInfoResult" databaseId="tibero">
+		SELECT
+			NODE_INFO.GROUP_ID,
+			NODE_INFO.INTF_ID,
+			NODE_INFO.NODE_ID,
+			NODE_INFO.NODE_NM,
+			NODE_INFO.HOST_ID,
+			NODE_INFO.NODE_TYPE,
+			NODE_INFO.NODE_GUBUN,
+			NVL(NODE_IDX.IDX, 0) AS NODE_INDEX,
+			DETAIL_LOG.PR_PROCESS_ID,
+			DETAIL_LOG.PR_HOST_ID,
+			DETAIL_LOG.PR_PROCESS_MODE,
+			DETAIL_LOG.PR_PROCESS_TYPE,
+			DETAIL_LOG.PR_DT,
+			DETAIL_LOG.MSG_STATUS,
+			DETAIL_LOG.DATA_SIZE,
+			DETAIL_LOG.COMPRESS_YN
+		FROM
+			NODEINFO NODE_INFO
+			LEFT OUTER JOIN
+			(
+				SELECT
+					DISTINCT GROUP_ID, INTF_ID, TO_NODE_ID AS NODE_ID, LEVEL AS IDX
+				FROM
+				(
+					SELECT
+						GROUP_ID,
+						INTF_ID,
+						FROM_NODE_ID,
+						TO_NODE_ID
+					FROM
+						(
+							SELECT
+								P.GROUP_ID,
+								P.INTF_ID,
+								'' AS FROM_NODE_ID,
+								P.FROM_NODE_ID AS TO_NODE_ID
+							FROM
+								LINKINFO P
+								LEFT OUTER JOIN LINKINFO C ON
+									P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+							WHERE
+								C.FROM_NODE_ID IS NULL
+
+							UNION
+
+							SELECT
+								P.GROUP_ID,
+								P.INTF_ID,
+								P.FROM_NODE_ID,
+								P.TO_NODE_ID
+							FROM
+								LINKINFO P
+								LEFT OUTER JOIN LINKINFO C ON
+									P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+						)
+					WHERE
+						1 = 1
+						AND GROUP_ID = #{logKey2}
+						AND INTF_ID = #{logKey3}
+				)
+
+				START WITH FROM_NODE_ID IS NULL
+				CONNECT BY NOCYCLE FROM_NODE_ID = PRIOR TO_NODE_ID
+				ORDER BY GROUP_ID, INTF_ID, LEVEL, TO_NODE_ID
+			) NODE_IDX ON
+				NODE_INFO.GROUP_ID = NODE_IDX.GROUP_ID
+				AND NODE_INFO.INTF_ID = NODE_IDX.INTF_ID
+				AND NODE_INFO.NODE_ID = NODE_IDX.NODE_ID
+			LEFT OUTER JOIN
+			(
+				SELECT
+					A.MSG_DATETIME,
+					A.PR_PROCESS_MODE,
+					A.PR_PROCESS_TYPE,
+					A.PR_DT,
+					A.MSG_STATUS,
+					A.DATA_SIZE,
+					A.COMPRESS_YN,
+					A.PR_PROCESS_ID,
+					A.PR_HOST_ID
+				FROM
+					DETAILLOG A
+					--INNER JOIN DETAILLOG_ID_MAP B ON
+						--A.MASTERLOG_ID = B.MASTERLOG_ID
+						--AND A.DETAILLOG_ID = B.DETAILLOG_ID
+				WHERE
+          1 = 1
+					AND A.MSG_HOST_ID = #{logKey1}
+					AND A.MSG_GROUP_ID = #{logKey2}
+          AND A.MSG_INTF_ID = #{logKey3}
+          AND A.MSG_DATETIME = #{logKey4}
+			) DETAIL_LOG  ON
+				NODE_INFO.NODE_ID = DETAIL_LOG.PR_PROCESS_ID
+		WHERE
+			1 = 1
+			AND NODE_INFO.GROUP_ID = #{logKey2}
+			AND NODE_INFO.INTF_ID = #{logKey3}
+		ORDER BY IDX NULLS FIRST, NODE_ID
+	</select>
+
+	<resultMap id="TRNodeInfoResult" type="TRNodeInfo">
+        <result property="nodeId"      		column="NODE_ID" />
+        <result property="nodeNm"        	column="NODE_NM" />
+        <result property="nodeType"      	column="NODE_TYPE" />
+        <result property="nodeGubun"      	column="NODE_GUBUN" />
+        <result property="nodeIndex"      	column="NODE_INDEX" />
+        <result property="hostId"           column="HOST_ID" />
+        <result property="posX"           	column="POS_X" />
+        <result property="posY"        		column="POS_Y" />
+        <result property="processId"        column="PR_PROCESS_ID" />
+        <result property="processMode"      column="PR_PROCESS_MODE" />
+        <result property="status"        	column="MSG_STATUS" />
+    </resultMap>
+
+    <select id="getTrackingLinkInfo" parameterType="Map" resultMap="TRLinkInfoResult">
+		SELECT
+			A.FROM_NODE_ID,
+			A.TO_NODE_ID
+		FROM
+			LINKINFO A
+		WHERE
+			1 = 1
+			AND GROUP_ID = #{logKey2}
+			AND INTF_ID = #{logKey3}
+	</select>
+
+	<resultMap id="TRLinkInfoResult" type="TRLinkInfo">
+        <result property="fromNodeId"      	column="FROM_NODE_ID" />
+        <result property="toNodeId"         column="TO_NODE_ID" />
+        <result property="fromNodeIdx"      column="FROM_NODE_IDX" />
+        <result property="toNodeIdx"      	column="TO_NODE_IDX" />
+    </resultMap>
+
+</mapper>

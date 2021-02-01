@@ -1,0 +1,23 @@
+AP00000051$$$H001$$$en$$$메인화면컨텐츠설정$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Menu Screen
+Configuration<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp;&nbsp;Main screen
+contents are composed of "error/delay status",
+"Yesterday/Today's throughput" ,"System throughput",
+"interface throughput"<br></font><font size="2">
+&nbsp; provide editing function that user can compose screen himself as he want<br>
+&nbsp;&nbsp;provide screen auto rolling(regular cycle) function<br>
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 1. setting<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. User can select only
+"error/delay status", "yesterday/today's status",
+"business system processing status", "interface processing
+status"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. add : double click "processing
+status" on left side of the list<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">delete : double click
+"processing status" on right side of the list<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. [ ( 1 page * 3 items ) * 2 = max 6 ]
+screen construction is available</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

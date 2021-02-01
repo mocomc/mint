@@ -1,0 +1,12 @@
+AP00000003$$$H007$$$en$$$발생주기상세$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕";'><font size="2">Data cycle details<br></font><font size="2">
+1. Divide the real batch runtime into 24 hours<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕";'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">* When runtime count stands n, 01:30, 07:00,
+12:00, 23:30<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">* When Consumer system count stands n,
+<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">[Consumer system name1 : 01:30,
+08:00], [Consumer system name2 : 03:00]</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

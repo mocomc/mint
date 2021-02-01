@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.ApplicationMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertApplication">
+		<selectKey keyProperty="appId" resultType="string" order="BEFORE" >
+			<choose>
+				<when test="_databaseId == 'postgres'">
+				SELECT 'AP' || LPAD((COALESCE(MAX(SUBSTR(APP_ID,3)),'0')::numeric+1)::text,8,'0') FROM TSU0204
+		    	</when>
+		    	<otherwise>
+				SELECT 'AP' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(APP_ID,3)),'0')) + 1),8,'0') FROM TSU0204
+		    	</otherwise>
+			</choose>
+		</selectKey>
+		
+		INSERT INTO TSU0204
+		(
+			APP_ID,
+			APP_NM,
+			APP_CD,
+			APP_OPT,
+			APP_URI,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{appId, jdbcType=VARCHAR},
+			#{appNm, jdbcType=VARCHAR},
+			#{appCd, jdbcType=VARCHAR},
+			#{appOpt, jdbcType=VARCHAR},
+			#{appUri, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<select id="getApplicationList" parameterType="Map" resultMap="applicationResultMap">
+		SELECT
+			APP_ID,
+			APP_NM,
+			APP_CD,
+			APP_OPT,
+			APP_URI,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		FROM TSU0204
+  		WHERE 1 = 1
+  		AND DEL_YN= 'N'
+
+		<if test="appNm != null">
+		AND APP_NM LIKE '%'||#{appNm}||'%'
+		</if>
+		ORDER BY APP_CD ASC
+	</select>
+
+	<resultMap type="Application" id="applicationResultMap">
+		<id property="appId" 				column="APP_ID"/>
+		<result property="appNm"				column="APP_NM"/>
+		<result property="appCd"				column="APP_CD"/>
+		<result property="appOpt"				column="APP_OPT"/>
+		<result property="appUri"				column="APP_URI"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+	</resultMap>
+
+	<update id="updateApplication">
+		UPDATE TSU0204
+		SET
+			APP_NM 	= #{appNm, jdbcType=VARCHAR}
+			,APP_CD	= #{appCd, jdbcType=VARCHAR}
+		   	,APP_OPT	= #{appOpt, jdbcType=VARCHAR}
+		    ,APP_URI	= #{appUri, jdbcType=VARCHAR}
+		    ,COMMENTS	= #{comments, jdbcType=VARCHAR}
+			,MOD_DATE 	= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 	= #{modId, jdbcType=VARCHAR}
+		WHERE APP_ID = #{appId}
+	</update>
+
+	<delete id="deleteApplication">
+		UPDATE TSU0204
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE APP_ID = #{appId}
+	</delete>
+
+	<select id="existApplication" parameterType="Map" resultMap="applicationResultMap">
+		SELECT
+			APP_ID,
+			APP_NM
+  		FROM TSU0204
+  		WHERE 1 = 1
+  		AND DEL_YN = 'N'
+		AND  APP_CD = #{appCd}
+		<if test="appId != null">
+			AND APP_ID &lt;&gt; #{appId}
+		</if>
+	</select>
+
+	<select id="usedApplication" parameterType="Map" resultType="String">
+		SELECT ROLE_ID
+  		FROM TSU0202
+  		WHERE DEL_YN= 'N'
+		AND APP_ID = #{appId}
+	</select>
+
+	<delete id="deleteApplicationMappingUserRole">
+		DELETE FROM TSU0202 WHERE APP_ID = #{appId}
+	</delete>
+
+	<insert id="insertApplicationMappingUserRole">
+		INSERT INTO TSU0202
+		SELECT ROLE_ID,
+		<choose>
+			<when test="_databaseId == 'altibase'">
+		  '${appId}',
+		  'Y',
+		  'YYYYY',
+		  'N',
+		  TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+		  REG_USER,
+		  TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+	    	</when>
+			<when test="_databaseId == 'postgres'">
+		  #{appId},
+		  'Y',
+		  'YYYYY',
+		  'N',
+		  TO_CHAR(now(), 'yyyyMMddHH24MISS'),
+		  REG_USER,
+		  TO_CHAR(now(), 'yyyyMMddHH24MISS'),
+	    	</when>
+	    	<otherwise>
+		  #{appId},
+		  'Y',
+		  'YYYYY',
+		  'N',
+		  TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+		  REG_USER,
+		  TO_CHAR(SYSDATE, 'yyyyMMddHH24MISS'),
+	    	</otherwise>
+		</choose>
+		  ''
+		FROM TSU0201
+		WHERE DEL_YN='N'
+	</insert>
+</mapper>

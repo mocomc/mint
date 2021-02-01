@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.GSSPDashboardMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getDelayListTop" parameterType="Map" resultMap="DelayListTopResult">
+		SELECT
+		    MSG_DATETIME1
+		  , MSG_DATETIME2
+          , RCV_SYS_REF_VAL
+		  , INTEGRATION_ID
+		  , INTERFACE_ID
+		  , INTERFACE_NM
+		  , STATUS_NM
+		  , LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24) ,'00')) || ':' ||
+		    LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60  ,'00')) || ':' ||
+		    LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60 * 60) -
+		                 ( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 * 60 + ( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME1,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 ) * 60 ) ,'00'))
+		    AS ELAPSED_TIME
+		  , RNUM
+		FROM
+			(
+				SELECT
+					---------------------
+					-- 트래킹
+					---------------------
+                      A.EAI_TRNS_PROC_MCSEC AS MSG_DATETIME1
+					, A.FST_TRNS_PROC_MCSEC AS MSG_DATETIME2
+                    , A.RCV_SYS_REF_VAL
+					---------------------
+					-- 인터페이스
+					---------------------
+					, TAN0201.INTEGRATION_ID
+					, TAN0201.INTERFACE_ID
+					, TAN0201.INTERFACE_NM
+					---------------------
+					-- 상태
+					---------------------
+					, A.IF_PROC_STAT_CD
+					, CDOP01.NM AS STATUS_NM
+					, ROWNUM AS RNUM
+				FROM
+					(
+						SELECT *
+						FROM
+							TOP0814
+						WHERE
+							1 = 1
+							AND IF_PROC_STAT_CD = '01'
+							AND ( FST_TRNS_PROC_MCSEC BETWEEN TO_CHAR(SYSDATE - (1/24), 'YYYYMMDDHH24')||'0000000000' AND TO_CHAR(SYSDATE - (0/24), 'YYYYMMDDHH24')||'5959999999' )
+							AND TO_CHAR(TO_DATE(SUBSTR(FST_TRNS_PROC_MCSEC,1,12), 'YYYYMMDDHH24MI') + (#{checkTime}/24/60), 'YYYYMMDDHH24MI') <![CDATA[<]]>= TO_CHAR(SYSDATE, 'YYYYMMDDHH24MI')
+					) A
+					---------------------
+					-- 인터페이스 조인
+					---------------------
+					INNER JOIN
+					(
+						SELECT
+							  TAN0201.INTERFACE_ID
+							, TAN0201.INTERFACE_NM
+							, TAN0201.INTEGRATION_ID
+						FROM
+							TAN0201 TAN0201
+							INNER JOIN
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 별 인터페이스 조회
+							-----------------------------------------------
+							(
+								SELECT
+									DISTINCT
+									TSU0220.INTERFACE_ID
+								FROM
+									-----------------------------------------------
+									-- 로그인 사용자 데이터 엑세스 권한 조회(공통)
+									-----------------------------------------------
+									(
+										SELECT
+											DISTINCT
+											TSU0219.USER_ID   AS USER_ID,
+											TSU0221.C_ROLE_ID AS ROLE_ID,
+											TSU0221.DEPTH     AS DEPTH
+										FROM
+											(
+												SELECT
+													TSU0101.USER_ID,
+													TSU0219.ROLE_ID
+												FROM
+													TSU0101 TSU0101
+													INNER JOIN TSU0219 TSU0219 ON
+														TSU0101.USER_ID = TSU0219.USER_ID
+												WHERE
+													1 = 1
+													AND TSU0101.DEL_YN = 'N'
+													AND TSU0101.USER_ID = #{userId}
+											) TSU0219
+												INNER JOIN TSU0221 TSU0221 ON
+												TSU0219.ROLE_ID = TSU0221.P_ROLE_ID
+									) ACCESS_ROLE
+									-----------------------------------------------
+									-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+									-----------------------------------------------
+									INNER JOIN TSU0220 TSU0220 ON
+										ACCESS_ROLE.ROLE_ID = TSU0220.ROLE_ID
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+						WHERE TAN0201.DEL_YN = 'N'
+					) TAN0201 ON A.EAI_IF_ID = TAN0201.INTEGRATION_ID
+					---------------------
+					-- 공통코드(상태값) 조인
+					---------------------
+					LEFT OUTER JOIN
+					(
+						SELECT CD, NM
+						FROM TSU0301
+						WHERE LEVEL1 = 'OP' AND LEVEL2 = '01'
+					) CDOP01 ON
+						A.IF_PROC_STAT_CD = CDOP01.CD
+			)
+		WHERE
+			1 = 1
+		<choose>
+			<when test="max != null">
+			AND RNUM <![CDATA[<=]]> #{max}
+			</when>
+			<otherwise>
+			AND RNUM <![CDATA[<=]]> 4
+			</otherwise>
+		</choose>
+	</select>
+
+	<resultMap id="DelayListTopResult" type="java.util.LinkedHashMap">
+		<id property="msgDateTime1"    	   column="MSG_DATETIME1"/>
+		<id property="msgDateTime2"    	   column="MSG_DATETIME2"/>
+		<id property="interfaceId"    	   column="INTERFACE_ID"/>
+		<id property="rcvSystemValue"      column="RCV_SYS_REF_VAL"/>
+        <result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="statusNm"        column="STATUS_NM"/>
+		<result property="elapsedTime"     column="ELAPSED_TIME"/>
+	</resultMap>
+
+    <select id="getDeadPosCount" resultType="java.lang.Integer">
+             SELECT
+             	COUNT(*)
+			 FROM TOP0812 A
+			 INNER JOIN TIM0501 B
+			 ON A.STORE_CD = B.STORE_CD
+			 AND A.POS_NO  = B.POS_NO
+    </select>
+
+    <select id="getDeadPosList" resultType="map">
+             SELECT A.STORE_CD AS "storeCd",
+			 	B.STORE_NM AS "storeNm",
+			 	B.CUST_STORE_CD AS "custStoreCd",
+			 	A.POS_NO AS "posNo",
+			 	A.REG_DATE AS "regDate"
+			 FROM TOP0812 A
+			 INNER JOIN TIM0501 B
+			 ON A.STORE_CD = B.STORE_CD
+			 AND A.POS_NO  = B.POS_NO
+			 ORDER BY A.STORE_CD
+    </select>
+
+    <select id="getNoTransactionPosCount" resultType="java.lang.Integer">
+        --------------------------
+        -- 거래미발생포스 카운트
+        --------------------------
+        select count(*) as cnt
+        from TOP0811 a
+        inner join TIM0501 b
+        on b.STORE_CD = a.STORE_CD
+        and b.POS_NO = a.POS_NO
+    </select>
+
+    <select id="getNoTransactionPosList" resultType="map">
+        --------------------------
+        -- 매출미발생포스 리스트
+        --------------------------
+        select
+            a.STORE_CD          as "storeCd",
+            b.STORE_NM          as "storeNm",
+            a.POS_NO            as "posNo",
+            a.RECENT_SALE_DATE  as "resentSaleDate",
+            a.REG_DATE          as "regDate"
+          from TOP0811 a
+    inner join TIM0501 b
+            on b.STORE_CD = a.STORE_CD
+           and b.POS_NO = a.POS_NO
+           order by a.STORE_CD
+    </select>
+
+    <select id="getTotalPosTransactionCount" resultType="java.lang.Integer">
+    <![CDATA[
+        ------------------------------------
+        -- 모든점포포스거래 건수 조회(조회일자 포멧 : yyyymmddhh24mi)
+        ------------------------------------
+        select sum(cnt) as cnt
+          from TOP0813
+         where GET_DATE >= #{startDate} and GET_DATE < #{endDate}
+    ]]>
+    </select>
+
+
+
+
+
+    <select id="getRealTimeFavoriteCount" parameterType="Map" resultMap="RealTimeFavoriteCountResult">
+		SELECT
+		    A.INTERFACE_ID
+		  , A.INTERFACE_NM
+		  , A.INTEGRATION_ID
+		  , NVL(B.CNT,0) AS CNT
+		  , ' ' AS FLAG
+		FROM
+	      (
+	        SELECT
+	            A.INTERFACE_ID,
+	            A.INTERFACE_NM,
+	            A.INTEGRATION_ID
+	        FROM
+	          	TAN0201 A
+				INNER JOIN
+				-----------------------------------------------
+				-- 데이터 엑세스 권한 별 인터페이스 조회
+				-----------------------------------------------
+				(
+					SELECT
+						DISTINCT
+						TSU0220.INTERFACE_ID
+					FROM
+						-----------------------------------------------
+						-- 로그인 사용자 데이터 엑세스 권한 조회(공통)
+						-----------------------------------------------
+						(
+							SELECT
+								DISTINCT
+								TSU0219.USER_ID   AS USER_ID,
+								TSU0221.C_ROLE_ID AS ROLE_ID,
+								TSU0221.DEPTH     AS DEPTH
+							FROM
+								(
+									SELECT
+										TSU0101.USER_ID,
+										TSU0219.ROLE_ID
+									FROM
+										TSU0101 TSU0101
+										INNER JOIN TSU0219 TSU0219 ON
+											TSU0101.USER_ID = TSU0219.USER_ID
+									WHERE
+										1 = 1
+										AND TSU0101.DEL_YN = 'N'
+										AND TSU0101.USER_ID = #{userId}
+								) TSU0219
+									INNER JOIN TSU0221 TSU0221 ON
+									TSU0219.ROLE_ID = TSU0221.P_ROLE_ID
+							--ORDER BY USER_ID, C_ROLE_ID
+						) ACCESS_ROLE
+						-----------------------------------------------
+						-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+						-----------------------------------------------
+						INNER JOIN TSU0220 TSU0220 ON
+							ACCESS_ROLE.ROLE_ID = TSU0220.ROLE_ID
+				) ACCESS_ROLE_INTF ON
+					A.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+				INNER JOIN TAN0214 B ON
+					A.INTERFACE_ID = B.INTERFACE_ID
+					AND B.USER_ID = #{userId}
+					AND B.TYPE = '0'
+					AND B.MONITOR_YN = 'Y'
+			WHERE A.DEL_YN = 'N'
+	      ) A
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		      TAN0201.INTERFACE_ID,
+		      COUNT(A.FST_TRNS_PROC_MCSEC) AS CNT
+		    FROM
+		      TOP0814 A
+		      ---------------------
+		      -- 인터페이스 조인
+		      ---------------------
+		      INNER JOIN
+		      (
+		        SELECT
+		            A.INTERFACE_ID,
+		            A.INTEGRATION_ID
+		        FROM
+		          	TAN0201 A
+					INNER JOIN TAN0214 B ON
+						A.INTERFACE_ID = B.INTERFACE_ID
+						AND B.USER_ID = #{userId}
+						AND B.TYPE = '0'
+						AND B.MONITOR_YN = 'Y'
+		        WHERE A.DEL_YN = 'N'
+		      ) TAN0201 ON
+		        A.EAI_IF_ID = TAN0201.INTEGRATION_ID
+		    WHERE
+		      1 = 1
+		      AND ( FST_TRNS_PROC_MCSEC BETWEEN TO_CHAR(SYSDATE- 10/(24*60*60),'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'99999999' )
+		    GROUP BY TAN0201.INTERFACE_ID
+		  ) B ON
+		    A.INTERFACE_ID = B.INTERFACE_ID
+	</select>
+
+	<resultMap id="RealTimeFavoriteCountResult" type="java.util.LinkedHashMap">
+		<id property="interfaceId"         column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="cnt"        column="CNT"/>
+		<result property="flag"        column="FLAG"/>
+	</resultMap>
+
+
+
+</mapper>

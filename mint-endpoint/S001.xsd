@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="S001">
+        <xs:annotation>
+            <xs:documentation>송신레이아웃1</xs:documentation>
+            <xs:appinfo>
+                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                    <mx:property key="format" value="xml"/>
+                </mx:properties>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" name="CommHeader">
+                    <xs:annotation>
+                        <xs:documentation>CommHeader</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="DATA_SIZE">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>DATA_SIZE</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="8"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="GLOBAL_ID">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>GLOBAL_ID</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="32"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="SVC_ID">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>SVC_ID</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="20"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="INTF_ID">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>INTF_ID</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="20"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="STATUS">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>STATUS</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="ERROR_CD">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>ERROR_CD</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="5"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="FILLER">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>FILLER</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="50"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="Data">
+                    <xs:annotation>
+                        <xs:documentation>Data</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="FIELD01">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>FIELD01</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string"/>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="FIELD02">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>FIELD02</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string"/>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

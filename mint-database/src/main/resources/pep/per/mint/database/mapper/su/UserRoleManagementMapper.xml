@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.UserRoleManagementMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getUserRoleList" resultMap="userResultMap">
+
+		select
+			 a.USER_ID
+			,NVL(a.USER_NM,' ') AS USER_NM
+			,NVL(a.CELL_PHONE,' ') AS CELL_PHONE
+			,NVL(a.PHONE,' ') AS PHONE
+			,NVL(a.EMAIL,' ') AS EMAIL
+			,NVL(a.COMPANY_NM,' ') AS COMPANY_NM
+			,NVL(a.DEPARTMENT_NM,' ') AS DEPARTMENT_NM
+			,NVL(a.POSITION_NM,' ') AS POSITION_NM
+			,NVL(a.ROLE_ID,' ') AS ROLE_ID
+			,NVL(f.ROLE_NM,' ') AS ROLE_NM
+			,NVL(b.CHANNEL_ID,' ') AS CHANNEL_ID
+			,NVL(g.CHANNEL_NM,' ') AS CHANNEL_NM
+			,NVL(b.ROLE_TYPE,'') AS CHANNEL_ROLE_TYPE
+			,NVL(c.NM,' ') AS CHANNEL_ROLE_NM
+			,NVL(d.ROLE_TYPE,' ') AS APPROVAL_ROLE_TYPE
+			,NVL(e.NM,' ') AS APPROVAL_ROLE_NM
+			,0 as SEQ
+		  from TSU0101 a
+		left outer join TIM0003 b on a.USER_ID = b.USER_ID and a.DEL_YN = 'N' and b.DEL_YN = 'N'
+		left outer join TSU0301 c on b.ROLE_TYPE = c.CD and c.LEVEL1 = 'IM' and c.LEVEL2 = '16'
+		left outer join TSU0104 d on a.USER_ID = d.USER_ID and d.DEL_YN = 'N'
+		left outer join TSU0301 e on d.ROLE_TYPE = e.CD and e.LEVEL1 = 'AN' and e.LEVEL2 = '05'
+		left outer join TSU0201 f on a.ROLE_ID = f.ROLE_ID
+		left outer join TIM0002 g on b.CHANNEL_ID = g.CHANNEL_ID
+		<if test="userNm != null">
+			where a.USER_NM like '%'||#{userNm}||'%'
+		</if>
+		order by USER_ID
+	</select>
+
+
+	<select id="getChannelUserList" resultMap="userResultMap">
+		select
+			 a.USER_ID
+			,a.USER_NM
+			,a.CELL_PHONE
+			,a.PHONE
+			,a.EMAIL
+			,a.COMPANY_NM
+			,a.DEPARTMENT_NM
+			,a.POSITION_NM
+			,a.ROLE_ID
+			,f.ROLE_NM
+			,b.CHANNEL_ID
+			,g.CHANNEL_NM
+			,b.ROLE_TYPE as CHANNEL_ROLE_TYPE
+			,c.NM as CHANNEL_ROLE_NM
+			,'' as APPROVAL_ROLE_TYPE
+			,'' as APPROVAL_ROLE_NM
+			,b.SEQ
+		  from TSU0101 a
+		 inner join TIM0003 b on a.USER_ID = b.USER_ID and a.DEL_YN = 'N' and b.DEL_YN = 'N' and b.CHANNEL_ID = #{channelId}
+		 left outer join TSU0301 c on b.ROLE_TYPE = c.CD and c.LEVEL1 = 'IM' and c.LEVEL2 = '16'
+		 left outer join TSU0201 f on a.ROLE_ID = f.ROLE_ID
+		 left outer join TIM0002 g on b.CHANNEL_ID = g.CHANNEL_ID
+		order by USER_ID
+	</select>
+
+
+
+	<select id="getApprovalUserList" resultMap="userResultMap">
+		select
+			 a.USER_ID
+			,a.USER_NM
+			,a.CELL_PHONE
+			,a.PHONE
+			,a.EMAIL
+			,a.COMPANY_NM
+			,a.DEPARTMENT_NM
+			,a.POSITION_NM
+			,a.ROLE_ID
+			,f.ROLE_NM
+			,'' as CHANNEL_ID
+			,'' as CHANNEL_NM
+			,'' as CHANNEL_ROLE_TYPE
+			,'' as CHANNEL_ROLE_NM
+			,d.ROLE_TYPE as APPROVAL_ROLE_TYPE
+			,e.NM as APPROVAL_ROLE_NM
+			,d.SEQ
+		 from TSU0101 a
+		inner join TSU0104 d on a.USER_ID = d.USER_ID and d.DEL_YN = 'N' and d.ROLE_TYPE = #{approvalRoleType}
+		left outer join TSU0301 e on d.ROLE_TYPE = e.CD and e.LEVEL1 = 'AN' and e.LEVEL2 = '05'
+		left outer join TSU0201 f on a.ROLE_ID = f.ROLE_ID
+		order by USER_ID
+	</select>
+
+
+	<select id="getApprovalAuthorityGroupList" resultMap="approvalAuthorityGroupResultMap">
+		select
+			 a.GRP_ID
+			,a.GRP_NM
+			,a.DEL_YN
+			,b.USER_ID
+			,b.DEL_YN
+			,b.SEQ
+			,b.ROLE_TYPE
+			,b.ORDER_NO
+			,c.USER_NM
+			,c.COMPANY_NM
+			,c.DEPARTMENT_NM
+			,c.POSITION_NM
+			,d.NM as ROLE_NM
+			,a.REG_DATE as GRP_REG_DATE
+			,a.REG_USER as GRP_REG_USER
+			,a.MOD_DATE as GRP_MOD_DATE
+			,a.MOD_USER as GRP_MOD_USER
+			,b.REG_DATE
+			,b.REG_USER
+			,b.MOD_DATE
+			,b.MOD_USER
+		  from TSU0103 a
+		  left outer JOIN TSU0104 b
+		    on a.GRP_ID = b.GRP_ID
+		   and b.DEL_YN = 'N'
+		  left outer JOIN TSU0101 c
+		    on b.USER_ID = c.USER_ID
+		   and c.DEL_YN = 'N'
+		  left outer join TSU0301 d on b.ROLE_TYPE = d.CD and d.LEVEL1 = 'AN' and d.LEVEL2 = '05'
+		 where a.DEL_YN = 'N'
+		 order by a.GRP_NM, b.ORDER_NO
+	</select>
+
+	<resultMap id="approvalAuthorityGroupResultMap" type="ApprovalAuthorityGroup">
+		<id property="groupId" 		column="GRP_ID"/>
+		<result property="groupNm" 	column="GRP_NM"/>
+		<result property="regDate"	column="GRP_REG_DATE"/>
+		<result property="regId"	column="GRP_REG_USER"/>
+		<result property="modDate"	column="GRP_MOD_DATE"/>
+		<result property="modId"	column="GRP_MOD_USER"/>
+
+		<collection property="authorityList" ofType="ApprovalAuthority">
+			<id property="groupId"			column="GRP_ID"/>
+			<id property="userId" 			column="USER_ID"/>
+			<id property="seq" 				column="SEQ"/>
+			<result property="userNm" 		column="USER_NM"/>
+			<result property="orderNo" 		column="ORDER_NO"/>
+			<result property="positionNm"	column="POSITION_NM"/>
+			<result property="companyNm" 	column="COMPANY_NM"/>
+			<result property="departmentNm"	column="DEPARTMENT_NM"/>
+			<result property="approvalRoleType"	column="ROLE_TYPE"/>
+			<result property="approvalRoleNm"	column="ROLE_NM"/>
+			<result property="regDate"	column="REG_DATE"/>
+			<result property="regId"	column="REG_USER"/>
+			<result property="modDate"	column="MOD_DATE"/>
+			<result property="modId"	column="MOD_USER"/>
+		</collection>
+	</resultMap>
+
+	<insert id="insertChannelUser">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select nvl(max(SEQ) + 1, 0) from TIM0003 where CHANNEL_ID = #{channelId}
+		</selectKey>
+		insert into TIM0003(
+			 CHANNEL_ID
+			,USER_ID
+			,SEQ
+			,ROLE_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{channelId		, jdbcType=VARCHAR}
+			,#{userId			, jdbcType=VARCHAR}
+			,#{seq				, jdbcType=NUMERIC}
+			,#{channelRoleType	, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate			, jdbcType=VARCHAR}
+			,#{regId			, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="updateChannelUser">
+		update TIM0003
+		   set ROLE_TYPE = #{channelRoleType, jdbcType=VARCHAR}
+		      ,MOD_DATE  = #{modDate		, jdbcType=VARCHAR}
+		      ,MOD_USER  = #{modId			, jdbcType=VARCHAR}
+		 where USER_ID = #{userId}
+		   and SEQ = #{seq}
+		   and CHANNEL_ID = #{channelId}
+	</update>
+
+	<delete id="deleteChannelUser">
+		delete from TIM0003 where USER_ID = #{userId} and SEQ = #{seq} and CHANNEL_ID = #{channelId}
+	</delete>
+
+	<insert id="insertApprovalUser">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select nvl(max(SEQ) + 1, 0) from TSU0104
+		</selectKey>
+		insert into TSU0104(
+			 GRP_ID
+			,USER_ID
+			,SEQ
+			,ROLE_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 '1'
+			,#{userId			, jdbcType=VARCHAR}
+			,#{seq				, jdbcType=NUMERIC}
+			,#{approvalRoleType	, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate			, jdbcType=VARCHAR}
+			,#{regId			, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="updateApprovallUser">
+		update TSU0104
+		   set ROLE_TYPE = #{approvalRoleType, jdbcType=VARCHAR}
+		      ,MOD_DATE  = #{modDate		 , jdbcType=VARCHAR}
+		      ,MOD_USER  = #{modId			 , jdbcType=VARCHAR}
+		 where USER_ID = #{userId}
+		   and SEQ = #{seq}
+	</update>
+
+	<delete id="deleteApprovalUser">
+		delete from TSU0104 where USER_ID = #{userId} and SEQ = #{seq}
+	</delete>
+
+
+	<resultMap id="userResultMap" type="java.util.LinkedHashMap">
+		<id property="userId" 			column="USER_ID"/>
+		<id property="seq"			    column="SEQ"/>
+		<result property="userNm" 		column="USER_NM"/>
+		<result property="cellPhone" 	column="CELL_PHONE"/>
+		<result property="phone"		column="PHONE"/>
+		<result property="email"		column="EMAIL"/>
+		<result property="companyNm" 	column="COMPANY_NM"/>
+		<result property="departmentNm"	column="DEPARTMENT_NM"/>
+		<result property="positionNm"	column="POSITION_NM"/>
+		<result property="roleId"		column="ROLE_ID"/>
+		<result property="roleNm" 		column="ROLE_NM"/>
+		<result property="channelId"	column="CHANNEL_ID"/>
+		<result property="channelNm" 	column="CHANNEL_NM"/>
+		<result property="channelRoleType"	column="CHANNEL_ROLE_TYPE"/>
+		<result property="channelRoleNm" 	column="CHANNEL_ROLE_NM"/>
+		<result property="approvalRoleType"	column="APPROVAL_ROLE_TYPE"/>
+		<result property="approvalRoleNm" 	column="APPROVAL_ROLE_NM"/>
+	</resultMap>
+
+
+
+
+
+
+	<insert id="insertApprovalAuthorityGroup">
+		<selectKey keyProperty="groupId" resultType="string" order="BEFORE" >
+			select to_char(nvl(max(to_number(GRP_ID)),0) + 1) from TSU0103
+		</selectKey>
+		insert into TSU0103(
+			 GRP_ID
+			,GRP_NM
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{groupId 			, jdbcType=VARCHAR}
+			,#{groupNm			, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate			, jdbcType=VARCHAR}
+			,#{regId			, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="updateApprovalAuthorityGroup">
+		update TSU0103
+		   set GRP_NM 	= #{groupNm, jdbcType=VARCHAR}
+			  ,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+		      ,MOD_USER = #{modId  , jdbcType=VARCHAR}
+		where GRP_ID = #{groupId}
+	</update>
+
+	<delete id="deleteApprovalAuthorityGroup">
+		update TSU0103
+		 set DEL_YN = 'Y'
+			,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+			,MOD_USER = #{modId  , jdbcType=VARCHAR}
+		where GRP_ID = #{groupId}
+	</delete>
+
+
+	<insert id="insertApprovalAuthority">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select nvl(max(SEQ) + 1, 0) from TSU0104 where GRP_ID = #{groupId}
+		</selectKey>
+		insert into TSU0104(
+			 GRP_ID
+			,USER_ID
+			,SEQ
+			,ROLE_TYPE
+			,ORDER_NO
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{groupId			, jdbcType=VARCHAR}
+			,#{userId			, jdbcType=VARCHAR}
+			,#{seq				, jdbcType=NUMERIC}
+			,#{approvalRoleType	, jdbcType=VARCHAR}
+			,#{orderNo          , jdbcType=NUMERIC}
+			,'N'
+			,#{regDate			, jdbcType=VARCHAR}
+			,#{regId			, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="updateApprovalAuthority">
+		update TSU0104
+		set ROLE_TYPE = #{approvalRoleType, jdbcType=VARCHAR}
+		   ,ORDER_NO  = #{orderNo         , jdbcType=NUMERIC}
+		   ,MOD_DATE  = #{modDate		  , jdbcType=VARCHAR}
+		   ,MOD_USER  = #{modId			  , jdbcType=VARCHAR}
+		where GRP_ID  = #{groupId}
+		  and USER_ID = #{userId}
+		  and SEQ     = #{seq}
+	</update>
+
+	<delete id="deleteApprovalAuthority">
+		update TSU0104
+		   set  DEL_YN = 'Y'
+			   ,MOD_DATE  = #{modDate		  , jdbcType=VARCHAR}
+			   ,MOD_USER  = #{modId			  , jdbcType=VARCHAR}
+		 where GRP_ID  = #{groupId}
+		   and USER_ID = #{userId}
+		   and SEQ     = #{seq}
+	</delete>
+
+
+</mapper>

@@ -1,0 +1,78 @@
+<!-- Info Dialog -->
+<div class="modal inmodal-original" id="infoDialog" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog-original">
+        <div class="modal-content-original animated fadeIn">
+            <div class="modal-header-original">
+                <button type="button" class="close" data-dismiss="modal">
+	                <span aria-hidden="true">&times;</span>
+	                <span class="sr-only">Close</span>
+                </button>
+                <i class="fa fa-exclamation-circle modal-icon-original"></i>
+                <h3 class="modal-title-original">Information</h4>
+                <large>아래 내용을 확인하시기 바랍니다</large>
+            </div>
+            <div class="modal-body-original">
+				<p>
+				<h2><strong>방화벽 확인 안내</strong></h2>
+				인터페이스 정보에 등록된 수신 시스템과 연계를 위해 방화벽 개통 작업이 필요합니다.<br><br>
+				<ul>
+					<li>개발서버 IP : 127.0.0.1<br>
+					<li>운영서버 IP : 127.100.100.1<br>
+				</ul>
+				</p>
+            </div>
+            <div class="modal-footer-original">
+                <!--<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>-->
+                <button id="btnClose" type="button" class="btn btn-primary" data-dismiss="modal">확 인</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+	$("#btnClose").bind("click", function () {
+		swal({
+		    title: "완료",
+		    text: "저장이 완료되었습니다",
+		    type: "success",
+		    showCancelButton: false,
+		    confirmButtonColor: "#AEDEF4",//DD6B55
+		    confirmButtonText: "저장",
+		    cancelButtonText: "취소",
+		    closeOnConfirm: true,
+		    closeOnCancel: false },
+		    function (isConfirm) {
+		        if (isConfirm) {
+		        	move('../sub-an/AN-01-00-002');
+		        } else {
+		            swal("취소", "저장을 취소 하였습니다", "error");
+		        }
+		    });
+    });
+	
+/*	
+	$("#btnClose").bind("click", function () {
+		swal({
+		    title: "저장 하시겠습니까?",
+		    text: "",
+		    type: "warning",
+		    showCancelButton: true,
+		    confirmButtonColor: "#DD6B55",
+		    confirmButtonText: "저장",
+		    cancelButtonText: "취소",
+		    closeOnConfirm: false,
+		    closeOnCancel: false },
+		    function (isConfirm) {
+		        if (isConfirm) {
+		            var check= swal("완료", "저장이 완료 되었습니다", "success");
+		            if( check = false) {
+						move('../sub-an/AN-01-00-002');
+		            }
+		        } else {
+		            swal("취소", "저장을 취소 하였습니다", "error");
+		        }
+		    });
+	    });	
+*/	
+});
+</script>

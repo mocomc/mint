@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="map">
+		<xs:annotation>
+			<xs:documentation>데이터 매핑 정의서 포멧 DESIGN</xs:documentation>
+		</xs:annotation>
+ 
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="description">
+					<xs:annotation>
+						<xs:documentation>매핑디스크립션</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="name" type="xs:string"/>
+							<xs:element name="cd" 	type="xs:string"/>	  
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="dataset">
+					<xs:annotation>
+						<xs:documentation>입출력 데이터 소스 정의</xs:documentation>
+					</xs:annotation>
+					
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="source" minOccurs="1" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="id" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="target" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="id" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					
+				</xs:element>
+
+				<xs:element name="mapping">
+					<xs:annotation>
+						<xs:documentation>mapping 정의</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="item" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="control">
+											<xs:complexType>
+												<xs:attribute name="id" type="xs:string" />
+											</xs:complexType>
+										</xs:element>
+										 
+										
+										<xs:element name="input">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="field" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="dataset" type="xs:string" />
+															<xs:attribute name="path" 	 type="xs:string" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="output">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="field">
+														<xs:complexType>
+															<xs:attribute name="dataset" type="xs:string" />
+															<xs:attribute name="path" 	 type="xs:string" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

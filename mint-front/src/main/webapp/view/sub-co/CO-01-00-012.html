@@ -1,0 +1,1029 @@
+<style>
+/* GRID Scroll hidden */
+.k-grid-header
+{
+   padding: 0 !important;
+}
+
+.k-grid-content
+{
+   overflow-y: visible;
+}
+/* end GRID Scroll hidden */
+</style>
+
+<!-- 오류/장애 조회 상세 팝업 -->
+<div class="modal" id="problemDetail" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+                    <span aria-hidden="true">&times;</span> <span id="bt-if-search-close" class="sr-only bt-if-search-close">Close</span>
+                </button>
+                <span style="float: right; font-size:15px; font-weight: bold; padding: 15px 0px 0px 0px;">
+                    <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000022','H001')"></a>
+                </span>
+                <div>
+                    <h2><lb class="lb-32"></lb> <lb class="lb-353"></lb></h2>
+                </div>
+            </div>
+
+            <!--modal-body-->
+            <div class="modal-body">
+                <div class="row">
+			        <div class="col-lg-12">
+			            <div class="ibox float-e-margins">
+			                <div class="ibox-title">
+			                	<h5><lb class="lb-152"></lb></h5>
+			                    <!-- <div class="ibox-tools">
+			                    	<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000022','H001')"></a>
+			                        <a class="collapse-link">
+			                            <i class="fa fa-chevron-up"></i>
+			                        </a>
+			                    </div> -->
+			                </div>
+			                <div class="ibox-content">
+			                    <div class="row">
+
+			                        <div class="col-sm-6">
+			                            <span class="lable_tag"><lb class="lb-479"></lb></span>
+			                            <input id="detail-endDate" class="input-width detail-endDate" tabIndex="7" style="text-align:center; width: 42%">
+			                            <input id="detail-endDateTime" class="input-width detail-endDateTime"  tabIndex="8" style="text-align:center; width: 20.5%;">
+			                        </div>
+			                        <div class="col-sm-6">
+			                            <span class="lable_tag"><lb class="lb-494"></lb></span>
+			                            <div style="padding: 3px 0px 0px 15px;">
+			                                <label style="padding-left:10px;"><input type="radio" name="type" value="0" checked="checked"> <lb class="lb-476"></lb> </label>
+			                                <label style="padding-left:10px;"><input type="radio" name="type" value="1"> <lb class="lb-467"></lb> </label>
+			                            </div>
+			                        </div>
+			                        <hr class="hr-space">
+			                        <div class="col-sm-6">
+			                            <span class="lable_tag"><lb class="lb-495"></lb><lb class="lb-473"></lb></span>
+			                            <input id="detail-status" class="detail-status required" message="처리상태를 선택해 주시기 바랍니다." type="text" placeholder="Search..."  tabIndex="4" style="width: 63%;">
+			                        </div>
+			                        <div class="col-sm-6" style="display:none;">
+				                        <span class="lable_tag"><lb class="lb-32"></lb> <lb class="lb-68"></lb></span>
+				                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+				                            <input id="problemSubject" type="text" class="k-input problemSubject required" message="오류/장애 제목을 입력해 주시기 바랍니다." placeholder="" style="width: 100%;">
+				                        </span>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="row">
+			        <div class="col-lg-12">
+			            <div class="ibox float-e-margins">
+
+			                <div class="ibox-content">
+
+			                    <div id="tab-02" class="tab-pane active">
+			                        <div class="panel-body">
+				                        <ul class="category-list" style="padding: 0">
+				                        	<li><i class="fa fa-circle text-primary" style="color: #1c84c6;"></i> <lb class="lb-499"></lb><lb class="lb-500"></lb></li>
+				                        </ul>
+			                            <textarea id="causeContents" class="" message="원인분석을 입력해 주시기 바랍니다." rows="5" cols="30" style="height:200px"></textarea>
+			                        </div>
+			                    </div>
+
+			                    <div id="tab-03" class="tab-pane active">
+			                        <div class="panel-body">
+				                        <ul class="category-list" style="padding: 0">
+				                        	<li><i class="fa fa-circle text-primary" style="color: #1c84c6;"></i> <lb class="lb-468"></lb></li>
+				                        </ul>
+			                            <textarea id="resultContents" class="" message="조치결과를 입력해 주시기 바랍니다." rows="5" cols="30" style="height:200px"></textarea>
+			                        </div>
+			                    </div>
+
+			                    <div id="tab-04" class="tab-pane active">
+			                        <div class="panel-body">
+				                        <ul class="category-list" style="padding: 0">
+				                        	<li><i class="fa fa-circle text-primary" style="color: #1c84c6;"></i> <lb class="lb-501"></lb><lb class="lb-502"></lb></li>
+				                        </ul>
+			                            <textarea id="planContents" class="" message="향후계획을 입력해 주시기 바랍니다." rows="5" cols="30" style="height:200px"></textarea>
+			                        </div>
+			                    </div>
+
+			                    <div id="tab-05" class="tab-pane active">
+			                        <div class="panel-body">
+			                            <ul class="category-list" style="padding: 0">
+			                                <li><i class="fa fa-circle text-primary" style="color: #1c84c6;"></i> <lb class="lb-219"></lb></li>
+			                            </ul>
+
+					                    <!-- 첨부파일row -->
+					                    <div class="row">
+					                        <!-- col-sm-12 -->
+					                        <div class="col-sm-12">
+					                            <input name="file" id="file" type="file" />
+					                        </div>
+					                        <!-- col-sm-12 end -->
+					                    </div>
+			            			</div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div><!--  end col-lg-12 -->
+			    </div>
+			    <br>
+			    <div class="row interfaceInfo">
+			        <div class="col-lg-12">
+			            <div class="ibox float-e-margins">
+			                <div class="ibox-title">
+			                    <h5><lb class="lb-32"></lb> <lb class="lb-348"></lb></h5>
+			                    <!-- <div class="ibox-tools">
+			                    	<button class="btn btn-success btn-inteface-add" style="display:none"><i class="fa fa-search "></i> 인터페이스 추가 </button>
+			                    	<button class="btn btn-danger btn-inteface-del" style="display:none"><i class="fa fa-trash-o "></i> 인터페이스 삭제 </button>
+			                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+			                    </div> -->
+			                </div>
+				            <div class="ibox-content">
+				                <div>
+				                	<div id="problemInterfaceGrid" ></div>
+				                </div>
+				            </div>
+			            </div>
+			        </div>
+			    </div>
+            </div>
+
+            <!--modal-footer-->
+            <div class="modal-footer-original" style="clear: both">
+                <button id="btnClose" type="button" class="btn btn-danger btnClose" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+            </div>
+            <!--modal-footer END-->
+        </div>
+    </div>
+    <!--modal-content animated fadeIn END-->
+</div>
+<!-- modal-dialog END-->
+
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "CO-01-00-012";
+
+    $.extend({
+    	sub : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+            	//업로드 관련 카운트
+	            fileUploadSucess : 0,
+	            fileUploadError : 0,
+	            fileUploadTotal : 0,
+	            kendoUploadButton : "",
+
+	            uploadAttatchFileList : [],
+	            orgAttachFileList : [],
+	            searchInterfaceId : "",
+
+	            //2015/10/02 추가 :: UI 표준 패턴에 맞추기 위해 전역변수에서 로컬변수로 변경
+	            updateCheck : false,
+	            problemId   : "",
+	            channelId   : "",
+	            isApproval  : false,
+
+	         	// 미등록 오류/장애 인터페이스 리스트
+	            problemInterfaceList : [],
+
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.sub.fn_initCallback');
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+
+                	//화면에서 사용할 Parameter
+                	{
+                		$.sub.updateCheck = $.main.updateCheckFixedProblem;
+                		$.sub.problemId   = $.main.problemIdFixedProblem;
+                		$.sub.channelId   = $.main.channelIdFixedProblem;
+                		$.sub.isApproval  = $.main.isApprovalFixedProblem;
+                	}
+
+                    //검색조건 세팅
+                    //$.sub.fn_setSearchCondition();
+
+                    mint.ui.setDropDownList('detail-status', mint.common.commonCodeMap.get("cds").OP02, 3, 'nm', 'cd');
+                    mint.ui.setDropDownList('importance', mint.common.commonCodeMap.get("cds").OP03, 3, 'nm', 'cd');
+                    mint.ui.setDropDownList('systemNm', mint.common.commonCodeMap.get("systemCdList"), 0, 'systemNm', 'systemId');
+
+                    $.sub.fn_setEditor('problemContents');
+                    $.sub.fn_setEditor('causeContents');
+                    $.sub.fn_setEditor('resultContents');
+                    $.sub.fn_setEditor('planContents');
+
+                    $("#detail-startDate").kendoDatePicker({
+                        format : "yyyy/MM/dd",
+                        culture: "ko-KR",
+                        value : new Date()
+                    });
+
+                    $("#detail-startDateTime").kendoTimePicker({
+                        interval : 1,
+                        format: "HH:mm",
+                        value:new Date()
+                    });
+
+                    $("#detail-endDate").kendoDatePicker({
+                        format : "yyyy/MM/dd",
+                        culture: "ko-KR"
+                    });
+
+                    $("#detail-endDateTime").kendoTimePicker({
+                        interval : 1,
+                        format: "HH:mm",
+                        value:new Date()
+                    });
+
+                    $("#detail-endDateTime").val("");
+
+                 // 그리드 초기화
+                    {
+                    	// 오류/장애 인터페이스 목록 그리드 초기화
+                        $.sub.fn_initProblemInterfaceGrid();
+                    }
+
+					// 데이터 조회/초기화
+                    $.sub.fn_getProblemInfo();
+
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+                }
+            }, // end fn_initCallback
+
+          //-----------------------------------------------------------------------
+            // Description :: 그리드 템플릿 설정
+            //-----------------------------------------------------------------------
+            fn_initProblemInterfaceGrid : function() {
+                try{
+                    $("#problemInterfaceGrid").kendoGrid({
+                        dataSource : {
+	                        data : [],
+	                        pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+                        },
+                        sortable : true,
+                        resizable: true,
+                        pageable : {
+                        	refresh : false,
+                        	pageSizes : mint.ui.getPageSizesS(),
+                        	buttonCount : 5
+                        },
+                        columns : [
+   		                        {
+		                            field : "channelNm",
+		                            title : mint.label.getLabel('lb-80'),
+		                            width : "160px",
+		                            headerAttributes : {
+		                                style : "text-align: center"
+		                            },
+		                            attributes : {
+		                                style : "text-align: center; white-space: nowrap;"
+		                            },
+		                        },
+		                        {
+		                            field : "integrationId",
+		                            title : mint.label.getLabel('lb-154'),
+		                            width : "160px",
+		                            headerAttributes : {
+		                                style : "text-align: center"
+		                            },
+		                            attributes : {
+		                                style : "text-align: center"
+		                            },
+		                            template : '#=$.main.fn_replaceNull(integrationId)#'
+
+		                        },
+    		                        {
+    		                            field : "interfaceNm",
+    		                            title : mint.label.getLabel('lb-153'),
+    		                            headerAttributes : {
+    		                                style : "text-align: center"
+    		                            },
+    		                            attributes : {
+    		                                style : "text-align: left"
+    		                            },
+    		                            template : '#=$.main.fn_replaceNull(interfaceNm)#'
+
+    		                        },
+    		                        {
+    		                            field : "errorMsg",
+    		                            title : mint.label.getLabel('lb-463') + " " + mint.label.getLabel('lb-462'),
+    		                            //width : "40%",
+    		                            headerAttributes : {
+    		                                style : "text-align: center"
+    		                            },
+    		                            attributes : {
+    		                                style : "text-align: left; white-space: nowrap;"
+    		                            },
+    		                            template : '<span title="${errorMsg}">#=$.main.fn_replaceNull(errorMsg)#</span>'
+    		                        },
+    		                        {
+    		                        	field : "seq",
+    		                        	hidden : true
+    		                        },
+    		                        {
+    		                            field : "startDate",
+    		                            title : mint.label.getLabel('lb-50'),
+    		                            width : "180px",
+    		                            template : '#=$.main.fn_changeTime(startDate)#',
+    		                            headerAttributes : {
+    		                                style : "text-align: center"
+    		                            },
+    		                            attributes : {
+    		                                style : "text-align: center"
+    		                            }
+    		                        },
+    		                        {
+    		                        	field : "flag",
+    		                        	hidden : true
+    		                        }
+                        ],
+                        dataBound: function (e) {
+							if(1 > $("#problemInterfaceGrid").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+								$("#problemInterfaceGrid").children(".k-grid-content").height(gridHeight /2.5);
+								//$("#problemInterfaceGrid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#problemInterfaceGrid").children(".k-grid-content").height('auto');
+								//$("#problemInterfaceGrid").children(".k-grid-content-locked").height('auto');
+							}
+						}
+                    });
+
+                } catch ( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initProblemInterfaceGrid"});
+                }
+            },
+
+            fn_setProblemInterfaceGrid : function(jsonData) {
+            	try {
+					var gridData = $.sub.fn_getProblemInterfaceGridData_custom(jsonData);
+
+            		var dataSource = new kendo.data.DataSource({
+						  data: gridData
+					    , page:1
+					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+					});
+
+					//데이터 재설정
+					$("#problemInterfaceGrid").data("kendoGrid").setDataSource(dataSource);
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setProblemInterfaceGrid"});
+            	}
+            },
+
+            fn_getProblemInterfaceGridData_custom : function (jsonData) {
+            	try {
+            		var gridData = [];
+            		//console.log(jsonData);
+					var selectedNoRegProblemData = {};
+            		for (var i in jsonData) {
+
+            			//if (jsonData[i].checked) {
+            				selectedNoRegProblemData = {};
+
+                			selectedNoRegProblemData.channelNm = jsonData[i].dataItem.channelNm;
+                			selectedNoRegProblemData.interfaceId = jsonData[i].dataItem.interfaceId;
+                			selectedNoRegProblemData.integrationId = jsonData[i].dataItem.integrationId;
+                			selectedNoRegProblemData.interfaceNm = jsonData[i].dataItem.interfaceNm;
+                			selectedNoRegProblemData.seq = jsonData[i].dataItem.seq;
+                			selectedNoRegProblemData.startDate = jsonData[i].dataItem.startDate;
+                			selectedNoRegProblemData.errorMsg = jsonData[i].dataItem.errorMsg;
+                			selectedNoRegProblemData.statusNm = jsonData[i].dataItem.statusNm;
+                			selectedNoRegProblemData.crudpsType = (jsonData[i].checked == true) ? mint.label.getLabel('lb-370') : mint.label.getLabel('lb-343');
+
+
+                			gridData.push(selectedNoRegProblemData);
+            			//}
+
+            		}
+
+            		return gridData;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getProblemInterfaceGridData_custom"});
+            	}
+            },
+
+            fn_setEditor : function(id) {
+            	try {
+            		$("#" + id).kendoEditor({
+                        resizable: {
+                              content: true
+                            , toolbar: true
+                        }
+                    });
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setEditor"});
+            	}
+            }, // end fn_setEditor
+
+          //-----------------------------------------------------------------------
+            // Description :: problem 기본 정보를 가져온다.
+            //-----------------------------------------------------------------------
+            fn_getProblemInfo : function() {
+            	try {
+            		if($.sub.updateCheck) {
+                		//mint.callService($.sub.fn_getRequestObject(), screenName, 'REST-R01-OP-03-03', '$.sub.fn_setDetailInfo', {errorCall : true });
+            			mint.callService($.sub.fn_getRequestObject(), screenName, 'REST-R13-OP-03-02', '$.sub.fn_setDetailInfo', {errorCall : true });
+                	} else {
+                		//$('.btn-save').show();
+                		//$('.btn-list').show();
+                		//$('.btn-inteface').show();
+                		$("#approvalStatus").val("N/A");
+                		$.sub.fn_fileUpload();
+                	}
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getProblemInfo"});
+            	}
+
+            }, // end fn_getProblemInfo
+
+
+            //-----------------------------------------------------------------------
+            // Description :: problem 기본정보를 세팅하기 위한 requestObject를 생성한다.
+            //-----------------------------------------------------------------------
+            fn_getRequestObject : function() {
+                try{
+                    var searchObject = new Object();
+
+                    searchObject.problemId = $.sub.problemId;
+
+                    return searchObject;
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getRequestObject"});
+                }
+            }, // end fn_getRequestObject
+
+
+            //-----------------------------------------------------------------------
+            // Description :: problem 기본정보를 세팅한다.
+            //-----------------------------------------------------------------------
+            fn_setDetailInfo : function(data) {
+            	try {
+            		//console.log(data);
+            		//tempProblemPopupData = data;
+
+                    $.sub.fn_setProblemInfo(data);
+                    $.sub.fn_changeEnableStatus(true);
+
+                    if(data.problemAttachFile != null) {
+                    	//첨부파일을 카피한다.
+                    	$.sub.fn_setAttachFile(data.problemAttachFile);
+                    	$('#file').data("kendoUpload").disable();
+                    }
+
+                    /*
+                    if(data.interface != null) {
+                    	//인터페이스 정보가 있다면 인터페이스 정보를 세팅한다.
+                    	//$(".interfaceInfo").show();
+
+                    	tempInterfacePopupData = data.interface;
+                    	$.sub.fn_setInterfaceInfo(data.interface);
+                    } else {
+                    	//$(".interfaceInfo").hide();
+                    }
+                    */
+
+                    if (data.problemInterface != null) {
+
+                    	//인터페이스 정보가 있다면 인터페이스 정보를 세팅한다.
+                    	tempInterfacePopupData = data.interface;
+                    	tempInterfaceCntPopupTitle = (data.interfaceCnt > 1) ? " (" + mint.label.getLabel('lb-503') + " " + (data.interfaceCnt - 1) + " " + mint.label.getLabel('lb-64') +")" : "";
+
+                    	$.sub.problemInterfaceList = [];
+                    	var result = data.problemInterface;
+                    	//console.log(result);
+    					for (var i in result) {
+    						$.sub.problemInterfaceList[result[i].interfaceId + "-" + result[i].seq + "-" + result[i].startDate] = {
+       	 	 						checked : true,
+       	 	 						dataItem : {
+       	 	 							channelNm : result[i].channelNm,
+       	 	 							interfaceId : result[i].interfaceId,
+       	 	 							integrationId : result[i].integrationId,
+       		 	       					interfaceNm : result[i].interfaceNm,
+       		 	       					seq : result[i].seq,
+       		 	       					startDate : result[i].startDate,
+       		 	       					errorMsg : result[i].errorMsg,
+       		 	       					statusNm : result[i].statusNm,
+       		 	       					flag : ''
+       	 	 						}
+       	 	 				};
+    					}
+
+
+    					var problemInterfaceList_result = [];
+    					for(var x in $.sub.problemInterfaceList) {
+    						if (Object.prototype.hasOwnProperty.call($.sub.problemInterfaceList, x)) {
+    							problemInterfaceList_result.push($.sub.problemInterfaceList[x]);
+    						}
+    					}
+
+    					// 오류/장애 인터페이스 목록 그리드 Data 설정
+                        $.sub.fn_setProblemInterfaceGrid(problemInterfaceList_result);
+                    }
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setDetailInfo"});
+            	}
+            }, // end fn_setDetailInfo
+
+         	//-----------------------------------------------------------------------
+            // Description :: 첨부파일을 카피한다.
+            //-----------------------------------------------------------------------
+            fn_setAttachFile : function(problemAttachFile) {
+            	try {
+            		var tempArray = [];
+
+                    if(0 < problemAttachFile.length) {
+                        for(var i=0; i<problemAttachFile.length; i++) {
+                            var fileObject = new Object;
+
+                            fileObject.objectType = 'ProblemAttachFile';
+                            fileObject.problemId = '';
+                            fileObject.fileId = problemAttachFile[i].fileId;
+                            fileObject.fileNm = problemAttachFile[i].fileNm;
+                            fileObject.filePath = problemAttachFile[i].filePath;
+                            fileObject.name = problemAttachFile[i].fileNm;
+                            fileObject.flag = '';
+
+                            //첨부파일 카피
+                            $.sub.orgAttachFileList.push(fileObject);
+                            tempArray.push(fileObject);
+                        }
+                    }
+
+                    //첨부파일을 세팅한다.
+                    $.sub.fn_fileUpload(tempArray);
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setAttachFile"});
+            	}
+            }, // end fn_setAttachFile
+
+          	//-----------------------------------------------------------------------
+            // Description :: 첨부파일 세팅
+            //-----------------------------------------------------------------------
+            fn_fileUpload : function(fileList) {
+            	try {
+            		if("undefined"  == typeof fileList) {
+                        fileList = [];
+                    }
+                    //첨부파일 - 데이터 세팅
+                    // kendo upload Drop 영역 비활성
+                    kendo.ui.Upload.fn._supportsDrop = function() { return false; }
+
+                	$("#file").kendoUpload({
+                        files: fileList,
+                        remove: $.sub.fn_onRemove,
+                        async: {
+                            saveUrl: "/mint/ut/upload",
+                            removeUrl: "remove",
+                            autoUpload: false
+                        },
+                        //multiple: false,
+                        localization: {
+                            select: mint.label.getLabel('lb-220')
+                        },
+                        error: function(e) {
+
+                            mint.common.debugLog("Kendo Upload Error Event!!");
+                            mint.common.debugLog(e);
+
+                            if("remove" != e.operation) {
+                            	$.sub.fileUploadError++;
+                            }
+
+                            if(0 < $.sub.fileUploadTotal && $.sub.fileUploadTotal == ($.sub.fileUploadError + $.sub.fileUploadSucess)) {
+                            	/*
+                                alert('총 카운트 = ' + $.sub.fileUploadTotal +
+                                          '\n성공 카운트 = ' + $.sub.fileUploadSucess +
+                                          '\n에러 카운트 = ' + $.sub.fileUploadError
+                                );
+                            	*/
+                                $(".k-upload-files.k-reset").find("li").remove();
+
+                                $.sub.uploadAttatchFileList =[];
+                                $.sub.fileUploadTotal = 0;
+                                $.sub.fileUploadSucess = 0;
+                                $.sub.fileUploadError = 0;
+
+                                $.sub.kendoUploadButton = "";
+                            }
+
+                        },
+                        success: function(e) {
+
+                        	mint.common.debugLog("Kendo Upload Success Event!!");
+                        	mint.common.debugLog(e);
+
+                            var serverResponse = JSON.parse(e.XMLHttpRequest.response);
+
+                            if("undefined"  == typeof serverResponse.errMessage) {
+                            	$.sub.fileUploadSucess++;
+
+                                var tempObj = new Object();
+                                tempObj.fileNm = serverResponse.getOriginalFilename;
+                                tempObj.filePath = serverResponse.serverPath;
+
+                                $.sub.uploadAttatchFileList.push(tempObj);
+                            } else {
+                            	$.sub.fileUploadError++;
+                            }
+
+                            if($.sub.fileUploadTotal == $.sub.fileUploadSucess) {
+                            	/*
+//                              alert('총 카운트 = ' + fileUploadTotal +
+//                                        '\n성공 카운트 = ' + fileUploadSucess +
+//                                        '\n에러 카운트 = ' + fileUploadError
+//                              );
+                                */
+                                $.sub.fileUploadTotal = 0;
+                                $.sub.fileUploadSucess = 0;
+                                $.sub.fileUploadError = 0;
+
+                                //데이터 등록
+
+                                var requestObject = $.sub.fn_setParam();
+
+                                var attatchFileList = [];
+
+                                for(var i=0; i<$.sub.uploadAttatchFileList.length; i++) {
+                                    var tempAttatchObj = new Object();
+                                    tempAttatchObj.objectType = 'ProblemAttachFile';
+                                    tempAttatchObj.problemId = '';
+                                    tempAttatchObj.fileId = '';
+                                    tempAttatchObj.fileNm = $.sub.uploadAttatchFileList[i].fileNm;
+                                    tempAttatchObj.filePath = $.sub.uploadAttatchFileList[i].filePath;
+                                    tempAttatchObj.flag = 'C';
+
+                                    if($.sub.orgAttachFileList.length <= 0) {
+                                        attatchFileList.push(tempAttatchObj);
+                                    } else {
+                                    	$.sub.orgAttachFileList.push(tempAttatchObj);
+                                    }
+                                }
+
+                                var tempArray = [];
+
+                                if($.sub.orgAttachFileList.length <= 0) {
+                                	mint.common.debugLog("attach file attatchFileList : " + attatchFileList);
+
+                                	for(var i= 0; i < attatchFileList.length; i++) {
+                                		var fileObject = new Object();
+
+                                		fileObject.objectType = 'ProblemAttachFile';
+                                		fileObject.problemId = attatchFileList[i].problemId;
+                                		fileObject.fileId = attatchFileList[i].fileId;
+                                		fileObject.fileNm = attatchFileList[i].fileNm;
+                                		fileObject.filePath = attatchFileList[i].filePath;
+                                		fileObject.flag = attatchFileList[i].flag;
+
+                                		tempArray.push(fileObject);
+                                	}
+
+                                    requestObject.problemAttachFile = tempArray;
+                                } else {
+                                	mint.common.debugLog("attach file orgAttachFileList : " + $.sub.orgAttachFileList);
+
+
+                                	for(var i= 0; i < $.sub.orgAttachFileList.length; i++) {
+                                        var fileObject = new Object();
+
+                                        fileObject.objectType = 'ProblemAttachFile';
+                                        fileObject.problemId = $.sub.orgAttachFileList[i].problemId;
+                                        fileObject.fileId = $.sub.orgAttachFileList[i].fileId;
+                                        fileObject.fileNm = $.sub.orgAttachFileList[i].fileNm;
+                                        fileObject.filePath = $.sub.orgAttachFileList[i].filePath;
+                                        fileObject.flag = $.sub.orgAttachFileList[i].flag;
+
+                                        tempArray.push(fileObject);
+                                    }
+
+                                	requestObject.problemAttachFile = tempArray;
+                                }
+
+                                /*
+                                //debugger;
+                                var restUrl = "";
+
+                                if($.sub.updateCheck) {
+    		                        //update
+    		                        restUrl = "REST-U01-OP-03-02";
+    		                        mint.callService(requestObject, screenName, restUrl, '$.sub.fn_saveComplete', {errorCall : true, params : {problemId : $.sub.problemId} });
+    		                    } else {
+    		                    	restUrl = "REST-C01-OP-03-02";
+    		                    	mint.callService(requestObject, screenName, restUrl, '$.sub.fn_saveComplete', {errorCall : true });
+    		                    }
+                                */
+                                $.sub.kendoUploadButton = "";
+                            } else if($.sub.fileUploadTotal == ($.sub.fileUploadError + $.sub.fileUploadSucess)) {
+                                $(".k-upload-files.k-reset").find("li").remove();
+                                /*
+                                alert('총 카운트 = ' + $.sub.fileUploadTotal +
+                                          '\n성공 카운트 = ' + $.sub.fileUploadSucess +
+                                          '\n에러 카운트 = ' + $.sub.fileUploadError +
+                                          '\n 파일을 재등록하여 주세요'
+                                );
+                                */
+                                $.sub.uploadAttatchFileList =[];
+                                $.sub.fileUploadTotal = 0;
+                                $.sub.fileUploadSucess = 0;
+                                $.sub.fileUploadError = 0;
+
+                                $.sub.kendoUploadButton = "";
+                            }
+                        },
+                        upload: function(e) {
+                        	$.sub.fileUploadTotal++;
+                        },
+                        select : function(e) {
+                            // 첨부 불가 확장자
+                            var extArray = new Array(".php3",".php4",".asp",".jsp",".php",".html",".htm",".inc",".js",".pl",".cgi",".java",".sh",".bash",".exe",".bat",".msi",".xml");
+                            // 확장자 체크
+                            var notAllowed = false;
+                            /* $.each(e.files, function(index, value) {
+                                if (extArray.indexOf(value.extension.toLowerCase()) > -1 ) {
+                                	mint.common.debugLog(value.extension + " is not allowed Extension!!");
+                                //}
+                                //if (value.extension !== '.txt') {
+                                    //alert("not allowed...!  Only Upload .TXT file");
+                                    alert("첨부 할 수 없는  종류의 파일이 선택 되었습니다. \n 확인 후 다시 첨부하여 주십시오.");
+                                    notAllowed = true;
+                                }
+                            }); */
+                            var breakPoint = 0;
+                            if (notAllowed == true) {
+                                e.preventDefault();
+                            }
+
+                            // custom button 확용
+                            setTimeout(function() {
+                                $.sub.kendoUploadButton = $(".k-upload-selected");
+                                $.sub.kendoUploadButton.hide();
+                            }, 1);
+                        }
+                    });
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_fileUpload"});
+            	}
+            },
+
+            fn_onRemove : function(e) {
+            	try {
+            		$.sub.fn_setAttachFileFlag($.sub.fn_getFileName(e), 'D');
+
+                	var files = e.files;
+
+                    for(var i=0; i < $('#file').data("kendoUpload").options.files.length; i++) {
+
+                        if(files[0].uid == $('#file').data("kendoUpload").options.files[i].uid) {
+                            $('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+                            $('#file').data("kendoUpload").options.files.splice(i, 1);
+                            e.preventDefault();
+                        }
+                    }
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_onRemove"});
+            	}
+            }, // end fn_onRemove
+
+            fn_getFileName : function(e) {
+            	try {
+            		return $.map(e.files, function(file) {
+                        var info = file.name;
+
+                        return info;
+                    }).join(", ");
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getFileName"});
+            	}
+            }, // end fn_getFileName
+
+            fn_setAttachFileFlag : function(fileName, flag) {
+            	try {
+            		for(var i = 0; i < $.sub.orgAttachFileList.length; i++) {
+
+                		if($.sub.orgAttachFileList[i].fileNm == fileName) {
+                			$.sub.orgAttachFileList[i].flag = flag;
+                		}
+                	}
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setAttachFileFlag"});
+            	}
+            },
+
+          	//-----------------------------------------------------------------------
+            // Description :: 오류/장애  정보를 세팅한다.
+            //-----------------------------------------------------------------------
+            fn_setProblemInfo : function(problemInfo) {
+            	try {
+                	//오류/장애 구분
+                	if(problemInfo.type != null) {
+                		$("input[name='type']:radio[value='" + problemInfo.type + "']").attr('checked',true);
+                	}
+
+                	//처리상태
+                	if(problemInfo.status != null) {
+                		$('#detail-status').data('kendoDropDownList').value(problemInfo.status);
+                	}
+
+                	//조치일자
+                	if(problemInfo.endDate != null) {
+                        $("#detail-endDate").data('kendoDatePicker').value($.sub.fn_getDate(problemInfo.endDate));
+                        $("#detail-endDateTime").data('kendoTimePicker').value($.sub.fn_getDateTime(problemInfo.endDate));
+                    }
+
+                	//원인분석
+                	$("#causeContents").data('kendoEditor').value(mint.common.replaceNull(problemInfo.causeContents));
+
+                	//조치결과
+                	$("#resultContents").data('kendoEditor').value(mint.common.replaceNull(problemInfo.resultContents));
+
+                	//향후계획
+                	$("#planContents").data('kendoEditor').value(mint.common.replaceNull(problemInfo.planContents));
+
+
+                	mint.common.debugLog("updatecheck : " + $.sub.updateCheck + ", isApproval : " + $.sub.isApproval + ", channelId : " + $.sub.channelId + ", problemId : " + $.sub.problemId);
+                	/*
+                	//심의요청 버튼 생성
+                	if($.sub.updateCheck) {
+                		if($.sub.isApproval === 'true' && $("#detail-status").val() == '2' && $("#detail-endDate").val() != "" && $("#detail-endDateTime").val() != "") {
+                			if(null == problemInfo.approvalStatus || 2 == problemInfo.approvalStatus) {
+                				$(".btn-approval").show();
+                				$(".btn-modify").show();
+                				$(".btn-delete").show();
+                				$(".btn-list").show();
+                			} else if(0 == problemInfo.approvalStatus) {
+                    			$('.btn-list').show();
+                    		}
+                		} else if(null == problemInfo.approvalStatus || 2 == problemInfo.approvalStatus) {
+                			$(".btn-modify").show();
+            				$(".btn-delete").show();
+                			$('.btn-list').show();
+                		} else {
+                			$('.btn-list').show();
+                		}
+                	}
+                	*/
+                	$.sub.searchInterfaceId = problemInfo.interfaceId;
+
+                	//console.log("aaaaaaaaa : " + $.sub.searchInterfaceId);
+
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setProblemInfo"});
+            	}
+            }, // end fn_setProblemInfo
+
+            //-----------------------------------------------------------------------
+            // Description :: 필드 disable 상태 변경
+            //-----------------------------------------------------------------------
+            fn_changeEnableStatus : function(status) {
+            	try {
+                	//오류/장애 구분
+                	$('input:radio[name=type]').prop("disabled", status);
+
+                	//처리상태
+                	$('#detail-status').data("kendoDropDownList").enable(!status);
+
+                	//조치일자
+                	$('#detail-endDate').data("kendoDatePicker").enable(!status);
+                	$('#detail-endDateTime').data("kendoTimePicker").enable(!status);
+
+                	//오류/장애 개요
+
+    				$('#errorMsg').prop('readonly', status);
+     	    		$('#errorMsg').prop('disabled', status);
+    				if(status) {
+         	    		$('#errorMsg').css('background-color', '#eee');
+                	} else {
+        	    		$('#errorMsg').css('background-color', '');
+                	}
+
+                	//원인분석
+                	$($('#causeContents').data().kendoEditor.body).prop('contenteditable', !status);
+
+                	//조치결과
+                	$($('#resultContents').data().kendoEditor.body).prop('contenteditable', !status);
+
+                	//향후계획
+                	$($('#planContents').data().kendoEditor.body).prop('contenteditable', !status);
+
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_changeEnableStatus"});
+            	}
+            }, // end fn_changeEnableStatus
+
+            //-----------------------------------------------------------------------
+            // Description :: 날짜 표시
+            //-----------------------------------------------------------------------
+            fn_getDate : function(dateVal) {
+            	try {
+            		var returnVal = dateVal.substring(0, 4) + "/" + dateVal.substring(4, 6) + "/" + dateVal.substring(6, 8);
+
+                	return returnVal;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getDate"});
+            	}
+            }, // end fn_getDate
+
+            //-----------------------------------------------------------------------
+            // Description :: 시간 표시
+            //-----------------------------------------------------------------------
+            fn_getDateTime : function(dateVal) {
+            	try {
+            		var returnVal = dateVal.substring(8, 10) + ":" + dateVal.substring(10, 12);
+
+                	return returnVal;
+            	}
+            	catch(e) {
+
+            	}
+            } // end fn_getDateTime
+    	}
+    });
+
+  	//=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+
+    $(document).on('click', function(e) {
+
+        if("CO-01-00-012" == screenName) {
+            if('k-filename' == e.target.className) {
+                tempCount = 1;
+                var uploadElement = $("#file").data("kendoUpload");
+                var tempIndex = $(".k-filename").index(e.target);
+
+                //tempJsonData.requirementId;
+                //alert(uploadElement.options.files[tempIndex].fileId);
+
+                tempFilePath = uploadElement.options.files[tempIndex].filePath;
+                tempFileNm = uploadElement.options.files[tempIndex].fileNm;
+
+                //$(location).attr("href", "/mint/ut/download?filepath=" + tempFilePath + "&filename=" + tempFileNm);
+    			$.fileDownload( "/mint/ut/download?filepath=" + tempFilePath + "&filename=" + tempFileNm)
+    	        .done(function () {})
+    	        .fail(function () { mint.common.alert('File download failed!['+tempFileNm+"]", null); });
+
+                e.stopImmediatePropagation();
+            }
+        }
+    });
+
+
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.sub.fn_init();
+    mint.label.attachLabel(null);
+
+});
+</script>
+
+<style>
+	/* 첨부파일 - style customize set */
+	.k-filename {
+		max-width: 94% !important;
+	}
+
+	/* 첨부파일 - style customize set */
+	.k-upload-status {
+		display: none !important;
+	}
+</style>

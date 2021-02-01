@@ -1,0 +1,1071 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.InfraMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<!--
+	  REST-R01-IM-01-01  시스템 리스트 조회
+    -->
+	<select id="getSystemList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.systemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemList"/>
+		<if test="systemId != null">
+		AND a.SYSTEM_ID = #{systemId}
+		</if>
+		<if test="systemCd != null">
+		AND a.SYSTEM_CD LIKE '%'||#{systemCd}||'%'
+		</if>
+		<if test="systemNm != null">
+		AND a.SYSTEM_NM LIKE '%'||#{systemNm}||'%'
+		</if>
+	</select>
+
+	<select id="existSystem" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.systemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemList"/>
+		AND (a.SYSTEM_CD = #{systemCd} )
+	</select>
+
+	<select id="getRootSystemList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.systemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemList"/>
+		AND a.ROOT_YN = 'Y'
+		ORDER BY a.SYSTEM_NM
+	</select>
+
+	<select id="getChildSystemList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.systemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemList"/>
+		AND k.P_SYSTEM_ID = #{parentSystemId}
+		ORDER BY a.SYSTEM_NM
+	</select>
+
+	<!--
+	  REST-R02-IM-01-01  시스템상세조회
+	  시스템 리스트 조회를 이용하여 조회 params값으로 systemId를 주어 사용한다.
+    -->
+	<select id="getSystemDetail" parameterType="string" resultMap="pep.per.mint.database.mapper.CoreMapper.systemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemList"/>
+		AND a.SYSTEM_ID = #{systemId}
+	</select>
+
+	<!--
+		REST-R03-IM-01-01 시스템트리조회
+	-->
+	<select id="getSystemTreeWithModel" resultMap="pep.per.mint.database.mapper.CoreMapper.systemTreeWithModelResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemTreeWithModel"/>
+	</select>
+
+	<!--
+		REST-R03-IM-01-01 시스템트리조회
+	-->
+	<select id="getSystemTreeWithModelParam" resultMap="pep.per.mint.database.mapper.CoreMapper.systemTreeWithModelResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemTreeWithModel"/>
+		<if test="systemCd != null">
+		AND (b.SYSTEM_CD LIKE '%'||#{systemCd}||'%' OR c.SYSTEM_CD LIKE '%'||#{systemCd}||'%' )
+		</if>
+		<if test="systemNm != null">
+		AND (b.SYSTEM_NM LIKE '%'||#{systemNm}||'%' OR c.SYSTEM_NM LIKE '%'||#{systemNm}||'%')
+		</if>
+		ORDER BY P_SYS_NM ASC, C_SYS_NM ASC
+	</select>
+
+	<!--
+		REST-R03-IM-01-01 시스템트리조회
+	-->
+	<select id="getSystemTree" resultMap="pep.per.mint.database.mapper.CoreMapper.treeResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemTree"/>
+	</select>
+
+	<insert id="insertSystem">
+		<selectKey keyProperty="systemId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				SELECT 'SS' || LPAD((COALESCE(MAX(SUBSTR(SYSTEM_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0101
+        		</when>
+        		<otherwise>
+				SELECT 'SS' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(SYSTEM_ID,3)),'0')) + 1),8,'0') FROM TIM0101
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0101 (
+			SYSTEM_ID,
+			SYSTEM_NM,
+			SYSTEM_CD,
+			ROOT_YN,
+			GRP_YN,
+			EXTERNAL_YN,
+			ZONE_ID,
+			COUNTRY_ID,
+			AREA_INPUT,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{systemId},
+			#{systemNm, jdbcType=VARCHAR},
+			#{systemCd, jdbcType=VARCHAR},
+			#{rootYn, jdbcType=VARCHAR},
+			#{grpYn, jdbcType=VARCHAR},
+			#{externalYn, jdbcType=VARCHAR},
+			#{zoneInfo.zoneId, jdbcType=VARCHAR},
+			#{zoneInfo.countryInfo.countryId, jdbcType=VARCHAR},
+			#{areaInput, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="usedSystem" resultType="string">
+	<!--
+		select INTERFACE_ID from TAN0213 where SYSTEM_ID = #{systemId}
+	 -->
+
+	  	SELECT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID IN (
+	  		SELECT a.C_SYS_ID
+		 	FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_SYS_ID = #{systemId}
+   		)
+	</select>
+
+	<delete id="deleteSystem">
+	<!--
+		update TIM0101
+		set DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		where SYSTEM_ID = #{systemId}
+	 -->
+	 	UPDATE TIM0101
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE SYSTEM_ID IN (
+	  		SELECT a.C_SYS_ID
+		 	FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_SYS_ID = #{systemId}
+   		)
+	</delete>
+
+	<update id="updateSystem">
+		UPDATE TIM0101
+		SET  SYSTEM_NM 	= #{systemNm, jdbcType=VARCHAR}
+			,SYSTEM_CD 	= #{systemCd, jdbcType=VARCHAR}
+			,ROOT_YN   	= #{rootYn, jdbcType=VARCHAR}
+			,GRP_YN    	= #{grpYn, jdbcType=VARCHAR}
+			,EXTERNAL_YN= #{externalYn, jdbcType=VARCHAR}
+			,ZONE_ID 	= #{zoneInfo.zoneId, jdbcType=VARCHAR}
+			,COUNTRY_ID = #{zoneInfo.countryInfo.countryId, jdbcType=VARCHAR}
+			,AREA_INPUT = #{areaInput, jdbcType=VARCHAR}
+			,COMMENTS 	= #{comments, jdbcType=VARCHAR}
+		WHERE SYSTEM_ID = #{systemId}
+	</update>
+
+	<!--
+    public int deleteSystemRelativeUsers(@Param("systemId")String systemId) throws Exception;
+
+    public int insertSystemRelativeUser(@Param("systemId")String systemId, @Param("relUser")RelUser relUser) throws Exception;
+
+    public int deleteSystemServerMaps(@Param("systemId")String systemId) throws Exception;
+
+    public int insertSystemServerMap(@Param("systemId")String systemId, @Param("server")Server server) throws Exception;
+
+    public int deleteSystemPath(@Param("systemId")String systemId) throws Exception;
+	-->
+
+	<delete id="deleteSystemRelativeUsers">
+	<!--
+		delete from TIM0105 where SYSTEM_ID = #{systemId}
+	 -->
+		DELETE FROM TIM0105 WHERE SYSTEM_ID IN (
+	  		SELECT a.C_SYS_ID
+		 	FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+	  		AND a.P_SYS_ID = #{systemId}
+		)
+	</delete>
+
+	<delete id="deleteSystemRelativeUsersforUpdate">
+		DELETE FROM TIM0105 WHERE SYSTEM_ID = #{systemId}
+	</delete>
+
+	<insert id="insertSystemRelativeUser">
+		INSERT INTO TIM0105 (
+			 USER_ID
+			,SYSTEM_ID
+			,SEQ
+			,ROLE_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{relUser.user.userId}
+			,#{systemId}
+			,#{relUser.seq}
+			,#{relUser.roleType}
+			,'N'
+			,#{relUser.regDate}
+			,#{relUser.regId}
+		)
+	</insert>
+
+	<delete id="deleteSystemServerMaps">
+	<!--
+		delete from TIM0202 where SYSTEM_ID = #{systemId}
+	 -->
+		DELETE FROM TIM0202 WHERE SYSTEM_ID IN (
+	  		SELECT a.C_SYS_ID
+		 	FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_SYS_ID = #{systemId}
+		)
+	</delete>
+
+	<delete id="deleteSystemServerMapsforUpdate">
+		DELETE FROM TIM0202 WHERE SYSTEM_ID = #{systemId}
+	</delete>
+
+	<insert id="insertSystemServerMap">
+		INSERT INTO TIM0202 (
+			 SERVER_ID
+			,SYSTEM_ID
+			,SEQ
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{server.serverId}
+			,#{systemId}
+			,#{server.seq}
+			,'N'
+			,#{server.regDate}
+			,#{server.regId}
+		)
+	</insert>
+
+	<delete id="deleteSystemPath">
+	<!--
+		delete TIM0102 where P_SYS_ID = #{systemId} or C_SYS_ID = #{systemId}
+	-->
+		DELETE FROM TIM0102 WHERE P_SYS_ID IN (
+	  		SELECT a.C_SYS_ID
+		 	FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_SYS_ID = #{systemId}
+   		)
+	</delete>
+
+	<delete id="deleteSystemAsOranization">
+	<!--
+		delete from TIM0202 where SYSTEM_ID = #{systemId}
+	 -->
+		DELETE FROM TIM0403 WHERE SYSTEM_ID IN (
+			SELECT a.C_SYS_ID
+	 		FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+  			AND a.P_SYS_ID = #{systemId}
+  		)
+	</delete>
+
+	<!--
+    	REST-R03-IM-03-01 비지니스트리조회
+	-->
+	<select id="getBusinessTree" resultMap="pep.per.mint.database.mapper.CoreMapper.treeResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.businessTree"/>
+	</select>
+
+	<!--
+		REST-R04-IM-01-03 최상위 업무코드 트리 검색
+		public List<Map> getRootBusinessTree()throws Exception;
+	-->
+	<select id="getRootBusinessTree" resultMap="pep.per.mint.database.mapper.CoreMapper.treeResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.rootBusinessTree"/>
+	</select>
+
+	<!--
+		REST-R05-IM-01-03 자식 업무코드트리 검색
+		public List<Map> getChildBusinessTree(@Param("parentBusinessId")String parentBusinessId)throws Exception;
+	-->
+	<select id="getChildBusinessTree" resultMap="pep.per.mint.database.mapper.CoreMapper.treeResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.childBusinessTree"/>
+	</select>
+
+	<insert id="insertSystemPath" parameterType="SystemPath">
+		INSERT INTO TIM0102 (
+			 P_SYS_ID
+			,C_SYS_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="createSystemPathRelation" parameterType="Map">
+		INSERT INTO TIM0102 (
+			 P_SYS_ID
+			,C_SYS_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		)
+		SELECT
+			 a.P_SYS_ID
+			,b.C_SYS_ID
+			,a.DEPTH + b.DEPTH +1
+			,'N'
+		<choose>
+       		<when test="_databaseId == 'altibase'">
+       		,'${regDate}'
+			,'${regId}'
+		FROM TIM0102 a , TIM0102 b
+       		</when>
+       		<otherwise>
+       		,#{regDate}
+			,#{regId}
+		FROM TIM0102 a CROSS JOIN TIM0102 b
+       		</otherwise>
+       	</choose>
+		WHERE a.C_SYS_ID = #{pid}
+		AND b.P_SYS_ID = #{cid}
+	</insert>
+
+	<select id="existPath" parameterType="string" resultType="string">
+		SELECT P_SYS_ID FROM TIM0102 WHERE DEPTH = 0 AND P_SYS_ID = #{systemId} AND C_SYS_ID = #{systemId}
+	</select>
+
+	<insert id="insertServer">
+		<selectKey keyProperty="serverId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'SV' || LPAD((COALESCE(MAX(SUBSTR(SERVER_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0201
+        		</when>
+        		<otherwise>
+			SELECT 'SV' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(SERVER_ID,3)),'0')) + 1),8,'0') FROM TIM0201
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0201 (
+		    SERVER_ID,
+		    SERVER_NM,
+		    SERVER_CD,
+		    HOST_NM,
+		    USE_TYPE,
+		    IP,
+		    REDUNDANCY_YN,
+		    HW_INST_POSITION,
+		    OS,
+		    FIREWALL_YN,
+		    ZONE_ID,
+		    COUNTRY_ID,
+		    AREA_INPUT,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{serverId},
+			#{serverNm, jdbcType=VARCHAR},
+			#{serverCd, jdbcType=VARCHAR},
+			#{hostNm, jdbcType=VARCHAR},
+			#{useType, jdbcType=VARCHAR},
+			#{ip, jdbcType=VARCHAR},
+			#{redundancyYn, jdbcType=VARCHAR},
+			#{hwInstPosition, jdbcType=VARCHAR},
+			#{os, jdbcType=VARCHAR},
+			#{firewallYn, jdbcType=VARCHAR},
+			#{zoneInfo.zoneId, jdbcType=VARCHAR},
+			#{zoneInfo.countryInfo.countryId, jdbcType=VARCHAR},
+			#{areaInput, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getServerList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.serverResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.serverList"/>
+		<if test="serverId != null">
+		AND a.SERVER_ID = #{serverId}
+		</if>
+		<if test="serverCd != null">
+		AND a.SERVER_CD LIKE '%'||#{serverCd}||'%'
+		</if>
+		<if test="serverNm != null">
+		AND a.SERVER_NM LIKE '%'||#{serverNm}||'%'
+		</if>
+	</select>
+
+	<select id="existServer" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.serverResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.serverList"/>
+		AND a.SERVER_CD = #{serverCd}
+	</select>
+	<!--
+	  REST-R02-IM-01-01  시스템상세조회
+	  시스템 리스트 조회를 이용하여 조회 params값으로 serverd를 주어 사용한다.
+    -->
+	<select id="getServerDetail" parameterType="string" resultMap="pep.per.mint.database.mapper.CoreMapper.serverResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.serverList"/>
+		AND a.SERVER_ID = #{serverId}
+	</select>
+
+	<update id="updateServer">
+		UPDATE TIM0201
+		SET SERVER_NM 		= #{serverNm, jdbcType=VARCHAR}
+			,SERVER_CD 		= #{serverCd, jdbcType=VARCHAR}
+			,HOST_NM   		= #{hostNm, jdbcType=VARCHAR}
+			,USE_TYPE  		= #{useType, jdbcType=VARCHAR}
+			,IP		    	= #{ip, jdbcType=VARCHAR}
+			,REDUNDANCY_YN 	= #{redundancyYn, jdbcType=VARCHAR}
+			,HW_INST_POSITION = #{hwInstPosition, jdbcType=VARCHAR}
+			,OS				= #{os, jdbcType=VARCHAR}
+			,FIREWALL_YN 	= #{firewallYn, jdbcType=VARCHAR}
+			,ZONE_ID 		= #{zoneInfo.zoneId, jdbcType=VARCHAR}
+			,COUNTRY_ID 	= #{zoneInfo.countryInfo.countryId, jdbcType=VARCHAR}
+			,AREA_INPUT 	= #{areaInput, jdbcType=VARCHAR}
+			,COMMENTS 		= #{comments, jdbcType=VARCHAR}
+			,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+			,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+		WHERE SERVER_ID = #{serverId}
+	</update>
+
+	<delete id="deleteServer">
+		UPDATE TIM0201
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE SERVER_ID = #{serverId}
+	</delete>
+
+	<delete id="deleteServerAsSystem">
+		DELETE FROM TIM0202 WHERE SERVER_ID = #{serverId}
+	</delete>
+
+	<select id="getUserList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.userResultMap">
+		SELECT
+			 a.USER_ID
+			,COALESCE(a.USER_NM,' ') AS USER_NM
+			,COALESCE(a.CELL_PHONE,' ') AS CELL_PHONE
+			,COALESCE(a.PHONE,' ') AS PHONE
+			,COALESCE(a.EMAIL,' ') AS EMAIL
+			,COALESCE(a.COMPANY_NM,' ') AS COMPANY_NM
+			,COALESCE(a.DEPARTMENT_NM,' ') AS DEPARTMENT_NM
+			,COALESCE(a.POSITION_NM,' ') AS POSITION_NM
+			,COALESCE(a.ROLE_ID,' ') AS ROLE_ID
+			,COALESCE(a.DEL_YN, 'N') AS DEL_YN
+			,COALESCE(f.ROLE_NM,' ') AS ROLE_NM
+		FROM TSU0101 a
+		LEFT OUTER JOIN TSU0201 f ON a.ROLE_ID = f.ROLE_ID
+		WHERE 1=1
+		<if test="userNm != null and userNm != ''">
+		AND a.USER_NM LIKE '%'||#{userNm}||'%'
+		</if>
+		<if test="userId != null and userId != ''">
+		AND a.USER_ID LIKE '%'||#{userId}||'%'
+		</if>
+		AND a.ROLE_ID  <![CDATA[ <> ]]> 'UR00000000'
+		ORDER BY A.USER_ID
+	</select>
+
+	<select id="getUserDetail" parameterType="string" resultMap="pep.per.mint.database.mapper.CoreMapper.userResultMap">
+		SELECT
+			 a.USER_ID
+			,COALESCE(a.USER_NM,' ') AS USER_NM
+			,COALESCE(a.CELL_PHONE,' ') AS CELL_PHONE
+			,COALESCE(a.PHONE,' ') AS PHONE
+			,COALESCE(a.EMAIL,' ') AS EMAIL
+			,COALESCE(a.COMPANY_NM,' ') AS COMPANY_NM
+			,COALESCE(a.DEPARTMENT_NM,' ') AS DEPARTMENT_NM
+			,COALESCE(a.POSITION_NM,' ') AS POSITION_NM
+			,COALESCE(a.ROLE_ID,' ') AS ROLE_ID
+			,COALESCE(a.DEL_YN, 'N') AS DEL_YN
+			,COALESCE(f.ROLE_NM,' ') AS ROLE_NM
+		FROM TSU0101 a
+		LEFT OUTER JOIN TSU0201 f ON a.ROLE_ID = f.ROLE_ID
+		WHERE 1=1
+		AND a.USER_ID = #{userId}
+	</select>
+
+	<select id="getUserRoleList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.roleResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.roleList"/>
+	</select>
+
+	<insert id="insertUser">
+		INSERT INTO TSU0101 (
+		    USER_ID,
+			PASSWORD,
+			USER_NM,
+			CELL_PHONE,
+			PHONE,
+			EMAIL,
+			COMPANY_NM,
+			DEPARTMENT_NM,
+			POSITION_NM,
+			ROLE_ID,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{userId,	jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR},
+			#{userNm,	jdbcType=VARCHAR},
+			#{cellPhone,jdbcType=VARCHAR},
+			#{phone,	jdbcType=VARCHAR},
+			#{email,	jdbcType=VARCHAR},
+			#{companyNm,jdbcType=VARCHAR},
+			#{departmentNm,jdbcType=VARCHAR},
+			#{positionNm, jdbcType=VARCHAR},
+			#{role.roleId, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateUser">
+		UPDATE TSU0101
+		SET CELL_PHONE = #{cellPhone,jdbcType=VARCHAR},
+		   <if test="password != null and  password != ''">
+		   	PASSWORD   = #{password, jdbcType=VARCHAR},
+		   </if>
+			PHONE		= #{phone,	jdbcType=VARCHAR},
+			EMAIL		= #{email,	jdbcType=VARCHAR},
+			COMPANY_NM	= #{companyNm,jdbcType=VARCHAR},
+			DEPARTMENT_NM = #{departmentNm,jdbcType=VARCHAR},
+			POSITION_NM	= #{positionNm, jdbcType=VARCHAR},
+			ROLE_ID		= #{role.roleId, jdbcType=VARCHAR},
+			MOD_DATE	= #{modDate, jdbcType=VARCHAR},
+			MOD_USER	= #{modId, jdbcType=VARCHAR},
+			DEL_YN      = #{delYn, jdbcType=VARCHAR}
+		WHERE USER_ID = #{userId}
+	</update>
+
+	<delete id="deleteUser">
+		UPDATE TSU0101
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE USER_ID = #{userId}
+	</delete>
+
+	<!--
+	  REST-R01-IM-01-01  시스템 리스트 조회
+    -->
+
+	<select id="getRootOrganizationList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.organizationResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.organizationList"/>
+		AND a.ROOT_YN = 'Y'
+		ORDER BY a.ORG_NM
+	</select>
+
+	<!--
+		REST-R03-IM-01-06 기관트리조회
+	-->
+	<select id="getOrganizationTreeWithModelParam" resultMap="pep.per.mint.database.mapper.CoreMapper.organizationTreeWithModelResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.organizationTreeWithModel"/>
+		WHERE 1=1
+		<if test="organizationCd != null">
+		AND (P_ORG_CD LIKE '%'||#{organizationCd}||'%' OR P_ORG_CD LIKE '%'||#{organizationCd}||'%' )
+		</if>
+		<if test="organizationNm != null">
+		AND (P_ORG_NM LIKE '%'||#{organizationNm}||'%' OR P_ORG_NM LIKE '%'||#{organizationNm}||'%')
+		</if>
+		ORDER BY P_ORG_NM ASC, C_ORG_NM ASC
+	</select>
+
+	<!--
+		REST-R04-IM-01-06 기관-시스템트리조회
+	-->
+	<select id="getOrganizationSystemMap" resultMap="pep.per.mint.database.mapper.CoreMapper.orgSystemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.organizationSystemMap"/>
+		AND A.ORG_ID =#{organizationId}
+	</select>
+
+	<select id="getOrganizationOfSystemMap" resultMap="organizationSystemMap">
+		SELECT
+			 a.ORG_ID
+			,a.SYSTEM_ID
+			,b.SYSTEM_NM
+			,b.SYSTEM_CD
+		FROM TIM0403 a
+		INNER JOIN TIM0101 b ON b.SYSTEM_ID = a.SYSTEM_ID
+		WHERE 1 = 1
+		AND a.DEL_YN = 'N'
+		AND a.SYSTEM_ID =#{system.systemId}
+	</select>
+
+	<resultMap id="organizationSystemMap" type="java.util.Map">
+		<result property="organizationId" 	column="ORG_ID"/>
+		<result property="systemId" 	column="SYSTEM_ID"/>
+		<result property="systemNm" 	column="SYSTEM_NM"/>
+		<result property="systemCd" 	column="SYSTEM_CD"/>
+	</resultMap>
+
+	<select id="existOrganization" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.organizationResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.organizationList"/>
+		AND (a.ORG_CD = #{organizationCd})
+	</select>
+
+	<!--
+	  REST-R02-IM-01-06 기관 상세조회
+	  시스템 리스트 조회를 이용하여 조회 params값으로 systemId를 주어 사용한다.
+    -->
+	<select id="getOrganizationDetail" parameterType="string" resultMap="pep.per.mint.database.mapper.CoreMapper.organizationResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.organizationList"/>
+		AND a.ORG_ID = #{organizationId}
+	</select>
+
+	<insert id="insertOrganization">
+		<selectKey keyProperty="organizationId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'OR' || LPAD((COALESCE(MAX(SUBSTR(ORG_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0401
+        		</when>
+        		<otherwise>
+			SELECT 'OR' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(ORG_ID,3)),'0')) + 1),8,'0') FROM TIM0401
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0401 (
+			ORG_ID,
+			ORG_NM,
+			ORG_CD,
+			ROOT_YN,
+			GRP_YN,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{organizationId},
+			#{organizationNm, jdbcType=VARCHAR},
+			#{organizationCd, jdbcType=VARCHAR},
+			#{rootYn, jdbcType=VARCHAR},
+			#{grpYn, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="usedOrganization" resultType="string">
+		 SELECT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID IN
+		 (
+     		SELECT a.C_SYS_ID
+		 	FROM TIM0102 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_SYS_ID  IN
+   			(
+   				SELECT b.SYSTEM_ID
+   				FROM TIM0403 b
+   				WHERE b.DEL_YN ='N'
+   				AND b.ORG_ID IN
+   				(
+   					SELECT c.C_ORG_ID
+				 	FROM TIM0402 c
+					WHERE c.DEL_YN = 'N'
+		   			AND c.P_ORG_ID = #{organizationId}
+   				)
+   			)
+		 )
+	</select>
+
+	<delete id="deleteOrganization">
+	<!--
+		update TIM0401
+		set DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		where ORG_ID = #{organizationId}
+	 -->
+	 	UPDATE TIM0401
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE ORG_ID IN
+   		(
+   			SELECT c.C_ORG_ID
+			FROM TIM0402 c
+			WHERE c.DEL_YN = 'N'
+		   	AND c.P_ORG_ID = #{organizationId}
+   		)
+	</delete>
+
+	<update id="updateOrganization">
+		UPDATE TIM0401
+		SET ORG_NM = #{organizationNm, jdbcType=VARCHAR}
+			,ORG_CD = #{organizationCd, jdbcType=VARCHAR}
+			,ROOT_YN = #{rootYn, jdbcType=VARCHAR}
+			,GRP_YN = #{grpYn, jdbcType=VARCHAR}
+			,COMMENTS = #{comments, jdbcType=VARCHAR}
+		WHERE ORG_ID = #{organizationId}
+	</update>
+
+	<delete id="deleteOrganizationRelativeUsers">
+	<!--
+		delete from TIM0404 where ORG_ID = #{organizationId}
+	-->
+		DELETE FROM TIM0404 WHERE ORG_ID IN
+   		(
+  			SELECT c.C_ORG_ID
+		 	FROM TIM0402 c
+			where c.DEL_YN = 'N'
+	   		AND c.P_ORG_ID = #{organizationId}
+   		)
+	</delete>
+
+
+	<delete id="deleteOrganizationRelativeUsersforUpdate">
+		DELETE FROM TIM0404 WHERE ORG_ID = #{organizationId}
+	</delete>
+
+	<insert id="insertOrganizationRelativeUser">
+		INSERT INTO TIM0404 (
+			 USER_ID
+			,ORG_ID
+			,SEQ
+			,ROLE_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{relUser.user.userId}
+			,#{organizationId}
+			,#{relUser.seq}
+			,#{relUser.roleType}
+			,'N'
+			,#{relUser.regDate}
+			,#{relUser.regId}
+		)
+	</insert>
+
+
+	<delete id="deleteOrganizationSystemMaps">
+	<!--
+		delete from TIM0403 where ORG_ID = #{organizationId}
+	-->
+		DELETE FROM TIM0403 WHERE ORG_ID IN
+   		(
+  			SELECT c.C_ORG_ID
+		 	FROM TIM0402 c
+			WHERE c.DEL_YN = 'N'
+	   		AND c.P_ORG_ID = #{organizationId}
+   		)
+	</delete>
+
+	<delete id="deleteOrganizationSystemMapsforUpdate">
+		DELETE FROM TIM0403 WHERE ORG_ID = #{organizationId}
+	</delete>
+
+	<insert id="insertOrganizationSystemMap">
+		INSERT INTO TIM0403 (
+			 SYSTEM_ID
+			,ORG_ID
+			,SEQ
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{system.systemId}
+			,#{organizationId}
+			,#{system.seq}
+			,'N'
+			,#{system.regDate}
+			,#{system.regId}
+		)
+	</insert>
+
+	<delete id="deleteOrganizationPath">
+	<!--
+		delete TIM0402 where P_ORG_ID = #{organizationId} or C_ORG_ID = #{organizationId}
+	-->
+		DELETE FROM TIM0402 WHERE P_ORG_ID IN
+   		(
+   			SELECT c.C_ORG_ID
+		 	FROM TIM0402 c
+			WHERE c.DEL_YN = 'N'
+	   		AND c.P_ORG_ID = #{organizationId}
+   		)
+	</delete>
+
+	<insert id="insertOrganizationPath" parameterType="OrganizationPath">
+		INSERT INTO TIM0402 (
+			 P_ORG_ID
+			,C_ORG_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="createOrganizationPathRelation" parameterType="Map">
+		INSERT INTO TIM0402 (
+			 P_ORG_ID
+			,C_ORG_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		)
+		SELECT
+			 a.P_ORG_ID
+			,b.C_ORG_ID
+			,a.DEPTH + b.DEPTH +1
+			,'N'
+		<choose>
+			<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+		FROM TIM0402 a, TIM0402 b
+	      	</when>
+	      	<otherwise>
+			,#{regDate}
+			,#{regId}
+		FROM TIM0402 a CROSS JOIN TIM0402 b
+	      	</otherwise>
+		</choose>
+		WHERE a.C_ORG_ID = #{pid}
+		AND b.P_ORG_ID = #{cid}
+	</insert>
+
+	<select id="existOrganizationPath" parameterType="string" resultType="string">
+		SELECT P_ORG_ID FROM TIM0402 WHERE DEPTH = 0 AND P_ORG_ID = #{organizationId} AND C_ORG_ID = #{organizationId}
+	</select>
+
+	<select id="getRootBusinessList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.businessResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.businessList"/>
+		AND a.ROOT_YN = 'Y'
+		ORDER BY a.BUSINESS_NM
+	</select>
+
+	<!--
+		REST-R03-IM-01-06 기관트리조회
+	-->
+	<select id="getBusinessTreeWithModelParam" resultMap="pep.per.mint.database.mapper.CoreMapper.businessTreeWithModelResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.businessTreeWithModel"/>
+		<if test="businessCd != null">
+		AND (b.BUSINESS_CD LIKE '%'||#{businessCd}||'%' OR c.BUSINESS_CD LIKE '%'||#{businessCd}||'%' )
+		</if>
+		<if test="businessNm != null">
+		AND (b.BUSINESS_NM LIKE '%'||#{businessNm}||'%' OR c.BUSINESS_NM LIKE '%'||#{businessNm}||'%')
+		</if>
+		ORDER BY P_BIZ_NM ASC, C_BIZ_NM ASC
+	</select>
+
+	<select id="existBusiness" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.businessResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.businessList"/>
+		AND a.BUSINESS_CD = #{businessCd}
+	</select>
+
+	<!--
+	  REST-R02-IM-01-06 기관 상세조회
+	  시스템 리스트 조회를 이용하여 조회 params값으로 systemId를 주어 사용한다.
+    -->
+	<select id="getBusinessDetail" parameterType="string" resultMap="pep.per.mint.database.mapper.CoreMapper.businessResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.businessList"/>
+		AND a.BUSINESS_ID = #{businessId}
+	</select>
+
+	<insert id="insertBusiness">
+		<selectKey keyProperty="businessId" resultType="string" order="BEFORE" >
+		<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'BZ' || LPAD((COALESCE(MAX(SUBSTR(BUSINESS_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0301
+        		</when>
+        		<otherwise>
+			SELECT 'BZ' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(BUSINESS_ID,3)),'0')) + 1),8,'0') FROM TIM0301
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TIM0301 (
+		    BUSINESS_ID,
+		    BUSINESS_NM,
+		    BUSINESS_CD,
+			ROOT_YN,
+			GRP_YN,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{businessId},
+			#{businessNm, jdbcType=VARCHAR},
+			#{businessCd, jdbcType=VARCHAR},
+			#{rootYn, jdbcType=VARCHAR},
+			#{grpYn, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="usedBusiness" resultType="string">
+	<!--
+		 select INTERFACE_ID from TAN0218 where BUSINESS_ID = #{businessId}
+	-->
+		SELECT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID IN (
+     		SELECT a.C_BIZ_ID
+		 	FROM TIM0302 a
+			WHERE a.DEL_YN = 'N'
+   			AND a.P_BIZ_ID=#{businessId}
+		)
+	</select>
+
+	<delete id="deleteBusiness">
+	<!--
+		update TIM0301
+		set DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		where BUSINESS_ID = #{businessId}
+		 -->
+		UPDATE TIM0301
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE BUSINESS_ID IN (
+	    	SELECT a.C_BIZ_ID
+			FROM TIM0302 a
+			WHERE a.DEL_YN = 'N'
+	   		AND a.P_BIZ_ID=#{businessId}
+		)
+	</delete>
+
+	<update id="updateBusiness">
+		UPDATE TIM0301
+		SET BUSINESS_NM 	= #{businessNm, jdbcType=VARCHAR}
+			,BUSINESS_CD 	= #{businessCd, jdbcType=VARCHAR}
+			,ROOT_YN   		= #{rootYn, jdbcType=VARCHAR}
+			,GRP_YN    		= #{grpYn, jdbcType=VARCHAR}
+			,COMMENTS 		= #{comments, jdbcType=VARCHAR}
+		WHERE BUSINESS_ID = #{businessId}
+	</update>
+
+	<delete id="deleteBusinessRelativeUsers">
+	<!--
+		delete from TIM0304 where BUSINESS_ID = #{businessId}
+	-->
+		DELETE FROM TIM0304 WHERE BUSINESS_ID IN (
+			SELECT a.C_BIZ_ID
+	 		FROM TIM0302 a
+			WHERE a.DEL_YN = 'N'
+  			AND a.P_BIZ_ID=#{businessId}
+	   )
+	</delete>
+
+	<delete id="deleteBusinessRelativeUsersforUpdate">
+		DELETE FROM TIM0304 WHERE BUSINESS_ID = #{businessId}
+	</delete>
+
+	<insert id="insertBusinessRelativeUser">
+		INSERT INTO TIM0304 (
+			 USER_ID
+			,BUSINESS_ID
+			,SEQ
+			,ROLE_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{relUser.user.userId}
+			,#{businessId}
+			,#{relUser.seq}
+			,#{relUser.roleType}
+			,'N'
+			,#{relUser.regDate}
+			,#{relUser.regId}
+		)
+	</insert>
+
+	<delete id="deleteBusinessPath">
+	<!--
+		delete TIM0302 where P_BIZ_ID = #{businessId} or C_BIZ_ID = #{businessId}
+ 	-->
+		DELETE FROM TIM0302 WHERE P_BIZ_ID IN (
+			SELECT a.C_BIZ_ID
+	 		FROM TIM0302 a
+			WHERE a.DEL_YN = 'N'
+  			AND a.P_BIZ_ID=#{businessId}
+	   )
+	</delete>
+
+	<insert id="insertBusinessPath" parameterType="BusinessPath">
+		INSERT INTO TIM0302 (
+			 P_BIZ_ID
+			,C_BIZ_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="createBusinessPathRelation" parameterType="Map">
+		INSERT INTO TIM0302 (
+			 P_BIZ_ID
+			,C_BIZ_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		)
+		SELECT
+			 a.P_BIZ_ID
+			,b.C_BIZ_ID
+			,a.DEPTH + b.DEPTH +1
+			,'N'
+		<choose>
+			<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+		FROM TIM0302 a, TIM0302 b
+	      	</when>
+	      	<otherwise>
+	      	,#{regDate}
+			,#{regId}
+		FROM TIM0302 a CROSS JOIN TIM0302 b
+	      	</otherwise>
+		</choose>
+		 WHERE a.C_BIZ_ID = #{pid}
+		 AND b.P_BIZ_ID = #{cid}
+	</insert>
+
+	<select id="existBusinessPath" parameterType="string" resultType="string">
+		SELECT P_BIZ_ID FROM TIM0302 WHERE DEPTH = 0 AND P_BIZ_ID = #{businessId} AND C_BIZ_ID = #{businessId}
+	</select>
+
+</mapper>

@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.MessageMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getMessageSet" parameterType="string" resultMap="messageSetResult">
+		select
+			* 
+	     from TB_MSG_MSGSET
+	    where MSGSET_ID = #{id} 
+  	</select>
+  
+  
+  	<resultMap id="messageSetResult" type="MessageSet">
+  		<id property="id" column="MSGSET_ID"/>
+  		<result property="type"			column="MSGSET_TYPE"/>
+  		<result property="ccsid"		column="CCSID"/>
+  		<result property="usage"		column="MSG_USAGE"/>
+		<result property="name" 		column="MSGSET_NM"/>
+		<result property="name2" 		column="NM2"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+   	
+   	<select id="getMessageSetProperties" parameterType="string" resultMap="messageSetPropertyResult">
+		select
+			* 
+		  from TB_MSG_MSGSET_PROPERTY
+		where MSGSET_ID = #{id}
+	</select>
+	
+	<resultMap type="map" id="messageSetPropertyResult">
+		<result property="key" 			column="KEY"/>
+		<result property="value" 		column="VALUE"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+	
+   	
+   	<select id="selectMessageSetDetail" parameterType="string" resultMap="messageSetDetailResult">
+   		select 
+   			* 
+   		  from TB_MSG_MSGSET_DETAIL 
+   		 where MSGSET_ID = #{id} order by seq
+   	</select>
+   	
+   	<resultMap id="messageSetDetailResult" type="map" >
+   		<id property="id" 					column="FIELD_ID"/>
+		<result property="isFieldSet" 		column="FIELDSET_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="seq" 				column="SEQ"/>
+		<result property="fieldSetId" 		column="FIELDSET_ID"/>
+		<result property="required"			column="REQUIRED" 		typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="lengthFieldName"	column="REF_LEN_FIELD_NM"/>
+		<result property="repeatFieldName"	column="REF_REPEAT_FIELD_NM"/>
+		<result property="repeatCount"		column="REPEAT_COUNT" javaType="Integer" jdbcType="NUMERIC"/>
+		<result property="occursType"		column="OPT_OCCURS" javaType="Integer" jdbcType="VARCHAR"/>
+   	</resultMap>
+   	  
+   	<select id="getFixedLengthFieldDefinition" parameterType="string" resultMap="fixedLengthFieldDefinitionResult">
+   		select 
+   			  A.FIELD_ID
+   			 ,B.FIELD_NM
+   			 ,B.FIELD_NM2
+   			 ,A.LENGTH
+   			 ,B.TYPE
+   			 ,B.JUSTIFY
+   			 ,B.DEFAULT_VALUE
+   			 ,B.PADDING_CHAR
+   			 ,A.INC_LEN_FIELD
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_MSG_FIELD_FIXED A, TB_MSG_FIELD B
+   		 where A.FIELD_ID = #{id}
+   		   and A.FIELD_ID = B.FIELD_ID 
+   	</select>
+ 
+   	<resultMap id="fixedLengthFieldDefinitionResult" type="FixedLengthFieldDefinition">
+   		<id property="id" 								column="FIELD_ID"/>
+		<result property="name"							column="FIELD_NM"/>
+		<result property="name2"						column="FIELD_NM2"/>
+		<result property="length"						column="LENGTH"/>
+		<result property="type"							column="TYPE"/>
+		<result property="justify"						column="JUSTIFY"/>
+		<result property="defaultValue"					column="DEFAULT_VALUE"			typeHandler="pep.per.mint.database.mybatis.handler.ObjectTypeHandler" />
+		<result property="paddingValue"					column="PADDING_CHAR"/>
+		<result property="includeLengthFieldSize"		column="INC_LEN_FIELD" 			typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+   	</resultMap>
+   	
+   	
+	<select id="getXMLFieldDefinition" parameterType="string" resultMap="xmlFieldDefinitionResult">
+   		select 
+   			  A.FIELD_ID
+   			 ,B.FIELD_NM
+   			 ,B.FIELD_NM2
+   			 ,B.TYPE
+   			 ,B.JUSTIFY
+   			 ,B.DEFAULT_VALUE
+   			 ,B.PADDING_CHAR
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_MSG_FIELD_XML A, TB_MSG_FIELD B
+   		 where A.FIELD_ID = #{id}
+   		   and A.FIELD_ID = B.FIELD_ID 
+   	</select>
+ 
+   	<resultMap id="xmlFieldDefinitionResult" type="XMLFieldDefinition">
+   		<id property="id" 								column="FIELD_ID"/>
+		<result property="name"							column="FIELD_NM"/>
+		<result property="name2"						column="FIELD_NM2"/>
+		<result property="type"							column="TYPE"/>
+		<result property="justify"						column="JUSTIFY"/>
+		<result property="defaultValue"					column="DEFAULT_VALUE" typeHandler="pep.per.mint.database.mybatis.handler.ObjectTypeHandler" />
+		<result property="paddingValue"					column="PADDING_CHAR"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+   	</resultMap>
+   	   	
+   	
+   	
+   	<select id="getJsonFieldDefinition" parameterType="string" resultMap="jsonFieldDefinitionResult">
+   		select 
+   			  A.FIELD_ID
+   			 ,B.FIELD_NM
+   			 ,B.FIELD_NM2
+   			 ,B.TYPE
+   			 ,B.JUSTIFY
+   			 ,B.DEFAULT_VALUE
+   			 ,B.PADDING_CHAR
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_MSG_FIELD_JSON A, TB_MSG_FIELD B
+   		 where A.FIELD_ID = #{id}
+   		   and A.FIELD_ID = B.FIELD_ID 
+   	</select>
+ 
+   	<resultMap id="jsonFieldDefinitionResult" type="JsonFieldDefinition">
+   		<id property="id" 								column="FIELD_ID"/>
+		<result property="name"							column="FIELD_NM"/>
+		<result property="name2"						column="FIELD_NM2"/>
+		<result property="type"							column="TYPE"/>
+		<result property="justify"						column="JUSTIFY"/>
+		<result property="defaultValue"					column="DEFAULT_VALUE" typeHandler="pep.per.mint.database.mybatis.handler.ObjectTypeHandler" />
+		<result property="paddingValue"					column="PADDING_CHAR"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+   	</resultMap>
+   	
+   	
+   	<select id="getDelimiterFieldDefinition" parameterType="string" resultMap="delimiterFieldDefinitionResult">
+   		select 
+   			  A.FIELD_ID
+   			 ,B.FIELD_NM
+   			 ,B.FIELD_NM2
+   			 ,B.TYPE
+   			 ,B.JUSTIFY
+   			 ,B.DEFAULT_VALUE
+   			 ,B.PADDING_CHAR
+   			 ,B.REG_DATE
+   			 ,B.REG_ID
+   			 ,B.MOD_DATE
+   			 ,B.MOD_ID
+   		  from TB_MSG_FIELD_DELIM A, TB_MSG_FIELD B
+   		 where A.FIELD_ID = #{id}
+   		   and A.FIELD_ID = B.FIELD_ID 
+   	</select>
+ 
+   	<resultMap id="delimiterFieldDefinitionResult" type="DelimiterFieldDefinition">
+   		<id property="id" 								column="FIELD_ID"/>
+		<result property="name"							column="FIELD_NM"/>
+		<result property="name2"						column="FIELD_NM2"/>
+		<result property="type"							column="TYPE"/>
+		<result property="justify"						column="JUSTIFY"/>
+		<result property="defaultValue"					column="DEFAULT_VALUE" typeHandler="pep.per.mint.database.mybatis.handler.ObjectTypeHandler" />
+		<result property="paddingValue"					column="PADDING_CHAR"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+   	</resultMap>
+   	   	
+   	   	
+   	   	
+   	<select id="selectFieldSetDetail" parameterType="string" resultMap="fieldSetDetailResult">
+   		select 
+   			* 
+   		  from TB_MSG_FIELDSET_DETAIL 
+   		 where FIELDSET_ID = #{id} order by seq
+   	</select>
+   	
+   	<resultMap id="fieldSetDetailResult" type="map" >
+   		<id property="id" 					column="FIELD_ID"/>
+		<result property="isFieldSet" 		column="FIELDSET_YN"	typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="seq" 				column="SEQ"/>
+		<result property="required"			column="REQUIRED" 		typeHandler="pep.per.mint.database.mybatis.handler.StringYnTypeHandler"/>
+		<result property="lengthFieldName"	column="REF_LEN_FIELD_NM"/>
+		<result property="repeatFieldName"	column="REF_REPEAT_FIELD_NM"/>
+		<result property="repeatCount"		column="REPEAT_COUNT" javaType="Integer" jdbcType="NUMERIC"/>
+		<result property="occursType"		column="OPT_OCCURS" javaType="Integer" jdbcType="VARCHAR"/>
+   	</resultMap>
+   	
+   	
+   	<select id="getFieldSetDefinition" parameterType="string" resultMap="fieldSetDefinitionResult">
+   		select 
+   			 *
+   		  from TB_MSG_FIELDSET
+   		 where FIELDSET_ID = #{id} 
+   	</select>
+ 
+   	<resultMap id="fieldSetDefinitionResult" type="FieldSetDefinition">
+   		<id property="id" 								column="FIELDSET_ID"/>
+		<result property="name"							column="FIELDSET_NM"/>
+		<result property="regDate" 						column="REG_DATE"/>
+		<result property="regId" 						column="REG_ID"/>
+		<result property="modDate" 						column="MOD_DATE"/>
+		<result property="modId" 						column="MOD_ID"/>
+   	</resultMap>
+
+
+	<select id="getSystemField" parameterType="string" resultMap="systemFieldResult">
+   		select 
+   			 *
+   		  from TB_MSG_SYSTEM_FIELD
+   		 where MSGSET_ID = #{id} 
+   	</select>
+  
+   	<resultMap id="systemFieldResult" type="SystemField">
+   		<constructor>
+   			<idArg column="FIELD_PATH" javaType="String"/>
+   		</constructor>
+		<id property="messageSetId"					column="MSGSET_ID"/>
+		<id property="fieldPathString"				column="FIELD_PATH"/>
+		<id property="usage"						column="FIELD_USAGE"/>
+		<result property="seq"						column="SEQ"/>
+		<result property="name"						column="FIELD_NM"/>
+		<result property="regDate" 					column="REG_DATE"/>
+		<result property="regId" 					column="REG_ID"/>
+		<result property="modDate" 					column="MOD_DATE"/>
+		<result property="modId" 					column="MOD_ID"/>
+   	</resultMap>
+   	
+   	<!-- start of mapping function -->
+   	<select id="getMessageMap" parameterType="string" resultMap="messageMapResult">
+   		select 
+   			 * 
+   		  from TB_MAP_MSGMAP
+   		 where MAP_ID = #{id}
+   	</select>
+   	
+   	<resultMap id="messageMapResult" type="MsgMap">
+		<id property="id"					column="MAP_ID"/>
+		<result property="inputMsgSetId"	column="SRC_MSGSET_ID"/>
+		<result property="outputMsgSetId"	column="TAG_MSGSET_ID"/>
+		<result property="name" 			column="MAP_NM"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_ID"/>
+		<result property="modDate" 			column="MOD_DATE"/>
+		<result property="modId" 			column="MOD_ID"/>
+   	</resultMap>
+   	
+   	
+   	<select id="selectMapControlList" parameterType="string" resultMap="mapControlListResult">
+   		select 
+   			  A.CTRL_ID
+   			 ,B.TYPE
+   		  from TB_MAP_CTRL_LIST A, TB_MAP_CTRL B 
+   		 where A.MAP_ID = #{id}
+   		   and A.CTRL_ID = B.CTRL_ID
+   		 order by A.SEQ
+   	</select>
+   	
+   	<resultMap id="mapControlListResult" type="map">
+		<id property="id"			column="CTRL_ID"/>
+		<result property="type"		column="TYPE" javaType="Integer" jdbcType="VARCHAR"/>
+   	</resultMap>
+   	
+   	<select id="selectJoinConditionList" parameterType="string" resultMap="joinConditionListResult">
+   		select 
+   			  a.TYPE
+   			 ,b.PATH_ID
+   			 ,b.PARENT
+   			 ,b.CURRENT
+   		  from TB_MAP_JOIN_CDT a, TB_MAP_PATH b 
+   		 where a.CTRL_ID = #{controlId}
+   		   and a.PATH_ID = b.PATH_ID
+   		 order by a.SEQ
+   	</select>
+   	
+   	<resultMap id="joinConditionListResult" type="map">
+		<result property="type"		column="TYPE" javaType="Integer" jdbcType="VARCHAR"/>
+		<result property="pathId" 	column="PATH_ID"/>
+		<result property="parent" 	column="PARENT"/>
+		<result property="current" 	column="CURRENT"/>
+   	</resultMap>
+   	
+   	<select id="selectJoinIndexList" resultType="int">
+   		select
+   			a.IDX
+   		 from TB_MAP_JOIN_CDT_IDX a
+   		where a.CTRL_ID = #{controlId}
+   		  and a.PATH_ID = #{pathId}
+   		order by a.IDX
+   	</select>
+   	
+   	
+   	
+   	<!--  
+   	public List<MapPath> selectMapPathList(
+			@Param("controlId") Object controlId, 
+			@Param("type") String type);
+   	-->
+   	<select id="selectMapPathList" parameterType="string" resultMap="selectMapPathListResult">
+   		select 
+   			  B.PARENT
+   			 ,B.CURRENT
+   		  from TB_MAP_PATH_LIST A, TB_MAP_PATH B 
+   		 where A.CTRL_ID = #{controlId}
+   		   and A.TYPE    = #{type}
+   		   and A.PATH_ID = B.PATH_ID
+   		 order by A.SEQ
+   	</select>
+   	
+   	<resultMap id="selectMapPathListResult" type="MapPath">
+   		<constructor>
+   			<idArg column="PARENT" javaType="String"/>
+   			<idArg column="CURRENT" javaType="String"/>
+   		</constructor>
+   	</resultMap>
+   	
+   	<select id="selectChildMapControlList" parameterType="string" resultMap="mapControlListResult">
+ 		select 
+   			  A.CTRL_ID
+   			 ,A.TYPE 
+   		  from TB_MAP_CTRL A 
+   		 where A.PARENT_ID = #{parentCotrolId}
+   		 order by A.SEQ
+   	</select>
+   	
+   	<select id="selectMapFunction" parameterType="string" resultMap="mapFunctionDefinitionResult">
+		select
+	            b.FUNCTION_ID 
+	           ,b.FUNCTION_NM 
+	           ,b.TYPE
+	           ,b.REF 
+	           ,b.CONTENTS
+	           ,a.SEQ
+	           ,b.REG_ID 
+	           ,b.REG_DATE 
+	           ,b.MOD_ID 
+	           ,b.MOD_DATE   
+		   from TB_MAP_FUNCTION_LIST a, TB_MAP_FUNCTION b
+		  where a.CTRL_ID		= #{id}
+		    and a.FUNCTION_ID   = b.FUNCTION_ID 
+		order by a.SEQ   		 
+   	</select>
+   	
+   	<resultMap id="mapFunctionDefinitionResult" type="MapFunctionDefinition" >
+   		<id property="id" 					column="FUNCTION_ID"/>
+   		<result property="name"				column="FUNCTION_NM"/>
+		<result property="type"				column="TYPE"/>
+		<result property="ref"				column="REF"/>
+		<result property="contents" 		column="CONTENTS"/>
+		<result property="seq" 				column="SEQ"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_ID"/>
+		<result property="modDate" 			column="MOD_DATE"/>
+		<result property="modId" 			column="MOD_ID"/>
+   	</resultMap>
+   	
+   	
+   	<select id="selectMapFunctionArgs" parameterType="string" resultMap="mapFunctionArgsResult">
+		select
+			* 
+		   from TB_MAP_FUNCTION_ARGS a
+		  where a.FUNCTION_ID   = #{functionId}
+	   order by a.KEY_SEQ   	
+	</select>
+	
+	<resultMap type="map" id="mapFunctionArgsResult">
+		<result property="key" 			column="KEY"/>
+		<result property="value" 		column="VALUE" typeHandler="pep.per.mint.database.mybatis.handler.ObjectTypeHandler"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+	
+	 
+	 
+   	<insert id="insertMessageSet" parameterType="MessageSet">
+   		insert into TB_MSG_MSGSET (
+			 MSGSET_ID
+			,MSGSET_NM
+			,MSGSET_TYPE
+			,MSG_USAGE
+			,CCSID
+			,NM2
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE   		
+   		) values (
+   			 #{id}
+   			,#{name}
+   			,#{type}
+   			,#{usage}
+   			,#{ccsid}
+   			,#{name2,jdbcType=VARCHAR}
+   			,#{regId}
+   			,#{regDate}
+   			,#{modId}
+   			,#{modDate}
+   		)
+   	</insert>
+		
+	<insert id="insertMessageSetDetail" parameterType="MessageSetDetail">
+   		insert into TB_MSG_MSGSET_DETAIL (
+			 MSGSET_ID
+			,FIELD_ID
+			,FIELDSET_YN
+			,SEQ
+			,REQUIRED
+			,REF_LEN_FIELD_NM
+			,REF_REPEAT_FIELD_NM
+			,REPEAT_COUNT
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE   		
+   		) values (
+   			 #{messageSetId}
+   			,#{fieldId}
+   			,#{isFieldSet,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+   			,#{seq}
+   			,#{required,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+   			,#{lengthFieldName,jdbcType=VARCHAR}
+   			,#{repeatFieldName,jdbcType=VARCHAR}
+   			,#{repeatCount,jdbcType=NUMERIC}
+   			,#{regId}
+   			,#{regDate}
+   			,#{modId}
+   			,#{modDate}
+   		)
+   	</insert>
+	
+   	<insert id="insertFieldSetDefinition" parameterType="FieldSetDefinition">
+   		insert into TB_MSG_FIELDSET (
+			 FIELDSET_ID
+			,FIELDSET_NM
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE   		
+   		) values (
+   			 #{id}
+   			,#{name}
+   			,#{regId}
+   			,#{regDate}
+   			,#{modId}
+   			,#{modDate}
+   		)
+   	</insert>
+   	
+   	<insert id="insertFieldSetDetail" parameterType="FieldSetDetail">
+   		insert into TB_MSG_FIELDSET_DETAIL (
+			 FIELDSET_ID
+			,FIELD_ID
+			,SEQ
+			,REQUIRED
+			,FIELDSET_YN
+			,REF_LEN_FIELD_NM
+			,REF_REPEAT_FIELD_NM
+			,REPEAT_COUNT 	
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE	
+   		) values (
+   			 #{fieldSetId}
+   			,#{fieldId}
+   			,#{seq}
+   			,#{required,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+   			,#{isFieldSet,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+   			,#{lengthFieldName,jdbcType=VARCHAR}
+   			,#{repeatFieldName,jdbcType=VARCHAR}
+   			,#{repeatCount,jdbcType=NUMERIC}
+   			,#{regId}
+   			,#{regDate}
+   			,#{modId}
+   			,#{modDate}
+   		)
+   	</insert>
+   	
+   	<insert id="insertFieldDefinition" parameterType="FieldDefinition">
+   		insert into TB_MSG_FIELD_FIXED (
+			 FIELD_ID
+			,FIELD_NM
+			,FIELD_NM2
+			,TYPE
+			,JUSTIFY
+			,DEFAULT_VALUE
+			,PADDING_CHAR
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE  		
+   		) values (
+   			 #{id}
+   			,#{name}
+   			,#{name2}
+   			,#{type}
+   			,#{justify}
+   			,#{defaultValue,jdbcType=VARCHAR}
+   			,#{paddingValue,jdbcType=VARCHAR}
+   			,#{regId}
+   			,#{regDate}
+   			,#{modId}
+   			,#{modDate}
+   		)
+   	</insert>
+   	
+   	<insert id="insertFixedLengthFieldDefinition" parameterType="FixedLengthFieldDefinition">
+   		insert into TB_MSG_FIELD_FIXED (
+			 FIELD_ID
+			,LENGTH
+			,INC_LEN_FIELD
+   		) values (
+   			 #{id}
+   			,#{length}
+   			,#{includeLengthFieldSize,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+   		)
+   	</insert>
+   	
+   	<insert id="insertSystemField" parameterType="SystemField">
+   		insert into TB_MSG_SYSTEM_FIELD (
+			 MSGSET_ID
+			,FIELD_PATH
+			,FIELD_USAGE
+			,SEQ
+			,FIELD_NM
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE  		
+   		) values (
+   			 #{messageSetId}
+   			,#{fieldPathString}
+   			,#{usage}
+   			,#{seq}
+   			,#{name}
+   			,#{regId}
+   			,#{regDate}
+   			,#{modId}
+   			,#{modDate}
+   		)
+   	</insert>
+   	
+   	<!-- update -->
+   	<update id="updateMessageSet" parameterType="MessageSet">
+   		update TB_MSG_MSGSET 
+   		   set
+			 MSGSET_NM   = #{name}   
+			,MSGSET_TYPE = #{type}  
+			,MSG_USAGE   = #{usage}   
+			,CCSID       = #{ccsid}  
+			,NM2         = #{name2,jdbcType=VARCHAR}
+			,REG_ID      = #{regId}
+			,REG_DATE    = #{regDate}  
+			,MOD_ID      = #{modId}
+			,MOD_DATE    = #{modDate}  		
+		where MSGSET_ID  = #{id}     
+   	</update>
+   	
+	<update id="updateMessageSetDetail" parameterType="MessageSetDetail">
+   		update TB_MSG_MSGSET_DETAIL
+   		   set
+			 FIELDSET_YN 		 = #{isFieldSet,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,SEQ         	     = #{seq}
+			,REQUIRED    		 = #{required,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,REF_LEN_FIELD_NM    = #{lengthFieldName,jdbcType=VARCHAR}
+			,REF_REPEAT_FIELD_NM = #{repeatFieldName,jdbcType=VARCHAR}
+			,REPEAT_COUNT        = #{repeatCount,jdbcType=NUMERIC}
+			,REG_ID      		 = #{regId}
+			,REG_DATE    		 = #{regDate}  
+			,MOD_ID      		 = #{modId}
+			,MOD_DATE    		 = #{modDate}
+		where MSGSET_ID	 		 = #{messageSetId}
+		  and FIELD_ID           = #{fieldId}
+   	</update>
+	
+   	<update id="updateFieldSetDefinition" parameterType="FieldSetDefinition">
+   		update TB_MSG_FIELDSET
+   		   set
+			 FIELDSET_NM         = #{name}
+			,REG_ID              = #{regId}
+			,REG_DATE            = #{regDate}  
+			,MOD_ID              = #{modId}
+			,MOD_DATE            = #{modDate}
+		where FIELDSET_ID		 = #{id}
+   	</update>
+   	
+   	<update id="updateFieldSetDetail" parameterType="FieldSetDetail">
+   		update TB_MSG_FIELDSET_DETAIL 
+   		   set
+			 SEQ          		 = #{seq}
+			,REQUIRED    		 = #{required,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+			,FIELDSET_YN 		 = #{isFieldSet,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler} 		
+			,REF_LEN_FIELD_NM    = #{lengthFieldName,jdbcType=VARCHAR}
+			,REF_REPEAT_FIELD_NM = #{repeatFieldName,jdbcType=VARCHAR}
+			,REPEAT_COUNT        = #{repeatCount,jdbcType=NUMERIC}
+			,REG_ID      		 = #{regId}
+			,REG_DATE    		 = #{regDate}  
+			,MOD_ID      		 = #{modId}
+			,MOD_DATE    		 = #{modDate}			
+		where FIELDSET_ID = #{fieldSetId}
+		  and FIELD_ID    = #{fieldId}
+   	</update>
+   	
+   	<update id="updateFieldDefinition" parameterType="FieldDefinition">
+   		update TB_MSG_FIELD
+   		   set
+			 FIELD_NM             = #{name}
+			,FIELD_NM2            = #{name2}
+			,TYPE                 = #{type}
+			,JUSTIFY              = #{justify}
+			,DEFAULT_VALUE        = #{defaultValue,jdbcType=VARCHAR}
+			,PADDING_CHAR         = #{paddingValue,jdbcType=VARCHAR}
+			,REG_ID               = #{regId}
+			,REG_DATE             = #{regDate}
+			,MOD_ID               = #{modId}
+			,MOD_DATE  		      = #{modDate}
+		where FIELD_ID            = #{id} 
+   	</update>
+   	
+   	<update id="updateFixedLengthFieldDefinition" parameterType="FixedLengthFieldDefinition">
+   		update TB_MSG_FIELD_FIXED
+   		   set
+			,LENGTH               = #{length}
+			,INC_LEN_FIELD        = #{includeLengthFieldSize,javaType=Boolean,jdbcType=VARCHAR,typeHandler=pep.per.mint.database.mybatis.handler.StringYnTypeHandler}
+		where FIELD_ID            = #{id} 
+   	</update>
+   	
+   	<update id="updateSystemField" parameterType="SystemField">
+   		update TB_MSG_SYSTEM_FIELD
+   		   set
+			 SEQ         = #{seq}
+			,FIELD_NM    = #{name}
+			,REG_ID      = #{regId}
+			,REG_DATE    = #{regDate}
+			,MOD_ID      = #{modId}
+			,MOD_DATE  	 = #{modDate}
+		where MSGSET_ID   = #{messageSetId}
+		  and FIELD_PATH  = #{fieldPathString}
+		  and FIELD_USAGE = #{usage}
+   	</update>
+</mapper>

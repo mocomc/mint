@@ -1,0 +1,166 @@
+﻿<div class="modal inmodal-original" id="SU-02-02-003" tabindex="-1" role="dialog"  aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content-original animated fadeIn">
+            <div class="modal-header-original">
+                <button type="button" class="close" data-dismiss="modal">
+	                <span aria-hidden="true">&times;</span>
+	                <span class="sr-only"><lb class="lb-298"></lb></span>
+                </button>
+                <i class="fa fa-exclamation-circle modal-icon-original"></i>
+                <h3 id="Title" class="modal-title-original"><lb class="lb-24"></lb></h3>
+            </div>
+            <div class="full-height-scroll">
+	            <div class="modal-body-original" >
+	            	<div id="popup-question">
+						<p>
+							<h4><strong><lb class="lb-540"></lb> : </strong><category class="text-success"></category><question></<question>></h4>
+						</p>
+					</div>
+					<div id="popup-answer" >
+						<br>
+						<p>
+						</p>
+					</div>
+	            </div>
+
+	            <div id="attach-file-panel" class="panel panel-default" style="margin: 10px 10px 10px 10px;">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<lb class="lb-219"></lb>
+						</h3>
+					</div>
+
+					<div class="panel-body">
+						<div id="attach-file-list" class="list-group">
+						</div>
+					</div>
+				</div>
+            </div>
+            <div class="modal-footer-original">
+            	<div id="popup-crudx-include"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "SU-02-02-003";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			attachFileList : [],
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.sub.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					// crudx
+					mint.crudx(screenName, '#popup-crudx-include', function(responseText) {}, null);
+
+					// 첨부파일 초기화
+					if ($.main.faqDetailData) {
+						if (0 < $.main.faqDetailData.faqAttachFile.length) {
+							$.sub.fn_setAttachFile($.main.faqDetailData.faqAttachFile);
+						}
+						else {
+							$("#attach-file-panel").hide();
+						}
+					}
+					else {
+						$("#attach-file-panel").hide();
+					}
+
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			}, //end fn_initCallback()
+
+			fn_setAttachFile : function(faqAttachFile) {
+				try {
+					if (0 < faqAttachFile.length) {
+						for (var i=0; i<faqAttachFile.length; i++) {
+							var fileObject = new Object();
+
+							fileObject.objectType = "FaqAttachFile";
+							fileObject.ownerId = "";
+							fileObject.fileId = faqAttachFile[i].fileId;
+							fileObject.fileNm = faqAttachFile[i].fileNm;
+							fileObject.filePath = faqAttachFile[i].filePath;
+							fileObject.flag = "";
+
+							$.sub.attachFileList.push(fileObject);
+
+
+							$("#attach-file-list").append('<a href="#" class="list-group-item faq-attachfile-list"><i class="fa fa-paperclip"></i> ' + fileObject.fileNm + '</a>');
+
+						}
+
+				 		$('.faq-attachfile-list').each(function(index) {
+							var filePath = $.sub.attachFileList[index].filePath;
+							var fileName = $.sub.attachFileList[index].fileNm;
+				 			$(this).attr("onClick", "mint.fileDownLoad('" + encodeURI(filePath) + "','" + encodeURI(fileName) + "');");
+				 			$(this).css("cursor", "pointer");
+				 		});
+					}
+
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setAttachFile"});
+				}
+
+			}, // end fn_setAttachFile
+
+			//-----------------------------------------------------------------------
+			// Description :: 공지사항 삭제 콜백
+			//-----------------------------------------------------------------------
+			fn_deleteFAQResult : function(jsonData) {
+				try {
+					mint.common.alert('CI00103', null);
+					$('#SU-02-02-003').modal('hide');
+					$.main.fn_searchFAQ();
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_deleteFAQResult"});
+				}
+			} // end fn_deleteNoticeResult
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});
+</script>

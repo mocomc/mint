@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.B2BiMapper">
+	<!--
+  	<cache/>
+  	-->
+	
+	<!--
+		B2Bi 기준정보 조회 SQL 
+	 -->
+	 
+	<resultMap id="B2BiInterfaceMetaDataListMap" type="java.util.LinkedHashMap">
+		<result property="integrationId"	column="INTEGRATION_ID"/>
+		<result property="interfaceId"		column="INTERFACE_ID"/>
+		<result property="interfaceNm"		column="INTERFACE_NM"/>
+		<result property="asInterfaceId"	column="AS_INTERFACE_ID"/>
+		<result property="companyNm"		column="COMPANY_NM"/>
+		<result property="docNm"			column="DOC_NM"/>
+		<result property="bizNm"			column="BIZ_NM"/>
+		<result property="direction"		column="DIRECTION"/>
+		<result property="protocol"			column="PROTOCOL"/>
+		<result property="delYn"			column="DEL_YN"/>
+		<result property="isMapping"		column="IS_MAPPING"/>
+	</resultMap>	 
+	 
+	<select id="getB2BiInterfaceMetaDataList" resultMap="B2BiInterfaceMetaDataListMap">
+		SELECT
+		    A.INTEGRATION_ID
+		  , A.INTERFACE_ID
+		  , A.INTERFACE_NM
+		  , C.AS_INTERFACE_ID
+		  , NVL(B.COMPANY_NM, '') AS COMPANY_NM
+		  , NVL(B.DOC_NM, '') AS DOC_NM
+		  , NVL(B.BIZ_NM, '') AS BIZ_NM
+		  , NVL(B.DIRECTION, '') AS DIRECTION
+		  , NVL(B.PROTOCOL, '') AS PROTOCOL
+		  , NVL(B.DEL_YN, '') AS DEL_YN
+		  , CASE WHEN B.INTERFACE_ID IS NULL THEN 'N' ELSE 'Y' END AS IS_MAPPING
+		FROM 
+		  TAN0201 A
+		  INNER JOIN
+		  (
+		    SELECT
+		        INTERFACE_ID
+		      , COUNT(REQUIREMENT_ID) AS REQUIREMENT_CNT
+		      , SUM(DEL_Y_CNT) AS DEL_Y_CNT
+		      , SUM(DEL_N_CNT) AS DEL_N_CNT
+		    FROM
+		      (
+		        SELECT 
+		            INTERFACE_ID
+		          , REQUIREMENT_ID
+		          , CASE WHEN DEL_YN = 'Y' THEN 1 ELSE 0 END AS DEL_Y_CNT
+		          , CASE WHEN DEL_YN = 'N' THEN 1 ELSE 0 END AS DEL_N_CNT
+		        FROM 
+		          TAN0101 A
+		      )
+		    GROUP BY INTERFACE_ID
+		    HAVING COUNT(REQUIREMENT_ID) != SUM(DEL_Y_CNT)  
+		  ) A2 ON
+		  	A.INTERFACE_ID = A2.INTERFACE_ID
+		  LEFT OUTER JOIN TAN0228 B ON
+		    A.INTERFACE_ID = B.INTERFACE_ID
+		  LEFT OUTER JOIN 
+		  (
+		  	SELECT * 
+		  	FROM TAN0210
+		  	WHERE DEL_YN ='N'
+		  ) C ON
+		  	A.INTERFACE_ID = C.INTERFACE_ID
+		  	--AND A.CHANNEL_ID = C.CHANNEL_ID
+		WHERE 
+			A.CHANNEL_ID = 'CN00000005'
+	</select>
+	
+	<!--
+		B2Bi 기간별 조회 SQL 
+	 -->	
+	<resultMap id="B2BiPeriodSearchMap" type="java.util.LinkedHashMap">
+		<result property="dates"			column="DATES"/>
+		<result property="integrationId"	column="INTEGRATION_ID"/>
+		<result property="interfaceId"		column="INTERFACE_ID"/>
+		<result property="interfaceNm"		column="INTERFACE_NM"/>
+		<result property="asInterfaceId"	column="AS_INTERFACE_ID"/>
+		<result property="companyNm"		column="COMPANY_NM"/>
+		<result property="docNm"			column="DOC_NM"/>
+		<result property="bizNm"			column="BIZ_NM"/>
+		<result property="direction"		column="DIRECTION"/>
+		<result property="protocol"			column="PROTOCOL"/>
+		<result property="delYn"			column="DEL_YN"/>
+		<result property="isMapping"		column="IS_MAPPING"/>
+		<result property="cnt"				column="CNT"/>
+	</resultMap>	
+	
+	
+	<select id="getB2BiPeriodSearch" resultMap="B2BiPeriodSearchMap">
+		SELECT
+		    C.ST_YEAR||C.ST_MONTH||C.ST_DAY AS DATES
+		  , A.INTEGRATION_ID
+		  , A.INTERFACE_ID
+		  , A.INTERFACE_NM
+		  , NVL(B.COMPANY_NM, '') AS COMPANY_NM
+		  , NVL(B.DOC_NM, '') AS DOC_NM
+		  , NVL(B.BIZ_NM, '') AS BIZ_NM
+		  , NVL(B.DIRECTION, '') AS DIRECTION
+		  , NVL(B.PROTOCOL, '') AS PROTOCOL
+		  , NVL(B.DEL_YN, '') AS DEL_YN
+		  , CASE WHEN B.INTERFACE_ID IS NULL THEN 'N' ELSE 'Y' END AS IS_MAPPING
+		  , C.CNT
+		FROM 
+		  TAN0201 A
+		  LEFT OUTER JOIN TAN0228 B ON
+		    A.INTERFACE_ID = B.INTERFACE_ID
+		  INNER JOIN 
+		  (
+		    SELECT
+		        ST_YEAR
+		      , ST_MONTH
+		      , ST_DAY
+		      , INTF_ID
+		      , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		    FROM SI_STAT_INTF_HOUR
+		    WHERE
+		      1 = 1
+		      AND ST_YEAR||ST_MONTH||ST_DAY BETWEEN #{fromDate} AND #{toDate}
+		    GROUP BY ST_YEAR, ST_MONTH, ST_DAY, INTF_ID
+		    ORDER BY ST_YEAR DESC, ST_MONTH DESC, ST_DAY DESC, INTF_ID  
+		  ) C ON
+		    A.INTEGRATION_ID = C.INTF_ID
+		WHERE
+		  1 = 1
+		  AND B.DEL_YN = 'N'			
+		  AND A.CHANNEL_ID = 'CN00000005'
+		  <if test="companyNm != null and companyNm != '' ">
+		  AND COMPANY_NM LIKE '%'||#{companyNm}||'%'
+		  </if>			
+		  <if test="docNm != null and docNm != '' ">
+		  AND DOC_NM LIKE '%'||#{docNm}||'%'
+		  </if>			
+		  <if test="bizNm != null and bizNm != '' ">
+		  AND BIZ_NM LIKE '%'||#{bizNm}||'%'
+		  </if>
+		  <if test="direction != null and direction != '' ">
+		  AND DIRECTION LIKE '%'||#{direction}||'%'
+		  </if>			
+		  <if test="protocol != null and protocol != '' ">
+		  AND PROTOCOL LIKE '%'||#{protocol}||'%'
+		  </if>		  
+		  
+		  
+		ORDER BY BIZ_NM, COMPANY_NM, DOC_NM, DIRECTION, PROTOCOL, DATES DESC  
+	</select>
+
+
+	<!--
+		B2Bi 문서별 현황 SQL 
+	 -->
+
+	<resultMap id="B2BiStateByDocNmMap" type="java.util.LinkedHashMap">
+		<result property="interfaceId"			column="INTERFACE_ID"/>	
+		<result property="companyNm"			column="COMPANY_NM"/>
+		<result property="docNm"				column="DOC_NM"/>
+		<result property="bizNm"				column="BIZ_NM"/>
+		<result property="direction"			column="DIRECTION"/>
+		<result property="protocol"				column="PROTOCOL"/>
+		<result property="preMonthCnt"			column="PRE_MONTH_CNT"/>
+		<result property="preMonthWeekAvgCnt"	column="PRE_MONTH_WEEK_AVG_CNT"/>
+		<result property="preWeekCnt"			column="PRE_WEEK_CNT"/>
+		<result property="currentWeekCnt"		column="CURRENT_WEEK_CNT"/>
+		<result property="currentMonthCnt"		column="CURRENT_MONTH_CNT"/>
+		<result property="preMonth03Cnt"		column="PRE_MONTH_03_CNT"/>
+		<result property="preMonth06Cnt"		column="PRE_MONTH_06_CNT"/>
+		<result property="preMonth12Cnt"		column="PRE_MONTH_12_CNT"/>
+	</resultMap>
+
+
+	<select id="getB2BiStateByDocNm" resultMap="B2BiStateByDocNmMap">
+		SELECT
+		    A.INTERFACE_ID
+		  , A.BIZ_NM
+		  , A.COMPANY_NM
+		  , A.DOC_NM
+		  , A.DIRECTION
+		  , A.PROTOCOL
+		  , NVL(B.CNT,0) AS PRE_MONTH_CNT
+		  , NVL(ROUND((B.CNT / 4),0),0) AS PRE_MONTH_WEEK_AVG_CNT
+		  , NVL(C.CNT,0) AS PRE_WEEK_CNT
+		  , NVL(D.CNT,0) AS CURRENT_WEEK_CNT		  
+		  , NVL(E.CNT,0) AS CURRENT_MONTH_CNT		  
+	      , NVL(F.CNT,0) AS PRE_MONTH_03_CNT
+	      , NVL(G.CNT,0) AS PRE_MONTH_06_CNT
+	      , NVL(H.CNT,0) AS PRE_MONTH_12_CNT		  
+		FROM
+		  (
+		    SELECT
+		        A.INTEGRATION_ID
+		      , A.INTERFACE_ID
+		      , A.INTERFACE_NM
+		      , NVL(B.COMPANY_NM, '') AS COMPANY_NM
+		      , NVL(B.DOC_NM, '') AS DOC_NM
+		      , NVL(B.BIZ_NM, '') AS BIZ_NM
+		      , NVL(B.DIRECTION, '') AS DIRECTION
+		      , NVL(B.PROTOCOL, '') AS PROTOCOL
+		    FROM 
+		      TAN0201 A
+		      LEFT OUTER JOIN TAN0228 B ON
+		        A.INTERFACE_ID = B.INTERFACE_ID
+		    WHERE
+		      1 = 1
+		      AND A.CHANNEL_ID = 'CN00000005'
+		      AND B.DEL_YN = 'N'
+		      AND B.BIZ_NM IS NOT NULL
+		      AND B.COMPANY_NM IS NOT NULL
+		      AND B.DOC_NM IS NOT NULL
+			  <if test="companyNm != null and companyNm != '' ">
+			  AND COMPANY_NM LIKE '%'||#{companyNm}||'%'
+			  </if>			
+			  <if test="docNm != null and docNm != '' ">
+			  AND DOC_NM LIKE '%'||#{docNm}||'%'
+			  </if>			
+			  <if test="bizNm != null and bizNm != '' ">
+			  AND BIZ_NM LIKE '%'||#{bizNm}||'%'
+			  </if>
+			  <if test="direction != null and direction != '' ">
+			  AND DIRECTION LIKE '%'||#{direction}||'%'
+			  </if>			
+			  <if test="protocol != null and protocol != '' ">
+			  AND PROTOCOL LIKE '%'||#{protocol}||'%'
+			  </if>		      
+		  ) A
+		  -----------------------------
+		  -- 전월(B)
+		  -----------------------------
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		        INTF_ID
+		      , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		    FROM SI_STAT_INTF_DAY
+		    WHERE
+		      1 = 1
+		      AND ST_YEAR||ST_MONTH = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+		    GROUP BY INTF_ID
+		    --ORDER BY INTF_ID  
+		  ) B ON
+		    A.INTEGRATION_ID = B.INTF_ID
+		  -----------------------------
+		  -- 전주(C)
+		  -----------------------------    
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		        INTF_ID
+		      , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		    FROM SI_STAT_INTF_DAY
+		    WHERE
+		      1 = 1
+		      AND ST_YEAR||ST_MONTH||ST_DAY BETWEEN TO_CHAR(TO_CHAR(TRUNC(SYSDATE, 'IW')-7, 'YYYYMMDD')) AND TO_CHAR(TO_CHAR(TRUNC(SYSDATE, 'IW')-1, 'YYYYMMDD'))
+		    GROUP BY INTF_ID
+		    --ORDER BY INTF_ID  
+		  ) C ON
+		    A.INTEGRATION_ID = C.INTF_ID
+		  -----------------------------
+		  -- 금주(D)
+		  -----------------------------
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		        INTF_ID
+		      , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		    FROM SI_STAT_INTF_DAY
+		    WHERE
+		      1 = 1
+		      AND ST_YEAR||ST_MONTH||ST_DAY BETWEEN TO_CHAR(TO_CHAR(TRUNC(SYSDATE, 'IW'), 'YYYYMMDD')) AND TO_CHAR(TO_CHAR(TRUNC(SYSDATE, 'IW')+6, 'YYYYMMDD'))
+		    GROUP BY INTF_ID
+		    --ORDER BY INTF_ID  
+		  ) D ON
+		    A.INTEGRATION_ID = D.INTF_ID
+		  -----------------------------
+		  -- 금월(E)
+		  -----------------------------
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		        INTF_ID
+		      , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		    FROM SI_STAT_INTF_DAY
+		    WHERE
+		      1 = 1
+		      AND ST_YEAR||ST_MONTH = TO_CHAR(ADD_MONTHS(SYSDATE, 0), 'YYYYMM')
+		    GROUP BY INTF_ID
+		    --ORDER BY INTF_ID  
+		  ) E ON
+		    A.INTEGRATION_ID = E.INTF_ID
+	      -----------------------------
+	      -- 이전 3개월내(F)
+	      -----------------------------
+	      LEFT OUTER JOIN
+	      (
+	        SELECT
+	            INTF_ID
+	          , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+	        FROM SI_STAT_INTF_DAY
+	        WHERE
+	          1 = 1
+	          AND ST_YEAR||ST_MONTH BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -3)+1, 'YYYYMM') AND TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+	        GROUP BY INTF_ID
+	        --ORDER BY INTF_ID  
+	      ) F ON
+	        A.INTEGRATION_ID = F.INTF_ID
+	      -----------------------------
+	      -- 이전 6개월내(G)
+	      -----------------------------    
+	      LEFT OUTER JOIN
+	      (
+	        SELECT
+	            INTF_ID
+	          , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+	        FROM SI_STAT_INTF_DAY
+	        WHERE
+	          1 = 1
+	          AND ST_YEAR||ST_MONTH BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -6)+1, 'YYYYMM') AND TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+	        GROUP BY INTF_ID
+	        --ORDER BY INTF_ID  
+	      ) G ON
+	        A.INTEGRATION_ID = G.INTF_ID        
+	      -----------------------------
+	      -- 이전 12개월내(H)
+	      -----------------------------
+	      LEFT OUTER JOIN
+	      (
+	        SELECT
+	            INTF_ID
+	          , SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+	        FROM SI_STAT_INTF_DAY
+	        WHERE
+	          1 = 1
+	          AND ST_YEAR||ST_MONTH BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -12)+1, 'YYYYMM') AND TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+	        GROUP BY INTF_ID
+	        --ORDER BY INTF_ID  
+	      ) H ON
+	        A.INTEGRATION_ID = H.INTF_ID		    
+		    
+		    
+		    
+		ORDER BY BIZ_NM, COMPANY_NM, DOC_NM, DIRECTION, PROTOCOL
+	</select>	
+
+	<!--
+		B2Bi 현황판 SQL 
+	 -->
+
+	<resultMap id="B2BiStateMainMap" type="java.util.LinkedHashMap">
+		<result property="bizNm"			column="BIZ_NM"/>	
+		<result property="protocolSumCnt"	column="PROTOCOL_SUM_CNT"/>
+		<result property="protocol01Cnt"	column="PROTOCOL_01_CNT"/>
+		<result property="protocol02Cnt"	column="PROTOCOL_02_CNT"/>
+		<result property="protocol03Cnt"	column="PROTOCOL_03_CNT"/>
+		<result property="docSumCnt"		column="DOC_SUM_CNT"/>
+		<result property="doc01Cnt"			column="DOC_01_CNT"/>
+		<result property="doc02Cnt"			column="DOC_02_CNT"/>
+		<result property="month12SumCnt"	column="MONTH_12_SUM_CNT"/>
+		<result property="month1201Cnt"		column="MONTH_12_01_CNT"/>
+		<result property="month1202Cnt"		column="MONTH_12_02_CNT"/>
+		<result property="month06SumCnt"	column="MONTH_06_SUM_CNT"/>
+		<result property="month0601Cnt"		column="MONTH_06_01_CNT"/>
+		<result property="month0602Cnt"		column="MONTH_06_02_CNT"/>
+		<result property="month03SumCnt"	column="MONTH_03_SUM_CNT"/>
+		<result property="month0301Cnt"		column="MONTH_03_01_CNT"/>
+		<result property="month0302Cnt"		column="MONTH_03_02_CNT"/>
+
+		
+	</resultMap>
+	
+	
+	<select id="getB2BiStateMain" resultMap="B2BiStateMainMap">
+		SELECT
+		  	A.BIZ_NM
+		  , A.PROTOCOL_SUM_CNT
+		  , A.PROTOCOL_01_CNT
+		  , A.PROTOCOL_02_CNT
+		  , A.PROTOCOL_03_CNT
+		  , A.DOC_SUM_CNT
+		  , A.DOC_01_CNT
+		  , A.DOC_02_CNT
+		  , B.MONTH_12_SUM_CNT
+		  , B.MONTH_12_01_CNT
+		  , B.MONTH_12_02_CNT
+		  , B.MONTH_06_SUM_CNT
+		  , B.MONTH_06_01_CNT
+		  , B.MONTH_06_02_CNT
+		  , B.MONTH_03_SUM_CNT
+		  , B.MONTH_03_01_CNT
+		  , B.MONTH_03_02_CNT
+		
+		FROM
+		  (
+		    SELECT
+		      	BIZ_NM
+		      , SUM(PROTOCOL_01_CNT + PROTOCOL_02_CNT + PROTOCOL_03_CNT) AS PROTOCOL_SUM_CNT
+		      , SUM(PROTOCOL_01_CNT) AS PROTOCOL_01_CNT
+		      , SUM(PROTOCOL_02_CNT) AS PROTOCOL_02_CNT
+		      , SUM(PROTOCOL_03_CNT) AS PROTOCOL_03_CNT
+		      , SUM(DOC_01_CNT + DOC_02_CNT) AS DOC_SUM_CNT
+		      , SUM(DOC_01_CNT) AS DOC_01_CNT
+		      , SUM(DOC_02_CNT) AS DOC_02_CNT      
+		    FROM
+		      (
+		        /*
+		        SELECT
+		          	BIZ_NM
+		          , CASE WHEN PROTOCOL = 'EDI' THEN 1 ELSE 0 END AS PROTOCOL_01_CNT
+		          , CASE WHEN PROTOCOL = 'AS2(직접)' THEN 1 ELSE 0 END AS PROTOCOL_02_CNT
+		          , CASE WHEN PROTOCOL = '로제타' THEN 1 ELSE 0 END AS PROTOCOL_03_CNT
+		          , CASE WHEN DIRECTION = '송신' THEN 1 ELSE 0 END AS DOC_01_CNT
+		          , CASE WHEN DIRECTION = '수신' THEN 1 ELSE 0 END AS DOC_02_CNT          
+		        FROM TAN0228
+		        */
+		        
+		        SELECT
+		          	BIZ_NM
+		          , 0 AS PROTOCOL_01_CNT
+		          , 0 AS PROTOCOL_02_CNT
+		          , 0 AS PROTOCOL_03_CNT
+		          , CASE WHEN DIRECTION = '송신' THEN 1 ELSE 0 END AS DOC_01_CNT
+		          , CASE WHEN DIRECTION = '수신' THEN 1 ELSE 0 END AS DOC_02_CNT          
+		        FROM TAN0228
+		        WHERE DEL_YN = 'N'
+		        
+		        UNION ALL
+		        
+		        SELECT
+		          	BIZ_NM
+		          , CASE WHEN PROTOCOL = 'EDI' THEN 1 ELSE 0 END AS PROTOCOL_01_CNT
+		          , CASE WHEN PROTOCOL = 'AS2(직접)' THEN 1 ELSE 0 END AS PROTOCOL_02_CNT
+		          , CASE WHEN PROTOCOL = '로제타' THEN 1 ELSE 0 END AS PROTOCOL_03_CNT
+		          , 0 AS DOC_01_CNT
+		          , 0 AS DOC_02_CNT          
+		        FROM TAN0228
+		        WHERE DEL_YN = 'N'
+		        GROUP BY BIZ_NM, COMPANY_NM, PROTOCOL		        		        
+		          
+		      )
+		    GROUP BY BIZ_NM  
+		  ) A
+		  INNER JOIN
+		  (
+		    SELECT
+		      	BIZ_NM
+		      , SUM(MONTH_12_01_CNT + MONTH_12_02_CNT) AS MONTH_12_SUM_CNT
+		      , SUM(MONTH_12_01_CNT) AS MONTH_12_01_CNT
+		      , SUM(MONTH_12_02_CNT) AS MONTH_12_02_CNT
+		      
+		      , SUM(MONTH_06_01_CNT + MONTH_06_02_CNT) AS MONTH_06_SUM_CNT
+		      , SUM(MONTH_06_01_CNT) AS MONTH_06_01_CNT
+		      , SUM(MONTH_06_02_CNT) AS MONTH_06_02_CNT
+		      
+		      , SUM(MONTH_03_01_CNT + MONTH_03_02_CNT) AS MONTH_03_SUM_CNT
+		      , SUM(MONTH_03_01_CNT) AS MONTH_03_01_CNT
+		      , SUM(MONTH_03_02_CNT) AS MONTH_03_02_CNT
+		    
+		    FROM
+		      (
+		        SELECT
+		            BIZ_NM
+		          , CASE WHEN DIRECTION='송신' THEN SUM(MONTH_12_CNT) ELSE SUM(0) END AS MONTH_12_01_CNT
+		          , CASE WHEN DIRECTION='수신' THEN SUM(MONTH_12_CNT) ELSE SUM(0) END AS MONTH_12_02_CNT
+		          
+		          , CASE WHEN DIRECTION='송신' THEN SUM(MONTH_06_CNT) ELSE SUM(0) END AS MONTH_06_01_CNT
+		          , CASE WHEN DIRECTION='수신' THEN SUM(MONTH_06_CNT) ELSE SUM(0) END AS MONTH_06_02_CNT
+		          
+		          , CASE WHEN DIRECTION='송신' THEN SUM(MONTH_03_CNT) ELSE SUM(0) END AS MONTH_03_01_CNT
+		          , CASE WHEN DIRECTION='수신' THEN SUM(MONTH_03_CNT) ELSE SUM(0) END AS MONTH_03_02_CNT
+		        
+		        FROM
+		          (
+		            SELECT
+		                A.INTERFACE_ID
+		              , A.BIZ_NM
+		              , A.COMPANY_NM
+		              , A.DOC_NM
+		              , A.DIRECTION
+		              , A.PROTOCOL
+		              , CASE WHEN NVL(B.CNT,0) > 0 THEN 1 ELSE 0 END AS MONTH_12_CNT
+		              , CASE WHEN NVL(C.CNT,0) > 0 THEN 1 ELSE 0 END AS MONTH_06_CNT
+		              , CASE WHEN NVL(D.CNT,0) > 0 THEN 1 ELSE 0 END AS MONTH_03_CNT
+		            FROM
+		              (
+		                SELECT
+		                    A.INTEGRATION_ID
+		                  , A.INTERFACE_ID
+		                  , A.INTERFACE_NM
+		                  , NVL(B.COMPANY_NM, '') AS COMPANY_NM
+		                  , NVL(B.DOC_NM, '') AS DOC_NM
+		                  , NVL(B.BIZ_NM, '') AS BIZ_NM
+		                  , NVL(B.DIRECTION, '') AS DIRECTION
+		                  , NVL(B.PROTOCOL, '') AS PROTOCOL
+		                FROM 
+		                  TAN0201 A
+		                  LEFT OUTER JOIN TAN0228 B ON
+		                    A.INTERFACE_ID = B.INTERFACE_ID
+		                WHERE
+		                  1 = 1
+		                  AND A.CHANNEL_ID = 'CN00000005'
+		                  AND B.DEL_YN = 'N'		                  
+		                  AND B.BIZ_NM IS NOT NULL
+		                  AND B.COMPANY_NM IS NOT NULL
+		                  AND B.DOC_NM IS NOT NULL
+		              ) A
+		              -----------------------------
+		              -- 12개월내
+		              -----------------------------
+		              LEFT OUTER JOIN
+		              (
+		                SELECT
+		                    INTF_ID
+		                  , COUNT(INTF_ID) AS CNT  
+		                  --, SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		                FROM SI_STAT_INTF_DAY
+		                WHERE
+		                  1 = 1
+		                  AND ST_YEAR||ST_MONTH||ST_DAY BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -12)+1, 'YYYYMMDD') AND TO_CHAR(ADD_MONTHS(SYSDATE, 0), 'YYYYMMDD')
+		                GROUP BY INTF_ID
+		                --ORDER BY INTF_ID  
+		              ) B ON
+		                A.INTEGRATION_ID = B.INTF_ID
+		              -----------------------------
+		              -- 6개월내
+		              -----------------------------    
+		              LEFT OUTER JOIN
+		              (
+		                SELECT
+		                    INTF_ID
+		                  , COUNT(INTF_ID) AS CNT  
+		                  --, SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		                FROM SI_STAT_INTF_DAY
+		                WHERE
+		                  1 = 1
+		                  AND ST_YEAR||ST_MONTH||ST_DAY BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -6)+1, 'YYYYMMDD') AND TO_CHAR(ADD_MONTHS(SYSDATE, 0), 'YYYYMMDD')
+		                GROUP BY INTF_ID
+		                --ORDER BY INTF_ID  
+		              ) C ON
+		                A.INTEGRATION_ID = C.INTF_ID
+		              -----------------------------
+		              -- 3개월내
+		              -----------------------------
+		              LEFT OUTER JOIN
+		              (
+		                SELECT
+		                    INTF_ID
+		                  , COUNT(INTF_ID) AS CNT  
+		                  --, SUM(NVL(ST_PROCESSING,0) + NVL(ST_FINISHED,0) + NVL(ST_SEND_ERR,0) + NVL(ST_RECV_ERR,0) ) AS CNT
+		                FROM SI_STAT_INTF_DAY
+		                WHERE
+		                  1 = 1
+		                  AND ST_YEAR||ST_MONTH||ST_DAY BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -3)+1, 'YYYYMMDD') AND TO_CHAR(ADD_MONTHS(SYSDATE, 0), 'YYYYMMDD')
+		                GROUP BY INTF_ID
+		                --ORDER BY INTF_ID  
+		              ) D ON
+		                A.INTEGRATION_ID = D.INTF_ID
+		            --ORDER BY BIZ_NM, COMPANY_NM, DOC_NM, DIRECTION, PROTOCOL  
+		          )
+		        GROUP BY BIZ_NM, DIRECTION  
+		      )
+		    GROUP BY BIZ_NM  
+		  ) B
+		    ON A.BIZ_NM = B.BIZ_NM
+		ORDER BY BIZ_NM    
+
+	</select>		
+	
+	
+	
+	
+	<select id="getB2BiCompanyNmByRelation" resultType="java.util.LinkedHashMap">
+		SELECT COMPANY_NM AS KEY, COMPANY_NM AS VALUE
+		FROM TAN0228
+		WHERE
+			1 = 1
+			AND DEL_YN = 'N'			
+			AND COMPANY_NM IS NOT NULL
+			<if test="companyNm != null and companyNm != '' ">
+			
+			</if>			
+			<if test="docNm != null and docNm != '' ">
+			AND DOC_NM LIKE '%'||#{docNm}||'%'
+			</if>			
+			<if test="bizNm != null and bizNm != '' ">
+			AND BIZ_NM LIKE '%'||#{bizNm}||'%'
+			</if>
+			<if test="direction != null and direction != '' ">
+			AND DIRECTION LIKE '%'||#{direction}||'%'
+			</if>			
+			<if test="protocol != null and protocol != '' ">
+			AND PROTOCOL LIKE '%'||#{protocol}||'%'
+			</if>
+		GROUP BY COMPANY_NM
+		ORDER BY COMPANY_NM
+	</select>
+	
+	<select id="getB2BiDocNmByRelation" resultType="java.util.LinkedHashMap">
+		SELECT DOC_NM AS KEY, DOC_NM AS VALUE
+		FROM TAN0228
+		WHERE
+			1 = 1
+			AND DEL_YN = 'N'			
+			AND DOC_NM IS NOT NULL
+			
+			<if test="companyNm != null and companyNm != '' ">
+			AND COMPANY_NM LIKE '%'||#{companyNm}||'%'
+			</if>			
+			<if test="docNm != null and docNm != '' ">
+
+			</if>			
+			<if test="bizNm != null and bizNm != '' ">
+			AND BIZ_NM LIKE '%'||#{bizNm}||'%'
+			</if>
+			<if test="direction != null and direction != '' ">
+			AND DIRECTION LIKE '%'||#{direction}||'%'
+			</if>			
+			<if test="protocol != null and protocol != '' ">
+			AND PROTOCOL LIKE '%'||#{protocol}||'%'
+			</if>
+		GROUP BY DOC_NM
+		ORDER BY DOC_NM
+	</select>
+	
+	<select id="getB2BiBizNmByRelation" resultType="java.util.LinkedHashMap">
+		SELECT BIZ_NM AS KEY, BIZ_NM AS VALUE
+		FROM TAN0228
+		WHERE
+			1 = 1
+			AND DEL_YN = 'N'			
+			AND BIZ_NM IS NOT NULL
+			
+			<if test="companyNm != null and companyNm != '' ">
+			AND COMPANY_NM LIKE '%'||#{companyNm}||'%'
+			</if>			
+			<if test="docNm != null and docNm != '' ">
+			AND DOC_NM LIKE '%'||#{docNm}||'%'
+			</if>			
+			<if test="bizNm != null and bizNm != '' ">
+
+			</if>
+			<if test="direction != null and direction != '' ">
+			AND DIRECTION LIKE '%'||#{direction}||'%'
+			</if>			
+			<if test="protocol != null and protocol != '' ">
+			AND PROTOCOL LIKE '%'||#{protocol}||'%'
+			</if>
+		GROUP BY BIZ_NM
+		ORDER BY BIZ_NM
+	</select>
+	
+	<select id="getB2BiDirectionByRelation" resultType="java.util.LinkedHashMap">
+		SELECT DIRECTION AS KEY, DIRECTION AS VALUE
+		FROM TAN0228
+		WHERE
+			1 = 1
+			AND DEL_YN = 'N'			
+			AND DIRECTION IS NOT NULL
+			
+			<if test="companyNm != null and companyNm != '' ">
+			AND COMPANY_NM LIKE '%'||#{companyNm}||'%'
+			</if>			
+			<if test="docNm != null and docNm != '' ">
+			AND DOC_NM LIKE '%'||#{docNm}||'%'
+			</if>			
+			<if test="bizNm != null and bizNm != '' ">
+			AND BIZ_NM LIKE '%'||#{bizNm}||'%'
+			</if>
+			<if test="direction != null and direction != '' ">
+
+			</if>			
+			<if test="protocol != null and protocol != '' ">
+			AND PROTOCOL LIKE '%'||#{protocol}||'%'
+			</if>
+		GROUP BY DIRECTION
+		ORDER BY DIRECTION
+	</select>
+	
+	<select id="getB2BiProtocolByRelation" resultType="java.util.LinkedHashMap">
+		SELECT PROTOCOL AS KEY, PROTOCOL AS VALUE
+		FROM TAN0228
+		WHERE
+			1 = 1
+			AND DEL_YN = 'N'			
+			AND PROTOCOL IS NOT NULL
+			
+			<if test="companyNm != null and companyNm != '' ">
+			AND COMPANY_NM LIKE '%'||#{companyNm}||'%'
+			</if>			
+			<if test="docNm != null and docNm != '' ">
+			AND DOC_NM LIKE '%'||#{docNm}||'%'
+			</if>			
+			<if test="bizNm != null and bizNm != '' ">
+			AND BIZ_NM LIKE '%'||#{bizNm}||'%'
+			</if>
+			<if test="direction != null and direction != '' ">
+			AND DIRECTION LIKE '%'||#{direction}||'%'
+			</if>			
+			<if test="protocol != null and protocol != '' ">
+
+			</if>
+		GROUP BY PROTOCOL
+		ORDER BY PROTOCOL
+	</select>	
+	
+	
+	<select id="getMatchingCount" resultType="int">
+		SELECT COUNT(*) AS CNT
+		FROM TAN0228
+		WHERE 
+			COMPANY_NM = #{companyNm} 
+			AND DOC_NM = #{docNm} 
+			AND BIZ_NM = #{bizNm}
+			<if test="interfaceId != null and interfaceId != '' ">
+			AND INTERFACE_ID != #{interfaceId}
+			</if>			
+	</select>	
+	
+	
+	<select id="getMatchingInterfaceId" resultType="int">
+		SELECT COUNT(*) AS CNT
+		FROM TAN0228
+		WHERE INTERFACE_ID = #{interfaceId}
+	</select>	
+	
+	<insert id="insertB2BiInterfaceMetaData">
+		INSERT INTO TAN0228 (
+			INTERFACE_ID,
+			COMPANY_NM,
+			DOC_NM,
+			BIZ_NM,
+			DIRECTION,
+			PROTOCOL,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{interfaceId, jdbcType=VARCHAR},
+			#{companyNm,   jdbcType=VARCHAR},
+			#{docNm,       jdbcType=VARCHAR},
+			#{bizNm,       jdbcType=VARCHAR},
+			#{direction,   jdbcType=VARCHAR},
+			#{protocol,    jdbcType=VARCHAR},
+			'N',
+			#{regDate,     jdbcType=VARCHAR},
+			#{regId,       jdbcType=VARCHAR},
+			#{modDate,     jdbcType=VARCHAR},
+			#{modId,       jdbcType=VARCHAR}
+		)
+	</insert>
+	 
+	 
+	<insert id="updateB2BiInterfaceMetaData">
+		UPDATE TAN0228
+		SET
+			COMPANY_NM = #{companyNm,   jdbcType=VARCHAR},
+			DOC_NM     = #{docNm,       jdbcType=VARCHAR},
+			BIZ_NM     = #{bizNm,       jdbcType=VARCHAR},
+			DIRECTION  = #{direction,   jdbcType=VARCHAR},
+			PROTOCOL   = #{protocol,    jdbcType=VARCHAR},
+			MOD_DATE   = #{modDate,     jdbcType=VARCHAR},
+			MOD_USER   = #{modId,       jdbcType=VARCHAR}
+		WHERE
+			INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+	</insert>
+	
+	<delete id="removeB2BiInterfaceMetaData">
+		DELETE FROM TAN0228 WHERE INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+	</delete>	
+
+</mapper>

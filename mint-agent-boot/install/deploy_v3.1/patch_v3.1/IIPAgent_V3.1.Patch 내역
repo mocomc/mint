@@ -1,0 +1,39 @@
+IIP Agent V3.1  001
+
+================변경 내용 =====================================
+  - 인터페이스 테스트 Call ( Tmax, Java Api, C Api )
+  - mint-agent / mint-common  deploy 방식 변경.
+
+###########################################################
+- $IIPAGENT_HOME/mint-agent-boot-0.0.1-SNAPSHOT.jar 교체
+
+- $IIPAGENT_HOME/lib/mint-common-3.0.0.jar 삭제
+- $IIPAGENT_HOME/lib/jProcessesCus-1.0.0.jar 삭제
+
+- $IIPAGENT_HOME/lib/jProcessesCus-1.0.1.jar 추가
+- $IIPAGENT_HOME/lib/commons-beanutils-1.9.3.jar 추가
+- $IIPAGENT_HOME/lib/commons-collections-3.2.2.jar 추가
+- $IIPAGENT_HOME/lib/commons-configuration2-2.3.jar 추가
+- $IIPAGENT_HOME/lib/commons-logging-1.2.jar 추가
+
+- $IIPAGENT_HOME/classes/config/agent.properites  항목추가
+   iip.server.deploy.version=v3.1
+
+- $IIPAGENT_HOME/script/interfaceCall.bat  파일 추가
+- $IIPAGENT_HOME/script/interfaceCall.sh   파일 추가
+
+
+###########################################################
+
+IIP Agent V3.1  002
+
+- $IIPAGENT_HOME/classes/config/SiteSystemInfo.json  추가
+- $IIPAGENT_HOME/classes/config/SampleSiteSystemInfo.json  추가
+
+
+
+
+
+
+
+

@@ -1,0 +1,1016 @@
+﻿<!DOCTYPE html>
+<html >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IPS (Interface Portal System)</title>
+	
+	
+	
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: common                                  -->
+		<!---------------------------------------------------------------------->		
+		<link rel="stylesheet" type="text/css" href="../../css/common/common.css">
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: bootstrap-inspina                       -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/font-awesome/css/font-awesome.css">		
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/animate.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/style.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: kendo                                   -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.common.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.rtl.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.default.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.default.min.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: JQuery                                             -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/jquery/js/jquery.min.js"></script>
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: bootstrap-inspina                                  -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/peity/jquery.peity.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/pace/pace.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/iCheck/icheck.min.js"></script>	
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/bootstrap.min.js"></script>  
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/inspinia.js"></script>		
+
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/chartJs/Chart.min.js"></script>	
+
+		
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: Kendo                                              -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/kendo/js/kendo.all.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+	<!--왼쪽메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+              <li class="nav-header">
+                  <div class="dropdown profile-element"><a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                      <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Interface Portal System</strong>
+                       </span> <span class="text-muted text-xs block">My page <b class="caret"></b></span> </span> </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="mailbox.html">Mailbox</a></li>
+                            <li class="divider"></li>
+                            <li><a href="login.html">Logout</a></li>
+                        </ul>
+                </div>
+                    <div class="logo-element">
+                        IN+
+                    </div>
+              </li>
+				<li>
+                    <a href="#"><span class="nav-label">* 라이프사이클 관리</span> </a>
+                </li>
+                <li class="active">
+                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">요건관리</span> <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li ><a href="index.html">요건조회</a></li>
+                        <li ><a href="dashboard_2.html">요건등록</a></li>
+                        <li ><a href="dashboard_3.html">요건 히스토리</a></li>
+                    </ul>
+                </li>
+              
+                <li>
+                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">인터페이스 관리<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="graph_flot.html">인터페이스 조회</a></li>
+                        <li><a href="graph_morris.html">인터페이스 등록</a></li>
+                        <li><a href="graph_rickshaw.html">인터페이스 히스토리</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><span class="nav-label">* 운영 관리</span> </a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">인프라</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="form_basic.html">시스템(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시스템(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+
+                        <li><a href="form_advanced.html">서버(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">서버(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">서버(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+                        <li><a href="form_wizard.html">업무(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">업무(그룹) 등록</a>
+                                </li>
+                            </ul>
+						</li>	
+                   	 </ul>
+                </li>
+
+				<li>
+                    <a href="#"><span class="nav-label">* 모니터링</span> </a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Data Tracking</span></a>
+                   
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">대시보드</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">자원 모니터링</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">장애관리</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="typography.html">장애대장</a></li>
+                        <li><a href="icons.html">장애 히스토리 관리</a></li>
+                    </ul>
+                </li>
+				<li>
+                    <a href="#"><span class="nav-label">* 통계/KPI</span> </a>
+                </li>
+
+                <li>
+                    <a href="grid_options.html"><i class="fa fa-laptop"></i> <span class="nav-label">표준화 준수율</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">인터페이스 재 사용율</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">진척률 통계</span></a>
+                    
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">인터페이스 통계</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">인터페이스 운영통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시간별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">일별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">월별 통계</a>
+                                </li>
+								<li>
+                                    <a href="#">년간 통계</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        
+						<li>
+                            <a href="#">인터페이스 현황통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+						<li>
+                            <a href="#">장애통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">장애발생 순위 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">장애 유형별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+					<!--nav nav-second-level 끝-->
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+	<!--왼쪽메뉴 끝-->
+	
+
+        <div id="page-wrapper" class="gray-bg">
+
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome to IPS (Interface Portal System)</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="img/a7.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <small class="pull-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="img/a4.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="img/profile.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="grid_options.html">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="login.html">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+		<!--header end-->
+     	
+		<!--wrapper wrapper-content-->
+        <div class="wrapper wrapper-content animated fadeInRight" >
+		<!--row-->
+		<div class="row">
+		
+		<!--col-lg-9-->
+            <div class="col-lg-9">
+                <div class="ibox float-e-margins">
+					 <div class="ibox-title">
+                        <h5>업무 시스템별 처리현황</h5>
+						<span class="pull-right text-right" style="padding-top:5px;">
+                                <small>Average value of sales in the past month in: <strong>수원 사업장</strong></small>
+                                      </span>
+                    </div>
+                    <div class="ibox-content">
+                        
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div>
+                                         <canvas id="lineChart" height="114"></canvas>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul class="stat-list" style="padding-left:15px;">
+                                        <li>
+                                            <font class="main-h2">50,346</font><small class="stats-label">전일 총건수</small>
+                                            <div class="progress progress-mini" style="width:95%">
+                                                <div class="progress-bar" style="width:100%;background-color:#d5d5d5;"></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <font class="main-h2">42,547</font><small class="stats-label">전일 정상건수</small>
+                                            <div class="progress progress-mini" style="width:95%">
+                                                <div class="progress-bar" style="width:100%;background-color:#d5d5d5;"></div>
+                                            </div>
+                                        </li>
+										 <li>
+                                            <font class="main-h2">30,226</font><small class="stats-label">전일 오류건수</small>
+                                            <div class="progress progress-mini" style="width:95%">
+                                                <div class="progress-bar" style="width:100%;background-color:#d5d5d5;"></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <font class="main-h2">10,346</font><small class="stats-label">금일 총건수</small>
+                                            <div class="progress progress-mini" style="width:95%">
+                                                <div class="progress-bar" style="width: 100%;"></div>
+                                            </div>
+                                        </li>
+										 <li>
+                                            <font class="main-h2">50,010</font><small class="stats-label">금일 정상건수</small>
+                                            <div class="progress progress-mini" style="width:95%">
+                                                <div class="progress-bar" style="width: 100%;"></div>
+                                            </div>
+                                        </li>
+										 <li>
+                                            <font class="main-h2">24,145</font><small class="stats-label">금일 정상건수</small>
+                                            <div class="progress progress-mini" style="width:95%">
+                                                <div class="progress-bar" style="width: 100%;"></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                  
+
+                        <div class="m-t-md">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i>
+                                Update on 16.07.2015
+                            </small>
+                            <small>
+                                <strong>Analysis of sales:</strong> The value has been changed over time, and last month reached a level over $50,000.
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+			<!--col-lg-9 END-->
+			
+			
+			<!--col-lg-3-->
+            <div class="col-lg-3">
+			
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+						<span class="label label-success pull-right">NEW</span>
+                        <h5>구매</h5>
+                    </div>
+                    <div class="ibox-content5">
+                        <div class="row">
+                            <div class="col-xs-6">
+							<h4>개발구매</h4>
+                                <small class="stats-label">총건수</small> <font class="main-h3">10,346</font></br>
+								<small class="stats-label">정상건수</small> <font class="main-h3">5,346</font></br>
+								<small class="stats-label">오류건수</small> <font class="main-h3">25</font>
+								
+                            </div>
+
+                            <div class="col-xs-6">
+                                <h4>전략소싱</h4>
+                                <small class="stats-label">총건수</small> <font class="main-h3">6,346</font></br>
+								<small class="stats-label">정상건수</small> <font class="main-h3">2,346</font></br>
+								<small class="stats-label">오류건수</small> <font class="main-h3">60</font>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="ibox-content5">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h4>조달구매</h4>
+                                <small class="stats-label">총건수</small> <font class="main-h3">6,346</font></br>
+								<small class="stats-label">정상건수</small> <font class="main-h3">2,646</font></br>
+								<small class="stats-label">오류건수</small> <font class="main-h3">20</font>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <h4>IPC구매</h4>
+                                <small class="stats-label">총건수</small> <font class="main-h3">14,346</font></br>
+								<small class="stats-label">정상건수</small> <font class="main-h3">7,346</font></br>
+								<small class="stats-label">오류건수</small> <font class="main-h3">156</font>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="ibox-content5">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h4>설비구매</h4>
+                                <small class="stats-label">총건수</small> <font class="main-h3">40,346</font></br>
+								<small class="stats-label">정상건수</small> <font class="main-h3">5,346</font></br>
+								<small class="stats-label">오류건수</small> <font class="main-h3">20</font>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <h4>MRO</h4>
+                                <small class="stats-label">총건수</small> <font class="main-h3">20,346</font></br>
+								<small class="stats-label">정상건수</small> <font class="main-h3">3,346</font></br>
+								<small class="stats-label">오류건수</small> <font class="main-h3">200</font>
+                            </div>
+                            
+                        </div>
+                    </div>
+					
+                </div>
+            </div>
+			<!--col-lg-3 END-->
+			 </div>
+			<!--row end-->	
+			
+			<!--row-->	
+			  <div class="row" style="padding-top:15px;">
+					<!--I/F 개발현황-->	
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-primary pull-right">Today</span>
+                                <h5>I/F 개발현황</h5>
+                            </div>
+                            <div class="ibox-content">
+							
+							  <!--Kendo graph-->	
+							  <div id="example" style="padding-left:20px;">
+								<div class="demo-section k-content" >
+									<div id="chart"></div>
+								</div>
+								
+								<script>
+									function createChart() {
+										$("#chart").height(250).kendoChart({
+											
+											legend: {
+											   position: "top"
+											},
+											seriesDefaults: {
+												labels: {
+													template: "#= category # - #= kendo.format('{0:P}', percentage)#",
+													position: "outsideEnd",
+													visible: true,
+													background: "transparent"
+												}
+											},
+											series: [{
+												type: "pie",
+												data: [{
+													category: "Football",
+													value: 55,
+													color:"#a3e1d4"
+												}, {
+													category: "Basketball",
+													value: 15,
+													color:"#dedede"
+												}, {
+													category: "Volleyball",
+													value: 30,
+													color:"#b5b8cf"
+												}]
+											}],
+											tooltip: {
+												visible: true,
+												template: "#= category # - #= kendo.format('{0:P}', percentage) #"
+											}
+										});
+									}
+
+									$(document).ready(function() {
+										createChart();
+										$(document).bind("kendo:skinChange", createChart);
+										$(".box").bind("change", refresh);
+									});
+
+									function refresh() {
+										var chart = $("#chart").data("kendoChart"),
+											pieSeries = chart.options.series[0],
+											labels = $("#labels").prop("checked"),
+											alignInputs = $("input[name='alignType']"),
+											alignLabels = alignInputs.filter(":checked").val();
+
+										chart.options.transitions = false;
+										pieSeries.labels.visible = labels;
+										pieSeries.labels.align = alignLabels;
+
+										alignInputs.attr("disabled", !labels);
+
+										chart.refresh();
+									}
+								</script>
+								</div>						
+                              <!--Kendo graphEND-->	
+							  <div style="padding-top:10px">
+							  <small class="stats-label">총건수</small> <font class="main-h3">10,346</font>
+								<small class="stats-label">정상건수</small> <font class="main-h3">5,346</font>
+								<small class="stats-label">오류건수</small> <font class="main-h3">25</font>
+							</div>
+                            </div>
+							<!--ibox-content END-->
+                        </div>
+                    </div>
+					<!--I/F 개발현황 END-->	
+					<!--I/F 장애현황 -->	
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-info pull-right">Monthly</span>
+                                <h5>I/F 장애현황</h5>
+                            </div>
+                            <div class="ibox-content">
+							
+							<!--Kendo graph-->	
+							<div id="example" >
+								<div class="demo-section k-content">
+									<div id="chart2"></div>
+								</div>
+								<script>
+									var internetUsers = [
+									
+										{
+											"country": "United States",
+											"year": "2005",
+											"value": 68.3
+										},
+										{
+											"country": "United States",
+											"year": "2006",
+											"value": 25.2
+										},
+										{
+											"country": "United States",
+											"year": "2007",
+											"value": 75.3
+										},
+										{
+											"country": "United States",
+											"year": "2008",
+											"value": 30.2
+										},
+										{
+											"country": "United States",
+											"year": "2009",
+											"value": 68.2
+										},
+										{
+											"country": "United States",
+											"year": "2010",
+											"value": 94.2
+										},
+										{
+											"country": "United States",
+											"year": "2011",
+											"value": 78.2
+										}
+									];
+
+									function createChart2() {
+										$("#chart2").height(250).kendoChart({
+											dataSource: {
+												data: internetUsers
+											},
+											title: {
+													text: ""
+											},
+											legend: {
+												visible: false
+											},
+											seriesDefaults: {
+												type: "line",
+												labels: {
+													visible: true,
+													format: "{0}%",
+													background: "transparent",
+												}
+											},
+											series: [{
+												field: "value",
+												name: "United States",
+												color:"#f8ac59"	
+											}],
+											valueAxis: {
+												labels: {
+													format: "{0}%"
+												},
+												line: {
+													visible: false
+												}
+											},
+											categoryAxis: {
+												field: "year",
+												majorGridLines: {
+													visible: false
+												}
+											}
+										});
+									}
+
+									$(document).ready(createChart2);
+									$(document).bind("kendo:skinChange", createChart2);
+								</script>
+							</div>
+                            <!--Kendo graphEND-->	
+							<div style="padding-top:10px">
+							  <small class="stats-label">최근 5일</small> <font class="main-h3">30</font>
+								<small class="stats-label">어제</small> <font class="main-h3">5</font>
+								<small class="stats-label">금일</small> <font class="main-h3">1</font>
+							</div>
+                            </div>
+                        </div>
+                    </div>
+					<!--col-lg-4 I/F 장애현황 END-->	
+					<!--col-lg-4 장애사전 예방-->	
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-warning pull-right">Annual</span>
+                                <h5>장애사전 예방 Alert</h5>
+                            </div>
+                            <div class="ibox-content">
+							
+								<!--Kendo graph-->	
+							<div id="example" style="padding-left:20px;">
+							<div class="demo-section k-content">
+								<div id="chart3" style="background: center no-repeat url('../content/shared/styles/world-map.png');"></div>
+							</div>
+							<script>
+								function createChart3() {
+									$("#chart3").height(250).kendoChart({
+										title: {
+											text: ""
+										},
+										legend: {
+											position: "bottom"
+										},
+										chartArea: {
+											background: ""
+										},
+										seriesDefaults: {
+											type: "line",
+											style: "smooth"
+										},
+										series: [{
+											name: "India",
+											data: [3.907, 7.943, 7.848, 9.284, 9.263, 9.801, 3.890, 8.238, 9.552, 6.855],
+											color:"#1c84c6"	
+										},{
+											name: "World",
+											data: [1.988, 2.733, 3.994, 3.464, 4.001, 3.939, 1.333, -2.245, 4.339, 2.727],
+											color:"#1ab394"	
+										},{
+											name: "Haiti",
+											data: [-0.253, 0.362, -3.519, 1.799, 2.252, 3.343, 0.843, 2.877, -5.416, 5.590],
+											color:"#f8ac59"	
+										}],
+										valueAxis: {
+											labels: {
+												format: "{0}%"
+											},
+											line: {
+												visible: false
+											},
+											axisCrossingValue: -10
+										},
+										categoryAxis: {
+											categories: [2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011],
+											majorGridLines: {
+												visible: false
+											},
+											labels: {
+												rotation: "auto"
+											}
+										},
+										tooltip: {
+											visible: true,
+											format: "{0}%",
+											template: "#= series.name #: #= value #"
+										}
+									});
+								}
+
+								$(document).ready(createChart3);
+								$(document).bind("kendo:skinChange", createChart3);
+							</script>
+						</div>
+
+									<!--Kendo graphEND-->	
+								<div style="padding-top:10px">
+							  <small class="stats-label">총건수</small> <font class="main-h3">10,346</font>
+								<small class="stats-label">정상건수</small> <font class="main-h3">5,346</font>
+								<small class="stats-label">오류건수</small> <font class="main-h3">25</font>
+							</div>
+							</div>
+                                <!--ibox-content END-->
+                            </div>
+							<!--ibox float-e-margins END-->
+                        </div>
+						<!--col-lg-4 장애사전 예방 END-->
+						
+                    </div>
+						<!--row END-->
+						
+				<!--row-->
+				 <div class="row" style="padding-top:15px;">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>오류 리스트
+                            </h5>
+                            <div ibox-tools></div>
+                        </div>
+                        <div class="ibox-content">
+                            
+                                <!--grid 3 -->
+								<div id="grid3">
+								<script>
+									$(document).ready(function() {
+										$("#grid3").kendoGrid({
+											dataSource: {
+												type: "odata",
+												transport: {
+													read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+												},
+												schema: {
+													model: {
+														fields: {
+															OrderID: { type: "number" },
+															Freight: { type: "number" },
+															ShipName: { type: "string" },
+															OrderDate: { type: "date" },
+															ShipCity: { type: "string" }
+														}
+													}
+												},
+												pageSize: 20,
+												serverPaging: true,
+												serverFiltering: true,
+												serverSorting: true
+											},
+											height: 200,
+											filterable: true,
+											sortable: true,
+											pageable: true,
+											columns: [{
+													field:"OrderID",
+													filterable: false
+												},
+												"Freight",
+												{
+													field: "OrderDate",
+													title: "Order Date",
+													format: "{0:MM/dd/yyyy}"
+												}, {
+													field: "ShipName",
+													title: "Ship Name"
+												}, {
+													field: "ShipCity",
+													title: "Ship City"
+												}
+											]
+										});
+									});
+								</script>
+							   
+									   </div>
+									   <!--grid 3 end-->
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>지연 처리 리스트</h5>
+                            <div ibox-tools></div>
+                        </div>
+                        <div class="ibox-content">
+                            
+                                <!--grid 4-->
+					<div id="grid4">
+					<script>
+						$(document).ready(function() {
+							$("#grid4").kendoGrid({
+								dataSource: {
+									type: "odata",
+									transport: {
+										read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+									},
+									schema: {
+										model: {
+											fields: {
+												OrderID: { type: "number" },
+												Freight: { type: "number" },
+												ShipName: { type: "string" },
+												OrderDate: { type: "date" },
+												ShipCity: { type: "string" }
+											}
+										}
+									},
+									pageSize: 20,
+									serverPaging: true,
+									serverFiltering: true,
+									serverSorting: true
+								},
+								height: 200,
+								filterable: true,
+								sortable: true,
+								pageable: true,
+								columns: [{
+										field:"OrderID",
+										filterable: false
+									},
+									"Freight",
+									{
+										field: "OrderDate",
+										title: "Order Date",
+										format: "{0:MM/dd/yyyy}"
+									}, {
+										field: "ShipName",
+										title: "Ship Name"
+									}, {
+										field: "ShipCity",
+										title: "Ship City"
+									}
+								]
+							});
+						});
+					</script>
+           
+                   </div>
+                   <!--grid 4 end-->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<!--row end-->	
+			
+	
+        </div>
+		<!--wrapper wrapper-content end-->
+
+		<!--footer-->
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2015
+            </div>
+        </div>
+		<!--footer end-->
+
+
+
+
+        </div>
+		<!--page-wrapper end-->
+
+        </div>
+		<!--wrapper end-->
+
+
+
+
+
+			<script>
+					$(document).ready(function() {
+
+						var lineData = {
+							labels: ["January", "February", "March", "April", "May", "June", "July"],
+							datasets: [
+								{
+									label: "Example dataset",
+									fillColor: "rgba(220,220,220,0.5)",
+									strokeColor: "rgba(220,220,220,1)",
+									pointColor: "rgba(220,220,220,1)",
+									pointStrokeColor: "#fff",
+									pointHighlightFill: "#fff",
+									pointHighlightStroke: "rgba(220,220,220,1)",
+									data: [65, 59, 80, 81, 56, 55, 40]
+								},
+								{
+									label: "Example dataset",
+									fillColor: "rgba(26,179,148,0.5)",
+									strokeColor: "rgba(26,179,148,0.7)",
+									pointColor: "rgba(26,179,148,1)",
+									pointStrokeColor: "#fff",
+									pointHighlightFill: "#fff",
+									pointHighlightStroke: "rgba(26,179,148,1)",
+									data: [28, 48, 40, 19, 86, 27, 90]
+								}
+							]
+						};
+
+						var lineOptions = {
+							scaleShowGridLines: true,
+							scaleGridLineColor: "rgba(0,0,0,.05)",
+							scaleGridLineWidth: 1,
+							bezierCurve: true,
+							bezierCurveTension: 0.4,
+							pointDot: true,
+							pointDotRadius: 4,
+							pointDotStrokeWidth: 1,
+							pointHitDetectionRadius: 20,
+							datasetStroke: true,
+							datasetStrokeWidth: 2,
+							datasetFill: true,
+							responsive: true,
+						};
+
+
+						var ctx = document.getElementById("lineChart").getContext("2d");
+						var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+
+					});
+				</script>
+
+</body>
+
+</html>

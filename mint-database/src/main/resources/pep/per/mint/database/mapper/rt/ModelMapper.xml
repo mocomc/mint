@@ -1,0 +1,1013 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.rt.ModelMapper">
+    <!--
+    <cache/>
+    -->
+
+    <select id="getAppModelAttributeIdList" resultMap="resultMapOfAppModelAttributeId">
+		SELECT
+			 a.AID
+			,a.APP_TYPE
+			,TRT0207.APP_TYPE_NM AS APP_TYPE_NM
+			,a.NAME
+			,a.SEQ
+			,a.CD
+			,a.TYPE
+			,cd3.NM AS TYPE_NM
+			,a.TAG_YN
+			,a.INPUT_TYPE
+			,cd2.NM AS INPUT_TYPE_NM
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+			,b.CD as BCD
+			,b.NM as BNM
+			,b.SEQ  AS BSEQ
+			,b.COMMENTS AS BCOMMENTS
+			,b.DEL_YN	AS BDEL_YN
+			,b.REG_DATE AS BREG_DATE
+			,b.REG_USER AS BREG_USER
+			,b.MOD_DATE	AS BMOD_DATE
+			,b.MOD_USER AS BMOD_USER
+		  FROM (SELECT * FROM TRT0203 WHERE DEL_YN = 'N') a
+		  LEFT OUTER JOIN (SELECT * FROM TRT0204 WHERE DEL_YN = 'N') b
+            ON a.AID 	   	= b.AID
+           AND a.APP_TYPE  	= b.APP_TYPE
+		  LEFT OUTER JOIN TRT0207 TRT0207
+		    ON TRT0207.APP_TYPE = a.APP_TYPE
+		  LEFT OUTER JOIN TSU0301 cd2
+		    ON cd2.LEVEL1 = 'RT'
+		   AND cd2.LEVEL2 = '02'
+		   AND cd2.CD     = a.INPUT_TYPE
+ 		 LEFT OUTER JOIN TSU0301 cd3
+		    ON cd3.LEVEL1 = 'RT'
+		   AND cd3.LEVEL2 = '03'
+		   AND cd3.CD     = a.TYPE
+		   <if test="appType!=null">
+		 WHERE a.APP_TYPE   = #{appType}
+		   </if>
+		 ORDER BY a.APP_TYPE , a.SEQ ASC , b.SEQ ASC
+    </select>
+
+    <resultMap id="resultMapOfAppModelAttributeId" type="pep.per.mint.common.data.basic.runtime.AppModelAttributeId">
+		<id 	property="aid" 			column="AID"/>
+		<id 	property="appType" 		column="APP_TYPE"/>
+		<id 	property="appTypeName" 	column="APP_TYPE_NM"/>
+		<result property="name" 		column="NAME"/>
+		<result property="seq"	 		column="SEQ"/>
+		<result property="cd"	 		column="CD"/>
+		<result property="type"	 		column="TYPE"/>
+		<result property="typeName"		column="TYPE_NM"/>
+		<result property="tagYn" 		column="TAG_YN"/>
+		<result property="inputType" 	column="INPUT_TYPE"/>
+		<result property="inputTypeName" column="INPUT_TYPE_NM"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+
+		<collection property="cds" ofType="AppModelAttributeCode">
+			<id 	property="attrCd" 	column="BCD"/>
+			<result property="attrName" column="BNM"/>
+			<result property="attrSeq"  column="BSEQ"/>
+			<result property="comments" column="BCOMMENTS"/>
+			<result property="delYn" 	column="BDEL_YN"/>
+			<result property="regDate" 	column="BREG_DATE"/>
+			<result property="regId" 	column="BREG_USER"/>
+			<result property="modDate" 	column="BMOD_DATE"/>
+			<result property="modId" 	column="BMOD_USER"/>
+		</collection>
+
+	</resultMap>
+
+
+	<select id="getAppModelAttributeCodeList" resultMap="resultMapOfAppModelAttributeCode">
+		select
+			 a.CD
+			,a.NM
+			,a.SEQ
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+		 from TRT0204 a
+		where a.AID 	 = #{aid}
+		  and a.APP_TYPE = #{appType}
+		  and a.DEL_YN   = 'N'
+	</select>
+
+	<resultMap id="resultMapOfAppModelAttributeCode" type="pep.per.mint.common.data.basic.runtime.AppModelAttributeCode">
+		<id 	property="attrCd" 	column="CD"/>
+		<result property="attrName" column="NM"/>
+		<result property="attrSeq"  column="SEQ"/>
+		<result property="comments" column="COMMENTS"/>
+		<result property="delYn" 	column="DEL_YN"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modId" 	column="MOD_USER"/>
+	</resultMap>
+
+
+	<insert id="createAttribute" parameterType="pep.per.mint.common.data.basic.runtime.AppModelAttributeId">
+		<selectKey keyProperty="aid" resultType="String" order="BEFORE" >
+			select
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(AID::numeric), 0) + 1 as aid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(AID)), 0) + 1 as aid
+				 </otherwise>
+		   	</choose>
+			from TRT0203
+			where APP_TYPE = #{appType}
+		</selectKey>
+
+
+		INSERT INTO TRT0203 (
+			 AID
+			,APP_TYPE
+			,NAME
+			,CD
+			,SEQ
+			,TYPE
+			,TAG_YN
+			,INPUT_TYPE
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{aid,			jdbcType=VARCHAR}
+			,#{appType,		jdbcType=VARCHAR}
+			,#{name,		jdbcType=VARCHAR}
+			,#{cd,			jdbcType=VARCHAR}
+		 <choose>
+	        <when test="_databaseId == 'postgres'">
+	       	,#{aid,			jdbcType=VARCHAR}::numeric
+	       	</when>
+	        <otherwise>
+			,to_number(#{aid,jdbcType=VARCHAR})
+	        </otherwise>
+	   </choose>
+			,#{type,		jdbcType=VARCHAR}
+			,#{tagYn,		jdbcType=VARCHAR}
+			,#{inputType,	jdbcType=VARCHAR}
+			,#{comments,	jdbcType=VARCHAR}
+			,#{delYn,		jdbcType=VARCHAR}
+			,#{regDate,		jdbcType=VARCHAR}
+			,#{regId,		jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="updateAttribute" parameterType="pep.per.mint.common.data.basic.runtime.AppModelAttributeId">
+		update TRT0203
+		   set
+			 NAME 		= #{name,		jdbcType=VARCHAR}
+			,CD			= #{cd,			jdbcType=VARCHAR}
+			,TYPE		= #{type,		jdbcType=VARCHAR}
+			,TAG_YN		= #{tagYn,		jdbcType=VARCHAR}
+			,COMMENTS	= #{comments,	jdbcType=VARCHAR}
+			,DEL_YN		= #{delYn,		jdbcType=VARCHAR}
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		 where AID 		= #{aid,		jdbcType=VARCHAR}
+		   and APP_TYPE = #{appType,	jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteAttribute" parameterType="pep.per.mint.common.data.basic.runtime.AppModelAttributeId">
+		update TRT0203
+		   set
+			 DEL_YN		= 'Y'
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		 where AID 		= #{aid,		jdbcType=VARCHAR}
+		   and APP_TYPE = #{appType,	jdbcType=VARCHAR}
+	</update>
+
+	<select id="existAttributeCode" resultType="int">
+		select count(*) as cnt from TRT0204 where APP_TYPE = #{appType} and AID = #{aid} and CD = #{cd}
+	</select>
+
+
+	<insert id="createAttributeCode" parameterType="map">
+		INSERT INTO TRT0204 (
+			 AID
+			,APP_TYPE
+			,CD
+			,SEQ
+			,NM
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{aid,			jdbcType=VARCHAR}
+			,#{appType,		jdbcType=VARCHAR}
+			,#{cd.attrCd,	jdbcType=VARCHAR}
+			,#{cd.attrSeq,	jdbcType=NUMERIC}
+			,#{cd.attrName,	jdbcType=VARCHAR}
+			,#{cd.comments,	jdbcType=VARCHAR}
+			,#{cd.delYn,	jdbcType=VARCHAR}
+			,#{cd.regDate,	jdbcType=VARCHAR}
+			,#{cd.regId,	jdbcType=VARCHAR}
+		)
+		<!--
+		<selectKey keyProperty="attrSeq" resultType="int" order="BEFORE" >
+			select
+				COALESCE(max(SEQ), 0) + 1 as "attrSeq"
+			from TRT0204
+		   where APP_TYPE = #{appType} and AID = #{aid}
+		</selectKey>
+		INSERT INTO TRT0204 (
+			 AID
+			,APP_TYPE
+			,CD
+			,SEQ
+			,NM
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{aid,			jdbcType=VARCHAR}
+			,#{appType,		jdbcType=VARCHAR}
+			,#{cd.attrCd,	jdbcType=VARCHAR}
+			,#{attrSeq,		jdbcType=NUMERIC}
+			,#{cd.attrName,	jdbcType=VARCHAR}
+			,#{cd.comments,	jdbcType=VARCHAR}
+			,#{cd.delYn,	jdbcType=VARCHAR}
+			,#{cd.regDate,	jdbcType=VARCHAR}
+			,#{cd.regId,	jdbcType=VARCHAR}
+		)
+		-->
+
+	</insert>
+
+
+	<update id="updateAttributeCode" parameterType="map">
+		update TRT0204
+           set
+           	 SEQ 	   = #{cd.attrSeq, 	jdbcType=NUMERIC}
+			,NM  	   = #{cd.attrName,	jdbcType=VARCHAR}
+			,COMMENTS  = #{cd.comments,	jdbcType=VARCHAR}
+			,DEL_YN    = #{cd.delYn,	jdbcType=VARCHAR}
+			,MOD_DATE  = #{cd.modDate,	jdbcType=VARCHAR}
+			,MOD_USER  = #{cd.modId,	jdbcType=VARCHAR}
+		where AID 	   = #{aid,			jdbcType=VARCHAR}
+		  and APP_TYPE = #{appType,		jdbcType=VARCHAR}
+		  and CD 	   = #{cd.attrCd,	jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="deleteAttributeCode" parameterType="map">
+		update TRT0204
+           set
+			 DEL_YN    = 'Y'
+			,MOD_DATE  = #{cd.modDate,	jdbcType=VARCHAR}
+			,MOD_USER  = #{cd.modId,	jdbcType=VARCHAR}
+		where AID 	   = #{aid,			jdbcType=VARCHAR}
+		  and APP_TYPE = #{appType,		jdbcType=VARCHAR}
+		  and CD 	   = #{cd.attrCd,	jdbcType=VARCHAR}
+	</update>
+	<!--
+	<update id="deleteAllAttributeCode" parameterType="map">
+		update TRT0204
+           set
+			 DEL_YN    = 'Y'
+			,MOD_DATE  = #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER  = #{modId,	jdbcType=VARCHAR}
+		where AID 	   = #{aid,		jdbcType=VARCHAR}
+		  and APP_TYPE = #{appType,	jdbcType=VARCHAR}
+	</update>
+	 -->
+	<delete id="deleteAllAttributeCode" parameterType="map">
+		delete from TRT0204
+		where AID 	   = #{aid,		jdbcType=VARCHAR}
+		  and APP_TYPE = #{appType,	jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="resetAttributes">
+		delete from TRT0203
+	</delete>
+
+	<delete id="resetAttributeCodes">
+		delete from TRT0204
+	</delete>
+
+	<select id="newAppModels" resultType="AppModel">
+			SELECT
+				 a.SYSTEM_ID as "systemId"
+				,b.SYSTEM_NM as "systemName"
+				,b.SYSTEM_CD as "systemCd"
+				,a.SEQ       as "systemSeq"
+				,a.NODE_TYPE as "systemType"
+				,cd01.NM     as "systemTypeName"
+	  	     FROM TAN0213 a
+       INNER JOIN TIM0101 b
+	           ON INTERFACE_ID = #{interfaceId}
+   	          AND a.SYSTEM_ID  = b.SYSTEM_ID
+  LEFT OUTER JOIN TSU0301 CD01
+               ON a.NODE_TYPE = cd01.CD
+	          AND cd01.LEVEL1 = 'IM'
+	          AND cd01.LEVEL2 = '08'
+	     ORDER BY a.SEQ
+	</select>
+
+	<insert id="insertInterfaceModel" parameterType="InterfaceModel">
+		<selectKey keyProperty="mid" resultType="String" order="BEFORE" >
+			select
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(INTERFACE_MID::numeric), 0) + 1 as mid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(INTERFACE_MID)), 0) + 1 as mid
+				 </otherwise>
+		   	</choose>
+			from TRT0101
+		</selectKey>
+
+		insert into TRT0101 (
+			 INTERFACE_MID
+			,NAME
+			,INTERFACE_ID
+			,STAGE
+			,STD
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) values (
+			 #{mid			, jdbcType=VARCHAR}
+			,#{name			, jdbcType=VARCHAR}
+			,#{interfaceId	, jdbcType=VARCHAR}
+			,#{stage		, jdbcType=VARCHAR}
+			,#{std			, jdbcType=VARCHAR}
+			,#{comments		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertAppModel" parameterType="AppModel">
+		<selectKey keyProperty="mid" resultType="String" order="BEFORE" >
+			select
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(APP_MID::numeric), 0) + 1 as mid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(APP_MID)), 0) + 1 as mid
+				 </otherwise>
+		   	</choose>
+			from TRT0201
+			where INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TRT0201 (
+			 INTERFACE_MID
+			,APP_MID
+			,NAME
+			,CD
+			,APP_TYPE
+			,SYSTEM_ID
+			,SEQ
+			,SYSTEM_TYPE
+			,SERVER_ID
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) values (
+			 #{interfaceMid	, jdbcType=VARCHAR}
+			,#{mid			, jdbcType=VARCHAR}
+			,#{name			, jdbcType=VARCHAR}
+			,#{cd			, jdbcType=VARCHAR}
+			,#{type			, jdbcType=VARCHAR}
+			,#{systemId     , jdbcType=VARCHAR}
+			,#{systemSeq    , jdbcType=NUMERIC}
+			,#{systemType	, jdbcType=VARCHAR}
+			,#{serverId		, jdbcType=VARCHAR}
+			,#{comments		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<insert id="insertAppModelAttribute" parameterType="AppModelAttribute">
+		insert into TRT0202 (
+			 APP_MID
+			,INTERFACE_MID
+			,AID
+			,APP_TYPE
+			,SEQ
+			,VAL
+			,TAG
+		) values (
+			 #{appMid		, jdbcType=VARCHAR}
+			,#{interfaceMid	, jdbcType=VARCHAR}
+			,#{aid			, jdbcType=VARCHAR}
+			,#{appType		, jdbcType=VARCHAR}
+			,#{seq			, jdbcType=NUMERIC}
+			,#{val			, jdbcType=VARCHAR}
+			,#{tag			, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<insert id="insertMessageModel" parameterType="MessageModel">
+
+		<selectKey keyProperty="mid" resultType="String" order="BEFORE" >
+			select
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(MSG_MID::numeric), 0) + 1 as mid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(MSG_MID)), 0) + 1 as mid
+				 </otherwise>
+		   	</choose>
+			from TRT0401
+			where INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+			  and APP_MID		= #{appMid		, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TRT0401 (
+			 INTERFACE_MID
+			,APP_MID
+			,MSG_MID
+			,NAME
+			,DATASET_ID
+			,TYPE
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) values (
+			 #{interfaceMid	, jdbcType=VARCHAR}
+			,#{appMid		, jdbcType=VARCHAR}
+			,#{mid			, jdbcType=VARCHAR}
+			,#{name			, jdbcType=VARCHAR}
+			,#{dataSetId	, jdbcType=VARCHAR}
+			,#{type			, jdbcType=VARCHAR}
+			,#{comments		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<insert id="insertMappingModel" parameterType="MappingModel">
+
+		<selectKey keyProperty="mid" resultType="String" order="BEFORE" >
+			select
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(MAP_MID::numeric), 0) + 1 as mid
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(MAP_MID)), 0) + 1 as mid
+				 </otherwise>
+		   	</choose>
+			from TRT0501
+			where INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+			  and APP_MID		= #{appMid		, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TRT0501 (
+			 INTERFACE_MID
+			,APP_MID
+			,MAP_MID
+			,NAME
+			,MAP_ID
+			,TYPE
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) values (
+			 #{interfaceMid	, jdbcType=VARCHAR}
+			,#{appMid		, jdbcType=VARCHAR}
+			,#{mid			, jdbcType=VARCHAR}
+			,#{name			, jdbcType=VARCHAR}
+			,#{mapId		, jdbcType=VARCHAR}
+			,#{type			, jdbcType=VARCHAR}
+			,#{comments		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateInterfaceModel" parameterType="InterfaceModel">
+		update TRT0101
+		   set NAME				= #{name			,jdbcType=VARCHAR}
+			  ,INTERFACE_ID		= #{interfaceId		,jdbcType=VARCHAR}
+			  ,STAGE			= #{stage			,jdbcType=VARCHAR}
+			  ,STD				= #{std				,jdbcType=VARCHAR}
+			  ,DEPLOY_STATUS	= #{deployStatus	,jdbcType=VARCHAR}
+			  ,LAST_DEPLOY_DATE	= #{lastDeployDate	,jdbcType=VARCHAR}
+			  ,LAST_DEPLOY_USER = #{lastDeployUser	,jdbcType=VARCHAR}
+			  ,COMMENTS			= #{comments		,jdbcType=VARCHAR}
+			  ,MOD_DATE			= #{modDate			,jdbcType=VARCHAR}
+			  ,MOD_USER			= #{modId			,jdbcType=VARCHAR}
+		 where INTERFACE_MID 	= #{mid			    ,jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteInterfaceModel" parameterType="map">
+		update TRT0101
+		   set
+			 DEL_YN		= 'Y'
+			,MOD_DATE	= #{modDate,	jdbcType=VARCHAR}
+			,MOD_USER	= #{modId,		jdbcType=VARCHAR}
+		 where INTERFACE_MID = #{interfaceMid,	jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteAppModelAttribute" parameterType="map">
+		delete from TRT0202 where INTERFACE_MID = #{interfaceMid,	jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteAppModel" parameterType="map">
+		delete from TRT0201 where INTERFACE_MID = #{interfaceMid,	jdbcType=VARCHAR}
+	</delete>
+
+
+	<delete id="deleteMessageModel" parameterType="map">
+		delete from TRT0401 where INTERFACE_MID = #{interfaceMid,	jdbcType=VARCHAR}
+	</delete>
+
+
+	<delete id="deleteMappingModel" parameterType="map">
+		delete from TRT0501 where INTERFACE_MID = #{interfaceMid,	jdbcType=VARCHAR}
+	</delete>
+
+
+
+	<select id="getInterfaceModelList" resultMap="resultMapOfInterfaceModel">
+
+					SELECT
+						 a.INTERFACE_MID 		AS A_MID
+						,a.NAME					AS A_NAME
+						,a.INTERFACE_ID			AS A_INTERFACE_ID
+						,ab.INTEGRATION_ID		AS A_INTEGRATION_ID
+						,a.STAGE				AS A_STAGE
+						,a.STD					AS A_STD
+						,im10.NM 				AS A_STAGE_NM
+						,a.DEPLOY_STATUS		AS A_DEPLOY_STATUS
+						,an12.NM 				AS A_DEPLOY_STATUS_NM
+						,a.LAST_DEPLOY_DATE     AS A_LAST_DEPLOY_DATE
+						,a.LAST_DEPLOY_USER     AS A_LAST_DEPLOY_USER
+						,depuser.USER_NM 		AS A_LAST_DEPLOY_USER_NM
+						,(select count(DATASET_ID) from TRT0401 where INTERFACE_MID = a.INTERFACE_MID and DEL_YN = 'N') AS A_LAYOUT_CNT
+						,(select count(MAP_ID) from TRT0501 where INTERFACE_MID = a.INTERFACE_MID and DEL_YN = 'N') AS A_MAPPING_CNT
+						,a.COMMENTS             AS A_COMMENTS
+						,a.DEL_YN               AS A_DEL_YN
+						,a.REG_DATE				AS A_REG_DATE
+						,a.REG_USER             AS A_REG_USER
+						,reguser.USER_NM 		AS A_REG_USER_NM
+						,a.MOD_DATE             AS A_MOD_DATE
+						,a.MOD_USER	            AS A_MOD_USER
+						,MODUSER.USER_NM 		AS A_MOD_USER_NM
+				<choose>
+					<when test="_databaseId == 'postgres'">
+					    ,(select COALESCE(max(VERSION::numeric), 0) from TRT0102 where INTERFACE_MID = a.INTERFACE_MID) AS A_VERSION
+					</when>
+					<otherwise>
+						,(select COALESCE(max(to_number(VERSION)), 0) from TRT0102 where INTERFACE_MID = a.INTERFACE_MID) AS A_VERSION
+					</otherwise>
+				</choose>
+						,b.APP_MID 				AS B_MID
+						,b.NAME                 AS B_NAME
+						,b.CD 					AS B_CD
+						,b.APP_TYPE 			AS B_APP_TYPE
+						,rt01.NM				AS B_APP_TYPE_NM
+						,b.SYSTEM_ID  			AS B_SYSTEM_ID
+						,ba.SYSTEM_NM			AS B_SYSTEM_NM
+						,ba.SYSTEM_CD			AS B_SYSTEM_CD
+						,b.SEQ 					AS B_SEQ
+						,b.SYSTEM_TYPE 			AS B_SYSTEM_TYPE
+						,im08.NM				AS B_SYSTEM_TYPE_NM
+						,b.SERVER_ID 			AS B_SERVER_ID
+						,bb.SERVER_NM			AS B_SERVER_NM
+						,bb.SERVER_CD			AS B_SERVER_CD
+						,b.COMMENTS 			AS B_COMMENTS
+						,b.DEL_YN 				AS B_DEL_YN
+						,b.REG_DATE 			AS B_REG_DATE
+						,b.REG_USER 			AS B_REG_USER
+						,b.MOD_DATE 			AS B_MOD_DATE
+						,b.MOD_USER 			AS B_MOD_USER
+						,e.INTERFACE_MID        AS E_INTERFACE_MID
+						,e.APP_MID         		AS E_APP_MID
+						,e.MSG_MID 				AS E_MID
+						,e.DATASET_ID 			AS E_DATASET_ID
+						,e.NAME					AS E_NAME
+						,e."TYPE" 				AS E_TYPE
+						,f.INTERFACE_MID        AS F_INTERFACE_MID
+						,f.APP_MID         		AS F_APP_MID
+						,f.MAP_MID 				AS F_MID
+						,f.MAP_ID 				AS F_MAP_ID
+						,f.NAME					AS F_NAME
+						,f."TYPE"               AS F_TYPE
+					FROM TRT0101 a
+			  INNER JOIN TRT0201 b
+			          ON a.INTERFACE_MID = b.INTERFACE_MID
+			         AND a.DEL_YN = 'N'
+			         AND b.DEL_YN = 'N'
+			         <if test="interfaceMid!=null">
+			         AND a.INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+			         </if>
+			         <if test="interfaceId!=null">
+			         AND a.INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+			         </if>
+			  INNER JOIN TAN0201 ab
+			          ON ab.INTERFACE_ID = a.INTERFACE_ID
+			  INNER JOIN TIM0101 ba
+			          ON b.SYSTEM_ID = ba.SYSTEM_ID
+			  INNER JOIN TIM0201 bb
+			          ON b.SERVER_ID = bb.SERVER_ID
+		 LEFT OUTER JOIN TRT0401 e
+		 			  ON e.INTERFACE_MID = b.INTERFACE_MID
+		 			 AND e.APP_MID = b.APP_MID
+		 			 AND e.DEL_YN = 'N'
+		 LEFT OUTER JOIN TRT0501 f
+		 			  ON f.INTERFACE_MID = b.INTERFACE_MID
+		 			 AND f.APP_MID = b.APP_MID
+		 			 AND f.DEL_YN = 'N'
+		 LEFT OUTER JOIN TSU0301 im10
+		              ON im10.CD = a.STAGE
+		             AND im10.LEVEL1 = 'IM'
+		             AND im10.LEVEL2 = '10'
+		             AND im10.DEL_YN  = 'N'
+		LEFT OUTER JOIN TSU0301 an12
+		              ON an12.CD = a.DEPLOY_STATUS
+		             AND an12.LEVEL1 = 'AN'
+		             AND an12.LEVEL2 = '12'
+		             AND an12.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0301 rt01
+		              ON rt01.CD = b.APP_TYPE
+		             AND rt01.LEVEL1 = 'RT'
+		             AND rt01.LEVEL2 = '01'
+		             AND rt01.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0301 im08
+		              ON im08.CD = b.SYSTEM_TYPE
+		             AND im08.LEVEL1 = 'IM'
+		             AND im08.LEVEL2 = '08'
+		             AND im08.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0101 depuser
+			          ON depuser.USER_ID = a.LAST_DEPLOY_USER
+		LEFT OUTER JOIN TSU0101 reguser
+			          ON reguser.USER_ID = a.REG_USER
+		LEFT OUTER JOIN TSU0101 moduser
+			          ON moduser.USER_ID = a.MOD_USER
+			    ORDER BY a.INTERFACE_MID, b.APP_MID, b.SEQ
+
+	</select>
+
+
+	<resultMap id="resultMapOfInterfaceModel" type="pep.per.mint.common.data.basic.runtime.InterfaceModel">
+		<id 	property="mid" 				column="A_MID"/>
+		<result property="name" 			column="A_NAME"/>
+		<result property="interfaceId" 		column="A_INTERFACE_ID"/>
+		<result property="integrationId" 	column="A_INTEGRATION_ID"/>
+		<result property="stage" 			column="A_STAGE"/>
+		<result property="std" 				column="A_STD"/>
+		<result property="stageName" 		column="A_STAGE_NM"/>
+		<result property="deployStatus" 	column="A_DEPLOY_STATUS"/>
+		<result property="deployStatusName" column="A_DEPLOY_STATUS_NM"/>
+		<result property="lastDeployDate" 	column="A_LAST_DEPLOY_DATE"/>
+		<result property="lastDeployUser" 	column="A_LAST_DEPLOY_USER"/>
+		<result property="lastDeployUserNm" column="A_LAST_DEPLOY_USER_NM"/>
+		<result property="layoutCount" 		column="A_LAYOUT_CNT"/>
+		<result property="mappingCount" 	column="A_MAPPING_CNT"/>
+		<result property="comments" 		column="A_COMMENTS"/>
+		<result property="delYn" 			column="A_DEL_YN"/>
+		<result property="regDate" 			column="A_REG_DATE"/>
+		<result property="regId" 			column="A_REG_USER"/>
+		<result property="regNm" 			column="A_REG_USER_NM"/>
+		<result property="modDate" 			column="A_MOD_DATE"/>
+		<result property="modId" 			column="A_MOD_USER"/>
+		<result property="modNm" 			column="A_MOD_USER_NM"/>
+		<result property="version" 			column="A_VERSION"/>
+		<collection property="appModels" ofType="AppModel">
+			<id 	property="interfaceMid" 	column="A_MID"/>
+			<id 	property="mid" 				column="B_MID"/>
+			<result property="name" 			column="B_NAME"/>
+			<result property="cd" 				column="B_CD"/>
+			<result property="type" 			column="B_APP_TYPE"/>
+			<result property="typeName" 		column="B_APP_TYPE_NM"/>
+			<result property="systemId" 		column="B_SYSTEM_ID"/>
+			<result property="systemName" 		column="B_SYSTEM_NM"/>
+			<result property="systemCd" 		column="B_SYSTEM_CD"/>
+			<result property="systemSeq" 		column="B_SEQ"/>
+			<result property="systemType" 		column="B_SYSTEM_TYPE"/>
+			<result property="systemTypeName" 	column="B_SYSTEM_TYPE_NM"/>
+			<result property="serverId" 		column="B_SERVER_ID"/>
+			<result property="serverName" 		column="B_SERVER_NM"/>
+			<result property="serverCd" 		column="B_SERVER_CD"/>
+			<result property="comments" 		column="B_COMMENTS"/>
+			<result property="delYn" 			column="B_DEL_YN"/>
+			<result property="regDate" 			column="B_REG_DATE"/>
+			<result property="regId" 			column="B_REG_USER"/>
+			<result property="modDate" 			column="B_MOD_DATE"/>
+			<result property="modId" 			column="B_MOD_USER"/>
+
+			<collection property="msgs" ofType="MessageModel">
+				<id 	property="interfaceMid" 	column="E_INTERFACE_MID"/>
+				<id 	property="appMid" 			column="E_APP_MID"/>
+				<id 	property="mid" 				column="E_MID"/>
+				<result property="dataSetId" 		column="E_DATASET_ID"/>
+				<result property="name" 			column="E_NAME"/>
+				<result property="type" 			column="E_TYPE"/>
+			</collection>
+
+
+			<collection property="mappings" ofType="MappingModel">
+				<id 	property="interfaceMid" 	column="F_INTERFACE_MID"/>
+				<id 	property="appMid" 			column="F_APP_MID"/>
+				<id 	property="mid" 				column="F_MID"/>
+				<result property="mapId" 			column="F_MAP_ID"/>
+				<result property="name" 			column="F_NAME"/>
+				<result property="type" 			column="F_TYPE"/>
+			</collection>
+
+
+		</collection>
+
+
+	</resultMap>
+
+	<select id="getAppModelAttributes" parameterType="map" resultMap="resultMapOfAppModelAttribute">
+		 SELECT
+		 		 a.INTERFACE_MID
+		 		,a.APP_MID
+		 		,a.APP_TYPE
+ 				,b.AID
+				,b.NAME
+				,b.CD
+				,b."TYPE"
+				,a.SEQ
+				,a.VAL
+				,a.TAG
+				,b.INPUT_TYPE
+               FROM TRT0202 a
+         INNER JOIN TRT0203 b
+     	         ON a.APP_TYPE = b.APP_TYPE
+			    AND a.AID = b.AID
+                AND a.INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+                AND a.APP_MID 		= #{appMid		, jdbcType=VARCHAR}
+	</select>
+
+	<resultMap id="resultMapOfAppModelAttribute" type="pep.per.mint.common.data.basic.runtime.AppModelAttribute">
+		<id 	property="interfaceMid" column="INTERFACE_MID"/>
+		<id 	property="appMid" 		column="APP_MID"/>
+		<id 	property="appType" 		column="APP_TYPE"/>
+		<id 	property="aid" 			column="AID"/>
+		<id 	property="type" 		column="TYPE"/>
+		<id 	property="seq" 			column="SEQ"/>
+		<result property="name" 		column="NAME"/>
+		<result property="cd" 			column="CD"/>
+		<result property="val" 			column="VAL"/>
+		<result property="tag" 			column="TAG"/>
+		<result property="inputType" 	column="INPUT_TYPE"/>
+	</resultMap>
+
+	<select id="getMessageModels" parameterType="map" resultMap="resultMapOfMessageModel">
+		SELECT
+	 		 a.INTERFACE_MID
+	 		,a.APP_MID
+			,a.MSG_MID
+			,a.NAME
+			,a.DATASET_ID
+			,b.CD
+			,a."TYPE"
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+          FROM TRT0401 a
+    INNER JOIN TAN0501 b
+            ON a.DATASET_ID  = b.DATASET_ID
+           AND a.INTERFACE_MID = #{interfaceMid , jdbcType=VARCHAR}
+           AND a.APP_MID   	   = #{appMid		, jdbcType=VARCHAR}
+
+	</select>
+
+	<resultMap id="resultMapOfMessageModel" type="pep.per.mint.common.data.basic.runtime.MessageModel">
+		<id 	property="interfaceMid" column="INTERFACE_MID"/>
+		<id 	property="appMid" 		column="APP_TYPE"/>
+		<id 	property="mid" 			column="MSG_MID"/>
+		<result property="dataSetId" 	column="DATASET_ID"/>
+		<result property="cd" 			column="CD"/>
+		<result property="type" 		column="TYPE"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+	</resultMap>
+
+
+	<select id="getMappingModels" parameterType="map" resultMap="resultMapOfMappingModel">
+		SELECT
+	 		 a.INTERFACE_MID
+	 		,a.APP_MID
+			,a.MAP_MID
+			,a.NAME
+			,a.MAP_ID
+			,b.CD
+			,a."TYPE"
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+          FROM TRT0501 a
+	INNER JOIN TAN0503 b
+	        ON a.MAP_ID = b.MAP_ID
+           AND a.INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+           AND a.APP_MID 	   = #{appMid	   , jdbcType=VARCHAR}
+
+	</select>
+
+	<resultMap id="resultMapOfMappingModel" type="pep.per.mint.common.data.basic.runtime.MappingModel">
+		<id 	property="interfaceMid" column="INTERFACE_MID"/>
+		<id 	property="appMid" 		column="APP_TYPE"/>
+		<id 	property="mid" 			column="MAP_MID"/>
+		<result property="mapId" 		column="MAP_ID"/>
+		<result property="cd" 			column="CD"/>
+		<result property="type" 		column="TYPE"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+	</resultMap>
+
+
+	<insert id="insertInterfaceModelHistory" parameterType="InterfaceModelHistory">
+		<selectKey keyProperty="version" resultType="String" order="BEFORE" >
+			select
+			<choose>
+		        <when test="_databaseId == 'postgres'">
+		        COALESCE(max(VERSION::numeric), 0) + 1 as version
+		        </when>
+		        <otherwise>
+				COALESCE(max(to_number(VERSION)), 0) + 1 as version
+				 </otherwise>
+		   	</choose>
+			from TRT0102
+			where INTERFACE_MID = #{mid, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TRT0102 (
+			 INTERFACE_MID
+			,VERSION
+			,CONTENTS
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{mid,			jdbcType=VARCHAR}
+			,#{version, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=CLOB}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId,		jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getInterfaceModelHistory" resultMap="resultMapOfInterfaceModelHistory">
+		select
+			 a.INTERFACE_MID
+			,a.VERSION
+			,a.CONTENTS
+			,a.REG_DATE
+			,a.REG_USER
+			,b.USER_NM
+		  from TRT0102 a
+	inner join TSU0101 b
+	        on b.USER_ID = a.REG_USER
+	       and a.INTERFACE_MID = #{mid, jdbcType=VARCHAR}
+	  order by a.VERSION desc
+	</select>
+
+	<resultMap id="resultMapOfInterfaceModelHistory" type="pep.per.mint.common.data.basic.runtime.InterfaceModelHistory">
+		<id 	property="mid" 			column="INTERFACE_MID"/>
+		<id 	property="version" 		column="VERSION"/>
+		<result property="contents" 	column="CONTENTS"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="regNm" 		column="REG_USER_NM"/>
+	</resultMap>
+
+	<select id="getAppTypes" resultMap="resultMapOfAppType">
+		SELECT
+                 a.APP_TYPE
+                ,a.APP_TYPE_NM
+                ,a.RSS_CD
+                ,b.NM AS RSS_NM
+           FROM TRT0207 a
+     INNER JOIN TSU0301 b
+             ON a.RSS_CD = b.CD
+             <if test="resourceCd != null and resourceCd != ''">
+            AND a.RSS_CD = #{resourceCd}
+			</if>
+            AND a.DEL_YN = 'N'
+            AND b.LEVEL1 = 'IM'
+            AND b.LEVEL2 = '04'
+	</select>
+
+	<select id="getAppType" resultMap="resultMapOfAppType">
+		SELECT
+                 a.APP_TYPE
+                ,a.APP_TYPE_NM
+                ,a.RSS_CD
+                ,b.NM AS RSS_NM
+           FROM TRT0207 a
+     INNER JOIN TSU0301 b
+             ON a.RSS_CD = b.CD
+            AND a.APP_TYPE = #{appType}
+            AND a.DEL_YN = 'N'
+            AND b.LEVEL1 = 'IM'
+            AND b.LEVEL2 = '04'
+	</select>
+
+
+	<resultMap id="resultMapOfAppType" type="pep.per.mint.common.data.basic.runtime.AppType">
+		<id 	property="appType" 		column="APP_TYPE"/>
+		<result property="appTypeName" 	column="APP_TYPE_NM"/>
+		<result property="resourceCd" 	column="RSS_CD"/>
+		<result property="resourceNm" 	column="RSS_NM"/>
+	</resultMap>
+
+
+	<insert id="createModelDeployment" parameterType="ModelDeployment">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select
+				COALESCE(max(SEQ), 0) + 1 as seq
+			 from TRT0901
+			where DEPLOY_DATE   = #{deployDate,   jdbcType=VARCHAR}
+			  and INTERFACE_MID = #{interfaceMid, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TRT0901 (
+			 DEPLOY_DATE
+			,INTERFACE_MID
+			,SEQ
+			,SYSTEM_ID
+			,SERVER_ID
+			,METHOD
+			,RESULT_CD
+			,RESULT_MSG
+			,DEPLOY_USER
+		) values (
+			 #{deployDate,   jdbcType=VARCHAR}
+			,#{interfaceMid, jdbcType=VARCHAR}
+			,#{seq, 		 jdbcType=NUMERIC}
+			,#{systemId, 	 jdbcType=VARCHAR}
+			,#{serverId, 	 jdbcType=VARCHAR}
+			,#{method, 	 	 jdbcType=VARCHAR}
+			,#{resultCd, 	 jdbcType=VARCHAR}
+			,#{resultMsg, 	 jdbcType=VARCHAR}
+			,#{deployUser, 	 jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+</mapper>

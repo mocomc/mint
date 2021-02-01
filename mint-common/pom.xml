@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>mint</artifactId>
+		<groupId>pep.per</groupId>
+		<version>3.0.0</version>
+	</parent>
+	<artifactId>mint-common</artifactId>
+	<name>mint-common</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<jackson-version>2.3.4</jackson-version>
+		<org.apache.commons-lang3-vsersion>3.1</org.apache.commons-lang3-vsersion>
+		<org.apache.commons-io-vsersion>2.4</org.apache.commons-io-vsersion>
+	</properties>
+	<dependencies>
+		<!-- Jackson json mapper -->
+		<!-- <dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-core-asl</artifactId> 
+			<version>${jackson-version}</version> </dependency> <dependency> <groupId>org.codehaus.jackson</groupId> 
+			<artifactId>jackson-mapper-asl</artifactId> <version>${jackson-version}</version> 
+			</dependency> -->
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${org.apache.commons-lang3-vsersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${org.apache.commons-io-vsersion}</version>
+		</dependency>
+
+	</dependencies>
+
+ 
+	<profiles>
+		<profile>
+			<id>mint-2.0.0</id>
+
+			<build>
+				<finalName>${project.artifactId}-product-${project.version}</finalName>
+				<directory>${basedir}/target-version-2.0.0</directory>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.3</version>
+						<configuration>
+							<excludes>
+								<exclude>log4j.xml</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+
+		<profile>
+			<id>mint-develop-2.0.0</id>
+			<build>
+				<finalName>${project.artifactId}-test-${project.version}</finalName>
+				<directory>${basedir}/target-test-version-2.0.0</directory>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.3</version>
+						<configuration>
+							<excludes>
+								<exclude>log4j.xml</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>mint-3.0.0</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jackson-version>2.9.5</jackson-version>
+			</properties>
+
+			<build>
+
+				<finalName>${project.artifactId}-product-${project.version}</finalName>
+				<directory>${basedir}/target-version-3.0.0</directory>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.3</version>
+						<configuration>
+							<excludes>
+								<exclude>log4j.xml</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+
+
+
+</project>

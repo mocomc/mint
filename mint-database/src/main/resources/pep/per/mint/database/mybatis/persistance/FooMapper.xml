@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.FooMapper">
+  <!--
+  <cache/>
+  -->
+   
+  <select id="getFooListByName" parameterType="string" resultType="Foo">
+    SELECT
+           ID		as id
+          ,NAME		as name
+          ,AGE		as age
+          ,REG_DATE as regDate
+    FROM FOO
+   	WHERE NAME like '%' || #{name} || '%'
+  </select>
+
+
+  <select id="getFooById" parameterType="string" resultType="Foo">
+    SELECT
+           ID		as id
+          ,NAME		as name
+          ,AGE		as age
+          ,REG_DATE as regDate
+    FROM ${table}
+   	WHERE ID = #{id}
+  </select>
+  
+  <insert id="fooInsert" parameterType="Foo" >
+  	INSERT INTO FOO (
+  		 ID
+		,NAME
+		,AGE
+		,REG_DATE
+  	) values (
+  		 #{id}
+  		,#{name}
+  		,#{age}
+  		,#{regDate}
+  	)
+  </insert>
+  
+</mapper>

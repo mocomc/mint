@@ -1,0 +1,29 @@
+AP00000060$$$H001$$$ko$$$조회조건$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font color="#000000" face="맑은 고딕" size="2">조회조건</font></b></p><p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp; </font></span></span><font color="#000000" size="2">일단위로</font><span lang="EN-US"><font color="#000000" size="2"> CPU/MEMORY </font></span><font color="#000000" size="2">사용 현황을 조회</font><span lang="EN-US"><font color="#000000" size="2">. </font></span></font></b></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><b style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp; </font></span></span></b><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Arial; mso-ascii-font-family: "맑은 고딕"; mso-fareast-font-family: "맑은 고딕"; mso-hansi-font-family: "맑은 고딕";'><font size="2">"KPI</font></span></b><b style="mso-bidi-font-weight: normal;"><span style='color: black; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: Arial; mso-ascii-font-family: "맑은 고딕"; mso-fareast-font-family: "맑은 고딕"; mso-hansi-font-family: "맑은 고딕";'><font size="2">현황</font><span lang="EN-US"><font size="2">" </font></span><font size="2">중</font><span lang="EN-US"><font size="2"> "CPU</font></span><font size="2">임계치 초과</font><span lang="EN-US"><font size="2">",”MEMORY</font></span><font size="2">임계치 초과</font><span lang="EN-US"><font size="2">”</font></span><font size="2">와 연동</font></span></b></font></p><p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp; </font></span><font color="#000000" size="2">1. AP</font></span><font color="#000000" size="2">서버
+</font></font></b></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></span><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;</font></span><font color="#000000" size="2">ComboBox
+List</font></span><font color="#000000" size="2">에서 업무시스템을 선택</font></font></p><p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp; </font></span><font color="#000000" size="2">2. </font></span><font color="#000000" size="2">조회구분</font></font></b></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><b style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span></span></b><span lang="EN-US"><font color="#000000" size="2">CPU </font></span><font color="#000000" size="2">또는</font><span lang="EN-US"><font color="#000000" size="2"> Memory</font></span></font></p><p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp; </font></span><font color="#000000" size="2">3. </font></span><font color="#000000" size="2">최소사용율</font></font></b></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><b style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span></span></b><span lang="EN-US"><font color="#000000" size="2">CPU/MEMORY</font></span><font color="#000000" size="2">에 대해 임계치 설정</font></font></p><p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp; </font></span><font color="#000000" size="2">4. </font></span><font color="#000000" size="2">검색기간</font></font></b></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><b style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span></span></b><span lang="EN-US"><font color="#000000" size="2">1</font></span><font color="#000000" size="2">일 단위 검색이며</font><span lang="EN-US"><font color="#000000" size="2">,</font><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp;
+</font></span><font color="#000000" size="2">-2</font></span><font color="#000000" size="2">일전까지만 가능하다</font><span lang="EN-US"><font color="#000000" size="2">.</font></span></font></p><p><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><span lang="EN-US"><span style="mso-spacerun: yes;"><font color="#000000" size="2">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- </font></span></span><font color="#000000" size="2">필요 시</font><span lang="EN-US"><font color="#000000" size="2"> IIP </font></span><font color="#000000" size="2">담당자에게
+요청하면 누적 기간을 늘릴 수 있다</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US"><font color="#000000" size="2">.</font></span></b></font><br></p>

@@ -1,0 +1,1990 @@
+﻿<!--
+	Screen ID : AN-01-00-008
+	Screen NM : 인터페이스 일괄등록.
+	[변경 이력]
+	* 20160718-001
+      - 최초 등록.
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-659">일괄등록</lb></h2>
+	    <ol class="breadcrumb">
+	        <li><lb class="lb-8"></lb></li>
+	        <li class="active"><strong><lb class="lb-659">일괄등록</lb></strong></li>
+	    </ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" ></div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						<span><lb class="lb-660">일괄등록 목록</lb></span>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+						    <i class="fa fa-chevron-up"></i>
+						</a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-excelTemplateDownLoad"><i class="fa fa-file-excel-o"></i> <lb class="lb-670">Excel-Template-Download</lb></a>
+						<a class="btn btn-w-m btn-primary btn-excelUpload"><i class="fa fa-arrow-up"></i> <lb class="lb-671">Excel Upload</lb></a>
+						<a class="btn btn-w-m btn-danger btn-deleteItem"><i class="fa fa-trash-o"></i> <lb class="lb-343">삭제</lb></a>
+					</div>
+				</div>
+				<div class="ibox-content">
+				<div id="AN-01-00-008-GRID-001" style="width: 100%;"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						<span><lb class="lb-661">일괄등록 상세</lb></span>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+						    <i class="fa fa-chevron-up"></i>
+						</a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+
+					</div>
+				</div>
+				<div class="ibox-content">
+	           		<div id="AN-01-00-008-GRID-002" style="width: 100%;"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="modal inmodal" id="AN-01-00-008-POPUP-01" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only"></span>
+				</button>
+				<div>
+					<h2 class="popupTitle"><lb class="lb-671">Excel Upload</lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-lg-12">
+						<div class="form-group">
+							<span class="lable_tag6"><lb class="lb-398">설명</lb></span>
+							<span class="k-widget k-autocomplete k-header k-state-default" style="width:80%;">
+								<input id="tf-excelUpload-comments" type="text" class="k-input required" placeholder="" style="width:100%;">
+							</span>
+						</div>
+						<hr class="hr-space">
+						<div class="form-group" style="widht:99.5%;">
+							<input name="excelFileUpload" id="excelFileUpload" type="file" accept=".xls, .xlsx"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+
+            <div class="modal-footer-original">
+                <button type="button" class="btn btn-primary btn-excelUpload-save" ><i class="fa fa-arrow-up"></i>  <lb class="lb-673">Upload</lb></button>
+                <button type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-143"></lb></button>
+            </div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	$(document).ready(function() {
+	    //=======================================================================
+	    //(1) function 및 variable scope 설정 :: (메인은 main/main_detail, 팝업 및 서브는 sub)
+	    //=======================================================================
+	    screenName = "AN-01-00-008";
+
+	    $.extend({
+	        main : {
+	            //=======================================================================
+	            // (2) Screen 에서 사용할 variable 정의
+	            //=======================================================================
+				checkedBatchId : '',
+
+	            //=======================================================================
+	            // (3) Screen 에서 사용할 function 정의
+	            //=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.checkedBatchId = new Map();
+						$.main.fn_initFileUpload();
+						$.main.fn_initGrid01();
+						$.main.fn_initGrid02();
+						$.main.fn_requireExcelUploadMasterInfo();
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				fn_initFileUpload : function() {
+					try {
+
+						kendo.ui.Upload.fn._supportsDrop = function() { return false; }
+				 		$("#excelFileUpload").kendoUpload({
+				 			  files: []
+							, multiple: false
+				 			, async: {
+				 				saveUrl: "/mint/ut/excel/upload",
+				 				//removeUrl: "remove",
+				 				autoUpload: false
+				 			}
+				 			, localization: {
+				 				select: mint.label.getLabel('lb-220')
+				 			}
+
+				 			, select : function(e) {
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' select ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+				 				var selectFile = e.files[0];
+				 				if( ! mint.common.isEmpty(selectFile) && selectFile.extension.toLowerCase() != '.xlsx' ) {
+				 					mint.common.alert('확장자가 .xlsx 파일만 업로드 할 수 있습니다.');
+				 					e.preventDefault();
+				 				}
+
+	                    		if( mint.common.invalidFileName(selectFile.name) ) {
+	                    			mint.common.alert('CW00015', selectFile.name);
+	                    			e.preventDefault();
+	                    		}
+
+				 	            // custom button 확용
+				 	            setTimeout(function() {
+				 	            	$.main.kendoUploadButton = $(".k-upload-selected");
+				 	            	$.main.kendoUploadButton.hide();
+				 	            }, 1);
+				 			}
+				 			, upload: function(e) {
+				 				//----------------------------------------------------------------------
+				 				// CASE#1 e.data 에 설정하기
+				 				//----------------------------------------------------------------------
+
+				 				{
+				 					e.data = {comments:$('#tf-excelUpload-comments').val(), userId:mint.session.getUserId()};
+				 				}
+
+
+				 				//----------------------------------------------------------------------
+				 				// CASE#2 e.formData 에 설정하기
+				 				//----------------------------------------------------------------------
+				 				/*
+				 				{
+					 				var formData = new FormData();
+					 				formData.append("title", "dhkim 2");
+					 				formData.append("content", "dong hwan 2");
+					 				formData.append("excelFileUpload", $('input[name=excelFileUpload]')[0].files[0]);
+
+					 				e.formData = formData;
+				 				}
+				 				*/
+				 				//----------------------------------------------------------------------
+				 				// CASE#3 JSON data 전달하기.
+				 				//----------------------------------------------------------------------
+				 				/*
+				 				var requestObject = new Object();
+				 				requestObject.title = 'file upload test';
+				 				requestObject.content = '파일 업로드 테스트 입니다. 흐흐흐흐흐흐.';
+
+				 				var comMessage = new Object();
+				 				{
+				 					comMessage.objectType = "ComMessage";
+				 					comMessage.requestObject = requestObject;
+				 					comMessage.startTime = mint.common.getStartTime();
+				 					comMessage.endTime = null;
+				 					comMessage.errorCd = "0";
+				 					comMessage.errorMsg = "";
+				 					if( mint.common.isEmpty(mint.session) ) {
+				 						comMessage.userId = "unknown";
+				 					} else {
+				 						comMessage.userId = mint.session.getUserId();
+				 					}
+				 					comMessage.appId = 'aaaaaaaaa';
+		 							comMessage.userId = "unknown";
+		 							comMessage.checkSession = false;
+				 				}
+								//e.data = {title:"dhkim",content: JSON.stringify(comMessage)};
+
+				 				//----------------------------------------------------------------------
+				 				// CASE#4 JQuery 문법 적용하기.
+				 				//----------------------------------------------------------------------
+
+								var formData = new FormData();
+				 				formData.append("title", "dhkim 2");
+				 				formData.append("content", JSON.stringify(comMessage));
+								formData.append("excelFileUpload", $('input[name=excelFileUpload]')[0].files[0]);
+
+				 				$.ajax({
+				 					 async : true,
+				 					 cache : false,
+				 				     type: 'POST',
+				 				     dataType: 'json',
+				 				     url: '/mint/ut/excel/upload',
+				 				     //contentType : 'multipart/form-data; charset=utf-8',
+				 				     data: formData,
+				 				     processData: false,
+				 				     contentType:false,
+				 				     complete: function(xhr,textStatus) {
+
+				 				     }//end complete
+				 					, beforeSend : function(xhr) {
+
+				 					}
+				 				 });//end ajax call
+
+
+				 				e.preventDefault();
+				 				*/
+
+
+
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' upload ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+
+
+
+				 			}
+
+				 			, progress: function(e) {
+				 				mint.waitingLoad(true);
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' progress ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+				 			}
+				 			, cancel: function(e) {
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' cancel ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+				 			}
+				 			, error: function(e) {
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' error ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+								$.main.fn_uploadCheck(e.XMLHttpRequest)
+				 			}
+				 			, success: function(e) {
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' success ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+								$.main.fn_uploadCheck(e.XMLHttpRequest)
+				 			}
+				 			, complete: function(e) {
+				 				mint.waitingLoad(false);
+				 				//console.log('-----------------------------------------------------------------------------------');
+				 				//console.log(' complete ');
+								//console.log(e);
+								//console.log('-----------------------------------------------------------------------------------');
+				 			}
+
+				 			, remove: function onRemove(e) {
+				 				var files = e.files;
+
+				 		       	for(var i=0; i<$('#excelFileUpload').data("kendoUpload").options.files.length; i++) {
+				 		   			if(files[0].uid == $('#file').data("kendoUpload").options.files[i].uid) {
+				 		   				$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+				 		   				$('#excelFileUpload').data("kendoUpload").options.files.splice(i, 1);
+				 		   			    e.preventDefault();
+				 		   			}
+				 		   		}
+				 		    }
+
+
+				 		});
+
+
+
+
+						/*
+				 		$("#file").kendoUpload({
+				 			  files: fileList
+				 			, remove: function onRemove(e) {
+				 				var files = e.files;
+
+				 		       	for(var i=0; i<$('#file').data("kendoUpload").options.files.length; i++) {
+				 		   			if(files[0].uid == $('#file').data("kendoUpload").options.files[i].uid) {
+				 		   				$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+				 		   				$('#file').data("kendoUpload").options.files.splice(i, 1);
+				 		   			    e.preventDefault();
+				 		   			}
+				 		   		}
+				 		    }
+				 			, async: {
+				 				saveUrl: "/mint/ut/upload",
+				 				removeUrl: "remove",
+				 				autoUpload: false
+				 			}
+				 			, localization: {
+				 				select: mint.label.getLabel('lb-220')
+				 			}
+				 			, error: function(e) {
+				 				if("remove" == e.operation) {
+				 					//$('span.k-filename[title="' + e.files[0].fileNm + '"]').parent().remove();
+				 				} else {
+				 					$.main.fileUploadError++;
+				 				}
+
+				 				if(0 < fileUploadTotal && fileUploadTotal == (fileUploadError + fileUploadSucess)) {
+				 					$(".k-upload-files.k-reset").find("li").remove();
+
+				 					$.main.uploadAttatchFileList =[];
+				 					$.main.fileUploadTotal = 0;
+				 					$.main.fileUploadSucess = 0;
+				 					$.main.fileUploadError = 0;
+
+				 					$.main.kendoUploadButton = "";
+				 				}
+
+				 			}
+				 			, success: function(e) {
+				 				var serverResponse = JSON.parse(e.XMLHttpRequest.response);
+
+				 				if("undefined"  == typeof serverResponse.errMessage) {
+				 					fileUploadSucess++;
+
+				 					var tempObj = new Object();
+					 				tempObj.fileNm = serverResponse.getOriginalFilename;
+					 				tempObj.filePath = serverResponse.serverPath;
+
+					 				uploadAttatchFileList.push(tempObj);
+				 				} else {
+				 					fileUploadError++;
+				 				}
+
+				 				if(fileUploadTotal == fileUploadSucess) {
+
+				 					$.main.fileUploadTotal = 0;
+				 					$.main.fileUploadSucess = 0;
+				 					$.main.fileUploadError = 0;
+
+		                            //데이터 등록
+
+		                            var requestObject = $.main.fn_getSaveData();
+
+		                            var attatchFileList = [];
+
+		                            for(var i=0; i<$.main.uploadAttachFileList.length; i++) {
+		                                var tempAttatchObj = new Object();
+		                                tempAttatchObj.objectType = 'NoticeAttachFile';
+		                                tempAttatchObj.ownerId = '';
+		                                tempAttatchObj.fileId = '';
+		                                tempAttatchObj.fileNm = $.main.uploadAttachFileList[i].fileNm;
+		                                tempAttatchObj.filePath = $.main.uploadAttachFileList[i].filePath;
+		                                tempAttatchObj.flag = 'C';
+
+		                                if($.main.orgAttachFileList.length <= 0) {
+		                                    attatchFileList.push(tempAttatchObj);
+		                                } else {
+		                                	$.main.orgAttachFileList.push(tempAttatchObj);
+		                                }
+		                            }
+
+		                            var tempArray = [];
+
+		                            if($.main.orgAttachFileList.length <= 0) {
+		                            	mint.common.debugLog("attach file attatchFileList : " + attatchFileList);
+
+		                            	for(var i= 0; i < attatchFileList.length; i++) {
+		                            		var fileObject = new Object();
+
+		                            		fileObject.objectType = 'NoticeAttachFile';
+		                            		fileObject.ownerId = attatchFileList[i].ownerId;
+		                            		fileObject.fileId = attatchFileList[i].fileId;
+		                            		fileObject.fileNm = attatchFileList[i].fileNm;
+		                            		fileObject.filePath = attatchFileList[i].filePath;
+		                            		fileObject.flag = attatchFileList[i].flag;
+
+		                            		tempArray.push(fileObject);
+		                            	}
+
+		                                requestObject.noticeAttachFile = tempArray;
+		                            }
+		                            else {
+		                            	mint.common.debugLog("attach file orgAttachFileList : " + $.main.orgAttachFileList);
+
+
+		                            	for(var i= 0; i < $.main.orgAttachFileList.length; i++) {
+		                                    var fileObject = new Object();
+
+		                                    fileObject.objectType = 'NoticeAttachFile';
+		                                    fileObject.ownerId = $.sub.orgAttachFileList[i].ownerId;
+		                                    fileObject.fileId = $.sub.orgAttachFileList[i].fileId;
+		                                    fileObject.fileNm = $.sub.orgAttachFileList[i].fileNm;
+		                                    fileObject.filePath = $.sub.orgAttachFileList[i].filePath;
+		                                    fileObject.flag = $.sub.orgAttachFileList[i].flag;
+
+		                                    tempArray.push(fileObject);
+		                                }
+
+		                            	requestObject.noticeAttachFile = tempArray;
+		                            }
+
+		                            //console.log(requestObject);
+		                            if ($.main.noticeProcMode == "UPDATE") {
+		                                //update
+		                                mint.callService(requestObject, screenName, "REST-U01-SU-02-01", '$.sub.fn_saveComplete', {errorCall : true, params : {noticeId : $.main.noticeDetailData.noticeId} });
+
+		                            } else {
+		                                //insert
+		                            	mint.callService(requestObject, screenName, "REST-C01-SU-02-01", '$.sub.fn_saveComplete', {errorCall : true });
+		                            }
+
+		                            kendoUploadButton = "";
+				 				} else if(fileUploadTotal == (fileUploadError + fileUploadSucess)) {
+				 					$(".k-upload-files.k-reset").find("li").remove();
+
+				 					$.main.uploadAttatchFileList =[];
+				 					$.main.fileUploadTotal = 0;
+				 					$.main.fileUploadSucess = 0;
+				 					$.main.fileUploadError = 0;
+
+						 	        $.main.kendoUploadButton = "";
+				 				}
+				 			}
+				 			, upload: function(e) {
+				 				$.main.fileUploadTotal++;
+				 			}
+				 			, select : function(e) {
+				 				// 첨부 불가 확장자
+				 				var extArray = new Array(".php3",".php4",".asp",".jsp",".php",".html",".htm",".inc",".js",".pl",".cgi",".java",".sh",".bash",".exe",".bat",".msi",".xml");
+				 				// 확장자 체크
+				 				var notAllowed = false;
+				 	            // $.each(e.files, function(index, value) {
+				 	            //	if (extArray.indexOf(value.extension.toLowerCase()) > -1 ) {
+//				 	            //		console.log(value.extension + " is not allowed Extension!!");
+				 	            //        alert("첨부 할 수 없는  종류의 파일이 선택 되었습니다. \n 확인 후 다시 첨부하여 주십시오.");
+				 	            //        notAllowed = true;
+				 	            //    }
+				 	            //});
+				 	            var breakPoint = 0;
+
+				 	            if (notAllowed == true) {
+				 	            	e.preventDefault();
+				 	            }
+
+				 	            // custom button 확용
+				 	            setTimeout(function() {
+				 	            	$.main.kendoUploadButton = $(".k-upload-selected");
+				 	            	$.main.kendoUploadButton.hide();
+				 	            }, 1);
+				 			}
+				 		});
+						*/
+
+
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initFileUpload"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Panel#01 초기화
+				//-----------------------------------------------------------------------
+				fn_uploadCheck : function( xhr ) {
+					try {
+						var httpStatus = xhr.status;
+						if( httpStatus == 200 ) {
+							//-----------------------------------------------------------------------
+							// Response ComMessage
+							//-----------------------------------------------------------------------
+							var msg = JSON.parse(xhr.responseText);
+							if( msg.errorCd == 0 ) {
+
+								mint.common.alert('CI00105');
+								var jsonData = msg.responseObject;
+								var dataSource = $.main.fn_getGridDataSource('AN-01-00-008-GRID-001', jsonData);
+								$('#AN-01-00-008-GRID-001').data('kendoGrid').setDataSource(dataSource);
+								$('#AN-01-00-008-POPUP-01').modal('hide');
+
+							} else {
+								$('#AN-01-00-008-POPUP-01').modal('hide');
+								mint.common.errorDialog('Service', msg.errorCd, msg.errorMsg, msg.errorDetail);
+							}
+
+						} else {
+							switch( httpStatus ) {
+								case 12029 : //server shutdown
+									alertMsg = mint.message.getMessage('CE12029', null);
+									break;
+								case 404 :
+									alertMsg = mint.message.getMessage('CE10404', null);
+									break;
+								default :
+									alertMsg = mint.message.getMessage('CE10000', httpStatus);
+									break;
+							}
+							mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_uploadCheck"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid#01 초기화
+				//-----------------------------------------------------------------------
+				fn_initGrid01 : function() {
+					try {
+
+						$("#AN-01-00-008-GRID-001").kendoGrid({
+							dataSource : $.main.fn_getGridDataSource('AN-01-00-008-GRID-001', []),
+							filterable: false,
+							scrollable: true,
+							resizable: true,
+				            sortable: true,
+				            selectable: true,
+				            editable: "inline",
+				            pageable : {
+								  refresh 		: false
+						    	, buttonCount 	: 5
+						    	, pageSizes		: mint.ui.getPageSizesS()
+							},
+				            save : function(e) {
+								var dataItem = e.model;
+								$.main.fn_saveSystem(dataItem, true);
+				            },
+							columns: [
+   								{
+ 									//title : "<input type='checkbox' id='AN-01-00-008-GRID-001-CHECKBOX-CHECKBOX-All'>",
+									template : "<input type='checkbox' readonly='readonly' name='AN-01-00-008-GRID-001-CHECKBOX' class='AN-01-00-008-GRID-001-CHECKBOX' onchange='$.main.fn_checkBoxSelected(this)' >",
+									width : "30px",
+									headerAttributes : {
+										style : "text-align: center; vertical-align:middle;"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									}
+								},
+								{
+									field : "comments",
+									title : mint.label.getLabel('lb-398'), //"설명"
+									//width : "300px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: left; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									//locked : true,
+								},
+								{
+									field : "batchCnt",
+									title : mint.label.getLabel('lb-349'), //"건수"
+									width : "70px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									//locked : true,
+								},
+								{
+									field : "resultCd",
+									title : mint.label.getLabel('lb-473'), //"상태"
+									//width : "70px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									template: '#=$.main.fn_resultNm(resultCd)#'
+								},
+								{
+									field : "resultMsg",
+									title : mint.label.getLabel('lb-574'), //"메세지"
+									//width : "300px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: left; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									//locked : true,
+								},
+								{
+									field : "regDate",
+									title : mint.label.getLabel('lb-71'), //"등록일"
+									width : "150px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									template: "#=kendo.toString(kendo.parseDate(regDate, 'yyyyMMddHHmm'), 'yyyy/MM/dd HH:mm')#"
+									//locked : true,
+								},
+								{
+									field : "regUserNm",
+									title : mint.label.getLabel('lb-535'), //"등록자"
+									width : "100px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									//locked : true,
+								},
+								{
+                                    field : "batchId",
+                                    hidden : true
+                                },
+								{
+                                    field : "resultCd",
+                                    hidden : true
+                                }
+
+							]
+							, dataBound: function (e) {
+								if('undefined' != typeof $("#AN-01-00-008-GRID-001").data()) {
+									if(0 == $("#AN-01-00-008-GRID-001").data().kendoGrid.dataSource.view().length) {
+										var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+							    		$("#AN-01-00-008-GRID-001").children(".k-grid-content").height(gridHeight /3.5);
+							    	} else {
+							    		$("#AN-01-00-008-GRID-001").children(".k-grid-content").height('auto');
+							    	}
+
+									//-----------------------------------------------------------------------
+									// 시스템그룹의 하위 시스템이 존재하면 삭제 버튼을 비활성화 시킨다.
+									//-----------------------------------------------------------------------
+									var items = e.sender._data;
+									if( items.length > 0 ) {
+										for(var i = 0; i < items.length; i++ ) {
+											if( items[i].resultCd == 2 ) {
+												var tr = e.sender.tbody.find("tr[data-uid='" + items[i].uid + "']");
+												var inputTag = tr.find("td>input[class='AN-01-00-008-GRID-001-CHECKBOX']");
+												inputTag.attr('readonly','readonly');
+												inputTag.attr('disabled','disabled');
+											}
+										}
+									}
+
+								}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid01"});
+					}
+				},//end fn_initGrid01
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid#02 초기화
+				//-----------------------------------------------------------------------
+				fn_initGrid02 : function() {
+					try {
+
+						$("#AN-01-00-008-GRID-002").kendoGrid({
+							dataSource : $.main.fn_getGridDataSource('AN-01-00-008-GRID-002', []),
+							filterable: false,
+							scrollable: true,
+							resizable: true,
+				            sortable: true,
+				            selectable: true,
+				            editable: "inline",
+				            pageable : {
+								  refresh 		: false
+						    	, buttonCount 	: 5
+						    	, pageSizes		: mint.ui.getPageSizesM()
+							},
+				            save : function(e) {
+								var dataItem = e.model;
+								$.main.fn_saveSystem(dataItem, true);
+				            },
+							columns: [
+								{
+									field : "rowIndex",
+									title : mint.common.isEmpty(mint.label.getLabel('lb-665')) ? "행번호" : mint.label.getLabel('lb-665'),
+									width : "60px",
+									headerAttributes : {
+										style : "text-align: center; vertical-align:middle;"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									filterable: { multi: true, search: true },
+									//locked : true,
+								},
+								{
+									field : "",
+									//title : mint.label.getLabel('lb-109'), //"업무정보"
+									title : "인터페이스기본", //"업무정보"
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "interfaceId",
+											title : mint.label.getLabel('lb-154'), //"인터페이스ID"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center; vertical-align:middle;"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true },
+											//locked : true,
+										},
+										{
+											field : "col2",
+											title : mint.label.getLabel('lb-153'), //"인터페이스명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+											//locked : true,
+										},
+										{
+											field : "col3",
+											title : "인터페이스설명", //"인터페이스설명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true },
+											//locked : true,
+										}
+									]
+								},
+
+								{
+									field : "",
+									title : "업무", //"업무"
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col4",
+											title : "업무대분류명", //"업무대분류명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col5",
+											title : "업무대분류코드", //"업무대분류코드"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col6",
+											title : "업무중분류명", //"업무중분류명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col7",
+											title : "업무중분류코드", //"업무중분류코드"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col8",
+											title : mint.label.getLabel('lb-83'), //"업무명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col9",
+											title : "업무코드", //"업무코드"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+
+								{
+									field : "",
+									title : "기관", //"기관"
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col10",
+											title : "송신기관대분류명", //"송신기관대분류명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col11",
+											title : "송신기관대분류코드", //"송신기관대분류코드"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col12",
+											title : "송신기관중분류명", //"송신기관중분류명"
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col13",
+											title : "송신기관중분류코드", //"송신기관중분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col14",
+											title : "송신기관명", //"송신기관명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col15",
+											title : "송신기관코드", //"송신기관코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col16",
+											title : "수신기관대분류명", //"수신기관대분류명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col17",
+											title : "수신기관대분류코드", //"수신기관대분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col18",
+											title : "수신기관중분류명", //"수신기관중분류명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col19",
+											title : "수신기관중분류코드", //"수신기관중분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col20",
+											title : "수신기관명", //"수신기관명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col21",
+											title : "수신기관코드", //"수신기관코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+								{
+									field : "",
+									title : "시스템", //"시스템",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col22",
+											title : "송신시스템대분류명", //"송신시스템대분류명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col23",
+											title : "송신시스템대분류코드", //"송신시스템대분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col24",
+											title : "송신시스템중분류명", //"송신시스템중분류명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col25",
+											title : "송신시스템중분류코드", //"송신시스템중분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col26",
+											title : "송신시스템명", //"송신시스템명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col27",
+											title : "송신시스템코드", //"송신시스템코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col28",
+											title : "수신시스템대분류명", //"수신시스템대분류명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col29",
+											title : "수신시스템대분류코드", //"수신시스템대분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col30",
+											title : "수신시스템중분류명", //"수신시스템중분류명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col31",
+											title : "수신시스템중분류코드", //"수신시스템중분류코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col32",
+											title : "수신시스템명", //"수신시스템명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col33",
+											title : "수신시스템코드", //"수신시스템코드",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+
+								{
+									field : "",
+									title : "서비스", //"서비스",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col34",
+											title : "송신 연결정보", //"송신 연결정보",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col35",
+											title : "송신 서비스명", //"송신 서비스명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col36",
+											title : "수신 연결정보", //"수신 연결정보",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col37",
+											title : "수신 서비스명", //"수신 서비스명",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+
+								{
+									field : "",
+									title : "연계기본정보", //"연계기본정보",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col38",
+											title : "등록일자", //"등록일자",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col39",
+											title : "연계방식", //"연계방식",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col40",
+											title : "인터페이스유형", //"인터페이스유형",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col41",
+											title : "DATA처리방향", //"DATA처리방향",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+								{
+									field : "",
+									title : "스케줄", //"스케줄",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col42",
+											title : "발생유형", //"발생유형",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col43",
+											title : "발생주기", //"발생주기",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col44",
+											title : "발생주기입력값", //"발생주기입력값",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col45",
+											title : "발생조건", //"발생조건",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+								{
+									field : "",
+									title : "관리정보", //"관리정보",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col46",
+											title : "중요도", //"중요도",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col47",
+											title : "연계패턴", //"연계패턴",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col48",
+											title : "진행상태", // "진행상태",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+								{
+									field : "",
+									title : mint.label.getLabel('lb-218'), //"부가정보",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+									columns: [
+										{
+											field : "col38",
+											title : mint.label.getLabel('lb-222'), //"Comment",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										},
+										{
+											field : "col39",
+											title : mint.label.getLabel('lb-223'), //"Description",
+											width : "150px",
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											filterable: { multi: true, search: true }
+										}
+									]
+								},
+
+								{
+                                    field : "batchId",
+                                    hidden : true
+                                },
+
+								{
+									field : "rowIndex",
+									hidden : true
+								},
+								{
+									field : "requirementId",
+									hidden : true
+								}
+							]
+							, dataBound: function (e) {
+								if('undefined' != typeof $("#AN-01-00-008-GRID-002").data()) {
+									if(0 == $("#AN-01-00-008-GRID-002").data().kendoGrid.dataSource.view().length) {
+										var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+							    		$("#AN-01-00-008-GRID-002").children(".k-grid-content").height(gridHeight /3.5);
+							    	} else {
+							    		$("#AN-01-00-008-GRID-002").children(".k-grid-content").height('auto');
+							    	}
+								}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid02"});
+					}
+				},//end fn_initGrid02
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid DataSource return
+				//-----------------------------------------------------------------------
+				fn_getGridDataSource : function(gridId, jsonData) {
+					try {
+						var dataSource = null;
+						if( gridId === 'AN-01-00-008-GRID-001' ) {
+							dataSource = new kendo.data.DataSource({
+								  data: jsonData
+							    , page: mint.ui.getPageSizesM()
+							    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+							    , schema: {
+							    	model: $.main.fn_getGridModel('ExcelUploadMasterInfo')
+							    }
+							});
+						} else if( gridId === 'AN-01-00-008-GRID-002' ) {
+							dataSource = new kendo.data.DataSource({
+								  data: jsonData
+							    , page:1
+							    , pageSize: mint.ui.getPageSizesM({'currentPage' : true})
+							    , schema: {
+							    	model: $.main.fn_getGridModel('ExcelUploadDetailInfo')
+							    }
+							});
+						} else {
+							dataSource = new kendo.data.DataSource({
+								  data: []
+							    , page:1
+							    , pageSize: mint.ui.getPageSizesM({'currentPage' : true})
+							    //, schema: {
+							    //	model: $.main.fn_getGridModel('System')
+							    //}
+							});
+
+						}
+						return dataSource;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridDataSource"});
+					}
+				},//end fn_getGridDataSource()
+
+				//-----------------------------------------------------------------------
+				// Description :: Kendo Model return
+				//-----------------------------------------------------------------------
+				fn_getGridModel : function(modelType) {
+					try {
+
+						var ExcelUploadMasterInfo = new kendo.data.Model.define({
+							fields: {
+								batchId : {defaultValue: ""},
+								comments : {defaultValue: ""},
+								batchCnt : {defaultValue: 0},
+								resultCd : {defaultValue: ""},
+								resultMsg : {defaultValue: ""},
+								fileNm : {defaultValue: ""},
+								regDate : {defaultValue: ""},
+								regUser : {defaultValue: ""},
+								regUserNm : {defaultValue: ""},
+								modDate : {defaultValue: ""},
+								modUser : {defaultValue: ""},
+								modUserNm : {defaultValue: ""},
+							}
+						});
+						var ExcelUploadDetailInfo = new kendo.data.Model.define({
+							fields: {
+								batchId : {defaultValue: ""},
+								rowIndex : {defaultValue: ""},
+								requirementId : {defaultValue: ""},
+								interfaceId : {defaultValue: ""},
+								col0 : {defaultValue: ""},
+								col1 : {defaultValue: ""},
+								col2 : {defaultValue: ""},
+								col3 : {defaultValue: ""},
+								col4 : {defaultValue: ""},
+								col5 : {defaultValue: ""},
+								col6 : {defaultValue: ""},
+								col7 : {defaultValue: ""},
+								col8 : {defaultValue: ""},
+								col9 : {defaultValue: ""},
+								col10 : {defaultValue: ""},
+								col11 : {defaultValue: ""},
+								col12 : {defaultValue: ""},
+								col13 : {defaultValue: ""},
+								col14 : {defaultValue: ""},
+								col15 : {defaultValue: ""},
+								col16 : {defaultValue: ""},
+								col17 : {defaultValue: ""},
+								col18 : {defaultValue: ""},
+								col19 : {defaultValue: ""},
+								col20 : {defaultValue: ""},
+								col21 : {defaultValue: ""},
+								col22 : {defaultValue: ""},
+								col23 : {defaultValue: ""},
+								col24 : {defaultValue: ""},
+								col25 : {defaultValue: ""},
+								col26 : {defaultValue: ""},
+								col27 : {defaultValue: ""},
+								col28 : {defaultValue: ""},
+								col29 : {defaultValue: ""},
+								col30 : {defaultValue: ""},
+								col31 : {defaultValue: ""},
+								col32 : {defaultValue: ""},
+								col33 : {defaultValue: ""},
+								col34 : {defaultValue: ""},
+								col35 : {defaultValue: ""},
+								col36 : {defaultValue: ""},
+								col37 : {defaultValue: ""},
+								col38 : {defaultValue: ""},
+								col39 : {defaultValue: ""},
+								col40 : {defaultValue: ""},
+								col41 : {defaultValue: ""},
+								col42 : {defaultValue: ""},
+								col43 : {defaultValue: ""},
+								col44 : {defaultValue: ""},
+								col45 : {defaultValue: ""},
+							}
+						});
+						if( modelType == 'ExcelUploadMasterInfo' ) {
+							return ExcelUploadMasterInfo;
+						} else if( modelType == 'ExcelUploadDetailInfo' ) {
+							return ExcelUploadDetailInfo;
+						} else {
+							return null;
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridModel"});
+					}
+				}, //end fn_getGridModel()
+
+				//-----------------------------------------------------------------------
+				// Description :: excel upload
+				//-----------------------------------------------------------------------
+				fn_excelUpload : function() {
+					try {
+						$.main.kendoUploadButton.click();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_excelUpload"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: validate check
+				//-----------------------------------------------------------------------
+				fn_validateCheck : function() {
+					try {
+
+						var jsonData = $.main.excelOriginalData;
+
+						mint.callService(jsonData, 'AN-01-00-008', 'REST-R01-AN-01-00-008', function(validateData) {
+						}, {errorCall : true});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_validateCheck"});
+					}
+				},
+				//-----------------------------------------------------------------------
+				// Description :: Excel Upload MasterInfo Search
+				//-----------------------------------------------------------------------
+				fn_requireExcelUploadMasterInfo : function() {
+					try {
+						mint.callService(null, screenName, 'REST-R01-AN-01-00-008', function(jsonData) {
+							if( ! mint.common.isEmpty(jsonData) ) {
+								$("#AN-01-00-008-GRID-001").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-001', jsonData));
+							} else {
+								$("#AN-01-00-008-GRID-001").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-001', []));
+							}
+						}, { errorCall : true, notificationView : false } );
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_requireExcelUploadMasterInfo"});
+					}
+				},//end fn_requireExcelUploadMasterInfo()
+
+				//-----------------------------------------------------------------------
+				// Description :: Excel Upload DetailInfo Search
+				//-----------------------------------------------------------------------
+				fn_requireExcelUploadDetailInfo : function(batchId) {
+					try {
+						var requestObject = new Object();
+						requestObject.batchId = batchId;
+						mint.callService(requestObject, screenName, 'REST-R02-AN-01-00-008', function(jsonData) {
+							if( ! mint.common.isEmpty(jsonData) ) {
+								$("#AN-01-00-008-GRID-002").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-002', jsonData));
+							} else {
+								$("#AN-01-00-008-GRID-002").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-002', []));
+							}
+						}, { errorCall : true, notificationView : false } );
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_requireExcelUploadDetailInfo"});
+					}
+				},//end fn_requireExcelUploadDetailInfo()
+
+				//-----------------------------------------------------------------------
+				// Description :: create interface
+				//-----------------------------------------------------------------------
+				fn_createInterface : function(batchId) {
+					try {
+
+						var requestObject = new Object();
+						requestObject.batchId = batchId;
+						mint.callService(requestObject, screenName, 'REST-C01-AN-01-00-008', function(jsonData) {
+							if( ! mint.common.isEmpty(jsonData) ) {
+								console.log(jsonData);
+								$("#AN-01-00-008-GRID-001").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-001', jsonData));
+							} else {
+								$("#AN-01-00-008-GRID-001").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-001', []));
+							}
+						}, { errorCall : true, notificationView : false } );
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_createInterface"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: delete interface
+				//-----------------------------------------------------------------------
+				fn_deleteInterface : function(batchId) {
+					try {
+
+						var batchIds = [];
+						var batchIdKey = $.main.checkedBatchId.keys();
+						for(var i=0; i < batchIdKey.length; i++ ) {
+							batchIds.push(batchIdKey[i]);
+						}
+
+						var requestObject = new Object();
+						requestObject.batchId = batchIds;
+
+						mint.callService(requestObject, screenName, 'REST-D01-AN-01-00-008', function(jsonData) {
+
+							mint.common.alert('CI00103',null);
+
+							$("#AN-01-00-008-GRID-002").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-002', []));
+							if( ! mint.common.isEmpty(jsonData) ) {
+								$("#AN-01-00-008-GRID-001").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-001', jsonData));
+							} else {
+								$("#AN-01-00-008-GRID-001").data("kendoGrid").setDataSource($.main.fn_getGridDataSource('AN-01-00-008-GRID-001', []));
+							}
+						}, { errorCall : true, notificationView : false } );
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_createInterface"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: Excel Upload Result Nm Return
+				//-----------------------------------------------------------------------
+				fn_resultNm : function(resultCd) {
+					try {
+						var resultNm = "";
+						if( resultCd == 0 ) {
+							resultNm = "임시저장";
+						} else if( resultCd == 1 ) {
+							resultNm = "필드체크 성공";
+						} else if( resultCd == -1 ) {
+							resultNm = "필드체크 실패(삭제후 재등록 권장)";
+						} else if( resultCd == 2 ) {
+							resultNm = "일괄등록 완료";
+						} else if( resultCd == -2 ) {
+							resultNm = "일괄등록 실패(삭제후 재등록 권장)";
+						}
+						return resultNm;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_resultNm"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: MasterGrid CheckBox Click Event
+				//-----------------------------------------------------------------------
+				fn_checkBoxSelected : function(rowObj) {
+	            	try {
+	            		var grid = $("#AN-01-00-008-GRID-001").data("kendoGrid");
+	            		var row = $(rowObj).closest("tr");
+	            		var checkedDataItem = grid.dataItem(row);
+
+	            		if (rowObj.checked) {
+					        //select the row
+					        row.addClass("k-state-selected");
+					        $.main.checkedBatchId.put(checkedDataItem.batchId,checkedDataItem.batchId);
+					    } else {
+					        //remove selection
+					        row.removeClass("k-state-selected");
+					        if( $.main.checkedBatchId.containsKey(checkedDataItem.batchId) ) {
+					        	$.main.checkedBatchId.remove(checkedDataItem.batchId);
+					        }
+					    }
+	            	}
+	            	catch(e) {
+	            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkBoxSelected"});
+	            	}
+	            },
+
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 상세 화면으로 이동
+				//-----------------------------------------------------------------------
+				fn_moveRequirementDetail : function(requirementId) {
+					try {
+
+				        mint.setDetailView('Y');
+				        mint.common.setScreenParam("caller", "AN-01-00-008");
+				        mint.common.setScreenParam("requirementId", requirementId);
+			      		var options = mint.common.getScreenParam("options");
+			      		mint.move('../sub-an/AN-01-00-003', {CRUDPS:'R'});
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_moveRequirementDetail"});
+					}
+				}//end fn_moveRequirementDetail()
+
+	        }
+	    });
+
+	    //=======================================================================
+	    // (4) 이벤트 핸들러 정의
+	    //=======================================================================
+		//-----------------------------------------------------------------------
+		// Description :: Excel Upload Click
+		//-----------------------------------------------------------------------
+		$(".btn-excelUpload").click(function(e) {
+			try {
+			    $(".k-upload-files.k-reset").remove();
+			    $(".k-upload-status.k-upload-status-total").remove();
+			    $("#tf-excelUpload-comments").val('');
+				$('#AN-01-00-008-POPUP-01').modal({
+					backdrop: 'static'
+				});
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelUpload.click"});
+			}
+		});
+
+
+		//-----------------------------------------------------------------------
+		// Description :: Excel Upload Save Click
+		//-----------------------------------------------------------------------
+		$(".btn-excelUpload-save").click(function(e) {
+			try {
+				$.main.fn_excelUpload();
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelUpload-save.click"});
+			}
+		});
+
+
+		//-----------------------------------------------------------------------
+		// Description :: interface create
+		//-----------------------------------------------------------------------
+		$(".btn-createItem").click(function(e) {
+			try {
+
+				if( ! mint.common.isEmpty($.main.checkedBatchId) && $.main.checkedBatchId.size() > 0 ) {
+					if( $.main.checkedBatchId.size() > 1 ) {
+						mint.common.alert('하나의 목록만 선택하세요.');
+					} else {
+						var batchIdKey = $.main.checkedBatchId.keys();
+						$.main.fn_createInterface(batchIdKey[0]);
+					}
+
+				} else {
+					mint.common.alert('CW00003','일괄등록 목록');
+				}
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-createItem.click"});
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: interface delete
+		//-----------------------------------------------------------------------
+		$(".btn-deleteItem").click(function(e) {
+			try {
+				if( ! mint.common.isEmpty($.main.checkedBatchId) && $.main.checkedBatchId.size() > 0 ) {
+					if( mint.common.confirm('CI00003', null) ) {
+						$.main.fn_deleteInterface();
+					}
+				} else {
+					mint.common.alert('CW00003','일괄등록 목록');
+				}
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-deleteItem.click"});
+			}
+		});
+
+
+
+		//-----------------------------------------------------------------------
+		// Description :: interface delete
+		//-----------------------------------------------------------------------
+		$(".btn-excelTemplateDownLoad").click(function(e) {
+			try {
+				$(location).attr("href", encodeURI("/mint/ut/excel/download/template?filename=[IIP]DE_000_UPLOAD_TEMPLATE.xlsx") );
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-excelTemplateDownLoad.click"});
+			}
+		});
+
+	  	//-----------------------------------------------------------------------
+		// Description :: ExcelUpload Master Info 더블클릭 이벤트
+		//-----------------------------------------------------------------------
+		$('#AN-01-00-008-GRID-001').on('dblclick', "tr.k-state-selected", function () {
+			try {
+				var entityGrid = $("#AN-01-00-008-GRID-001").data("kendoGrid");
+				var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+				//$('#IM-01-01-001-SELECTED-SYSTEM-GROUP').val(selectedItem.systemNm + '(' + selectedItem.systemCd + ')');
+				//$('#IM-01-01-001-SELECTED-SYSTEM-GROUP-ID').val(selectedItem.systemId);
+				//$('#IM-01-01-001-SELECTED-SYSTEM-GROUP-CD').val(selectedItem.systemCd);
+				//$('#IM-01-01-001-SELECTED-SYSTEM-GROUP-NM').val(selectedItem.systemNm);
+
+				$.main.fn_requireExcelUploadDetailInfo(selectedItem.batchId);
+			} catch( e ) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "AN-01-00-008-GRID-001.grid.dbclick"});
+			}
+		});
+
+	  	//-----------------------------------------------------------------------
+		// Description :: ExcelUpload Master Info 더블클릭 이벤트
+		//-----------------------------------------------------------------------
+		$('#AN-01-00-008-GRID-002').on('dblclick', "tr.k-state-selected", function () {
+			try {
+				var entityGrid = $("#AN-01-00-008-GRID-002").data("kendoGrid");
+				var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+				if( !mint.common.isEmpty(selectedItem) && !mint.common.isEmpty(selectedItem.requirementId) ) {
+					$.main.fn_moveRequirementDetail(selectedItem.requirementId);
+				}
+
+			} catch( e ) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "AN-01-00-008-GRID-001.grid.dbclick"});
+			}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: Validate Check
+		//-----------------------------------------------------------------------
+		$(".btn-validateCheck").click(function(e) {
+			try {
+				$.main.fn_validateCheck();
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-save.click"});
+			}
+		});
+
+	    //=======================================================================
+	    // (5) 기타 Function 정의
+	    //=======================================================================
+
+	    //=======================================================================
+	    // (6) 화면 로딩시 실행할 항목 기술
+	    //=======================================================================
+	    $.main.fn_init();
+	    mint.label.attachLabel(null);
+	});
+</script>
+
+<style>
+	/* 첨부파일 - style customize set */
+	.k-filename {
+		max-width: 94% !important;
+	}
+	.k-upload {
+		width: 98.5% !important;
+	}
+</style>

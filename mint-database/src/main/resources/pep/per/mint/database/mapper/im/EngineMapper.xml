@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.EngineMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+
+	<insert id="insertEngineAgent">
+		<selectKey keyProperty="agentId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'MA' || LPAD((COALESCE(MAX(SUBSTR(AGENT_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0209
+        		</when>
+        		<otherwise>
+			SELECT 'MA' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(AGENT_ID,3)),'0')) + 1),8,'0') FROM TIM0209
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		insert into TIM0209 (
+		    AGENT_ID,
+		    SERVER_ID,
+		    AGENT_CD,
+		    AGENT_NM,
+		    STATUS,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) values (
+			#{agentId},
+			#{server.serverId, jdbcType=VARCHAR},
+			#{agentCd, jdbcType=VARCHAR},
+			#{agentNm, jdbcType=VARCHAR},
+			'0',
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getEngineAgentList" parameterType="Map" resultMap="agentResultMap">
+		select
+			a.AGENT_ID
+			,a.AGENT_NM
+			,a.AGENT_CD
+			,a.STATUS
+			,a.COMMENTS
+			,k.SERVER_ID
+			,k.SERVER_CD
+			,k.SERVER_NM
+			,j.RUNNER_ID AS MR_RUNNER_ID
+			,j.RUNNER_NM AS MR_RUNNER_NM
+			,j.STATUS	AS  MR_STATUS
+			,j.COMMENTS  AS MR_COMMENTS
+		from TIM0209 a
+		left outer join TIM0201 k on a.SERVER_ID = k.SERVER_ID
+		left outer join (
+			select
+        		 AGENT_ID
+				,RUNNER_ID
+				,RUNNER_NM
+				,STATUS
+				,COMMENTS
+			from TIM0210 WHERE DEL_YN='N'
+		) j on a.AGENT_ID = j.AGENT_ID
+		where a.DEL_YN = 'N'
+		<if test="agentId != null">
+			AND a.AGENT_ID = #{agentId}
+		</if>
+	</select>
+
+	<resultMap type="MIAgent" id="agentResultMap">
+		<id property="agentId" 			column="AGENT_ID"/>
+		<result property="agentNm"			column="AGENT_NM"/>
+		<result property="agentCd"			column="AGENT_CD"/>
+		<result property="status"			column="STATUS"/>
+		<result property="comments"			column="COMMENTS"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverCd" 	column="SERVER_CD" />
+			<result property="serverNm" 	column="SERVER_NM" />
+		</association>
+		<collection property="brokerList" ofType="MIRunner">
+			<id property="runnerId"				column="MR_RUNNER_ID"/>
+			<result property="runnerNm"			column="MR_RUNNER_NM"/>
+			<result property="status" 			column="MR_STATUS"/>
+			<result property="comments" 		column="MR_COMMENTS"/>
+		</collection>
+
+<!--
+		<association property="serverResourceList" javaType="ServerResource">
+			<id property="resourceId"			column="RESOURCE_ID"/>
+			<result property="resourceNm"		column="RESOURCE_NM"/>
+			<result property="type" 			column="SR_TYPE"/>
+			<result property="typeNm" 			column="SR_TYPE_NM"/>
+			<result property="limit" 			column="SR_LIMIT"/>
+			<result property="info1" 			column="SR_INFO1"/>
+			<result property="info2" 			column="SR_INFO2"/>
+			<result property="info3" 			column="SR_INFO3"/>
+			<result property="comments" 		column="SR_COMMENTS"/>
+		</association>
+
+
+		<association property="serverProcessList" javaType="ServerProcess">
+			<id property="processId"			column="PROCESS_ID"/>
+			<result property="processNm"		column="PROCESS_NM"/>
+			<result property="checkValue"		column="SP_CHECK_VAL"/>
+			<result property="checkCnt"			column="SP_CHECK_CNT"/>
+			<result property="comments" 		column="SP_COMMENTS"/>
+		</association>
+
+		<association property="qmgrList" javaType="QueueManager">
+			<id property="qmgrId" 			column="QM_QMGR_ID"/>
+			<result property="qmgrNm"			column="QM_QMGR_NM"/>
+			<result property="ip" 				column="QM_IP"/>
+			<result property="port" 			column="QM_PORT"/>
+			<result property="status" 			column="QM_STATUS"/>
+			<result property="comments" 		column="QM_COMMENTS"/>
+
+			<association property="queueList" javaType="Queue">
+				<id property="queueId" 		column="QU_QUEUE_ID"/>
+				<result property="queueNm" 	column="QU_QUEUE_NM"/>
+				<result property="limit" 	column="QU_LIMIT"/>
+				<result property="limitOpt" column="QU_LIMIT_OPT"/>
+				<result property="depth" 	column="QU_DEPTH"/>
+				<result property="perDepth" column="QU_PER_DEPTH"/>
+				<result property="comments" column="QU_COMMENTS"/>
+			</association>
+
+			<association property="channelList" javaType="QmgrChannel">
+				<id property="channelId" 		column="QC_CHANNEL_ID"/>
+				<result property="channelNm" 	column="QC_CHANNEL_NM"/>
+				<result property="xQname" 		column="QC_XQNAME"/>
+				<result property="status"		column="QC_STATUS"/>
+				<result property="comments"		column="QC_COMMENTS"/>
+			</association>
+		</association>
+
+ -->
+	</resultMap>
+
+
+
+	<select id="existEngineAgent" parameterType="Map" resultMap="agentResultMap">
+		SELECT
+			AGENT_ID,
+			AGENT_NM
+  		FROM TIM0209
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		AND  AGENT_NM = #{agentNm}
+		<if test="agentId != null">
+			AND AGENT_ID &lt;&gt; #{agentId}
+		</if>
+	</select>
+
+
+	<update id="updateEngineAgent">
+		update TIM0209
+		   set   AGENT_CD 		= #{agentCd, jdbcType=VARCHAR}
+				,AGENT_NM  		= #{agentNm, jdbcType=VARCHAR}
+				,SERVER_ID		= #{server.serverId, jdbcType=VARCHAR}
+				,COMMENTS 		= #{comments, jdbcType=VARCHAR}
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+
+		where AGENT_ID = #{agentId}
+	</update>
+
+	<delete id="deleteEngineAgent">
+		update TIM0209
+		set DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		where AGENT_ID = #{agentId}
+	</delete>
+
+
+
+	<insert id="insertEngineRunner">
+		<selectKey keyProperty="runnerId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT 'MR' || LPAD((COALESCE(MAX(SUBSTR(RUNNER_ID,3)),'0')::numeric+1)::text,8,'0') FROM TIM0210
+        		</when>
+        		<otherwise>
+			SELECT 'MR' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(RUNNER_ID,3)),'0')) + 1),8,'0') FROM TIM0210
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		insert into TIM0210 (
+		    AGENT_ID,
+		    RUNNER_ID,
+		    RUNNER_NM,
+		    STATUS,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) values (
+			#{agentId, jdbcType=VARCHAR},
+			#{runnerId},
+			#{runnerNm, jdbcType=VARCHAR},
+			'0',
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getEngineRunner" parameterType="Map" resultMap="runnerResultMap">
+		select
+			a.RUNNER_ID
+			,a.RUNNER_NM
+			,a.STATUS
+			,a.COMMENTS
+			,a.AGENT_ID
+		from TIM0210 a
+		where a.DEL_YN = 'N'
+		<if test="agentId != null">
+			AND AGENT_ID =  #{agentId}
+		</if>
+
+	</select>
+
+	<resultMap type="MIRunner" id="runnerResultMap">
+		<id property="agentId"			column="AGENT_ID"/>
+		<id property="runnerId"			column="RUNNER_ID"/>
+		<result property="runnerNm"		column="RUNNER_NM"/>
+		<result property="status" 			column="STATUS"/>
+		<result property="comments" 		column="COMMENTS"/>
+	</resultMap>
+
+	<select id="existEngineRunner" parameterType="Map" resultMap="runnerResultMap">
+		SELECT
+			RUNNER_ID,
+			RUNNER_NM
+  		FROM TIM0210
+  		WHERE 1=1
+  		AND DEL_YN= 'N'
+		AND  RUNNER_NM = #{runnerNm}
+		AND AGENT_ID =#{agentId}
+		<if test="runnerId != null">
+			AND RUNNER_ID &lt;&gt; #{runnerId}
+		</if>
+	</select>
+
+
+	<update id="updateEngineRunner">
+		update TIM0210
+		   set   RUNNER_NM 		= #{runnerNm, jdbcType=VARCHAR}
+				,COMMENTS 		= #{comments, jdbcType=VARCHAR}
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+
+		where  RUNNER_ID = #{runnerId}
+	</update>
+
+
+	<update id="deleteEngineRunner">
+		update TIM0210
+		   set  DEL_YN ='Y'
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+		where RUNNER_ID = #{runnerId}
+	</update>
+
+
+	<update id="deleteAllEngineRunner">
+		update TIM0210
+		   set  DEL_YN ='Y'
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+		where AGENT_ID = #{agentId}
+	</update>
+
+</mapper>

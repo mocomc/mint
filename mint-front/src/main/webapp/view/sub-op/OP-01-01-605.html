@@ -1,0 +1,218 @@
+﻿<!--
+	Screen ID : OP-01-01-605
+	Screen NM : ISM 온라인 처리결과 로그 전문보기 팝업화면
+-->
+
+<!-- 팝업-->
+<div class="modal inmodal-original" id="OP-01-01-605" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+					<span aria-hidden="true">&times;</span> <span class="sr-only"><lb class="lb-298"></lb></span>
+				</button>
+				<div>
+					<h2 id="pop-person-title"></h2>
+				</div>
+			</div>
+
+
+			<div class="modal-body">
+				<div class="col-sm-12">
+					<div class="ibox-content3">
+						<div>
+							<textarea id="ta-description" rows="43" cols="140" style="width:100%;"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+
+			<!--modal-footer-->
+			<div class="modal-footer-original" style="clear: both">
+				<button id="popup-btn-close"   type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i> <lb class="lb-298"></lb></button>
+			</div>
+			<!--modal-footer END-->
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<!-- modal inmodal END-->
+
+<!-- 팝업-->
+
+<script>
+
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "OP-01-01-605";
+		var callUrl = "";
+
+		$.extend({
+			sub : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.sub.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.sub.fn_initComponent();
+						$.sub.fn_setCallUrl();
+						$.sub.fn_initCallData();
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 url
+				//-----------------------------------------------------------------------
+				fn_setCallUrl : function() {
+
+					try {
+					//url
+						var envVal = mint.common.commonCodeMap.get("environmentalValues");
+						if( !mint.common.isEmpty(envVal) ) {
+							if( !mint.common.isEmpty(envVal["system.ism.log.url"]) ) {
+								callUrl = envVal["system.ism.log.url"] + "/log/online/message";
+							}else {
+								//alert("bb");
+							}
+
+						} else {
+							//alert("aa");
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setCallUrl"});
+					}
+
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallData : function() {
+					try {
+				      	{
+						   mint.callService($.sub.fn_getSearchObject(), screenName, 'REST-R01-OP-01-01-605', '$.sub.fn_setGridData', {errorCall : true});
+				      	}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallData"});
+					}
+				},//end fn_initCallback()
+
+
+				 //-----------------------------------------------------------------------
+	            // Description :: 검색 조건 조회 request object 세팅
+	            //-----------------------------------------------------------------------
+	            fn_getSearchObject : function() {
+	            	try {
+	                    var searchObject = new Object();
+
+	                    searchObject.processDate = mint.common.getScreenParam("processDate");
+	                    searchObject.integrationServiceId = mint.common.getScreenParam("integrationServiceId");
+	                    searchObject.stepIndex = mint.common.getScreenParam("stepIndex");
+	                    searchObject.id = mint.common.getScreenParam("id");
+	                    searchObject.globalId = mint.common.getScreenParam("globalId");
+	                    searchObject.serverName = mint.common.getScreenParam("serverName");
+
+						searchObject.callUrl = callUrl;
+
+	                    return searchObject;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getSearchObject"});
+	                }
+	            },
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기 설정
+				//-----------------------------------------------------------------------
+				fn_initComponent : function() {
+					try {
+
+						var caller = mint.common.getScreenParam("caller");
+						$('#pop-person-title').text(mint.label.getLabel("lb-911"));
+						$('#popup-btn-apply').show();
+
+						$("#ta-description").kendoMaskedTextBox({
+							resizable : {
+								content : true
+							  , toolbar : true
+							}
+						});
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initComponent"});
+					}
+				},//end fn_initComponent()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function(jsonData) {
+					try {
+						console.log(jsonData);
+						if(!mint.common.isEmpty(jsonData)) {
+
+							$("#ta-description").data("kendoMaskedTextBox").value(jsonData.resStr);
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+
+			}// end sub
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.sub.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+</script>
+<style>
+.modal-dialog {
+	width: 1200px;
+}
+</style>

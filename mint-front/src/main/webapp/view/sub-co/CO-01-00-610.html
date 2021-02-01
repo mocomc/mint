@@ -1,0 +1,299 @@
+﻿<!--
+	Screen ID : CO-01-00-610
+	Screen NM : 인터페이스 트레킹 상세 팝업(NH농협) - 운영
+-->
+
+<div class="modal" id="CO-01-00-610" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+                    <span aria-hidden="true">&times;</span> <span id="bt-if-search-close" class="sr-only bt-if-search-close">Close</span>
+                </button>
+                <span style="float: right; font-size:15px; font-weight: bold; padding: 15px 0px 0px 0px;">
+                    <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000050','H001')"></a>
+                </span>
+                <div>
+                    <h2><lb class="lb-30"></lb> <lb class="lb-353"></lb></h2>
+                </div>
+            </div>
+
+            <!--modal-body-->
+            <div class="modal-body">
+                <div class="ibox-content4">
+
+					<div class="col-lg-12">
+                        <div>
+							<sapn style="padding: 0px; float: left;">
+								<h4> ▶ <lb class="lb-459"></lb> <lb class="lb-352"></lb></h4>
+							</sapn>
+							<span style="padding: 0px; float: right;">
+								<span class="lable-sm" style="margin-right: 7px"><lb class="lb-459"></lb> <lb class="lb-460"></lb></span>
+								<span style="margin-right: 7px"><strong><lb class="lb-89"></lb> </strong><span id="totalCnt"></span></span>
+							</span>
+                        </div>
+
+                        <div style="padding:30px 0px 0px 0px;">
+							<div id="nodeListGrid"></div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-space">
+ 					<hr class="hr-space">
+
+                    <div class="col-lg-12" style="display:none;">
+                        <div class="panel blank-panel">
+                            <div class="poupup-tabs-container">
+                                <ul id="tab-detail-info" class="nav nav-tabs">
+                                    <li class="" style="display:none;"><a data-toggle="tab" href="#tab-01"><lb class="lb-462">Message</lb> <lb class="lb-464">Detail</lb></a></li>
+                                    <li class="active" style="display:none;"><a data-toggle="tab" href="#tab-02"><lb class="lb-463">Error</lb> <lb class="lb-464">Detail</lb></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                   	<div id="tab-01" class="tab-pane">
+                                        <div class="col-sm-12" style="padding: 0px 2px 0px 2px">
+                                            <textarea id="msg" class="well" style="padding: 10px 10px 10px 10px; width:100%; height: 100px; overflow-y:auto;" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <div id="tab-02" class="tab-pane active">
+                                        <div class="col-sm-12" style="padding: 0px 2px 0px 2px">
+                                        	<textarea id="errorMsg" class="alert alert-danger" style="padding: 10px 10px 10px 10px; width:100%; height: 100px; overflow-y:auto;" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div><!--tab-content end-->
+                            </div> <!--panel-body-->
+                        </div><!--panel blank-panel-->
+                    </div><!--col-lg-12 end-->
+                </div>
+            </div>
+
+            <!--modal-footer-->
+            <div class="modal-footer-original" style="clear: both">
+                <button id="btnClose" type="button" class="btn btn-danger btn-outline btnClose" data-dismiss="modal"><i class="fa fa-ban"></i> Close </button>
+            </div>
+            <!--modal-footer END-->
+        </div>
+    </div>
+    <!--modal-content animated fadeIn END-->
+</div>
+<!-- modal-dialog END-->
+
+
+
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "CO-01-00-610";
+    $.extend({
+        sub : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+			detailKey : '',
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.sub.fn_initCallback',{isDraggable:false});
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+
+                	$.sub.detailKey = mint.common.getScreenParam('detailKey');
+                	$.sub.fn_initGridNode();
+               		$.sub.fn_getTrackingDetail();
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_initGrid
+            //-----------------------------------------------------------------------
+            fn_initGridNode : function() {
+                try{
+					$("#nodeListGrid").kendoGrid({
+						dataSource: {
+							data: [],
+							pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+						},
+						sortable: true,
+						selectable: true,
+						resizable: true,
+						columns: [
+							{
+								field: "integrationId",
+								title: mint.label.getLabel('lb-395'),
+								width: "130px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "processMode",
+								title: mint.label.getLabel('lb-32')+"구간",
+								width: "100px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "hostId",
+								title: mint.label.getLabel('lb-32') + mint.label.getLabel('lb-82'),
+								width: "150px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "mqmdQmgr",
+								title: mint.label.getLabel('lb-263'),
+								width: "105px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "errorCnt",
+								title: mint.label.getLabel('lb-240'),
+								width: "100px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							}
+						],
+                        dataBound: function(e) {
+							if('undefined' != typeof $("#nodeListGrid").data()) {
+								if(0 == $("#nodeListGrid").data().kendoGrid.dataSource.view().length) {
+						    		$("#nodeListGrid").children(".k-grid-content").height('50');
+						    	} else {
+						    		$("#nodeListGrid").children(".k-grid-content").height('auto');
+						    	}
+							}
+
+							//-----------------------------------------------------------------------
+							// Node Count 처리
+							//-----------------------------------------------------------------------
+							var totalCnt = 0;
+							var completeCnt = 0;
+							var errorCnt = 0;
+
+							var items = e.sender.dataItems();
+							if( items.length > 0 ) {
+								for(var i = 0; i < items.length; i++ ) {
+									var status = items[i].status;
+									if( status == "99" ) {
+										errorCnt++;
+									} else {
+										completeCnt++;
+									}
+								}
+							}
+
+		                    totalCnt = completeCnt + errorCnt;
+
+		                    $("#totalCnt").html(totalCnt);
+                        }
+                    });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGridNode"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_getTrackingDetail
+            //-----------------------------------------------------------------------
+            fn_getTrackingDetail : function() {
+            	try {
+            		var requestObject = new Object();
+            		mint.callService(requestObject, 'CO-01-00-610', 'REST-R03-OP-01-01-NH',
+            				function( jsonData ) {
+            					$.sub.fn_setTrackingDetail( jsonData );
+            				},
+            				{ errorCall : true, notificationView : false, params : {logKey1: $.sub.detailKey.fromDate, logKey2: $.sub.detailKey.toDate} }
+            		);
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getTrackingDetail"});
+            	}
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_setTrackingDetail
+            //-----------------------------------------------------------------------
+            fn_setTrackingDetail : function(jsonData) {
+            	try {
+            		var dataSource = new kendo.data.DataSource({
+						data: jsonData,
+                        schema: {
+                            model: {
+                                fields: {
+                                	integrationId: {type: "String"},
+                                    processMode: {type: "String"},
+                                    hostId: {type: "String"},
+                                    mqmdQmgr: {type: "String"},
+                                    errorCnt: {type: "String"}
+                                }
+                            }
+                        },
+						page:1,
+						pageSize:mint.ui.getPageSizesS({'currentPage' : true}),
+						sort: { field: "errorCnt", dir: "desc" }
+					});
+					$("#nodeListGrid").data("kendoGrid").setDataSource(dataSource);
+
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setTrackingDetail"});
+            	}
+            }
+        }
+    });
+
+
+    //=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.sub.fn_init();
+    mint.label.attachLabel(null);
+});
+</script>

@@ -1,0 +1,600 @@
+﻿<!--
+	Screen ID : AN-05-00-501
+	Screen NM : 전문 비교(전문관리 메뉴에서 전문비교하는 화면)
+-->
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-1027"></lb></h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-832"></lb></li>
+	        <!-- <li><lb class="lb-833"></lb></li> -->
+	        <li class="active">
+	        	<strong><lb class="lb-1027"></strong>
+	        </li>
+ 		</ol>
+	</div>
+	<div class="col-lg-7">
+		<div class="title-action" >
+		</div>
+	</div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!--row-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class=""></h5>&nbsp;&nbsp;&nbsp;
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000001','H001')"></a>
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-back"><i class="fa fa-reply"></i> <lb class="lb-311"></a>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-lg-6">
+						<!--ibox-content-->
+		             	<div class="ibox-content">
+		             		<!--row-->
+		               		<div class="row">
+		                   		<!--col-sm-4 2-->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-1001"></span>
+										<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width: 50%;">
+											<input id="tf-datasetNm1" type="text" class="k-input" style="width: 100%;">
+										</span>
+									</div>
+								</div>
+
+								<!--col-sm-4 3-->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-1006"></span>
+										<input id="tf-datasetCd1" type="text"  class="k-input" style="width: 50%;">
+									</div>
+								</div>
+
+								<hr class="hr-space">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-48"></span>
+										<input id="tf-typeNm1" type="text" class="k-input" style="width: 50%;">
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-1002"></span>
+										<span style="padding: 0px 0px 0px 0px;">
+							            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+												<span class="radio-info" style="padding-right: 10px;"><input id="radio0" type="radio" name="rd-standard1" value="N" checked="checked"><label for="radio0"><lb class="lb-1004"></lb></label></span>
+				                                <span class="radio-info"   style="padding:0px 10px;"><input id="radio1" type="radio" name="rd-standard1" value="Y"><label for="radio1"><lb class="lb-1005"></lb></label></span>
+		                                	</div>
+		                                </span>
+									</div>
+								</div>
+								<hr class="hr-space">
+						 		<div class="col-lg-12">
+						            <div class="ibox float-e-margins">
+						                <div class="ibox-content">
+						     	     		<div id="grid-1"></div>
+						               	</div>
+						            </div>
+						       	</div>
+		                   	</div>
+						 	<!--row end-->
+		                </div>
+						<!--ibox-content end-->
+					</div>
+
+
+					<div class="col-lg-6">
+						<!--ibox-content-->
+		             	<div class="ibox-content">
+		             		<!--row-->
+		               		<div class="row">
+		                   		<!--col-sm-4 2-->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-1001"></span>
+										<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width: 50%;">
+											<input id="tf-datasetNm2" type="text" class="k-input" style="width: 100%;">
+										</span>
+									</div>
+								</div>
+
+								<!--col-sm-4 3-->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-1006"></span>
+										<input id="tf-datasetCd2" type="text"  class="k-input" style="width: 50%;">
+									</div>
+								</div>
+
+								<hr class="hr-space">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-48"></span>
+										<input id="tf-typeNm2" type="text" class="k-input" style="width: 50%;">
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<span class="lable_tag"><lb class="lb-1002"></span>
+										<span style="padding: 0px 0px 0px 0px;">
+							            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+												<span class="radio-info" style="padding-right: 10px;"><input id="radio0" type="radio" name="rd-standard2" value="N" checked="checked"><label for="radio0"><lb class="lb-1004"></lb></label></span>
+				                                <span class="radio-info"   style="padding:0px 10px;"><input id="radio1" type="radio" name="rd-standard2" value="Y"><label for="radio1"><lb class="lb-1005"></lb></label></span>
+		                                	</div>
+		                                </span>
+									</div>
+								</div>
+								<hr class="hr-space">
+						 		<div class="col-lg-12">
+						            <div class="ibox float-e-margins">
+						                <div class="ibox-content">
+						     	     		<div id="grid-2"></div>
+						               	</div>
+						            </div>
+						       	</div>
+		                   	</div>
+						 	<!--row end-->
+		                </div>
+						<!--ibox-content end-->
+					</div>
+				</div>
+           	</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+</div>
+
+<script>
+	$(document).ready(function(){
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "AN-05-00-501";
+		$.extend({
+			main_detail : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				dataSetList : {},
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main_detail.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main_detail.dataSetList = mint.common.getScreenParam('dataSetList');
+						$.main_detail.fn_initComponent(null);
+						$.main_detail.fn_setDataSetInfo("1",$.main_detail.dataSetList[0]);
+						$.main_detail.fn_setDataSetInfo("2",$.main_detail.dataSetList[1]);
+						{
+							mint.common.removeScreenParam('dataSetList');
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: component 초기화
+				//-----------------------------------------------------------------------
+				fn_initComponent : function(options) {
+					try {
+						$.main_detail.fn_initFieldGrid("grid-1", null);
+						$.main_detail.fn_initFieldGrid("grid-2", null);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initComponent"});
+					}
+				},//end fn_initComponent()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: init User Grid
+				//-----------------------------------------------------------------------
+				fn_initFieldGrid : function(gridName , jsonData) {
+					try {
+
+						$("#"+gridName).kendoTreeList({
+				          	dataSource : $.main_detail.fn_getFieldGridDataSource([])
+							, filterable: false
+							, resizable: true
+				            , sortable: true
+				            , selectable: true
+				            , editable: false
+	                        , scrollable: {
+	                            virtual: true
+	                        }
+		  /*                   , pageable: {
+		                          numeric: false,
+		                          previousNext: false,
+		                           messages: {
+		                                display: "Showing {2} data items"
+		                           }
+		                     } */
+							, columns: [
+										{
+											field : "name1",
+											title : mint.label.getLabel('lb-1015'),
+											headerAttributes : {
+												style : "text-align: left"
+											},
+											attributes : {
+												style : "text-align: left; white-space: nowrap;"
+											},
+										},
+										{
+											field : "name2",
+											title : mint.label.getLabel('lb-1014'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "typeNm",
+											title :  mint.label.getLabel('lb-48'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "offset",
+											title : mint.label.getLabel('lb-1016'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "length",
+											title : mint.label.getLabel('lb-1012'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+
+										{
+											field : "defaultValue",
+											title : mint.label.getLabel('lb-1017'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+										},
+										{
+											field : "encryptTypeNm",
+											title : mint.label.getLabel('lb-1018'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "isLengthField",
+											title : mint.label.getLabel('lb-1019'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "hasRepeatCountField",
+											title : mint.label.getLabel('lb-1020'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "repeatFieldId",
+											title : mint.label.getLabel('lb-1021'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "repeatCount",
+											title : mint.label.getLabel('lb-1022'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "justifyNm",
+											title : mint.label.getLabel('lb-1023'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+										{
+											field : "padding",
+											title : mint.label.getLabel('lb-1024'),
+											headerAttributes : {
+												style : "text-align: center"
+											},
+											attributes : {
+												style : "text-align: center; white-space: nowrap;"
+											},
+											hidden: true
+										},
+
+										{	field : "seq", hidden : true },
+										{	field : "type", hidden : true },
+										{	field : "typeCd", hidden : true },
+										{	field : "encryptType", hidden : true },
+										{	field : "justify", hidden : true },
+										{	field : "dataFieldId", hidden : true },
+										{	field : "fieldSetId", hidden : true },
+										{	field : "id", hidden : true },
+										{	field : "parentId", hidden : true }
+
+
+							]
+							, change: function(e) {
+					     		currFieldItem = this.dataItem(this.select());;
+							}
+							, dataBound: function (e) {
+						    	if(0 == $("#"+gridName).data().kendoTreeList.dataSource.view().length) {
+						    		$("#"+gridName).children(".k-grid-content").height('150');
+						    	} else {
+						    		$("#"+gridName).children(".k-grid-content").height('auto');
+						    	}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initFieldGrid"});
+					}
+				},//end fn_initFieldGrid()
+
+				//-----------------------------------------------------------------------
+				// Description :: 그리드 컬럼 스타일 변경(편집 불가)
+				//-----------------------------------------------------------------------
+				fn_setStyleCheck : function(columnValue, reUseDelYn) {
+					try {
+						if('N' == reUseDelYn) {
+							return "<span title='"+ columnValue +"' style='color:#C0C0C0'>" + columnValue + "</span>";
+						} else {
+							return "<span title='"+ columnValue +"'>" + columnValue + "</span>";
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setStyleCheck"});
+					}
+				},//end fn_setStyleCheck()
+
+				//-----------------------------------------------------------------------
+				// Description :: Field Grid DataSource
+				//-----------------------------------------------------------------------
+				fn_getFieldGridDataSource : function(jsonData) {
+					try {
+							var	dataSource = new kendo.data.TreeListDataSource({
+								  data: jsonData
+							    , page:1
+							    , pageSize: 50 // mint.ui.getPageSizesS({'currentPage' : true})
+							    , schema: {
+							    	model: $.main_detail.fn_getFieldGridModel()
+							    }
+							});
+						return dataSource;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getFieldGridDataSource"});
+					}
+				},//end fn_getFieldGridDataSource()
+
+				//-----------------------------------------------------------------------
+				// Description :: Field Grid Model
+				//-----------------------------------------------------------------------
+				fn_getFieldGridModel : function() {
+					try {
+
+						var DataFieldGridModel = new kendo.data.TreeListModel.define({
+							//id: "dataFieldId",
+		            		fields: {
+			            		name1 	    : {editable: true, nullable: false, defaultValue: ""},
+			            		name2	    : {editable: true, nullable: false, defaultValue: ""},
+			            		typeNm		: {editable: true, nullable: false, defaultValue: ""},
+			            		offset		: {type: "number",validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: "0"},
+		            			length		: {type: "number",validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: "0"},
+		            			defaultValue: {editable: true, nullable: false, defaultValue: ""},
+		            			encryptTypeNm : {editable: true, nullable: false, defaultValue: ""},
+		            			isLengthField : {editable: true, nullable: false, defaultValue: ""},
+		            			hasRepeatCountField : {editable: true, nullable: false, defaultValue: ""},
+		            			repeatFieldId : {editable: true, nullable: false, defaultValue: ""},
+		            			repeatCount : {type: "number",validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: "0"},
+		            			justifyNm : {editable: true, nullable: false, defaultValue: ""},
+		            			fieldSetId : {editable:false, nullable: false, defaultValue: ""},
+		            			padding : {editable: true, nullable: false, defaultValue: "",
+		            				validation: {
+		                                required: true,
+		                                custom:
+		                                    function(input) {
+		                                        if (input.val().length > 5) {
+		                                           input.attr("data-maxlength-msg", "Max length is 5");
+		                                           return false;
+		                                        }
+		                                        return true;
+		                                    }
+		                            }
+		            			},
+		            			dataFieldId:{editable: false, nullable: false, defaultValue: ""},
+		            			parentId: { field: "parentId", nullable: true }
+		            		}
+						});
+
+						return DataFieldGridModel;
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getFieldGridModel"});
+					}
+				}, //end fn_getFieldGridModel()
+
+				//-----------------------------------------------------------------------
+				// Description :: DataSet 정보 셋팅
+				//-----------------------------------------------------------------------
+				fn_setDataSetInfo : function(index, jsonData) {
+					try {
+						if(null != jsonData) {
+							$('#tf-datasetNm'+index).val( jsonData.name2 );
+							$('#tf-datasetNm'+index).prop("readonly", "readonly");
+							$('#tf-datasetCd'+index).val( jsonData.cd );
+							$('#tf-datasetCd'+index).prop("readonly", "readonly");
+
+							$('#tf-typeNm'+index).val( jsonData.dataFormatNm );
+							$('#tf-typeNm'+index).prop("readonly", "readonly");
+
+							$('input:radio[name=rd-standard'+index+']:input[value='+jsonData.isStandard+']').prop("checked", true);
+							$('input:radio[name=rd-standard'+index+']').prop("disabled", true);
+
+							//-----------------------------------------------------------------------
+							// DataField
+							//-----------------------------------------------------------------------
+							var 	dataFieldObjectList = [];
+		 					for( var i=0; i<jsonData.dataFieldList.length; i++ ) {
+		 						jsonData.dataFieldList[i].reUseDelYn      = 'N';
+		 						jsonData.dataFieldList[i].parentId      = null;
+		 						jsonData.dataFieldList[i].id      = jsonData.dataFieldList[i].dataFieldId;
+		 						dataFieldObjectList.push(jsonData.dataFieldList[i]);
+							}
+							$('#grid-'+index).data('kendoTreeList').setDataSource( $.main_detail.fn_getFieldGridDataSource(dataFieldObjectList) );
+
+							var complexList = [];
+
+		 					for( var j=0; j<jsonData.dataFieldList.length; j++ ) {
+		 						if(jsonData.dataFieldList[j].type=='4'){
+		 							var complexField = jsonData.complexTypeMap[jsonData.dataFieldList[j].fieldSetId];
+		 							for( var k=0; k<complexField.dataFieldList.length; k++ ) {
+		 								//complexField.dataFieldList[k].reUseDelYn    = 'N';
+		 								//complexField.dataFieldList[k].parentId      =jsonData.dataFieldList[j].dataFieldId;
+		 								//complexField.dataFieldList[k].id      		= complexField.dataFieldList[k].dataFieldId+'-' + jsonData.dataFieldList[j].dataSetId;
+		 								//complexField.dataFieldList[k].dataFieldId   = complexField.dataFieldList[k].dataFieldId+'-' + jsonData.dataFieldList[j].dataSetId;
+		 								//console.log(complexField.dataFieldList[k]);
+		 								//console.log(jsonData.dataFieldList[j]);
+		 								var node =  new kendo.data.Node(
+		 	           					{ 	id: complexField.dataFieldList[k].dataFieldId+'-' + jsonData.dataFieldList[j].dataFieldId,
+		 	           						dataFieldId:complexField.dataFieldList[k].dataFieldId,
+		 	           						name1: complexField.dataFieldList[k].name1,
+		 	           						name2: complexField.dataFieldList[k].name2,
+		 	           						parentId:jsonData.dataFieldList[j].dataFieldId,
+		 	           						typeNm: complexField.dataFieldList[k].typeNm,
+		 	           						offset:complexField.dataFieldList[k].offset,
+		 	           						length:complexField.dataFieldList[k].length,
+		 	           						defValue:complexField.dataFieldList[k].defaultValue,
+		 	           						encryptTypeNm:complexField.dataFieldList[k].encryptTypeNm,
+		 	           						encryptType:complexField.dataFieldList[k].encryptType,
+		 	           						isLengthField:complexField.dataFieldList[k].isLengthField,
+		 	           						hasRepeatCountField:complexField.dataFieldList[k].hasRepeatCountField,
+		 	           						repeatFieldId:complexField.dataFieldList[k].repeatFieldId,
+		 	           						repeatCount:complexField.dataFieldList[k].repeatCount,
+		 	           						justifyNm:complexField.dataFieldList[k].justifyNm,
+		 	           						padding:complexField.dataFieldList[k].padding,
+		 	           						fieldSetId:complexField.dataFieldList[k].fieldSetId
+		 	           					});
+		 								$('#grid-'+index).data().kendoTreeList.dataSource.pushUpdate(node);
+				 						complexList.push(complexField.dataFieldList[k]);
+									}
+
+		 						}
+							}
+						} else {
+							mint.common.alert('BW00009', null);
+							mint.back(null);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setDataSetInfo"});
+					}
+				},//end fn_setDataSetInfo()
+			}// end main
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+
+		//-----------------------------------------------------------------------
+		// Description :: 목록 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+		$('.btn-back').on('click', function(e) {
+			mint.back(null);
+		});
+
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main_detail.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+</script>
+

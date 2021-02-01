@@ -1,0 +1,1668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.QAMonitorMapper">
+  	<!--
+ 	<cache/>
+  	-->
+
+	<select id="getTrackingLogListTotalCount" parameterType="Map" resultType="int">
+
+		SELECT
+			COUNT(QA_MASTERLOG.MSG_DATETIME) AS TOTAL_CNT
+		FROM
+			(
+				SELECT
+					QA_MASTERLOG.MSG_DATETIME,
+					QA_MASTERLOG.MASTERLOG_ID
+				FROM
+					QA_MASTERLOG QA_MASTERLOG
+				WHERE
+					1 = 1
+					AND MSG_DATETIME BETWEEN #{startDate} AND #{endDate}
+					<if test="status != null and status != ''">
+					AND MSG_STATUS = #{status}
+					</if>
+					<if test="msgDateTime !=null and msgDateTime !=''">
+					AND MSG_DATETIME = #{msgDateTime}
+					</if>
+			) QA_MASTERLOG
+
+			INNER JOIN
+			(
+				SELECT
+					  DISTINCT
+					  ID_MAP.MASTERLOG_ID
+					, ID_MAP.GROUP_ID
+					, ID_MAP.INTF_ID
+
+					, NVL(TAN0201.INTEGRATION_ID, ID_MAP.INTF_ID) AS INTEGRATION_ID
+					, NVL(TAN0201.INTERFACE_ID  , ID_MAP.INTF_ID) AS INTERFACE_ID
+				FROM
+					QA_MASTERLOG_ID_MAP ID_MAP
+					<choose>
+					<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+					LEFT OUTER JOIN
+					</when>
+					<otherwise>
+					INNER JOIN
+					</otherwise>
+					</choose>
+					(
+						SELECT
+							  DISTINCT
+							  TAN0201.INTEGRATION_ID
+							, TAN0201.INTERFACE_ID
+							, TAN0201.INTERFACE_NM
+							, TAN0201.CHANNEL_ID
+							, TAN0101.BUSINESS_ID
+						FROM
+							TAN0201 TAN0201
+							INNER JOIN TAN0101 ON
+								TAN0101.INTERFACE_ID = TAN0201.INTERFACE_ID
+
+							<choose>
+							<when test="systemId != null and systemId != ''">
+							INNER JOIN TAN0213 ON
+								TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+							INNER JOIN TIM0102 ON
+								TAN0213.SYSTEM_ID = TIM0102.C_SYS_ID
+							    AND TIM0102.P_SYS_ID = #{systemId}
+							</when>
+							<otherwise>
+							<if test="organizationId != null and organizationId != ''">
+							INNER JOIN TAN0213 ON
+								TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+							INNER JOIN TIM0403 ON
+								TIM0403.SYSTEM_ID = TAN0213.SYSTEM_ID
+							INNER JOIN TIM0402 ON
+								TIM0402.C_ORG_ID = TIM0403.ORG_ID AND TIM0402.P_ORG_ID = #{organizationId}
+							INNER JOIN TIM0102 ON
+								TIM0102.P_SYS_ID = TIM0403.SYSTEM_ID
+							</if>
+							</otherwise>
+							</choose>
+
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 별 인터페이스 조회
+							-----------------------------------------------
+							INNER JOIN
+							(
+								SELECT
+									DISTINCT
+									TSU0220.INTERFACE_ID
+								FROM
+									-----------------------------------------------
+									-- 로그인 사용자 데이터 엑세스 권한 조회(공통)
+									-----------------------------------------------
+									(
+										SELECT
+											DISTINCT
+											TSU0219.USER_ID   AS USER_ID,
+											TSU0221.C_ROLE_ID AS ROLE_ID
+										FROM
+											TSU0219
+											INNER JOIN TSU0221 ON
+												TSU0221.P_ROLE_ID = TSU0219.ROLE_ID
+										WHERE
+											TSU0219.USER_ID = #{userId}
+									) ACCESS_ROLE
+									-----------------------------------------------
+									-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+									-----------------------------------------------
+									INNER JOIN TSU0220 TSU0220 ON
+										TSU0220.ROLE_ID = ACCESS_ROLE.ROLE_ID
+
+								UNION
+
+								-----------------------------------------------
+								-- 로그인 사용자 본인이 등록한 인터페이스 목록 조회
+								-----------------------------------------------
+								SELECT
+									INTERFACE_ID
+								FROM
+									TAN0201
+								WHERE REG_USER = #{userId}
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+
+							<if test="accRoleId != null and accRoleId !=''">
+							INNER JOIN TSU0220 ON
+								TAN0201.INTERFACE_ID = TSU0220.INTERFACE_ID
+								AND TSU0220.ROLE_ID = #{accRoleId}
+							</if>
+
+							<if test="isFavoriteInterface != null and isFavoriteInterface eq 'Y'.toString()">
+							INNER JOIN TAN0214 ON
+								TAN0201.INTERFACE_ID = TAN0214.INTERFACE_ID
+								AND TAN0214.USER_ID = #{userId}
+							</if>
+
+						WHERE
+							1 = 1
+							<if test="channelId != null and channelId != ''">
+							AND TAN0201.CHANNEL_ID = #{channelId}
+							</if>
+
+							<if test="interfaceNm != null and interfaceNm != ''">
+							AND TAN0201.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+							</if>
+
+							<if test="integrationId != null and integrationId != ''">
+							AND TAN0201.INTEGRATION_ID LIKE '%'||#{integrationId}||'%'
+							</if>
+
+							<if test="businessId != null and businessId != ''">
+							AND TAN0101.BUSINESS_ID = #{businessId}
+							</if>
+
+					) TAN0201 ON
+						<choose>
+						<when test="isGroupIdJoin != null and isGroupIdJoin eq 'Y'.toString()">
+						(ID_MAP.GROUP_ID || '_' || ID_MAP.INTF_ID) = TAN0201.INTEGRATION_ID
+						</when>
+						<otherwise>
+						ID_MAP.INTF_ID = TAN0201.INTEGRATION_ID
+						</otherwise>
+						</choose>
+			) INTF_INFO ON
+				QA_MASTERLOG.MASTERLOG_ID = INTF_INFO.MASTERLOG_ID
+	</select>
+
+
+
+
+  	<!-- TYPE0 :: 처리시간 조회(O), QA_MASTERLOG.P_TIME 컬럼이 존재하고 값이 있을때 사용 -->
+	<select id="getTrackingLogListType0" parameterType="Map" resultMap="TRLogResult">
+		SELECT
+			  TRACKING.RNUM
+			, TRACKING.IDX
+			, TRACKING.MSG_DATETIME
+			, TRACKING.MASTERLOG_ID
+			, TRACKING.DATA_SIZE
+			, TRACKING.MSG_STATUS
+			, TRACKING.ELAPSED_TIME
+			, CASE
+				WHEN TRACKING.MSG_STATUS = '00' THEN '완료'
+				WHEN TRACKING.MSG_STATUS = '01' THEN '처리중'
+				WHEN TRACKING.MSG_STATUS = '99' THEN '오류'
+				ELSE ''
+			  END AS STATUS_NM
+
+			, TRACKING.GROUP_ID
+			, TRACKING.INTF_ID
+			, TRACKING.INTEGRATION_ID
+			, TRACKING.INTERFACE_ID
+			, TRACKING.INTERFACE_NM
+			, TRACKING.MIN_PR_DT
+			, TRACKING.MAX_PR_DT
+
+			, SND.SYSTEM_ID AS SND_SYSTEM_ID
+			, SND.SYSTEM_CD AS SND_SYSTEM_CD
+			, CASE WHEN SND.SYSTEM_NM IS NOT NULL THEN SND.SYSTEM_NM||'('||SND.SYSTEM_CD||')' ELSE '' END AS SND_SYSTEM_NM
+
+			, RCV.SYSTEM_ID AS RCV_SYSTEM_ID
+			, RCV.SYSTEM_CD AS RCV_SYSTEM_CD
+			, CASE WHEN RCV.SYSTEM_NM IS NOT NULL THEN RCV.SYSTEM_NM||'('||RCV.SYSTEM_CD||')' ELSE '' END AS RCV_SYSTEM_NM
+		FROM
+			(
+				SELECT
+					  RNUM
+					, IDX
+					, MSG_DATETIME
+					, MASTERLOG_ID
+					, DATA_SIZE
+					, MSG_STATUS
+					, ELAPSED_TIME
+
+					, GROUP_ID
+					, INTF_ID
+
+					, INTEGRATION_ID
+					, INTERFACE_ID
+					, INTERFACE_NM
+
+					, MIN_PR_DT
+					, MAX_PR_DT
+				FROM
+					(
+						SELECT
+							  ROWNUM AS RNUM
+							, SUB_FROM_01.IDX
+							, SUB_FROM_01.MSG_DATETIME
+							, SUB_FROM_01.MASTERLOG_ID
+							, SUB_FROM_01.DATA_SIZE
+							, SUB_FROM_01.MSG_STATUS
+							, SUB_FROM_01.ELAPSED_TIME
+
+							, SUB_FROM_01.GROUP_ID
+							, SUB_FROM_01.INTF_ID
+
+							, SUB_FROM_01.INTEGRATION_ID
+							, SUB_FROM_01.INTERFACE_ID
+							, SUB_FROM_01.INTERFACE_NM
+							, SUB_FROM_01.CHANNEL_ID
+							, SUB_FROM_01.BUSINESS_ID
+
+							, SUB_FROM_01.MSG_DATETIME AS MIN_PR_DT
+							, SUB_FROM_01.MSG_DATETIME AS MAX_PR_DT
+						FROM
+							(
+								SELECT
+									  QA_MASTERLOG.IDX
+									, QA_MASTERLOG.MSG_DATETIME
+									, QA_MASTERLOG.MASTERLOG_ID
+									, QA_MASTERLOG.DATA_SIZE
+									, QA_MASTERLOG.MSG_STATUS
+									, QA_MASTERLOG.P_TIME AS ELAPSED_TIME
+
+									, INTF_INFO.GROUP_ID
+									, INTF_INFO.INTF_ID
+
+									, INTF_INFO.INTEGRATION_ID
+									, INTF_INFO.INTERFACE_ID
+									, INTF_INFO.INTERFACE_NM
+									, INTF_INFO.CHANNEL_ID
+									, INTF_INFO.BUSINESS_ID
+
+								FROM
+									(
+										SELECT
+											/*+ INDEX_DESC (QA_MASTERLOG IX_QA_MASTERLOG_MSDT_01) */
+											ROWNUM AS IDX,
+											QA_MASTERLOG.MSG_DATETIME,
+											QA_MASTERLOG.MASTERLOG_ID,
+											QA_MASTERLOG.MSG_STATUS,
+											QA_MASTERLOG.DATA_SIZE,
+											QA_MASTERLOG.P_TIME
+										FROM
+											QA_MASTERLOG QA_MASTERLOG
+										WHERE
+											1 = 1
+											AND MSG_DATETIME BETWEEN #{startDate} AND #{endDate}
+											<if test="status != null and status != ''">
+											AND MSG_STATUS = #{status}
+											</if>
+											<if test="msgDateTime !=null and msgDateTime !=''">
+											AND MSG_DATETIME = #{msgDateTime}
+											</if>
+									) QA_MASTERLOG
+
+									INNER JOIN
+									(
+										SELECT
+											  DISTINCT
+											  ID_MAP.MASTERLOG_ID
+											, ID_MAP.GROUP_ID
+											, ID_MAP.INTF_ID
+
+											, NVL(TAN0201.INTEGRATION_ID, ID_MAP.INTF_ID) AS INTEGRATION_ID
+											, NVL(TAN0201.INTERFACE_ID  , ID_MAP.INTF_ID) AS INTERFACE_ID
+											, NVL(TAN0201.INTERFACE_NM  , '미등록 인터페이스') AS INTERFACE_NM
+											, NVL(TAN0201.CHANNEL_ID    , '미등록 인터페이스') AS CHANNEL_ID
+											, NVL(TAN0201.BUSINESS_ID   , '미등록 인터페이스') AS BUSINESS_ID
+
+										FROM
+											QA_MASTERLOG_ID_MAP ID_MAP
+											<choose>
+											<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+											LEFT OUTER JOIN
+											</when>
+											<otherwise>
+											INNER JOIN
+											</otherwise>
+											</choose>
+											(
+												SELECT
+													  DISTINCT
+													  TAN0201.INTEGRATION_ID
+													, TAN0201.INTERFACE_ID
+													, TAN0201.INTERFACE_NM
+													, TAN0201.CHANNEL_ID
+													, TAN0101.BUSINESS_ID
+												FROM
+													TAN0201 TAN0201
+													INNER JOIN TAN0101 ON
+														TAN0101.INTERFACE_ID = TAN0201.INTERFACE_ID
+
+													<choose>
+													<when test="systemId != null and systemId != ''">
+													INNER JOIN TAN0213 ON
+														TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+													INNER JOIN TIM0102 ON
+														TAN0213.SYSTEM_ID = TIM0102.C_SYS_ID
+													    AND TIM0102.P_SYS_ID = #{systemId}
+													</when>
+													<otherwise>
+													<if test="organizationId != null and organizationId != ''">
+													INNER JOIN TAN0213 ON
+														TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+													INNER JOIN TIM0403 ON
+														TIM0403.SYSTEM_ID = TAN0213.SYSTEM_ID
+													INNER JOIN TIM0402 ON
+														TIM0402.C_ORG_ID = TIM0403.ORG_ID AND TIM0402.P_ORG_ID = #{organizationId}
+													INNER JOIN TIM0102 ON
+														TIM0102.P_SYS_ID = TIM0403.SYSTEM_ID
+													</if>
+													</otherwise>
+													</choose>
+
+													<choose>
+													<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+													</when>
+													<otherwise>
+													-----------------------------------------------
+													-- 데이터 엑세스 권한 별 인터페이스 조회
+													-----------------------------------------------
+													INNER JOIN
+													(
+														SELECT
+															DISTINCT
+															TSU0220.INTERFACE_ID
+														FROM
+															-----------------------------------------------
+															-- 로그인 사용자 데이터 엑세스 권한 조회(공통)
+															-----------------------------------------------
+															(
+																SELECT
+																	DISTINCT
+																	TSU0219.USER_ID   AS USER_ID,
+																	TSU0221.C_ROLE_ID AS ROLE_ID
+																FROM
+																	TSU0219
+																	INNER JOIN TSU0221 ON
+																		TSU0221.P_ROLE_ID = TSU0219.ROLE_ID
+																WHERE
+																	TSU0219.USER_ID = #{userId}
+															) ACCESS_ROLE
+															-----------------------------------------------
+															-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+															-----------------------------------------------
+															INNER JOIN TSU0220 TSU0220 ON
+																TSU0220.ROLE_ID = ACCESS_ROLE.ROLE_ID
+
+														UNION
+
+														-----------------------------------------------
+														-- 로그인 사용자 본인이 등록한 인터페이스 목록 조회
+														-----------------------------------------------
+														SELECT
+															INTERFACE_ID
+														FROM
+															TAN0201
+														WHERE REG_USER = #{userId}
+													) ACCESS_ROLE_INTF ON
+														TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+													</otherwise>
+													</choose>
+
+													<if test="accRoleId != null and accRoleId !=''">
+													INNER JOIN TSU0220 ON
+														TAN0201.INTERFACE_ID = TSU0220.INTERFACE_ID
+														AND TSU0220.ROLE_ID = #{accRoleId}
+													</if>
+
+													<if test="isFavoriteInterface != null and isFavoriteInterface eq 'Y'.toString()">
+													INNER JOIN TAN0214 ON
+														TAN0201.INTERFACE_ID = TAN0214.INTERFACE_ID
+														AND TAN0214.USER_ID = #{userId}
+													</if>
+
+												WHERE
+													1 = 1
+													<if test="channelId != null and channelId != ''">
+													AND TAN0201.CHANNEL_ID = #{channelId}
+													</if>
+
+													<if test="interfaceNm != null and interfaceNm != ''">
+													AND TAN0201.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+													</if>
+
+													<if test="integrationId != null and integrationId != ''">
+													AND TAN0201.INTEGRATION_ID LIKE '%'||#{integrationId}||'%'
+													</if>
+
+													<if test="businessId != null and businessId != ''">
+													AND TAN0101.BUSINESS_ID = #{businessId}
+													</if>
+
+											) TAN0201 ON
+												<choose>
+												<when test="isGroupIdJoin != null and isGroupIdJoin eq 'Y'.toString()">
+												(ID_MAP.GROUP_ID || '_' || ID_MAP.INTF_ID) = TAN0201.INTEGRATION_ID
+												</when>
+												<otherwise>
+												ID_MAP.INTF_ID = TAN0201.INTEGRATION_ID
+												</otherwise>
+												</choose>
+									) INTF_INFO ON
+										QA_MASTERLOG.MASTERLOG_ID = INTF_INFO.MASTERLOG_ID
+							) SUB_FROM_01
+						WHERE
+							1 = 1
+							AND ROWNUM <![CDATA[<]]>= #{endIndex}
+					) SUB_FROM_02
+				WHERE
+					1=1
+					AND RNUM <![CDATA[>]]>= #{startIndex}
+			) TRACKING
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					  DISTINCT
+					  TIM0101.SYSTEM_NM
+					, TAN0213.SYSTEM_ID
+					, TIM0101.SYSTEM_CD
+					, TAN0213.INTERFACE_ID
+					, TAN0213.SEQ
+				FROM
+					TAN0213 TAN0213
+					INNER JOIN TIM0101 TIM0101 ON
+						TAN0213.SYSTEM_ID = TIM0101.SYSTEM_ID
+						AND TAN0213.NODE_TYPE = '0'
+						<choose>
+						<when test="systemId != null and systemId != ''">
+						AND TAN0213.SYSTEM_ID = #{systemId}
+						</when>
+						<otherwise>
+						AND TAN0213.SEQ = ( SELECT MAX(MAX0213.SEQ) FROM TAN0213 MAX0213 WHERE MAX0213.NODE_TYPE = '0' AND MAX0213.INTERFACE_ID = TAN0213.INTERFACE_ID )
+						</otherwise>
+						</choose>
+			) SND ON
+			   SND.INTERFACE_ID = TRACKING.INTERFACE_ID
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					  DISTINCT
+					  TIM0101.SYSTEM_NM
+					, TAN0213.SYSTEM_ID
+					, TIM0101.SYSTEM_CD
+					, TAN0213.INTERFACE_ID
+					, TAN0213.SEQ
+				FROM
+					TAN0213 TAN0213
+					INNER JOIN TIM0101 TIM0101 ON
+						TAN0213.SYSTEM_ID = TIM0101.SYSTEM_ID
+						AND TAN0213.NODE_TYPE = '2'
+						<choose>
+						<when test="systemId != null and systemId != ''">
+						AND TAN0213.SYSTEM_ID = #{systemId}
+						</when>
+						<otherwise>
+						AND TAN0213.SEQ = ( SELECT MAX(MAX0213.SEQ) FROM TAN0213 MAX0213 WHERE MAX0213.NODE_TYPE = '2' AND MAX0213.INTERFACE_ID = TAN0213.INTERFACE_ID )
+						</otherwise>
+						</choose>
+			) RCV ON
+				RCV.INTERFACE_ID = TRACKING.INTERFACE_ID
+
+		ORDER BY IDX
+	</select>
+
+	<!-- TYPE1 :: 처리시간 조회(X) -->
+	<select id="getTrackingLogListType1" parameterType="Map" resultMap="TRLogResult">
+		SELECT
+			  TRACKING.RNUM
+			, TRACKING.IDX
+			, TRACKING.MSG_DATETIME
+			, TRACKING.MASTERLOG_ID
+			, TRACKING.DATA_SIZE
+			, TRACKING.MSG_STATUS
+			, CASE
+				WHEN TRACKING.MSG_STATUS = '00' THEN '완료'
+				WHEN TRACKING.MSG_STATUS = '01' THEN '처리중'
+				WHEN TRACKING.MSG_STATUS = '99' THEN '오류'
+				ELSE ''
+			  END AS STATUS_NM
+
+			, TRACKING.GROUP_ID
+			, TRACKING.INTF_ID
+			, TRACKING.INTEGRATION_ID
+			, TRACKING.INTERFACE_ID
+			, TRACKING.INTERFACE_NM
+			, TRACKING.MIN_PR_DT
+			, TRACKING.MAX_PR_DT
+
+			, SND.SYSTEM_ID AS SND_SYSTEM_ID
+			, SND.SYSTEM_CD AS SND_SYSTEM_CD
+			, CASE WHEN SND.SYSTEM_NM IS NOT NULL THEN SND.SYSTEM_NM||'('||SND.SYSTEM_CD||')' ELSE '' END AS SND_SYSTEM_NM
+
+			, RCV.SYSTEM_ID AS RCV_SYSTEM_ID
+			, RCV.SYSTEM_CD AS RCV_SYSTEM_CD
+			, CASE WHEN RCV.SYSTEM_NM IS NOT NULL THEN RCV.SYSTEM_NM||'('||RCV.SYSTEM_CD||')' ELSE '' END AS RCV_SYSTEM_NM
+		FROM
+			(
+				SELECT
+					  RNUM
+					, IDX
+					, MSG_DATETIME
+					, MASTERLOG_ID
+					, DATA_SIZE
+					, MSG_STATUS
+
+					, GROUP_ID
+					, INTF_ID
+
+					, INTEGRATION_ID
+					, INTERFACE_ID
+					, INTERFACE_NM
+
+					, MIN_PR_DT
+					, MAX_PR_DT
+				FROM
+					(
+						SELECT
+							  ROWNUM AS RNUM
+							, SUB_FROM_01.IDX
+							, SUB_FROM_01.MSG_DATETIME
+							, SUB_FROM_01.MASTERLOG_ID
+							, SUB_FROM_01.DATA_SIZE
+							, SUB_FROM_01.MSG_STATUS
+
+							, SUB_FROM_01.GROUP_ID
+							, SUB_FROM_01.INTF_ID
+
+							, SUB_FROM_01.INTEGRATION_ID
+							, SUB_FROM_01.INTERFACE_ID
+							, SUB_FROM_01.INTERFACE_NM
+							, SUB_FROM_01.CHANNEL_ID
+							, SUB_FROM_01.BUSINESS_ID
+
+							, SUB_FROM_01.MSG_DATETIME AS MIN_PR_DT
+							, SUB_FROM_01.MSG_DATETIME AS MAX_PR_DT
+						FROM
+							(
+								SELECT
+									  QA_MASTERLOG.IDX
+									, QA_MASTERLOG.MSG_DATETIME
+									, QA_MASTERLOG.MASTERLOG_ID
+									, QA_MASTERLOG.DATA_SIZE
+									, QA_MASTERLOG.MSG_STATUS
+
+									, INTF_INFO.GROUP_ID
+									, INTF_INFO.INTF_ID
+
+									, INTF_INFO.INTEGRATION_ID
+									, INTF_INFO.INTERFACE_ID
+									, INTF_INFO.INTERFACE_NM
+									, INTF_INFO.CHANNEL_ID
+									, INTF_INFO.BUSINESS_ID
+
+								FROM
+									(
+										SELECT
+											/*+ INDEX_DESC (QA_MASTERLOG IX_QA_MASTERLOG_MSDT_01) */
+											ROWNUM AS IDX,
+											QA_MASTERLOG.MSG_DATETIME,
+											QA_MASTERLOG.MASTERLOG_ID,
+											QA_MASTERLOG.MSG_STATUS,
+											QA_MASTERLOG.DATA_SIZE
+										FROM
+											QA_MASTERLOG QA_MASTERLOG
+										WHERE
+											1 = 1
+											AND MSG_DATETIME BETWEEN #{startDate} AND #{endDate}
+											<if test="status != null and status != ''">
+											AND MSG_STATUS = #{status}
+											</if>
+											<if test="msgDateTime !=null and msgDateTime !=''">
+											AND MSG_DATETIME = #{msgDateTime}
+											</if>
+									) QA_MASTERLOG
+
+									INNER JOIN
+									(
+										SELECT
+											  DISTINCT
+											  ID_MAP.MASTERLOG_ID
+											, ID_MAP.GROUP_ID
+											, ID_MAP.INTF_ID
+
+											, NVL(TAN0201.INTEGRATION_ID, ID_MAP.INTF_ID) AS INTEGRATION_ID
+											, NVL(TAN0201.INTERFACE_ID  , ID_MAP.INTF_ID) AS INTERFACE_ID
+											, NVL(TAN0201.INTERFACE_NM  , '미등록 인터페이스') AS INTERFACE_NM
+											, NVL(TAN0201.CHANNEL_ID    , '미등록 인터페이스') AS CHANNEL_ID
+											, NVL(TAN0201.BUSINESS_ID   , '미등록 인터페이스') AS BUSINESS_ID
+
+										FROM
+											QA_MASTERLOG_ID_MAP ID_MAP
+											<choose>
+											<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+											LEFT OUTER JOIN
+											</when>
+											<otherwise>
+											INNER JOIN
+											</otherwise>
+											</choose>
+											(
+												SELECT
+													  DISTINCT
+													  TAN0201.INTEGRATION_ID
+													, TAN0201.INTERFACE_ID
+													, TAN0201.INTERFACE_NM
+													, TAN0201.CHANNEL_ID
+													, TAN0101.BUSINESS_ID
+												FROM
+													TAN0201 TAN0201
+													INNER JOIN TAN0101 ON
+														TAN0101.INTERFACE_ID = TAN0201.INTERFACE_ID
+
+													<choose>
+													<when test="systemId != null and systemId != ''">
+													INNER JOIN TAN0213 ON
+														TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+													INNER JOIN TIM0102 ON
+														TAN0213.SYSTEM_ID = TIM0102.C_SYS_ID
+													    AND TIM0102.P_SYS_ID = #{systemId}
+													</when>
+													<otherwise>
+													<if test="organizationId != null and organizationId != ''">
+													INNER JOIN TAN0213 ON
+														TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+													INNER JOIN TIM0403 ON
+														TIM0403.SYSTEM_ID = TAN0213.SYSTEM_ID
+													INNER JOIN TIM0402 ON
+														TIM0402.C_ORG_ID = TIM0403.ORG_ID AND TIM0402.P_ORG_ID = #{organizationId}
+													INNER JOIN TIM0102 ON
+														TIM0102.P_SYS_ID = TIM0403.SYSTEM_ID
+													</if>
+													</otherwise>
+													</choose>
+
+													<choose>
+													<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+													</when>
+													<otherwise>
+													-----------------------------------------------
+													-- 데이터 엑세스 권한 별 인터페이스 조회
+													-----------------------------------------------
+													INNER JOIN
+													(
+														SELECT
+															DISTINCT
+															TSU0220.INTERFACE_ID
+														FROM
+															-----------------------------------------------
+															-- 로그인 사용자 데이터 엑세스 권한 조회(공통)
+															-----------------------------------------------
+															(
+																SELECT
+																	DISTINCT
+																	TSU0219.USER_ID   AS USER_ID,
+																	TSU0221.C_ROLE_ID AS ROLE_ID
+																FROM
+																	TSU0219
+																	INNER JOIN TSU0221 ON
+																		TSU0221.P_ROLE_ID = TSU0219.ROLE_ID
+																WHERE
+																	TSU0219.USER_ID = #{userId}
+															) ACCESS_ROLE
+															-----------------------------------------------
+															-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+															-----------------------------------------------
+															INNER JOIN TSU0220 TSU0220 ON
+																TSU0220.ROLE_ID = ACCESS_ROLE.ROLE_ID
+
+														UNION
+
+														-----------------------------------------------
+														-- 로그인 사용자 본인이 등록한 인터페이스 목록 조회
+														-----------------------------------------------
+														SELECT
+															INTERFACE_ID
+														FROM
+															TAN0201
+														WHERE REG_USER = #{userId}
+													) ACCESS_ROLE_INTF ON
+														TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+													</otherwise>
+													</choose>
+
+													<if test="accRoleId != null and accRoleId !=''">
+													INNER JOIN TSU0220 ON
+														TAN0201.INTERFACE_ID = TSU0220.INTERFACE_ID
+														AND TSU0220.ROLE_ID = #{accRoleId}
+													</if>
+
+													<if test="isFavoriteInterface != null and isFavoriteInterface eq 'Y'.toString()">
+													INNER JOIN TAN0214 ON
+														TAN0201.INTERFACE_ID = TAN0214.INTERFACE_ID
+														AND TAN0214.USER_ID = #{userId}
+													</if>
+
+												WHERE
+													1 = 1
+													<if test="channelId != null and channelId != ''">
+													AND TAN0201.CHANNEL_ID = #{channelId}
+													</if>
+
+													<if test="interfaceNm != null and interfaceNm != ''">
+													AND TAN0201.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+													</if>
+
+													<if test="integrationId != null and integrationId != ''">
+													AND TAN0201.INTEGRATION_ID LIKE '%'||#{integrationId}||'%'
+													</if>
+
+													<if test="businessId != null and businessId != ''">
+													AND TAN0101.BUSINESS_ID = #{businessId}
+													</if>
+
+											) TAN0201 ON
+												<choose>
+												<when test="isGroupIdJoin != null and isGroupIdJoin eq 'Y'.toString()">
+												(ID_MAP.GROUP_ID || '_' || ID_MAP.INTF_ID) = TAN0201.INTEGRATION_ID
+												</when>
+												<otherwise>
+												ID_MAP.INTF_ID = TAN0201.INTEGRATION_ID
+												</otherwise>
+												</choose>
+									) INTF_INFO ON
+										QA_MASTERLOG.MASTERLOG_ID = INTF_INFO.MASTERLOG_ID
+							) SUB_FROM_01
+						WHERE
+							1 = 1
+							AND ROWNUM <![CDATA[<]]>= #{endIndex}
+					) SUB_FROM_02
+				WHERE
+					1=1
+					AND RNUM <![CDATA[>]]>= #{startIndex}
+			) TRACKING
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					  DISTINCT
+					  TIM0101.SYSTEM_NM
+					, TAN0213.SYSTEM_ID
+					, TIM0101.SYSTEM_CD
+					, TAN0213.INTERFACE_ID
+					, TAN0213.SEQ
+				FROM
+					TAN0213 TAN0213
+					INNER JOIN TIM0101 TIM0101 ON
+						TAN0213.SYSTEM_ID = TIM0101.SYSTEM_ID
+						AND TAN0213.NODE_TYPE = '0'
+						<choose>
+						<when test="systemId != null and systemId != ''">
+						AND TAN0213.SYSTEM_ID = #{systemId}
+						</when>
+						<otherwise>
+						AND TAN0213.SEQ = ( SELECT MAX(MAX0213.SEQ) FROM TAN0213 MAX0213 WHERE MAX0213.NODE_TYPE = '0' AND MAX0213.INTERFACE_ID = TAN0213.INTERFACE_ID )
+						</otherwise>
+						</choose>
+			) SND ON
+			   SND.INTERFACE_ID = TRACKING.INTERFACE_ID
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					  DISTINCT
+					  TIM0101.SYSTEM_NM
+					, TAN0213.SYSTEM_ID
+					, TIM0101.SYSTEM_CD
+					, TAN0213.INTERFACE_ID
+					, TAN0213.SEQ
+				FROM
+					TAN0213 TAN0213
+					INNER JOIN TIM0101 TIM0101 ON
+						TAN0213.SYSTEM_ID = TIM0101.SYSTEM_ID
+						AND TAN0213.NODE_TYPE = '2'
+						<choose>
+						<when test="systemId != null and systemId != ''">
+						AND TAN0213.SYSTEM_ID = #{systemId}
+						</when>
+						<otherwise>
+						AND TAN0213.SEQ = ( SELECT MAX(MAX0213.SEQ) FROM TAN0213 MAX0213 WHERE MAX0213.NODE_TYPE = '2' AND MAX0213.INTERFACE_ID = TAN0213.INTERFACE_ID )
+						</otherwise>
+						</choose>
+			) RCV ON
+				RCV.INTERFACE_ID = TRACKING.INTERFACE_ID
+
+		ORDER BY IDX
+	</select>
+
+	<!-- TYPE2 :: 처리시간 조회(O), QA_MASTERLOG.P_TIME 컬럼이 없거나 값이 없을때, QA_DETAILLOG.PR_DT 값으로 계산 -->
+  	<select id="getTrackingLogListType2" parameterType="Map" resultMap="TRLogResult">
+	  	SELECT
+			  SUB_FROM_03.MASTERLOG_ID
+			, SUB_FROM_03.MSG_DATETIME
+			, SUB_FROM_03.DATA_SIZE
+			, SUB_FROM_03.MSG_STATUS
+			, SUB_FROM_03.STATUS_NM
+
+			, SUB_FROM_03.GROUP_ID
+			, SUB_FROM_03.INTF_ID
+
+			, SUB_FROM_03.INTEGRATION_ID
+			, SUB_FROM_03.INTERFACE_ID
+			, SUB_FROM_03.INTERFACE_NM
+			, SUB_FROM_03.CHANNEL_NM
+			, SUB_FROM_03.BUSINESS_NM
+
+			, SUB_FROM_03.RCV_SYSTEM_ID
+			, SUB_FROM_03.RCV_SYSTEM_CD
+			, SUB_FROM_03.RCV_SYSTEM_NM
+
+			, SUB_FROM_03.SND_SYSTEM_ID
+			, SUB_FROM_03.SND_SYSTEM_CD
+			, SUB_FROM_03.SND_SYSTEM_NM
+
+			, TO_CHAR(QA_DETAILLOG.MIN_PR_DT, 'YYYYMMDDHH24MISS') AS MIN_PR_DT
+			, CASE WHEN MSG_STATUS = '01' THEN '' ELSE TO_CHAR(QA_DETAILLOG.MAX_PR_DT, 'YYYYMMDDHH24MISS') END AS MAX_PR_DT
+			, CASE
+				WHEN MSG_STATUS = '01' THEN ''
+				ELSE
+					LTRIM(TO_CHAR( TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24) ,'00')) || ':' ||
+					LTRIM(TO_CHAR( TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24 * 60) - TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24) * 60  ,'00')) || ':' ||
+					LTRIM(TO_CHAR( TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24 * 60 * 60) -
+					             ( TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24) * 60 * 60 + ( TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24 * 60) - TRUNC((QA_DETAILLOG.MAX_PR_DT - QA_DETAILLOG.MIN_PR_DT) * 24) * 60 ) * 60 ) ,'00'))
+			  END AS ELAPSED_TIME
+	  	FROM
+	  		(
+
+				SELECT
+					  MASTERLOG_ID
+					, MSG_DATETIME
+					, DATA_SIZE
+					, MSG_STATUS
+					, CASE
+						WHEN MSG_STATUS = '00' THEN '완료'
+						WHEN MSG_STATUS = '01' THEN '처리중'
+						WHEN MSG_STATUS = '99' THEN '오류'
+						ELSE ''
+					  END AS STATUS_NM
+
+					, GROUP_ID
+					, INTF_ID
+
+					, INTEGRATION_ID
+					, INTERFACE_ID
+					, INTERFACE_NM
+					, CHANNEL_NM
+					, BUSINESS_NM
+
+					, RCV_SYSTEM_ID
+					, RCV_SYSTEM_CD
+					, CASE WHEN RCV_SYSTEM_NM IS NOT NULL THEN RCV_SYSTEM_NM||'('||RCV_SYSTEM_CD||')' ELSE '' END AS RCV_SYSTEM_NM
+
+					, SND_SYSTEM_ID
+					, SND_SYSTEM_CD
+					, CASE WHEN SND_SYSTEM_NM IS NOT NULL THEN SND_SYSTEM_NM||'('||SND_SYSTEM_CD||')' ELSE '' END AS SND_SYSTEM_NM
+
+					, MIN_PR_DT
+					, MAX_PR_DT
+					, RNUM
+				FROM
+					(
+						SELECT
+							  SUB_FROM_01.MASTERLOG_ID
+							, SUB_FROM_01.MSG_DATETIME
+							, SUB_FROM_01.DATA_SIZE
+							, SUB_FROM_01.MSG_STATUS
+							--, SUB_FROM_01.STATUS_NM
+
+							, SUB_FROM_01.GROUP_ID
+							, SUB_FROM_01.INTF_ID
+
+							, SUB_FROM_01.INTEGRATION_ID
+							, SUB_FROM_01.INTERFACE_ID
+							, SUB_FROM_01.INTERFACE_NM
+							, SUB_FROM_01.CHANNEL_NM
+							, SUB_FROM_01.BUSINESS_NM
+
+							, SUB_FROM_01.RCV_SYSTEM_ID
+							, SUB_FROM_01.RCV_SYSTEM_CD
+							, SUB_FROM_01.RCV_SYSTEM_NM
+
+							, SUB_FROM_01.SND_SYSTEM_ID
+							, SUB_FROM_01.SND_SYSTEM_CD
+							, SUB_FROM_01.SND_SYSTEM_NM
+
+							, SUB_FROM_01.MSG_DATETIME AS MIN_PR_DT
+							, SUB_FROM_01.MSG_DATETIME AS MAX_PR_DT
+							, ROWNUM AS RNUM
+						FROM
+							(
+								SELECT
+									  QA_MASTERLOG.MASTERLOG_ID
+									, QA_MASTERLOG.MSG_DATETIME
+									, QA_MASTERLOG.DATA_SIZE
+									, QA_MASTERLOG.MSG_STATUS
+									--, CDOP01.NM AS STATUS_NM
+
+									, INTF_INFO.GROUP_ID
+									, INTF_INFO.INTF_ID
+
+									, INTF_INFO.INTEGRATION_ID
+									, INTF_INFO.INTERFACE_ID
+									, INTF_INFO.INTERFACE_NM
+									, INTF_INFO.CHANNEL_ID
+									, INTF_INFO.CHANNEL_NM
+									, INTF_INFO.BUSINESS_ID
+									, INTF_INFO.BUSINESS_NM
+
+									, INTF_INFO.RCV_SYSTEM_ID
+									, INTF_INFO.RCV_SYSTEM_CD
+									, INTF_INFO.RCV_SYSTEM_NM
+
+			               			, INTF_INFO.SND_SYSTEM_ID
+									, INTF_INFO.SND_SYSTEM_CD
+									, INTF_INFO.SND_SYSTEM_NM
+								FROM
+									(
+										SELECT
+											  QA_MASTERLOG_ID_MAP.MASTERLOG_ID
+											, QA_MASTERLOG_ID_MAP.GROUP_ID
+											, QA_MASTERLOG_ID_MAP.INTF_ID
+
+											, NVL(TAN0201.INTEGRATION_ID, QA_MASTERLOG_ID_MAP.INTF_ID) AS INTEGRATION_ID
+											, NVL(TAN0201.INTERFACE_ID, QA_MASTERLOG_ID_MAP.INTF_ID) AS INTERFACE_ID
+											, NVL(TAN0201.INTERFACE_NM, '미등록 인터페이스') AS INTERFACE_NM
+
+											, TAN0201.CHANNEL_ID
+											, TAN0201.CHANNEL_NM
+
+											, TAN0201.BUSINESS_ID
+											, TAN0201.BUSINESS_NM
+
+
+											, TAN0201.RCV_SYSTEM_ID
+											, TAN0201.RCV_SYSTEM_CD
+											, TAN0201.RCV_SYSTEM_NM
+
+											, TAN0201.SND_SYSTEM_ID
+											, TAN0201.SND_SYSTEM_CD
+											, TAN0201.SND_SYSTEM_NM
+										FROM
+											---------------------
+											-- 마스터 로그 아이디맵
+											---------------------
+											QA_MASTERLOG_ID_MAP QA_MASTERLOG_ID_MAP
+											---------------------
+											-- 인터페이스 조인 (GROUP_ID + '_' + INTF_ID의 형태로 INTEGRATION ID를 관리하는 고객사를 고려해 JOIN 구성)
+											---------------------
+											<choose>
+											<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+											LEFT OUTER JOIN
+											</when>
+											<otherwise>
+											INNER JOIN
+											</otherwise>
+											</choose>
+											(
+												SELECT
+													  TAN0101.REQUIREMENT_ID
+													, TAN0101.REQUIREMENT_NM
+													, TAN0101.BUSINESS_ID
+													, TAN0101.BUSINESS_NM
+
+													, TAN0201.INTEGRATION_ID
+													, TAN0201.INTERFACE_ID
+													, TAN0201.INTERFACE_NM
+													, TIM0002.CHANNEL_ID
+													, TIM0002.CHANNEL_NM
+
+													, RCV_SYSTEM.SYSTEM_ID AS RCV_SYSTEM_ID
+													, ( SELECT SYSTEM_CD FROM TIM0101 WHERE SYSTEM_ID = RCV_SYSTEM.SYSTEM_ID AND DEL_YN = 'N' AND GRP_YN = 'N') AS RCV_SYSTEM_CD
+													, ( SELECT SYSTEM_NM FROM TIM0101 WHERE SYSTEM_ID = RCV_SYSTEM.SYSTEM_ID AND DEL_YN = 'N' AND GRP_YN = 'N') AS RCV_SYSTEM_NM
+
+													, SND_SYSTEM.SYSTEM_ID AS SND_SYSTEM_ID
+													, ( SELECT SYSTEM_CD FROM TIM0101 WHERE SYSTEM_ID = SND_SYSTEM.SYSTEM_ID AND DEL_YN = 'N' AND GRP_YN = 'N') AS SND_SYSTEM_CD
+													, ( SELECT SYSTEM_NM FROM TIM0101 WHERE SYSTEM_ID = SND_SYSTEM.SYSTEM_ID AND DEL_YN = 'N' AND GRP_YN = 'N') AS SND_SYSTEM_NM
+												FROM
+													---------------------
+													-- 인터페이스정보
+													---------------------
+													TAN0201 TAN0201
+													---------------------
+													-- 요건정보, 업무정보
+													---------------------
+													INNER JOIN
+													(
+														SELECT
+															  TAN0101.REQUIREMENT_ID
+															, TAN0101.REQUIREMENT_NM
+															, TAN0101.INTERFACE_ID
+															, TIM0301.BUSINESS_ID
+															, TIM0301.BUSINESS_NM
+														FROM
+															---------------------
+															-- 요건정보
+															---------------------
+															TAN0101 TAN0101
+															---------------------
+															-- 업무정보
+															---------------------
+														    INNER JOIN TIM0301 TIM0301 ON
+														    	TAN0101.BUSINESS_ID = TIM0301.BUSINESS_ID
+														WHERE
+															1 = 1
+															AND TAN0101.DEL_YN = 'N'
+															AND TIM0301.DEL_YN = 'N'
+															<if test="businessId != null and businessId != ''">
+															AND TAN0101.BUSINESS_ID = #{businessId}
+															AND TIM0301.BUSINESS_ID = #{businessId}
+															</if>
+													) TAN0101 ON
+														TAN0201.INTERFACE_ID = TAN0101.INTERFACE_ID
+													---------------------
+													-- 전사솔루션
+													---------------------
+												    INNER JOIN TIM0002 TIM0002 ON
+												    	TAN0201.CHANNEL_ID = TIM0002.CHANNEL_ID
+													---------------------
+													-- 기관정보
+													---------------------
+												    <if test="organizationId != null and organizationId != ''">
+													INNER JOIN
+													(
+										       			SELECT B.INTERFACE_ID
+														FROM
+															TAN0213 B
+															INNER JOIN TIM0101 A ON A.SYSTEM_ID = B.SYSTEM_ID
+										      				INNER JOIN
+										      				(
+										      					SELECT B.SYSTEM_ID
+												      			FROM
+												      				TIM0403 B
+										          					INNER JOIN
+										          					(
+										          						SELECT C_ORG_ID
+										          						FROM TIM0402
+										          						WHERE
+										          							DEL_YN='N'
+										          							AND P_ORG_ID=#{organizationId}
+										          					) G ON B.ORG_ID = G.C_ORG_ID
+										          			) K ON A.SYSTEM_ID = K.SYSTEM_ID
+														WHERE A.DEL_YN = 'N'
+													) TIM0403 ON
+														TAN0201.INTERFACE_ID = TIM0403.INTERFACE_ID
+													</if>
+
+													<choose>
+													<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+													</when>
+													<otherwise>
+													-----------------------------------------------
+													-- 데이터 엑세스 권한 별 인터페이스 조회
+													-----------------------------------------------
+													INNER JOIN
+													(
+														SELECT
+															DISTINCT
+															TSU0220.INTERFACE_ID
+														FROM
+															-----------------------------------------------
+															-- 로그인 사용자 데이터 엑세스 권한 조회(공통)
+															-----------------------------------------------
+															(
+																SELECT
+																	DISTINCT
+																	TSU0219.USER_ID   AS USER_ID,
+																	TSU0221.C_ROLE_ID AS ROLE_ID,
+																	TSU0221.DEPTH     AS DEPTH
+																FROM
+																	(
+																		SELECT
+																			TSU0101.USER_ID,
+																			TSU0219.ROLE_ID
+																		FROM
+																			TSU0101 TSU0101
+																			INNER JOIN TSU0219 TSU0219 ON
+																				TSU0101.USER_ID = TSU0219.USER_ID
+																		WHERE
+																			1 = 1
+																			AND TSU0101.DEL_YN = 'N'
+																			AND TSU0101.USER_ID = #{userId}
+																	) TSU0219
+																		INNER JOIN TSU0221 TSU0221 ON
+																		TSU0219.ROLE_ID = TSU0221.P_ROLE_ID
+															) ACCESS_ROLE
+															-----------------------------------------------
+															-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+															-----------------------------------------------
+															INNER JOIN TSU0220 TSU0220 ON
+																ACCESS_ROLE.ROLE_ID = TSU0220.ROLE_ID
+
+														UNION
+
+														-----------------------------------------------
+														-- 로그인 사용자 본인이 등록한 인터페이스 목록 조회
+														-----------------------------------------------
+														SELECT
+															INTERFACE_ID
+														FROM
+															TAN0201
+														WHERE REG_USER = #{userId}
+													) ACCESS_ROLE_INTF ON
+														TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+													</otherwise>
+													</choose>
+
+													-----------------------------------------------
+													-- 시스템 정보(CONSUMER-송신)
+													-----------------------------------------------
+													LEFT OUTER JOIN
+													(
+														SELECT
+															  INTERFACE_ID
+															, MAX(SYSTEM_ID) AS SYSTEM_ID
+														FROM
+															TAN0213
+														WHERE
+															DEL_YN = 'N'
+															AND NODE_TYPE = '0'
+															<if test="systemId != null and systemId != ''">
+															AND SYSTEM_ID = #{systemId}
+															</if>
+														GROUP BY INTERFACE_ID
+													) SND_SYSTEM ON
+														TAN0201.INTERFACE_ID = SND_SYSTEM.INTERFACE_ID
+
+													-----------------------------------------------
+													-- 시스템 정보(PROVIDER-수신)
+													-----------------------------------------------
+													LEFT OUTER JOIN
+													(
+														SELECT
+															  INTERFACE_ID
+															, MAX(SYSTEM_ID) AS SYSTEM_ID
+														FROM
+															TAN0213
+														WHERE
+															DEL_YN = 'N'
+															AND NODE_TYPE = '2'
+															<if test="systemId != null and systemId != ''">
+															AND SYSTEM_ID = #{systemId}
+															</if>
+														GROUP BY INTERFACE_ID
+													) RCV_SYSTEM ON
+														TAN0201.INTERFACE_ID = RCV_SYSTEM.INTERFACE_ID
+												WHERE
+													1 = 1
+
+													<if test="channelId != null and channelId != ''">
+													AND TAN0201.CHANNEL_ID = #{channelId}
+													AND TIM0002.CHANNEL_ID = #{channelId}
+													</if>
+
+													<if test="interfaceNm != null and interfaceNm != ''">
+													AND TAN0201.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+													</if>
+
+													<if test="integrationId != null and integrationId != ''">
+													AND LOWER(TAN0201.INTEGRATION_ID) LIKE LOWER('%'||#{integrationId}||'%')
+													</if>
+
+													<if test="systemId != null and systemId != ''">
+													AND ( SND_SYSTEM.SYSTEM_ID = #{systemId} OR RCV_SYSTEM.SYSTEM_ID = #{systemId} )
+													</if>
+
+													<if test="accRoleId != null and accRoleId !=''">
+													AND TAN0201.INTERFACE_ID IN
+													(
+														SELECT INTERFACE_ID
+														FROM TSU0220
+														WHERE ROLE_ID = #{accRoleId}
+													)
+													</if>
+
+													<if test="isFavoriteInterface != null and isFavoriteInterface eq 'Y'.toString()">
+													AND TAN0201.INTERFACE_ID IN
+													(
+														SELECT INTERFACE_ID
+														FROM TAN0214
+														WHERE USER_ID = #{userId}
+													)
+													</if>
+
+											) TAN0201 ON
+												QA_MASTERLOG_ID_MAP.INTF_ID = TAN0201.INTEGRATION_ID --OR (QA_MASTERLOG_ID_MAP.GROUP_ID || '_' || QA_MASTERLOG_ID_MAP.INTF_ID) = TAN0201.INTEGRATION_ID
+									) INTF_INFO
+
+									-----------------------------------------------
+									-- 트레킹 정보
+									-----------------------------------------------
+									INNER JOIN
+									(
+										SELECT
+											QA_MASTERLOG.MASTERLOG_ID,
+											QA_MASTERLOG.MSG_DATETIME,
+											QA_MASTERLOG.MSG_STATUS,
+											QA_MASTERLOG.DATA_SIZE
+										FROM
+											QA_MASTERLOG QA_MASTERLOG
+										WHERE
+											1 = 1
+											AND MSG_DATETIME BETWEEN #{startDate} AND #{endDate}
+											<if test="status != null and status != ''">
+											AND MSG_STATUS = #{status}
+											</if>
+											<if test="msgDateTime !=null and msgDateTime !=''">
+											AND MSG_DATETIME = #{msgDateTime}
+											</if>
+										<choose>
+										<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+
+										</when>
+										<otherwise>
+										ORDER BY QA_MASTERLOG.MSG_DATETIME DESC
+										</otherwise>
+										</choose>
+									) QA_MASTERLOG ON
+										INTF_INFO.MASTERLOG_ID = QA_MASTERLOG.MASTERLOG_ID
+									/*
+									-----------------------------------------------
+									-- 공통코드(상태값)
+									-----------------------------------------------
+									INNER  JOIN
+									(
+										SELECT CD, NM
+										FROM TSU0301
+										WHERE
+											LEVEL1 = 'OP' AND LEVEL2 = '01'
+									) CDOP01 ON
+										QA_MASTERLOG.MSG_STATUS = CDOP01.CD
+									*/
+								WHERE
+			 						1 = 1
+								<choose>
+								<when test="unregisteredFlag != null and unregisteredFlag eq 'Y'.toString()">
+								ORDER BY QA_MASTERLOG.MSG_DATETIME DESC
+								</when>
+								<otherwise>
+
+								</otherwise>
+								</choose>
+							) SUB_FROM_01
+						WHERE
+							1 = 1
+								<if test="businessId != null and businessId != ''">
+								AND BUSINESS_ID = #{businessId}
+								</if>
+
+								<if test="channelId != null and channelId != ''">
+								AND CHANNEL_ID = #{channelId}
+								</if>
+
+								<if test="interfaceNm != null and interfaceNm != ''">
+								AND INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+								</if>
+
+								<if test="integrationId != null and integrationId != ''">
+								AND LOWER(INTEGRATION_ID) LIKE LOWER('%'||#{integrationId}||'%')
+								</if>
+
+								<if test="systemId != null and systemId != ''">
+								AND ( SND_SYSTEM_ID = #{systemId} OR RCV_SYSTEM_ID = #{systemId} )
+								</if>
+
+								<if test="accRoleId != null and accRoleId !=''">
+								AND INTERFACE_ID IN
+								(
+									SELECT INTERFACE_ID
+									FROM TSU0220
+									WHERE ROLE_ID = #{accRoleId}
+								)
+								</if>
+
+								<if test="isFavoriteInterface != null and isFavoriteInterface eq 'Y'.toString()">
+								AND INTERFACE_ID IN
+								(
+									SELECT INTERFACE_ID
+									FROM TAN0214
+									WHERE USER_ID = #{userId}
+								)
+								</if>
+					) SUB_FROM_02
+				WHERE
+					1=1
+					<if test="searchNum !=null and searchNum !=''">
+					AND RNUM <![CDATA[<]]>= #{searchNum}
+					</if>
+	  		) SUB_FROM_03
+
+			INNER JOIN
+			(
+				SELECT
+					  MASTERLOG_ID
+					, MSG_DATETIME
+					, MIN(PR_DT) AS MIN_PR_DT
+					, MAX(PR_DT) AS MAX_PR_DT
+				FROM QA_DETAILLOG
+				WHERE
+					1 = 1
+					AND MSG_DATETIME BETWEEN #{startDate} AND #{endDate}
+					<if test="msgDateTime !=null and msgDateTime !=''">
+					AND MSG_DATETIME = #{msgDateTime}
+					</if>
+				GROUP BY MASTERLOG_ID , MSG_DATETIME
+			) QA_DETAILLOG ON
+				QA_DETAILLOG.MASTERLOG_ID = SUB_FROM_03.MASTERLOG_ID
+				AND QA_DETAILLOG.MSG_DATETIME = SUB_FROM_03.MSG_DATETIME
+	</select>
+
+	<resultMap id="TRLogResult" type="TRLog" >
+		<result property="logTime"            column="MSG_DATETIME" />
+		<result property="logId"              column="MASTERLOG_ID" />
+		<result property="globalId"           column="GLOBAL_ID" />
+		<result property="interfaceId"        column="INTERFACE_ID" />
+		<result property="integrationId"      column="INTEGRATION_ID" />
+		<result property="interfaceNm"        column="INTERFACE_NM" />
+		<result property="channelNm"          column="CHANNEL_NM" />
+		<result property="businessNm"         column="BUSINESS_NM" />
+		<result property="statusNm"           column="STATUS_NM" />
+		<result property="dataPrMethodNm"     column="DATAPRMETHOD_NM" />
+		<result property="sndSystemNm"        column="SND_SYSTEM_NM" />
+		<result property="sndSystemCd"        column="SND_SYSTEM_CD" />
+		<result property="rcvSystemNm"        column="RCV_SYSTEM_NM" />
+		<result property="rcvSystemCd"        column="RCV_SYSTEM_CD" />
+		<result property="sndBizServiceNm"    column="SND_BIZ_SERVICE_NM" />
+		<result property="minPrDt"			  column="MIN_PR_DT" />
+		<result property="maxPrDt"			  column="MAX_PR_DT" />
+		<result property="elapsedTime"		  column="ELAPSED_TIME" />
+		<result property="dataSize"		  	  column="DATA_SIZE" />
+	</resultMap>
+
+	<select id="getTrackingLogDetail" parameterType="Map" resultMap="TRLogDetailResult">
+		SELECT
+			  A.MASTERLOG_ID
+			, A.DETAILLOG_ID
+			, A.MSG_DATETIME
+			, A.PR_PROCESS_MODE
+			, B.PR_HOST_ID
+			, B.PR_PROCESS_ID
+			, A.PR_DT
+			, C.NM AS STATUS_NM
+			, A.MSG_STATUS AS STATUS
+			, A.RECORD_CNT
+			, A.DATA_SIZE
+			, A.COMPRESS_YN
+			, D.ERROR_MSG
+			, E.DATA
+			, F.DIRECTORY_NM
+			, F.FILE_NM
+		  	, CASE
+		  		WHEN NODE_INFO.NODE_IDX IS NULL THEN
+					NVL(PIDX.IDX,
+						CASE
+							WHEN A.PR_PROCESS_MODE IN('SNDR', 'ISND') THEN 1
+							WHEN A.PR_PROCESS_MODE IN('BRKR', 'IHUB') THEN 11
+							WHEN A.PR_PROCESS_MODE IN('SBRK', 'IREQ') THEN 21
+							WHEN A.PR_PROCESS_MODE IN('REPL')         THEN 22
+							WHEN A.PR_PROCESS_MODE IN('RBRK', 'IRLY') THEN 23
+							WHEN A.PR_PROCESS_MODE IN('SNRC')         THEN 88
+							WHEN A.PR_PROCESS_MODE IN('RCVR', 'IRCV') THEN 99
+							WHEN A.PR_PROCESS_MODE = '' THEN 0
+						END
+					)
+		  		ELSE
+		  			NODE_INFO.NODE_IDX
+		  	  END AS IDX
+		FROM
+			QA_DETAILLOG A
+			LEFT OUTER JOIN QA_DETAILLOG_ID_MAP B ON A.MASTERLOG_ID = B.MASTERLOG_ID AND A.DETAILLOG_ID = B.DETAILLOG_ID
+			LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'OP' AND LEVEL2 = '01') C ON A.MSG_STATUS = C.CD
+			LEFT OUTER JOIN QA_DETAILLOG_ERR D ON A.MASTERLOG_ID = D.MASTERLOG_ID AND A.DETAILLOG_ID = D.DETAILLOG_ID AND A.MSG_DATETIME = D.MSG_DATETIME
+			LEFT OUTER JOIN QA_DETAILLOG_DATA E ON A.MASTERLOG_ID = E.MASTERLOG_ID AND A.DETAILLOG_ID = E.DETAILLOG_ID AND A.MSG_DATETIME = E.MSG_DATETIME
+			LEFT OUTER JOIN QA_DETAILLOG_FILE F ON A.MASTERLOG_ID = F.MASTERLOG_ID AND A.DETAILLOG_ID = F.DETAILLOG_ID AND A.MSG_DATETIME = F.MSG_DATETIME
+			LEFT OUTER JOIN (SELECT IDX, ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'tracking' AND ATTRIBUTE_ID = 'process.mode.sort.index') PIDX ON A.PR_PROCESS_MODE = PIDX.ATTRIBUTE_VALUE
+			LEFT OUTER JOIN
+			(
+				SELECT
+					NODE_INFO.GROUP_ID,
+					NODE_INFO.INTF_ID,
+					NODE_INFO.NODE_ID,
+					NODE_INFO.NODE_NM,
+					NODE_INFO.HOST_ID,
+					NODE_INFO.NODE_TYPE,
+					NODE_INFO.NODE_GUBUN,
+					NVL(NODE_IDX.IDX, 0) AS NODE_IDX
+				FROM
+					NODEINFO NODE_INFO
+					LEFT OUTER JOIN
+					(
+						SELECT
+							DISTINCT GROUP_ID, INTF_ID, TO_NODE_ID AS NODE_ID, LEVEL AS IDX
+						FROM
+						(
+							SELECT
+								GROUP_ID,
+								INTF_ID,
+								FROM_NODE_ID,
+								TO_NODE_ID
+							FROM
+								(
+									SELECT
+										P.GROUP_ID,
+										P.INTF_ID,
+										'' AS FROM_NODE_ID,
+										P.FROM_NODE_ID AS TO_NODE_ID
+									FROM
+										LINKINFO P
+										LEFT OUTER JOIN LINKINFO C ON
+											P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+									WHERE
+										C.FROM_NODE_ID IS NULL
+
+									UNION
+
+									SELECT
+										P.GROUP_ID,
+										P.INTF_ID,
+										P.FROM_NODE_ID,
+										P.TO_NODE_ID
+									FROM
+										LINKINFO P
+										LEFT OUTER JOIN LINKINFO C ON
+											P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+								)
+							WHERE
+								1 = 1
+								AND GROUP_ID = #{groupId}
+								AND INTF_ID = #{intfId}
+						)
+
+						START WITH FROM_NODE_ID IS NULL
+						CONNECT BY NOCYCLE FROM_NODE_ID = PRIOR TO_NODE_ID
+						ORDER BY GROUP_ID, INTF_ID, LEVEL, TO_NODE_ID
+					) NODE_IDX ON
+						NODE_INFO.GROUP_ID = NODE_IDX.GROUP_ID
+						AND NODE_INFO.INTF_ID = NODE_IDX.INTF_ID
+						AND NODE_INFO.NODE_ID = NODE_IDX.NODE_ID
+				WHERE
+					1 = 1
+					AND NODE_INFO.GROUP_ID = #{groupId}
+					AND NODE_INFO.INTF_ID = #{intfId}
+				ORDER BY IDX NULLS FIRST, NODE_ID
+			) NODE_INFO ON
+			  NODE_INFO.NODE_ID = B.PR_PROCESS_ID
+		WHERE
+			A.MASTERLOG_ID = B.MASTERLOG_ID
+			AND B.MASTERLOG_ID = #{logKey1}
+			AND A.MSG_DATETIME = #{logKey2}
+		ORDER BY IDX ASC
+	</select>
+
+	<resultMap id="TRLogDetailResult" type="TRLogDetail">
+        <result property="logKey1"          column="MASTERLOG_ID" />
+        <result property="logKey2"          column="MSG_DATETIME" />
+        <result property="logKey3"          column="DETAILLOG_ID" />
+        <result property="processMode"      column="PR_PROCESS_MODE" />
+        <result property="hostId"           column="PR_HOST_ID" />
+        <result property="processId"        column="PR_PROCESS_ID" />
+        <result property="processTime"      column="PR_DT" />
+        <result property="status"           column="STATUS" />
+        <result property="statusNm"         column="STATUS_NM" />
+        <result property="recordCnt"        column="RECORD_CNT" />
+        <result property="dataSize"         column="DATA_SIZE" />
+        <result property="compressYn"       column="COMPRESS_YN" />
+        <result property="errorMsg"         column="ERROR_MSG" />
+        <result property="msg"              column="DATA"  ></result>
+        <result property="msgToByte"        column="DATA"  jdbcType="BLOB" ></result>
+        <result property="directoryNm"      column="DIRECTORY_NM" />
+        <result property="fileNm"           column="FILE_NM" />
+        <result property="hopCnt"           column="IDX"/>
+    </resultMap>
+
+    <select id="getTrackingNodeInfo" parameterType="Map" resultMap="TRNodeInfoResult">
+		SELECT
+			NODE_INFO.GROUP_ID,
+			NODE_INFO.INTF_ID,
+			NODE_INFO.NODE_ID,
+			NODE_INFO.NODE_NM,
+			NODE_INFO.HOST_ID,
+			NODE_INFO.NODE_TYPE,
+			NODE_INFO.NODE_GUBUN,
+			NVL(NODE_IDX.IDX, 0) AS NODE_INDEX,
+			DETAIL_LOG.PR_PROCESS_ID,
+			DETAIL_LOG.PR_HOST_ID,
+			DETAIL_LOG.PR_PROCESS_MODE,
+			DETAIL_LOG.PR_PROCESS_TYPE,
+			DETAIL_LOG.PR_DT,
+			DETAIL_LOG.MSG_STATUS,
+			DETAIL_LOG.DATA_SIZE,
+			DETAIL_LOG.COMPRESS_YN
+		FROM
+			NODEINFO NODE_INFO
+			LEFT OUTER JOIN
+			(
+				SELECT
+					DISTINCT GROUP_ID, INTF_ID, TO_NODE_ID AS NODE_ID, LEVEL AS IDX
+				FROM
+				(
+					SELECT
+						GROUP_ID,
+						INTF_ID,
+						FROM_NODE_ID,
+						TO_NODE_ID
+					FROM
+						(
+							SELECT
+								P.GROUP_ID,
+								P.INTF_ID,
+								'' AS FROM_NODE_ID,
+								P.FROM_NODE_ID AS TO_NODE_ID
+							FROM
+								LINKINFO P
+								LEFT OUTER JOIN LINKINFO C ON
+									P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+							WHERE
+								C.FROM_NODE_ID IS NULL
+
+							UNION
+
+							SELECT
+								P.GROUP_ID,
+								P.INTF_ID,
+								P.FROM_NODE_ID,
+								P.TO_NODE_ID
+							FROM
+								LINKINFO P
+								LEFT OUTER JOIN LINKINFO C ON
+									P.GROUP_ID = C.GROUP_ID AND P.INTF_ID = C.INTF_ID AND P.FROM_NODE_ID = C.TO_NODE_ID
+						)
+					WHERE
+						1 = 1
+						AND GROUP_ID = #{groupId}
+						AND INTF_ID = #{intfId}
+				)
+
+				START WITH FROM_NODE_ID IS NULL
+				CONNECT BY NOCYCLE FROM_NODE_ID = PRIOR TO_NODE_ID
+				ORDER BY GROUP_ID, INTF_ID, LEVEL, TO_NODE_ID
+			) NODE_IDX ON
+				NODE_INFO.GROUP_ID = NODE_IDX.GROUP_ID
+				AND NODE_INFO.INTF_ID = NODE_IDX.INTF_ID
+				AND NODE_INFO.NODE_ID = NODE_IDX.NODE_ID
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					A.MASTERLOG_ID,
+					A.DETAILLOG_ID,
+					A.MSG_DATETIME,
+					A.PR_PROCESS_MODE,
+					A.PR_PROCESS_TYPE,
+					A.PR_DT,
+					A.MSG_STATUS,
+					A.DATA_SIZE,
+					A.COMPRESS_YN,
+					A.ADAPTER_CODE,
+					B.PR_PROCESS_ID,
+					B.PR_HOST_ID
+				FROM
+					QA_DETAILLOG A
+					INNER JOIN QA_DETAILLOG_ID_MAP B ON
+						A.MASTERLOG_ID = B.MASTERLOG_ID
+						AND A.DETAILLOG_ID = B.DETAILLOG_ID
+				WHERE
+					A.MASTERLOG_ID = #{logKey1}
+					AND A.MSG_DATETIME = #{logKey2}
+			) DETAIL_LOG  ON
+				NODE_INFO.NODE_ID = DETAIL_LOG.PR_PROCESS_ID
+		WHERE
+			1 = 1
+			AND NODE_INFO.GROUP_ID = #{groupId}
+			AND NODE_INFO.INTF_ID = #{intfId}
+		ORDER BY IDX NULLS FIRST, NODE_ID
+	</select>
+
+	<resultMap id="TRNodeInfoResult" type="TRNodeInfo">
+        <result property="nodeId"      		column="NODE_ID" />
+        <result property="nodeNm"        	column="NODE_NM" />
+        <result property="nodeType"      	column="NODE_TYPE" />
+        <result property="nodeGubun"      	column="NODE_GUBUN" />
+        <result property="nodeIndex"      	column="NODE_INDEX" />
+        <result property="hostId"           column="HOST_ID" />
+        <result property="posX"           	column="POS_X" />
+        <result property="posY"        		column="POS_Y" />
+        <result property="processId"        column="PR_PROCESS_ID" />
+        <result property="processMode"      column="PR_PROCESS_MODE" />
+        <result property="status"        	column="MSG_STATUS" />
+    </resultMap>
+
+    <select id="getTrackingInterfaceInfo" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT
+			B.GROUP_ID,
+ 			B.INTF_ID
+		FROM
+			QA_MASTERLOG A
+			INNER JOIN QA_MASTERLOG_ID_MAP B ON
+				A.MASTERLOG_ID = B.MASTERLOG_ID
+		WHERE
+			1 = 1
+			AND A.MASTERLOG_ID = #{logKey1}
+			AND A.MSG_DATETIME = #{logKey2}
+	</select>
+
+    <select id="getTrackingLinkInfo" parameterType="Map" resultMap="TRLinkInfoResult">
+		SELECT
+			A.FROM_NODE_ID,
+			A.TO_NODE_ID
+		FROM
+			LINKINFO A
+		WHERE
+			1 = 1
+			AND GROUP_ID = #{groupId}
+			AND INTF_ID = #{intfId}
+	</select>
+
+	<resultMap id="TRLinkInfoResult" type="TRLinkInfo">
+        <result property="fromNodeId"      	column="FROM_NODE_ID" />
+        <result property="toNodeId"         column="TO_NODE_ID" />
+        <result property="fromNodeIdx"      column="FROM_NODE_IDX" />
+        <result property="toNodeIdx"      	column="TO_NODE_IDX" />
+    </resultMap>
+
+
+</mapper>

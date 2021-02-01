@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.co.JobMapper">
+    <!--
+    <cache/>
+    -->
+
+    <select id="getJobScheduleList" resultMap="zobScheduleResultMap">
+        SELECT
+             a.GRP_ID
+            ,a.GRP_NM
+            ,b.JOB_ID
+            ,b.GRP_ID
+            ,b.SEQ
+            ,b.TYPE AS SCHEDULE_TYPE
+            ,b.VALUE
+            ,c.JOB_NM
+            ,c.TYPE AS JOB_TYPE
+            ,c.IMPL_CLASS
+            ,c.TABLE_NM
+            ,c.COMMENTS
+            ,d.SCHEDULE_ID
+            ,d.SCHEDULE_NM
+        FROM TBA0002 a
+        INNER JOIN TBA0004 b ON a.GRP_ID = b.GRP_ID
+        INNER JOIN TBA0001 c ON a.GRP_ID = c.GRP_ID AND b.JOB_ID = c.JOB_ID
+        INNER JOIN TBA0003 d ON b.SCHEDULE_ID = d.SCHEDULE_ID AND d.USAGE = 'Y'
+        ORDER BY a.GRP_ID, b.JOB_ID, d.SCHEDULE_ID, b.SEQ
+    </select>
+
+    <select id="getJobScheduleListByClass" resultMap="zobScheduleResultMap">
+        SELECT
+             a.GRP_ID
+            ,a.GRP_NM
+            ,b.JOB_ID
+            ,b.GRP_ID
+            ,b.SEQ
+            ,b.TYPE	AS SCHEDULE_TYPE
+            ,b.VALUE
+            ,c.JOB_NM
+            ,c.TYPE AS JOB_TYPE
+            ,c.IMPL_CLASS
+            ,c.TABLE_NM
+            ,c.COMMENTS
+            ,d.SCHEDULE_ID
+            ,d.SCHEDULE_NM
+        FROM TBA0002 a
+        INNER JOIN TBA0004 b ON a.GRP_ID = b.GRP_ID
+        INNER JOIN TBA0001 c ON a.GRP_ID = c.GRP_ID AND b.JOB_ID = c.JOB_ID AND c.IMPL_CLASS = #{implClass}
+        INNER JOIN TBA0003 d ON b.SCHEDULE_ID = d.SCHEDULE_ID AND d.USAGE = 'Y'
+        ORDER BY a.GRP_ID, b.JOB_ID, d.SCHEDULE_ID, b.SEQ
+    </select>
+
+    <resultMap id="zobScheduleResultMap" type="ZobSchedule" >
+        <id property="scheduleId" 			column="SCHEDULE_ID"/>
+        <id property="seq" 			        column="SEQ"/>
+        <result property="scheduleNm" 		column="SCHEDULE_NM" />
+        <result property="type" 		    column="SCHEDULE_TYPE" />
+        <result property="value" 		    column="VALUE" />
+        <association property="zob" javaType="Zob">
+            <id property="jobId" 			column="JOB_ID" />
+            <id property="groupId"          column="GRP_ID" />
+            <result property="jobNm" 		column="JOB_NM" />
+            <result property="tableNm" 		column="TABLE_NM" />
+            <result property="type" 		column="JOB_TYPE" />
+            <result property="implClass" 	column="IMPL_CLASS" />
+            <result property="comments" 	column="COMMENTS" />
+        </association>
+    </resultMap>
+
+    <insert id="insertJobResult">
+        <selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			SELECT COALESCE(max(SEQ) + 1, 0) AS seq
+            FROM TBA0005
+            WHERE PROCESS_ID  = #{processId, jdbcType=VARCHAR}
+            AND SCHEDULE_ID = #{scheduleId, jdbcType=VARCHAR}
+            AND JOB_ID      = #{jobId, jdbcType=VARCHAR}
+            AND GRP_ID      = #{groupId, jdbcType=VARCHAR}
+        </selectKey>
+
+        INSERT INTO TBA0005(
+            PROCESS_ID,
+            SCHEDULE_ID,
+            JOB_ID,
+            GRP_ID,
+            SEQ,
+            START_DATE,
+            END_DATE,
+            SCHEDULE_VALUE,
+            PROCESS_STATUS,
+            RESULT_CD,
+            ERROR_MSG,
+            CALLER
+        ) VALUES (
+             #{processId}
+            ,#{scheduleId}
+            ,#{jobId}
+            ,#{groupId}
+            ,#{seq}
+            ,#{startDate}
+            ,#{endDate}
+            ,#{scheduleValue}
+            ,#{processStatus}
+            ,#{resultCd}
+            <choose>
+				<when test="_databaseId == 'postgres'">
+	            ,#{errorMsg}
+			    </when>
+			    <otherwise>
+	            ,#{errorMsg, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			    </otherwise>
+			</choose>
+            ,#{caller}
+        )
+    </insert>
+
+    <select id="getJobResultList" resultMap="zobResultMap">
+        SELECT
+             a.PROCESS_ID
+            ,a.SCHEDULE_ID
+            ,a.SEQ
+            ,a.GRP_ID
+            ,c.GRP_NM
+            ,a.JOB_ID
+            ,b.JOB_NM
+            ,a.START_DATE
+            ,a.END_DATE
+            ,a.SCHEDULE_VALUE
+            ,a.PROCESS_STATUS
+            ,a.RESULT_CD
+            ,a.ERROR_MSG
+            ,a.CALLER
+		FROM TBA0005 a
+		INNER JOIN TBA0001 b
+        ON a.GRP_ID = b.GRP_ID
+		AND a.JOB_ID = b.JOB_ID
+        <if test="jobNm != null">
+        AND b.JOB_NM LIKE '%'||#{jobNm}||'%'
+        </if>
+        <if test="errorOnly != null and errorOnly eq 'Y'.toString()">
+        AND a.RESULT_CD <![CDATA[<>]]> '0'
+        </if>
+        <if test="groupId != null">
+        AND a.GRP_ID = #{groupId}
+        </if>
+        <if test="jobId != null">
+        AND a.JOB_ID = #{jobId}
+        </if>
+        <if test="caller != null">
+        AND a.CALLER = #{caller}
+        </if>
+        <if test="startDate != null">
+        AND a.START_DATE <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+        AND a.END_DATE <![CDATA[<=]]> #{endDate}
+        </if>
+        INNER JOIN TBA0002 c
+        ON a.GRP_ID = c.GRP_ID
+        <if test="groupNm != null">
+        AND c.GROUP_NM LIKE '%'||#{groupNm}||'%'
+        </if>
+        ORDER BY a.START_DATE DESC
+    </select>
+
+    <resultMap id="zobResultMap" type="ZobResult">
+        <id property="processId"    column="PROCESS_ID"/>
+        <id property="scheduleId"   column="SCHEDULE_ID"/>
+        <id property="groupId"      column="GRP_ID"/>
+        <id property="jobId"        column="JOB_ID"/>
+        <id property="seq"          column="SEQ"/>
+        <result property="jobNm"            column="JOB_NM"/>
+        <result property="groupNm"          column="GRP_NM"/>
+        <result property="caller"           column="CALLER"/>
+        <result property="processStatus"    column="PROCESS_STATUS"/>
+        <result property="resultCd"         column="RESULT_CD"/>
+        <result property="errorMsg"			column="ERROR_MSG" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+        <result property="startDate"        column="START_DATE"/>
+        <result property="endDate"          column="END_DATE"/>
+        <result property="scheduleValue"    column="SCHEDULE_VALUE"/>
+    </resultMap>
+
+    <select id="getBatchHostname" resultType="string">
+        SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'system' AND ATTRIBUTE_ID = 'batch.basic.hostname' AND IDX = 1
+    </select>
+
+    <select id="getUseBatchHostname" resultType="string">
+        SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'system' AND ATTRIBUTE_ID = 'batch.use.basic.hostname' AND IDX = 1
+    </select>
+
+	<select id="getPurgeToDate" resultType="string">
+        SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'system' AND ATTRIBUTE_ID = 'batch.purge.date' AND IDX = 1
+    </select>
+
+    <select id="getMIManangerConnectionInfo" resultType="map">
+    	SELECT
+			(SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'solution' AND ATTRIBUTE_ID = 'mi.manager.password' AND IDX = 1) AS "password"
+    		,(SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'solution' AND ATTRIBUTE_ID = 'mi.manager.username' AND IDX = 1) AS "username"
+    		,(SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'solution' AND ATTRIBUTE_ID = 'mi.manager.ip' AND IDX = 1) AS "ip"
+    		,(SELECT ATTRIBUTE_VALUE FROM TSU0302 WHERE PACKAGE = 'solution' AND ATTRIBUTE_ID = 'mi.manager.port' AND IDX = 1) AS "port"
+	   	<choose>
+       		<when test="_databaseId == 'postgres'"></when>
+       		<otherwise>
+		FROM DUAL
+       		</otherwise>
+       	</choose>
+    </select>
+</mapper>

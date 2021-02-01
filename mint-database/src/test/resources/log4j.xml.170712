@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+		<!--
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+			 -->
+			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS}-%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Application Loggers
+	<logger name="pep.per.mint">
+		<level value="debug" />
+	</logger>
+
+	<logger name="pep.per.mint.database">
+		<level value="debug" />
+	</logger>
+
+	-->
+	<logger name="pep.per.mint.database.service">
+		<level value="debug" />
+		<appender-ref ref="console"/>
+	</logger>
+
+	<!-- 3rdparty Loggers
+	<logger name="org.springframework.core">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.springframework.beans">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.springframework.context">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="debug" />
+	</logger>
+	-->
+	<!--
+	<logger name="org.mybatis">
+		<level value="debug"/>
+	</logger>
+
+	<logger name="pep.per.mint.database.persistance.FooMapper">
+		<level value="debug" />
+	</logger>
+
+
+	<logger name="pep.per.mint.database.persistance.FooBatchDao">
+		<level value="debug" />
+	</logger>
+
+	<logger name="pep.per.mint.database.persistance.BrokerMapper">
+		<level value="debug" />
+	</logger>
+
+
+	<logger name="pep.per.mint.database.persistance.MonitorMapper">
+		<level value="debug" />
+	</logger>
+
+
+	<logger name="pep.per.mint.database.mybatis.dao">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.h2.tools.Server">
+		<level value="debug" />
+	</logger>
+
+	<logger name="pep.per.mint.database.mapper.co">
+		<level value="debug" />
+	</logger>
+	-->
+<!--
+logger	description	since
+jdbc.sqlonly	Logs only SQL. SQL executed within a prepared statement is automatically shown with it's bind arguments replaced with the data bound at that position, for greatly increased readability.	1.0
+jdbc.sqltiming	Logs the SQL, post-execution, including timing statistics on how long the SQL took to execute.	1.0
+jdbc.audit	Logs ALL JDBC calls except for ResultSets. This is a very voluminous output, and is not normally needed unless tracking down a specific JDBC problem.	1.0
+jdbc.resultset	Even more voluminous, because all calls to ResultSet objects are logged.	1.0
+jdbc.connection	Logs connection open and close events as well as dumping all open connection numbers. This is very useful for hunting down connection leak problems.	1.2alpha1
+ -->
+	<logger name="jdbc.sqlonly">
+		<level value="DEBUG" />
+		<appender-ref ref="console"/>
+	</logger>
+
+    <logger name="jdbc.sqltiming">
+        <level value="off" />
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="jdbc.audit">
+        <level value="debug" />
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="jdbc.resultset">
+        <level value="off" />
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="jdbc.connection">
+        <level value="off" />
+        <appender-ref ref="console"/>
+    </logger>
+
+
+	<!-- Root Logger -->
+	<!--
+	<root>
+		<priority value="error" />
+		<appender-ref ref="console" />
+	</root>
+ 	-->
+</log4j:configuration>

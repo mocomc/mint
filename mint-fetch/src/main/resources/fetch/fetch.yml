@@ -1,0 +1,16 @@
+fetch:
+ id: f19042901
+ version: f19042901
+ author: whoana
+ comments: 스키마변경, 데이터 변경, 공통코드, 포털환경설정 등을 업데이트 
+ database: 
+  schema: 
+   - fetch-schema01.sql
+   - fetch-schema02.sql
+  data: 
+   - fetch-data01.sql
+   - fetch-data02.sql
+  tsu0301:
+   fetch-tsu0301.sql
+  tsu0302:
+   fetch-tsu0302.sql

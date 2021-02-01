@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.SmsServiceMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<select id="selectStDateSmsResourceForTracking" resultType="string">
+		select substr(nvl(max(KEY2),to_char(sysdate,'yyyymmddHH24MISS')||'000000'),1,17) from TOP0905
+	</select>
+
+	<resultMap type="smsResource" id="smsResourceForTrackingResultMap">
+		<id property="key1" 				column="MASTERLOG_ID"/>
+		<id property="key2" 				column="MSG_DATETIME"/>
+		<result property="interfaceId" 		column="INTERFACE_ID"/>
+		<result property="integrationId"	column="INTEGRATION_ID"/>
+		<result property="interfaceNm"		column="INTERFACE_NM"/>
+	</resultMap>
+
+
+    <select id="getSmsResourceForTracking" resultMap="smsResourceForTrackingResultMap">
+        select
+            rownum as IDX,
+            a.MASTERLOG_ID,
+		    a.MSG_DATETIME,
+		    c.INTERFACE_ID,
+		    c.INTEGRATION_ID,
+		    nvl(c.INTERFACE_NM,'미식별인터페이스('||b.INTF_ID||')') as INTERFACE_NM
+		  from MASTERLOG a
+          inner join MASTERLOG_ID_MAP b
+             on b.MASTERLOG_ID = a.MASTERLOG_ID
+            and a.MSG_STATUS = '99'
+		    and a.MSG_DATETIME <![CDATA[>=]]> #{stDate}
+            and a.MSG_DATETIME <![CDATA[<=]]> '99991231235959999999'
+            and (a.MASTERLOG_ID, a.MSG_DATETIME) not in (select KEY1, KEY2 from TOP0903 where KEY2 <![CDATA[>=]]> #{stDate} and KEY2 <![CDATA[<=]]> '99991231235959999999')
+        left outer join TAN0201 c
+		     on c.INTEGRATION_ID = b.INTF_ID
+	</select>
+
+
+    <select id="existSmsResource" resultType="string">
+        select 'true' from TOP0905 where KEY1 = #{key1} and KEY2 = #{key2}
+    </select>
+
+	<resultMap type="Recipient" id="recipientResultMap">
+		<id property="address" 			column="EMAIL_ADDRESS"/>
+		<id property="type" 			column="RECIPIENT_TYPE"/>
+		<result property="userId" 		column="USER_ID"/>
+		<result property="nickName"		column="NICKNAME"/>
+		<result property="regDate"		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate"		column="MOD_DATE"/>
+		<result property="modId"		column="MOD_USER"/>
+		<result property="delYn"		column="DEL_YN"/>
+	</resultMap>
+
+
+<!--
+	<insert id="insertSms">
+		<selectKey keyProperty="smsId" resultType="string" order="BEFORE" >
+			  select to_char(nvl(max(to_number(SMS_ID)) + 1,1)) from TOP0904
+		</selectKey>
+		insert into TOP0904 (
+			 SMS_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,RETRY
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{smsId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=VARCHAR}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{retry, 		jdbcType=NUMERIC}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+
+	</insert>
+ -->
+	<insert id="insertSms">
+
+		insert into TOP0904 (
+			 SMS_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,RETRY
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{smsId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=VARCHAR}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{retry, 		jdbcType=NUMERIC}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+
+	<insert id="insertSmsResource">
+		insert into TOP0905 (
+			 SMS_ID
+			,TYPE
+			,KEY1
+			,KEY2
+			,KEY3
+		) values (
+			 #{smsId}
+			,#{type}
+			,#{key1}
+			,#{key2}
+			,#{key3}
+		)
+	</insert>
+
+	<resultMap type="Sms" id="smsForTrackingResultMap">
+		<id property="smsId" 			column="SMS_ID"/>
+		<id property="type" 			column="TYPE"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<result property="contents"		column="CONTENTS"/>
+		<result property="sender"		column="SENDER"/>
+		<result property="recipients" 	column="RECIPIENTS"/>
+		<result property="retry"		column="RETRY"/>
+		<result property="format" 		column="FORMAT"/>
+		<result property="sndReqDate"	column="SND_REQ_DATE"/>
+		<result property="sndYn"		column="SND_YN"/>
+		<result property="resDate" 		column="RES_DATE"/>
+		<result property="resCd"		column="RES_CD"/>
+		<result property="resMsg"		column="RES_MSG"/>
+		<result property="regDate"		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate"		column="MOD_DATE"/>
+		<result property="modId"		column="MOD_USER"/>
+		<result property="delYn"		column="DEL_YN"/>
+	</resultMap>
+
+	<select id="getSmsForTracking" resultMap="smsForTrackingResultMap">
+			select
+		     A.SMS_ID
+		    ,A.TYPE
+		    ,SUBJECT
+		    ,CONTENTS
+		    ,SENDER
+		    ,RECIPIENTS
+		    ,RETRY
+		    ,FORMAT
+		    ,SND_REQ_DATE
+		    ,SND_YN
+		    ,RES_DATE
+		    ,RES_CD
+		    ,RES_MSG
+		    ,REG_DATE
+
+		    ,MOD_DATE
+
+		    ,DEL_YN
+		    ,B.KEY1  AS  REG_USER
+		    ,B.KEY3  AS  MOD_USER
+		  from TOP0904 A
+		  LEFT OUTER JOIN TOP0905 B ON (A.SMS_ID = B.SMS_ID AND A."TYPE" = B."TYPE")
+		  where SND_YN = 'N'
+		   AND RETRY <![CDATA[<=]]>#{retry}
+		   and REG_DATE <![CDATA[>=]]> #{fromDate}
+ 		   and ROWNUM <![CDATA[<=]]> #{fetchCount}
+	</select>
+
+	<update id="updateSms">
+		update
+			 TOP0904
+		   set
+			 SUBJECT 		= #{subject, 		jdbcType=VARCHAR}
+			,CONTENTS 		= #{contents, 		jdbcType=VARCHAR}
+			,SENDER 		= #{sender, 		jdbcType=VARCHAR}
+			,RECIPIENTS 	= #{recipients, 	jdbcType=VARCHAR}
+			,RETRY 			= #{retry,	 		jdbcType=NUMERIC}
+			,FORMAT 		= #{format, 		jdbcType=VARCHAR}
+			,SND_REQ_DATE 	= #{sndReqDate, 	jdbcType=VARCHAR}
+			,SND_YN 		= #{sndYn, 			jdbcType=VARCHAR}
+			,RES_DATE 		= #{resDate, 		jdbcType=VARCHAR}
+			,RES_CD 		= #{resCd, 			jdbcType=VARCHAR}
+			,RES_MSG 		= #{resMsg, 		jdbcType=VARCHAR}
+			,MOD_DATE 		= #{modDate, 		jdbcType=VARCHAR}
+			,MOD_USER 		= #{modId, 			jdbcType=VARCHAR}
+			,DEL_YN 		= #{delYn, 			jdbcType=VARCHAR}
+		 where SMS_ID = #{smsId}
+		   and TYPE = #{type}
+	</update>
+
+	<select id="getSmsRecipients" resultType="string">
+		SELECT CELL_PHONE  FROM TSU0101 WHERE DEL_YN='N' AND ROLE_ID='UR00000001' AND CELL_PHONE IS NOT NULL
+	</select>
+
+	<!-- deprecate.201808 -->
+	<select id="getSmsRecipientsByQmgrId" resultType="string">
+		    SELECT a.CELL_PHONE
+		      FROM TSU0101 a
+		INNER JOIN TIM0105 b
+		        ON a.USER_ID = b.USER_ID
+		       AND a.DEL_YN = 'N'
+		       AND a.CELL_PHONE IS NOT NULL
+		INNER JOIN TIM0202 c
+		        ON b.SYSTEM_ID = c.SYSTEM_ID
+		INNER JOIN TIM0206 d
+		        ON c.SERVER_ID = d.SERVER_ID
+		       AND d.QMGR_ID = #{qmgrId}
+	</select>
+
+	<!-- deprecate.201808 -->
+	<select id="getSmsRecipientsByProcessId" resultType="string">
+		    SELECT a.CELL_PHONE
+		      FROM TSU0101 a
+		INNER JOIN TIM0105 b
+		        ON a.USER_ID = b.USER_ID
+		       AND a.DEL_YN = 'N'
+		       AND a.CELL_PHONE IS NOT NULL
+		INNER JOIN TIM0202 c
+		        ON b.SYSTEM_ID = c.SYSTEM_ID
+		INNER JOIN TIM0205 d
+		        ON c.SERVER_ID = d.SERVER_ID
+		       AND d.PROCESS_ID = #{processId}
+	</select>
+
+	<!-- deprecate.201808 -->
+	<select id="getSmsRecipientsByResourceId" resultType="string">
+		    SELECT a.CELL_PHONE
+		      FROM TSU0101 a
+		INNER JOIN TIM0105 b
+		        ON a.USER_ID = b.USER_ID
+		       AND a.DEL_YN = 'N'
+		       AND a.CELL_PHONE IS NOT NULL
+		INNER JOIN TIM0202 c
+		        ON b.SYSTEM_ID = c.SYSTEM_ID
+		INNER JOIN TIM0204 d
+		        ON c.SERVER_ID = d.SERVER_ID
+		       AND d.RESOURCE_ID = #{resourceId}
+	</select>
+
+
+</mapper>

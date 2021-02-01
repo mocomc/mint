@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<context:component-scan base-package="
+		pep.per.mint.front.controller,
+		pep.per.mint.front.aop,
+		pep.per.mint.front.service,
+		pep.per.mint.front.scheduler" />
+
+	<aop:aspectj-autoproxy/>
+
+ 	<!-- enable autowire
+    <context:annotation-config />
+    -->
+
+    <default-servlet-handler/>
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+
+
+	<task:executor id="frontManagementExecutor" pool-size="50-100" queue-capacity="1000" rejection-policy="ABORT"/>
+
+	<task:scheduler id="frontManagementScheduler" pool-size="10"/>
+
+    <task:annotation-driven executor="frontManagementExecutor" scheduler="frontManagementScheduler"/>
+
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+	<!--
+	<beans:bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" p:alwaysUseFullPath="true">
+		<beans:property name="messageConverters">
+			<beans:list>
+				<beans:ref bean="stringHttpMessageConverter" />
+				<beans:ref bean="jsonHttpMessageConverter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter" />
+    <beans:bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    -->
+
+
+    <beans:bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basename" value="classpath:messages/messages" />
+        <beans:property name="defaultEncoding" value="UTF-8" />
+    </beans:bean>
+
+    <beans:bean id="localeResolver"
+        class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <beans:property name="defaultLocale" value="ko_KR" />
+        <beans:property name="cookieName" value="myAppLocaleCookie"></beans:property>
+        <beans:property name="cookieMaxAge" value="3600"></beans:property>
+    </beans:bean>
+
+    <interceptors>
+        <beans:bean
+            class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <beans:property name="paramName" value="locale" />
+        </beans:bean>
+    </interceptors>
+
+    <!--
+    <beans:bean id="frontManagementService" class="pep.per.mint.front.service.FrontManagementService">
+    	<beans:property name="frontLogOptionMap">
+    		<beans:map>
+
+    			<beans:entry key="execution(RequirementController.createRequirement(..))">
+    				<beans:bean class="pep.per.mint.common.data.basic.monitor.FrontLogOption">
+    					<beans:property name="loggingYn" value="Y"/>
+    					<beans:property name="saveRequestMsg" value="Y"/>
+    					<beans:property name="saveResponseMsg" value="Y"/>
+    				</beans:bean>
+    			</beans:entry>
+
+    			<beans:entry key="execution(RequirementController.updateRequirement(..))">
+    				<beans:bean class="pep.per.mint.common.data.basic.monitor.FrontLogOption">
+    					<beans:property name="loggingYn" value="Y"/>
+    					<beans:property name="saveRequestMsg" value="Y"/>
+    					<beans:property name="saveResponseMsg" value="Y"/>
+    				</beans:bean>
+    			</beans:entry>
+
+    		</beans:map>
+    	</beans:property>
+
+    </beans:bean>
+    -->
+
+	<beans:bean id="frontEnvironments" class="pep.per.mint.front.env.FrontEnvironments" init-method="init">
+		<!--
+		String frontLoggingYn = "Y";
+		Map<String, FrontLogOption> frontLogOptionMap;
+		String systemEncoding = "UTF-8";
+		List<UserRole> interfaceDataAccessRoleList
+		-->
+		<beans:property name="frontLoggingYn" value="Y"/>
+		<beans:property name="frontLogOptionMap">
+    		<beans:map>
+    			<beans:entry key="execution(RequirementController.createRequirement(..))">
+    				<beans:bean class="pep.per.mint.common.data.basic.monitor.FrontLogOption">
+    					<beans:property name="loggingYn" value="Y"/>
+    					<beans:property name="saveRequestMsg" value="Y"/>
+    					<beans:property name="saveResponseMsg" value="Y"/>
+    				</beans:bean>
+    			</beans:entry>
+    			<beans:entry key="execution(RequirementController.updateRequirement(..))">
+    				<beans:bean class="pep.per.mint.common.data.basic.monitor.FrontLogOption">
+    					<beans:property name="loggingYn" value="Y"/>
+    					<beans:property name="saveRequestMsg" value="Y"/>
+    					<beans:property name="saveResponseMsg" value="Y"/>
+    				</beans:bean>
+    			</beans:entry>
+    			<beans:entry key="execution(CommonController.login(..))">
+    				<beans:bean class="pep.per.mint.common.data.basic.monitor.FrontLogOption">
+    					<beans:property name="loggingYn" value="Y"/>
+    					<beans:property name="saveRequestMsg" value="Y"/>
+    					<beans:property name="saveResponseMsg" value="Y"/>
+    				</beans:bean>
+    			</beans:entry>
+    		</beans:map>
+    	</beans:property>
+    	<beans:property name="systemEncoding" value="UTF-8"/>
+    	<beans:property name="interfaceDataAccessRoleList">
+    		<beans:list>
+    			<beans:bean class="pep.per.mint.common.data.basic.UserRole">
+    				<beans:property name="roleId" value="UR00000001"/>
+    				<beans:property name="roleNm" value="포털 시스템 어드민"/>
+    				<beans:property name="isInterfaceAdmin" value="Y"/>
+    			</beans:bean>
+    			<beans:bean class="pep.per.mint.common.data.basic.UserRole">
+    				<beans:property name="roleId" value="UR00000002"/>
+    				<beans:property name="roleNm" value="결재 관리자"/>
+    				<beans:property name="isInterfaceAdmin" value="Y"/>
+    			</beans:bean>
+    			<beans:bean class="pep.per.mint.common.data.basic.UserRole">
+    				<beans:property name="roleId" value="UR00000003"/>
+    				<beans:property name="roleNm" value="인터페이스 어드민"/>
+    				<beans:property name="isInterfaceAdmin" value="Y"/>
+    			</beans:bean>
+    		</beans:list>
+    	</beans:property>
+	</beans:bean>
+
+
+
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   		<beans:property name="defaultEncoding" value="UTF8"/>
+   		<beans:property name="maxInMemorySize" value="1024000"/>
+   		<beans:property name="maxUploadSize" value="10240000"/>
+		<beans:property name="uploadTempDir" value="./WEB-INF/uploadTemp"/>
+   	</beans:bean>
+
+	<beans:bean id="fileUploadController" class="pep.per.mint.front.controller.ut.FileUploadController"/>
+
+	<beans:bean id="rsakeyManager" class="pep.per.mint.front.security.RSAKeyManager"/>
+
+	<beans:bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+
+	<beans:bean id="eucKrRestTemplate" class="org.springframework.web.client.RestTemplate"/>
+
+
+
+</beans:beans>

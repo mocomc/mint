@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+        <context:annotation-config/>
+	<context:component-scan base-package="pep.per.mint.inhouse
+                                             ,com.mocomsys.iip.inhouse.wrapper
+                                             ,pep.per.mint.inhouse.ism
+                                             ,pep.per.mint.inhouse.mail
+                                             ,pep.per.mint.inhouse.sso
+                                             ,pep.per.mint.inhouse.sso.hdins
+                                             ,pep.per.mint.inhouse.model.template" />
+
+
+
+
+	<!--
+		[ Excel Upload Service Define ]
+		- COMMON :: com.mocomsys.iip.inhouse.excel.DefaultExcelUploadService
+		- KICS   :: com.mocomsys.iip.inhouse.excel.InHouseExcelUploadService
+		- HDINS  :: com.mocomsys.iip.inhouse.excel.HdinsExcelUploadService
+		- SSHP   :: com.mocomsys.iip.inhouse.excel.SSHPExcelUploadService
+	-->
+        <!-- JavaConfiguration 으로 대체함 -->
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.DefaultExcelUploadService"/>-->
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.InHouseExcelUploadService"/>-->
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.HdinsExcelUploadService"/>-->
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.SSHPExcelUploadService"/>-->
+
+
+	<!--
+		[ Interface Id Selector Service Define ]
+		- KICS,SSHP   :: com.mocomsys.iip.inhouse.selector.kics.KICSIdSelector
+		- HDINS       :: com.mocomsys.iip.inhouse.selector.hdins.HDINSIdSelector
+		- SSHP	      :: pep.per.mint.inhouse.selector.sprinting.SSHPIdSelector
+	-->
+        <!-- JavaConfiguration 으로 대체함 -->
+	<!-- <bean id="inHouseIdSelector" class="com.mocomsys.iip.inhouse.selector.kics.KICSIdSelector"/> -->
+	<!-- <bean id="inHouseIdSelector" class="com.mocomsys.iip.inhouse.selector.hdins.HDINSIdSelector"/> -->
+	<!-- <bean id="inHouseIdSelector" class="pep.per.mint.inhouse.selector.sprinting.SSHPIdSelector"/> -->
+
+	<!--
+		[ Login Service Define ]
+		- HDINS  :: pep.per.mint.inhouse.sso.hdins.LoginService
+	-->
+	<bean id="loginService" class="pep.per.mint.inhouse.sso.hdins.LoginService" init-method="init"/>
+
+	<!--
+		트레킹 에러 전송 이메일 서비스 빈
+	 -->
+	<bean id="sendMailService" class="pep.per.mint.inhouse.mail.samsung.SamsungMailService" init-method="init"/>
+	
+	
+	   <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+
+    <bean id="eucKrRestTemplate" class="org.springframework.web.client.RestTemplate"/>
+	 
+
+</beans>

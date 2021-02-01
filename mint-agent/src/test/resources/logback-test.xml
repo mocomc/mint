@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds" >
+
+    <property name="APP_LOG_LEVEL" value="debug" />
+    <property name="3RD_LOG_LEVEL" value="error" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!--
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <Pattern>%d{HH:mm:ss.SSS}   %-4relative [%-5level] - %logger{35} - %msg%n</Pattern>
+            -->
+            <Pattern>%-12.12d %5p  ${PID:- } [%20.20thread] %30.30C{3}:%4.4L  - %m%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="daily-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${IIPAGENT_HOME}//log//iipagent_test.log</file>
+         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+          <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${IIPAGENT_HOME}//log//iipagent_test.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <!-- keep 1 days' worth of history -->
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+
+            <pattern>%d{HH:mm:ss.SSS} %5p  ${PID:- } [%20.20thread] %30.30C{3}:%4.4L - %m%n</pattern>
+            <!--
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <Pattern>%d{HH:mm:ss.SSS}   %-4relative %-5level - %logger{35} - %msg%n</Pattern>
+            -->
+        </encoder>
+    </appender>
+
+    <appender name="error-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${IIPAGENT_HOME}//log//iipagent_test_err.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${IIPAGENT_HOME}//log//iipagent_test_err.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <!-- keep 1 days' worth of history -->
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <!--
+            <Pattern>%d{HH:mm:ss.SSS}   %-4relative %-5level - %logger{35} - %msg%n</Pattern>
+            -->
+        </encoder>
+    </appender>
+
+
+	<!-- Application Loggers -->
+	<logger name="pep.per.mint">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="pep.per.mint.agent">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="pep.per.mint.common">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="org.springframework.beans">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="org.springframework.context">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+
+	<logger name="org.mybatis">
+		<level value="${3RD_LOG_LEVEL}"/>
+	</logger>
+
+	<logger name="jdbc.connection">
+    	<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="jdbc.sqltiming">
+	    <level value="error" />
+	</logger>
+
+	<logger name="java.sql.ResultSet">
+	    <level value="error" />
+	</logger>
+	<logger name="jdbc.resultset">
+	    <level value="error" />
+	</logger>
+
+	<logger name="jdbc.resultsettable">
+	    <level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+<!--     <logger name="pep.per.mint.tracking.creater"  level="${APP_LOG_LEVEL}" additivity="false"> -->
+<!--         <appender-ref ref="daily-file" /> -->
+<!--         <appender-ref ref="error-log" /> -->
+<!--         <appender-ref ref="STDOUT" /> -->
+<!--     </logger> -->
+    <!--
+    <category name="daily-file"  additivity="false">
+            <level value="debug"/>
+            <appender-ref ref="daily-file" />
+            <appender-ref ref="error-log" />
+    </category>
+     -->
+    <root level="${APP_LOG_LEVEL}">
+        <appender-ref ref="daily-file" />
+        <appender-ref ref="error-log" />
+<!--         <appender-ref ref="STDOUT" /> -->
+    </root>
+</configuration>

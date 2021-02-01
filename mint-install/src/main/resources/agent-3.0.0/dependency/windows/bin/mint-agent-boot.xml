@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+
+	<env name="AGENT_HOME" 	value="C:\Software\iipagent" />
+	<env name="JAVA_HOME"	value="C:\Software\Java\JDK7_64" />
+	<env name="JAVA_OPTS" 	value="-Xms64m -Xmx1024m -Xverify:none" />
+
+	<env name="CLASSPATH" 	value=".;%AGENT_HOME%\mint-agent-boot-0.0.1-SNAPSHOT.jar;%AGENT_HOME%\lib\*" />
+	<env name="LIB_PATH" 	value="%AGENT_HOME%\lib" />
+	<env name="MAIN_CALSS"	value="pep.per.mint.agent.IIPAgentStartUp" />
+    <id>mint-agent-boot</id>
+    <name>mint-agent-boot</name>
+    <description>mint-agent-boot Windows Service</description>
+    <executable>%JAVA_HOME%\bin\java</executable>
+	<!-- JMX MONISTOR SET
+	<startargument>-Dspring.application.admin.enabled=true</startargument>
+	<startargument>-Dcom.sun.management.jmxremote.port=50201</startargument>
+	<startargument>-Dcom.sun.management.jmxremote.authenticate=false</startargument>
+	<startargument>-Dcom.sun.management.jmxremote.ssl=false </startargument>
+	-->
+    <arguments>%JAVA_OPTS% -classpath %CLASSPATH% -Djava.library.path=%LIB_PATH% -DIIPAGENT_HOME=%AGENT_HOME% %MAIN_CALSS%</arguments>
+
+	<logmode>rotate</logmode>
+
+</service>

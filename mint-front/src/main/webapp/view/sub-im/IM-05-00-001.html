@@ -1,0 +1,519 @@
+<!--
+	Screen ID : IM-05-00-001
+	Screen NM : 점포/POS 관리
+-->
+<!-- <meta http-equiv="Cache-Control" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta http-equiv="Pragma" content="no-cache"/> -->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-842"></lb></h2>
+		<ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="lb-842"></lb></strong></li>
+ 		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" >
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content" >
+    <div class="row">
+       	<div class="col-lg-12">
+       		<div id="iipStore" class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						<span><lb class="lb-3063">Store</lb></span>
+					</h5>
+					<div class="ibox-tools">
+	                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+	                </div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-clear"><i class="fa fa-check "></i> <lb class="lb-79"></lb></a>
+			        	<a id="btnListSearch" class="btn btn-w-m btn-default btn-outline"><i class="fa fa-search "></i> <lb class="lb-10"></lb> </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="row">
+						<div class="col-sm-4">
+                            <span class="lable_tag"><lb class="lb-3055"></lb></span>
+	                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+	                            <input id="storeNm" type="text" class="k-input" placeholder="" style="width: 100%;">
+	                        </span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="lable_tag"><lb class="lb-3056"></lb></span>
+	                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+	                            <input id="storeCd" type="text" class="k-input" placeholder="" style="width: 100%;">
+	                        </span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="lable_tag"><lb class="lb-3057"></lb></span>
+                            <input id="posMonitorYn" type="text" class="input-tag-4">
+                        </div>
+                        <hr class="hr-space">
+                        <hr class="hr-space">
+                        <div style="float: right; padding: 0px 20px 0px 0px;">
+							<a class="btn btn-w-m btn-primary btn-include"><i class="fa fa-check "></i> <lb class="370">포함</a>
+							<a class="btn btn-w-m btn-success btn-except"><i class="fa fa-times "></i> <lb class="370">제외</a>
+						</div>
+                      	<div class="col-sm-12">
+							<div id="list-grid"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+   	</div>
+</div>
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "IM-05-00-001";
+		$.extend({
+			main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				callScrnNm : screenName,
+				storeListCheckbox : {},
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						var srcYn = [	{text: "전체", value: ""},
+						             	{text: "Yes", value: "Y"},
+										{text: "No", value: "N"}
+					    	 ];
+
+						mint.ui.setDropDownList('posMonitorYn', srcYn, 0, 'text', 'value');
+
+						$.main.fn_initGrid();
+						$.main.fn_searchGridList();
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+					finally {}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: grid 초기화
+				//-----------------------------------------------------------------------
+				fn_initGrid : function() {
+					try{
+						var fixLeftGridWidth = ($('#list-grid')[0].clientWidth / 10) * 7;
+						var fixLeftCoulmnWidth = fixLeftGridWidth / 4;
+
+						$("#list-grid").kendoGrid({
+							dataSource : {
+				 				  data: ""
+				 				, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+							},
+		                    //editable: "inline",
+						    width  : "100%",
+							selectable: "row",
+							resizable: true,
+		                    sortable : true,
+							pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesXS()
+						    	, buttonCount 	: 5
+
+							}
+						    , columns : [
+									{
+										title : "",
+										template : "<input type='checkbox' name='storeId-list-checkbox' class='if-popup-ifCheckbox' onclick='$.main.fn_checkStoreGridRow(this)' >",
+										width : "60px",
+										headerAttributes : {
+											style : "text-align: center"
+										},
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										}
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-3056')
+										, field 	: "storeCd"
+										, width 	: "100px"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'text-align: center; white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-3058')
+										, field 	: "posNo"
+										, width 	: "80px"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+											style: 'text-align: center; white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-3055')
+										, field 	: "storeNm"
+										, width 	: "200px"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+											style: 'text-align: center; white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-3059')
+										, field 	: "custStoreCd"
+										, width 	: "100px"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+											style: 'text-align: center; white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-71')
+										, field 	: "regDate"
+										, width 	: "150px"
+										,template : '#=$.main.fn_changeTime(regDate)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-582')
+										, field 	: "modDate"
+										, width 	: "150px"
+										,template : '#=$.main.fn_changeTime(modDate)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-3057')
+										, field 	: "posMonitorYn"
+										, width 	: "100px"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+											style: 'text-align: center; white-space: nowrap;'
+							            },
+							            editor : mint.ui.gridEditorYesOrNoComboBox
+									}
+									,{field : "regUser",hidden:true}
+									,{field : "modUser",hidden:true}
+							]
+						    , dataBound: function (e) {
+						    	if(0 == $("#list-grid").data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$("#list-grid").children(".k-grid-content").height(gridHeight /2.5);
+						    		$("#list-grid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+						    	} else {
+						    		$("#list-grid").children(".k-grid-content").height('auto');
+							    	$("#list-grid").children(".k-grid-content-locked").height('auto');
+						    	}
+
+						    	//-----------------------------------------------------------------------
+								// ROW / COL CSS 처리
+								//-----------------------------------------------------------------------
+								var items = e.sender.dataItems();
+								if( items.length > 0 ) {
+									for(var i = 0; i < items.length; i++ ) {
+										var tr = e.sender.wrapper.find("tr[data-uid='" + items[i].uid + "']:first");
+										if( items[i].posMonitorYn === 'N' ) {
+											tr.css('text-decoration', 'line-through');
+										}
+									}
+								}
+						    }
+						}).data("kendoGrid");
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+					};
+				},//end fn_initGrid
+
+				//-----------------------------------------------------------------------
+				// Description :: 인터페이스 리스트 - 그리드 체크박스 클릭 이벤트 (인터페이스 상세 이동)
+				//-----------------------------------------------------------------------
+				fn_checkStoreGridRow : function(node) {
+					try {
+					    var checked = node.checked,
+					    row = $(node).closest("tr"),
+					    grid = $("#list-grid").data("kendoGrid"),
+					    dataItem = grid.dataItem(row);
+					    $.main.storeListCheckbox[dataItem.uid] = {'checked':checked, 'dataItem':dataItem};
+
+					    if (checked) {
+					        //-select the row
+					        row.addClass("k-state-selected");
+					    } else {
+					        //-remove selection
+					        row.removeClass("k-state-selected");
+					    }
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkStoreGridRow"});
+					}
+				},//end fn_checkStoreGridRow()
+
+				//-----------------------------------------------------------------------
+	            // Description :: [연관검색 관련] - 검색 조건 초기화
+	            //-----------------------------------------------------------------------
+	            fn_clearSearchArea : function() {
+	                try {
+
+						$('#storeCd').val('');
+						$('#storeNm').val('');
+						$('#posMonitorYn').data("kendoDropDownList").value("");
+
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_clearSearchArea"});
+	                }
+	            },
+
+              	//-----------------------------------------------------------------------
+                // Description :: time format 변경
+                //-----------------------------------------------------------------------
+                fn_changeTime : function(val) {
+                    try {
+                        var str = val.substring(0, 14);
+
+                        var returnVal = ''
+                        if( mint.common.isEmpty(str) ) {
+                        	returnVal = '';
+                        } else {
+                        	returnVal =str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
+                        }
+
+                        return returnVal;
+                    } catch( e ) {
+                        mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_changeTime"});
+                    }
+                },
+				//-----------------------------------------------------------------------
+				// Description ::  점포/POS 검색
+				//-----------------------------------------------------------------------
+				fn_searchGridList : function() {
+					try {
+						var tempStore = new Object();
+						tempStore.storeNm = $('#storeNm').val();
+    					tempStore.storeCd = $('#storeCd').val();
+						tempStore.posMonitorYn =  $('#posMonitorYn').data("kendoDropDownList").dataItem().value;
+
+						mint.callService(
+								tempStore
+						 		, screenName
+								, 'REST-R01-IM-05-01'
+								, function(jsonData) {
+							 		var dataSource = new kendo.data.DataSource({
+										  data: jsonData
+									    , page:1
+									    , pageSize: mint.ui.getPageSizesXS({'currentPage' : true})
+						 				, schema:{
+						 				    model: {
+						 				        id: "storeId",
+						 				        fields: {
+						 				            storeCd: { editable: false },
+						 				            posNo: { editable: false },
+						 				            storeNm: { editable: false },
+						 				            custStoreCd: { editable: false },
+						 				            regDate: { editable: false },
+						 				            modDate: { editable: false }
+						 				        }
+						 				    }
+						 				}
+									});
+									$("#list-grid").data("kendoGrid").setDataSource(dataSource);
+								}
+								, {errorCall : true}
+						);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_searchGridList"});
+					}
+				},//end fn_searchGridList()
+
+				//-----------------------------------------------------------------------
+				// Description ::  점포/POS 수정
+				//-----------------------------------------------------------------------
+				fn_saveMonitorYn : function(val) {
+
+					var checkboxCount = $("input[name=storeId-list-checkbox]:checked").length;
+
+					if(0 == checkboxCount) {
+						mint.common.alert('CW00003', mint.label.getLabel('lb-3063'));
+					} else {
+						var storeList = [];
+						var i=0;
+						for(var j in $.main.storeListCheckbox){
+							if($.main.storeListCheckbox[j].checked) {
+								var tempStoreObject = new Object();
+								tempStoreObject.storeCd =  $.main.storeListCheckbox[j].dataItem.storeCd;
+								tempStoreObject.posNo = $.main.storeListCheckbox[j].dataItem.posNo;
+								tempStoreObject.posMonitorYn = val;
+								tempStoreObject.regDate = $.main.storeListCheckbox[j].dataItem.regDate;
+								tempStoreObject.regUser = $.main.storeListCheckbox[j].dataItem.regUser;
+								tempStoreObject.modDate = mint.common.getStartTime();
+								tempStoreObject.modUser = mint.session.getUserId();
+								storeList.push(tempStoreObject);
+							}
+		 				}
+						if(storeList.length<=0){
+
+						}else{
+							var requestObject = new Object();
+							requestObject.objectType = 'Store';
+							requestObject.userId=mint.session.getUserId();
+							requestObject.posMonitorYn=val;
+							requestObject.storeList = storeList;
+				      		mint.callService(
+				      			requestObject
+				       			, 'IM-05-00-001'
+				       			, 'REST-C01-IM-05-01'
+				       			, function(jsonData, errorCd, errorMsg) {
+									if( ! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+										mint.common.alert('CI00102', null); //수정을 완료했습니다.
+										$.main.storeListCheckbox = {};
+										$.main.fn_searchGridList();
+									}else{
+									}
+								}
+				       			, {
+				       				errorCall : true
+				       				, params : {
+				       					typeCd : '0'  // 관심 인터페이스
+				  					}
+				  				}
+				        	);
+						}
+					}
+				}
+			},// end main
+		}); // end extends
+
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//조회
+		$("#btnListSearch").click(function () {
+			$.main.fn_searchGridList();
+        });
+
+		//-----------------------------------------------------------------------
+		// Description :: KeyDown 이벤트 설정 (상단)
+		//-----------------------------------------------------------------------
+		$('#storeNm').keydown(function(event) {
+			if(event.keyCode == 13) {
+				$.main.fn_searchGridList();
+	     	}
+		});
+
+		$('#storeCd').keydown(function(event) {
+			if(event.keyCode == 13) {
+				$.main.fn_searchGridList();
+	     	}
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 초기화 버튼 Click 이벤트
+		//-----------------------------------------------------------------------
+	    $('.btn-clear').on('click', function() {
+	        $.main.fn_clearSearchArea();
+	    });
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 포함 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$(".btn-include").click(function () {
+			$.main.fn_saveMonitorYn('Y');
+        });
+
+	  	//-----------------------------------------------------------------------
+		// Description :: 제외 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$(".btn-except").click(function () {
+			$.main.fn_saveMonitorYn('N');
+        });
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+	});
+
+</script>
+
+<style>
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr td {
+	    border-bottom: 1px solid #C0C0C0;
+	}
+
+	.k-grid .k-dirty {
+	  display: none;
+	}
+
+	.note-editor {
+    	border : 1px solid #a9a9a9 !important;
+	}
+
+    .fa.k-sprite,
+    .fa.k-sprite::before {
+       font-size: 10px;
+       line-height: 10px;
+       vertical-align: middle;
+    }
+</style>
+
+</body>
+</html>

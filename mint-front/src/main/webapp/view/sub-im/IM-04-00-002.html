@@ -1,0 +1,343 @@
+<!--
+	Screen ID : IM-04-00-002
+	Screen NM : 인터페이스 이관-들여오기
+  --------------------------------------------
+  	설명 : 전체 인터페이스 정보를 들여오기 기능 구현
+	변경 이력 :
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-9001"></lb></h2>
+		<ol class="breadcrumb">
+	        <li><lb class="lb-9"></lb></li>
+	        <li class="active"><strong><lb class="lb-9001"></lb></strong></li>
+ 		</ol>
+	</div>
+
+	<!--button-->
+	<div class="col-lg-7">
+		<div class="title-action" >
+	        <!-- <a href="#" class="btn btn-primary btn-register"><i class="fa fa-check "></i> <lb class="lb-11"></a> -->
+		</div>
+	</div>
+	<!--button end-->
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<!--
+					<h5><lb class="lb-78"></h5>&nbsp;&nbsp;&nbsp;
+					-->
+					<h5>인터페이스 들여오기</h5>&nbsp;&nbsp;&nbsp;
+					<div class="ibox-tools">
+						<!--
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H002')"></a>
+						-->
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-primary btn-import-server"><i class="fa fa-check "></i> 들여오기</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+				    <input name="interfaceFileUpload" id="interfaceFileUpload" type="file" accept=".zip"/>
+				</div>
+				<div class="ibox-content import-msg" style="display: none;"></div>
+
+             	<div class="ibox-content">
+			  		<p>인터페이스 들여오기는 타시스템에서 내보낸 JSON 형식의 인터페이스 정보 압축 파일을 본 시스템으로 들여오는 기능입니다.</p>
+			  		<p>들여올 인터페이스 정보의 크기(건수)에 따라 들여오는 시간이 오래걸릴 수 있습니다.</p>
+			  		<p>들여오기 처리는 대부분 서버에서 처리되므로 클라이언트 브라우저의 리소스는 거의 사용되지 않습니다.</p>
+                </div>
+				<!--ibox-content end-->
+           	</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+
+</div>
+
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "IM-04-00-002";
+		$.extend({
+			main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				//-----------------------------------------------------------------------
+				// 연관검색 필드
+				//-----------------------------------------------------------------------
+				searchNode : "",
+				//-----------------------------------------------------------------------
+				// 조회 - 엑셀다운도드 조회조건 sycn
+				//-----------------------------------------------------------------------
+				requestObject : new Object(),
+				canImportNow : false,
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_initFileUploadControl();
+						$.main.fn_showAsynckResult();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+
+				//-----------------------------------------------------------------------
+				// Description ::fn_initFileUploadControl
+				//-----------------------------------------------------------------------
+				fn_initFileUploadControl : function(){
+					try{
+						$("#interfaceFileUpload").kendoUpload({
+							  file:[]
+							, multiple: false
+				            , async: {
+				                saveUrl: "/mint/ut/interface/import",
+				                //removeUrl: ""
+				                autoUpload: false
+				             }
+							, localization: {
+				 				//select: mint.label.getLabel('lb-220')
+				 				select : "들여오기 파일 선택(.zip)"
+							 }
+				            //, dropZone: ".dropZoneElement"
+			            	, select : function(e) {
+				 				var selectFile = e.files[0];
+				 				if( ! mint.common.isEmpty(selectFile) && selectFile.extension.toLowerCase() != '.zip' ) {
+				 					mint.common.alert('확장자가 .zip 파일만 업로드 할 수 있습니다.');
+				 					e.preventDefault();
+				 				}
+
+	                    		if( mint.common.invalidFileName(selectFile.name) ) {
+	                    			mint.common.alert('CW00015', selectFile.name);
+	                    			e.preventDefault();
+	                    		}
+
+				 	            // custom button 활용
+				 	            /* setTimeout(function() {
+				 	            	$.main.kendoUploadButton = $(".k-upload-selected");
+				 	            	$.main.kendoUploadButton.hide();
+				 	            }, 1); */
+				 			}
+				 			, upload: function(e) {
+				 				// e.data 에 설정하기
+				 				e.data = {asyncOption:true,comments:'', userId:mint.session.getUserId()};
+				 			}
+				 			, progress: function(e) {
+				 				mint.waitingLoad(true);
+				 			}
+				 			/*, cancel: function(e) {
+				 			}
+				 			*/
+				 			, error: function(e) {
+								$.main.fn_uploadCheckResult(e.XMLHttpRequest)
+				 			}
+				 			, success: function(e) {
+								$.main.fn_uploadCheckResult(e.XMLHttpRequest)
+				 			}
+				 			, complete: function(e) {
+				 				mint.waitingLoad(false);
+				 			}
+				 			, remove: function (e) {
+				 				var files = e.files;
+				 		       	for(var i=0; i<$('#interfaceFileUpload').data("kendoUpload").options.files.length; i++) {
+				 		   			if(files[0].uid == $('#file').data("kendoUpload").options.files[i].uid) {
+				 		   				$('li.k-file[data-uid="' + files[0].uid + '"]').remove();
+				 		   				$('#interfaceFileUpload').data("kendoUpload").options.files.splice(i, 1);
+				 		   			    e.preventDefault();
+				 		   			}
+				 		   		}
+				 		    }
+				        });
+
+					}catch( e ){
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initFileUploadControl"});
+					}
+				},//fn_initFileUploadControl
+
+				//-----------------------------------------------------------------------
+				// fn_uploadCheckResult
+				//-----------------------------------------------------------------------
+				fn_uploadCheckResult : function(xhr){
+					try {
+						var httpStatus = xhr.status;
+						if( httpStatus == 200 ) {
+							//-----------------------------------------------------------------------
+							// Response ComMessage
+							//-----------------------------------------------------------------------
+							var msg = JSON.parse(xhr.responseText);
+							if( msg.errorCd == 0 ) {
+								var jsonData = msg.responseObject;
+
+								$('.import-msg').html('<h3 style="margin-left: 20px; color: blue">들여오기를 요청하였습니다.</h3><p><h3 style="margin-left: 20px; color: blue"> ' + jsonData.resultMsg +'</h3>');
+
+							} else {
+								$('.import-msg').html('<h3 style="margin-left: 20px; color: blue">들여오기 실패하였습니다.</h3><p><h3 style="margin-left: 20px; color: red">(' + msg.errorCd + ')' + msg.errorMsg + '</h3>');
+							}
+
+						} else {
+							switch( httpStatus ) {
+								case 12029 : //server shutdown
+									alertMsg = mint.message.getMessage('CE12029', null);
+									break;
+								case 404 :
+									alertMsg = mint.message.getMessage('CE10404', null);
+									break;
+								default :
+									alertMsg = mint.message.getMessage('CE10000', httpStatus);
+									break;
+							}
+							mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_uploadCheckResult"});
+					} finally{
+
+					}
+				},//fn_uploadCheckResult
+				//-----------------------------------------------------------------------
+				// fn_showAsynckResult
+				//-----------------------------------------------------------------------
+				fn_showAsynckResult : function(){
+
+
+
+
+
+					$.ajax({
+						 async : true,
+						 cache : false,
+					     type: 'POST',
+					     dataType: 'json',
+					     url: '/mint/import/result.json',
+					     contentType : 'application/json; charset=utf-8',
+					     //data: comMessage,
+					     timeout: 0,
+					     complete: function(xhr,textStatus) {
+
+					    	 var readyState = xhr.readyState;
+					    	 var httpStatus = xhr.status;
+					    	 var statusText = xhr.statusText;
+
+					    	 if( readyState == 0 && xhr.statusText == 'timeout' ) {
+
+					    	 } else if( readyState == 4 && httpStatus == 200 ) {
+
+
+					    		 //-----------------------------------------------------------------------
+					    		 // Response ComMessage
+					    		 //-----------------------------------------------------------------------
+					    		 var msg = JSON.parse(xhr.responseText);
+
+
+					    		 //-----------------------------------------------------------------------
+					    		 // ComMessage 의 errorCode 체크
+					    		 //-----------------------------------------------------------------------
+					    		 var errorCode = msg.resultCd;
+					    		 if( errorCode == 0 ) {
+
+					    		 } else {
+
+					    		 }
+					     	 } else {
+					     		 switch( httpStatus ) {
+					         		 case 12029 : //server shutdown
+					         			 alertMsg = mint.message.getMessage('CE12029', null);
+					         			 break;
+					         		 case 404 :
+					         			 $.main.canImportNow = true;
+					         			 $('.import-msg').show();
+										 $('.import-msg').html('<h3 style="margin-left: 20px; color: blue">현재 진행중인 작업이 없습니다(인터페이스 들여오기 진행 가능).</h3>');
+					         			 break;
+					         		 default :
+					         			 alertMsg = mint.message.getMessage('CE10000', httpStatus);
+					         			 break;
+					     		 }
+					     		 if( httpStatus == 0 ) {
+					     			 // httpStatus 가 0 일 때는 별다른 내용이 없으므로 팝업을 호출 하지 않도록 함.
+					     		 } else {
+					     			 //mint.common.errorDialog('Http', httpStatus, alertMsg, null);
+					     		 }
+					    	 }
+					     }//end complete
+					 });//end ajax call
+
+
+
+
+				},//fn_showAsynckResult
+
+			}// end main
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+		//-----------------------------------------------------------------------
+		// Description ::인터페이스 들여오기 클릭
+		//-----------------------------------------------------------------------
+		$('.btn-import-server').on('click', function(e) {
+			try {
+				if(mint.common.confirm('인터페이스 들여오기를 진행하시겠습니까?')){
+					e.preventDefault();
+					$('.import-msg').show();
+					$('.import-msg').html('<h3 style="margin-left: 20px; color: blue">인터페이스 들여오기 처리중입니다. 완료될 때까지 기다려 주십시요.</h3>');
+					//$.main.fn_importInterfaces();
+			    	var upload = $("#interfaceFileUpload").data("kendoUpload");
+			      	upload.upload();
+				}
+			}
+			catch (e) {
+				mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-import-server.click"});
+			}
+    	});
+
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+
+</script>

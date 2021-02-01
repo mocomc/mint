@@ -1,0 +1,357 @@
+/**
+ * Copyright 2020 Mocomsys Inc.  All Rights Reserved.
+ */
+package pep.per.mint.agent.util;
+
+/**
+ * @author whoana
+ * @since 2020. 11. 2.
+ */
+
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
+
+import com.mococo.ILinkAPI.jms.MIMQC;
+import com.mococo.ILinkAPI.manager.ChannelProperty;
+import com.mococo.ILinkAPI.manager.ILinkException;
+import com.mococo.ILinkAPI.manager.LinkServerAPI;
+import com.mococo.ILinkAPI.manager.QManagerAPI;
+import com.mococo.ILinkAPI.manager.QMgrConnection;
+import com.mococo.ILinkAPI.manager.QMgrProperty;
+import com.mococo.ILinkAPI.manager.QProperty;
+import com.mococo.ILinkAPI.manager.ReceiverChannelProperty;
+import com.mococo.ILinkAPI.manager.TransmitterChannelProperty;
+
+import pep.per.mint.common.util.Util;
+
+public class ILinkConTest {
+
+	
+	public static void main(String[] args) {
+//		version 5
+		String ip = "10.10.1.66";
+		int port = 10001;
+		String qmgr = "TEST";
+		
+//		version 6
+//		String ip = "10.10.1.66";
+//		int port = 10010;
+//		String qmgr = "T1";		
+				
+		try {
+			QManagerAPI api = new QManagerAPI(ip, port, qmgr);
+			String version = api.getVersion();
+			System.out.println("version:" + version);
+			
+			if(version.startsWith("5")) {//ILink Version 5 이하 
+				
+				LinkedList tcl= api.getTransmitterChannelList();
+				for( int k = 0 ;k < tcl.size() ;  k ++){
+					TransmitterChannelProperty ch = (TransmitterChannelProperty)tcl.get(k);
+					System.out.println(Util.join(ch.getName(),":", ch.getStatus()));
+				} 
+				
+				LinkedList rcl= api.getReceiverChannelList();
+				for( int k = 0 ;k < rcl.size() ; k ++){
+					ReceiverChannelProperty ch = (ReceiverChannelProperty)rcl.get(k);
+					System.out.println(Util.join(ch.getName(),":", ch.getStatus()));
+				}
+				
+				
+			}else {
+//				LinkedList cl = api.getChannelList();
+//				for (Object object : cl) {
+//					ChannelProperty ch = (ChannelProperty)object;
+//					System.out.println(Util.join(ch.getName(),":", ch.getStatus()));
+//				}				
+			}
+			
+			
+		} catch (ILinkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/***********************************************************
+		* @작성일 : 2020. 7. 16.
+		* @작성자 : snowjeans
+		* 아래 샘플 소스는 ILink JetStream 6.2.3에서 테스트 완료 되었습니다.		
+	 */
+	public static void main2(String[] args) {
+		
+		 
+		
+		/************************************************************
+		 * 1. 서버 연결 (큐 관리자 직접 연결 시 생략 가능)
+		 *    - 큐 관리자 정보를 모르는 상태에서 Admin 동작을 수행하기 위해서는 먼저 ILinkServer에 연결되어야 합니다.
+		 *    - 서버에 연결하려면 서버 IP와 Listen Port 정보가 필요합니다.
+		 */
+		// ILink 서버 접속 정보를 지정합니다.
+		//String serverIp = "127.0.0.1";
+		String serverIp = "10.10.1.66";
+		int serverPort = 9998;		
+		// 서버 API 객체를 생성합니다. 생성자 파라미터로 접속 정보가 들어갑니다.
+		LinkServerAPI service = null;
+		try {
+			// 객체 생성자 내부에서 ILinkServer에 연결을 시도하게 됩니다.
+			System.out.println("try to connect to server... " + serverIp + "(" + serverPort + ")");
+			service = new LinkServerAPI(serverIp, serverPort);
+			System.out.println("connected.");
+		} catch (ILinkException e) {
+			e.printStackTrace();
+			System.out.println("cannot connect to server.");
+			return;
+		}
+		
+		/************************************************************
+		 * 2. 큐 관리자 목록 조회 (큐 관리자 직접 연결 시 생략 가능)
+		 *    - 서버 연결에 성공하면 서버에 큐 관리자 목록을 요청할 수 있습니다.
+		 */
+		LinkedList qmgrs = null;
+		try {
+			System.out.println("try to inquire manager list...");
+			qmgrs = service.getQMgrList();
+			System.out.println("inquire success. number of manager : " + qmgrs.size());
+		} catch (ILinkException e) {
+			e.printStackTrace();
+			System.out.println("failed to inquire manager list.");
+			return;
+		}
+		
+		/************************************************************
+		 * 3. 큐 관리자 연결
+		 *    - 큐 관리자 목록을 순회하여 각 큐 관리자 속성 객체를 획득합니다.
+		 *    - 획득한 큐 관리자 정보로 큐 관리자에 연결할 수 있습니다.
+		 *    - 접속 정보를 이미 알고 있다면 앞의 1, 2단계를 건너뛰고 바로 큐 관리자 API 객체부터 생성해도 무관합니다. 
+		 */
+		Iterator it = qmgrs.iterator();
+		while (it.hasNext()) {
+			QMgrProperty prop = (QMgrProperty) it.next();
+			// 큐 관리자 API 객체를 생성합니다. 서버와 마찬가지로 생성자 파라미터에 접속 정보가 들어갑니다.
+			QMgrConnection qmgr = null;
+			try {								
+				qmgr = new QMgrConnection(serverIp, prop.getPort(), prop.getQueueManagerName());
+				System.out.println("version:" + qmgr.getQMgrName() + ", " + qmgr.getVersion());
+				// API 객체가 생성되면 큐 관리자 연결을 시도합니다.
+				System.out.println("try to connect to manager : " + prop.getQueueManagerName() + " (" + serverIp + ":" + prop.getPort() + ")");
+				qmgr.connect();
+				System.out.println("connected.");
+				//QManagerAPI api = new QManagerAPI("", 11111, "");
+				//ILSession session
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("cannot connect to manager.");
+				return;
+			}
+			
+			System.out.println();
+
+			/************************************************************
+			 * 4. 큐 관리자 오브젝트 생성 / 삭제
+			 *    - 큐 관리자 API 객체를 통해 큐 / 채널 등 큐 관리자 오브젝트를 조회 / 생성 / 삭제할 수 있습니다.
+			 */			
+			// 1. 큐 목록 조회
+			try {
+				java.util.LinkedList queueList = qmgr.getQueueList();
+				ListIterator iter = queueList.listIterator();
+				System.out.println("QUEUE\t\t\tTYPE\t\t\tDEPTH");
+				System.out.println("-------------------------------------------------------");
+				while (iter.hasNext()) {
+					QProperty queue = (QProperty) iter.next();
+					String tabStr = "\t";
+					if (queue.getQueueName().length() < 8) tabStr += "\t";
+					if (queue.getQueueName().length() < 12) tabStr += "\t";
+					System.out.println(queue.getQueueName() + tabStr + getQueueTypeString(queue.getQueueType()) + "\t\t\t" + queue.getQueueDepth());
+				}
+			} catch (Exception e) {
+				System.out.println("ERROR : failed to inquire queue list..");
+				e.printStackTrace();
+			}
+			
+			System.out.println();
+			
+			// 2. 로컬 큐 생성 예시
+			QProperty qp = null;
+			ChannelProperty cp = null;
+			qp = new QProperty();
+			qp.setQueueName("TEST.LQ");
+			qp.setTrigger(false);
+			qp.setQueueType(MIMQC.MIMQ_LOCAL_PERSISTENT);
+			// 최대 메시지 길이의 설정 가능한 범위는 0~100M 입니다.
+			qp.setMaxMessageLength(104857600); // 100M
+			// 최대 큐 깊이의 설정 가능한 범위는 0~99999999 입니다.
+			qp.setMaxQueueDepth(99999999);
+			try {
+				System.out.println("try to create local queue : " + qp.getQueueName());
+				if (0 != qmgr.createQueue(qp)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("queue created.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to create queue.");
+				return;
+			}
+
+			// 3. 전송 큐 생성 예시
+			qp = new QProperty();
+			qp.setQueueName("TEST.XQ");
+			qp.setTriggerType(MIMQC.MIMQ_CHANNEL_TRANSMISSION_QUEUE);
+			qp.setMaxMessageLength(104857600);
+			qp.setMaxQueueDepth(99999999);
+			try {
+				System.out.println("try to create xmit queue : " + qp.getQueueName());
+				if (0 != qmgr.createQueue(qp)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("queue created.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to create queue.");
+				return;
+			}
+			
+			// 4. 리모트 큐 생성 예시
+			qp = new QProperty();
+			qp.setQueueName("TEST.RQ");
+			qp.setQueueType(MIMQC.MIMQ_REMOTE_QUEUE);
+			qp.setChannelTransmissionQueueName("TEST.XQ");
+			qp.setRemoteQueueManagerName("TEST2");
+			qp.setRemoteQueueName("TEST2.LQ");
+			try {
+				System.out.println("try to create remote queue : " + qp.getQueueName());
+				if (0 != qmgr.createQueue(qp)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("queue created.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to create queue.");
+				return;
+			}
+			
+			System.out.println();
+			
+			// 5. 큐 삭제
+			String queueName = "";
+			try {
+				queueName = "TEST.LQ";
+				System.out.println("try to remove queue : " + queueName);
+				if (0 != qmgr.removeQueue(queueName)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("queue removed : " + queueName);
+				queueName = "TEST.XQ";
+				System.out.println("try to remove queue : " + queueName);
+				if (0 != qmgr.removeQueue(queueName)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("queue removed : " + queueName);
+				queueName = "TEST.RQ";
+				System.out.println("try to remove queue : " + queueName);
+				if (0 != qmgr.removeQueue(queueName)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("queue removed : " + queueName);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to remove queue : " + queueName);
+				return;
+			}
+			
+			System.out.println();
+			
+			// 6. 채널 목록 조회
+			try {
+				java.util.LinkedList channelList = qmgr.getChannelList();
+				ListIterator iter = channelList.listIterator();
+				System.out.println("CHANNEL\t\t\tTYPE\t\t\tSTATUS");
+				System.out.println("-------------------------------------------------------");
+				while (iter.hasNext()) {
+					ChannelProperty channel = (ChannelProperty) iter.next();
+					String tabStr = "\t";
+					if (channel.getName().length() < 8) tabStr += "\t";
+					if (channel.getName().length() < 12) tabStr += "\t";
+					System.out.println(channel.getName() + tabStr + channel.getTypeString() + "." + channel.getDirectionString() + "\t\t" + channel.getStatusString());
+				}
+			} catch (Exception e) {
+				System.out.println("ERROR : failed to inquire queue list..");
+				e.printStackTrace();
+			}
+			
+			System.out.println();
+			
+			// 7. 클라이언트-송신 채널 생성 예시
+			cp = new ChannelProperty();
+			cp.setName("TEST1.CHL");
+			cp.setType(ChannelProperty.CHANNEL_TYPE_CLIENT);
+			cp.setDirection(ChannelProperty.CHANNEL_DIRECTION_SEND);
+			cp.setDestManagerIp("127.0.0.1");
+			cp.setDestManagerPort(22222);
+			cp.setXmitQueueName("TEST.XQ");
+			try {
+				System.out.println("try to create channel : " + cp.getName());
+				if (0 != qmgr.createChannel(cp)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("channel created.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to create channel.");
+				return;
+			}
+			
+			// 8. 서버-수신 채널 생성 예시
+			cp = new ChannelProperty();
+			cp.setName("TEST2.CHL");
+			cp.setType(ChannelProperty.CHANNEL_TYPE_CLIENT);
+			cp.setDirection(ChannelProperty.CHANNEL_DIRECTION_SEND);
+			cp.setDestManagerIp("127.0.0.1");
+			cp.setDestManagerPort(22222);
+			cp.setXmitQueueName("TEST.XQ");
+			try {
+				System.out.println("try to create channel : " + cp.getName());
+				if (0 != qmgr.createChannel(cp)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("channel created.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to create channel.");
+				return;
+			}
+			
+			System.out.println();
+			
+			// 9. 채널 삭제
+			String channelName = "";
+			try {
+				channelName = "TEST1.CHL";
+				System.out.println("try to remove channel : " + channelName);
+				if (0 != qmgr.removeChannel(channelName)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("channel removed : " + channelName);
+				channelName = "TEST2.CHL";
+				System.out.println("try to remove channel : " + channelName);
+				if (0 != qmgr.removeChannel(channelName)) 
+					throw new ILinkException("[" + qmgr.getLastErrorCode() + "] " + qmgr.getLastErrorMessage());
+				System.out.println("channel removed : " + channelName);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("failed to remove channel : " + channelName);
+				return;
+			}
+			
+			break;
+		}
+	}
+	
+	private static String getQueueTypeString(int queueType) {
+		switch (queueType) {
+		case 1000:
+			return "LOCAL";
+		case 1002:
+			return "XMIT";
+		case 1003:
+			return "REMOTE";
+		}
+		return "UNKNOWN";
+	}
+}
+
+

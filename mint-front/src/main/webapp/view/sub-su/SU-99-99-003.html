@@ -1,0 +1,523 @@
+<!--
+	Screen ID : SU-99-99-003
+	Screen NM : REST API 관리
+	[변경 이력]
+	* 20170109-001
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath"  class="col-lg-5">
+	    <h2><lb class="">REST API 관리</lb></h2>
+		<ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="">REST API 관리</lb></strong></li>
+ 		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" >
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content" >
+    <div class="row">
+        <div class="col-lg-12">
+        	<div class="ibox float-e-margins">
+        		<div class="ibox-title">
+	                <h5>List</h5>
+	                <div class="ibox-tools">
+	                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+	                </div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			        	<a id="btnListSearch" class="btn btn-w-m btn-default btn-outline"><i class="fa fa-search "></i> <lb class="lb-10"></lb> </a>
+			            <a id="btnCreate" class="btn btn-w-m btn-default btn-outline"><i class="fa fa-save"></i> <lb class="lb-428"></lb> </a>
+			            <a id="btnModify" class="btn btn-w-m btn-default btn-outline" style="display: none;"><i class="fa fa-pencil"></i> <lb class="lb-342"></lb> </a>
+			            <a id="btnDelete" class="btn btn-w-m btn-default btn-outline" style="display: none;"><i class="fa fa-trash-o"></i> <lb class="lb-343"></lb> </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="row">
+		                <div class="col-sm-6">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-78"></lb></span>
+								<span style="padding: 0px 0px 0px 0px;">
+					            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+										<span class="radio-danger" style="padding-right: 20px;"><input id="rd-search-range" type="radio" name="rd-search-range" value="N" checked="true"><label for="radio0"><lb class="lb-211"></lb></label></span>
+										<span class="radio-info"   style="padding:0px 20px;"><input id="rd-search-range" type="radio" name="rd-search-range" value="Y"><label for="radio1"><lb class="lb-354"></lb></label></span>
+									</div>
+	                             </span>
+							</div>
+						</div>
+                        <div class="col-sm-6">
+                            <span class="lable_tag"><lb class="lb-78"></lb></span>
+	                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+	                            <input id="searchNm" type="text" class="k-input" placeholder="" style="width: 100%;">
+	                        </span>
+                        </div>
+                      	<hr class="hr-space">
+                      	<div class="col-sm-12">
+							<div id="list-grid"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+       	</div>
+   	</div>
+    <div class="row">
+        <div class="col-lg-12">
+        	<div class="ibox float-e-margins">
+        		<div class="ibox-title">
+	                <h5>Detail View</h5><a id="btnClear" href="#" class="btn btn-white" style="margin-left: 10px;"><i class="fa fa-check "></i><lb class="lb-79"></lb></a>
+	                <div class="ibox-tools">
+	                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+	                </div>
+				</div>
+				<div class="ibox-content">
+					<div class="row">
+		               <div class="col-sm-6">
+                            <span class="lable_tag"><lb class=""> REST API 코드</lb></span>
+	                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+	                            <input id="serviceCd" type="text" style="width: 100%;" >
+	                        </span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="lable_tag"><lb class="">서비스 명</lb></span>
+                            <span style="width:63%;">
+                            	<input id="serviceNm" class="" type="text"  tabIndex="4" style="width: 63%;">
+                            </span>
+                        </div>
+
+                      	<hr class="hr-space">
+                        <div class="col-sm-6">
+                            <span class="lable_tag"><lb class="">서비스  URI</lb></span>
+	                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+	                            <input id="serviceUri" type="text" class="k-input" placeholder="" style="width: 100%;">
+	                        </span>
+                        </div>
+                        <div class="col-sm-6">
+	                        <span class="lable_tag"><lb class="">서비스 타입</lb></span>
+	                        <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:63%;">
+	                            <input id="serviceType" type="text" class="k-input" placeholder="" maxlength="5" style="width: 100%;">
+	                        </span>
+                        </div>
+
+                        <hr class="hr-space">
+						<div class="col-sm-12">
+							<textarea id="comments" rows="5" cols="30" style="height:50px; width: 100%"></textarea>
+							<div id="bak" style="top:0px; position:absolute; z-index:1; background:#1B1B1B; display: none;">
+						</div>
+					</div>
+				</div>
+			</div>
+       	</div>
+   	</div>
+</div>
+
+
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "SU-99-99-003";
+		$.extend({
+			main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				callScrnNm : screenName,
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.main.fn_initGrid();
+
+						mint.callService(
+								null
+						 		, screenName
+								, 'REST-R01-SU-10-02'
+								, function(jsonData) {
+							 		var dataSource = new kendo.data.DataSource({
+										  data: jsonData
+									    , page:1
+									    , pageSize: mint.ui.getPageSizesXXS({'currentPage' : true})
+									});
+									//데이터 재설정
+									$("#list-grid").data("kendoGrid").setDataSource(dataSource);
+								}
+								, {errorCall : true}
+						);
+						// 권한 적용
+						{
+							var roleId = mint.session.getRoleId();
+							//if (roleId == "URID001" || roleId == "URID003") {
+							if( mint.session.isInterfaceAdmin() == 'Y' ){
+								$.main.isAdmin = "Y";
+								$(".btnCreate").show();
+							}
+							else {
+								$(".btnCreate").hide();
+							}
+						}
+
+						mint.common.siteMenuPath(screenName);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+					finally {
+						//$.main.fn_searchNotice();
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: grid 초기화
+				//-----------------------------------------------------------------------
+				fn_initGrid : function() {
+					try{
+						$("#list-grid").kendoGrid({
+							dataSource : {
+				 				  data: ""
+				 				, pageSize : mint.ui.getPageSizesXXS({'currentPage' : true})
+							}
+						    , sortable : true
+							, selectable: "row"
+							, resizable: true
+							, pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesXXS()
+						    	, buttonCount 	: 10
+
+							}
+						    , columns : [
+									{
+										  title 	: "REST API 코드"
+										, field 	: "serviceCd"
+										, template	: "<span title='${serviceCd}'>${serviceCd}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: "서비스 명"
+										, field 	: "serviceNm"
+										, template	: "<span title='${serviceNm}'>${serviceNm}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: "서비스 URI"
+										, field 	: "serviceUri"
+										, template	: "<span title='${serviceUri}'>${serviceUri}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: "등록일"
+										, field 	: "regDate"
+										, template	: "<span title='${regDate}'>${regDate}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+									, {
+										  title 	: "수정일"
+										, field 	: "modDate"
+										, template	: "<span title='${modDate}'>${modDate}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            }
+									}
+							]
+						    , dataBound: function (e) {
+						    	if(0 == $("#list-grid").data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$("#list-grid").children(".k-grid-content").height(gridHeight /2.5);
+						    		$("#list-grid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+						    	} else {
+						    		$("#list-grid").children(".k-grid-content").height('auto');
+							    	$("#list-grid").children(".k-grid-content-locked").height('auto');
+						    	}
+						    }
+						}).data("kendoGrid");
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+					};
+				},//end fn_initGrid
+
+
+				//-----------------------------------------------------------------------
+	            // Description :: 초기화
+	            //-----------------------------------------------------------------------
+				fn_editorClear : function() {
+					$('#btnCreate').show();
+					$('#btnModify').hide();
+					$('#btnDelete').hide();
+
+					$('#serviceCd').val('');
+					$('#serviceNm').val('');
+					$('#serviceUri').val('');
+					$('#serviceType').val('');
+
+					$("#comments").val('');
+
+				},//	end fn_editorClear
+
+			 	//-----------------------------------------------------------------------
+	            // Description :: 조회
+	            //-----------------------------------------------------------------------
+				fn_searchGridServerList : function() {
+					var tempServer = new Object();
+					if ($('input:radio[name=rd-search-range]:checked').val() =='N'){
+						tempServer.serviceNm = $('#searchNm').val();
+    				}else{
+    					tempServer.serviceCd = $('#searchNm').val();
+    				}
+
+					mint.callService(
+							tempServer
+					 		, 'SU-99-99-003'
+							, 'REST-R01-SU-10-02'
+							, function(jsonData) {
+								console.log(jsonData);
+						 		var dataSource = new kendo.data.DataSource({
+									  data: jsonData
+								    , page:1
+								    , pageSize: mint.ui.getPageSizesXXS({'currentPage' : true})
+								});
+								//데이터 재설정
+								$("#list-grid").data("kendoGrid").setDataSource(dataSource);
+							}
+							, {errorCall : true}
+					);
+				}, // end fn_searchGridServerList
+
+				//-----------------------------------------------------------------------
+	            // Description :: 상세 조회
+	            //-----------------------------------------------------------------------
+				 fn_getServiceDetail : function() {
+						var entityGrid = $("#list-grid").data("kendoGrid");
+				        var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+				        mint.callService(selectedItem, 'SU-99-99-003', 'REST-R02-SU-10-02'
+				        	, function(jsonData){
+								if(null != jsonData) {
+
+									$('#btnCreate').hide();
+									$('#btnModify').show();
+									$('#btnDelete').show();
+
+									$('#serviceCd').val(jsonData.serviceCd);
+									$('#serviceNm').val(jsonData.serviceNm);
+									$('#serviceUri').val(jsonData.serviceUri);
+									$('#serviceType').val(jsonData.serviceType);
+
+									$("#comments").val(jsonData.comments);
+
+								}
+							}
+							,{
+								  errorCall : true
+								, params : {
+									serviceId  : selectedItem.serviceId
+									, serviceNm : selectedItem.serviceNm
+								}
+							}
+						);
+					} // end fn_getServerDetail
+			}// end main
+		}); // end extends
+
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+/* 		$(document).keydown(function (e) {
+			if($('#bak').is(":visible") && e.target.className == 'note-editable panel-body') {
+				return false;
+			}
+		}); */
+
+		//초기화
+		$("#btnClear").click(function () {
+			$.main.fn_editorClear();
+        });
+
+
+		//조회
+		$("#btnListSearch").click(function () {
+			$.main.fn_searchGridServerList();
+        });
+
+		//-----------------------------------------------------------------------
+		// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+		//-----------------------------------------------------------------------
+		$('#searchNm').keydown(function(event) {
+			if(event.keyCode == 13) {
+				$.main.fn_searchGridServerList();
+	     	}
+		});
+
+		//생성
+		$('#btnCreate').click(function(e) {
+
+			if('' == $('#serviceNm').val()) {
+				mint.common.alert('CW00001', mint.label.getLabel('lb-359'));
+			} else if('' == $('#serviceCd').val()) {
+				mint.common.alert('CW00001', mint.label.getLabel('lb-801'));
+			} else {
+				var confirmCheck = mint.common.confirm('CI00005', null);
+
+			    if (confirmCheck == true) {
+			    	var service = new Object();
+			    	service.objectType 	= 'Service';
+					service.serviceCd	= $('#serviceCd').val();
+					service.serviceNm  	= $('#serviceNm').val();
+					service.serviceUri 	= $('#serviceUri').val();
+					service.serviceType	= $('#serviceType').val();
+					service.comments    = $('#comments').val();
+
+					mint.callService(service, 'SU-99-99-003', 'REST-C01-SU-10-02', function(jsonData){
+						if(null != jsonData) {
+							mint.common.alert('CI00105', null);
+							$.main.fn_searchGridServerList();
+							$.main.fn_editorClear();
+						}
+					}, {errorCall : true });
+			    }
+			}
+		});
+
+		//수정
+		$('#btnModify').click(function(e) {
+			if('' == $('#serviceNm').val()) {
+				mint.common.alert('CW00001', mint.label.getLabel('lb-359'));
+			} else if('' == $('#serviceCd').val()) {
+				mint.common.alert('CW00001', mint.label.getLabel('lb-801'));
+			} else {
+				var confirmCheck = mint.common.confirm('CI00002', null);
+
+			    if (confirmCheck == true) {
+			    	var service = new Object();
+			    	service.objectType 	= 'Service';
+					var entityGrid = $("#list-grid").data("kendoGrid");
+					var selectedItem = entityGrid.dataItem(entityGrid.select());
+					service.serviceId   = selectedItem.serviceId;
+					service.serviceCd	= $('#serviceCd').val();
+					service.serviceNm  	= $('#serviceNm').val();
+					service.serviceUri 	= $('#serviceUri').val();
+					service.serviceType	= $('#serviceType').val();
+					service.comments    = $('#comments').val();
+
+					mint.callService(service, 'SU-99-99-003','REST-U01-SU-10-02', function(jsonData){
+							mint.common.alert('CI00102', null);
+							$.main.fn_searchGridServerList();
+							$.main.fn_editorClear();
+					}, {errorCall : true });
+			    }
+			}
+		});
+
+		//삭제
+		$('#btnDelete').click(function(e) {
+			var confirmCheck = mint.common.confirm('CI00003', null);
+
+		    if (confirmCheck == true) {
+				var entityGrid = $("#list-grid").data("kendoGrid");
+				var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+				mint.callService(selectedItem, 'SU-99-99-003','REST-D01-SU-10-02', function(jsonData){
+						mint.common.alert('CI00103', null);
+						$.main.fn_searchGridServerList();
+						$.main.fn_editorClear();
+				}, {errorCall : true
+					, params : {
+					  	  serviceId  : selectedItem.servcieId
+						, serviceNm : selectedItem.serviceNm
+					}
+				}
+				);
+		    }
+		});
+
+		//클릭 이벤트 (보기)
+		$('#list-grid').on('click', "tr.k-state-selected", function () {
+			$.main.fn_getServiceDetail();
+		});
+
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+	});
+
+
+</script>
+
+<style>
+	.k-grid-header
+	{
+	   padding: 0 !important;
+	}
+
+	.k-grid-content
+	{
+	   overflow-y: visible;
+	}
+
+	.k-grid tr td {
+	    border-bottom: 1px solid #C0C0C0;
+	}
+
+	.k-grid .k-dirty {
+	  display: none;
+	}
+
+	.note-editor {
+    	border : 1px solid #a9a9a9 !important;
+	}
+</style>
+
+</body>
+</html>

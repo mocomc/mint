@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="UTF-8"?><model xmlns="http://www.w3.org/2001/XMLSchema-instance">
+    <id>143</id>
+    <name>Nexacro_001_Model</name>
+    <stage>0</stage>
+    <createDate>20201223150607</createDate>
+    <version>9</version>
+    <description>Nexacro_001_Model</description>
+    <interface id="Nexacro_001" name="넥사크로001"/>
+    <apps>
+        <app id="1" name="MON">
+            <type cd="MON" name=""/>
+            <system cd="CUI" name="처리계UI" seq="0" type="0"/>
+            <server cd="BO1" name="BOS 1"/>
+            <properties>
+                <property name="serviceId">NCS12345</property>
+            </properties>
+            <layouts>
+                <layout ref="NCS12345_I_1" type="0"/>
+                <layout ref="NCS12345_O_1" type="1"/>
+            </layouts>
+        </app>
+        <app id="2" name="프레임워크서비스">
+            <type cd="FWS" name=""/>
+            <system cd="NCM" name="계약관리(처리계)" seq="0" type="2"/>
+            <server cd="D002" name="DUMMY-FW"/>
+            <properties>
+                <property name="serviceId">1234</property>
+            </properties>
+        </app>
+    </apps>
+    <layouts>
+        <layout id="NCS12345_I_1" name="고객계좌정보조회 요청">
+        <modifyDate>20200101</modifyDate>
+        <createDate>20200101</createDate>
+        <modifyUserId>20200101</modifyUserId>
+        <createUserId>20200101</createUserId>
+        <![CDATA[
+        <?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="NCS12345_I_1">
+        <xs:annotation>
+            <xs:documentation>고객계좌정보조회 요청</xs:documentation>
+            <xs:appinfo>
+                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                    <mx:property key="format" value="xml"/>
+                </mx:properties>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" name="cusAccountInfoDto">
+                    <xs:annotation>
+                        <xs:documentation>고객계좌정보Dto</xs:documentation>
+                        <xs:appinfo>
+                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                <mx:property key="userDataType" value="gs"/>
+                                <mx:property key="comments" value=""/>
+                            </mx:properties>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="CUST_ID">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>고객ID</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="ACC_NUM">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>계좌번호ABC</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="6"/>
+                                                <mx:property key="justify" value="right"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="CUS_NM">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>고객명</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="20"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="no"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="20"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+]]></layout>
+        <layout id="NCS12345_O_1" name="고객계좌정보조회 응답">
+        <modifyDate>20200101</modifyDate>
+        <createDate>20200101</createDate>
+        <modifyUserId>20200101</modifyUserId>
+        <createUserId>20200101</createUserId>
+        <![CDATA[<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="NCS12345_O_1">
+        <xs:annotation>
+            <xs:documentation>고객계좌정보조회 응답</xs:documentation>
+            <xs:appinfo>
+                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                    <mx:property key="format" value="xml"/>
+                </mx:properties>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" name="cusAccountInfoDto">
+                    <xs:annotation>
+                        <xs:documentation>고객계좌정보Dto</xs:documentation>
+                        <xs:appinfo>
+                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                <mx:property key="userDataType" value="gs"/>
+                                <mx:property key="comments" value=""/>
+                            </mx:properties>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="CUST_ID">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>고객ID</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="OP_BRCH">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>계좌개설점</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="number"/>
+                                                <mx:property key="length" value="1"/>
+                                                <mx:property key="justify" value="right"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="2"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="ACC_NUM">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>계좌번호</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="6"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="AAC_PW">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>비밀번호</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="4"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="no"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="4"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="AMT">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>잔액</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="number"/>
+                                                <mx:property key="length" value="20"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="no"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="1"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="yes"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="20"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="CUS_NM">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>고객명</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="20"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="20"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="ACCOUNT_TRX_INFO_DTO_CNT">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>계좌거래정보Dto_cnt</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="userDataType" value="number"/>
+                                    <mx:property key="length" value="5"/>
+                                    <mx:property key="justify" value="right"/>
+                                    <mx:property key="padding" value="space"/>
+                                    <mx:property key="required" value="yes"/>
+                                    <mx:property key="meta" value="yes"/>
+                                    <mx:property key="scale" value="0"/>
+                                    <mx:property key="decimalPoint" value="no"/>
+                                    <mx:property key="isKorean" value="no"/>
+                                    <mx:property key="maskingYn" value="no"/>
+                                    <mx:property key="maskingPatternCd" value=""/>
+                                    <mx:property key="comments" value=""/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="5"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="accountTrxInfoDto">
+                    <xs:annotation>
+                        <xs:documentation>계좌거래정보Dto</xs:documentation>
+                        <xs:appinfo>
+                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                <mx:property key="userDataType" value="gm"/>
+                                <mx:property key="comments" value=""/>
+                            </mx:properties>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="ACC_NUM">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>계좌번호</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="6"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="TRX_DATE">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래일자</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="8"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="8"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="TRX_TIME">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래시각</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="6"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="TRX_AMT">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래금액</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="number"/>
+                                                <mx:property key="length" value="2"/>
+                                                <mx:property key="justify" value="right"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="no"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="2"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="TRX_TYPE">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래유형명</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="string"/>
+                                                <mx:property key="length" value="6"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="yes"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="TABLE">
+                    <xs:annotation>
+                        <xs:documentation>테이블</xs:documentation>
+                        <xs:appinfo>
+                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                <mx:property key="userDataType" value="gs"/>
+                                <mx:property key="comments" value=""/>
+                            </mx:properties>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN1">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼1</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="VARCHAR2"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN2">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼2</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="CHAR"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN3">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼3</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="CLOB"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN4">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼4</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="LONG VARCHAR"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN5">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼5</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="NUMBER"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN6">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼6</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="NUMERIC"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN7">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼7</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="DECIMAL"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN8">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼8</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="INTEGER"/>
+                                                <mx:property key="length" value="10"/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN9">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼9</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="TIMESTAMP"/>
+                                                <mx:property key="length" value=""/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:dateTime"/>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="COUMN10">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>컬럼10</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="userDataType" value="DATETIME"/>
+                                                <mx:property key="length" value=""/>
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                                <mx:property key="required" value="yes"/>
+                                                <mx:property key="meta" value="no"/>
+                                                <mx:property key="scale" value="0"/>
+                                                <mx:property key="decimalPoint" value="no"/>
+                                                <mx:property key="isKorean" value="no"/>
+                                                <mx:property key="maskingYn" value="no"/>
+                                                <mx:property key="maskingPatternCd" value=""/>
+                                                <mx:property key="comments" value=""/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:dateTime"/>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+]]></layout>
+    </layouts>
+    <mappings/>
+</model>

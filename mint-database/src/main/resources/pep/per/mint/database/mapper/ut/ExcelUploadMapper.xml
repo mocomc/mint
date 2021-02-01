@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.ut.ExcelUploadMapper">
+	<!--
+  	<cache/>
+  	-->
+
+	<!--
+		ExcelUpload SQL
+	 -->
+	<resultMap id="ExcelUploadMasterInfoMap" type="java.util.LinkedHashMap">
+		<result property="batchId" 		column="BATCH_ID"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="batchCnt" 	column="BATCH_CNT"/>
+		<result property="resultCd" 	column="RESULT_CD"/>
+		<result property="resultMsg" 	column="RESULT_MSG"/>
+		<result property="fileNm" 		column="FILE_NM"/>
+		<result property="filePath" 	column="FILE_PATH"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regUser" 		column="REG_USER"/>
+		<result property="regUserNm" 	column="REG_USER_NM"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modUser" 		column="MOD_USER"/>
+		<result property="modUserNm" 	column="MOD_USER_NM"/>
+	</resultMap>
+	<select id="getExcelUploadMasterInfo" resultMap="ExcelUploadMasterInfoMap">
+		SELECT
+			  BATCH_ID
+			, COMMENTS
+			, BATCH_CNT
+			, RESULT_CD
+			, RESULT_MSG
+			, FILE_NM
+			, FILE_PATH
+			, REG_DATE
+			, REG_USER
+			, ( SELECT USER_NM FROM TSU0101 WHERE USER_ID = REG_USER AND DEL_YN = 'N' ) AS REG_USER_NM
+			, MOD_DATE
+			, MOD_USER
+			, ( SELECT USER_NM FROM TSU0101 WHERE USER_ID = MOD_USER AND DEL_YN = 'N' ) AS MOD_USER_NM
+		FROM
+		  TAN0226
+		ORDER BY BATCH_ID DESC
+	</select>
+
+
+	<resultMap id="ExcelUploadDetailInfoMap" type="java.util.LinkedHashMap">
+		<result property="batchId" 			column="BATCH_ID"/>
+		<result property="rowIndex" 		column="ROW_INDEX"/>
+		<result property="requirementId" 	column="REQUIREMENT_ID"/>
+		<result property="interfaceId" 		column="INTERFACE_ID"/>
+		<result property="col0"  column="COL0"/>
+		<result property="col1"  column="COL1"/>
+		<result property="col2"  column="COL2"/>
+		<result property="col3"  column="COL3"/>
+		<result property="col4"  column="COL4"/>
+		<result property="col5"  column="COL5"/>
+		<result property="col6"  column="COL6"/>
+		<result property="col7"  column="COL7"/>
+		<result property="col8"  column="COL8"/>
+		<result property="col9"  column="COL9"/>
+		<result property="col10" column="COL10"/>
+		<result property="col11" column="COL11"/>
+		<result property="col12" column="COL12"/>
+		<result property="col13" column="COL13"/>
+		<result property="col14" column="COL14"/>
+		<result property="col15" column="COL15"/>
+		<result property="col16" column="COL16"/>
+		<result property="col17" column="COL17"/>
+		<result property="col18" column="COL18"/>
+		<result property="col19" column="COL19"/>
+		<result property="col20" column="COL20"/>
+		<result property="col21" column="COL21"/>
+		<result property="col22" column="COL22"/>
+		<result property="col23" column="COL23"/>
+		<result property="col24" column="COL24"/>
+		<result property="col25" column="COL25"/>
+		<result property="col26" column="COL26"/>
+		<result property="col27" column="COL27"/>
+		<result property="col28" column="COL28"/>
+		<result property="col29" column="COL29"/>
+		<result property="col30" column="COL30"/>
+		<result property="col31" column="COL31"/>
+		<result property="col32" column="COL32"/>
+		<result property="col33" column="COL33"/>
+		<result property="col34" column="COL34"/>
+		<result property="col35" column="COL35"/>
+		<result property="col36" column="COL36"/>
+		<result property="col37" column="COL37"/>
+		<result property="col38" column="COL38"/>
+		<result property="col39" column="COL39"/>
+		<result property="col40" column="COL40"/>
+		<result property="col41" column="COL41"/>
+		<result property="col42" column="COL42"/>
+		<result property="col43" column="COL43"/>
+		<result property="col44" column="COL44"/>
+		<result property="col45" column="COL45"/>
+	</resultMap>
+
+	<select id="getExcelUploadDetailInfo" resultMap="ExcelUploadDetailInfoMap">
+		SELECT
+			  BATCH_ID
+			, ROW_INDEX
+			, REQUIREMENT_ID
+			, B.INTEGRATION_ID AS INTERFACE_ID
+			, COL0
+			, COL1
+			, COL2
+			, COL3
+			, COL4
+			, COL5
+			, COL6
+			, COL7
+			, COL8
+			, COL9
+			, COL10
+			, COL11
+			, COL12
+			, COL13
+			, COL14
+			, COL15
+			, COL16
+			, COL17
+			, COL18
+			, COL19
+			, COL20
+			, COL21
+			, COL22
+			, COL23
+			, COL24
+			, COL25
+			, COL26
+			, COL27
+			, COL28
+			, COL29
+			, COL30
+			, COL31
+			, COL32
+			, COL33
+			, COL34
+			, COL35
+			, COL36
+			, COL37
+			, COL38
+			, COL39
+			, COL40
+			, COL41
+			, COL42
+			, COL43
+			, COL44
+			, COL45
+		FROM TAN0227 A
+			 LEFT OUTER JOIN TAN0201 B
+			 	ON A.INTERFACE_ID = B.INTERFACE_ID
+		WHERE BATCH_ID = #{batchId}
+		ORDER BY ROW_INDEX
+	</select>
+
+	<insert id="insertExcelUploadMasterInfo" parameterType="Map">
+		<selectKey keyProperty="batchId" resultType="string" order="BEFORE" >
+			SELECT 'EX' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(BATCH_ID,3)),'0')) + 1),8,'0') FROM TAN0226
+		</selectKey>
+		INSERT
+		INTO TAN0226
+		  (
+		    BATCH_ID,
+		    COMMENTS,
+		    BATCH_CNT,
+		    RESULT_CD,
+		    RESULT_MSG,
+		    FILE_NM,
+		    FILE_PATH,
+		    REG_DATE,
+		    REG_USER,
+		    MOD_DATE,
+		    MOD_USER
+		  )
+		  VALUES
+		  (
+		    #{batchId,		jdbcType=VARCHAR},
+		    #{comments,		jdbcType=VARCHAR},
+		    #{batchCnt,		jdbcType=NUMERIC},
+		    #{resultCd,		jdbcType=VARCHAR},
+		    #{resultMsg,	jdbcType=VARCHAR},
+		    #{fileNm,		jdbcType=VARCHAR},
+		    #{filePath,		jdbcType=VARCHAR},
+		    #{regDate,		jdbcType=VARCHAR},
+		    #{regUser,		jdbcType=VARCHAR},
+		    #{modDate,		jdbcType=VARCHAR},
+		    #{modUser,		jdbcType=VARCHAR}
+		  )
+	</insert>
+
+
+	<insert id="insertExcelUploadDetailInfo">
+
+		INSERT
+		INTO TAN0227
+		  (
+		    BATCH_ID,
+		    ROW_INDEX,
+		    REQUIREMENT_ID,
+		    INTERFACE_ID,
+		    COL0,
+		    COL1,
+		    COL2,
+		    COL3,
+		    COL4,
+		    COL5,
+		    COL6,
+		    COL7,
+		    COL8,
+		    COL9,
+		    COL10,
+		    COL11,
+		    COL12,
+		    COL13,
+		    COL14,
+		    COL15,
+		    COL16,
+		    COL17,
+		    COL18,
+		    COL19,
+		    COL20,
+		    COL21,
+		    COL22,
+		    COL23,
+		    COL24,
+		    COL25,
+		    COL26,
+		    COL27,
+		    COL28,
+		    COL29,
+		    COL30,
+		    COL31,
+		    COL32,
+		    COL33,
+		    COL34,
+		    COL35,
+		    COL36,
+		    COL37,
+		    COL38,
+		    COL39,
+		    COL40,
+		    COL41,
+		    COL42,
+		    COL43,
+		    COL44,
+		    COL45
+		  )
+		  VALUES
+		  (
+		    #{batchId,			jdbcType=VARCHAR},
+		    #{rowIndex,			jdbcType=NUMERIC},
+		    #{requirementId,	jdbcType=VARCHAR},
+		    #{interfaceId,		jdbcType=VARCHAR},
+		    #{col0,				jdbcType=VARCHAR},
+		    #{col1,				jdbcType=VARCHAR},
+		    #{col2,				jdbcType=VARCHAR},
+		    #{col3,				jdbcType=VARCHAR},
+		    #{col4,				jdbcType=VARCHAR},
+		    #{col5,				jdbcType=VARCHAR},
+		    #{col6,				jdbcType=VARCHAR},
+		    #{col7,				jdbcType=VARCHAR},
+		    #{col8,				jdbcType=VARCHAR},
+		    #{col9,				jdbcType=VARCHAR},
+		    #{col10,			jdbcType=VARCHAR},
+		    #{col11,			jdbcType=VARCHAR},
+		    #{col12,			jdbcType=VARCHAR},
+		    #{col13,			jdbcType=VARCHAR},
+		    #{col14,			jdbcType=VARCHAR},
+		    #{col15,			jdbcType=VARCHAR},
+		    #{col16,			jdbcType=VARCHAR},
+		    #{col17,			jdbcType=VARCHAR},
+		    #{col18,			jdbcType=VARCHAR},
+		    #{col19,			jdbcType=VARCHAR},
+		    #{col20,			jdbcType=VARCHAR},
+		    #{col21,			jdbcType=VARCHAR},
+		    #{col22,			jdbcType=VARCHAR},
+		    #{col23,			jdbcType=VARCHAR},
+		    #{col24,			jdbcType=VARCHAR},
+		    #{col25,			jdbcType=VARCHAR},
+		    #{col26,			jdbcType=VARCHAR},
+		    #{col27,			jdbcType=VARCHAR},
+		    #{col28,			jdbcType=VARCHAR},
+		    #{col29,			jdbcType=VARCHAR},
+		    #{col30,			jdbcType=VARCHAR},
+		    #{col31,			jdbcType=VARCHAR},
+		    #{col32,			jdbcType=VARCHAR},
+		    #{col33,			jdbcType=VARCHAR},
+		    #{col34,			jdbcType=VARCHAR},
+		    #{col35,			jdbcType=VARCHAR},
+		    #{col36,			jdbcType=VARCHAR},
+		    #{col37,			jdbcType=VARCHAR},
+		    #{col38,			jdbcType=VARCHAR},
+		    #{col39,			jdbcType=VARCHAR},
+		    #{col40,			jdbcType=VARCHAR},
+		    #{col41,			jdbcType=VARCHAR},
+		    #{col42,			jdbcType=VARCHAR},
+		    #{col43,			jdbcType=VARCHAR},
+		    #{col44,			jdbcType=VARCHAR},
+		    #{col45,			jdbcType=VARCHAR}
+		  )
+	</insert>
+
+
+	<update id="updateExcelUploadMasterInfoStatus">
+		UPDATE TAN0226
+		SET
+			RESULT_CD  = #{resultCd,   jdbcType=VARCHAR},
+			RESULT_MSG = #{resultMsg,  jdbcType=VARCHAR},
+			MOD_DATE   = #{regDate,    jdbcType=VARCHAR},
+			MOD_USER   = #{userId,     jdbcType=VARCHAR}
+		WHERE
+			BATCH_ID   = #{batchId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateExcelUploadDetailInfo">
+		UPDATE TAN0227
+		SET
+			REQUIREMENT_ID  = #{requirementId,	jdbcType=VARCHAR},
+			INTERFACE_ID  	= #{interfaceId,	jdbcType=VARCHAR}
+		WHERE
+			BATCH_ID   		= #{batchId,		jdbcType=VARCHAR}
+			AND COL0  		= #{seq,			jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteExcelUploadMasterInfo" parameterType="java.util.HashMap">
+		DELETE FROM TAN0226 WHERE BATCH_ID IN <foreach item="item" index="index" collection="batchId" open="(" separator="," close=")"> #{item} </foreach>
+	</delete>
+
+	<delete id="deleteExcelUploadDetailInfo"  parameterType="java.util.HashMap">
+		DELETE FROM TAN0227 WHERE BATCH_ID IN <foreach item="item" index="index" collection="batchId" open="(" separator="," close=")"> #{item} </foreach>
+	</delete>
+
+</mapper>

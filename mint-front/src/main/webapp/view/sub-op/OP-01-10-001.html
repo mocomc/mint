@@ -1,0 +1,942 @@
+<!--
+	Screen ID : OP-01-10-001
+	Screen NM : 인터페이스 트래킹 조회 - IIP 4.0
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div id="oldPath" class="col-lg-5" style="display:none;">
+		<h2><lb class="lb-630">운영환경</lb></h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-29"></lb></li>
+			<li><lb class="lb-30"></lb></li>
+			<li class="active"><strong><lb class="lb-630">운영환경</lb></strong></li>
+		</ol>
+    </div>
+    <div id="menuPath" class="col-lg-5">
+		<h2><lb class="lb-630">운영환경</lb></h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-29"></lb></li>
+			<li><lb class="lb-30"></lb></li>
+			<li class="active"><strong><lb class="lb-630">운영환경</lb></strong></li>
+		</ol>
+    </div>
+</div>
+<!--location end-->
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><lb class="lb-78"></lb></h5>
+                    &nbsp;&nbsp;&nbsp;
+                    <div class="ibox-tools">
+                       <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000016','H001')"></a>
+					   <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-clear"><i class="fa fa-check "></i> <lb class="lb-79"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-search"><i class="fa fa-search "></i> <lb class="lb-10"></lb> </a>
+					</div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-80"></lb></span>
+                                <input id="cb-channelId" class="input-tag-4" type="text" placeholder="Search...">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+							<div class="form-group">
+								<span class="label-tag-4"><lb class="lb-820"></lb><a class="help-over-label" onclick="mint.ui.help(this, 'AP00000005','H004')"></a></span>
+								<input id="tf-orgNm" type="text" class="input-tag-4 k-textbox" readonly="readonly" placeholder="Search...">
+								<input id="hd-orgNm" type="hidden">
+								<input id="hd-orgId" type="hidden">
+							</div>
+						</div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-82"></lb></span>
+								<input id="tf-systemNm" type="text" class="input-tag-4 k-textbox" readonly="readonly" placeholder="Search...">
+								<input id="hd-systemNm" type="hidden">
+								<input id="hd-systemId" type="hidden">
+                            </div>
+                        </div>
+
+                        <hr class="hr-space">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-81"></lb><a class="help-over-label" onclick="mint.ui.help(this, 'AP00000005','H004')"></a></span>
+								<input id="tf-bizNm" type="text" class="input-tag-4 k-textbox" readonly="readonly" placeholder="Search...">
+								<input id="hd-bizNm" type="hidden">
+								<input id="hd-bizId" type="hidden">
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-153"></lb></span>
+                                <input id="cb-interfaceNm" class="input-tag-4" type="text" placeholder="Search...">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-154"></lb></span>
+                                <input id="cb-integrationId" class="input-tag-4" type="text" placeholder="Search...">
+                            </div>
+                        </div>
+
+                        <hr class="hr-space">
+
+ 						<div class="col-sm-12" style="padding-top: 0px">
+							<div class="b-col"></div>
+						</div>
+                        <hr class="hr-space">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-302"></lb>(From)</span>
+                                <input id="dt-fromDate" class="input-tag-4" style="text-align:center;">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                             	<span class="label-tag-4"><lb class="lb-302"></lb>(To)</span>
+								<input id="dt-toDate" class="input-tag-4" style="text-align:center;">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="label-tag-4"><lb class="lb-473"></lb></span>
+								<span style="padding: 0px 0px 0px 0px;">
+					            	<div class="radio radio-inline" style="padding-left:20px; padding-top:5px;">
+					            		<div id="cb-status"></div>
+                                	</div>
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr class="hr-space">
+
+                        <div class="col-sm-4">
+                        </div>
+
+                        <div class="col-sm-4">
+                        </div>
+
+						<input id="hd-accRoleId"   type="hidden">
+						<input id="hd-trackingDate" type="hidden">
+                    </div>
+                </div>
+                <!--ibox-content end-->
+            </div>
+            <!--ibox float-e-margins end-->
+        </div>
+        <!--col-lg-12 end-->
+    </div>
+    <!--row end-->
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><lb class="lb-91"></lb></h5>
+                    <div class="ibox-tools">
+                       <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000016','H002')"></a>
+					   <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+					<div id="grid-tracking"></div>
+					<div id="grid-tracking-excel" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "OP-01-10-001";
+    start = null;
+
+    $.extend({
+        main : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+			//-----------------------------------------------------------------------
+			// [페이지 관련] - Page Control Variable
+			//-----------------------------------------------------------------------
+			page : 1,
+			perCount : 1,
+			totalCount : 0,
+			//-----------------------------------------------------------------------
+			// 조회 - 엑셀다운도드 조회조건 sync
+			//-----------------------------------------------------------------------
+			requestObject : new Object(),
+			//-----------------------------------------------------------------------
+			// etc
+			//-----------------------------------------------------------------------
+
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.main.fn_initCallback');
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+
+                	mint.common.siteMenuPath(screenName);
+
+                	//-----------------------------------------------------------------------
+                	// Combobox
+                	//-----------------------------------------------------------------------
+                    mint.ui.setComboBoxWithValue('cb-channelId', mint.common.commonCodeMap.get("channelList"), 0, 'channelNm', 'channelId');
+                    mint.ui.setComboBoxWithValueSort('cb-interfaceNm', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'interfaceNm', 'interfaceNm');
+                    mint.ui.setComboBoxWithValueSort('cb-integrationId', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'integrationId', 'integrationId');
+
+                	//-----------------------------------------------------------------------
+                	// Radio Button
+                	//-----------------------------------------------------------------------
+                    var obj = new Object();
+                    obj.nm = "전체";
+                    obj.cd = "";
+                    mint.ui.setRadioButton('cb-status', mint.common.commonCodeMap.get("cds").OP01, 0, 'cd', 'nm', 'status', obj);
+
+                	//-----------------------------------------------------------------------
+                	// DateTimePicker
+                	//-----------------------------------------------------------------------
+					var fromDate = new Date();
+					fromDate.setHours(fromDate.getHours()-1,0,0,0);
+					mint.ui.setDateTimePicker('dt-fromDate', fromDate);
+
+					var toDate = new Date();
+					toDate.setHours(toDate.getHours(),59,59,0);
+					mint.ui.setDateTimePicker('dt-toDate', toDate);
+
+                	//-----------------------------------------------------------------------
+                	// Init grid
+                	//-----------------------------------------------------------------------
+                	$.main.fn_initGrid();
+
+                	//-----------------------------------------------------------------------
+                	// KeyEvent
+                	//-----------------------------------------------------------------------
+                	$("#cb-channelId").data("kendoComboBox").input.keydown($.main.fn_onKeyDown);
+                	$("#cb-integrationId").data("kendoComboBox").input.keydown($.main.fn_onKeyDown);
+                	$("#cb-interfaceNm").data("kendoComboBox").input.keydown($.main.fn_onKeyDown);
+					$('#dt-fromDate').keydown($.main.fn_onKeyDown);
+					$('#dt-toDate').keydown($.main.fn_onKeyDown);
+
+					//-----------------------------------------------------------------------
+					// [페이지 관련] - 그리드 페이지 컨트롤 이벤트 설정
+					//-----------------------------------------------------------------------
+					{
+						var grid = $('#grid-tracking').data('kendoGrid');
+						var pager = grid.pager;
+						pager.element.bind('change', function(e) {
+							$.main.fn_gridItemPerPageEvent(e);
+						});
+						$.main.perCount = pager.pageSize();
+					}
+
+					//-----------------------------------------------------------------------
+					// 대시보드 연계 확인
+					//-----------------------------------------------------------------------
+                    var caller = mint.common.getScreenParam("caller");
+                    if( ! mint.common.isEmpty(caller) && caller == 'dashboard' ) {
+
+                    	var options = mint.common.getScreenParam("options");
+
+                    	var accRoleId     = mint.common.isEmpty(options.accRoleId) ? '' : options.accRoleId;
+                		var integrationId = mint.common.isEmpty(options.integrationId) ? '' : options.integrationId;
+                		var trackingDate   = mint.common.isEmpty(options.trackingDate) ? '' : options.trackingDate;
+                		var status        = mint.common.isEmpty(options.status) ? '' : options.status;
+
+    					var fromDate = new Date();
+    					fromDate.setHours(0,0,0,0);
+
+    					var toDate = new Date();
+    					toDate.setHours(23,59,59,0);
+
+    					$('#dt-fromDate').data('kendoDateTimePicker').value(fromDate);
+    					$('#dt-toDate').data('kendoDateTimePicker').value(toDate);
+
+						$('#cb-status').data("kendoExtRadioButtonGroup").value(status);
+                   		$('#cb-integrationId').data("kendoComboBox").value(integrationId);
+                   		$('#hd-accRoleId').val(accRoleId);
+                   		$('#hd-trackingDate').val(trackingDate);
+
+                    	$.main.fn_getData();
+
+                    	{
+                        	mint.common.setScreenParam("caller", null);
+                        	mint.common.setScreenParam("option", null);
+                    	}
+                    }
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+                }
+            },// end fn_initCallback
+
+            //-----------------------------------------------------------------------
+            // Description :: 검색 조건 초기화
+            //-----------------------------------------------------------------------
+            fn_clearSearchArea : function() {
+                try {
+
+                	// 채널
+                    var combobox = $('#cb-channelId').data('kendoComboBox');
+                    combobox.enable(true);
+                    combobox.value('');
+                    mint.ui.setComboBoxWithValue('cb-channelId', mint.common.commonCodeMap.get("channelList"), 0, 'channelNm', 'channelId');
+
+					// 기관
+					$('#tf-orgNm').val('');
+					$('#hd-orgNm').val('');
+					$('#hd-orgId').val('');
+					$('#tf-orgNm').prop('disabled', false);
+					$('#tf-orgNm').css('background-color', '#FFFFFF');
+
+                    // 시스템
+                    $('#tf-systemNm').val('');
+					$('#hd-systemNm').val('');
+					$('#hd-systemId').val('');
+					$('#tf-systemNm').prop('disabled', false);
+					$('#tf-systemNm').css('background-color', '#FFFFFF');
+
+                    // 업무
+                    $('#tf-bizNm').val('');
+                    $('#hd-bizNm').val('');
+					$('#hd-bizId').val('');
+					$('#tf-bizNm').prop('disabled', false);
+					$('#tf-bizNm').css('background-color', '#FFFFFF');
+
+                    // interface
+                    $('#cb-interface').data('kendoMultiColumnComboBox').enable(true);
+                    $('#cb-interface').data('kendoMultiColumnComboBox').value('');
+
+                    // 상태
+                    var obj = new Object();
+                    obj.nm = "전체";
+                    obj.cd = "";
+					mint.ui.setRadioButton('cb-status', mint.common.commonCodeMap.get("cds").OP01, 0, 'cd', 'nm', 'status', obj);
+
+                    // 검색기간
+					var fromDate = new Date();
+					fromDate.setHours(fromDate.getHours()-1,0,0,0);
+					$('#dt-fromDate').data('kendoDateTimePicker').value(fromDate);
+
+					var toDate = new Date();
+					toDate.setHours(toDate.getHours(),59,59,0);
+					$('#dt-toDate').data('kendoDateTimePicker').value(toDate);
+
+                    // 대시보드 연관 필드
+                    $('#hd-accRoleId').val('');
+                    $('#hd-trackingDate').val('');
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_clearSearchArea"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: request object 생성
+            //-----------------------------------------------------------------------
+            fn_getRequestObject : function(isInitSearch) {
+                try{
+                    var requestObject = new Object();
+
+                    requestObject.channelId      = $("#cb-channelId").data("kendoComboBox").value();
+                    requestObject.organizationId = $('#hd-orgId').val();
+                    requestObject.systemId       = $('#hd-systemId').val();
+                    requestObject.businessId     = $('#hd-bizId').val();
+                    requestObject.interfaceId    = $("#cb-interface").data("kendoMultiColumnComboBox").value();
+
+                    requestObject.status         = $("#cb-status").data("kendoExtRadioButtonGroup").dataItem().cd;
+
+                    if( mint.common.isEmpty( $("#hd-trackingDate").val() ) ) {
+                    	requestObject.startDate      = mint.common.formatDate($("#dt-fromDate").data("kendoDateTimePicker").value(), 'yyyyMMddHHmm') + '00000000';
+                    	requestObject.endDate        = mint.common.formatDate($("#dt-toDate").data("kendoDateTimePicker").value(), 'yyyyMMddHHmm') + '59999999';
+                    } else {
+                    	requestObject.startDate      = $("#hd-trackingDate").val();
+                    	requestObject.endDate        = $("#hd-trackingDate").val();
+                    }
+
+                    requestObject.accRoleId       = $("#hd-accRoleId").val();
+                    requestObject.trackingDate     = $("#hd-trackingDate").val();
+
+					//-----------------------------------------------------------------------
+					// [페이지 관련] - page, perCount 설정
+					//-----------------------------------------------------------------------
+			    	if( isInitSearch ) {
+			    		$.main.page = 1;
+			    		requestObject.total = 0;
+			    	} else {
+			    		requestObject.total = $.main.totalCount;
+			    	}
+
+			    	requestObject.page     = $.main.page;
+			    	requestObject.perCount = $.main.perCount;
+
+			    	//-----------------------------------------------------------------------
+			    	// ExcelDownload 시 참고할 requestObject
+			    	//-----------------------------------------------------------------------
+			    	$.main.requestObject = requestObject;
+
+                    return requestObject;
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getRequestObject"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: 데이터 조회
+            //-----------------------------------------------------------------------
+            fn_getData : function(isInitSearch) {
+                try{
+                	start = new Date().getTime();
+                    mint.callService($.main.fn_getRequestObject(isInitSearch), screenName, 'REST-R01-OP-01-10', '$.main.fn_setGridData', {errorCall : true, includeRequest : true});
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getData"});
+                }
+
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: 데이터 조회 콜백
+            //-----------------------------------------------------------------------
+            fn_setGridData : function(requestObject, responseObject) {
+            	try {
+            		var dataSource = new kendo.data.DataSource({
+						  data: responseObject
+					    , page: $.main.page
+					    , pageSize: $.main.perCount
+					    , serverPaging: true
+					    , schema: {
+					    	total: function() {
+					    		return ($.main.totalCount = requestObject.total);
+					    	}
+					    }
+					});
+
+					//데이터 재설정
+					$("#grid-tracking").data("kendoGrid").setDataSource(dataSource);
+					elapsed = new Date().getTime() - start;
+					alert("소요시간 : "+elapsed +"ms");
+					start = null;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridData"});
+            	}
+            },
+
+			//-----------------------------------------------------------------------
+			// Description :: Excel Data 조회
+			//-----------------------------------------------------------------------
+			fn_getGridExcelData : function() {
+				try {
+					$.main.requestObject.page     = 1;
+					$.main.requestObject.perCount = $.main.totalCount;
+
+			    	mint.callService($.main.requestObject, screenName, 'REST-R01-OP-01-10', '$.main.fn_setGridExcelData', {errorCall : true, includeRequest : false});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_getGridExcelData"});
+				}
+			},//end fn_getGridExcelData()
+
+			//-----------------------------------------------------------------------
+			// Description :: 엑셀 저장용 그리드 데이터 바인딩
+			//-----------------------------------------------------------------------
+			fn_setGridExcelData : function(responseObject) {
+				try {
+					var dataSource = new kendo.data.DataSource({
+						  data: responseObject
+					    , page:1
+					    , pageSize:mint.ui.getPageSizesL({'currentPage' : true})
+					});
+
+					var gridExcel = $("#grid-tracking-excel").data("kendoGrid");
+					gridExcel.setDataSource(dataSource);
+				    gridExcel.saveAsExcel();
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridExcelData"});
+				}
+			},//end fn_setGridExcelData()
+
+            //-----------------------------------------------------------------------
+			// Description ::  검색 결과 - Grid 생성
+			//-----------------------------------------------------------------------
+            fn_initGrid : function() {
+            	try{
+					//-----------------------------------------------------------------------
+					// 조회 결과 그리드
+					//-----------------------------------------------------------------------
+	            	$("#grid-tracking").kendoGrid({
+	                    dataSource : {
+		                    data : "",
+		                    pageSize : mint.ui.getPageSizesL({'currentPage' : true})
+	                    },
+	                    filterable: true,
+	                    resizable: true,
+	                    sortable : true,
+	                    scrollable : true,
+	                	columnMenu: true,
+						reorderable: true,
+	                    pageable : {
+	                      pageSizes     : mint.ui.getPageSizesL(),
+	                      buttonCount   : 5,
+	                      input : true
+	                    },
+	                    selectable : true,
+	                    toolbar: ["excel"],
+						excel: {
+							  allPages: true
+							, filterable: true
+							, fileName: mint.common.remakeYYMMDD(new Date()).substring(0, 14) + '_' + mint.label.getLabel('lb-30') + '.xlsx'
+						},
+						messages: {
+							commands: {
+							  excel: mint.label.getLabel('lb-508')
+							}
+						},
+					    page: function(e) {
+					    	$.main.fn_gridPageEvent(e);
+					    },
+						excelExport: function(e) {
+						    $.main.fn_getGridExcelData();
+						    e.preventDefault();
+						},
+	                    columns : $.main.fn_getColumn_Grid(),
+	                    dataBound: function (e) {
+							if(1 > $("#grid-tracking").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+								$("#grid-tracking").children(".k-grid-content").height(gridHeight /2.5);
+								$("#grid-tracking").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#grid-tracking").children(".k-grid-content").height('auto');
+								$("#grid-tracking").children(".k-grid-content-locked").height('auto');
+							}
+						}
+	                    });
+					//-----------------------------------------------------------------------
+					// Excel export 그리드
+					//-----------------------------------------------------------------------
+	            	$("#grid-tracking-excel").kendoGrid({
+	                    dataSource : {
+		                    data : "",
+		                    pageSize : mint.ui.getPageSizesL({'currentPage' : true})
+	                    },
+	                    filterable: true,
+	                    resizable: true,
+	                    sortable : true,
+	                    scrollable : true,
+	                	columnMenu: true,
+						reorderable: true,
+	                    pageable : {
+	                      pageSizes     : mint.ui.getPageSizesL(),
+	                      buttonCount   : 5
+
+	                    },
+	                    selectable : true,
+	                    toolbar: ["excel"],
+						excel: {
+							  allPages: true
+							, filterable: true
+							, fileName: mint.common.remakeYYMMDD(new Date()).substring(0, 14) + '_' + mint.label.getLabel('lb-30') + '.xlsx'
+						},
+						messages: {
+							commands: {
+							  excel: mint.label.getLabel('lb-508')
+							}
+						},
+					    page: function(e) {
+					    	$.main.fn_gridPageEvent(e);
+					    },
+						excelExport: function(e) {
+							//-----------------------------------------------------------------------
+					    	// 스타일 편집
+					    	//-----------------------------------------------------------------------
+					        var sheet = e.workbook.sheets[0];
+					        for (var i = 0; i < sheet.rows.length; i++) {
+					        	if( sheet.rows[i].type == 'header' ) {
+						        	for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+						            	sheet.rows[i].cells[ci].vAlign = "center";
+					            		sheet.rows[i].cells[ci].hAlign = "center";
+					            		sheet.rows[i].cells[ci].bold = true;
+						        	}
+					        	} else {
+					        		// 트래킹 조회 타입 1일 경우
+					        		var startDate = sheet.rows[i].cells[5].value;
+					        		sheet.rows[i].cells[5].value = startDate.substring(0, 14);//milliseconds 절삭처리
+					        	}
+					    	}
+						},
+	                    columns : $.main.fn_getColumn_Grid(),
+	                    dataBound: function (e) {
+
+						}
+                    });
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+            	}
+            },
+
+         	//-----------------------------------------------------------------------
+			// Description :: - 그리드 컬럼 동적 설정
+			//-----------------------------------------------------------------------
+			fn_getColumn_Grid : function() {
+
+				try{
+					var fixLeftGridWidth = ($('#grid-tracking')[0].clientWidth / 10) * 7;
+					var fixLeftCoulmnWidth = fixLeftGridWidth / 4;
+					var columnsData =
+						[
+							{
+							    field : "statusNm",
+							    title : mint.label.getLabel('lb-473'), // 상태
+							    width : "60px",
+							    template : '#=$.main.fn_setColor(statusNm)#',
+							    headerAttributes : {
+							        style : "text-align: center"
+							    },
+							    attributes : {
+							        style : "text-align: center; white-space: nowrap;"
+							    },
+							    filterable: { multi: true, search: true }
+							},
+							{
+		                        field : "interfaceNm",
+		                        title : mint.label.getLabel('lb-153'), // 인터페이스명
+		                        width : "170px",
+		                        template: "<span title='${interfaceNm}'>${interfaceNm}</span>",
+		                        headerAttributes : {
+		                            style : "text-align: center"
+		                        },
+		                        attributes : {
+		                            style : "text-align: left; white-space: nowrap;"
+		                        },
+		                        filterable: { multi: true, search: true },
+		                    },
+		                    {
+		                        field : "integrationId",
+		                        title : mint.label.getLabel('lb-154'), // 인터페이스ID
+		                        width : "120px",
+		                        template: "<span title='${integrationId}'>${integrationId}</span>",
+		                        headerAttributes : {
+		                            style : "text-align: center"
+		                        },
+		                        attributes : {
+		                            style : "text-align: center; white-space: nowrap;"
+		                        },
+		                        filterable: { multi: true, search: true },
+		                    },
+		                    {
+		                        field : "sndSystemNm",
+		                        title : mint.label.getLabel('lb-98'), // 송신/요청
+		                        width : "130px",
+		                        template: "<span title='${sndSystemNm}'>${sndSystemNm}</span>",
+		                        headerAttributes : {
+		                            style : "text-align: center"
+		                        },
+		                        attributes : {
+		                            style : "text-align: center; white-space: nowrap;"
+		                        },
+		                        filterable: { multi: true, search: true },
+	 	                    },
+	 	                    {
+		                        field : "rcvSystemNm",
+		                        title : mint.label.getLabel('lb-102'), // 수신/응답
+		                        width : "130px",
+		                        template: "<span title='${rcvSystemNm}'>${rcvSystemNm}</span>",
+		                        headerAttributes : {
+		                            style : "text-align: center"
+		                        },
+		                        attributes : {
+		                            style : "text-align: center; white-space: nowrap;"
+		                        },
+		                        filterable: { multi: true, search: true },
+		                    },
+		                    {
+						        field : "trackingDate",
+						        title : mint.label.getLabel('lb-509') + mint.label.getLabel('lb-510'), // 시작시간
+						        width : "130px",
+						        template : '#=$.main.fn_changeTime(trackingDate)#',
+						        headerAttributes : {
+						            style : "text-align: center"
+						        },
+						        attributes : {
+						            style : "text-align: center; white-space: nowrap;"
+						        },
+						        filterable: { multi: true, search: true }
+						    },
+						    {
+		                        field : "dataAmt",
+		                        title : mint.label.getLabel('lb-474'), // 데이터 사이즈
+		                        template: '#=mint.common.addComma(dataAmt)#',
+		                        width : "100px",
+		                        headerAttributes : {
+		                            style : "text-align: center"
+		                        },
+		                        attributes : {
+		                            style : "text-align: center; white-space: nowrap;"
+		                        },
+		                        filterable: { multi: true, search: true }
+		                    }
+ 	                    ];
+					return columnsData;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_getColumn_Grid"});
+				}
+
+
+			}, // end fn_getColumn_Grid()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: [페이지 관련] - Grid Page Event
+			//-----------------------------------------------------------------------
+			fn_gridPageEvent : function(event) {
+				try {
+					$.main.page     = parseInt(event.page);
+					$.main.perCount = parseInt(event.sender.pager.pageSize());
+
+					$.main.fn_getData(false);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_gridPageEvent"});
+				}
+			},//end fn_gridPageEvent()
+
+			//-----------------------------------------------------------------------
+			// Description :: [페이지 관련] - Grid ItemPerPage Event
+			//-----------------------------------------------------------------------
+			fn_gridItemPerPageEvent : function(event) {
+				try {
+					var grid = $('#grid-tracking').data('kendoGrid');
+					if( $.main.perCount != grid.pager.pageSize() ) {
+						$.main.perCount = grid.pager.pageSize();
+						// 조회가 완료된 이후 페이지 값이 변경되면, 다시 조회하여 초기화 한다
+						if( grid.dataSource.total() > 0 ) {
+							$.main.fn_getData(true);
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_gridItemPerPageEvent"});
+				}
+			},//end fn_gridItemPerPageEvent()
+
+
+            //-----------------------------------------------------------------------
+            // Description :: grid status color 변경
+            //-----------------------------------------------------------------------
+            fn_setColor : function(val) {
+                try {
+                    if (val && val != null && val == mint.label.getLabel('lb-476'))
+                        return "<b style='color:red'>" + val + "</b>";
+                    else if (val && val != null && val == mint.label.getLabel('lb-511'))
+                        return "<b style='color:blue'>" + val + "</b>";
+                    else
+                        return val;
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setColor"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: grid 클릭 시 상세 팝업 오픈
+            //-----------------------------------------------------------------------
+            fn_showDetailPopup : function() {
+
+                try {
+                    var grid = $("#grid-tracking").data("kendoGrid");
+                    var selectedItem = grid.dataItem(grid.select());
+
+                    mint.common.setScreenParam('detailKey', selectedItem);
+                    mint.common.searchPopup('../sub-co/CO-01-10-009.html','CO-01-10-009');
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_showDetailPopup"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: time format 변경
+            //-----------------------------------------------------------------------
+            fn_changeTime : function(val) {
+                try {
+                    var str = val.substring(0, 14);
+
+                    var returnVal = ''
+                    if( mint.common.isEmpty(str) ) {
+                    	returnVal = '';
+                    } else {
+                    	returnVal =str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
+                    }
+
+                    return returnVal;
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_changeTime"});
+                }
+            },
+
+          	//-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDown : function(event) {
+				try {
+					if(event.keyCode == 13) {
+						$.main.fn_getData(true);
+					}
+				} catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDown"});
+				}
+			}, // end fn_onKeyDown
+
+         	//-----------------------------------------------------------------------
+			// Description :: 기관 정보 콜백
+			//-----------------------------------------------------------------------
+			fn_setOrganizationInfo : function(selectedItem) {
+				try {
+					if( mint.common.isEmpty(selectedItem) ) {
+						$('#tf-orgNm').val('');
+						$('#hd-orgNm').val('');
+						$('#hd-orgId').val('');
+					}else{
+						$("#tf-orgNm").val(selectedItem.orgNm + mint.lb + selectedItem.orgCd  + mint.rb);
+						$("#hd-orgNm").val(selectedItem.orgNm);
+						$("#hd-orgId").val(selectedItem.orgId);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setOrganizationInfo"});
+				}
+			},//end fn_setOrganizationInfo()
+
+            //-----------------------------------------------------------------------
+			// Description :: 시스템 정보 콜백
+			//-----------------------------------------------------------------------
+			fn_setSystemInfo : function(selectedItem) {
+				try {
+					if( mint.common.isEmpty(selectedItem) ) {
+						$('#tf-systemNm').val('');
+						$('#hd-systemNm').val('');
+						$('#hd-systemId').val('');
+					} else {
+						$('#tf-systemNm').val(selectedItem.systemNm +  mint.lb + selectedItem.systemCd + mint.rb);
+						$('#hd-systemNm').val(selectedItem.systemNm);
+						$('#hd-systemId').val(selectedItem.systemId);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSystemInfo"});
+				}
+			},//end fn_setSystemInfo()
+
+            //-----------------------------------------------------------------------
+			// Description :: 업무 정보 콜백
+			//-----------------------------------------------------------------------
+			fn_setBusinessInfo : function(selectedItem) {
+				try {
+					if( mint.common.isEmpty(selectedItem) ) {
+						$('#tf-bizNm').val('');
+						$('#hd-bizNm').val('');
+						$('#hd-bizId').val('');
+					}else{
+						$("#tf-bizNm").val(selectedItem.businessNm  + mint.lb + selectedItem.businessCd  + mint.rb);
+						$("#hd-bizNm").val(selectedItem.businessNm);
+						$("#hd-bizId").val(selectedItem.businessId);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setBusinessInfo"});
+				}
+			}//end fn_setBusinessInfo()
+        }
+    });
+
+
+    //=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 조회 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+    $('.btn-search').on('click', function() {
+        $.main.fn_getData(true);
+    });
+
+	//-----------------------------------------------------------------------
+	// Description :: 초기화 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+    $('.btn-clear').on('click', function() {
+        $.main.fn_clearSearchArea();
+    });
+
+	//-----------------------------------------------------------------------
+	// Description :: 기관  검색에 Click 이벤트 설정 (팝업 오픈)
+	//-----------------------------------------------------------------------
+	$('#tf-orgNm').on('click', function () {
+		mint.common.setScreenParam('callback', '$.main.fn_setOrganizationInfo');
+		mint.common.searchPopup('../sub-co/CO-01-00-902.html','CO-01-00-902');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 시스템 검색 Click 이벤트 (팝업 오픈)
+	//-----------------------------------------------------------------------
+	$('#tf-systemNm').on('click', function () {
+		mint.common.setScreenParam('orgId', $('#tf-orgId_hidden').val());
+		mint.common.setScreenParam('callback', '$.main.fn_setSystemInfo');
+		mint.common.searchPopup('../sub-co/CO-01-00-901.html','CO-01-00-901');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 업무 검색 Click 이벤트 (팝업 오픈)
+	//-----------------------------------------------------------------------
+	$('#tf-bizNm').on('click', function () {
+		mint.common.setScreenParam('callback', '$.main.fn_setBusinessInfo');
+		mint.common.searchPopup('../sub-co/CO-01-00-003.html','CO-01-00-003');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 그리드 Double Click 이벤트 (상세 조회)
+	//-----------------------------------------------------------------------
+    $('#grid-tracking').on("dblclick", "table", function(e) {
+        $.main.fn_showDetailPopup();
+    });
+
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.main.fn_init();
+    mint.label.attachLabel(null);
+
+});
+</script>

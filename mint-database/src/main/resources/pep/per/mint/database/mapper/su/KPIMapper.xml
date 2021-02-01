@@ -1,0 +1,1431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.KPIMapper">
+	<!-- 미사용 인터페이스 -->
+	<select id="getNotUseInterface" parameterType="Map" resultMap="interfaceResultMap">
+	   select
+	   	   a.INTERFACE_ID
+          ,a.INTEGRATION_ID
+          ,a.INTERFACE_NM
+          ,max(cdim1201.NM) as DATA_PR_METHOD_NM
+          ,max(cdim03.NM) as DATA_FREQ_NM
+          <!-- 채널 정보 -->
+          ,max(b.CHANNEL_ID) as CHANNEL_ID
+          ,max(b.CHANNEL_NM) as CHANNEL_NM
+          <!-- 시스템 정보 -->
+          ,max(c.SYSTEM_ID) as SYSTEM_ID
+          ,max(d.SYSTEM_CD) as SYSTEM_CD
+          ,max(d.SYSTEM_NM) as SYSTEM_NM
+          ,c.NODE_TYPE as SYS_NODE_TYPE
+          <!-- 업무(프로세스) -->
+          ,max(g.BUSINESS_ID) as BZ_BUSINESS_ID
+          ,max(g.BUSINESS_CD) as BZ_BUSINESS_CD
+          ,max(g.BUSINESS_NM) as BZ_BUSINESS_NM
+          ,max(h.requirement_id) as "requirementId"
+          from TAN0201 a
+            inner join TIM0002 b on a.CHANNEL_ID = b.CHANNEL_ID
+            inner join TAN0213 c on a.INTERFACE_ID = c.INTERFACE_ID
+            inner join TIM0101 d on c.SYSTEM_ID = d.SYSTEM_ID
+            inner join TAN0218 f on a.INTERFACE_ID = f.INTERFACE_ID <!-- 인터페이스업무맵핑 -->
+            inner join TIM0301 g on f.BUSINESS_ID = g.BUSINESS_ID <!-- 업무 -->
+            inner join tan0101 h on a.interface_id = h.interface_id 
+            left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '12' and DEL_YN = 'N') cdim1201 on a.DATA_PR_METHOD = cdim1201.cd <!-- 데이터처리방식 -->
+            left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '03' and DEL_YN = 'N') cdim03 on a.DATA_FREQ = cdim03.cd <!-- 발생주기명 -->
+        where a.DEL_YN = 'N'
+          and b.DEL_YN = 'N'
+          and c.DEL_YN = 'N'
+          and d.DEL_YN = 'N'
+          and f.DEL_YN = 'N'
+          and h.DEL_YN = 'N'
+          and c.NODE_TYPE = f.NODE_TYPE
+          and c.SEQ = f.SEQ
+
+          and a.INTERFACE_ID in (
+                                    select distinct
+										a.INTERFACE_ID
+									from TAN0101 a
+										inner join (
+											select distinct
+												APPROVAL_ITEM_ID
+											from 
+												TCO0101
+											where 
+													APPROVAL_ITEM_TYPE = '0'
+												and REQ_TYPE = 'I0'
+												and DEL_YN = 'N'
+										) b on b.APPROVAL_ITEM_ID = a.REQUIREMENT_ID
+									where a.DEL_YN = 'N'
+									
+									
+									
+                                    minus
+                                    
+                                    
+                                    select distinct
+                                    	j.INTERFACE_ID
+                                    from 
+                                    (
+                                    	select distinct 
+                                    		INTF_ID
+                                    	from SI_STAT_INTF_MONTH a
+                                    	where a.ST_YEAR||a.ST_MONTH <![CDATA[>=]]> #{searchFromYear}||#{searchFromMonth}
+	    									and a.ST_YEAR||a.ST_MONTH <![CDATA[<=]]> #{searchToYear}||#{searchToMonth}
+                                    ) i 
+                                    inner join (
+                                    	select distinct 
+                                    		  x.INTEGRATION_ID
+                                    		, x.INTERFACE_ID
+                                    	from TAN0201 x, TAN0101 y, TCO0101 z
+                                    	where x.INTERFACE_ID = y.INTERFACE_ID
+                                    		and z.APPROVAL_ITEM_ID = y.REQUIREMENT_ID
+                                    		and z.APPROVAL_ITEM_TYPE = '0'
+                                    		and z.REQ_TYPE = 'I0'
+                                    		and z.DEL_YN = 'N'
+                                    		and y.DEL_YN = 'N'
+                                    ) j on j.INTEGRATION_ID = i.INTF_ID
+                                )
+ 		  <if test="channelId != null and channelId != ''">
+		  and a.CHANNEL_ID = #{channelId}
+		  </if>
+		  <if test="scDataPrMethod != null and scDataPrMethod != ''">
+		  and a.DATA_PR_METHOD = #{scDataPrMethod}
+		  </if>
+		  <if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString())">
+			  <choose>
+			  	<when test="scDataFreq != null and scDataFreq != ''">
+		  and a.DATA_FREQ = #{scDataFreq}
+			  	</when>
+			  	<otherwise>
+		  and a.DATA_FREQ is null
+			  	</otherwise>
+			  </choose>
+		  </if>
+
+		group by
+			  a.INTERFACE_ID 
+			, a.INTEGRATION_ID
+			, a.INTERFACE_NM
+			, c.NODE_TYPE 
+        order by 
+        	  max(c.SEQ)
+        	, c.NODE_TYPE 
+	</select>
+	
+	<resultMap id="interfaceResultMap" type="java.util.LinkedHashMap">
+	
+	   <result column="requirementId" property="requirementId" />
+         
+        <association property="interface" javaType="Interface">
+	        <id property="interfaceId"          column="INTERFACE_ID"/>
+	        <result property="integrationId"    column="INTEGRATION_ID"/>
+	        <result property="interfaceNm"      column="INTERFACE_NM"/>
+	        <result property="dataPrMethodNm"   column="DATA_PR_METHOD_NM"/>
+	        <result property="dataFrequencyNm"  column="DATA_FREQ_NM"/>
+	        
+	        <association property="channel" javaType="Channel">
+	            <id property="channelId"            column="CHANNEL_ID"/>
+	            <result property="channelNm"        column="CHANNEL_NM"/>
+	        </association>
+	        
+	        <!-- <association property="requirement" javaType="Requirement">
+	            <id property="requirementId"        column="REQUIREMENT_ID"/>
+	            <result property="requirementNm"    column="REQUIREMENT_NM"/>
+	        </association> -->
+	        
+	        <collection property="systemList" ofType="System">
+	            <id property="systemId"         column="SYSTEM_ID"/>
+	            <result property="systemCd"     column="SYSTEM_CD"/>
+	            <result property="systemNm"     column="SYSTEM_NM"/>
+	            <result property="nodeType"     column="SYS_NODE_TYPE"/>
+	        </collection>
+	        
+	        <collection property="businessList" ofType="Business">
+	            <id property="businessId"       column="BZ_BUSINESS_ID"/>
+	            <result property="businessCd"   column="BZ_BUSINESS_CD"/>
+	            <result property="businessNm"   column="BZ_BUSINESS_NM"/>
+	        </collection>
+	        
+	        <collection property="senderSystemInfoList" ofType="DisplaySystemInfo">
+	            <discriminator javaType="string" column="SYS_NODE_TYPE">
+	                <case value="0" resultMap="displaySystemInfoResultMap"/>
+	            </discriminator>
+	        </collection>
+	
+	        <collection property="receiverSystemInfoList" ofType="DisplaySystemInfo">
+	            <discriminator javaType="string" column="SYS_NODE_TYPE">
+	                <case value="2" resultMap="displaySystemInfoResultMap"/>
+	            </discriminator>
+	        </collection>
+	    </association>
+    </resultMap>
+    
+    <resultMap type="DisplaySystemInfo" id="displaySystemInfoResultMap">
+        <id property="systemId"         column="SYSTEM_ID"/>
+        <result property="systemCd"     column="SYSTEM_CD"/>
+        <result property="systemNm"     column="SYSTEM_NM"/>
+        <result property="nodeType"     column="SYS_NODE_TYPE"/>
+    </resultMap>
+    
+    <select id="getNoRegInterfacesInfo" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT 
+            to_char(to_date(a.CHECK_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd')          as "checkDate"
+            <!-- , a.INTERFACE_ID      as "interfaceId" --> 
+            , a.INTERFACE_ID      as "integrationId"
+            , a.SOURCE_HOST       as "sourceHost"
+            , a.SOURCE_SERVICE    as "sourceService"
+            , a.TARGET_HOST       as "targetHost"
+            , a.TARGET_SERVICE    as "targetService"
+            , a.TRAN_CNT          as "tranCnt"
+            , a.REG_USER          as "regUser"
+            , a.REG_YN            as "regYn"
+            , to_char(to_date(a.REG_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd')          as "regDate"
+            , a.CF_INTERFACE_ID   as "cfInterfaceId"
+		FROM 
+		  TSU0501 a 
+		WHERE a.CHECK_DATE between #{startDate} and #{endDate} 
+		  <choose>
+		  	<when test="regYn != null and (regYn eq 'N'.toString())">
+		  	and a.REG_YN != 'Y'
+		  	</when>
+		  	<when test="regYn != null and (regYn eq 'Y'.toString())">
+		  	and a.REG_YN = 'Y'
+		  	</when>
+		  	<otherwise>
+		  	</otherwise>
+		  </choose>
+	    ORDER BY a.CHECK_DATE DESC
+    </select> 
+    
+    <update id="updateNoRegInterface" parameterType="Map">
+        UPDATE
+            TSU0501
+        <!-- SET
+            CF_INTERFACE_ID = #{cfInterfaceId}
+            , REG_YN = #{regYn}
+            , REG_USER = #{userId}
+            , REG_DATE = #{regDate} -->
+        <set>
+		<if test="cfInterfaceId != null and cfInterfaceId != ''">CF_INTERFACE_ID = #{cfInterfaceId},</if>
+		<if test="regYn != null and regYn != ''">REG_YN = #{regYn},</if>
+		<if test="userId != null and userId != ''">REG_USER = #{userId},</if>
+		<if test="regDate != null and regDate != ''">REG_DATE = #{regDate}</if>
+		</set>
+        WHERE
+            CHECK_DATE = #{checkDate}
+            AND INTERFACE_ID = #{interfaceId}
+    </update>
+    
+    
+    <select id="getExpectationOfProblems" parameterType="Map" resultType="java.util.LinkedHashMap">
+        select
+            a.alert_date          as "alertDate"
+            , a.interface_id      as "integrationId"
+            , a.subject           as "subject"
+            , a.contents          as "contents"
+        from
+            tsu0502 a
+            inner join 
+                (
+                select
+                    aDate
+                    , interface_id
+                from
+                    (
+                    select
+                        rownum as rnum
+                        , aDate
+                        , interface_id
+                    from
+                        (
+                        select
+                            max(alert_date) as aDate
+                            , interface_id
+                        from
+                            tsu0502
+                        where
+                            alert_date <![CDATA[>=]]> to_char(sysdate - 5/24,'yyyymmdd hh24:mi:ss')
+                        group by interface_id
+                        order by max(alert_date) desc
+                        )
+                    )
+                where
+                    rnum <![CDATA[<=]]> #{searchCnt}
+                ) b on a.alert_date = b.aDate and a.interface_id = b.interface_id
+    </select>
+    
+    
+
+    
+    
+    
+    <!-- KPI 현황 정보 조회 -->
+
+    <!-- 인터페이스 사용율 -->
+    <select id="getUseInterfaceCountRateForMonth" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select 
+    		  categoryId as "categoryId"
+    		, categoryNm as "categoryNm"
+    		<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+    		, nvl(dataFreqCd, ' ') as "dataFreqCd"
+    		, nvl(dataFreqNm, 'N/A') as "dataFreqNm"
+    		</if> 
+    		, totalCnt as "totalCnt"
+    		, notUsedCnt as "notUsedCnt"
+    		, usedCnt as "usedCnt"
+    		, usedRate as "usedRate"
+    		, searchFromPeriod as "searchFromPeriod"
+    		, searchToPeriod as "searchToPeriod"
+    	from (
+    		select
+    			  a.CHANNEL_ID as categoryId
+	    		, a.CHANNEL_NM as categoryNm 
+	    		<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+	    		, b.DATA_FREQ as dataFreqCd
+	    		, (select NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '03' and CD = b.DATA_FREQ) as dataFreqNm
+	    		</if> 
+	    		, nvl(b.cnt, 0) as totalCnt
+	    		, nvl(c.usedCnt, 0) as usedCnt
+	    		, case
+	    			when ((nvl(b.cnt, 0) - nvl(c.usedCnt, 0)) <![CDATA[<]]> 0) then 0
+	    			else (nvl(b.cnt, 0) - nvl(c.usedCnt, 0))
+	    		  end as notUsedCnt
+	    		, case
+	    			when nvl(c.usedCnt, 0) <![CDATA[<]]> 1 or nvl(b.cnt, 0) <![CDATA[<]]> 1 then 0
+	    			else trunc((nvl(c.usedCnt, 0) / nvl(b.cnt, 0)) * 100, 1)
+	    		  end as usedRate
+	    		, #{searchFromYear}||#{searchFromMonth} as searchFromPeriod
+	    		, #{searchToYear}||#{searchToMonth} as searchToPeriod
+	    	from 
+	    		TIM0002 a
+	    		left outer join (
+	    			select 
+		    			  CHANNEL_ID
+		    			<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+		    			, DATA_FREQ
+		    			</if>
+	    				, count(INTERFACE_ID) as cnt
+	    			from 
+	    				(
+	    					select distinct 
+	    						  b1.INTERFACE_ID
+	    						, b2.CHANNEL_ID
+	    						, b2.DATA_FREQ
+							from
+								(
+									select distinct
+										INTERFACE_ID
+									from TAN0101 a
+										inner join (
+											select distinct
+												APPROVAL_ITEM_ID
+											from 
+												TCO0101
+											where 
+													APPROVAL_ITEM_TYPE = '0'
+												and REQ_TYPE = 'I0'
+												and DEL_YN = 'N'
+											) b on b.APPROVAL_ITEM_ID = a.REQUIREMENT_ID
+									where a.DEL_YN = 'N'
+								) b1
+								inner join (
+									select distinct
+										  x.INTERFACE_ID
+										, x.CHANNEL_ID
+										, x.DATA_FREQ
+									from 
+										TAN0201 x, TAN0101 y
+									where x.INTERFACE_ID = y.INTERFACE_ID
+										and y.DEL_YN = 'N'
+										and x.DEL_YN = 'N'
+									<if test="scDataPrMethod != null and (scDataPrMethod != ''.toString())">
+										and x.DATA_PR_METHOD = #{scDataPrMethod} <!-- 배치:0, 온라인:1, 요청:2 -->
+									</if>	 
+									<if test="scDataFreq != null and scDataFreq != ''">
+			    						and x.DATA_FREQ = #{scDataFreq}
+			    					</if>
+								) b2 On b2.INTERFACE_ID = b1.INTERFACE_ID
+	    				)
+	    			group by
+	    				  CHANNEL_ID
+	    			<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+	    				, DATA_FREQ
+	    			</if>	  
+				) b on b.CHANNEL_ID = a.CHANNEL_ID
+	    		left outer join (
+	    			select
+	    				  c2.CHANNEL_ID
+	    			<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+	    				, c2.DATA_FREQ
+	    			</if>
+	    				, count(c1.INTERFACE_ID) as usedCnt
+	    			from 
+	    				(
+	    				  	select distinct
+	    				  		  INTF_ID as INTERFACE_ID
+	    				  	from SI_STAT_INTF_MONTH
+	    				  	where ST_YEAR||ST_MONTH <![CDATA[>=]]> #{searchFromYear}||#{searchFromMonth}
+	    						and ST_YEAR||ST_MONTH <![CDATA[<=]]> #{searchToYear}||#{searchToMonth}
+	    				) c1
+	    				inner join (
+	    					select distinct 
+	    						  x.INTERFACE_ID
+	    						, x.CHANNEL_ID
+	    						, x.DATA_FREQ
+	    						, x.INTEGRATION_ID
+	    					from 
+	    						  TAN0201 x, TAN0101 y, TCO0101 z
+	    					where x.INTERFACE_ID = y.INTERFACE_ID
+	    						and z.APPROVAL_ITEM_ID = y.REQUIREMENT_ID
+	    						and z.APPROVAL_ITEM_TYPE = '0'
+	    						and z.REQ_TYPE = 'I0'
+	    						and z.DEL_YN = 'N'
+	    						and y.DEL_YN = 'N'
+	    						<!-- and x.DEL_YN = 'N' -->
+	    					<if test="scDataPrMethod != null and (scDataPrMethod != ''.toString())">	
+	    						and x.DATA_PR_METHOD = #{scDataPrMethod} <!-- 전체:'', 배치:0, 온라인:1 -->
+	    					</if>	 
+    						<if test="scDataFreq != null and scDataFreq != ''">
+	    						and x.DATA_FREQ = #{scDataFreq}
+	    					</if>
+	    				<!-- ) c2 on c2.INTERFACE_ID = c1.INTERFACE_ID -->
+	    				) c2 on c2.INTEGRATION_ID = c1.INTERFACE_ID
+	    			group by 
+	    				  c2.CHANNEL_ID
+	    			<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+	    				, c2.DATA_FREQ
+	    			</if>
+	    		) c on c.CHANNEL_ID = a.CHANNEL_ID
+	    		<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+   					and c.DATA_FREQ = b.DATA_FREQ 
+   				</if> 
+	    	where a.DEL_YN = 'N'
+	    	<if test="scCategoryId != null and scCategoryId != ''">
+	    		and a.CHANNEL_ID = #{scCategoryId}
+	    	</if>
+	    	group by 
+	    		  a.CHANNEL_ID
+	    		, a.CHANNEL_NM
+	    		, b.cnt
+	    		, c.usedCnt
+	    	<if test="scDataPrMethod != null and (scDataPrMethod eq '0'.toString()) and scMode != null and (scMode eq 'DATA_FREQ'.toString())">
+				, c.DATA_FREQ
+				, b.DATA_FREQ 
+			</if> 
+    	)
+    	order by usedRate desc, categoryId asc
+    	
+    </select>
+    
+    <!-- 인터페이스 등록율 -->
+    <select id="getRegInterfaceCountRateForMonth" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select
+    		  (nvl(a.totalCnt, 0) + nvl(b.noRegCnt, 0)) as "totalCnt"
+    		, nvl(b.noRegCnt, 0) as "noRegCnt"
+    		, nvl(a.totalCnt, 0) as "regedCnt"
+    		, case
+    			when nvl(a.totalCnt, 0) <![CDATA[<]]> 1 then 0
+    			else trunc((nvl(a.totalCnt, 0) / (nvl(a.totalCnt, 0) + nvl(b.noRegCnt, 0)) ) * 100, 1)
+    		  end as "regedRate"
+    		, #{searchFromYear}||#{searchFromMonth} as "searchFromPeriod"
+	    	, #{searchToYear}||#{searchToMonth} as "searchToPeriod"
+    	from
+    		(
+    			select
+    				count(INTERFACE_ID) as totalCnt
+    			from
+    				(
+    					select distinct
+    						INTERFACE_ID
+						from TAN0101 a
+						/* 2016/05/25  삼성전기 요구사항으로 로직 수정, 등록 건수를 이행건수에서 전체건수로 변경.
+							inner join (
+								select distinct
+									APPROVAL_ITEM_ID
+								from 
+									TCO0101
+								where 
+										APPROVAL_ITEM_TYPE = '0'
+									and REQ_TYPE = 'I0'
+									and DEL_YN = 'N'
+						    ) b on b.APPROVAL_ITEM_ID = a.REQUIREMENT_ID
+						*/    
+						where a.DEL_YN = 'N'
+    				)
+    		) a
+    		, (
+    			select
+    				count(INTERFACE_ID) as noRegCnt
+    			from 
+    				TSU0501 
+    			where REG_YN != 'Y'
+    				and CHECK_DATE <![CDATA[>=]]> #{searchFromYear}||#{searchFromMonth}||'01' 
+    				and CHECK_DATE <![CDATA[<=]]> #{searchToYear}||#{searchToMonth}||'31' 
+    		) b
+    </select>
+    
+    <!-- 인터페이스 재사용율 -->
+    <select id="getReusedInterfaceCountRateForYear" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select
+			 a.CHANNEL_ID as "channelId"
+			,a.CHANNEL_NM as "channelNm"
+			,a.CHANNEL_CD as "channelCd"
+			,a.TOT_CNT    as "totalCnt"
+			,NVL(a.REUSE_CNT,0)  as "reusedCnt"
+			,a.REUSE_RATE as "reusedRate"
+		  from (
+			  select 
+				 a.CHANNEL_ID
+				,c.CHANNEL_NM
+				,c.CHANNEL_CD
+				,a.TOT_CNT
+				,b.REUSE_CNT
+				, case
+				  when nvl(b.REUSE_CNT, 0) <![CDATA[<]]> 1 or nvl(a.TOT_CNT, 0) <![CDATA[<]]> 1 then 0
+				  else trunc((nvl(b.REUSE_CNT, 0) / nvl(a.TOT_CNT, 0)) * 100, 1)
+				  end as REUSE_RATE
+			    from (
+			    select
+			    	 b.CHANNEL_ID
+			    	,sum(a.CNT) as TOT_CNT	
+			    	from (
+			    	     select
+			    			distinct a.INTERFACE_ID,
+			    			1 as CNT
+			    		 from TAN0101 a
+			    			  inner join ( 
+			    			    select 
+			    			    	distinct APPROVAL_ITEM_ID 
+			    				from TCO0101
+			    				where
+			    					APPROVAL_ITEM_TYPE = '0'
+			    					and REQ_TYPE = 'I0'
+			    					and DEL_YN = 'N'
+			    			  ) b
+			    		   	  on b.APPROVAL_ITEM_ID = a.REQUIREMENT_ID
+			    		 where 
+			    		 	a.DEL_YN = 'N'
+			    		    and a.INTERFACE_ID is not null
+			        ) a
+			    	inner join TAN0201 b
+			    	   on a.INTERFACE_ID = b.INTERFACE_ID
+			    	group by b.CHANNEL_ID		  
+			  ) a 
+			  left outer join (
+			    select 
+			       a.CHANNEL_ID
+			      ,count(a.INTERFACE_ID) as REUSE_CNT
+			      from (
+			      	select 
+			  	   a.INTERFACE_ID
+			  	  ,a.CONSUMMER_CNT
+			  	  ,c.CHANNEL_ID
+			  	  from (
+			    	select 
+			    	   INTERFACE_ID
+			    	  ,count(SYSTEM_ID) as CONSUMMER_CNT
+			    	  from TAN0213 
+			    	where DEL_YN = 'N'
+			    	  and NODE_TYPE = '0'
+			    	group by INTERFACE_ID 
+			    	having count(SYSTEM_ID) <![CDATA[>]]> 1
+			    ) a
+			  	inner join (
+			  	  	select 
+			  	  		distinct a.INTERFACE_ID 
+			  	    from TAN0101 a
+			  	         inner join (
+			  	         	select
+			  	         		distinct APPROVAL_ITEM_ID 
+			  	         	from TCO0101
+			  	         	where
+					      	 REQ_TYPE = 'I0'
+					      	 and APPROVAL_ITEM_TYPE = '0'
+					      	 and DEL_YN = 'N'	 			  	         		
+			  	          ) b
+			  	          on b.APPROVAL_ITEM_ID = a.REQUIREMENT_ID
+			  	    where
+				  	     a.INTERFACE_ID is not null 
+				  	     and a.DEL_YN = 'N'
+  
+			  	   ) b
+			  	   on a.INTERFACE_ID = b.INTERFACE_ID
+			  	  inner join TAN0201 c
+			  	   on a.INTERFACE_ID = c.INTERFACE_ID
+			  	 ) a
+			  	 group by a.CHANNEL_ID
+			  ) b 	
+			  on a.CHANNEL_ID = b.CHANNEL_ID
+			inner join TIM0002 c on a.CHANNEL_ID = c.CHANNEL_ID
+		) a
+		<if test="channelId != null">
+			where a.CHANNEL_ID = #{channelId}
+		</if>
+		order by a.REUSE_RATE
+
+    </select>
+    <!-- 인터페이스 재사용률 목록 -->
+    <select id="getReusedInterfaceList" parameterType="Map" resultType="java.util.LinkedHashMap">
+			select
+		          a.INTERFACE_ID    as "interfaceId"
+				, c.INTEGRATION_ID  as "integrationId"
+				, c.INTERFACE_NM    as "interfaceNm"
+				, a.CONSUMMER_CNT   as "reusedIntfCnt"
+				, d.CHANNEL_ID      as "channelId"
+				, d.CHANNEL_NM      as "channelNm"
+				, d.CHANNEL_CD      as "channelCd"
+		  	  from (
+		      	select 
+		      	   INTERFACE_ID
+		      	  ,count(SYSTEM_ID) as CONSUMMER_CNT
+		      	  from TAN0213 
+		      	where DEL_YN = 'N'
+		      	  and NODE_TYPE = '0'
+		      	group by INTERFACE_ID 
+		      	having count(SYSTEM_ID) <![CDATA[>]]> 1
+		      ) a
+		  	  inner join (
+		  	     select distinct a.INTERFACE_ID 
+		  	     from TAN0101 a
+		  	          inner join TCO0101 b
+		  	          on b.APPROVAL_ITEM_ID = a.REQUIREMENT_ID
+		  	             and a.INTERFACE_ID is not null 
+		  	             and a.DEL_YN = 'N'
+		      	         and b.REQ_TYPE = 'I0'
+		      	         and b.APPROVAL_ITEM_TYPE = '0'
+		      	         and b.DEL_YN = 'N'
+		      	 where 
+		      	     a.INTERFACE_ID is not null
+		      	     and a.DEL_YN = 'N'         	   
+		  	 ) b
+		  	 on a.INTERFACE_ID = b.INTERFACE_ID
+		  	 inner join TAN0201 c
+		  	 on a.INTERFACE_ID = c.INTERFACE_ID
+		     inner join TIM0002 d 
+		     on d.CHANNEL_ID = c.CHANNEL_ID  	   
+		        and d.CHANNEL_ID = #{channelId}
+
+    </select>    
+    
+    <!-- 인터페이스 처리 현황 -->
+    <select id="getStatusInterfaceCountRate" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select 
+		    nvl(d.totalCnt, 0) as "totalCnt"
+		  , nvl(d.errorCnt, 0) as "errorCnt"
+		  , nvl(d.finishedCnt, 0) as "finishedCnt"
+		  , case 
+		      when nvl(d.totalCnt, 0) <![CDATA[<]]> 1 then 0
+		      else trunc( (nvl(d.errorCnt, 0) / nvl(d.totalCnt, 0)) * 100 , 1)
+		    end as "errorRate"
+		  , case
+		      when nvl(d.totalCnt, 0) <![CDATA[<]]> 1 then 0
+		      else trunc( (nvl(d.finishedCnt, 0) / nvl(d.totalCnt, 0)) * 100 , 1)
+		    end as "finishedRate"
+		  , c.CHANNEL_ID as "channelId"
+		  , c.CHANNEL_NM as "channelNm"
+		  , #{searchYear} as "searchYear"
+		  , #{searchMonth} as "searchMonth"
+		  <if test="searchDay != null and searchDay != ''">
+		  , #{searchDay} as "searchDay"
+		  </if>
+		from 
+		  tim0002 c
+		  left outer join 
+		  (
+		    select 
+		        (sum(ST_SEND_ERR + ST_RECV_ERR) + sum(ST_PROCESSING) + sum(ST_FINISHED)) as totalCnt
+		      , (sum(ST_SEND_ERR + ST_RECV_ERR) + sum(ST_PROCESSING)) as errorCnt
+		      , sum(ST_FINISHED) as finishedCnt
+		      , b.CHANNEL_ID
+		    from 
+		      (
+		        select 
+		            INTF_ID
+		          , nvl(ST_SEND_ERR, 0) as ST_SEND_ERR
+		          , nvl(ST_RECV_ERR, 0) as ST_RECV_ERR
+		          , nvl(ST_PROCESSING, 0) as ST_PROCESSING
+		          , nvl(ST_FINISHED, 0) as ST_FINISHED
+		        from
+		          SI_STAT_INTF_HOUR
+		        where ST_YEAR = #{searchYear}
+		          and ST_MONTH = #{searchMonth}
+		          <if test="searchDay != null and searchDay != ''">
+		          and ST_DAY = #{searchDay}
+		          </if>
+		      ) a
+		      inner join (
+		        select
+		              b1.INTERFACE_ID
+		            , b1.CHANNEL_ID
+		            , b1.INTEGRATION_ID
+		        from 
+		            TAN0201 b1
+		        where
+		            b1.DEL_YN = 'N'
+		      <!-- ) b on b.INTERFACE_ID = a.INTF_ID -->
+		      ) b on b.INTEGRATION_ID = a.INTF_ID
+		      group by 
+		        b.CHANNEL_ID
+		  ) d on d.CHANNEL_ID = c.CHANNEL_ID
+		where c.DEL_YN = 'N'
+    </select>
+    
+    
+    <!-- CPU 현황 -->
+    <select id="getOverUsageCountForCPU" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select
+    		  a.SYSTEM as "systemNm"
+    		, a.IP as "systemIp"
+    		, count(B.CPU) as "occurCnt"
+		From 
+		  DB_SYSTEM_INFO a
+		  left outer join (
+		    select 
+		    	  IP
+		   		, CPU
+		    from
+		      	DB_SYSTEM_LOG
+		    where DATETIME >= #{searchDate}||'000000' 
+		      and to_number(CPU) > #{searchOverUsage}
+		  ) b On a.IP = b.IP 
+		group by A.SYSTEM, a.IP
+		order by count(b.CPU) desc
+
+    </select>
+    
+    <!-- Memory 현황 -->
+    <select id="getOverUsageCountForMEMORY" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select
+    		  a.SYSTEM as "systemNm"
+    		, a.IP as "systemIp"
+    		, count(B.MEM) as "occurCnt"
+		From 
+		  DB_SYSTEM_INFO a
+		  left outer join (
+		    select 
+		    	  IP
+		   		, MEM
+		    from
+		      	DB_SYSTEM_LOG
+		    where DATETIME >= #{searchDate}||'000000' 
+		      and to_number(MEM) > #{searchOverUsage}
+		  ) b On a.IP = b.IP 
+		group by A.SYSTEM, a.IP
+		order by count(b.MEM) desc
+
+    </select>
+
+    <!-- 납기준수율 -->
+    <select id="getStatusRequirementComplyRate" parameterType="Map" resultType="java.util.LinkedHashMap">
+		select
+			 a.CD             as "statusId"
+			,a.NM             as "statusNm"
+			,a.FIN_CNT        as "finishCnt"
+			,a.DELAY_FIN_CNT  as "delayedFinishCnt"
+			,a.ING_CNT        as "ingCnt"
+			,a.DELAY_CNT      as "delayCnt"
+			,a.TOT_CNT        as "totalCnt"
+			,trunc(100 * (a.FIN_CNT + a.DELAY_FIN_CNT + a.ING_CNT) / a.TOT_CNT, 0) as "finishRate"
+		from (
+			select
+				 a.CD
+				,decode(a.CD,'0','개발','1','테스트','2','이행') as NM
+				,sum(a.FIN_CNT)       as FIN_CNT
+				,sum(a.DELAY_FIN_CNT) as DELAY_FIN_CNT
+				,sum(a.ING_CNT)       as ING_CNT
+				,sum(a.DELAY_CNT)     as DELAY_CNT
+				,( 
+				  SELECT COUNT(A.INTERFACE_ID) 
+				  FROM (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE DEL_YN='N' and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' ) ) A 
+				       INNER JOIN (SELECT * FROM TAN0201 WHERE DEL_YN='N') B 
+				       ON A.INTERFACE_ID = B.INTERFACE_ID
+				 ) AS TOT_CNT
+				--,(select count(*) from TAN0101 where DEL_YN = 'N') as TOT_CNT
+				--,sum(a.FIN_CNT + a.DELAY_FIN_CNT + a.ING_CNT + a.DELAY_CNT) as TOT_CNT
+			  from (
+					-----------
+					-- DEV
+					-----------
+					select
+						'0' as CD
+						,case
+						when DEV_EXP_YMD <![CDATA[>=]]> DEV_FIN_YMD  then 1
+						else 0
+						end as FIN_CNT
+						,case
+						when DEV_EXP_YMD <![CDATA[<]]> DEV_FIN_YMD then 1
+						else 0
+						end as DELAY_FIN_CNT
+						,0 as ING_CNT
+						,0 as DELAY_CNT
+					from TAN0101 a
+					     inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+					     on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+					where DEL_YN = 'N'
+					  and DEV_FIN_YMD is not null
+					  and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )					  
+					  
+					union all
+					select
+						'0' as CD
+						,0 as FIN_CNT
+						,0 as DELAY_FIN_CNT
+						,case
+						when DEV_EXP_YMD <![CDATA[>=]]> to_char(sysdate,'YYYYMMDD') then 1
+						else 0
+						end as ING_CNT
+						,case
+						when DEV_EXP_YMD <![CDATA[<]]> to_char(sysdate,'YYYYMMDD') then 1
+						else 0
+						end as DELAY_CNT
+					from TAN0101 a
+					     inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+					     on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+					where DEL_YN = 'N'
+					  and DEV_FIN_YMD is null
+					  and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )					  
+					  
+					union all
+					-----------
+					-- TEST
+					-----------
+					select
+						'1' as CD
+						,case
+						when TEST_EXP_YMD <![CDATA[>=]]> TEST_FIN_YMD  then 1
+						else 0
+						end as FIN_CNT
+						,case
+						when TEST_EXP_YMD <![CDATA[<]]> TEST_FIN_YMD then 1
+						else 0
+						end as DELAY_FIN_CNT
+						,0 as ING_CNT
+						,0 as DELAY_CNT
+					from TAN0101 a
+					     inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+					     on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+					where DEL_YN = 'N'
+					  and TEST_FIN_YMD is not null
+					  and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )					  
+					  
+					union all
+					select
+						'1' as CD
+						,0 as FIN_CNT
+						,0 as DELAY_FIN_CNT
+						,case
+						when TEST_EXP_YMD <![CDATA[>=]]> to_char(sysdate,'YYYYMMDD') then 1
+						else 0
+						end as ING_CNT
+						,case
+						when TEST_EXP_YMD <![CDATA[<]]> to_char(sysdate,'YYYYMMDD') then 1
+						else 0
+						end as DELAY_CNT
+					from TAN0101 a
+					     inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+					     on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+					where DEL_YN = 'N'
+					  and TEST_FIN_YMD is null
+					  and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )					  
+					  
+					  --and DEV_FIN_YMD is not null
+					union all
+					-----------
+					-- REAL
+					-----------
+					select
+						'2' as CD
+						,case
+						when REAL_EXP_YMD <![CDATA[>=]]> REAL_FIN_YMD then 1
+						else 0
+						end as FIN_CNT
+						,case
+						when REAL_EXP_YMD <![CDATA[<]]> REAL_FIN_YMD then 1
+						else 0
+						end as DELAY_FIN_CNT
+						,0 as ING_CNT
+						,0 as DELAY_CNT
+					from TAN0101 a
+					     inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+					     on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+					where DEL_YN = 'N'
+					  and REAL_FIN_YMD is not null
+					  and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )					  
+					  
+					union all
+					select
+						'2' as CD
+						,0 as FIN_CNT
+						,0 as DELAY_FIN_CNT
+						,case
+						when REAL_EXP_YMD <![CDATA[>=]]> to_char(sysdate,'YYYYMMDD') then 1
+						else 0
+						end as ING_CNT
+						,case
+						when REAL_EXP_YMD <![CDATA[<]]> to_char(sysdate,'YYYYMMDD') then 1
+						else 0
+						end as DELAY_CNT
+					from TAN0101 a
+					     inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+					     on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+					where DEL_YN = 'N'
+					  and REAL_FIN_YMD is null
+					  and STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )					  
+					  
+					  --and DEV_FIN_YMD is not null
+					  --and TEST_FIN_YMD is not null
+				) a
+			group by a.CD
+		) a
+		<if test="statusId != null">
+			where a.CD = #{statusId}
+		</if>
+		order by a.CD
+	</select>
+	
+	<!-- 납기 준수율 :: 지연 목록 조회 -->
+	<select id="getRequirementNotComplyList" resultMap="requirementNotComplyResultMapForList">
+		select
+			 a.REQUIREMENT_ID
+			,a.REQUIREMENT_NM
+			,a.STATUS
+			,b.NM as STATUS_NM
+			,a.BUSINESS_ID
+			,a.BUSINESS_NM
+			,a.BUSINESS_CD
+			,a.INTERFACE_ID
+			,a.INTEGRATION_ID
+			,a.INTERFACE_NM
+			,a.CHANNEL_ID
+			,a.CHANNEL_NM
+			,a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+			,a.SEQ as SYS_SEQ
+			,a.NODE_TYPE as SYS_NODE_TYPE
+			,c.NM as SYS_NODE_TYPE_NM
+			,a.SERVICE
+			,a.RESOURCE_TYPE
+			,d.NM as RESOURCE_NM
+
+		from (
+			select
+				 a.REQUIREMENT_ID
+				,a.REQUIREMENT_NM
+				,a.STATUS
+				,b.BUSINESS_ID
+				,b.BUSINESS_NM
+				,b.BUSINESS_CD
+				,c.INTERFACE_ID
+				,c.INTEGRATION_ID
+				,c.INTERFACE_NM
+				,c.SYSTEM_ID
+				,c.SYSTEM_NM
+				,c.SYSTEM_CD
+				,c.SEQ
+				,c.NODE_TYPE
+				,c.SERVICE
+				,c.RESOURCE_TYPE
+				,e.CHANNEL_ID
+				,e.CHANNEL_NM
+			from ( select a.* 
+			       from TAN0101 a
+			            inner join ( select INTERFACE_ID, MAX(REG_DATE) as REG_DATE from TAN0101 where DEL_YN='N' group by INTERFACE_ID ) b
+			            on a.INTERFACE_ID = b.INTERFACE_ID and a.REG_DATE = b.REG_DATE
+                 ) a
+			     inner join TIM0301 b on a.BUSINESS_ID = b.BUSINESS_ID
+			     and a.DEL_YN = 'N'
+			     and a.STATUS not in ('C0', 'C1', 'C2', 'C3', 'C4', 'E0', 'E1', 'E2', 'E3', 'E4' )
+		<choose>
+			<when test="statusId != null and (statusId eq '0'.toString())">
+				and a.DEV_FIN_YMD is NULL
+				and a.DEV_EXP_YMD <![CDATA[<]]> to_char(sysdate,'YYYYMMDD')
+			</when>
+			<when test="statusId != null and (statusId eq '1'.toString())">
+				--and a.DEV_FIN_YMD is not NULL
+				and a.TEST_FIN_YMD is NULL
+				and a.TEST_EXP_YMD <![CDATA[<]]>to_char(sysdate,'YYYYMMDD')
+			</when>
+			<when test="statusId != null and (statusId eq '2'.toString())">
+				--and a.DEV_FIN_YMD is not NULL
+				--and a.TEST_FIN_YMD is not NULL
+				and a.REAL_FIN_YMD is NULL
+				and a.REAL_EXP_YMD <![CDATA[<]]> to_char(sysdate,'YYYYMMDD')
+			</when>
+			<otherwise>
+
+			</otherwise>
+
+		</choose>
+
+			 left outer join (
+				select
+					 a.SYSTEM_ID
+					,a.SYSTEM_NM
+					,a.SYSTEM_CD
+					,b.INTERFACE_ID
+					,c.INTEGRATION_ID
+					,c.INTERFACE_NM
+					,b.SEQ
+					,b.NODE_TYPE
+					,b.SERVICE
+					,b.RESOURCE_TYPE
+				 from TAN0213 b
+				 inner join TIM0101 a on a.SYSTEM_ID = b.SYSTEM_ID and a.GRP_YN = 'N'
+				 inner join TAN0201 c on c.INTERFACE_ID = b.INTERFACE_ID
+				 where b.DEL_YN = 'N'
+			) c on a.INTERFACE_ID = c.INTERFACE_ID
+			left outer join TAN0201 d on d.INTERFACE_ID = a.INTERFACE_ID
+			inner join TIM0002 e
+			   on d.CHANNEL_ID = e.CHANNEL_ID
+			  and e.DEL_YN = 'N'
+		) a
+		left outer join (select CD, NM from TSU0301 where LEVEL1 = 'AN' and LEVEL2 = '01') b on a.STATUS = b.cd
+		left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '08') c on a.NODE_TYPE = c.cd
+		left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '04') d on a.RESOURCE_TYPE = d.cd
+		where 1 = 1
+		order by a.CHANNEL_NM, 	a.BUSINESS_NM, 	a.REQUIREMENT_NM, a.INTERFACE_NM, a.STATUS
+	</select>
+
+    
+    <resultMap id="requirementNotComplyResultMapForList" type="Requirement">
+		<id property="requirementId" 		column="REQUIREMENT_ID"/>
+		<result property="requirementNm" 	column="REQUIREMENT_NM"/>
+		<result property="status" 			column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+
+		<association property="business" javaType="Business">
+			<id property="businessId" 		column="BUSINESS_ID"/>
+			<result property="businessNm" 	column="BUSINESS_NM"/>
+			<result property="businessCd" 	column="BUSINESS_CD"/>
+		</association>
+
+		<association property="interfaceInfo" javaType="Interface">
+			<id property="interfaceId" 		column="INTERFACE_ID"/>
+			<result property="integrationId" 	column="INTEGRATION_ID"/>
+			<result property="interfaceNm" 	column="INTERFACE_NM"/>
+
+			<association property="channel" javaType="Channel">
+				<id property="channelId"		column="CHANNEL_ID"/>
+				<result property="channelNm" 	column="CHANNEL_NM"/>
+			</association>
+
+
+			<collection property="systemList" ofType="System">
+				<id property="systemId" 		column="SYSTEM_ID"/>
+				<id property="seq" 				column="SYS_SEQ"/>
+				<result property="systemCd" 	column="SYSTEM_CD"/>
+				<result property="systemNm" 	column="SYSTEM_NM"/>
+				<result property="nodeType" 	column="SYS_NODE_TYPE"/>
+				<result property="nodeTypeNm" 	column="SYS_NODE_TYPE_NM"/>
+				<result property="service" 		column="SERVICE"/>
+				<result property="resourceCd" 	column="RESOURCE_TYPE"/>
+				<result property="resourceNm" 	column="RESOURCE_NM"/>
+			</collection>
+
+
+			<collection property="senderSystemInfoList" ofType="DisplaySystemInfo">
+				<discriminator javaType="string" column="SYS_NODE_TYPE">
+					<case value="0" resultMap="displaySystemInfoNotComplyResultMap"/>
+				</discriminator>
+			</collection>
+
+			<collection property="receiverSystemInfoList" ofType="DisplaySystemInfo">
+				<discriminator javaType="string" column="SYS_NODE_TYPE">
+					<case value="2" resultMap="displaySystemInfoNotComplyResultMap"/>
+				</discriminator>
+			</collection>
+
+		</association>
+	</resultMap>	
+	
+
+	<!--
+    <select id="getStatusRequirementComplyRate" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	SELECT
+    		  STATUS_ID as "statusId"
+		    , STATUS_NM as "statusNm"
+		    , FINISHED_C_CNT as "finished_c_Cnt"
+		    , FINISHED_D_CNT as "finished_d_Cnt"
+		    , TOTAL_CNT as "totalCnt"
+		    , case
+		        when (FINISHED_C_CNT <![CDATA[<]]> 1) or (TOTAL_CNT <![CDATA[<]]> 1) then 0
+		        else TRUNC( (FINISHED_C_CNT / TOTAL_CNT) * 100, 1)
+		      end as "complyRate"
+		from (
+		    select
+		          STATUS_ID
+		        , STATUS_NM
+		        , nvl(min(decode(STATUS_TYPE, 'FINISHED_C', cnt)), 0) as FINISHED_C_CNT
+		        , nvl(min(decode(status_type, 'FINISHED_D', cnt)), 0) as FINISHED_D_CNT
+		        , nvl(min(decode(status_type, 'FINISHED_C', cnt)), 0)
+		         + nvl(min(decode(status_type, 'FINISHED_D', cnt)), 0) as TOTAL_CNT
+		    from (
+		    	<if test="scCategoryId != null and (scCategoryId eq 'DEV'.toString() or scCategoryId eq 'ALL'.toString())">
+		        select
+		              STATUS_TYPE
+		            , 'DEV' as STATUS_ID
+		            , '개발' as STATUS_NM
+		            , COUNT(STATUS_TYPE) as CNT
+		        from (
+		            select
+		                case
+                            when a.DEV_FIN_YMD is null then 'ERROR'
+                            else
+                                case
+                                    when a.DEV_EXP_YMD <![CDATA[<]]> a.DEV_FIN_YMD then 'FINISHED_D'
+                                    else 'FINISHED_C'
+                                end
+                        end as STATUS_TYPE
+		            from
+		            	  TAN0101 a
+
+		            where a.DEL_YN = 'N'
+		            and a.DEV_EXP_YMD is not null
+
+		        )
+		        group by
+		            STATUS_TYPE
+		        </if>
+		        <if test="scCategoryId != null and (scCategoryId eq 'ALL'.toString())">
+		        union all
+		        </if>
+		        <if test="scCategoryId != null and (scCategoryId eq 'TEST'.toString() or scCategoryId eq 'ALL'.toString())">
+		        select
+		              STATUS_TYPE
+		            , 'TEST' as STATUS_ID
+		            , '테스트' as STATUS_NM
+		            , COUNT(STATUS_TYPE) as CNT
+		        from (
+		            select
+		                case
+                            when a.TEST_FIN_YMD is null then 'ERROR'
+                            else
+                                case
+                                    when a.TEST_EXP_YMD <![CDATA[<]]> a.TEST_FIN_YMD then 'FINISHED_D'
+                                    else 'FINISHED_C'
+                                end
+                        end as STATUS_TYPE
+		            from
+		            	  TAN0101 a
+
+		            where a.DEL_YN = 'N'
+		            and a.TEST_EXP_YMD is not null
+
+		        )
+		        group by
+		            STATUS_TYPE
+		        </if>
+		        <if test="scCategoryId != null and (scCategoryId eq 'ALL'.toString())">
+		        union all
+		        </if>
+		        <if test="scCategoryId != null and (scCategoryId eq 'REAL'.toString() or scCategoryId eq 'ALL'.toString())">
+		        select
+		              STATUS_TYPE
+		            , 'REAL' as STATUS_ID
+		            , '이행' as STATUS_NM
+		            , COUNT(STATUS_TYPE) as CNT
+		        from (
+		            select
+		                case
+                            when a.REAL_FIN_YMD is null then 'ERROR'
+                            else
+                                case
+                                    when a.REAL_EXP_YMD <![CDATA[<]]> a.REAL_FIN_YMD then 'FINISHED_D'
+                                    else 'FINISHED_C'
+                                end
+                        end as STATUS_TYPE
+		            from
+		            	  TAN0101 a
+
+		            where a.DEL_YN = 'N'
+		            and a.REAL_EXP_YMD is not null
+
+		        )
+		        group by
+		            STATUS_TYPE
+		        </if>
+		    )
+		    group by
+		    	  STATUS_NM
+		    	, STATUS_ID
+		)
+    </select>
+    -->
+    
+    <!-- 납기 지연(미준수) 요건 리스트 조회 -->
+	<!--
+    <select id="getRequirementNotComplyList" resultMap="requirementNotComplyResultMapForList">
+    	select
+		     a.REQUIREMENT_ID
+		    ,a.REQUIREMENT_NM
+		    ,a.STATUS
+		    ,b.NM as STATUS_NM
+		    ,a.BUSINESS_ID
+		    ,a.BUSINESS_NM
+		    ,a.BUSINESS_CD
+		    ,a.INTERFACE_ID
+		    ,a.INTEGRATION_ID
+		    ,a.INTERFACE_NM
+		    ,a.CHANNEL_ID
+		    ,a.CHANNEL_NM
+		    ,a.SYSTEM_ID
+		    ,a.SYSTEM_NM
+		    ,a.SYSTEM_CD
+		    ,a.SEQ as SYS_SEQ
+		    ,a.NODE_TYPE as SYS_NODE_TYPE
+		    ,c.NM as SYS_NODE_TYPE_NM
+		    ,a.SERVICE
+		    ,a.RESOURCE_TYPE
+		    ,d.NM as RESOURCE_NM
+
+		  from (
+		      select
+		         a.REQUIREMENT_ID
+		        ,a.REQUIREMENT_NM
+		        ,a.STATUS
+		        ,b.BUSINESS_ID
+		        ,b.BUSINESS_NM
+		        ,b.BUSINESS_CD
+		        ,c.INTERFACE_ID
+		        ,c.INTEGRATION_ID
+		        ,c.INTERFACE_NM
+		        ,c.SYSTEM_ID
+		        ,c.SYSTEM_NM
+		        ,c.SYSTEM_CD
+		        ,c.SEQ
+		        ,c.NODE_TYPE
+		        ,c.SERVICE
+		        ,c.RESOURCE_TYPE
+		        ,e.CHANNEL_ID
+		        ,e.CHANNEL_NM
+		      from TAN0101 a
+		        inner join TIM0301 b on a.BUSINESS_ID = b.BUSINESS_ID
+		        left outer join (
+		              select
+		                 a.SYSTEM_ID
+		                ,a.SYSTEM_NM
+		                ,a.SYSTEM_CD
+		                ,b.INTERFACE_ID
+		                ,c.INTEGRATION_ID
+		                ,c.INTERFACE_NM
+		                ,b.SEQ
+		                ,b.NODE_TYPE
+		                ,b.SERVICE
+		                ,b.RESOURCE_TYPE
+		              from TAN0213 b
+		                inner join TIM0101 a on a.SYSTEM_ID = b.SYSTEM_ID and a.GRP_YN = 'N'
+		                inner join TAN0201 c on c.INTERFACE_ID = b.INTERFACE_ID
+		              where b.DEL_YN = 'N'
+		            ) c on a.INTERFACE_ID = c.INTERFACE_ID
+		        left outer join TAN0201 d on d.INTERFACE_ID = a.INTERFACE_ID
+		        inner join (
+		          select
+		             CHANNEL_ID
+		            ,CHANNEL_NM
+		            from TIM0002
+		           where DEL_YN = 'N'
+		        ) e on d.CHANNEL_ID = e.CHANNEL_ID
+		        , (
+		          select
+		              TO_CHAR(TRUNC(TO_DATE(to_char(sysdate, 'YYYYMMDD'),'yyyymmdd'),'q'),'yyyymmdd') as SEARCH_FROM
+		            , TO_CHAR(ADD_MONTHS(TRUNC(TO_DATE(to_char(sysdate, 'YYYYMMDD'),'yyyymmdd'),'q'), 3)-1,'yyyymmdd') as SEARCH_TO
+		          from dual
+		        ) z
+		      WHERE a.DEL_YN = 'N'
+		      and (rpad(a.DEV_EXP_YMD, 17, '0') between z.SEARCH_FROM||'000000000' and z.SEARCH_TO||'235959999'
+				    or rpad(a.DEV_FIN_YMD, 17, '0') between z.SEARCH_FROM||'000000000' and z.SEARCH_TO||'235959999'
+				    or rpad(a.TEST_EXP_YMD, 17, '0') between z.SEARCH_FROM||'000000000' and z.SEARCH_TO||'235959999'
+				    or rpad(a.TEST_FIN_YMD, 17, '0') between z.SEARCH_FROM||'000000000' and z.SEARCH_TO||'235959999'
+				    or rpad(a.REAL_EXP_YMD, 17, '0') between z.SEARCH_FROM||'000000000' and z.SEARCH_TO||'235959999'
+				    or rpad(a.REAL_FIN_YMD, 17, '0') between z.SEARCH_FROM||'000000000' and z.SEARCH_TO||'235959999'
+			    )
+		      <if test="scCategoryId != null and (scCategoryId eq 'DEV'.toString())">
+		      and a.DEV_EXP_YMD is not null
+		      and a.DEV_FIN_YMD is not null
+		      and a.DEV_EXP_YMD <![CDATA[<]]> a.DEV_FIN_YMD
+		      </if>
+		      <if test="scCategoryId != null and (scCategoryId eq 'TEST'.toString())">
+		      and a.TEST_EXP_YMD is not null
+		      and a.TEST_FIN_YMD is not null
+		      and a.TEST_EXP_YMD <![CDATA[<]]> a.TEST_FIN_YMD
+		      </if>
+		      <if test="scCategoryId != null and (scCategoryId eq 'REAL'.toString())">
+		      and a.REAL_EXP_YMD is not null
+		      and a.REAL_FIN_YMD is not null
+		      and a.REAL_EXP_YMD <![CDATA[<]]> a.REAL_FIN_YMD
+		      </if>
+		    ) a
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'AN' and LEVEL2 = '01') b on a.STATUS = b.cd
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '08') c on a.NODE_TYPE = c.cd
+		    left outer join (select CD, NM from TSU0301 where LEVEL1 = 'IM' and LEVEL2 = '04') d on a.RESOURCE_TYPE = d.cd
+		where 1 = 1
+		order by a.CHANNEL_NM, 	a.BUSINESS_NM, 	a.REQUIREMENT_NM, a.INTERFACE_NM, a.STATUS
+    </select>
+	-->
+
+
+	<resultMap type="DisplaySystemInfo" id="displaySystemInfoNotComplyResultMap">
+		<id property="systemId" 		column="SYSTEM_ID"/>
+		<id property="seq" 				column="SYS_SEQ"/>
+		<result property="systemCd" 	column="SYSTEM_CD"/>
+		<result property="systemNm" 	column="SYSTEM_NM"/>
+		<result property="nodeType" 	column="SYS_NODE_TYPE"/>
+		<result property="nodeTypeNm" 	column="SYS_NODE_TYPE_NM"/>
+		<result property="service" 		column="SERVICE"/>
+		<result property="resourceCd" 	column="RESOURCE_TYPE"/>
+		<result property="resourceNm" 	column="RESOURCE_NM"/>
+		<result property="businessId" 	column="BZ_BUSINESS_ID"/>
+		<result property="businessCd" 	column="BZ_BUSINESS_CD"/>
+		<result property="businessNm" 	column="BZ_BUSINESS_NM"/>
+	</resultMap>
+	
+    
+
+
+    <!-- KPI - 운영관리지표 - CPU/MEMORY 현황 : 서버 정보 조회 -->
+    <select id="getServerInfoForResourceCheck" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select 
+    		  IP as "systemIp"
+    		, SYSTEM as "systemNm"
+    	from 
+    		DB_SYSTEM_INFO
+    </select>
+    
+    <!-- KPI - 운영관리지표 - CPU/MEMORY 현황 : 그리드 출력 정보 조회 -->
+    <select id="getOverUsageServerList" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select 
+    		  a.IP as "systemIp"
+    		, b.SYSTEM as "systemNm"
+    		<choose>
+    			<when test="scCategory != null and (scCategory eq 'MEMORY'.toString())">
+    		, a.MEM as "usageRate"
+    			</when>
+    			<otherwise>
+    		, a.CPU as "usageRate"
+    			</otherwise>
+    		</choose>
+    		, a.datetime as "occurDateTime"
+    	from 
+    		DB_SYSTEM_LOG a
+    		left outer join DB_SYSTEM_INFO b on b.IP = a.IP
+    	where a.IP = #{scAPServer}
+    		and a.DATETIME between #{scPeriodFrom} and #{scPeriodTo}
+    		<choose>
+    			<when test="scCategory != null and (scCategory eq 'MEMORY'.toString())">
+    		and to_number(a.MEM) <![CDATA[>=]]> #{scOverUsage}
+    			</when>
+    			<otherwise>
+    		and to_number(a.CPU) <![CDATA[>=]]> #{scOverUsage}
+    			</otherwise>
+    		</choose>
+    	order by a.DATETIME asc
+    </select>
+    
+    <!-- KPI - 운영관리지표 - CPU/MEMORY 현황 : 그리드 출력 정보 조회 -->
+    <select id="getOverUsageListForChart" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	select 
+    		  a.CHK_HOUR as "occurHour"
+    		, nvl(b.USAGE_MIN, 0) as "usageMin"
+    		, nvl(b.USAGE_MAX, 0) as "usageMax"
+    		, nvl(b.USAGE_AVG, 0) as "usageAvg"
+    	from (
+    		select CHK_HOUR
+    		from (
+    			select '00' as CHK_HOUR from dual
+				union all select '01' as CHK_HOUR from dual
+				union all select '02' as CHK_HOUR from dual
+				union all select '03' as CHK_HOUR from dual
+				union all select '04' as CHK_HOUR from dual
+				union all select '05' as CHK_HOUR from dual
+				union all select '06' as CHK_HOUR from dual
+				union all select '07' as CHK_HOUR from dual
+				union all select '08' as CHK_HOUR from dual
+				union all select '09' as CHK_HOUR from dual
+				union all select '10' as CHK_HOUR from dual
+				union all select '11' as CHK_HOUR from dual
+				union all select '12' as CHK_HOUR from dual
+				union all select '13' as CHK_HOUR from dual
+				union all select '14' as CHK_HOUR from dual
+				union all select '15' as CHK_HOUR from dual
+				union all select '16' as CHK_HOUR from dual
+				union all select '17' as CHK_HOUR from dual
+				union all select '18' as CHK_HOUR from dual
+				union all select '19' as CHK_HOUR from dual
+				union all select '20' as CHK_HOUR from dual
+				union all select '21' as CHK_HOUR from dual
+				union all select '22' as CHK_HOUR from dual
+				union all select '23' as CHK_HOUR from dual
+    		)
+    		where CHK_HOUR between #{scPeriodFromHour} and #{scPeriodToHour}
+    	) a left outer join (
+    		select 
+    			  substr(DATETIME, 9, 2) as OCCUR_HOUR
+    		<choose>
+    			<when test="scCategory != null and (scCategory eq 'MEMORY'.toString())">
+    			, min(to_number(MEM)) as USAGE_MIN
+    			, max(to_number(MEM)) as USAGE_MAX
+    			, round(sum(to_number(MEM)) / count(*), 1) as USAGE_AVG
+    			</when>
+    			<otherwise>
+    			, min(to_number(CPU)) as USAGE_MIN
+    			, max(to_number(CPU)) as USAGE_MAX
+    			, round(sum(to_number(CPU)) / count(*), 1) as USAGE_AVG
+    			</otherwise>
+    		</choose>
+    		from 
+    			DB_SYSTEM_LOG
+    		where IP = #{scAPServer}
+    			and DATETIME between #{scPeriodFrom} and #{scPeriodTo}
+    		group by 
+    			  substr(DATETIME, 9, 2)
+    	) b on b.OCCUR_HOUR = a.CHK_HOUR
+    	order by a.CHK_HOUR asc
+    </select>
+    
+    
+    <!-- KPI :: 인터페이스 비율 -->
+    <select id="getInterfaceRate" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT
+		   DATA_PR_METHOD
+		  ,( SELECT NM 
+		     FROM TSU0301
+		     WHERE 
+		      LEVEL1='IM' 
+		      AND LEVEL2='12' 
+		      AND CD = A.DATA_PR_METHOD 
+		   ) AS DATA_PR_METHOD_NM
+		  ,COUNT(DATA_PR_METHOD) AS COUNT
+		FROM (SELECT * FROM TAN0201 WHERE DEL_YN='N') A
+		     INNER JOIN ( SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE DEL_YN='N' ) B
+		     ON A.INTERFACE_ID = B.INTERFACE_ID
+		GROUP BY DATA_PR_METHOD
+    </select>
+    
+    <!-- KPI :: 인터페이스 최초 등록 일 조회 -->
+    <select id="getInterfaceBeginRegDate" resultType="String">
+		SELECT SUBSTR(MIN(REG_DATE),0,8) AS REG_DATE FROM TAN0101 WHERE DEL_YN='N' 
+    </select>
+    
+    <!-- KPI :: 데이터 사이즈 -->
+    <select id="getDataSize" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT
+		   B.CHANNEL_ID AS CHANNEL_ID
+		  ,(SELECT CHANNEL_NM FROM TIM0002 WHERE CHANNEL_ID = B.CHANNEL_ID) AS CHANNEL_NM
+		  ,SUM(A.ST_N_COMPSIZE) AS SIZES
+		FROM
+		  (
+		    SELECT
+		         A.INTF_ID
+		        ,ST_N_COMPSIZE
+		    FROM SI_STAT_INTF_HOUR A
+		    WHERE ST_YEAR||ST_MONTH||ST_DAY = TO_CHAR(SYSDATE, 'YYYYMMDD') AND ST_N_COMPSIZE > 0
+		  ) A
+		  INNER JOIN TAN0201 B
+		  ON A.INTF_ID = B.INTEGRATION_ID
+		GROUP BY B.CHANNEL_ID
+		ORDER BY SIZES DESC
+    </select>             
+    
+</mapper>

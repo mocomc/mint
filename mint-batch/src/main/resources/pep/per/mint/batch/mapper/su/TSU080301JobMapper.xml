@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU080301JobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="selectInterfaces" resultType="map">
+    <![CDATA[
+      select
+          distinct
+           b.INTEGRATION_ID as "integrationId"
+          ,b.INTERFACE_ID   as "interfaceId"
+        from TOP0814 a
+  inner join TAN0201 b
+          on a.EAI_IF_ID = b.INTEGRATION_ID
+         and a.FST_TRNS_PROC_MCSEC >= #{fromDate} 
+         and a.FST_TRNS_PROC_MCSEC <= #{toDate}
+                  
+    ]]>
+    </select>
+ 
+    <select id="selectInterfaceTransactionSummary" resultType="map">
+    <![CDATA[
+        select 
+             a.EAI_IF_ID        as "integrationId"
+            ,a.TR_DATE          as "trDate"
+            ,sum(a.SUCCESS_CNT) as "successCnt"
+            ,sum(a.ERROR_CNT)   as "errorCnt" 
+            ,sum(a.PROCESS_CNT) as "processCnt"
+          from ( 
+            -- 정상완료건
+            select    
+                 EAI_IF_ID
+                ,substr(FST_TRNS_PROC_MCSEC, 1, 10) as TR_DATE         
+                ,count(*) as SUCCESS_CNT
+                ,0 as ERROR_CNT
+                ,0 as PROCESS_CNT
+              from TOP0814
+             where IF_PROC_STAT_CD = '00'
+               and FST_TRNS_PROC_MCSEC >= #{fromDate} 
+               and FST_TRNS_PROC_MCSEC <= #{toDate}
+               and EAI_IF_ID = #{integrationId}
+            group by EAI_IF_ID, substr(FST_TRNS_PROC_MCSEC, 1, 10)
+            union all
+            -- 에러건
+            select    
+                 EAI_IF_ID
+                ,substr(FST_TRNS_PROC_MCSEC, 1, 10) as TR_DATE           
+                ,0 as SUCCESS_CNT     
+                ,count(*) AS ERROR_CNT
+                ,0 as PROCESS_CNT    
+              from TOP0814
+             where IF_PROC_STAT_CD = '99'
+               and FST_TRNS_PROC_MCSEC >= #{fromDate} 
+               and FST_TRNS_PROC_MCSEC <= #{toDate}
+               and EAI_IF_ID = #{integrationId}
+            group by EAI_IF_ID, substr(FST_TRNS_PROC_MCSEC, 1, 10)
+            union all
+            -- 미완료건 
+            select    
+                 a.EAI_IF_ID
+                ,substr(FST_TRNS_PROC_MCSEC, 1, 10) as TR_DATE           
+                ,0 as SUCCESS_CNT     
+                ,0 AS ERROR_CNT
+                ,count(*) as PROCESS_CNT     
+              from TOP0814 a
+             where a.IF_PROC_STAT_CD = '01'
+               and FST_TRNS_PROC_MCSEC >= #{fromDate} 
+               and FST_TRNS_PROC_MCSEC <= #{toDate}
+               and EAI_IF_ID = #{integrationId}
+            group by EAI_IF_ID, substr(FST_TRNS_PROC_MCSEC, 1, 10)
+        ) a
+        group by  a.EAI_IF_ID, a.TR_DATE
+        order by  a.EAI_IF_ID, a.TR_DATE
+    ]]>
+    </select>
+    
+</mapper>

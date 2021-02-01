@@ -1,0 +1,899 @@
+﻿<!DOCTYPE html>
+<html >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IPS (Interface Portal System)</title>
+
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: common                                  -->
+		<!---------------------------------------------------------------------->		
+		<link rel="stylesheet" type="text/css" href="../../css/common/common.css">
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: bootstrap-inspina                       -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/font-awesome/css/font-awesome.css">		
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/animate.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/style.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: kendo                                   -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.common.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.rtl.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.default.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.default.min.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: JQuery                                             -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/jquery/js/jquery.min.js"></script>
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: bootstrap-inspina                                  -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/peity/jquery.peity.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/pace/pace.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/iCheck/icheck.min.js"></script>	
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/bootstrap.min.js"></script>  
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/inspinia.js"></script>			  
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: Kendo                                              -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/kendo/js/kendo.all.min.js"></script>
+		
+</head>
+
+<body>
+
+    <div id="wrapper">
+	<!--왼쪽메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+              <li class="nav-header">
+                  <div class="dropdown profile-element"><a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                      <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Interface Portal System</strong>
+                       </span> <span class="text-muted text-xs block">My page <b class="caret"></b></span> </span> </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="mailbox.html">Mailbox</a></li>
+                            <li class="divider"></li>
+                            <li><a href="login.html">Logout</a></li>
+                        </ul>
+                </div>
+                    <div class="logo-element">
+                        IN+
+                    </div>
+              </li>
+				<li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">라이프사이클 관리</span> </a>
+                </li>
+                <li class="active" style="padding-left:10px;">
+                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">요건관리</span> <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li ><a href="index.html">요건조회</a></li>
+                        <li ><a href="dashboard_2.html">요건등록</a></li>
+                        <li ><a href="dashboard_3.html">요건 히스토리</a></li>
+                    </ul>
+                </li>
+              
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-retweet"></i> <span class="nav-label">인터페이스 관리<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="graph_flot.html">인터페이스 조회</a></li>
+                        <li><a href="graph_morris.html">인터페이스 등록</a></li>
+                        <li><a href="graph_rickshaw.html">인터페이스 히스토리</a></li>
+                    </ul>
+                </li>
+                <li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">운영 관리</span> </a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">인프라</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="form_basic.html">시스템(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시스템(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+
+                        <li><a href="form_advanced.html">서버(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">서버(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">서버(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+                        <li><a href="form_wizard.html">업무(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">업무(그룹) 등록</a>
+                                </li>
+                            </ul>
+						</li>	
+                   	 </ul>
+                </li>
+
+				<li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">모니터링</span> </a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Data Tracking</span></a>
+                   
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-pie-chart"></i> <span class="nav-label">대시보드</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">자원 모니터링</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-warning"></i> <span class="nav-label">장애관리</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="typography.html">장애대장</a></li>
+                        <li><a href="icons.html">장애 히스토리 관리</a></li>
+                    </ul>
+                </li>
+				<li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">통계/KPI</span> </a>
+                </li>
+
+                <li style="padding-left:10px;">
+                    <a href="grid_options.html"><i class="fa fa-laptop"></i> <span class="nav-label">표준화 준수율</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-exchange"></i> <span class="nav-label">인터페이스 재 사용율</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span class="nav-label">진척률 통계</span></a>
+                    
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">인터페이스 통계</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">인터페이스 운영통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시간별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">일별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">월별 통계</a>
+                                </li>
+								<li>
+                                    <a href="#">년간 통계</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        
+						<li>
+                            <a href="#">인터페이스 현황통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+						<li>
+                            <a href="#">장애통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">장애발생 순위 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">장애 유형별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+					<!--nav nav-second-level 끝-->
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+	<!--왼쪽메뉴 끝-->
+	
+
+        <div id="page-wrapper" class="gray-bg">
+
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome to IPS (Interface Portal System)</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="img/a7.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <small class="pull-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="img/a4.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="img/profile.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="grid_options.html">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="login.html">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+		<!--header end-->
+     		<!--location -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-5">
+                    <h2>인터페이스 요건등록</h2>
+                    <ol class="breadcrumb">
+                        <li><a href="index.html">라이프 사이클관리</a>
+                        </li>
+                        <li><a>요건관리</a>
+                        </li>
+                        <li class="active"><strong>인터페이스 요건등록</strong>
+                        </li>
+                    </ol>
+                </div>
+				<!--button-->
+					<div class="col-lg-7">
+                    <div class="title-action" >
+                    	<a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> 심의 </a>
+                        <a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> 결재 </a>		
+                        <a href="#" class="btn btn-white"><i class="fa fa-pencil"></i> 히스토리 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-check "></i>저장</a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-pencil"></i> 삭제 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-check "></i> 임시저장 </a>	
+                        <a href="#" class="btn btn-white"><i class="fa fa-check "></i> 목록 </a>
+                    </div>
+                </div>
+				<!--button end-->
+             
+            </div>
+			<!--location end-->
+		
+				
+
+		<!--wrapper wrapper-content-->
+        <div class="wrapper wrapper-content animated fadeInRight" >
+
+<!-- 팝업-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal4">인터페이스 검색</button>버튼 클릭!
+
+
+
+
+<div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>	
+				<div>
+					<h2>시스템 검색</h2>
+				</div>
+			</div>
+			<!--modal-body--> 
+			<div class="modal-body">
+				<!--ibox-content4--> 
+				<div class="ibox-content4">
+					<!--panel blank-panel-->
+					<div class="panel blank-panel">
+						<!--panel-options-->
+						<div class="panel-options">
+							<ul class="nav nav-tabs">
+								<li class="active"><a data-toggle="tab" href="#tab-01">시스템 리스트</a></li>
+								<li class=""><a data-toggle="tab" href="#tab-02">시스템 상세</a></li>
+							</ul>
+						</div>
+						<!--panel-options end-->
+						<!--panel-body-->	
+						<div class="panel-body">
+							<!--tab-content-->
+							<div class="tab-content">
+								<!--tab-1--> 
+								<div id="tab-01" class="tab-pane active">
+									<!--client-detail 스크롤바-->  
+									<div class="client-detail">
+										<!--full-height-scroll 스크롤바-->  
+										<div class="full-height-scroll">
+										
+											<!--col-sm-4 1 -->   
+											<div class="col-sm-4">
+												<form class="form-horizontal">
+													<!--form-group -->
+													<div class="form-group">
+														<span class="lable_tag">시스템 명</span>
+														<!--comboBox-->
+														<span class="k-widget k-combobox k-header input-width" >
+															<span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+																<span tabindex="-1" unselectable="on" class="k-select">
+																	<span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span>
+																</span>
+															</span>
+														</span>
+														<!--comboBox end-->
+													</div>
+													<!--form-group end-->
+												</form>
+											</div>
+											<!--col-sm-4 1 end -->
+										
+											<!--col-sm-4 2 -->   
+											<div class="col-sm-4">
+												<form class="form-horizontal">
+													<!--form-group -->
+													<div class="form-group">
+														<span class="lable_tag">시스템 코드</span>
+														<!--comboBox-->
+														<span class="k-widget k-combobox k-header input-width" >
+															<span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+																<span tabindex="-1" unselectable="on" class="k-select">
+																	<span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span>
+																</span>
+															</span>
+														</span>
+														<!--comboBox end-->
+													</div>
+													<!--form-group end-->
+												</form>
+											</div>
+											<!--col-sm-4 2 end -->
+											
+											<hr class="hr-space">
+											<div class="col-sm-12"  style="padding-top:10px">
+												<div class="b-col">
+													<span style="float:right;padding-top:10px"><a href="#" class="btn btn-white"><i class="fa fa-search"></i> 조회 </a></span>
+												</div>
+											</div>
+								
+											<!--col-sm-12-->
+											<div class="col-sm-12">	
+												<!--ibox-content3-->
+												<div class="ibox-content3">		
+													<!-- kendo table-->
+													<div id="example">
+														<div id="grid"></div>
+														<script>
+															$(document).ready(function () {
+																$("#grid").kendoGrid({
+																dataSource: {
+																type: "odata",
+																transport: {
+																read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+																},
+																pageSize: 20
+																},
+																height: 250,
+																groupable: false,
+																sortable: true,
+																pageable: {
+																refresh: true,
+																pageSizes: true,
+																buttonCount: 5
+																},
+																columns: [{
+																field: "ContactName",
+																title: "Contact Name",
+																width: 200
+																}, {
+																field: "ContactTitle",
+																title: "Contact Title"
+																}, {
+																field: "CompanyName",
+																title: "Company Name"
+																}, {
+																field: "Country",
+																width: 150
+																}]
+																});
+															});
+														</script>
+													</div>
+													<!--kendo table end-->
+												</div>
+												<!--ibox-content3 end-->
+											</div>
+											<!--col-sm-12-->
+
+										</div>
+										<!--full-height-scroll 스크롤바 END-->  
+									</div>
+									<!--client-detail 스크롤바 END-->  	
+									<p></p>
+								</div>
+								<!--tab-1 end--> 
+								
+								
+								<!--tab-2 --> 
+								<div id="tab-02" class="tab-pane">
+									<!--client-detail 스크롤바-->  
+									<div class="client-detail">
+										<!--full-height-scroll 스크롤바-->  
+										<div class="full-height-scroll">
+										
+											<!-- 기본정보 -->	
+											<div class="col-sm-12"><h4>기본정보</h4></div>
+											<!--기본정보 col-sm-4 1-->   
+											<div class="col-sm-6">
+												<form class="form-horizontal">
+													<!--form-group -->
+													<div class="form-group">
+														<span class="lable_tag">시스템명</span>
+														<!--comboBox-->
+														<span class="k-widget k-autocomplete k-header k-state-default input-width">
+															<input type="text" class="k-input" placeholder="IIB" style="width:100%;background-color:#eee;cursor: not-allowed;">
+														</span>
+														<!--comboBox end-->
+													</div>
+													<!--form-group end-->
+													<hr class="hr-space">
+													<!--form-group -->
+													<div class="form-group">
+														<span class="lable_tag">그룹 여부</span>
+														<!--comboBox-->
+														<span class="k-widget k-autocomplete k-header k-state-default input-width">
+															<input type="text" class="k-input" placeholder="No" style="width:100%;background-color:#eee;cursor: not-allowed;">
+														</span>
+														<!--comboBox end-->
+													</div>
+													<!--form-group end-->
+													<hr class="hr-space">
+												</form>
+											</div>
+											<!--col-sm-4 1 end -->
+											<!--col-sm-4 2-->
+											<div class="col-sm-6">
+												<form class="form-horizontal">
+												
+													<!--form-group -->
+													<div class="form-group">
+														<span class="lable_tag">시스템 코드</span>
+														<!--comboBox-->
+														<span class="k-widget k-autocomplete k-header k-state-default input-width">
+															<input type="text" class="k-input" placeholder="EAI-HUB" style="width:100%;background-color:#eee;cursor: not-allowed;">
+														</span>
+														<!--comboBox end-->
+													</div>
+													<!--form-group end-->
+													<hr class="hr-space">
+													<!--form-group -->
+													<div class="form-group">
+														<span class="lable_tag">Parent 그룹</span>
+														<!--comboBox-->
+														<span class="k-widget k-autocomplete k-header k-state-default input-width">
+															<input type="text" class="k-input" placeholder="N/A" style="width:100%;background-color:#eee;cursor: not-allowed;">
+														</span>
+														<!--comboBox end-->
+													</div>
+													<!--form-group end-->
+													<hr class="hr-space">
+												</form>
+											</div>
+											<!--col-sm-4 2 end -->
+	
+	
+
+											<hr class="hr-space">
+											<!-- 기본정보 END-->	
+										
+										
+											<!--담당자 리스트-->					
+											<div class="col-sm-12"><h4>담당자</h4></div>
+											<!--담당자 col-sm-12-->
+											<div class="col-sm-12">	
+							
+												<!-- kendo table-->
+												<div id="example">
+													<table id="grid2">
+														<colgroup>
+															<col />
+															<col />
+															<col style="width:110px" />
+															<col style="width:120px" />
+															<col style="width:130px" />
+														</colgroup>
+														<thead>
+															<tr>
+															<th data-field="make">Car Make</th>
+															<th data-field="model">Car Model</th>
+															<th data-field="year">Year</th>
+															<th data-field="category">Category</th>
+															<th data-field="airconditioner">Air Conditioner</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>Volvo</td>
+																<td>S60</td>
+																<td>2010</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+															<tr>
+																<td>Audi</td>
+																<td>A4</td>
+																<td>2002</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+															<tr>
+																<td>BMW</td>
+																<td>535d</td>
+																<td>2006</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+															<tr>
+																<td>BMW</td>
+																<td>535d</td>
+																<td>2006</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+														</tbody>
+													</table>
+													<script>
+														$(document).ready(function() {
+														$("#grid2").kendoGrid({
+														height: 156,
+														sortable: true
+														});
+														});
+													</script>
+												</div>
+												<!--kendo table end-->
+								
+											</div>
+											<!--담당자 col-sm-12 END-->
+											<hr class="hr-space"><hr class="hr-space">
+											
+											<!--서버 리스트-->					
+											<div class="col-sm-12"><h4>서버 리스트</h4></div>
+											<!--서버 리스트 col-sm-12-->
+											<div class="col-sm-12">	
+							
+												<!-- kendo table-->
+												<div id="example">
+													<table id="grid3">
+														<colgroup>
+															<col />
+															<col />
+															<col style="width:110px" />
+															<col style="width:120px" />
+															<col style="width:130px" />
+														</colgroup>
+														<thead>
+															<tr>
+															<th data-field="make">Car Make</th>
+															<th data-field="model">Car Model</th>
+															<th data-field="year">Year</th>
+															<th data-field="category">Category</th>
+															<th data-field="airconditioner">Air Conditioner</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>Volvo</td>
+																<td>S60</td>
+																<td>2010</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+															<tr>
+																<td>Audi</td>
+																<td>A4</td>
+																<td>2002</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+															<tr>
+																<td>BMW</td>
+																<td>535d</td>
+																<td>2006</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+															<tr>
+																<td>BMW</td>
+																<td>535d</td>
+																<td>2006</td>
+																<td>Saloon</td>
+																<td>Yes</td>
+															</tr>
+														</tbody>
+													</table>
+													<script>
+														$(document).ready(function() {
+														$("#grid3").kendoGrid({
+														height: 156,
+														sortable: true
+														});
+														});
+													</script>
+												</div>
+												<!--kendo table end-->
+								
+											</div>
+											<!--서버 리스트 col-sm-12 END-->											
+
+										</div>
+											<!--full-height-scroll 스크롤바 END-->  
+									</div>
+									<!--client-detail 스크롤바 END-->  	
+									<p></p>
+								</div>
+								<!--tab-2 end-->
+								 
+							</div>
+							<!--tab-content end-->	
+
+							<!--적용 버튼-->
+							<div style="float:right;margin:15px 15px;">
+								<button class="btn btn-primary" type="button"><i class="fa fa-check"></i>적용</button>
+							</div>
+						</div>
+						<!--panel-body-->	
+					</div>
+					<!--panel blank-panel-->
+				</div>
+				<!--ibox-content4--> 
+			</div>
+			<!--modal-body END--> 
+			<!--modal-footer--> 
+			<div class="modal-footer" style="clear:both">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				<!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+			</div>
+			<!--modal-footer END--> 
+                                   
+		</div>
+		<!--modal-content animated fadeIn END--> 
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<!-- modal inmodal END-->
+<!-- 팝업-->
+		
+			
+
+        </div>
+		<!--wrapper wrapper-content end-->
+
+
+			<!--location -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+              	<div class="col-lg-12">
+				<!--button-->
+                    <div class="title-action2">
+                    	<a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> 심의 </a>
+                        <a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> 결재 </a>		
+                        <a href="#" class="btn btn-white"><i class="fa fa-pencil"></i> 히스토리 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-check "></i> 저장 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-pencil"></i> 삭제 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-check "></i> 임시저장 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-check "></i> 목록 </a>	
+                    </div>
+				<!--button end-->
+             	</div>
+            </div>
+			<!--location end-->
+
+
+		<!--footer-->
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2015
+            </div>
+        </div>
+		<!--footer end-->
+
+
+        </div>
+		<!--page-wrapper end-->
+
+</div>
+<!--wrapper end-->
+
+
+   
+	<script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+		$("#value").kendoDatePicker({
+                       
+                    });
+					$("#value2").kendoDatePicker({
+                       
+                    });
+					$("#value3").kendoDatePicker({
+                       
+                    });
+					$("#value4").kendoDatePicker({
+                       
+                    });
+					$("#value5").kendoDatePicker({
+                       
+                    });
+					$("#value6").kendoDatePicker({
+                       
+                    });
+
+			 $("#fabric").kendoComboBox({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        dataSource: [
+                            { text: "Cotton", value: "1" },
+                            { text: "Polyester", value: "2" },
+                            { text: "Cotton/Polyester", value: "3" },
+                            { text: "Rib Knit", value: "4" }
+                        ],
+                        filter: "contains",
+                        suggest: true,
+                        index: 3
+                    });
+	var viewModel = kendo.observable({
+        	isEnabled: true,
+        	isVisible: true,
+        	onSelect: function(e) {
+            		var message = $.map(e.files, function(file) { return file.name; }).join(", ");
+            		kendoConsole.log("event :: select (" + message + ")");
+        	}
+    	});
+    	kendo.bind($("#example"), viewModel);  
+	$("#files").kendoUpload();
+	
+	
+        $("#numeric").kendoNumericTextBox();
+		$("#numeric2").kendoNumericTextBox();	
+		$("#numeric3").kendoNumericTextBox();				
+		$("#editor").kendoEditor({ resizable: {
+								content: true,
+								toolbar: true
+							}});
+		 
+					
+
+        });
+    </script>
+    
+
+
+</body>
+
+</html>

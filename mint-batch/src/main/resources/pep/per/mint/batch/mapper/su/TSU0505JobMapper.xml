@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다. 
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605, 
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0505JobMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<delete id="deleteTSU0505">
+		delete from TSU0505 where ST_DATE = #{stDate}
+	</delete>
+
+	<insert id="insertTSU0505">
+
+		insert into TSU0505 (ST_DATE, REQUIREMENT_ID, INTERFACE_ID, STATUS, CHANNEL_ID, SYSTEM_ID, RESOURCE_TYPE)
+		select
+			 #{stDate}
+			,a.REQUIREMENT_ID
+			,b.INTERFACE_ID
+			,a.STATUS
+			,b.CHANNEL_ID
+			,c.SYSTEM_ID
+			,c.RESOURCE_TYPE
+		 from TAN0101 a
+		INNER JOIN TAN0201 b
+		   on a.INTERFACE_ID = b.INTERFACE_ID
+		  and a.DEL_YN = 'N'
+		  and b.DEL_YN = 'N'
+		INNER JOIN TAN0213 c
+		   on b.INTERFACE_ID = c.INTERFACE_ID
+		  and c.NODE_TYPE = '2'
+		  and c.SEQ = (select min(SEQ) from TAN0213 where INTERFACE_ID = c.INTERFACE_ID and NODE_TYPE = '2')
+		group by
+			 a.REQUIREMENT_ID
+			,b.INTERFACE_ID
+			,b.CHANNEL_ID
+			,c.SYSTEM_ID
+			,c.RESOURCE_TYPE
+			,a.STATUS
+		order by
+			 a.REQUIREMENT_ID
+			,b.INTERFACE_ID
+			,b.CHANNEL_ID
+			,c.SYSTEM_ID
+			,c.RESOURCE_TYPE
+			,a.STATUS
+
+	</insert>
+	
+</mapper>

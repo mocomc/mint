@@ -1,0 +1,36 @@
+AP00000040$$$H003$$$en$$$업무시스템별 처리현황$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Business System status<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp; You can
+search by a business system unit in detail screen of "Yesterday/Today's
+status"<br></font><font size="2">
+&nbsp; You can compare the number of processing "business system" at the
+same time<br>
+&nbsp; If a deviation of graph is widening, checks whether it is normal or not by
+increased throughput<br>
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 1. Search Conditions<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">A screen can be changed minutely and
+displays now to 4 hours ago's data<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Method to designate business system<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. Click "Setting
+button(spanner shape)" on right upper side<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. After input "system name"
+or "system code" condition at "system search" popup,</font><font size="2">
+click "Search" button<br>
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. select the row at "Search
+result"<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">d. Click "apply" button, after
+checking contents of "System details" tab<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 3. Personalization<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. General user can search only
+designated person in charge at "Life cycle
+management&gt;Search&gt;Interface details" screen<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">b. admin user can search all Interfaces<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. It is possible to compose screens up
+to 4<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 4. Detail screen view<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">Click a time zone of graph &gt;
+Accumulation &gt; Accumulation of interface &gt; Move to a By tems(comparision)
+screen</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

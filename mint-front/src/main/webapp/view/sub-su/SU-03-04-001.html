@@ -1,0 +1,1854 @@
+﻿<!--
+	Screen ID : SU-03-04-001
+	Screen NM : 오류/장애 발생률.
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-41"></lb></h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-490"></lb></li>
+			<li class="active"><strong><lb class="lb-41"></lb></strong></li>
+		</ol>
+	</div>
+	<!--button-->
+	<div class="col-lg-7">
+		<div class="title-action">
+
+		</div>
+	</div>
+	<!--button end-->
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!--row-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-78"></lb></h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+						<!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="#">Config option 1</a></li>
+							<li><a href="#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i></a> -->
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-failurerate-sttsearch"><i class="fa fa-search "></i> <lb class="lb-10"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-status-KPI" style="display: none;"><i class="fa fa-reply"></i> <lb class="lb-33"></lb></a>
+					</div>						
+				</div>
+
+				<!--ibox-content-->
+				<div class="ibox-content">
+					<!--row-->
+					<div class="row">
+						<!--col-sm-4 1-->
+						<div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-10"></lb> <lb class="lb-494"></lb></span>
+								<!--comboBox-->
+								<input id="sc-su0304001-category" type="text" style="width: 63%;" /> 
+								<!-- <span class="k-widget k-combobox k-header input-width">
+									<span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default">
+										<input class="k-input" type="text" placeholder="인터페이스 별" style="width: 100%;"> 
+										<span tabindex="-1" unselectable="on" class="k-select">
+											<span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1">select</span>
+										</span> 
+									</span>
+								</span> -->
+								<!--comboBox end-->
+							</div>
+						</div>
+						<!--col-sm-4 1end -->
+						
+						<div id="sc-category-detail" class="col-sm-4" style="display: none;">
+							<!--form-group -->
+								<div class="form-group">
+									<!--comboBox-->
+									<span id="sc-category-detail-title" class="lable_tag"><lb class="lb-153"></lb></span>
+									<span id="sc-su0304001-category-system" style="display: none;">
+										<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width: 63%;">
+											<input id="tf-systemNm" type="text" class="k-input" style="width: 100%;" readonly="readonly" placeholder="Search...">
+											<input id="tf-systemNm_hidden" type="hidden">
+											<input id="tf-systemId_hidden" type="hidden">
+										</span>										
+										<!--
+										<input id="sc-su0304001-cb-system" type="text" placeholder="Search..." style="width:63%;" />
+										-->
+									</span>
+									<span id="sc-su0304001-category-interface" style="display: none;">
+										<input id="sc-su0304001-cb-interfaceNm" type="text" placeholder="Search..." style="width:63%;" />
+									</span>
+									<span id="sc-su0304001-category-requirement" style="display: none;">
+										<input id="sc-su0304001-cb-requirement" type="text" placeholder="Search..." style="width:63%;" />
+									</span>
+									<!--comboBox end-->
+								</div>
+								<!--form-group end-->
+						</div>
+						
+						<div id="sc-expand" class="col-sm-4" style="display: none;">
+							<!--form-group -->
+							<div class="form-group">
+								<span id="sc-su0304001-expand-title" class="lable_tag"><lb class="lb-10"></lb> <lb class="lb-478"></lb></span>
+								<span id="sc-su0304001-expand-nodetype">
+									<input id="sc-su0304001-nodetype" type="text" style="width: 63%;" />
+								</span>
+								<span id="sc-su0304001-expand-interface">
+									<input id="sc-su0304001-cb-interfaceId" type="text" placeholder="Search..." style="width: 63%;" />
+								</span>
+							</div>
+							<!--form-group end-->
+						</div>
+
+						<hr class="hr-space">
+						<!--col-sm-11-->
+						<div class="col-sm-8">
+								<div class="form-group">
+									<span class="lable_tag4" style="width: 17%;"><lb class="lb-302"></lb></span>
+
+									<!--comboBox-->
+									<input id="sc-su0304001-period-fromdate" value="2015/04/20" class="input-width" style="text-align:center; width: 19.1%;" />  
+									<input id="sc-su0304001-period-fromhour" type="text" value="00" class="input-width" style="text-align:center; width: 100px;" /> 
+									<span style="padding: 0px 5px;"> ~ </span>
+									<input id="sc-su0304001-period-todate" value="2015/04/20" class="input-width" style="text-align:center; width: 19.1%;" />  
+									<input id="sc-su0304001-period-tohour" type="text" value="24" class="input-width" style="text-align:center; width: 100px;" /> 
+									<!-- 
+									<input id="value" value="2015/04/20" / class="input-width"
+										style="width: 19.1%"> 
+									<span
+										class="k-widget k-autocomplete k-header k-state-default input-width"
+										style="width: 70px;"> 
+									<input type="text"
+										class="k-input" placeholder="14" style="width: 100%;">
+									</span> 시 
+									<span class="k-widget k-combobox k-header input-width" style="width: 70px;"> 
+										<span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default ">
+											<input class="k-input" type="text" placeholder="00" style="width: 100%;"> 
+											<span tabindex="-1" unselectable="on" class="k-select">
+												<span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1">select</span>
+											</span> 
+										</span>
+									</span> 분
+									<span style="padding: 0px 5px;"> ~ </span>
+									<input id="value2" value="2015/04/20" / class="input-width" style="width: 19.1%"> 
+										<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width: 70px;"> 
+										<input type="text" class="k-input" placeholder="15" style="width: 100%;">
+									</span> 시 
+									<span class="k-widget k-combobox k-header input-width" style="width: 70px;"> 
+										<span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default ">
+											<input class="k-input" type="text" placeholder="00" style="width: 100%;"> 
+											<span tabindex="-1" unselectable="on" class="k-select">
+												<span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1">select</span>
+											</span> 
+										</span>
+									</span> 분
+									 -->
+									<!--comboBox end-->
+
+								</div>
+						</div>
+						<!--col-sm-11 end -->
+
+					</div>
+					<!--row end-->
+
+				</div>
+				<!--ibox-content end-->
+
+			</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+
+	</div>
+	<!--row end-->
+
+	<!--row start-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+
+				<!--ibox-title-->
+				<div class="ibox-title">
+					<h5><lb class="lb-91"></lb></h5>
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000034','H002')"></a>
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+						<!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i> </a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="#">Config option 1</a></li>
+							<li><a href="#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i></a> -->
+					</div>
+
+				</div>
+				<!--ibox-title end-->
+
+				<!--ibox-content-->
+				<div class="ibox-content">
+					<div class="tabs-container">
+						<ul id="tabs-menu-list" class="nav nav-tabs">
+		                    <li class="active"><a data-toggle="tab" href="#tab-01"><lb class="lb-41"></lb> <lb class="lb-532"></lb></a></li>
+		                    <li><a data-toggle="tab" href="#tab-02"><lb class="lb-32"></lb> <lb class="lb-395"></lb> <lb class="lb-532"></lb></a></li>
+		                </ul>
+					</div>
+					<div class="tab-content">
+						<div id="tab-01" class="tab-pane active">
+	                        <div class="panel-body">
+	                        	<ol id="navMenuForProcess" class="breadcrumb" style="padding-bottom : 10px;"></ol>
+	                            <div id="grid_su0304001"></div>
+	                        </div>
+	                    </div>
+	
+	                    <div id="tab-02" class="tab-pane">
+	                        <div class="panel-body">
+	                            <div id="grid_su0304001_detail"></div>
+	                        </div>
+	                    </div>
+					</div>
+				</div>
+				<!--ibox-content end-->
+			</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+</div>
+<!--wrapper wrapper-content end-->
+
+
+<!--location -->
+<!-- <div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-12">
+		<div class="title-action2">
+			<a href="#" class="btn btn-white"><i class="fa fa-check "></i> 조회 </a>
+		</div>
+	</div>
+</div> -->
+<!--location end-->
+
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "SU-03-04-001";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			//selectedGridRowObject : new Object(),
+			searchCondition : {},
+			isInitfailureInterfaceGridDetail : true,
+			tmpGridRowspanIdx : 0,
+			navMenuForProcessGrid : [],
+			
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================			
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.ui.initScreen();
+					
+					mint.init('$.main.fn_initSearchCondition');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------		
+			fn_initSearchCondition : function() {
+				try {
+					// 조회 구분
+					$.main.fn_initSC_Category();
+					$.main.fn_initSC_SU0304001_Category_Detail();
+					$("#sc-category-detail").show();
+					$("#sc-category-detail-title").show();
+					$("#sc-category-detail-title").html(mint.label.getLabel('lb-153'));
+					$("#sc-su0304001-category-interface").show();
+					
+					$("#sc-expand").show();
+					$("#sc-su0304001-expand-nodetype").hide();
+					$("#sc-su0304001-expand-title").show();
+					$("#sc-su0304001-expand-title").html(mint.label.getLabel('lb-154'));
+					$("#sc-su0304001-expand-interface").show();
+					
+					
+					// 검색 기간
+					$.main.fn_initSC_Period(); 
+					
+					// 조회 유형
+					$.main.fn_initSC_NodeType();
+					
+					
+					// 그리드 초기화
+					// 탭 자동 이동
+		    		$('#tabs-menu-list li:eq(0)').show();
+		    		$('#tabs-menu-list a:eq(0)').tab('show');
+					
+					// 서브용 탭 숨김
+		    		$('#tabs-menu-list li:eq(1)').hide();
+					
+		    		// 그리드 초기화 - 연계 조회시 겹치므로 아래에서 분기
+					//var columnsData = $.main.fn_getColumn_SU0304001_Grid("interface", "인터페이스");
+					//$.main.fn_initFailureRateStatisticsGrid("grid_su0304001", columnsData, false);
+					
+					// start. 연계 조회(자동) 여부 체크 및 조회
+					var linkedCategory = mint.common.getScreenParam("SU0304001_SearchCategory");
+					var linkedSearchKey = mint.common.getScreenParam("SU0304001_SearchChannelId");
+					var linkedFromDate = mint.common.getScreenParam("SU0304001_fromSearchPeriod");
+					var linkedToDate = mint.common.getScreenParam("SU0304001_toSearchPeriod");
+					
+					var linkedFromScreenName = mint.common.getScreenParam("LinkedFromScreenName");
+					
+					if ( linkedFromDate != null && linkedToDate != null ) {
+						//console.log(linkedFromDate + "~" + linkedToDate);
+						
+						if (linkedFromScreenName == "SU-03-00-001") {
+							$(".btn-status-KPI").show();
+						}
+						else {
+							$(".btn-status-KPI").hide();
+						}
+						
+						var tmpCategory = linkedCategory.toString();
+						$("#sc-su0304001-category").data("kendoDropDownList").value(tmpCategory);
+						if (tmpCategory == "channel") {
+							
+							$("#sc-category-detail").hide();
+							
+							$("#sc-category-detail-title").hide();
+							
+							$("#sc-su0304001-category-system").hide();
+							$("#sc-su0304001-category-interface").hide();
+							$("#sc-su0304001-category-requirement").hide();
+							
+							
+							// 그리드 컬럼 get
+							var columnsData = $.main.fn_getColumn_SU0304001_Grid(tmpCategory, mint.label.getLabel('lb-80'));
+							// 그리드 set
+							$.main.fn_initFailureRateStatisticsGrid("grid_su0304001", columnsData, false);
+							
+							
+							$("#sc-expand").hide();
+							
+							$("#sc-su0304001-expand-title").hide();
+							
+							$("#sc-su0304001-expand-nodetype").hide();
+							$("#sc-su0304001-expand-interface").hide();
+						}
+						
+						var tmpFromDate = new Date(linkedFromDate.substring(0,4), Number(linkedFromDate.substring(4,6)) - 1, linkedFromDate.substring(6,8));
+						$("#sc-su0304001-period-fromdate").data("kendoDatePicker").value(tmpFromDate);
+						
+						var tmpToDate = new Date(linkedToDate.substring(0,4), Number(linkedToDate.substring(4,6)) - 1, linkedToDate.substring(6,8));
+						$("#sc-su0304001-period-todate").data("kendoDatePicker").value(tmpToDate);
+						
+						$.main.searchCondition = $.main.fn_getSearchCondition();
+						//console.log(searchCondition);
+						//데이터 조회
+					    mint.callService($.main.searchCondition, screenName, 'REST-R01-SU-03-04', '$.main.fn_set_SU0304001_GridData', {errorCall : true});
+					}
+					else {
+						// 그리드 초기화
+						var columnsData = $.main.fn_getColumn_SU0304001_Grid("interface", mint.label.getLabel('lb-395'));
+						$.main.fn_initFailureRateStatisticsGrid("grid_su0304001", columnsData, false);
+						
+					}
+					mint.common.setScreenParam("SU0304001_SearchCategory", null);
+					mint.common.setScreenParam("SU0304001_SearchChannelId", null);
+					mint.common.setScreenParam("SU0304001_fromSearchPeriod", null);
+					mint.common.setScreenParam("SU0304001_toSearchPeriod", null);
+					
+					mint.common.setScreenParam("LinkedFromScreenName", null); 
+					// end. 연계 조회(자동) 여부 체크 및 조회
+					
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initSearchCondition"});
+				}
+			}, // end fn_initSearchCondition()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 조회조건 - 조회 구분 항목 초기화
+			//-----------------------------------------------------------------------
+			fn_initSC_Category : function() {
+				try {
+					var scCategory = [
+							{text: mint.label.getLabel('lb-395'), value: "interface"},
+							{text: mint.label.getLabel('lb-81'), value: "process"},
+							{text: mint.label.getLabel('lb-410'), value: "requirement"},
+							{text: mint.label.getLabel('lb-80'), value: "channel"},
+							{text: mint.label.getLabel('lb-82'), value: "system"},
+							{text: mint.label.getLabel('lb-478'), value: "type"}
+					];
+								
+					$("#sc-su0304001-category").kendoDropDownList({
+						dataTextField: "text",
+						dataValueField: "value",
+						dataSource: scCategory,
+						index: 0,
+						change: function(e) {
+							
+							$.main.fn_setSC_SU0304001_Category_Detail(this.value());
+							
+							// 탭 자동 이동
+				    		$('#tabs-menu-list li:eq(0)').show();
+				    		$('#tabs-menu-list a:eq(0)').tab('show');
+							
+							// 서브용 탭 숨김
+				    		$('#tabs-menu-list li:eq(1)').hide();
+							
+							// 그리드 컬럼 get
+							$("#grid_su0304001").empty();
+							var columnsData = $.main.fn_getColumn_SU0304001_Grid(this.value(), this.text());
+							// 그리드 set
+							var isHierarchy = false;
+							if (this.value() == "process") {
+								isHierarchy = true;
+							}
+							$.main.fn_initFailureRateStatisticsGrid("grid_su0304001", columnsData, isHierarchy);
+							
+							
+							// 조회 유형 표시여부 설정
+							if (this.value() == "process") {
+								$("#sc-expand").show();
+								
+								$("#sc-su0304001-expand-interface").hide();
+								
+								$("#sc-su0304001-expand-title").show();
+								$("#sc-su0304001-expand-title").html(mint.label.getLabel('lb-10') + " " + mint.label.getLabel('lb-478'));
+								$("#sc-su0304001-expand-nodetype").show();
+							}
+							else if (this.value() == "system") {
+								$("#sc-expand").show();
+
+								$("#sc-su0304001-expand-interface").hide();
+								
+								$("#sc-su0304001-expand-title").show();
+								$("#sc-su0304001-expand-title").html(mint.label.getLabel('lb-10') + " " + mint.label.getLabel('lb-478'));
+								$("#sc-su0304001-expand-nodetype").show();
+							}
+							else if (this.value() == "interface") {
+								$("#sc-expand").show();
+
+								$("#sc-su0304001-expand-nodetype").hide();
+								
+								$("#sc-su0304001-expand-title").show();
+								$("#sc-su0304001-expand-title").html(mint.label.getLabel('lb-154'));
+								$("#sc-su0304001-expand-interface").show();
+							}
+							else {
+								$("#sc-expand").hide();
+								
+								$("#sc-su0304001-expand-title").hide();
+								
+								$("#sc-su0304001-expand-nodetype").hide();
+								$("#sc-su0304001-expand-interface").hide();
+							}
+							
+							
+						}
+					});
+					
+					$('#sc-su0304001-category').data("kendoDropDownList").wrapper.keydown(function(event) {
+						$.main.fn_onKeyDownSU0304001(event);
+					});	
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initSC_Category"});
+				}
+			}, // end fn_initSC_Category()
+			
+			//-----------------------------------------------------------------------
+			// Description :: - 조회 조건 - 검색조건 상세 초기화
+			//-----------------------------------------------------------------------
+			fn_initSC_SU0304001_Category_Detail : function() {
+				try {
+					
+					// 시스템
+					//mint.ui.setComboBoxWithValue('sc-su0304001-cb-system', mint.common.commonCodeMap.get("systemCdList"), 0, 'systemNm', 'systemId');
+					/* $("#sc-su0304001-cb-system").data("kendoComboBox").bind("change", function(e) {
+						var widget = e.sender;
+						if (widget.value() && widget.select() === -1) {
+							widget.value("");
+						} 
+					}); */
+					//$("#sc-su0304001-cb-system").data("kendoComboBox").input.keydown($.main.fn_onKeyDownSU0304001);
+					
+					// 인터페이스명
+					mint.ui.setComboBoxWithValue('sc-su0304001-cb-interfaceNm', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'interfaceNm', 'interfaceNm');
+					/* $("#sc-su0304001-cb-interfaceNm").data("kendoComboBox").bind("change", function(e) {
+						var widget = e.sender;
+						if (widget.value() && widget.select() === -1) {
+							widget.value("");
+						} 
+					}); */
+					$("#sc-su0304001-cb-interfaceNm").data("kendoComboBox").input.keydown($.main.fn_onKeyDownSU0304001);
+					
+					// 인터페이스ID
+					//mint.ui.setComboBoxWithValue('sc-su0304001-cb-interfaceId', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'interfaceId', 'interfaceId');
+					mint.ui.setComboBoxWithValue('sc-su0304001-cb-interfaceId', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'integrationId', 'integrationId');
+					$("#sc-su0304001-cb-interfaceId").data("kendoComboBox").input.keydown($.main.fn_onKeyDownSU0304001);
+					
+					// 업무(요건)명
+					mint.ui.setComboBoxWithValue('sc-su0304001-cb-requirement', mint.common.commonCodeMap.get("requirementCdList"), 0, 'requirementNm', 'requirementNm');
+					/* $("#sc-su0304001-cb-requirement").data("kendoComboBox").bind("change", function(e) {
+						var widget = e.sender;
+						if (widget.value() && widget.select() === -1) {
+							widget.value("");
+						} 
+					}); */
+					$("#sc-su0304001-cb-requirement").data("kendoComboBox").input.keydown($.main.fn_onKeyDownSU0304001);
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initSC_SU0304001_Category_Detail"});
+				}
+			}, // end fn_initSC_SU0304001_Category_Detail()
+			
+			//-----------------------------------------------------------------------
+			// Description :: - 조회 조건 - 검색조건별 상세 설정
+			//-----------------------------------------------------------------------
+			fn_setSC_SU0304001_Category_Detail : function(criteriaVal) {
+				try {
+					
+					$("#sc-category-detail").hide();
+					
+					$("#sc-category-detail-title").hide();
+					
+					$("#sc-su0304001-category-system").hide();
+					$("#sc-su0304001-category-interface").hide();
+					$("#sc-su0304001-category-requirement").hide();
+					
+					//console.log("criteriaVal>>"+criteriaVal);
+					if (criteriaVal == "system") {
+						$("#sc-category-detail").show();
+						$("#sc-category-detail-title").show();
+						$("#sc-category-detail-title").html(mint.label.getLabel('lb-82'));
+						$("#sc-su0304001-category-system").show();
+					}
+					else if (criteriaVal == "interface") {
+						$("#sc-category-detail").show();
+						$("#sc-category-detail-title").show();
+						$("#sc-category-detail-title").html(mint.label.getLabel('lb-153'));
+						$("#sc-su0304001-category-interface").show();
+					}
+					else if (criteriaVal == "requirement") {
+						$("#sc-category-detail").show();
+						$("#sc-category-detail-title").show();
+						$("#sc-category-detail-title").html(mint.label.getLabel('lb-410'));
+						$("#sc-su0304001-category-requirement").show();
+					} 
+					else {
+						// default
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSC_SU0304001_Category_Detail"});
+				}
+			}, // end fn_setSC_SU0304001_Category_Detail()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 조회조건 - 조회 유형 초기화
+			//-----------------------------------------------------------------------
+			fn_initSC_NodeType : function() {
+				
+				var scNodeType = [
+									{text: "Provider", value: "2"},
+									{text: "Consumer", value: "0"},
+									{text: mint.label.getLabel('lb-89'), value: "ALL"}
+							];
+				
+				$("#sc-su0304001-nodetype").kendoDropDownList({
+					dataTextField: "text",
+					dataValueField: "value",
+					dataSource: scNodeType,
+					index: 0
+				});
+				
+				$('#sc-su0304001-nodetype').data("kendoDropDownList").wrapper.keydown(function(event) {
+					$.main.fn_onKeyDownSU0304001(event);
+				});	
+				/* 
+				mint.ui.setComboBoxWithValue("sc-su0304001-nodetype", scNodeType, 0, "text", "value");
+				$("#sc-su0304001-nodetype").data("kendoComboBox").bind("change", function(e) {
+					var widget = e.sender;
+					if (widget.value() && widget.select() === -1) {
+						widget.value("");
+					}
+				});
+				 */
+			}, // end fn_initSC_NodeType()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 조회조건 - 검색 기간 초기화
+			//-----------------------------------------------------------------------
+			fn_initSC_Period : function() {
+				try {
+					$("#sc-su0304001-period-fromdate").kendoDatePicker({
+			            format : "yyyy/MM/dd",
+			            culture: "ko-KR",
+			            value : new Date()
+			        });
+					
+					/* 
+					mint.ui.setComboBoxWithValue("sc-su0304001-period-fromhour", $.main.fn_makeKendoComboValueForJson(0, 24, 1), 0, "text", "value");
+					$("#sc-su0304001-period-fromhour").data("kendoComboBox").bind("change", function(e) {
+						var widget = e.sender;
+						if (widget.value() && widget.select() === -1) {
+							widget.value("00");
+						}
+					});
+					 */
+					var tmpFromDate = new Date();
+					tmpFromDate.setHours(0, 0, 0, 0);
+					//tmpFromDate.setMinutes(0, 0, 0);
+					$("#sc-su0304001-period-fromhour").kendoTimePicker({
+						value: tmpFromDate
+						, format: "HH:mm"
+						, interval: 60
+					});
+					
+					
+					$("#sc-su0304001-period-todate").kendoDatePicker({
+			            format : "yyyy/MM/dd",
+			            culture: "ko-KR",
+			            value : new Date()
+			        });
+					
+					/* 
+					mint.ui.setComboBoxWithValue("sc-su0304001-period-tohour", $.main.fn_makeKendoComboValueForJson(1, 25, 1), 0, "text", "value");
+					$("#sc-su0304001-period-tohour").data("kendoComboBox").bind("change", function(e) {
+						var widget = e.sender;
+						if (widget.value() && widget.select() === -1) {
+							widget.value("24");
+						}
+					});
+					 */
+					var tmpToDate = new Date();
+					tmpToDate.setHours(23, 59, 0, 0);
+					$("#sc-su0304001-period-tohour").kendoTimePicker({
+						value: tmpToDate
+						, format: "HH:59"
+						, interval: 60
+					});
+					
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initSC_Period"});
+				}
+			}, // end fn_initSC_Period()
+
+			//-----------------------------------------------------------------------
+			// Description :: - 조회조건 - 검색 기간 Kendo ComboBox JSON data 생성 
+			//-----------------------------------------------------------------------
+			fn_makeKendoComboValueForJson : function(minValue, maxValue, incrementValue) {
+				try {
+					var resultJson = [];
+					var i;
+					
+					i = minValue;
+					for (; i<maxValue; i+=incrementValue) {
+						resultJson.push({text: mint.common.leadingZeros(i, 2), value: mint.common.leadingZeros(i, 2)});
+					}
+					
+					return resultJson;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_makeKendoComboValueForJson"});
+				}
+			}, // end fn_makeKendoComboValueForJson(int, int, int)
+			
+			//-----------------------------------------------------------------------
+			// Description :: - 조회 경과 - 그리드 초기화
+			//-----------------------------------------------------------------------
+			fn_initFailureRateStatisticsGrid : function(grid_id, columnsData, isHierarchy) {
+				
+				try {
+					var excelName = mint.label.getLabel('lb-41') + ".xlsx";
+					excelName = excelName.replace(/\//g, "_");
+					
+					$("#" + grid_id).kendoGrid({
+						dataSource : {
+								data: [],
+								pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+						},
+						//height : 550,
+						selectable: "row",
+						resizable: true,
+						sortable: true,
+						pageable : {
+								refresh : false,
+								pageSizes : mint.ui.getPageSizesS(),
+								buttonCount : 5
+						},
+						toolbar: ["excel"],
+						excel: {
+							  allPages: true
+							, filterable: true
+							, fileName: excelName
+						}, 
+						messages: {
+							commands: {
+							  excel: mint.label.getLabel('lb-508')
+							}
+						}, excelExport: function(e) {
+							//스타일 편집
+							var sheet = e.workbook.sheets[0];
+							
+							//console.log(sheet);
+							// columns 기준
+							for(var cw=0; cw<sheet.columns.length; cw++) {
+								//sheet.columns[cw].width = 15;
+								sheet.columns[cw].autoWidth = true;
+								
+								if (cw > 0) {
+									sheet.columns[cw].width = 20;
+								}
+							}
+							
+							// custom TH title set
+							var searchCondition = $.main.searchCondition;
+							
+							// rows 기준
+							for (var i = 0; i < sheet.rows.length; i++) {
+								for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+									sheet.rows[i].cells[ci].vAlign = "center";
+									
+									//정렬 기준
+									if(0 == i) {
+										//컬럼 헤더일 경우
+										sheet.rows[i].cells[ci].hAlign = "center";
+										sheet.rows[i].cells[ci].bold = true;
+										
+									} else {
+										//데이터 내용일 경우
+										/*
+										if(1 == ci || 2 == ci || 3 == ci) {
+										   sheet.rows[i].cells[ci].hAlign = "left";
+										} else {
+										   sheet.rows[i].cells[ci].hAlign = "center";
+										}
+										*/
+										sheet.rows[i].cells[ci].hAlign = "center";
+										
+										
+										if (searchCondition.scCategory == "interface") {
+											if (ci == 6) {
+												sheet.rows[i].cells[ci].value = kendo.format("{0:p1}", (Math.floor( (sheet.rows[i].cells[4].value / sheet.rows[i].cells[3].value) * 1000) /1000) );
+											}
+											if (ci == 7) {
+												sheet.rows[i].cells[ci].value = kendo.format("{0:p1}", (Math.ceil( (sheet.rows[i].cells[5].value / sheet.rows[i].cells[3].value) * 1000) /1000) );
+											}
+										}
+										else {
+											if (ci == 5) {
+												sheet.rows[i].cells[ci].value = kendo.format("{0:p1}", (Math.floor( (sheet.rows[i].cells[3].value / sheet.rows[i].cells[2].value) * 1000) /1000) );
+											}
+											if (ci == 6) {
+												sheet.rows[i].cells[ci].value = kendo.format("{0:p1}", (Math.ceil( (sheet.rows[i].cells[4].value / sheet.rows[i].cells[2].value) * 1000) /1000) );
+											}
+										}
+									}
+								}
+							}
+							
+							e.preventDefault();
+							var createExcelFileName = excelName;
+							mint.downloadExcelFile(createExcelFileName, sheet, screenName);
+							
+						},
+						columns : columnsData,
+						dataBound: function (e) {
+							if(1 > $("#" + grid_id).data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+								
+								$("#" + grid_id).children(".k-grid-content").height(gridHeight /2.5);
+								//$("#" + grid_id).children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#" + grid_id).children(".k-grid-content").height('auto');
+								//$("#" + grid_id).children(".k-grid-content-locked").height('auto');
+							}
+							
+							/* 
+							//순번 세팅
+							var currentPage = this.dataSource.page();
+							var gridPageSize = this.dataSource.pageSize();
+					        var rows = this.items();
+					        $(rows).each(function () {
+					            var index = $(this).index() + 1;
+					            index = ((currentPage - 1) * gridPageSize) + index;
+					            var rowLabel = $(this).find(".row-number");
+					            $(rowLabel).html(index);
+						    });
+					         */
+						}
+					});
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initFailureRateStatisticsGrid"});
+				}
+			}, // end fn_initFailureRateStatisticsGrid(jsonData)
+			
+			//-----------------------------------------------------------------------
+			// Description :: - 그리드 컬럼 동적 설정
+			//-----------------------------------------------------------------------
+			fn_getColumn_SU0304001_Grid : function(categoryValue, categoryText) {
+
+				var columnsData = [];
+				
+				try {
+					/* 
+					if (categoryValue != "process") {
+						
+						columnsData.push(
+							{
+								  title: "순번"
+					        	, template: "<span class='row-number'></span>"
+					        	, width: 45
+					        	, headerAttributes: {
+									 style: "text-align: center; vertical-align:middle;"
+								}
+								, attributes: {
+									 style: "text-align: center;"
+								}
+							}
+						);
+					}
+					 */
+										
+					columnsData.push(
+						{
+							field : "categoryNm",
+							title : categoryText,
+							width : "25%",
+							headerAttributes: {
+								 style: "text-align: center; vertical-align:middle;"
+							}, 
+							attributes: {
+								 style: "text-align: center; white-space: nowrap;"
+							}
+						}
+					);
+					
+					if (categoryValue == "interface") {
+						columnsData.push(
+							{
+								field : "categoryId",
+								title : categoryText + " ID",
+								width : "10%",
+								headerAttributes: {
+									 style: "text-align: center; vertical-align:middle;"
+								}, 
+								attributes: {
+									 style: "text-align: center; white-space: nowrap;"
+								}
+							}
+						);
+					}
+					else {
+						columnsData.push(
+							{
+								field : "categoryId",
+								hidden : true
+							}
+						);
+					}
+					
+					
+					columnsData.push(
+						{
+							field : "dataSize",
+							title : mint.label.getLabel('lb-474') + "(byte)",
+							width : "15%",
+							template: '#=kendo.format("{0:n0}", dataSize)#',
+							headerAttributes: {
+								 style: "text-align: center; vertical-align:middle;"
+							}, 
+							attributes: {
+								 style: "text-align: center; white-space: nowrap;"
+							}
+						}
+					);
+					
+					columnsData.push(
+						{
+							field : "totalCnt",
+							title : mint.label.getLabel('lb-89') + mint.label.getLabel('lb-349'),
+							//width : "20%",
+							template: '#=kendo.format("{0:n0}", totalCnt)#',
+							headerAttributes: {
+								 style: "text-align: center; vertical-align:middle;"
+							}, 
+							attributes: {
+								 style: "text-align: center; white-space: nowrap;"
+							}
+						}
+					);
+					
+					columnsData.push(
+						{
+							field : "successCnt",
+							title : mint.label.getLabel('lb-477') + mint.label.getLabel('lb-349'),
+							//width : "15%",
+							template: '#=kendo.format("{0:n0}", successCnt)#',
+							headerAttributes: {
+								 style: "text-align: center; vertical-align:middle;"
+							}, 
+							attributes: {
+								 style: "text-align: center; white-space: nowrap;"
+							}
+						}
+					);
+					
+					columnsData.push(
+						{
+							field : "errorCnt",
+							title : mint.label.getLabel('lb-32') + " " + mint.label.getLabel('lb-349'),
+							//width : "15%",
+							template: '#=$.main.fn_errorCntTemplate(errorCnt, categoryId, categoryNm)#',
+							headerAttributes: {
+								 style: "text-align: center; vertical-align:middle;"
+							}, 
+							attributes: {
+								 style: "text-align: center; white-space: nowrap; color: red;"
+							}
+						}
+					);
+					
+					columnsData.push(
+							{
+								field : "successRate",
+								title : mint.label.getLabel('lb-554'),
+								//width : "15%",
+								//template: '#= kendo.format("{0:p}", failureRate) #',
+								sortable: {
+									compare: function (a, b) {
+										var aRate = (Math.floor((a.successCnt / a.totalCnt) * 1000) / 1000);
+										var bRate = (Math.floor((b.successCnt / b.totalCnt) * 1000) / 1000);
+										return aRate === bRate ? 0 : (aRate > bRate) ? 1 : -1;
+									}
+								},
+								template: '#=kendo.format("{0:p1}", (Math.floor((successCnt / totalCnt) * 1000) / 1000) )#',
+								headerAttributes: {
+									 style: "text-align: center; vertical-align:middle;"
+								}, 
+								attributes: {
+									 style: "text-align: center; white-space: nowrap; color: blue;"
+								}
+							}
+						);
+					
+					columnsData.push(
+						{
+							field : "failureRate",
+							title : mint.label.getLabel('lb-555'),
+							//width : "15%",
+							//template: '#= kendo.format("{0:p}", failureRate) #',
+							sortable: {
+								compare: function (a, b) {
+									var aRate = (Math.ceil((a.errorCnt / a.totalCnt) * 1000) / 1000);
+									var bRate = (Math.ceil((b.errorCnt / b.totalCnt) * 1000) / 1000);
+									return aRate === bRate ? 0 : (aRate > bRate) ? 1 : -1;
+								}
+							},
+							template: '#=kendo.format("{0:p1}", (Math.ceil((errorCnt / totalCnt) * 1000) / 1000) )#',
+							headerAttributes: {
+								 style: "text-align: center; vertical-align:middle;"
+							}, 
+							attributes: {
+								 style: "text-align: center; white-space: nowrap; color: blue;"
+							}
+						}
+					);
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_getColumn_SU0304001_Grid"});
+				}
+				
+				return columnsData;
+			}, // end fn_getColumn_SU0304001_Grid(string, string)
+			
+			
+			fn_errorCntTemplate : function (errorCnt, categoryId, categoryNm) {
+				
+				try {
+					//console.log("categoryId:" + categoryId + ", categoryNm:" + categoryNm);
+					var tmpHtml = "";
+					if ($.main.searchCondition.scCategory == "interface") {
+						tmpHtml = kendo.format("{0:n0}", errorCnt);
+					}
+					else {
+						tmpHtml = "<span onClick='$.main.fn_errorIntfList(\""+ categoryId + "\");' style='cursor: pointer;'>" + kendo.format("{0:n0}", errorCnt) + "</span>";
+					}
+					
+					return tmpHtml;
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_errorCntTemplate"});
+				}
+				
+			}, // fn_errorCntTemplate
+			
+			//-----------------------------------------------------------------------
+			// Description :: 조회 버튼 Click 이벤트 - Grid Data 설정
+			//-----------------------------------------------------------------------
+			fn_set_SU0304001_GridData : function(jsonData) {
+				
+				try {
+					
+					var gridData = $.main.fn_get_SU0304001_GridData(jsonData);
+					//console.log(gridData);
+					var dataSource = new kendo.data.DataSource({
+						  data: gridData
+					    , page:1
+					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+					});
+					
+					//데이터 재설정
+					$("#grid_su0304001").data("kendoGrid").setDataSource(dataSource);
+					
+					// 탭 자동 이동
+					$('#tabs-menu-list li:eq(0)').show();
+					$('#tabs-menu-list a:eq(0)').tab('show');
+					
+					//$('#tabs-menu-list li:eq(1)').hide();
+
+					// 상세 그리드  초기화
+					//$("#grid_su0304001_detail").empty();
+					//$.main.fn_initSU0304001_DetailGrid();
+
+					$("#grid_su0304001_detail th[data-field=categoryNm]").html($.main.searchCondition.scCategoryText);
+					
+					
+					// 그리드 네비게이션 메뉴 설정
+					if ($.main.searchCondition.scCategory == "process")
+					{
+						
+						var tmpNavHtml = [];
+						for (var i=0; i<$.main.navMenuForProcessGrid.length; i++) {
+							
+							tmpNavHtml.push('<li>');
+							tmpNavHtml.push('<a href="javascript:void(0);" onclick="$.main.fn_getDataForGridNavMenu(' + i + ')">' + $.main.navMenuForProcessGrid[i].navTitle + '</a>');
+							tmpNavHtml.push('</li>');
+						}
+						
+						$("#navMenuForProcess").html(tmpNavHtml.join(""));
+					}
+					
+
+				}
+				catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_set_SU0304001_GridData"});
+				}
+			}, // end fn_set_SU0304001_GridData(jsonData)
+			
+			fn_getDataForGridNavMenu : function(idx) {
+				
+				try {
+					var tmpNavMenuForProcessGrid = [];
+					var requestObject = {};
+					
+					// 조회 파라메터 구성
+					requestObject = $.main.searchCondition;
+					requestObject.detailId = $.main.navMenuForProcessGrid[idx].detailId;
+			        requestObject.searchMode = $.main.navMenuForProcessGrid[idx].searchMode;
+					
+			        
+			        // 네비 메뉴 설정
+					for (var i=0; i<=idx; i++) {
+						tmpNavMenuForProcessGrid[i] = $.main.navMenuForProcessGrid[i];
+					}
+					
+					$.main.navMenuForProcessGrid = [];
+					$.main.navMenuForProcessGrid = tmpNavMenuForProcessGrid;
+					
+					//데이터 조회
+				    mint.callService(requestObject, screenName, 'REST-R01-SU-03-04', '$.main.fn_set_SU0304001_GridData', {errorCall : true});
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDataForGridNavMenu"});
+				}
+			}, // fn_getDataForGridNavMenu(Number)
+			
+			fn_get_SU0304001_GridData : function(jsonData) {
+				try {//console.log(jsonData);
+					var statisticsFailureRateList = [];
+					var statisticsFailureRate;
+					var su0304001GridData = {};
+					
+					if (typeof jsonData != null) {
+						for (var d in jsonData) {
+							statisticsFailureRate = jsonData[d];
+							
+							su0304001GridData = {
+								  categoryId : statisticsFailureRate.categoryId
+								, categoryNm : statisticsFailureRate.categoryNm
+								, dataSize : statisticsFailureRate.dataSize
+								, totalCnt : statisticsFailureRate.totalCnt
+								, successCnt : statisticsFailureRate.finishedCnt
+								, errorCnt : statisticsFailureRate.processingCnt + statisticsFailureRate.errorCnt
+								//, failureRate : $.main.fn_getDataApplyTemplate(statisticsFailureRate.errorCnt, statisticsFailureRate.totalCnt)
+							};
+							
+							//console.log(su0304001GridData);
+							statisticsFailureRateList.push(su0304001GridData);
+						}
+					}
+					/* 
+					if (typeof jsonData != null) {
+						if (typeof jsonData.errorInterfaceList != null) {
+							
+							for (var d in jsonData.errorInterfaceList) {
+								
+								errorInterfaceRecord = jsonData.errorInterfaceList[d];
+								
+								errorInterfaceRecordList.push(errorInterfaceRecord);
+							}
+						}
+					}
+					 */
+					return statisticsFailureRateList;
+					
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_get_SU0304001_GridData"});
+				}
+				
+			}, // end fn_get_SU0304001_GridData(jsonData)
+			
+			//-----------------------------------------------------------------------
+			// Description :: 그리드 컬럼 Data custom template 적용
+			//-----------------------------------------------------------------------
+			fn_getDataApplyTemplate : function(numeratorVal, denominatorVal) {
+				
+				try {
+					var resultStr = "";
+					var ratio = 0;
+					
+					ratio = parseFloat((numeratorVal / denominatorVal) * 100);
+					
+					if ( (ratio == 0) || (ratio == 100) ) {
+						ratio = ratio.toFixed(0);
+					}
+					else {
+						ratio = ratio.toFixed(1);
+					}
+					
+					//resultStr = ratio + " %";
+					
+					//return resultStr;
+					return ratio;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDataApplyTemplate"});
+				}
+			}, // end fn_getDataApplyTemplate(int, int)
+			
+
+			fn_errorIntfList : function (categoryId) {
+				try {
+					//console.log("searchDetailKey:" + categoryId);
+					if ($.main.isInitfailureInterfaceGridDetail) {
+						// 탭 자동 이동
+						$('#tabs-menu-list li:eq(1)').show();
+						$('#tabs-menu-list a:eq(1)').tab('show');
+						
+						$("#grid_su0304001_detail").empty();
+						
+						$.main.fn_initSU0304001_DetailGrid();
+					} 
+					
+					if ($.main.searchCondition.scCategory == "interface") {
+						// 인터페이스 결과는 상세 결과와 동일하므로 별도 조회 안함.
+					}
+					else {
+						var searchCondition = $.main.searchCondition;
+						
+						searchCondition.searchDetailKey = categoryId;
+						//데이터 조회
+					    mint.callService(searchCondition, screenName, 'REST-R03-SU-03-04', '$.main.fn_set_SU0304001_DetailGridData', {errorCall : true});
+						
+					}
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_errorIntfList"});
+				}
+			}, // end fn_errorIntfList
+			
+			
+			fn_initSU0304001_DetailGrid : function() {
+				try {
+					var excelName = mint.label.getLabel('lb-32') + " " + mint.label.getLabel('lb-395') + " " + mint.label.getLabel('lb-353') + ".xlsx";
+					excelName = excelName.replace(/\//g, "_");
+					
+					$("#grid_su0304001_detail").kendoGrid({
+						dataSource : {
+								data: [],
+								pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+						},
+						//height : 550,
+						resizable: true,
+						sortable: true,
+						pageable : {
+								refresh : false,
+								pageSizes : mint.ui.getPageSizesS(),
+								buttonCount : 5
+						},
+						toolbar: ["excel"],
+						excel: {
+							  allPages: true
+							, filterable: true
+							, fileName: excelName
+						}, 
+						messages: {
+							commands: {
+							  excel: mint.label.getLabel('lb-508')
+							}
+						}, excelExport: function(e) {
+							//스타일 편집
+							var sheet = e.workbook.sheets[0];
+							
+							//console.log(sheet);
+							// columns 기준
+							for(var cw=0; cw<sheet.columns.length; cw++) {
+								//sheet.columns[cw].width = 15;
+								sheet.columns[cw].autoWidth = true;
+								
+								if (cw > 0) {
+									sheet.columns[cw].width = 20;
+								}
+							}
+							
+							// custom TH title set
+							var searchCondition = $.main.searchCondition;
+							
+							// rows 기준
+							for (var i = 0; i < sheet.rows.length; i++) {
+								for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+									sheet.rows[i].cells[ci].vAlign = "center";
+									
+									//정렬 기준
+									if(0 == i) {
+										//컬럼 헤더일 경우
+										sheet.rows[i].cells[ci].hAlign = "center";
+										sheet.rows[i].cells[ci].bold = true;
+										
+
+										if (0 == i && ci == 0) {
+											var tmpCategoryText = "";
+											if ($.main.searchCondition.scCategory == "interface") {
+												tmpCategoryText = mint.label.getLabel('lb-395');
+											}
+											else if ($.main.searchCondition.scCategory == "process") {
+												tmpCategoryText = mint.label.getLabel('lb-81');
+											}
+											else if ($.main.searchCondition.scCategory == "requirement") {
+												tmpCategoryText = mint.label.getLabel('lb-410');
+											}
+											else if ($.main.searchCondition.scCategory == "channel") {
+												tmpCategoryText = mint.label.getLabel('lb-80');
+											}
+											else if ($.main.searchCondition.scCategory == "system") {
+												tmpCategoryText = mint.label.getLabel('lb-82');
+											}
+											else if ($.main.searchCondition.scCategory == "type") {
+												tmpCategoryText = mint.label.getLabel('lb-478');
+											}
+											else {
+												//
+											}
+											
+											sheet.rows[i].cells[ci].value = tmpCategoryText;
+										}
+										
+										
+									} else {
+										//데이터 내용일 경우
+										/*
+										if(1 == ci || 2 == ci || 3 == ci) {
+										   sheet.rows[i].cells[ci].hAlign = "left";
+										} else {
+										   sheet.rows[i].cells[ci].hAlign = "center";
+										}
+										*/
+										sheet.rows[i].cells[ci].hAlign = "center";
+										
+									}
+								}
+							}
+							
+							e.preventDefault();
+							var createExcelFileName = excelName;
+							mint.downloadExcelFile(createExcelFileName, sheet, screenName);
+							
+						},
+						columns : [
+								{
+									field : "categoryId",
+									hidden: true
+								}
+								, {
+									field : "categoryNm",
+									title : " ",
+									width : "15%",
+									template : "#= $.main.fn_rowsGrouping(categoryNm) #",
+									headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "interfaceNm",
+									title : mint.label.getLabel('lb-153'),
+									//template: '#=$.main.fn_errorCntTemplate(errorCnt, categoryId, categoryNm)#',
+									headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "integrationId",
+									title : mint.label.getLabel('lb-154'),
+									width : "15%",
+									//template: '#=$.main.fn_errorCntTemplate(errorCnt, categoryId, categoryNm)#',
+									headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										 style: "text-align: center; white-space: nowrap;"
+									}
+								}
+								, {
+									field : "interfaceId",
+									hidden : true
+								}
+								, {
+									field : "errorCnt",
+									title : mint.label.getLabel('lb-32') + " " + mint.label.getLabel('lb-349'),
+									width : "15%",
+									template: '#= kendo.format("{0:n0}", errorCnt) #',
+									headerAttributes: {
+										 style: "text-align: center; vertical-align:middle;"
+									}, 
+									attributes: {
+										 style: "text-align: center; white-space: nowrap; color: red;"
+									}
+								}
+						],
+						dataBound: function (e) {
+							if(1 > $("#grid_su0304001_detail").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+								
+								$("#grid_su0304001_detail").children(".k-grid-content").height(gridHeight /2.5);
+								//$("#grid_su0304001").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#grid_su0304001_detail").children(".k-grid-content").height('auto');
+								//$("#grid_su0304001").children(".k-grid-content-locked").height('auto');
+							}
+
+							$.main.tmpGridRowspanIdx = 0;
+						}
+					});
+					
+					
+					$.main.isInitfailureInterfaceGridDetail = false;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_initSU0304001_DetailGrid"});
+				}
+			},
+			
+			//-----------------------------------------------------------------------
+			// Description :: - 그리드 row의 column 데이터 중복 시 그룹핑
+			//-----------------------------------------------------------------------
+			fn_rowsGrouping : function(colValue) {
+			
+				try {
+					var result = "";
+					
+					if ($.main.searchCondition.scCategory == "process") {
+						result = colValue;
+					}
+					else {
+						var currentPageSize = $("#grid_su0304001_detail").data("kendoGrid").dataSource.pageSize();
+						var page = $("#grid_su0304001_detail").data("kendoGrid").dataSource.page();
+						var totalDataSize = $("#grid_su0304001_detail").data("kendoGrid").dataSource.total();
+						
+						var lastPage = parseInt(totalDataSize / currentPageSize) + 1;
+						var lastPageRowsCount = (totalDataSize % currentPageSize);
+						
+						var rowsHalf = 0;
+						if (page == lastPage) {
+							rowsHalf = Math.round(lastPageRowsCount/2);
+						}
+						else {
+							rowsHalf = (currentPageSize > totalDataSize) ? Math.round(totalDataSize/2) : Math.round(currentPageSize/2);
+						}
+						
+						$.main.tmpGridRowspanIdx++;
+						
+						if ($.main.tmpGridRowspanIdx == rowsHalf) {
+							result = colValue;
+						}
+						else {
+							if (colValue == mint.label.getLabel('lb-547')) {
+								result = colValue;
+							}
+							else {
+								result = "";
+							}
+						}
+					}
+					
+					return result;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_rowsGrouping"});
+				}
+				
+			}, // end fn_rowsGrouping
+			
+			fn_set_SU0304001_DetailGridData : function(jsonData) {
+				try {
+					//console.log(jsonData);
+					var tmpCategoryText = "";
+					if ($.main.searchCondition.scCategory == "interface") {
+						tmpCategoryText = mint.label.getLabel('lb-395');
+					}
+					else if ($.main.searchCondition.scCategory == "process") {
+						tmpCategoryText = mint.label.getLabel('lb-81');
+					}
+					else if ($.main.searchCondition.scCategory == "requirement") {
+						tmpCategoryText = mint.label.getLabel('lb-410');
+					}
+					else if ($.main.searchCondition.scCategory == "channel") {
+						tmpCategoryText = mint.label.getLabel('lb-80');
+					}
+					else if ($.main.searchCondition.scCategory == "system") {
+						tmpCategoryText = mint.label.getLabel('lb-82');
+					}
+					else if ($.main.searchCondition.scCategory == "type") {
+						tmpCategoryText = mint.label.getLabel('lb-478');
+					}
+					else {
+						//
+					}
+						
+					$("#grid_su0304001_detail th[data-field=categoryNm]").html(tmpCategoryText);
+					
+					
+					// 그리드 초기화
+					// 탭 자동 이동
+		    		$('#tabs-menu-list li:eq(1)').show();
+		    		$('#tabs-menu-list a:eq(1)').tab('show');
+	        		
+					
+					var gridData = $.main.fn_get_SU0304001_DetailGrid_CustomData(jsonData);
+					//console.log(gridData);
+					var dataSource = new kendo.data.DataSource({
+						  data: gridData
+					    , page:1
+					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+					});
+					
+					//데이터 재설정
+					$("#grid_su0304001_detail").data("kendoGrid").setDataSource(dataSource);
+					
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_set_SU0304001_DetailGridData"});
+				}
+			}, // fn_set_SU0304001_DetailGridData 
+			
+			fn_get_SU0304001_DetailGrid_CustomData : function (jsonData) {
+				try {
+					var statisticsFailureInterfaceList = [];
+					var statisticsFailureInterface;
+					var su0304001DetailGridData = {};
+					
+					if (typeof jsonData != null) {
+						for (var d in jsonData) {
+							statisticsFailureInterface = jsonData[d];
+							
+							su0304001DetailGridData = {
+								  categoryId : statisticsFailureInterface.categoryId
+								, categoryNm : statisticsFailureInterface.categoryNm
+								, integrationId : statisticsFailureInterface.integrationId
+								, interfaceId : statisticsFailureInterface.interfaceId
+								, interfaceNm : statisticsFailureInterface.interfaceNm
+								, errorCnt : statisticsFailureInterface.processingCnt + statisticsFailureInterface.errorCnt
+							};
+							
+							statisticsFailureInterfaceList.push(su0304001DetailGridData);
+						}
+					}
+					
+					return statisticsFailureInterfaceList;
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_get_SU0304001_DetailGrid_CustomData"});
+				}
+			}, // fn_get_SU0304001_DetailGrid_CustomData 
+			
+			//-----------------------------------------------------------------------
+			// Description :: - 선택된 조회조건 정보 컨트롤 / 반환
+			//-----------------------------------------------------------------------
+			fn_getSearchCondition : function() {
+				try {
+					var resultConditions = {
+							scCategory : "",
+							scCategoryText : "",
+							scCategoryDetailId : "",
+							scCategoryDetailNm : "",
+							scNodeType : "",
+							scPeriodYearFrom : "",
+							scPeriodYearTo : "",
+							scPeriodMonthFrom : "",
+							scPeriodMonthTo : "",
+							scPeriodDayFrom : "",
+							scPeriodDayTo : "",
+							scPeriodHourFrom : "",
+							scPeriodHourTo : "",
+							scPeriodFrom : "",
+							scPeriodTo : "",
+							searchMode : "DEFAULT",
+							detailId : ""
+					};
+					
+					
+					
+					
+					resultConditions.scCategory =  $("#sc-su0304001-category").data("kendoDropDownList").value().replace(/\s/g,'');
+					resultConditions.scCategoryText = $("#sc-su0304001-category").data("kendoDropDownList").text();
+					
+					if (resultConditions.scCategory == "interface") {
+						resultConditions.scCategoryDetailNm = $("#sc-su0304001-cb-interfaceNm").data("kendoComboBox").value();
+						resultConditions.scCategoryDetailId = $("#sc-su0304001-cb-interfaceId").data("kendoComboBox").value().replace(/\s/g,'');
+					}
+					else if (resultConditions.scCategory == "system") {
+						resultConditions.scCategoryDetailId = $('#tf-systemId_hidden').val();
+						//resultConditions.scCategoryDetailId = $("#sc-su0304001-cb-system").data("kendoComboBox").value().replace(/\s/g,'');
+					}
+					else if (resultConditions.scCategory == "requirement") {
+						resultConditions.scCategoryDetailNm = $("#sc-su0304001-cb-requirement").data("kendoComboBox").value().replace(/\s/g,'');
+					}
+					else {
+						resultConditions.scCategoryDetailId = "";
+						resultConditions.scCategoryDetailNm = "";
+					}
+					
+					
+					var scNodeType = "";
+					if (resultConditions.scCategory == "process") {
+						scNodeType = $("#sc-su0304001-nodetype").data("kendoDropDownList").value().replace(/\s/g,'');
+					}
+					else if (resultConditions.scCategory == "system") {
+						scNodeType = $("#sc-su0304001-nodetype").data("kendoDropDownList").value().replace(/\s/g,'');
+					}
+					else {
+						scNodeType = "";
+					}
+					
+					if (scNodeType == "ALL") {
+						scNodeType = "";
+					}
+					
+					resultConditions.scNodeType = scNodeType;
+				
+					resultConditions.scPeriodYearFrom = kendo.toString($("#sc-su0304001-period-fromdate").data("kendoDatePicker").value(), 'yyyy');
+					resultConditions.scPeriodYearTo = kendo.toString($("#sc-su0304001-period-todate").data("kendoDatePicker").value(), 'yyyy');
+					
+					resultConditions.scPeriodMonthFrom = kendo.toString($("#sc-su0304001-period-fromdate").data("kendoDatePicker").value(), 'MM');
+					resultConditions.scPeriodMonthTo = kendo.toString($("#sc-su0304001-period-todate").data("kendoDatePicker").value(), 'MM');
+					
+					resultConditions.scPeriodDayFrom = kendo.toString($("#sc-su0304001-period-fromdate").data("kendoDatePicker").value(), 'dd');
+					resultConditions.scPeriodDayTo = kendo.toString($("#sc-su0304001-period-todate").data("kendoDatePicker").value(), 'dd');
+					
+					//resultConditions.scPeriodHourFrom = $("#sc-su0304001-period-fromhour").data("kendoComboBox").value();
+					//resultConditions.scPeriodHourTo = $("#sc-su0304001-period-tohour").data("kendoComboBox").value();
+					resultConditions.scPeriodHourFrom = kendo.toString($("#sc-su0304001-period-fromhour").data("kendoTimePicker").value(), 'HH');
+					resultConditions.scPeriodHourTo = "" + (Number(kendo.toString($("#sc-su0304001-period-tohour").data("kendoTimePicker").value(), 'HH')) + 1);
+					
+					
+					resultConditions.scPeriodFrom = resultConditions.scPeriodYearFrom
+													+ resultConditions.scPeriodMonthFrom
+													+ resultConditions.scPeriodDayFrom
+													+ resultConditions.scPeriodHourFrom;
+					
+					resultConditions.scPeriodTo = resultConditions.scPeriodYearTo
+													+ resultConditions.scPeriodMonthTo
+													+ resultConditions.scPeriodDayTo
+													+ resultConditions.scPeriodHourTo;
+					
+					//console.log(resultConditions);
+					
+					resultConditions.searchMode = "DEFAULT";
+					
+					
+					return resultConditions;
+					
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getSearchCondition"});
+				}
+			}, // end fn_getSearchCondition()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDownSU0304001 : function(event) {
+				try {
+					if(event.keyCode == 13) {
+						//var searchCondition = $.main.fn_getSearchCondition();
+						$.main.searchCondition = $.main.fn_getSearchCondition();
+						
+						
+						//네비 메뉴 설정
+						{
+							$.main.navMenuForProcessGrid = [];
+							
+							if ($.main.searchCondition.scCategory == "process") {
+								
+								var tmpNavObject = {};
+								
+								tmpNavObject.detailId = "";
+								tmpNavObject.navTitle = mint.label.getLabel('lb-91');
+								tmpNavObject.searchMode = "DEFAULT";
+								
+								$.main.navMenuForProcessGrid.push(tmpNavObject);
+															 
+							}
+							
+						}
+						
+						//데이터 조회
+					    mint.callService($.main.searchCondition, screenName, 'REST-R01-SU-03-04', '$.main.fn_set_SU0304001_GridData', {errorCall : true});
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownSU0304001"});
+				}
+			}, // end fn_onKeyDownSU0304001
+			
+			//-----------------------------------------------------------------------
+			// Description :: System 리턴 값
+			//-----------------------------------------------------------------------
+			fn_returnSystemPopupData : function(rtnSystemData) {
+				try {
+					if( mint.common.isEmpty(rtnSystemData) ) {
+						$('#tf-systemNm').val('');
+						$('#tf-systemNm_hidden').val('');
+						$('#tf-systemId_hidden').val('');
+					} else {
+						$('#tf-systemNm').val(rtnSystemData.systemNm + '(' + rtnSystemData.systemCd + ')');
+						$('#tf-systemNm_hidden').val(rtnSystemData.systemNm);
+						$('#tf-systemId_hidden').val(rtnSystemData.systemId);
+						
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_returnSystemPopupData"});
+				}
+			}//end fn_returnSystemPopupData()								
+			
+			
+		}// end main
+		
+	});//end extends
+	
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================	
+	// 조회 클릭(상단)
+	$(".btn-failurerate-sttsearch").bind("click", function () {
+		
+		//$('.k-grid-excel').prop('disabled', false);
+		
+		//var searchCondition = $.main.fn_getSearchCondition();
+		$.main.searchCondition = $.main.fn_getSearchCondition();
+		
+
+		//네비 메뉴 설정
+		{
+			$.main.navMenuForProcessGrid = [];
+			
+			if ($.main.searchCondition.scCategory == "process") {
+				
+				var tmpNavObject = {};
+				
+				tmpNavObject.detailId = "";
+				tmpNavObject.navTitle = mint.label.getLabel('lb-91');
+				tmpNavObject.searchMode = "DEFAULT";
+				
+				$.main.navMenuForProcessGrid.push(tmpNavObject);
+											 
+			}
+			
+		}
+		
+		//데이터 조회
+	    mint.callService($.main.searchCondition, screenName, 'REST-R01-SU-03-04', '$.main.fn_set_SU0304001_GridData', {errorCall : true});
+	});
+	
+
+	$(".btn-status-KPI").bind("click", function () {
+		
+		try {
+			mint.move('../sub-su/SU-03-00-001');
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btn-status-KPI.click"});
+		}
+		
+	});
+    
+	
+	// ARIS 프로세스 하위 프로세스 검색 이벤트
+	$('#grid_su0304001').on('dblclick', "tr.k-state-selected", function () {
+		
+		try {
+			var searchCondition = $.main.searchCondition;
+			var scCategoryVal = searchCondition.scCategory;
+			if (scCategoryVal == "process") {
+				//alert("dbl click Grid!!");
+				var entityGrid = $("#grid_su0304001").data("kendoGrid");
+		        var selectedItem = entityGrid.dataItem(entityGrid.select());
+				
+		        if (selectedItem) {
+	        		
+		        	var requestObject = $.main.searchCondition;;
+			        requestObject.detailId = selectedItem.categoryId;
+			        requestObject.searchMode = "DETAIL";
+			        
+			        
+					//네비 메뉴 설정
+					{
+						var tmpNavObject = {};
+						
+						tmpNavObject.detailId = selectedItem.categoryId;
+						tmpNavObject.navTitle = selectedItem.categoryNm;
+						tmpNavObject.searchMode = "DETAIL";
+						
+						$.main.navMenuForProcessGrid.push(tmpNavObject);
+						
+					}
+			        
+					//데이터 조회
+				    mint.callService(requestObject, screenName, 'REST-R01-SU-03-04', '$.main.fn_set_SU0304001_GridData', {errorCall : true});
+	        	}
+			}
+			else {
+				return false;
+			}
+		}
+		catch(e) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "grid_su0302001.dblclick"});
+		}
+		
+	});
+	
+	
+	//-----------------------------------------------------------------------
+	// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+	//-----------------------------------------------------------------------
+	$('#sc-su0304001-period-fromdate').keydown(function(event) {
+		$.main.fn_onKeyDownSU0304001(event);
+	});	
+	
+	$('#sc-su0304001-period-todate').keydown(function(event) {
+		$.main.fn_onKeyDownSU0304001(event);
+	});	
+	
+	$('#sc-su0304001-period-fromhour').keydown(function(event) {
+		$.main.fn_onKeyDownSU0304001(event);
+	});	
+	
+	$('#sc-su0304001-period-tohour').keydown(function(event) {
+		$.main.fn_onKeyDownSU0304001(event);
+	});
+	
+	//-----------------------------------------------------------------------
+	// Description :: 시스템명 변경시 event 함수
+	//-----------------------------------------------------------------------
+	$('#tf-systemNm').on('click', function () {
+		//팝업에 필요한 div 를 동적으로 생성하도록 한다.
+		var attachDiv = 'attachSystemSearchPop';
+		$('#' + attachDiv).remove();
+		$('#page-wrapper').append($('<div id="' + attachDiv + '"></div>'));
+		
+		$.ajax({
+     		url: "../sub-co/CO-01-00-901.html",
+     		success:function(data){
+     			$('#' + attachDiv).html('');
+         		$('#' + attachDiv).html(data);
+         		
+         		$('#pop_system_search').modal({
+    				backdrop: 'static'
+    			}).on('hidden.bs.modal', function(event) {
+    				$('#' + attachDiv).html('');
+    			});
+     		}
+ 		});
+	});		
+	
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================		
+	
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================		
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	
+});//end document.ready()
+</script>
+<style>
+/*
+.k-grid tr td {
+    border-bottom: 1px solid #C0C0C0;
+}
+*/
+
+.k-grid .k-detail-cell .k-grid-header {
+  display: none;
+}
+
+.k-grid-header
+{
+   padding: 0 !important;
+}
+
+.k-grid-content
+{
+   overflow-y: visible;
+}
+/* 
+.k-grid tr {
+    cursor : default !important;
+}
+*/
+</style>

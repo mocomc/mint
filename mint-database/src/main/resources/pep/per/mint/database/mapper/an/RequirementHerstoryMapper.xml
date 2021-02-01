@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.an.RequirementHerstoryMapper">
+	<!--
+      <cache/>
+      -->
+
+	<select id="selectCurrentHerstoryVersion" resultType="int">
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+		SELECT COALESCE(MAX(VERSION::numeric),0) FROM TAN0107 WHERE REQUIREMENT_ID = #{requirementId, jdbcType=VARCHAR}
+       		</when>
+       		<otherwise>
+		SELECT NVL(MAX(TO_NUMBER(VERSION)),0) FROM TAN0107 WHERE REQUIREMENT_ID = #{requirementId, jdbcType=VARCHAR}
+       		</otherwise>
+       	</choose>
+	</select>
+
+	<insert id="insertRequirementColumnHerstory" parameterType="ColumnHerstory">
+		INSERT INTO TAN0107 (
+			 REQUIREMENT_ID
+			,MOD_DATE
+			,COLUMN_ID
+			,VERSION
+			,TYPE
+			,VALUE
+			,MOD_USER
+		) VALUES (
+			 #{requirementId, jdbcType=VARCHAR}
+			,#{modDate		, jdbcType=VARCHAR}
+			,#{columnId 	, jdbcType=VARCHAR}
+			,#{version 		, jdbcType=NUMERIC}
+			,#{type			, jdbcType=VARCHAR}
+			,#{value		, jdbcType=VARCHAR}
+			,#{modId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getLastRequirementColumnHerstory" resultType="ColumnHerstory">
+		SELECT
+			 REQUIREMENT_ID AS "requirementId"
+			,MOD_DATE 		AS "modeDate"
+			,COLUMN_ID 		AS "columnId"
+			,VERSION 		AS "version"
+			,TYPE 			AS "type"
+			,VALUE 			AS "value"
+			,MOD_USER 		AS "modId"
+		FROM TAN0107
+		WHERE COLUMN_ID = #{columnId}
+		AND REQUIREMENT_ID = #{requirementId}
+		AND VERSION = (SELECT MAX(a.VERSION) FROM TAN0107 a WHERE COLUMN_ID = #{columnId} AND REQUIREMENT_ID = #{requirementId} )
+	</select>
+
+	<insert id="insertRequirementCommentHerstory">
+		INSERT INTO TAN0108 (
+			 REQUIREMENT_ID
+			,COMMENT_ID
+			,MOD_DATE
+			,VERSION
+			,CONTENTS
+			,MOD_USER
+		)
+		SELECT
+			a.REQUIREMENT_ID,
+			a.COMMENT_ID,
+			#{modDate, jdbcType=VARCHAR},
+			#{version, jdbcType=VARCHAR},
+			a.CONTENTS,
+			#{modId, jdbcType=VARCHAR}
+		FROM TAN0102 a
+		WHERE REQUIREMENT_ID = #{requirementId}
+	</insert>
+
+	<insert id="insertRequirementAttatchFileHerstory">
+		INSERT INTO TAN0109 (
+			 REQUIREMENT_ID
+			,FILE_ID
+			,FILE_NM
+			,FILE_PATH
+			,MOD_DATE
+			,VERSION
+			,MOD_USER
+		)
+		SELECT
+			a.REQUIREMENT_ID,
+			a.FILE_ID,
+			a.FILE_NM,
+			a.FILE_PATH,
+			#{modDate, jdbcType=VARCHAR},
+			#{version, jdbcType=VARCHAR},
+			#{modId, jdbcType=VARCHAR}
+		FROM TAN0103 a
+		WHERE REQUIREMENT_ID = #{requirementId}
+	</insert>
+
+	<!--
+	<select id="getRequirementDetailFromLastHerstory" parameterType="string" resultType="java.util.LinkedHashMap">
+		select
+			 (select VALUE from TAN0107 where COLUMN_ID = 'requirementNm' and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'requirementNm' and REQUIREMENT_ID = #{requirementId} )) as "requirementNm"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'status' 	  	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'status' 	  	  and REQUIREMENT_ID = #{requirementId} )) as "status"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'businessId' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'businessId'    and REQUIREMENT_ID = #{requirementId} )) as "businessId"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'comments' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'comments' 	  and REQUIREMENT_ID = #{requirementId} )) as "comments"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'devExpYmd' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'devExpYmd' 	  and REQUIREMENT_ID = #{requirementId} )) as "devExpYmd"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'devFinYmd' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'devFinYmd' 	  and REQUIREMENT_ID = #{requirementId} )) as "devFinYmd"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'testExpYmd'	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'testExpYmd' 	  and REQUIREMENT_ID = #{requirementId} )) as "testExpYmd"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'testFinYmd' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'testFinYmd' 	  and REQUIREMENT_ID = #{requirementId} )) as "testFinYmd"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'realExpYmd' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'realExpYmd' 	  and REQUIREMENT_ID = #{requirementId} )) as "realExpYmd"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'realFinYmd' 	  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'realFinYmd' 	  and REQUIREMENT_ID = #{requirementId} )) as "realFinYmd"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'delYn' 		  and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'delYn' 		  and REQUIREMENT_ID = #{requirementId} )) as "delYn"
+			,(select VALUE from TAN0107 where COLUMN_ID = 'interfaceId'   and REQUIREMENT_ID = #{requirementId} and VERSION = (select max(a.VERSION) from TAN0107 a where COLUMN_ID = 'interfaceId'   and REQUIREMENT_ID = #{requirementId} )) as "interfaceId"
+		from dual
+	</select>
+	-->
+
+	<insert id="insertInterfaceColumnHerstory" parameterType="ColumnHerstory">
+		INSERT INTO TAN0322 (
+			 REQUIREMENT_ID
+			,INTERFACE_ID
+			,MOD_DATE
+			,COLUMN_ID
+			,VERSION
+			,TYPE
+			,VALUE
+			,MOD_USER
+		) VALUES (
+			 #{requirementId, jdbcType=VARCHAR}
+			,#{interfaceId  , jdbcType=VARCHAR}
+			,#{modDate		, jdbcType=VARCHAR}
+			,#{columnId 	, jdbcType=VARCHAR}
+			,#{version 		, jdbcType=VARCHAR}
+			,#{type			, jdbcType=VARCHAR}
+			,#{value		, jdbcType=VARCHAR}
+			,#{modId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getLastInterfaceColumnHerstory" resultType="ColumnHerstory">
+		SELECT
+			 REQUIREMENT_ID AS "requirementId"
+			,INTERFACE_ID   AS "interfaceId"
+			,MOD_DATE 		AS "modeDate"
+			,COLUMN_ID 		AS "columnId"
+			,VERSION 		AS "version"
+			,TYPE 			AS "type"
+			,VALUE 			AS "value"
+			,MOD_USER 		AS "modId"
+		FROM TAN0322
+		WHERE COLUMN_ID = #{columnId}
+		AND REQUIREMENT_ID = #{requirementId}
+		AND INTERFACE_ID = #{interfaceId}
+		AND VERSION = (SELECT MAX(a.VERSION) FROM TAN0322 a WHERE COLUMN_ID = #{columnId} AND REQUIREMENT_ID = #{requirementId} AND INTERFACE_ID = #{interfaceId})
+	</select>
+
+	<insert id="insertInterfaceSystemMapHerstory">
+		INSERT INTO TAN0323 (
+			 REQUIREMENT_ID
+			,SYSTEM_ID
+			,INTERFACE_ID
+			,SEQ
+			,MOD_DATE
+			,VERSION
+			,NODE_TYPE
+			,SERVICE
+			,SERVICE_DESC
+			,RESOURCE_TYPE
+			,MOD_USER
+		)
+		SELECT
+			#{requirementId, jdbcType=VARCHAR},
+			a.SYSTEM_ID,
+			a.INTERFACE_ID,
+			a.SEQ,
+			#{modDate, jdbcType=VARCHAR},
+			#{version, jdbcType=VARCHAR},
+			a.NODE_TYPE,
+			a.SERVICE,
+			a.SERVICE_DESC,
+			a.RESOURCE_TYPE,
+			#{modId, jdbcType=VARCHAR}
+		FROM TAN0213 a
+		WHERE a.INTERFACE_ID = #{interfaceId}
+		AND a.DEL_YN = 'N'
+	</insert>
+
+	<insert id="insertInterfaceBusinessMapHerstory">
+		INSERT INTO TAN0324 (
+			 REQUIREMENT_ID
+			,BUSINESS_ID
+			,INTERFACE_ID
+			,SEQ
+			,MOD_DATE
+			,VERSION
+			,NODE_TYPE
+			,MOD_USER
+		)
+		SELECT
+			#{requirementId, jdbcType=VARCHAR},
+			a.BUSINESS_ID,
+			a.INTERFACE_ID,
+			a.SEQ,
+			#{modDate, jdbcType=VARCHAR},
+			#{version, jdbcType=VARCHAR},
+			a.NODE_TYPE,
+			#{modId, jdbcType=VARCHAR}
+		FROM TAN0218 a
+		WHERE a.INTERFACE_ID = #{interfaceId}
+		AND a.DEL_YN = 'N'
+	</insert>
+
+	<insert id="insertInterfaceRelUserHerstory">
+		INSERT INTO TAN0325 (
+			 REQUIREMENT_ID
+			,USER_ID
+			,INTERFACE_ID
+			,SEQ
+			,MOD_DATE
+			,VERSION
+			,ROLE_TYPE
+			,SYSTEM_ID
+			,MOD_USER
+		)
+		SELECT
+			#{requirementId, jdbcType=VARCHAR},
+			a.USER_ID,
+			a.INTERFACE_ID,
+			a.SEQ,
+			#{modDate, jdbcType=VARCHAR},
+			#{version, jdbcType=VARCHAR},
+			a.ROLE_TYPE,
+			a.SYSTEM_ID,
+			#{modId, jdbcType=VARCHAR}
+		FROM TAN0219 a
+		WHERE a.INTERFACE_ID = #{interfaceId}
+		AND a.DEL_YN = 'N'
+	</insert>
+
+	<insert id="insertB2BiInterfaceMetaDataHistory">
+		INSERT INTO TAN0326 (
+		    REQUIREMENT_ID,
+			INTERFACE_ID,
+			VERSION,
+			COMPANY_NM,
+			DOC_NM,
+			BIZ_NM,
+			DIRECTION,
+			PROTOCOL,
+			MOD_DATE,
+			MOD_USER
+		)
+		SELECT
+			#{requirementId, jdbcType=VARCHAR},
+			INTERFACE_ID,
+			#{version, jdbcType=VARCHAR},
+			COMPANY_NM,
+			DOC_NM,
+			BIZ_NM,
+			DIRECTION,
+			PROTOCOL,
+			#{modDate, jdbcType=VARCHAR},
+			#{modId, jdbcType=VARCHAR}
+		FROM TAN0228
+		WHERE INTERFACE_ID = #{interfaceId}
+	</insert>
+
+	<select id="getRequirementHerstoryList" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.REQUIREMENT_ID AS "requirementId",
+			a.MOD_DATE AS "modDate",
+			a.VERSION  AS "version",
+			a.MOD_USER AS "modUserId",
+			b.USER_NM  AS "modUserNm"
+		FROM TAN0107 a
+		INNER JOIN TSU0101 b
+		ON a.MOD_USER = b.USER_ID
+		WHERE a.REQUIREMENT_ID = #{requirementId}
+		GROUP BY a.REQUIREMENT_ID, a.MOD_DATE, a.VERSION, a.MOD_USER, b.USER_NM
+		ORDER BY a.MOD_DATE DESC, a.VERSION DESC
+	</select>
+
+	<select id="getRequirementColumnHerstory" resultType="RequirementColumnHerstory">
+		SELECT
+			----------------------
+			-- 요건
+			----------------------
+			(SELECT MAX(MOD_DATE) FROM TAN0107 WHERE VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "modDate"
+			,#{version} AS "version"
+			,a.REQUIREMENT_ID AS "requirementId"
+			,a.REQUIREMENT_NM AS "requirementNm"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'requirementNm' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "requirementNm2"
+			,a.STATUS AS "status"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'status' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "status2"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '01' AND DEL_YN = 'N' AND CD = a.STATUS) AS "statusNm"
+			,(SELECT b.NM FROM TAN0107 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'AN' AND b.LEVEL2 = '01' AND b.DEL_YN = 'N' AND b.CD = a.VALUE AND a.COLUMN_ID = 'status' AND a.REQUIREMENT_ID = #{requirementId} AND a.VERSION = #{version}) AS "statusNm2"
+			,a.COMMENTS AS "comments"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'comments' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "comments2"
+			,a.DEV_EXP_YMD AS "devExpYmd"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'devExpYmd' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "devExpYmd2"
+			,a.DEV_FIN_YMD AS "devFinYmd"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'devFinYmd' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "devFinYmd2"
+			,a.TEST_EXP_YMD AS "testExpYmd"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'testExpYmd' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "testExpYmd2"
+			,a.TEST_FIN_YMD AS "testFinYmd"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'testFinYmd' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "testFinYmd2"
+			,a.REAL_EXP_YMD AS "realExpYmd"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'realExpYmd' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "realExpYmd2"
+			,a.REAL_FIN_YMD AS "realFinYmd"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'realFinYmd' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "realFinYmd2"
+			,a.DEL_YN AS "delYn"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'delYn' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "delYn2"
+			,a.INTERFACE_ID AS "interfaceId"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'interfaceId' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "interfaceId2"
+			----------------------
+			-- 업무(프로세스)
+			----------------------
+			,a.BUSINESS_ID AS "businessId"
+			,(SELECT VALUE FROM TAN0107 WHERE COLUMN_ID = 'businessId' AND REQUIREMENT_ID = #{requirementId} AND VERSION = #{version}) AS "businessId2"
+			,(SELECT BUSINESS_NM FROM TIM0301 WHERE BUSINESS_ID = a.BUSINESS_ID) AS "businessNm"
+			,(SELECT b.BUSINESS_NM FROM TAN0107 a INNER JOIN TIM0301 b ON a.VALUE = b.BUSINESS_ID AND a.COLUMN_ID = 'businessId' AND a.REQUIREMENT_ID = #{requirementId} AND a.VERSION = #{version}) AS "businessNm2"
+		FROM TAN0101 a
+		WHERE a.REQUIREMENT_ID = #{requirementId}
+	</select>
+
+	<select id="getInterfaceColumnHerstory" resultType="InterfaceColumnHerstory">
+		SELECT
+			(SELECT MAX(MOD_DATE) FROM TAN0322 WHERE INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "modDate"
+			,#{version} AS "version"
+			-------------------------------------
+			-- 현재정보
+			-------------------------------------
+			,a.INTEGRATION_ID   AS "integrationId"
+			,a.INTERFACE_ID     AS "interfaceId"
+			,a.INTERFACE_NM     AS "interfaceNm"
+			,a.CHANNEL_ID       AS "channelId"
+			,(SELECT CHANNEL_NM FROM TIM0002 WHERE CHANNEL_ID = a.CHANNEL_ID) AS "channelNm"
+			,a.IMPORTANCE       AS "importance"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '02' AND CD = A.IMPORTANCE AND A.DEL_YN = 'N') AS importanceNm
+			,a.MAX_DELAY_TIME   AS "maxDelayTime"
+			,a.MAX_DELAY_UNIT   AS "maxDelayUnit"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '03' AND CD = a.MAX_DELAY_UNIT AND a.DEL_YN = 'N') AS maxDelayUnitNm
+			,a.MAX_ERROR_TIME   AS "maxErrorTime"
+			,a.MAX_ERROR_UNIT   AS "maxErrorUnit"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '04' AND CD = a.MAX_ERROR_UNIT AND a.DEL_YN = 'N') AS maxErrorUnitNm
+			,a.REF_PATTERN_ID   AS "refPatternId"
+			,a.DATA_PR_DIR      AS "dataPrDir"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '01' AND CD = a.DATA_PR_DIR AND a.DEL_YN = 'N') AS dataPrDirNm
+			,a.APP_PR_METHOD    AS "appPrMethod"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '02' AND CD = a.APP_PR_METHOD AND a.DEL_YN = 'N') AS appPrMethodNm
+			,a.DATA_PR_METHOD   AS "dataPrMethod"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '12' AND CD = a.DATA_PR_METHOD AND a.DEL_YN = 'N') AS dataPrMethodNm
+			,a.DATA_FREQ        AS "dataFrequency"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '03' AND CD = a.DATA_FREQ AND a.DEL_YN = 'N') AS dataFrequencyNm
+			,a.DATA_FREQ_INPUT AS "dataFrequencyInput"
+			,a.SZ_PER_TRAN      AS "sizePerTran"
+			,a.CNT_PER_FREQ     AS "cntPerFrequency"
+			,a.CNT_PER_DAY      AS "cntPerDay"
+			,a.QTT_PER_DAY      AS "qttPerDay"
+			,a.START_RES_TYPE   AS "startResType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND CD = a.START_RES_TYPE AND a.DEL_YN = 'N') AS startResTypeNm
+			,a.END_RES_TYPE     AS "endResType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND CD = a.END_RES_TYPE AND a.DEL_YN = 'N') AS endResTypeNm
+			,a.START_NODE_CNT   AS "startNodeCnt"
+			,a.END_NODE_CNT     AS "endNodeCnt"
+			,a.DATA_ORDER_YN    AS "dataSeqYn"
+			,a.COMMENTS         AS "comments"
+			,a.DEL_YN           AS "delYn"
+			,(SELECT AS_INTERFACE_ID FROM TAN0210 WHERE INTERFACE_ID = a.INTERFACE_ID AND CHANNEL_ID = a.CHANNEL_ID AND DEL_YN = 'N') AS "asisInterfaceId"
+			-------------------------------------
+			-- 변경버전정보
+			-------------------------------------
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'integrationId' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "integrationId2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'interfaceId' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "interfaceId2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'interfaceNm' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "interfaceNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'channelId' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "channelId2"
+			,(SELECT b.CHANNEL_NM FROM TAN0322 a INNER JOIN TIM0002 b ON b.CHANNEL_ID = a.VALUE WHERE COLUMN_ID = 'channelId' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "channelNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'importance' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "importance2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'AN' AND b.LEVEL2 = '02' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'importance' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "importanceNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'maxDelayTime' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "maxDelayTime2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'maxDelayUnit' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "maxDelayUnit2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'AN' AND b.LEVEL2 = '03' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'maxDelayUnit' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "maxDelayUnitNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'maxErrorTime' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId})  "maxErrorTime2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'maxErrorUnit' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "maxErrorUnit2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'AN' AND b.LEVEL2 = '04' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'maxErrorUnit' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "maxErrorUnitNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'refPatternId' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "refPatternId2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'dataPrDir' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "dataPrDir2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'IM' AND b.LEVEL2 = '01' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'dataPrDir' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "dataPrDirNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'appPrMethod' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "appPrMethod2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'IM' AND b.LEVEL2 = '02' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'appPrMethod' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "appPrMethodNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'dataPrMethod' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "dataPrMethod2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'IM' AND b.LEVEL2 = '12' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'dataPrMethod' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "dataPrMethodNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'dataFrequency' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "dataFrequency2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'IM' AND b.LEVEL2 = '03' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'dataFrequency' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "dataFrequencyNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'dataFrequencyInput' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "dataFrequencyInput2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'sizePerTran' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "sizePerTran2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'cntPerFrequency' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "cntPerFrequency2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'cntPerDay' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "cntPerDay2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'qttPerDay' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "qttPerDay2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'startResType' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "startResType2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'IM' AND b.LEVEL2 = '04' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'startResType' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "startResTypeNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'endResType' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "endResType2"
+			,(SELECT b.NM  FROM TAN0322 a INNER JOIN TSU0301 b ON b.LEVEL1 = 'IM' AND b.LEVEL2 = '04' AND b.CD = a.VALUE AND b.DEL_YN = 'N' AND a.COLUMN_ID = 'endResType' AND a.INTERFACE_ID = #{interfaceId} AND a.VERSION = #{version} AND a.REQUIREMENT_ID = #{requirementId}) AS "endResTypeNm2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'startNodeCnt' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "startNodeCnt2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'endNodeCnt' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "endNodeCnt2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'dataSeqYn' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "dataSeqYn2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'comments' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "comments2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'delYn' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "delYn2"
+			,(SELECT VALUE FROM TAN0322 WHERE COLUMN_ID = 'asisInterfaceId' AND INTERFACE_ID = #{interfaceId} AND VERSION = #{version} AND REQUIREMENT_ID = #{requirementId}) AS "asisInterfaceId2"
+		FROM TAN0201 a
+		WHERE a.INTERFACE_ID = #{interfaceId}
+	</select>
+
+	<select id="getCurrentRequirementCommentList" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.COMMENT_ID AS "commentId"
+			,a.CONTENTS AS "comment"
+		FROM TAN0102 a
+		WHERE a.DEL_YN = 'N'
+		AND a.REQUIREMENT_ID = #{requirementId}
+		ORDER BY a.COMMENT_ID
+	</select>
+
+	<select id="getRequirementCommentListHerstory" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.COMMENT_ID AS "commentId"
+			,a.CONTENTS AS "comment"
+		FROM TAN0108 a
+		WHERE a.REQUIREMENT_ID = #{requirementId}
+		AND a.VERSION = #{version}
+		ORDER BY a.COMMENT_ID
+	</select>
+
+	<select id="getCurrentRequirementAttachFileList" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.FILE_ID 	 AS "fileId"
+			,a.FILE_NM   AS "fileNm"
+			,a.FILE_PATH AS "filePath"
+		FROM TAN0103 a
+		WHERE a.DEL_YN = 'N'
+		AND a.REQUIREMENT_ID = #{requirementId}
+		ORDER BY a.FILE_ID
+	</select>
+
+	<select id="getRequirementAttachFileListHerstory" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.FILE_ID 	 AS "fileId"
+			,a.FILE_NM   AS "fileNm"
+			,a.FILE_PATH AS "filePath"
+		FROM TAN0109 a
+		WHERE a.REQUIREMENT_ID = #{requirementId}
+		AND a.VERSION = #{version}
+		ORDER BY a.FILE_ID
+	</select>
+
+	<select id="getCurrentInterfaceSystemMapList" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.SYSTEM_ID    AS "systemId"
+			,b.SYSTEM_CD   AS "systemCd"
+			,b.SYSTEM_NM||'('||b.SYSTEM_CD||')' AS "systemNm"
+			,a.NODE_TYPE   AS "nodeType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND CD = a.NODE_TYPE AND DEL_YN = 'N') AS "nodeTypeNm"
+			,RESOURCE_TYPE AS "resourceCd"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND CD = a.RESOURCE_TYPE AND DEL_YN = 'N') AS "resourceNm"
+			,a.SERVICE     AS "service"
+			,a.SERVICE_DESC AS "serviceDesc"
+			,a.SEQ         AS "seq"
+		FROM TAN0213 a
+		INNER JOIN TIM0101 b ON a.SYSTEM_ID = b.SYSTEM_ID
+		AND a.DEL_YN = 'N'
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.SEQ
+	</select>
+
+	<select id="getInterfaceSystemMapListHerstory" resultType="java.util.LinkedHashMap">
+		SELECT
+			a.SYSTEM_ID    AS "systemId"
+			,b.SYSTEM_CD   AS "systemCd"
+			,b.SYSTEM_NM||'('||b.SYSTEM_CD||')'  AS "systemNm"
+			,a.NODE_TYPE   AS "nodeType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND CD = a.NODE_TYPE AND DEL_YN = 'N') AS "nodeTypeNm"
+			,RESOURCE_TYPE AS "resourceCd"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND CD = a.RESOURCE_TYPE AND DEL_YN = 'N') AS "resourceNm"
+			,a.SERVICE     AS "service"
+			,a.SERVICE_DESC AS "serviceDesc"
+			,a.SEQ         AS "seq"
+		FROM TAN0323 a
+		INNER JOIN TIM0101 b ON a.SYSTEM_ID = b.SYSTEM_ID
+		AND a.REQUIREMENT_ID = #{requirementId}
+		AND a.VERSION = #{version}
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.SEQ
+	</select>
+
+	<select id="getCurrentInterfaceBusinessMapList" resultType="java.util.LinkedHashMap">
+		SELECT
+			 a.BUSINESS_ID   AS "businessId"
+			,b.BUSINESS_CD   AS "businessCd"
+			,b.BUSINESS_NM   AS "businessNm"
+			,a.NODE_TYPE     AS "nodeType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND CD = a.NODE_TYPE AND DEL_YN = 'N') AS "nodeTypeNm"
+			,a.SEQ           AS "seq"
+		FROM TAN0218 a
+		INNER JOIN TIM0301 b ON a.BUSINESS_ID = b.BUSINESS_ID
+		AND a.DEL_YN = 'N'
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.SEQ
+	</select>
+
+	<select id="getInterfaceBusinessMapListHerstory" resultType="java.util.LinkedHashMap">
+		SELECT
+			 a.BUSINESS_ID   AS "businessId"
+			,b.BUSINESS_CD   AS "businessCd"
+			,b.BUSINESS_NM   AS "businessNm"
+			,a.NODE_TYPE     AS "nodeType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND CD = a.NODE_TYPE AND DEL_YN = 'N') AS "nodeTypeNm"
+			,a.SEQ           AS "seq"
+		FROM TAN0324 a
+		INNER JOIN TIM0301 b ON a.BUSINESS_ID = b.BUSINESS_ID
+		AND a.REQUIREMENT_ID = #{requirementId}
+		AND a.VERSION = #{version}
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.SEQ
+	</select>
+
+	<select id="getCurrentInterfaceRelUserList" resultType="java.util.LinkedHashMap">
+		SELECT
+			 a.USER_ID    AS "userId"
+			,a.SEQ        AS "seq"
+			,a.ROLE_TYPE  AS "roleType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '09' AND CD = a.ROLE_TYPE AND DEL_YN = 'N') AS "roleTypeNm"
+			,b.USER_NM    AS "userNm"
+			,b.EMAIL      AS "email"
+			,b.CELL_PHONE AS "cellPhone"
+			,b.PHONE      AS "phone"
+			,NVL((SELECT SYSTEM_NM||'('||SYSTEM_CD||')' FROM TIM0101 WHERE SYSTEM_ID = a.SYSTEM_ID), ' ') AS "systemNm"
+		FROM TAN0219 a
+		INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		AND a.DEL_YN = 'N'
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.SEQ
+	</select>
+
+	<select id="getInterfaceRelUserListHerstory" resultType="java.util.LinkedHashMap">
+		SELECT
+			 a.USER_ID    AS "userId"
+			,a.SEQ        AS "seq"
+			,a.ROLE_TYPE  AS "roleType"
+			,(SELECT NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '09' AND CD = A.ROLE_TYPE AND DEL_YN = 'N') AS "roleTypeNm"
+			,b.USER_NM    AS "userNm"
+			,b.EMAIL      AS "email"
+			,b.CELL_PHONE AS "cellPhone"
+			,b.PHONE      AS "phone"
+			,NVL((SELECT SYSTEM_NM||'('||SYSTEM_CD||')' FROM TIM0101 WHERE SYSTEM_ID = a.SYSTEM_ID), ' ') AS "systemNm"
+		FROM TAN0325 a
+		INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		AND a.REQUIREMENT_ID = #{requirementId}
+		AND a.VERSION = #{version}
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.SEQ
+	</select>
+
+	<select id="getCurrentInterfaceB2biInfoList" resultType="java.util.LinkedHashMap">
+		SELECT
+			  NVL(COMPANY_NM,' ') AS "companyNm"
+			, NVL(DOC_NM    ,' ') AS "docNm"
+			, NVL(BIZ_NM    ,' ') AS "bizNm"
+			, NVL(DIRECTION ,' ') AS "direction"
+			, NVL(PROTOCOL  ,' ') AS "protocol"
+		FROM TAN0228
+		WHERE INTERFACE_ID = #{interfaceId}
+	</select>
+
+	<select id="getInterfaceB2biInfoListHerstory" resultType="java.util.LinkedHashMap">
+		SELECT
+			  NVL(COMPANY_NM,' ') AS "companyNm"
+			, NVL(DOC_NM    ,' ') AS "docNm"
+			, NVL(BIZ_NM    ,' ') AS "bizNm"
+			, NVL(DIRECTION ,' ') AS "direction"
+			, NVL(PROTOCOL  ,' ') AS "protocol"
+		FROM TAN0326
+		WHERE REQUIREMENT_ID = #{requirementId}
+		AND INTERFACE_ID = #{interfaceId}
+		AND VERSION = #{version}
+	</select>
+
+	<select id="getLastVersionRequirementHistory" resultType="RequirementHistory">
+		SELECT
+			  REQUIREMENT_ID AS "requirementId"
+			 ,VERSION    AS "version"
+			 ,CONTENTS   AS "contents"
+			 ,DEL_YN     AS "delYn"
+			 ,REG_DATE   AS "regDate"
+			 ,REG_USER   AS "regId"
+			 ,MOD_DATE   AS "modDate"
+			 ,MOD_USER   AS "modId"
+		FROM TAN0327
+	    WHERE REQUIREMENT_ID = #{requirementId}
+	    AND VERSION = (SELECT MAX(VERSION) FROM TAN0327 WHERE REQUIREMENT_ID = #{requirementId})
+	    AND DEL_YN = 'N'
+	</select>
+
+	<insert id="addRequirementHistory" parameterType="RequirementHistory">
+
+		<selectKey keyProperty="version" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				SELECT (COALESCE(MAX(version::numeric),0)+1)::text as version FROM TAN0327 WHERE REQUIREMENT_ID = #{requirementId, jdbcType=VARCHAR}
+        		</when>
+        		<otherwise>
+				SELECT TO_CHAR(NVL(MAX(TO_NUMBER(VERSION)),0) + 1) as version FROM TAN0327 WHERE REQUIREMENT_ID = #{requirementId, jdbcType=VARCHAR}
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TAN0327 (
+			 REQUIREMENT_ID
+			,VERSION
+			,CONTENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+			 #{requirementId}
+			,#{version}
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			,#{contents}
+        		</when>
+        		<otherwise>
+			,#{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+        		</otherwise>
+        	</choose>
+			,'N'
+			,#{regDate}
+			,#{regId}
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<select id="getRequirementHistoryList" resultType="java.util.Map">
+		SELECT
+			a.VERSION AS "version"
+		 	,a.REQUIREMENT_ID AS "requirementId"
+		 	,a.MOD_DATE AS "modDate"
+		 	,a.MOD_USER AS "modUserId"
+		 	,b.USER_NM AS "modUserNm"
+		FROM TAN0327 a
+		LEFT OUTER JOIN TSU0101 b
+		ON a.MOD_USER = b.USER_ID
+		WHERE a.REQUIREMENT_ID = #{requirementId}
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+		ORDER BY a.VERSION::numeric DESC
+       		</when>
+       		<otherwise>
+		ORDER BY TO_NUMBER(a.VERSION) DESC
+       		</otherwise>
+       	</choose>
+	</select>
+
+	<select id="getRequirementHistory" resultType="RequirementHistory">
+		SELECT
+			 a.VERSION	AS "version"
+			,a.CONTENTS	AS "contents"
+		 	,a.MOD_DATE AS "modDate"
+		 	,a.MOD_USER	AS "modId"
+		FROM TAN0327 a
+		WHERE a.REQUIREMENT_ID = #{requirementId} AND a.VERSION=#{version}
+	</select>
+
+	<select id="getRequirementHistoryStatusNm" resultType="java.lang.String">
+		SELECT NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '01' AND CD = #{status}
+	</select>
+
+</mapper>

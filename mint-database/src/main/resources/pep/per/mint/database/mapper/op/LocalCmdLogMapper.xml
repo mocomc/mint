@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.LocalCmdLogMapper">
+  	<!--
+  	<cache/>
+  	-->
+	
+	<select id="exist" resultType="int">
+		select count(*) as cnt 
+		  from TOP0818 
+		 where AGENT_ID  = #{agentId,	jdbcType=VARCHAR}
+		   and SERVER_ID = #{serverId,	jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getServerIds" resultType="Map">		
+		select 
+		 a.SERVER_ID 		as "serverId"
+		,a.SERVER_NM		as "serverNm" 
+		,a.IP 				as "ip"
+		,a.HW_INST_POSITION as "type"
+		,nvl((SELECT state FROM TOP0818 WHERE SERVER_ID = a.SERVER_ID AND AGENT_ID = #{agentId}),'0')  AS "state"
+	  from TIM0201 a
+	 where a.IP is not NULL  
+	   and a.HW_INST_POSITION IN ('1','2','3') 
+	   and a.OS = #{agentCd}
+	   and a.DEL_YN = 'N'
+	</select>
+	
+	<delete id="deleteNetstatLogs">
+		delete from TOP0818 where AGENT_ID = #{agentId}
+	</delete>
+
+	<update id="updateNetstatLog">
+	
+		update TOP0818 
+		   set 
+			 PROTOCOL		= #{protocol,		jdbcType=VARCHAR}
+			,RECVQ			= #{recvQ,			jdbcType=VARCHAR}
+			,SENDQ			= #{sendQ,			jdbcType=VARCHAR}
+			,LOCAL_ADDRESS	= #{localAddress,	jdbcType=VARCHAR}
+			,FOREIGN_ADDRESS= #{foreignAddress,	jdbcType=VARCHAR}
+			,STATE			= #{state,			jdbcType=VARCHAR}
+			,MOD_DATE		= #{modDate,		jdbcType=VARCHAR}
+		 where AGENT_ID  = #{agentId,	jdbcType=VARCHAR}
+		   and SERVER_ID = #{serverId,	jdbcType=VARCHAR}
+
+	</update>
+	
+	<insert id="insertNetstatLog">
+	
+		insert into TOP0818 (		
+			 AGENT_ID
+			,SERVER_ID
+			,PROTOCOL
+			,RECVQ
+			,SENDQ
+			,LOCAL_ADDRESS
+			,FOREIGN_ADDRESS
+			,STATE
+			,MOD_DATE
+			,REG_DATE
+		) values (
+			 #{agentId,			jdbcType=VARCHAR}
+			,#{serverId,		jdbcType=VARCHAR}
+			,#{protocol,		jdbcType=VARCHAR}
+			,#{recvQ,			jdbcType=VARCHAR}
+			,#{sendQ,			jdbcType=VARCHAR}
+			,#{localAddress,	jdbcType=VARCHAR}
+			,#{foreignAddress,	jdbcType=VARCHAR}
+			,#{state,			jdbcType=VARCHAR}
+			,#{modDate,			jdbcType=VARCHAR}
+			,#{regDate,			jdbcType=VARCHAR}			
+		)
+
+	</insert>
+ 
+
+</mapper>

@@ -1,0 +1,15 @@
+AP00000040$$$H002$$$ko$$$어제/오늘처리현황$$$<p><span style='color: black; line-height: 115%; font-family: "맑은 고딕"; font-size: 10pt; mso-bidi-font-family: 굴림; mso-font-kerning: 0pt; mso-ansi-language: EN-US; mso-fareast-language: KO; mso-bidi-language: AR-SA;'><span lang="EN-US"><strong>
+</strong></span></span><span style='color: black; line-height: 115%; font-family: "맑은 고딕"; font-size: 10pt; mso-bidi-font-family: 굴림; mso-font-kerning: 0pt; mso-ansi-language: EN-US; mso-fareast-language: KO; mso-bidi-language: AR-SA;'><strong>어제<span lang="EN-US">/</span>오늘 처리 현황</strong><span lang="EN-US"><br><strong>
+</strong></span></span><span style='color: black; line-height: 115%; font-family: "맑은 고딕"; font-size: 10pt; mso-bidi-font-family: 굴림; mso-font-kerning: 0pt; mso-ansi-language: EN-US; mso-fareast-language: KO; mso-bidi-language: AR-SA;'>&nbsp; 어제<span lang="EN-US">/</span>오늘
+동시간대 처리 건수를 비교<span lang="EN-US"> <br>
+</span>&nbsp; 그래프의 편차가 많이 나면 순간 처리량이 증가된 것으로 비정상 여부를 점검<span lang="EN-US"><br>
+<b style="mso-bidi-font-weight: normal;">&nbsp; 1. </b></span><b style="mso-bidi-font-weight: normal;">검색 조건<span lang="EN-US"><br>
+</span></b><span lang="EN-US"><span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>1</span>분 주기로
+화면이 변경<span lang="EN-US">, </span>현재시간<span lang="EN-US">-4</span>기간전 데이타 표기<span lang="EN-US"><span style="mso-spacerun: yes;">&nbsp; </span><br>
+<b style="mso-bidi-font-weight: normal;">&nbsp; 2. </b></span><b style="mso-bidi-font-weight: normal;">개인화기능<span lang="EN-US"><br>
+</span></b><span lang="EN-US"><span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp;&nbsp; </span>a. </span>일반사용자<span lang="EN-US">(</span>접속자<span lang="EN-US">)</span>는 “라이프사이클관리<span lang="EN-US">&gt;</span>조회<span lang="EN-US">&gt;</span>인터페이스상세”화면에서 담당자로 지정되어있는 대상만 검색<span lang="EN-US"><br>
+<span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp;&nbsp; </span>b. admin </span>유저는 전체 인터페이스를 검색<span lang="EN-US"><br>
+<b style="mso-bidi-font-weight: normal;">&nbsp; 3. </b></span><b style="mso-bidi-font-weight: normal;">화면 상세 보기<span lang="EN-US"><br>
+</span></b><span lang="EN-US"><span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp;&nbsp; </span></span>그래프상
+수치 해당 시간대를 클릭<span lang="EN-US"> &gt; </span>집계<span lang="EN-US">/KPI &gt; </span>기간별
+집계<span lang="EN-US"> &gt; </span>비교<span lang="EN-US"><span style="mso-spacerun: yes;">&nbsp; </span></span>화면으로 이동</span><span style='color: black; line-height: 115%; font-family: "맑은 고딕"; font-size: 10pt; mso-bidi-font-family: 굴림; mso-font-kerning: 0pt; mso-ansi-language: EN-US; mso-fareast-language: KO; mso-bidi-language: AR-SA;'><span lang="EN-US"><strong><br></strong></span></span></p>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.gssp.GSSPJobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="selectPosTransaction" resultType="map">
+    <![CDATA[
+        -- ========================================================
+        -- 포스거래건수 집계 
+        -- --------------------------------------------------------- 
+        -- 조회 범위 : 30분 (현재시간-10분 ~ 현재시간+10분) 
+        -- 조회 기준 필드 : (SALE_START_DTTM) 
+        -- 조회 주기 : 10분 
+        -- getDate 집계 필드 기준 : 1분에서 10분으로 변경 (00, 10, 20, 30, 40, 50 주기로 
+        -- ---------------------------------------------------------  
+            select 
+               to_char(SALE_START_DTTM,'yyyymmddhh24') || rpad(substr(to_char(SALE_START_DTTM,'yyyymmddhh24mi'),11,1),2,'0') as "getDate",
+               ORIGIN_BIZPL_CD                              as "storeCd",
+               POS_NO                                       as "posNo",
+               count(*)                                     as "cnt" 
+              from TS_TR_HEADER
+             where SALE_START_DTTM >= to_date(#{fromDate},'yyyymmddhh24miss') 
+               and SALE_START_DTTM <= to_date(#{toDate}  ,'yyyymmddhh24miss')
+               and OPER_DT BETWEEN TO_CHAR(SYSDATE -2 , 'YYYYMMDD') AND TO_CHAR(SYSDATE + 2, 'YYYYMMDD')
+          group by ORIGIN_BIZPL_CD, POS_NO, to_char(SALE_START_DTTM,'yyyymmddhh24'), substr(to_char(SALE_START_DTTM,'yyyymmddhh24mi'),11,1)
+    ]]>
+    </select>
+   
+    <select id="selectPosTransactionBackup" resultType="map">
+    <![CDATA[
+        -- ========================================================
+        -- 포스거래건수 집계 
+        -- --------------------------------------------------------- 
+        -- 조회 범위 : 30분 (현재시간-10분 ~ 현재시간+10분) 
+        -- 조회 기준 필드 : (SALE_START_DTTM) 
+        -- 조회 주기 : 10분 
+        -- ---------------------------------------------------------  
+            select 
+               to_char(SALE_START_DTTM,'yyyymmddhh24mi')    as "getDate",
+               ORIGIN_BIZPL_CD                              as "storeCd",
+               POS_NO                                       as "posNo",
+               count(*)                                     as "cnt" 
+              from TS_TR_HEADER
+             where SALE_START_DTTM >= to_date(#{fromDate},'yyyymmddhh24miss') 
+               and SALE_START_DTTM <= to_date(#{toDate}  ,'yyyymmddhh24miss')
+               --and OPER_DT =  TO_CHAR(SYSDATE, 'YYYYMMDD')
+               and OPER_DT BETWEEN TO_CHAR(SYSDATE -2 , 'YYYYMMDD') AND TO_CHAR(SYSDATE + 2, 'YYYYMMDD')
+          group by ORIGIN_BIZPL_CD, POS_NO, to_char(SALE_START_DTTM,'yyyymmddhh24mi')  
+    ]]>
+    </select>
+    
+    
+</mapper>

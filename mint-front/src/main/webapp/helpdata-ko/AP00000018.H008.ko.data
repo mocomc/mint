@@ -1,0 +1,9 @@
+AP00000018$$$H008$$$ko$$$디스크 사용현황$$$<div><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><font color="#000000" face="맑은 고딕" size="2">디스크 사용현황</font></b></div><div><font color="#000000" face="굴림" size="3">
+
+</font><font color="#000000" face="굴림" size="3"><br></font></div><p style="margin: 0cm 0cm 10pt; text-indent: 10.5pt;"><b style="mso-bidi-font-weight: normal;"><font face="맑은 고딕"><font color="#000000" size="2">각 서버별로</font><span lang="EN-US"><font color="#000000" size="2"> Agent</font></span><font color="#000000" size="2">를 설치</font><span lang="EN-US"><font color="#000000" size="2">/</font></span><font color="#000000" size="2">수집하여</font><span lang="EN-US"><font color="#000000" size="2">, 1</font></span><font color="#000000" size="2">분단위로</font><span lang="EN-US"><font color="#000000" size="2"> Disk </font></span><font color="#000000" size="2">사용률 정보를 보여준다</font><span lang="EN-US"><font color="#000000" size="2">.</font></span></font></b></p><div><font color="#000000" face="굴림" size="3">
+
+</font><font face="맑은 고딕"><b style="mso-bidi-font-weight: normal;"><font color="#000000" size="2">&nbsp;&nbsp; 상위</font><span lang="EN-US"><font color="#000000" size="2"> 5</font></span><font color="#000000" size="2">개만 표시되며</font><span lang="EN-US"><font color="#000000" size="2">, 80%</font></span><font color="#000000" size="2">이상 일 때 </font><span lang="EN-US"><font color="#000000" size="2">“</font></span><font color="#000000" size="2">붉은색</font><span lang="EN-US"><font color="#000000" size="2">” 글자가 나타면 인프라 담당자와 협의</font></span></b></font></div><div><font color="#000000" face="굴림" size="3">
+
+</font></div>

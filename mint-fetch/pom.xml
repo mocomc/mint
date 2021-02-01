@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>pep.per</groupId>
+		<artifactId>mint</artifactId>
+		<version>3.0.0</version>
+	</parent>
+	<groupId>pep.per</groupId>
+	<artifactId>mint-fetch</artifactId>
+	<version>3.0.0</version>
+	<name>mint-fetch</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jackson-version>2.3.4</jackson-version>
+		<com.oracle.ojdbc6-version>11.2.0.3</com.oracle.ojdbc6-version>
+		<altibase5.jdbc-version>5.3.3.104</altibase5.jdbc-version>
+		<tibero.tibero-version>5.1.94952</tibero.tibero-version>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+		<!-- <com.h2database.h2-version>1.4.197</com.h2database.h2-version> -->
+	</properties>
+
+	<repositories>
+		<repository>
+	     	<id>codelds</id>
+	     	<!--
+			<url>http://10.10.1.54:8081/nexus/content/groups/public/</url>
+			 -->
+			<url>http://idc.mocomsys.com:28081/nexus/content/groups/public/</url>
+	   	</repository>
+	 </repositories>
+
+
+	<dependencies>
+
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-common</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<!-- for json dependency -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+
+		<!-- for logging dependency(log4j로 전환 고려) -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.8</version>
+		</dependency>
+		<!-- Oracle JDBC -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>${com.oracle.ojdbc6-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>altibase5.jdbc</groupId>
+			<artifactId>Altibase5</artifactId>
+			<version>${altibase5.jdbc-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.tmax</groupId>
+			<artifactId>tibero</artifactId>
+			<version>${tibero.tibero-version}</version>
+		</dependency>
+
+		<!-- H2 Database -->
+		<!-- <dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${com.h2database.h2-version}</version>
+		</dependency> -->
+
+ 		<dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.20</version>
+        </dependency>
+
+
+	</dependencies>
+</project>

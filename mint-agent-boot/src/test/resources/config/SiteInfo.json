@@ -1,0 +1,15 @@
+[
+	{
+		"objectType": "ApplicationInfo",
+		"applicationNm": "WMQ",
+		"home": "C:\\IBM\\WMQ",
+		"type": "00"
+	},
+	{
+		"objectType": "ApplicationInfo",
+		"applicationNm": "MTE Maria DB",
+		"home": "C:\\iip\\mte\\memra_v3.5.5.17.exe",
+		"type": "10"
+	}
+
+]

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.an.UserManagementMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getInterfaceUserList" resultMap="userResultMap">
+
+		<choose>
+			<when test="onlyRetiredEmp != null and onlyRetiredEmp eq 'Y'.toString()">
+				select
+					 a.USER_ID
+					,b.USER_NM
+					,b.COMPANY_NM
+					,b.DEPARTMENT_NM
+					,b.POSITION_NM
+					,b.EMAIL
+					,b.CELL_PHONE
+					,b.PHONE
+					,'Y' as RETIRED
+					,(select count(sa.INTERFACE_ID) from TAN0219 sa, TAN0101 sb where sa.USER_ID = a.USER_ID and sa.INTERFACE_ID = sb.INTERFACE_ID and sb.DEL_YN = 'N') as INTERFACE_CNT
+				  from TSU0105 a
+				inner join TSU0101 b
+				   on a.USER_ID = b.USER_ID
+				  and a.DEL_YN = 'N'
+				<if test="userNm != null">
+					and b.USER_NM like '%'||#{userNm}||'%'
+				</if>
+				inner join (select distinct USER_ID from TAN0219 where DEL_YN = 'N') c
+				   on a.USER_ID = c.USER_Id
+			</when>
+			<otherwise>
+				select distinct
+					 a.USER_ID
+					,b.USER_NM
+					,b.COMPANY_NM
+					,b.DEPARTMENT_NM
+					,b.POSITION_NM
+					,b.EMAIL
+					,b.CELL_PHONE
+					,b.PHONE
+					,'N' as RETIRED
+					,(select count(sa.INTERFACE_ID) from TAN0219 sa, TAN0101 sb where sa.USER_ID = a.USER_ID and sa.INTERFACE_ID = sb.INTERFACE_ID and sb.DEL_YN = 'N') as INTERFACE_CNT
+				  from TAN0219 a
+				 inner join TSU0101 b
+				    on a.USER_ID = b.USER_ID
+				   and a.DEL_YN = 'N'
+			  	   and a.USER_ID not in (select USER_ID from TSU0105 where DEL_YN = 'N')
+				<if test="userNm != null">
+					and b.USER_NM like '%'||#{userNm}||'%'
+				</if>
+			</otherwise>
+		</choose>
+
+		order by USER_ID
+	</select>
+
+
+	<resultMap id="userResultMap" type="java.util.LinkedHashMap">
+		<id property="userId" 			column="USER_ID"/>
+		<result property="userNm" 		column="USER_NM"/>
+		<result property="cellPhone" 	column="CELL_PHONE"/>
+		<result property="phone"		column="PHONE"/>
+		<result property="email"		column="EMAIL"/>
+		<result property="companyNm" 	column="COMPANY_NM"/>
+		<result property="departmentNm"	column="DEPARTMENT_NM"/>
+		<result property="positionNm"	column="POSITION_NM"/>
+		<result property="retired"		column="RETIRED"/>
+		<result property="interfaceCnt" column="INTERFACE_CNT"/>
+	</resultMap>
+
+
+	<select id="getInterfaceList" resultType="java.util.LinkedHashMap">
+		select
+			 d.CHANNEL_ID 		as "channelId"
+			,e.CHANNEL_NM 		as "channelNm"
+			,d.INTERFACE_ID  	as "interfaceId"
+			,d.INTEGRATION_ID   as "integrationId"
+			,d.INTERFACE_NM  	as "interfaceNm"
+			,d.REG_USER         as "regId"
+			,f.USER_NM          as "regNm"
+			,a.ROLE_TYPE        as "roleType"
+		    ,im09.NM            as "roleNm"
+		  from TAN0219 a
+		 inner join TAN0201 d
+		    on a.INTERFACE_ID = d.INTERFACE_ID
+		   and a.USER_ID = #{userId}
+		 inner join TIM0002 e
+		    on d.CHANNEL_ID = e.CHANNEL_ID
+		 inner join TSU0101 f
+		    on d.REG_USER = f.USER_ID
+		 left outer join TSU0301 im09
+		    on a.ROLE_TYPE = im09.CD
+		   and im09.LEVEL1 = 'IM'
+		   and im09.LEVEL2 = '09'
+		 inner join TAN0101 g
+		    on d.INTERFACE_ID = g.INTERFACE_ID
+		   and g.DEL_YN = 'N'
+		 order by d.CHANNEL_ID, d.INTERFACE_ID
+
+	</select>
+
+	<select id="getInterfaceListForUserManagement" resultType="java.util.LinkedHashMap">
+		select
+			 a.CHANNEL_ID 		as "channelId"
+			,b.CHANNEL_NM 		as "channelNm"
+			,a.INTERFACE_ID  	as "interfaceId"
+			,a.INTEGRATION_ID   as "integrationId"
+			,a.INTERFACE_NM  	as "interfaceNm"
+			,a.REG_USER         as "regId"
+			,c.USER_NM          as "regNm"
+		 from TAN0201 a
+		inner join TIM0002 b on a.CHANNEL_ID = b.CHANNEL_ID
+		inner join TSU0101 c on a.REG_USER = c.USER_ID
+		<if test="userNm != null">
+			and a.INTERFACE_ID in (select sa.INTERFACE_ID from TAN0219 sa, TSU0101 sb where sa.USER_ID = sb.USER_ID and sb.USER_NM like '%'||#{userNm}||'%' )
+		</if>
+
+		<if test="systemId != null">
+			and a.INTERFACE_ID in (select INTERFACE_ID from TAN0213 where SYSTEM_ID = #{systemId})
+		</if>
+
+		<if test="systemNm != null">
+			and a.INTERFACE_ID in (select x.INTERFACE_ID from TAN0213 x , TIM0101 y where x.SYSTEM_ID = y.SYSTEM_ID and y.SYSTEM_NM like '%'||#{systemNm}||'%')
+		</if>
+
+		<if test="integrationId != null">
+			and a.INTEGRATION_ID = #{integrationId}
+		</if>
+
+		<if test="interfaceNm != null">
+			and a.INTERFACE_NM like '%'||#{interfaceNm}||'%'
+		</if>
+
+		order by a.CHANNEL_ID, a.INTERFACE_ID
+
+	</select>
+
+
+	<delete id="deleteInterfaceUser">
+		delete from TAN0219 where USER_ID = #{userId} and INTERFACE_ID = #{interfaceId} and ROLE_TYPE = #{roleType}
+	</delete>
+
+
+	<insert id="insertInterfaceUser">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select nvl(max(SEQ) + 1, 0) from TAN0219 where INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+		</selectKey>
+		insert into TAN0219(
+			 INTERFACE_ID
+			,USER_ID
+			,SEQ
+			,ROLE_TYPE
+			,SYSTEM_ID
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{interfaceId	, jdbcType=VARCHAR}
+			,#{newUserId	, jdbcType=VARCHAR}
+			,#{seq			, jdbcType=NUMERIC}
+			,#{roleType		, jdbcType=VARCHAR}
+			,#{systemId		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate		, jdbcType=VARCHAR}
+			,#{regId		, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<select id="selectInterfaceUser" resultType="string">
+		select distinct USER_ID from TAN0219 where USER_ID = #{userId} and INTERFACE_ID = #{interfaceId} and ROLE_TYPE = #{roleType}
+	</select>
+
+</mapper>

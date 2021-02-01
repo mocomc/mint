@@ -1,0 +1,884 @@
+<!--
+	Screen ID : RT-01-00-001
+	Screen NM : Application 모델속성관리.
+-->
+<div class="row wrapper border-bottom white-bg page-heading menu dhkim">
+	<div id="oldPath" class="col-lg-5">
+	    <h2><lb class="lb-800"></lb></h2>
+		<ol class="breadcrumb">
+	        <li><lb class="lb-636"></lb></li>
+	        <li><lb class="lb-25"></lb></li>
+	        <li class="active"><strong><lb class="lb-800"></lb></strong></li>
+ 		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+    <div class="col-lg-7">
+        <div class="title-action" >
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-78"></lb></h5> <!-- 조회 조건 -->
+					<div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			        	<a id="btnListSearch" class="btn btn-w-m btn-default btn-outline"><i class="fa fa-search "></i> <lb class="lb-10"></lb></a> <!-- 조회 -->
+			            <a id="btnCreate" class="btn btn-w-m btn-default btn-outline"><i class="fa fa-plus-circle"></i> <lb class="lb-428"></lb></a> <!-- 생성 -->
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="row">
+						<div class="col-sm-4">
+	                        <div class="form-group">
+	                            <span class="label-tag-4"><lb class="lb-92"></lb></span>
+	                            <input id="sc-appType" class="input-tag-4" type="text" placeholder="Search...">
+	                        </div>
+	                    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-lg-12">
+        	<div class="ibox float-e-margins">
+        		<div class="ibox-title">
+	                <h5><lb class="lb-91"></lb></h5> <!-- 조회 결과 -->
+	                <div class="ibox-tools">
+	                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+	                </div>
+				</div>
+				<div class="ibox-content">
+					<div class="panel-body">
+						<div id="attr-grid"></div>
+					</div>
+				</div>
+			</div>
+       	</div>
+   	</div>
+
+   	<div id="detail">
+    	<div style="float: right; padding: 0px 20px 10px 0px;">
+			<a id="btnDelete" class="btn btn-danger btn-w-m btn-default btn-outline"><i class="fa fa-trash-o"></i> <lb class="lb-343"></lb></a> <!-- 삭제 -->
+			<a id="btnSave" class="btn btn-w-m btn-default btn-outline" style="display: none;"><i class="fa fa-save"></i> <lb class="lb-310"></lb></a> <!-- 저장 -->
+			<a id="btnModify" class="btn btn-w-m btn-default btn-outline" style="display: none;"><i class="fa fa-pencil"></i> <lb class="lb-342"></lb></a> <!-- 수정 -->
+		</div>
+		<div class="ibox-content">
+			<div class="row">
+				<div class="col-sm-4">
+					<label class="label-tag-4"><lb class="lb-93"></lb></label>
+					<input id="attNm" type="text" class="input-tag-4 k-textbox" placeholder="">
+				</div>
+
+				<div class="col-sm-4">
+					<label class="label-tag-4"><lb class="lb-94"></lb></label>
+					<input id="attCd" type="text" class="input-tag-4 k-textbox" required />
+				</div>
+
+				<div class="col-sm-4">
+					<label class="label-tag-4"><lb class="lb-95"></lb></label>
+					<input id="attType" type="combobox" class="input-tag-4">
+				</div>
+
+				<hr class="hr-space">
+
+				<div class="col-sm-4">
+					<label class="label-tag-4"><lb class="lb-92"></lb></label>
+					<input id="appType" type="combobox" class="input-tag-4">
+				</div>
+				<div class="col-sm-4">
+					<label class="label-tag-4"><lb class="lb-96"></lb></label>
+					<input id="inputType" type="combobox" class="input-tag-4">
+				</div>
+				<div class="col-sm-4">
+					<label class="label-tag-4"><lb class="lb-97"></lb></label>
+					<input id="tagYn">
+				</div>
+			</div>
+		</div>
+		<div id="codeList" class="ibox-content" style="display:none;">
+			<div class="panel-body">
+				<div id="code-grid"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/x-kendo-template" id="template-001">
+	<div>
+		<span class="appAttCode" style="float: right; padding:5px 10px 5px 0px; cursor: pointer;">
+			<i class='fa fa-plus-square'></i> <lb class="template-001-change"></lb></span>
+		</span>
+	</div>
+</script>
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "RT-01-00-001";
+		$.extend({
+			main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+				callScrnNm : screenName,
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+
+						// Grid 초기화
+						$.main.fn_initAttrGrid();
+	                	$.main.fn_initCodeGrid();
+
+						// Combo 초기화
+	                	$.main.fn_getComboList();
+
+						$("#tagYn").kendoSwitch();
+
+						//	추후 공통으로..
+						$("#detail").kendoWindow({
+							actions: ["Minimize","Maximize", "Close"],
+							width: "1200px",
+							maxHeight: window.innerHeight - 50,
+							pinned: true,
+							resizable: false,
+							modal: true,
+							title: mint.label.getLabel('lb-353'),
+							visible: false
+						});
+
+						$.main.fn_searchGridAttrList();
+
+						mint.common.siteMenuPath(screenName);
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: 용도 조회 및 초기화
+				//-----------------------------------------------------------------------
+			 	fn_getComboList : function() {
+
+			 		var requestObject = new Object();
+			 		requestObject.resourceCd = "";
+
+					mint.callService(requestObject, screenName, 'REST-R03-RT-01-00',
+						function(jsonData) {
+							if( !mint.common.isEmpty(jsonData) ) {
+								for(var i=0; i < jsonData.length; i++) {
+									jsonData[i].appTypeName = jsonData[i].appTypeName + "[" + jsonData[i].appType +"]";
+								}
+								mint.ui.setComboBoxWithValueSort('sc-appType', jsonData, 0, 'appTypeName', 'appType');
+								mint.ui.setDropDownList('appType', jsonData, -1, 'appTypeName', 'appType');
+							}
+						} , {errorCall : true, throwError : true}
+					);
+
+					mint.ui.setDropDownList('attType', mint.common.commonCodeMap.get("cds").RT03, 0, 'nm', 'cd');
+					mint.ui.setDropDownList('inputType', mint.common.commonCodeMap.get("cds").RT02, 0, 'nm', 'cd');
+				}, // end fn_getComboList()
+
+				//-----------------------------------------------------------------------
+				// Description :: grid 초기화
+				//-----------------------------------------------------------------------
+				fn_initAttrGrid : function() {
+					try {
+						$("#attr-grid").kendoGrid({
+							dataSource : {
+				 				  data: ""
+				 				, pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+							}
+						    , sortable : true
+							, selectable: "row"
+							, resizable: true
+							, filterable: true
+							, pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesS()
+						    	, buttonCount 	: 5
+						    	, input : true
+							}
+						    , toolbar: ["excel"]
+						    , excel: {
+						          allPages: true
+						        , filterable: true
+						        , fileName: mint.common.remakeYYMMDD(new Date()).substring(0, 14) + '_' + mint.label.getLabel('lb-10') + '.xlsx'
+						    }
+						    , messages: {
+						        commands: {
+						          excel: mint.label.getLabel('lb-508')
+						        }
+						    }
+						    , detailInit: $.main.fn_detailInit
+						    , detailExpand: function(e) {
+						    	var detailRow = e.detailRow;
+						    	setTimeout(function() {
+						    		kendo.fx(detailRow).fade("in").duration(375).play();
+						    	}, 0);
+
+						    }
+						    , columns : [
+									 {
+										  title 	: mint.label.getLabel('lb-93')
+										, field 	: "name"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; '
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-94')
+										, field 	: "cd"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-95')
+										, field 	: "typeName"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-92')
+										, field 	: "appTypeName"
+										, template  : "#= appTypeName + mint.lb + appType + mint.rb #"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-96')
+										, field 	: "inputTypeName"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-97')
+										, field 	: "tagYn"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-71')
+										, field 	: "regDate"
+										, template  : '#=$.main.fn_changeTime(regDate)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-535')
+										, field 	: "regId"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-582')
+										, field 	: "modDate"
+										, template  : '#=$.main.fn_changeTime(modDate)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+									, {
+										  title 	: mint.label.getLabel('lb-667')
+										, field 	: "modId"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap; text-align: center;'
+							            },
+							            filterable: { multi: true, search: true }
+									}
+							]
+						    , dataBound: function (e) {
+
+						    	// 하위 정보가 존재할경우..
+						    	var dataSource = this.dataSource;
+						    	this.element.find('tr.k-master-row').each(function() {
+						        	var row = $(this);
+						        	var data = dataSource.getByUid(row.data('uid'));
+						        	if (data.cds.length === 0) {
+						        		row.find('.k-hierarchy-cell a').css({ display: 'none' });
+						        	}
+						        });
+
+						    	if(0 == $("#attr-grid").data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$("#attr-grid").children(".k-grid-content").height(gridHeight /2.5);
+						    		$("#attr-grid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+						    	} else {
+						    		$("#attr-grid").children(".k-grid-content").height('auto');
+							    	$("#attr-grid").children(".k-grid-content-locked").height('auto');
+						    	}
+						    }
+						}).data("kendoGrid");
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initAttrGrid"});
+					};
+				},//end fn_initAttrGrid
+
+				fn_detailInit : function(e) {
+					try {
+						var detailRow = e.data.cds;
+						$("<div/>").appendTo(e.detailCell).kendoGrid({
+							dataSource: detailRow
+							, scrollable: false
+							, columns: [
+								{
+									field : "attrCd",
+									title : mint.label.getLabel('lb-354'),
+									width : "200px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+								},
+								{
+									field : "attrName",
+									title : mint.label.getLabel('lb-211'),
+									width : "300px",
+									headerAttributes : {
+										style : "text-align: center"
+									},
+									attributes : {
+										style : "text-align: center; white-space: nowrap;"
+									},
+								}
+							]
+						});
+					} catch ( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_detailInit"});
+					}
+				}, // end fn_detailInit
+
+				fn_initCodeGrid : function() {
+					try {
+						var grid = $("#code-grid").kendoGrid({
+							dataSource : {
+				 				  data: []
+				 				, pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+				 				, schema: {
+							    	model: {
+							    		id: "attrCd"
+							    	}
+							    }
+							}
+							, toolbar : kendo.template( $("#template-001").html() )
+							, editable: {
+		                    	mode : "popup",
+		                    	window : {
+		                    		pinned: true,
+		                    		width : "400px"
+		                    	},
+		                    	createAt: "bottom"
+		                    }
+							, save : function(e) {
+
+								if( mint.common.isEmpty(e.model.attrCd) ) {
+									mint.common.alert('CW00019', mint.label.getLabel('lb-354'));
+									this.dataSource.cancelChanges();
+								} else {
+									for(i=0; i < e.sender.dataSource.data().length; i++) { // 중복체크
+										if(e.sender.dataSource.data()[i].attrCd === e.model.attrCd
+												&& !e.sender.dataSource.data()[i].dirty) {
+											mint.common.alert('CW00021', mint.label.getLabel('lb-354'));
+											this.dataSource.cancelChanges();
+										}
+									}
+								}
+
+								e.model.delYn = 'N';
+							}
+							, selectable: "row"
+							, resizable: true
+							, pageable : {
+								  refresh 		: false
+								, pageSizes		: mint.ui.getPageSizesS({'allView' : true})
+						    	, buttonCount 	: 5
+						    	, input : true
+							}
+						    , columns : [
+									{
+										  field 	: "attrCd"
+										, title 	: mint.label.getLabel('lb-354')
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'text-align: center; white-space: nowrap;'
+							            },
+									}
+									, {
+										  field 	: "attrName"
+										, title 	: mint.label.getLabel('lb-211')
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;'
+							            },
+									}
+									, {
+										attributes : {
+											style : "text-align: center; white-space: nowrap;"
+										},
+										command : [
+											{
+												name  : "edit",
+											  	text  :
+												{
+													edit   : mint.label.getLabel('lb-342'),
+												  	update : mint.label.getLabel('lb-310'),
+												  	cancel : mint.label.getLabel('lb-143')
+												}
+											},
+										  	{
+												name  : "deletes",
+											  	text  : "<span class='k-icon k-i-delete'></span>" + mint.label.getLabel('lb-343'),
+											  	click : function(e) {
+											  		var row = $(e.target).closest("tr");
+													var dataItem = this.dataItem(row);
+											  		$('#code-grid').data('kendoGrid').dataSource.remove(dataItem);
+											  	}
+											}
+										]
+									}
+							]
+						    , dataBound: function (e) {
+						    	if(0 == $("#code-grid").data().kendoGrid.dataSource.view().length) {
+						    		$("#code-grid").children(".k-grid-content").height('100');
+						    	} else {
+						    		$("#code-grid").children(".k-grid-content").height('auto');
+						    	}
+						    }
+						}).data("kendoGrid");
+						$('.template-001-change').text(mint.label.getLabel('lb-370'));
+
+						grid.table.kendoSortable({
+	                        filter: ">tbody >tr",
+	                        hint : $.noop,
+	                        cursor : "move",
+	                        placeholder: function(element) {
+	                            return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+	                        },
+	                        container: "#code-grid tbody",
+	                        change: function(e) {
+	                            var skip = grid.dataSource.skip(),
+	                                oldIndex = e.oldIndex + skip,
+	                                newIndex = e.newIndex + skip,
+	                                data = grid.dataSource.data(),
+	                                dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+
+	                            grid.dataSource.remove(dataItem);
+	                            grid.dataSource.insert(newIndex, dataItem);
+	                        }
+	                    });
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCodeGrid"});
+					};
+				},//end fn_initCodeGrid
+
+				//-----------------------------------------------------------------------
+	            // Description :: 초기화
+	            //-----------------------------------------------------------------------
+				fn_editorClear : function() {
+					$('#btnCreate').show();
+					$('#btnModify').hide();
+					$('#btnDelete').hide();
+
+					$('#attNm').val('');
+					$('#attCd').val('');
+					$('#attType').data("kendoDropDownList").select(0);
+					$("#appType").data("kendoDropDownList").select(0);
+					$('#inputType').data("kendoDropDownList").select(0);
+					$("#tagYn").data("kendoSwitch").check(false);
+
+					$("#attr-grid").data("kendoGrid").clearSelection();
+
+					$("#codeList").hide();
+					$("#code-grid").data('kendoGrid').dataSource.data([]);
+
+				},//end fn_editorClear
+
+			 	//-----------------------------------------------------------------------
+	            // Description :: 조회
+	            //-----------------------------------------------------------------------
+				fn_searchGridAttrList : function() {
+					try {
+						var tempAttr = new Object();
+						if( !mint.common.isEmpty($('#sc-appType').val()) ){
+							tempAttr.appType = $("#sc-appType").data("kendoComboBox").value();
+						}
+
+						mint.callService(
+								tempAttr
+						 		, screenName
+								, 'REST-R01-RT-01-00'
+								, function(jsonData) {
+							 		var dataSource = new kendo.data.DataSource({
+							 			data: jsonData
+									 	, page:1
+									 	, pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+									});
+									//데이터 재설정
+									$("#attr-grid").data("kendoGrid").setDataSource(dataSource);
+								}
+								, {errorCall : true}
+						);
+					} catch (e) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_searchGridAttrList"});
+					}
+				}, // end fn_searchGridAttrList
+
+				//-----------------------------------------------------------------------
+	            // Description :: 상세 조회
+	            //-----------------------------------------------------------------------
+	            fn_getAttrDetail : function() {
+	            	try {
+						var entityGrid = $("#attr-grid").data("kendoGrid");
+						var selectedItem = entityGrid.dataItem(entityGrid.select());
+						$("#attNm").val(selectedItem.name);
+						$("#attCd").val(selectedItem.cd);
+						$('#attType').data('kendoDropDownList').value(selectedItem.type);
+						$('#appType').data('kendoDropDownList').value(selectedItem.appType);
+						$('#inputType').data('kendoDropDownList').value(selectedItem.inputType);
+
+						if(selectedItem.tagYn === "Y") {
+							$("#tagYn").data("kendoSwitch").value(true);
+						} else {
+							$("#tagYn").data("kendoSwitch").value(false);
+						}
+
+						if(selectedItem.cds.length > 0) {
+							$("#codeList").show();
+							var dataSource = new kendo.data.DataSource({
+								data: JSON.parse(JSON.stringify(selectedItem.cds))
+								, schema: {
+									model: {
+										id: "attrCd"
+									}
+								}
+							    , page:1
+							    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+							});
+							$("#code-grid").data("kendoGrid").setDataSource(dataSource);
+						} else {
+							$("#codeList").hide();
+						}
+	            	} catch ( e ) {
+	            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getAttrDetail"});
+	            	}
+	            }, // end fn_getAttrDetail
+
+	            fn_detailEditorEvent : function(disabled, isModify) {
+	            	if(disabled) {
+	            		$("#attNm").prop("disabled", true).addClass("k-state-disabled");
+	        			$("#attCd").prop("disabled", true).addClass("k-state-disabled");
+	        			$('#attType').data('kendoDropDownList').enable(false);
+	        			$('#appType').data('kendoDropDownList').enable(false);
+	        			$('#inputType').data('kendoDropDownList').enable(false);
+	        			$("#tagYn").data('kendoSwitch').enable(false);
+	        			$(".appAttCode").prop("disabled", true).addClass("k-state-disabled");
+	        			$(".k-grid-edit").prop("disabled", true).addClass("k-state-disabled");
+	        			$(".k-grid-deletes").prop("disabled", true).addClass("k-state-disabled");
+	        			$("#code-grid").data("kendoGrid").table.data("kendoSortable").draggable.options.holdToDrag = true;
+	            	} else {
+	            		$("#attNm").prop("disabled", false).removeClass("k-state-disabled");
+	        			$("#attCd").prop("disabled", false).removeClass("k-state-disabled");
+	        			$('#attType').data('kendoDropDownList').enable(true);
+	        			$("#tagYn").data('kendoSwitch').enable(true);
+	        			$(".appAttCode").prop("disabled", false).removeClass("k-state-disabled");
+	        			$(".k-grid-edit").prop("disabled", false).removeClass("k-state-disabled");
+	        			$(".k-grid-deletes").prop("disabled", false).removeClass("k-state-disabled");
+	        			$("#code-grid").data("kendoGrid").table.data("kendoSortable").draggable.options.holdToDrag = false;
+
+	        			if(isModify) {
+		        			$('#inputType').data('kendoDropDownList').enable(false);
+		        			$('#appType').data('kendoDropDownList').enable(false);
+	        			} else {
+		        			$('#inputType').data('kendoDropDownList').enable(true);
+		        			$('#appType').data('kendoDropDownList').enable(true);
+	        			}
+	            	}
+	            }, // end fn_detailEditorEvent
+	          	//-----------------------------------------------------------------------
+	            // Description :: time format 변경
+	            //-----------------------------------------------------------------------
+	            fn_changeTime : function(val) {
+	                try {
+	                	if( !mint.common.isEmpty(val)) {
+		                    var str = val.substring(0, 14);
+
+		                    var returnVal = ''
+		                    if( mint.common.isEmpty(str) ) {
+		                    	returnVal = '';
+		                    } else {
+		                    	returnVal = str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
+		                    }
+
+		                    return returnVal;
+	                	} else {
+		                    return '';
+	                	}
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_changeTime"});
+	                }
+	            } // end fn_changeTime
+			}// end main
+		}); // end extends
+
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//조회
+		$("#btnListSearch").click(function () {
+			$.main.fn_searchGridAttrList();
+        });
+
+		//저장
+		$('#btnSave').click(function(e) {
+
+			if('' == $('#attNm').val()) {
+				mint.common.alert('CW00001', mint.label.getLabel('lb-93'));
+			} else if('' == $('#attCd').val()) {
+				mint.common.alert('CW00001', mint.label.getLabel('lb-94'));
+			} else {
+				var confirmId = "";
+				var alertId = "";
+				var restUrl = "";
+				var attrGrid = $("#attr-grid").data("kendoGrid");
+				var selectedItem = attrGrid.dataItem(attrGrid.select());
+				var codeGrid = $("#code-grid").data("kendoGrid");
+
+				var attributeList = [];
+				var attribute = new Object();
+				attribute.objectType = 'AppModelAttributeId';
+				attribute.appType = $('#appType').data("kendoDropDownList").value();
+				attribute.cd = $('#attCd').val();
+				attribute.name = $('#attNm').val();
+				attribute.type = $('#attType').data("kendoDropDownList").value();
+
+				var tagYn = $('#tagYn').data("kendoSwitch").check();
+				if(tagYn) {
+					attribute.tagYn = 'Y';
+				} else {
+					attribute.tagYn = 'N';
+				}
+				attribute.inputType = $('#inputType').data('kendoDropDownList').value();
+				attribute.comments = $('#attNm').val();
+				attribute.delYn = 'N';
+
+				attribute.cds = codeGrid.dataSource.data();
+
+				for(i=0; i < attribute.cds.length; i++) {
+					attribute.cds[i].attrSeq = i+1;
+					attribute.cds[i].objectType = 'AppModelAttributeCode';
+				}
+
+				if(mint.common.isEmpty(selectedItem)) {	// 등록
+					confirmId = "CI00005";
+					alertId = "CI00105";
+					restUrl = "REST-C01-RT-01-00";
+				} else {								// 수정
+					confirmId = "CI00002";
+					alertId = "CI00102";
+					restUrl = "REST-U01-RT-01-00";
+					attribute.aid = selectedItem.aid;
+				}
+
+				attributeList.push(attribute);
+
+				var confirmCheck = mint.common.confirm(confirmId, null);
+				if (confirmCheck == true) {
+					mint.callService(attributeList, screenName, restUrl, function(jsonData){
+						if(!mint.common.isEmpty(jsonData)) {
+							mint.common.alert(alertId, null);
+							$.main.fn_searchGridAttrList();
+							$("#detail").data("kendoWindow").close();
+						}
+					}, {errorCall : true });
+				}
+			}
+		});
+
+		//생성
+		$('#btnCreate').click(function(e) {
+			$.main.fn_editorClear();
+			$.main.fn_detailEditorEvent(false);
+			$('#btnSave').show();
+			$("#detail").data("kendoWindow").center().open();
+		});
+
+		//수정
+		$('#btnModify').click(function(e) {
+			$('#btnModify').hide();
+			$('#btnSave').show();
+			$.main.fn_detailEditorEvent(false, true);
+		});
+
+		//삭제
+		$('#btnDelete').click(function(e) {
+			var confirmCheck = mint.common.confirm('CI00003', null);
+
+		    if (confirmCheck == true) {
+		    	var attributeList = [];
+				var entityGrid = $("#attr-grid").data("kendoGrid");
+				var selectedItem = entityGrid.dataItem(entityGrid.select());
+				attributeList.push(selectedItem);
+
+				mint.callService(attributeList, screenName,'REST-D01-RT-01-00', function(jsonData){
+					if(!mint.common.isEmpty(jsonData)) {
+						mint.common.alert('CI00103', null);
+						$.main.fn_searchGridAttrList();
+						$("#detail").data("kendoWindow").close();
+					}
+				}, {errorCall : true});
+		    }
+		});
+
+		//더블클릭 이벤트 (보기)
+		$('#attr-grid').on('dblclick', "tr.k-state-selected", function () {
+			$('#btnSave').hide();
+			$('#btnModify').show();
+			$('#btnDelete').show();
+			$.main.fn_getAttrDetail();
+			$.main.fn_detailEditorEvent(true);
+			$("#detail").data("kendoWindow").center().open();
+		});
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+
+		//-----------------------------------------------------------------------
+		// Description :: 추가  click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$('.appAttCode').click(function(e) {
+			$('#code-grid').data("kendoGrid").addRow();
+		});
+
+		$("#inputType").data("kendoDropDownList").bind("change", function () {
+			if(this.value() === "4") {
+				$("#codeList").slideDown(300);
+			} else {
+				$("#codeList").slideUp(300);
+			}
+			$("#code-grid").data('kendoGrid').dataSource.data([]);
+		});
+	});
+</script>
+
+<style>
+	.k-grid-header {
+	   padding: 0 !important;
+	}
+
+	.k-grid-content {
+	   overflow-y: visible;
+	}
+
+	.k-grid tr td {
+	    border-bottom: 1px solid #C0C0C0;
+	}
+
+	.k-grid .k-dirty {
+	  display: none;
+	}
+
+	.note-editor {
+    	border : 1px solid #a9a9a9 !important;
+	}
+	.k-detail-cell > .k-grid {
+		width: 40%;
+	}
+	.k-detail-row {
+		background-color: #bdb4af;
+	}
+
+	#code-grid > .k-grid-content tbody tr {
+		cursor: move !important;
+	}
+</style>
+
+</body>
+</html>

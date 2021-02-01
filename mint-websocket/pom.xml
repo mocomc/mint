@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>pep.per</groupId>
+		<artifactId>mint</artifactId>
+		<version>3.0.0</version>
+	</parent>
+	<artifactId>mint-websocket</artifactId>
+	<name>mint-websocket</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+		<jackson-version>2.9.5</jackson-version>
+		<org.springframework-version>4.3.17.RELEASE</org.springframework-version>
+		<javax.servlet.servlet-api-version>2.5</javax.servlet.servlet-api-version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-common</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-database</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-inhouse</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>${org.springframework-version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javax.servlet.servlet-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>jeus</groupId>
+			<artifactId>spring-support</artifactId>
+			<version>4.2.0.RELEASE</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/spring-support-4.2.0.RELEASE.jar</systemPath>
+		</dependency>
+	</dependencies>
+
+
+	<profiles>
+		<profile>
+			<id>mint-3.0.0</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<finalName>${project.artifactId}-product-3.0.0</finalName>
+				<directory>${basedir}/target-version-3.0.0</directory>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.3</version>
+						<configuration>
+							<excludes>
+								<exclude>log4j.xml</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+</project>

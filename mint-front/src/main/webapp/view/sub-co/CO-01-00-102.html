@@ -1,0 +1,40 @@
+<!-- Warning Dialog -->
+<div class="modal inmodal-original" id="warningDialog" tabindex="-1" role="dialog"  aria-hidden="false">
+    <div class="modal-dialog-original">
+        <div class="modal-content-original animated fadeIn">
+            <div class="modal-header-original">
+                <button type="button" class="close" data-dismiss="modal">
+	                <span aria-hidden="true">&times;</span>
+	                <span class="sr-only">Close</span>
+                </button>
+                <i class="fa fa-exclamation-triangle modal-icon-original" style="color: orange; "></i>
+                <h3 id="Title" class="modal-title-original" style="color: orange; ">Warning</h3>
+                <large>아래 내용을 확인하시기 바랍니다</large>
+            </div>
+            <div class="full-height-scroll">
+	            <div class="modal-body-original" >
+					<p>
+					<h2><strong>title</strong></h2>
+					msg
+					<br><br>
+					<ul>
+						<li id="option1">opt1 : xxxxxx<br>
+						<li id="option2">opt2 : xxxxxx<br>
+					</ul>
+					</p>
+	            </div>
+            </div>
+            <div class="modal-footer-original">
+                <!--<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>-->
+                <button id="btnClose" type="button" class="btn btn-primary" data-dismiss="modal">확 인</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+	$('.full-height-scroll').slimscroll({
+	    height: '100%'
+	});
+});
+</script>

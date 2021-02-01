@@ -1,0 +1,1094 @@
+<!--
+	Screen ID : OP-01-01-603
+	Screen NM : ISM 배치 처리결과
+		[변경 이력]
+	* YYYYMMDD-###
+	  - xx
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-892"></lb></h2>
+		<ol class="breadcrumb">
+	        <li><lb class="lb-30"></lb></li>
+	        <li class="active"><strong><lb class="lb-892"></lb></strong></li>
+ 		</ol>
+	</div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!--row-->
+	<div class="row">
+		<!--col-lg-12-->
+		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-78"></h5>&nbsp;&nbsp;&nbsp;
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H002')"></a>
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-clear"><i class="fa fa-check "></i> <lb class="lb-79"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-ifsearch"><i class="fa fa-search "></i> <lb class="lb-10"></lb></a>
+					</div>
+				</div>
+
+				<!--ibox-content-->
+             	<div class="ibox-content">
+             		<!--row-->
+               		<div class="row">
+
+               			<!--col-sm-4 4-->
+						<div class="col-sm-4">
+							<!--form-group -->
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-154"></lb></span>
+								<!--comboBox-->
+								<input id="cb-integrationId" type="text" placeholder="Search..." style="width: 57%;">
+								<!--comboBox end-->
+							</div>
+							<!--form-group end-->
+						</div>
+
+
+                        <!-- <hr class="hr-space"> -->
+                        <div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-897"></lb></span>
+								<input id="cb-batchId" type="text" class="input-tag-4 k-textbox" placeholder="" style="width: 58%;">
+							</div>
+						</div>
+
+                        <!-- <div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-896"></lb></span>
+								<input id="cb-modelId" type="text" class="input-tag-4 k-textbox" placeholder="" style="width: 60%;">
+							</div>
+						</div>
+
+
+						<div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-471"></lb></span>
+								<input id="cb-totalTime" type="text" class="input-tag-4 k-textbox" placeholder="" style="width: 60%;">
+							</div>
+						</div> -->
+
+
+						<!-- <hr class="hr-space"> -->
+						<div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-901"></lb></span>
+								<input id="cb-sendFile" type="text" class="input-tag-4 k-textbox" placeholder="" style="width: 58%;">
+							</div>
+						</div>
+
+						<hr class="hr-space">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-86"></lb><a class="help-over-label" onclick="mint.ui.help(this, 'AP00000005','H005')"></a></span>
+								<input id="cb-resourceNm" type="text" placeholder="Search..." style="width: 57%;">
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="lable_tag"><lb class="lb-893"></lb></span>
+								<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width: 58%;">
+									<input id="tf-sendsystemNm" type="text" class="k-input" style="width: 100%;" readonly="readonly" placeholder="Search...">
+									<input id="tf-sendsystemNm_hidden" type="hidden">
+									<input id="tf-sendsystemId_hidden" type="hidden">
+								</span>
+                                <!-- <input id="systemNm" class="systemNm" type="text" placeholder="Search..."  tabIndex="5" style="width: 63%;"> -->
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="lable_tag"><lb class="lb-894"></lb></span>
+								<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width: 58%;">
+									<input id="tf-recvsystemNm" type="text" class="k-input" style="width: 100%;" readonly="readonly" placeholder="Search...">
+									<input id="tf-recvsystemNm_hidden" type="hidden">
+									<input id="tf-recvsystemId_hidden" type="hidden">
+								</span>
+                            </div>
+                        </div>
+
+
+                        <hr class="hr-space">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="lable_tag4" style="width: 19%;"><lb class="lb-302"></lb></span>
+                                <input id="processDate" class="input-width"  tabIndex="7" style="text-align:center; width: 29%">
+                                <input type="text" id="stTime" class="input-width"  tabIndex="8" style="text-align:center; width: 19%;">
+                                <span style="padding: 0px 5px;"> ~ </span>
+								<input id="msgDateTime" type="hidden">
+								<input type="text" id="edTime" class="input-width"  tabIndex="9" style="text-align:center; width: 19%;">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+							<div class="form-group">
+								<span class="lable_tag"><lb class="lb-359"></lb></span>
+								<input id="cb-eaiHost" type="text" class="input-tag-4 k-textbox" placeholder="" style="width: 58%;">
+							</div>
+						</div>
+
+
+                        <div class="col-sm-4">
+										<form class="form-horizontal">
+			                                <div class="form-group">
+			                               		<label class="label-tag-4"><lb class="lb-532"></lb></label>
+			                                    <div>
+			                                 		<label style="padding-left:10px;"><input type="radio" name="rb-Radio-Button" value="" checked="checked"> <lb class="lb-89"></lb> </label>
+			                                    	<label style="padding-left:10px;"><input type="radio" name="rb-Radio-Button" value="E" > <lb class="lb-461"></lb></label>
+			                                    	<label style="padding-left:10px;"><input type="radio" name="rb-Radio-Button" value="X" > <lb class="lb-511"></lb></label>
+			                                   	</div>
+			                              	</div>
+			                          	</form>
+									</div>
+
+
+
+                                	</div>
+                                </span>
+							</div>
+						</div>
+
+                   	</div>
+				 	<!--row end-->
+                </div>
+				<!--ibox-content end-->
+           	</div>
+			<!--ibox float-e-margins end-->
+		</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+
+
+	<!--row start-->
+	<div class="row">
+		<!--col-lg-12-->
+ 		<div class="col-lg-12">
+			<!--ibox float-e-margins-->
+
+            <div class="ibox float-e-margins">
+				<!--ibox-title-->
+                <div class="ibox-title">
+					<h5><lb class="lb-91"></h5>
+					<body>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</body>
+					<input id="totalCount" name="totalCount" type="text" class="input-tag-4 k-textbox" placeholder="" readonly="readonly" disabled="disabled" style="width: 8%; text-align: center;">
+                    <div class="ibox-tools">
+                   		<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H001')"></a>
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+               	</div>
+
+				<!--ibox-title end-->
+
+				<!--ibox-content-->
+                <div class="ibox-content">
+                	<!-- kendo table-->
+                	<div id="example">
+       	     			<div id="grid"></div>
+
+					</div>
+					<!--kendo table end-->
+               	</div>
+				<!--ibox-content end-->
+            </div>
+			<!--ibox float-e-margins end-->
+       	</div>
+		<!--col-lg-12 end-->
+	</div>
+	<!--row end-->
+</div>
+
+
+<div id="grid"></div>
+<script type="text/x-kendo-template" id="template">
+	<div class="toolbar">
+		<label class="category-label" for="category">Page:</label>
+			<select id="category" style="width: 80px">
+
+			</select>
+  	</div>
+</script>
+
+
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "OP-01-01-603";
+		var callUrl = "";
+
+		$.extend({
+			main : {
+				searchPage : 1,
+				modelIdList : [],
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						//mint.back(null);
+						//mint.ui.initScreen();
+						$.main.fn_getModelIdList();
+						mint.init('$.main.fn_initCallback');
+						//$.main.fn_initCallback();
+						//$.main.fn_setCallUrl();
+						//$.main.fn_setSearchResultGrid();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: ISM 모델 ID 조회
+				//-----------------------------------------------------------------------
+				fn_getModelIdList : function() {
+					try {
+						//데이터조회
+						$.main.fn_setCallUrl();
+
+						mint.callService($.main.fn_getSearchObject(), screenName, 'REST-R06-OP-01-01-600', function(jsonData, errorCd, errorMsg) {
+							if(! mint.common.isEmpty(errorCd) && errorCd == 0 ) {
+								$.main.modelIdList = jsonData;
+								mint.ui.setComboBoxWithValue('cb-modelId', $.main.modelIdList, 0, 'modelId', 'modelNm');
+							}
+						},
+						{errorCall : true});
+
+					} catch(e) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getModelIdList"});
+					}
+				},
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+
+					try {
+
+						$.main.fn_initComponent();
+						$.main.fn_setCallUrl();
+						$.main.fn_setSearchResultGrid();
+
+						var caller = mint.common.getScreenParam("caller");
+	                    if( ! mint.common.isEmpty(caller) && caller == 'dashboard' ) {
+
+	                    	var options = mint.common.getScreenParam("options");
+
+	                		var integrationServiceId = mint.common.isEmpty(options.integrationServiceId) ? '' : options.integrationServiceId;
+	                		var processDate   = mint.common.isEmpty(options.processDate) ? '' : options.processDate;
+	                		var globalId      = mint.common.isEmpty(options.globalId) ? '' : options.globalId;
+
+	                   		$('.btn-dashboard').show();
+
+	                   		$('#cb-integrationId').data("kendoComboBox").value(integrationServiceId);
+	                   		$('#cb-globalId').val(globalId);
+	                   		$('#cb-processDate').val(processDate);
+	                   		$('#cb-stTime').data("kendoComboBox").value("00:00");
+	                   		$('#cb-edTime').data("kendoComboBox").value("23:59");
+
+	                   		$.main.fn_searchRequirementList();
+
+	                   		{
+	                   			mint.common.setScreenParam("caller", null);
+	                   			mint.common.setScreenParam("option", null);
+	                   		}
+	                   	}
+
+					}catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+						}
+					}, //end fn_initCallback()
+
+
+					//-----------------------------------------------------------------------
+					// Description :: 화면 초기화 콜백
+					//-----------------------------------------------------------------------
+					fn_initComponent : function() {
+
+						try {
+
+	                    $("#processDate").kendoDatePicker({
+	                        format : "yyyy/MM/dd",
+	                        culture: "ko-KR",
+	                        value : new Date()
+	                    });
+
+	                    var loadDt = new Date();
+
+						var tmpFromDateTime = new Date();
+						tmpFromDateTime.setHours(0, 0, 0, 0);
+	                    $("#stTime").kendoTimePicker({
+	                    	interval : 1,
+	                    	format: "HH:mm",
+	                    	value: tmpFromDateTime,
+	                    	change: function(e) {
+	                    		$.main.fn_stTimeChangeEvent(e);
+	                    	}
+	                    });
+
+						var tmpToDateTime = new Date();
+						tmpToDateTime.setHours(23, 59, 0, 0);
+	                    $("#edTime").kendoTimePicker({
+	                    	interval : 1,
+	                    	format: "HH:mm",
+	                        value: tmpToDateTime
+	                    });
+
+	                    mint.ui.setComboBoxWithValue('cb-integrationId', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'integrationId', 'integrationId');
+
+	                    mint.ui.setComboBoxWithValue('cb-resourceNm', mint.common.commonCodeMap.get("cds").IM04, 0, 'nm', 'nm');
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initComponent"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_stTimeChangeEvent 조회
+				//-----------------------------------------------------------------------
+				fn_stTimeChangeEvent: function(e) {
+					try {
+						var stTime       = e.sender.value();
+						var edTimeObject = $('#edTime').data('kendoTimePicker');
+
+						if( !mint.common.isEmpty(edTimeObject) ) {
+							var edTime    = new Date();
+							var edHour    = stTime.getHours() + 2;
+							var edMinutes = stTime.getMinutes();
+
+							if( edHour > 23 ) {
+								edTime.setHours( 23 );
+								edTime.setMinutes( 59 );
+							} else {
+								edTime.setHours( edHour );
+								edTime.setMinutes( edMinutes );
+							}
+							edTimeObject.value( edTime );
+						}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_stTimeChangeEvent"});
+					}
+				}, //fn_stTimeChangeEvent
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 url
+				//-----------------------------------------------------------------------
+				fn_setCallUrl : function() {
+
+					try {
+					//url
+						var envVal = mint.common.commonCodeMap.get("environmentalValues");
+						if( !mint.common.isEmpty(envVal) ) {
+							if( !mint.common.isEmpty(envVal["system.ism.log.url"]) ) {
+								callUrl = envVal["system.ism.log.url"] + "/custom/log/batch";
+							}else {
+								//alert("bb");
+							}
+
+						} else {
+							//alert("aa");
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setCallUrl"});
+					}
+
+				},
+
+
+				//--------------------------------------- --------------------------------
+				// Description :: 송신 시스템 정보 셋팅
+				//-----------------------------------------------------------------------
+				fn_setSendSystemInfo : function(selectedItem) {
+					try {
+
+						if( mint.common.isEmpty(selectedItem) ) {
+							$('#tf-sendsystemNm').val('');
+							$('#tf-sendsystemNm_hidden').val('');
+							$('#tf-sendsystemId_hidden').val('');
+							$('#tf-sendsystemCd_hidden').val('');
+						} else {
+							$('#tf-sendsystemNm').val(selectedItem.systemNm +  mint.lb + selectedItem.systemCd + mint.rb);
+							$('#tf-sendsystemNm_hidden').val(selectedItem.systemNm);
+							$('#tf-sendsystemId_hidden').val(selectedItem.systemId);
+							$('#tf-sendsystemCd_hidden').val(selectedItem.systemCd);
+
+							//$.main.fn_setSearchNode('tf-sendsystemNm', 'input');
+	                        //$.main.fn_getSearchInfo('systemNm', selectedItem.systemNm);
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSendSystemInfo"});
+					}
+				},//end fn_setSystemInfo()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 수신 시스템 정보 셋팅
+				//-----------------------------------------------------------------------
+				fn_setRecvSystemInfo : function(selectedItem) {
+					try {
+
+						if( mint.common.isEmpty(selectedItem) ) {
+							$('#tf-recvsystemNm').val('');
+							$('#tf-recvsystemNm_hidden').val('');
+							$('#tf-recvsystemId_hidden').val('');
+							$('#tf-recvsystemCd_hidden').val('');
+						} else {
+							$('#tf-recvsystemNm').val(selectedItem.systemNm +  mint.lb + selectedItem.systemCd + mint.rb);
+							$('#tf-recvsystemNm_hidden').val(selectedItem.systemNm);
+							$('#tf-recvsystemId_hidden').val(selectedItem.systemId);
+							$('#tf-recvsystemCd_hidden').val(selectedItem.systemCd);
+
+							//$.main.fn_setSearchNode('tf-recvsystemNm', 'input');
+	                        //$.main.fn_getSearchInfo('systemNm', selectedItem.systemNm);
+						}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRecvSystemInfo"});
+					}
+				},//end fn_setSystemInfo()
+
+
+	            //-----------------------------------------------------------------------
+	            // Description :: 검색 조건 초기화 함수
+	            //-----------------------------------------------------------------------
+	            fn_clearSearchArea : function() {
+	                try {
+	                  	// 인터페이스 ID 초기화
+	                    var combobox = $("#cb-integrationId").data("kendoComboBox");
+	                    combobox.enable(true);
+	                    combobox.value('');
+	                    mint.ui.setComboBoxWithValue('cb-integrationId', mint.common.commonCodeMap.get("interfaceCdList"), 0, 'integrationId', 'integrationId', '');
+
+	                    // 송신 시스템명 초기화
+	                    $('#tf-sendsystemNm').val('');
+						$('#tf-sendsystemNm_hidden').val('');
+						$('#tf-sendsystemId_hidden').val('');
+						$('#tf-sendsystemCd_hidden').val('');
+						$('#tf-sendsystemNm').prop("disabled", false);
+						$('#tf-sendsystemNm').css("background-color", "#FFFFFF");
+						srchSystemData = null;
+
+						// 수신 시스템명 초기화
+	                    $('#tf-recvsystemNm').val('');
+						$('#tf-recvsystemNm_hidden').val('');
+						$('#tf-recvsystemId_hidden').val('');
+						$('#tf-recvsystemCd_hidden').val('');
+						$('#tf-recvsystemNm').prop("disabled", false);
+						$('#tf-recvsystemNm').css("background-color", "#FFFFFF");
+						srchSystemData = null;
+
+	                    // 검색기간 초기화
+	                    $("#processDate").data("kendoDatePicker").value(new Date());
+	                    $("#stTime").data("kendoTimePicker").value("00:00");
+	                    $("#edTime").data("kendoTimePicker").value("23:59");
+
+	                    // batchId 초기화
+	                    $('#cb-batchId').val('');
+
+	                    // eaiHost 초기화
+	                    $('#cb-eaiHost').val('');
+
+	                    // 송신파일명 초기화
+	                    $('#cb-sendFile').val('');
+
+	                    // 리소스명 초기화
+	                    $('#cb-resourceNm').data("kendoComboBox").value('');
+
+
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_clearSearchArea"});
+	                }
+	            },
+
+	            //-----------------------------------------------------------------------
+	            // Description :: 검색 조건 조회 request object 세팅
+	            //-----------------------------------------------------------------------
+	            fn_getSearchObject : function(flag, data) {
+	            	try {
+	                    var searchObject = new Object();
+
+	                    searchObject.processDate = mint.common.replaceAll($("#processDate").val(), "/", "");
+	                    searchObject.stTime = mint.common.replaceAll($("#stTime").val() + "00", ":", "");
+	                    searchObject.edTime = mint.common.replaceAll($("#edTime").val() + "59", ":", "");
+						searchObject.integrationServiceId = $("#cb-integrationId").val();
+
+						searchObject.page = $.main.searchPage;
+						searchObject.callUrl = callUrl;
+						searchObject.batchId = $("#cb-batchId").val();
+						//searchObject.modelId = $("#cb-modelId").val();
+						searchObject.result = $('input:radio[name="rb-Radio-Button"]:checked').val();
+
+						searchObject.sendsystemId = $("#tf-sendsystemNm").val();
+						searchObject.recvsystemId = $("#tf-recvsystemNm").val();
+						//searchObject.totalTime = $("#cb-totalTime").val();
+
+						searchObject.sendFileName = $("#cb-sendFile").val();
+						searchObject.Type = $("#cb-resourceNm").val();
+						searchObject.eaiHost = $("#cb-eaiHost").val();
+
+						//console.log(searchObject);
+	                    return searchObject;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getSearchObject"});
+	                }
+	            },
+
+				//-----------------------------------------------------------------------
+				// Description :: 엔터키 이벤트
+				//-----------------------------------------------------------------------
+				fn_onKeyDownAN0200001 : function() {
+					try {
+						if(event.keyCode == 13) {
+							$.main.fn_searchRequirementList();
+				     	}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownAN0200001"});
+					}
+				},//end fn_onKeyDownAN0200001()
+
+
+				//-----------------------------------------------------------------------
+				// Description ::  검색 결과 - Grid 설정
+				//-----------------------------------------------------------------------
+				fn_setSearchResultGrid : function() {
+					try {
+						var fixLeftGridWidth = ($('#grid')[0].clientWidth / 10) * 7;
+						var fixLeftCoulmnWidth = fixLeftGridWidth / 4;
+
+						//컬럼 레이블 아이디 세팅
+						var labelCoulmn = $.main.fn_setGridColumnLabel();
+
+						var grid = $("#grid").kendoGrid({
+							dataSource : {
+				 				 data: ""
+				 				, page : 1
+				 				//, pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+							}
+					    , sortable : true
+						, selectable: true
+						, resizable: true
+						, toolbar: [
+		                             {
+		                                 template: $("#template").html()
+		                             }]
+
+
+						    , columns : [
+						           {
+										  title 	: labelCoulmn['#lbl-integrationServiceId']
+										, field 	: "integrationServiceId"
+				 						, width 	: "150px"
+				 						, template	: "<span title='${integrationServiceId}'>${integrationServiceId}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+									}
+						           , {
+										  title 	: labelCoulmn['#lbl-integrationServiceName']
+										, field 	: "integrationServiceName"
+				 						, width 	: "150px"
+				 						, template	: '#=$.main.fn_setColor(integrationServiceName)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-isJobFinished']
+										, field 	: "isJobFinished"
+				 						, width 	: "100px"
+				 						, template	: '#=$.main.fn_setColor(isJobFinished)#'
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-serverName']
+										, field 	: "serverName"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${serverName}'>${serverName}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-totalCount']
+										, field 	: "totalCount"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${totalCount}'>${totalCount}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-successCount']
+										, field 	: "successCount"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${successCount}'>${successCount}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-failureCount']
+										, field 	: "failureCount"
+				 						, width 	: "100px"
+				 						, template	: "<span title='${failureCount}'>${failureCount}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-startTime']
+										, field 	: "startTime"
+				 						, width 	: "150px"
+				                        , template : '#=$.main.fn_viewTime(startTime)#'
+				 						//, template	: "<span title='${startTime}'>${startTime}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-endTime']
+										, field 	: "endTime"
+				 						, width 	: "150px"
+				                        , template : '#=$.main.fn_viewTime(endTime)#'
+				 						//, template	: "<span title='${endTime}'>${endTime}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-sendServer']
+										, field 	: "sendServer"
+				 						, width 	: "80px"
+				 						, template	: "<span title='${sendServer}'>${sendServer}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-recvServer']
+										, field 	: "recvServer"
+				 						, width 	: "80px"
+				 						, template	: "<span title='${recvServer}'>${recvServer}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-sendFilePath']
+										, field 	: "sendFilePath"
+				 						, width 	: "120px"
+				 						, template	: "<span title='${sendFilePath}'>${sendFilePath}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-sendFileName']
+										, field 	: "sendFileName"
+				 						, width 	: "120px"
+				 						, template	: "<span title='${sendFileName}'>${sendFileName}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-recvFilePath']
+										, field 	: "recvFilePath"
+				 						, width 	: "120px"
+				 						, template	: "<span title='${recvFilePath}'>${recvFilePath}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+									, {
+										  title 	: labelCoulmn['#lbl-recvFileName']
+										, field 	: "recvFileName"
+				 						, width 	: "120px"
+				 						, template	: "<span title='${recvFileName}'>${recvFileName}</span>"
+										, headerAttributes: {
+											 style: "text-align: center; vertical-align:middle; font-weight:bold;"
+										}
+										, attributes: {
+								              style: 'white-space: nowrap;  text-align: center;'
+							            }
+								   }
+							]
+						    , dataBound: function (e) {
+						    	if(0 == $("#grid").data().kendoGrid.dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$("#grid").children(".k-grid-content").height(gridHeight /3.5);
+						    		$("#grid").children(".k-grid-content-locked").height(gridHeight / 3.5);
+
+						    	} else {
+						    		$("#grid").children(".k-grid-content").height('auto');
+							    	$("#grid").children(".k-grid-content-locked").height('auto');
+						    	}
+						    }
+						}).data("kendoGrid");
+
+						  $("#grid").find(".k-grid-toolbar").insertAfter($("#grid .k-grid-content"));
+
+						  $('#category').change(function(){
+			                    var value = $(this).val();
+			                    if(value != null)
+			                    {
+			                    	$.main.searchPage = value;
+
+			                    	$.main.fn_searchRequirementList();
+			                    }
+
+			                });
+
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setSearchResultGrid"});
+					}
+				},//end fn_setSearchResultGrid()
+
+
+				//-----------------------------------------------------------------------
+	            // Description :: grid status color 변경
+	            //-----------------------------------------------------------------------
+	            fn_setColor : function(val) {
+	                try {
+	                    if (val && val != null && val == mint.label.getLabel('lb-571'))
+	                        return "<b style='color:red'>" + val + "</b>";
+	                    else if (val && val != null && val == mint.label.getLabel('lb-511'))
+	                        return "<b style='color:blue'>" + val + "</b>";
+	                    else
+	                        return val;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setColor"});
+	                }
+	            },
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 검색 결과 - Grid 컬럼 Label 설정
+				//-----------------------------------------------------------------------
+				fn_setGridColumnLabel : function() {
+					try {
+						var returnObject = {
+								  '#lbl-integrationServiceId': mint.label.getLabel('lb-154')
+								, '#lbl-integrationServiceName': mint.label.getLabel('lb-153')
+								, '#lbl-tgtsystemId': mint.label.getLabel('lb-894')
+								, '#lbl-syncType': mint.label.getLabel('lb-162')
+								, '#lbl-tranId': mint.label.getLabel('lb-217') + mint.label.getLabel('lb-87')  + mint.label.getLabel('lb-422')
+								, '#lbl-tgtElapsedTime': mint.label.getLabel('lb-876') + mint.label.getLabel('lb-495')  + mint.label.getLabel('lb-510')
+								, '#lbl-isJobFinished': mint.label.getLabel('lb-532')
+								, '#lbl-serverName': mint.label.getLabel('lb-495') + mint.label.getLabel('lb-357')
+								, '#lbl-totalCount': mint.label.getLabel('lb-58')
+								, '#lbl-successCount': mint.label.getLabel('lb-570')
+								, '#lbl-failureCount': mint.label.getLabel('lb-571')
+								, '#lbl-startTime': mint.label.getLabel('lb-509') + mint.label.getLabel('lb-510')
+								, '#lbl-endTime': mint.label.getLabel('lb-530') + mint.label.getLabel('lb-510')
+								, '#lbl-sendServer': mint.label.getLabel('lb-215')
+								, '#lbl-recvServer': mint.label.getLabel('lb-217')
+								, '#lbl-sendFilePath': mint.label.getLabel('lb-215') + mint.label.getLabel('lb-899')
+								, '#lbl-sendFileName': mint.label.getLabel('lb-901')
+								, '#lbl-recvFilePath': mint.label.getLabel('lb-217') + mint.label.getLabel('lb-899')
+								, '#lbl-recvFileName': mint.label.getLabel('lb-902')
+
+						};
+						return returnObject;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridColumnLabel"});
+					}
+				},//end fn_setGridColumnLabel()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 버튼 Click 이벤트
+				//-----------------------------------------------------------------------
+				fn_searchRequirementList : function() {
+					try {
+					    //데이터 조회
+					    mint.callService($.main.fn_getSearchObject(), screenName, 'REST-R01-OP-01-01-603', '$.main.fn_setGridData', {errorCall : true});
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_searchRequirementList"});
+					}
+				},//end fn_searchRequirementList()
+
+
+				//---------------------------------------------------------- -------------
+				// Description :: 조회 버튼 Click 이벤트 - Grid Data 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function(jsonData) {
+					try {
+
+						if(!mint.common.isEmpty(jsonData.list)){
+						var count = Object.keys(jsonData.list).length;
+
+						for(var i = 0; i < count; i++) {
+							if( jsonData.list[i].isJobFinished == 'Y'){
+								 jsonData.list[i].isJobFinished = '성공';
+							} else if (jsonData.list[i].isJobFinished == 'E') {
+								jsonData.list[i].isJobFinished = '실패';
+							} else {
+								jsonData.list[i].isJobFinished = '처리중';
+							}
+	            		}
+
+
+	            		for(var i = 0; i < count; i++) {
+							if( jsonData.list[i].sendFilePath == null){
+								 jsonData.list[i].sendFilePath = '';
+							}
+
+							if( jsonData.list[i].sendFileName == null){
+								 jsonData.list[i].sendFileName = '';
+							}
+
+							if( jsonData.list[i].recvFilePath == null){
+								 jsonData.list[i].recvFilePath = '';
+							}
+
+							if( jsonData.list[i].recvFileName == null){
+								 jsonData.list[i].recvFileName = '';
+							}
+
+							if( jsonData.list[i].endTime == null){
+								 jsonData.list[i].endTime = '';
+							}
+
+							if( jsonData.list[i].sendServer == null){
+								 jsonData.list[i].sendServer = '';
+							}
+
+							if( jsonData.list[i].recvServer == null){
+								 jsonData.list[i].recvServer = '';
+							}
+	            		}
+
+
+						$('#totalCount').val("총 = "+jsonData.totalCount+"건");
+
+						$('#category').empty();
+
+						for(var i = 1; i <= jsonData.pageCount; i++) {
+							if (jsonData.currentPage == i) {
+								var option = $("<option selected="+"seleted>"+i+"</option>");
+							} else {
+								var option = $("<option>"+i+"</option>");
+							}
+
+							$('#category').append(option);
+						}
+
+
+						var dataSource = new kendo.data.DataSource({
+							  data: jsonData.list
+						    , page:1
+						    , pageSize : 30
+						});
+
+						//데이터 재설정
+						$("#grid").data("kendoGrid").setDataSource(dataSource);
+
+					} else {
+						var dataSource = new kendo.data.DataSource({
+							 data: []
+
+        			});
+
+						//데이터 재설정
+						$("#grid").data("kendoGrid").setDataSource(dataSource);
+					}
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+
+
+	            //-----------------------------------------------------------------------
+	            // Description :: time format 변경
+	            //-----------------------------------------------------------------------
+	            fn_viewTime : function(val) {
+	                try {
+	                    var str = val.substring(0, 17);
+	                    //str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " +
+	                    var returnVal = str.substring(8, 10) + ":" +	 str.substring(10, 12) + ":" + str.substring(12, 14) + "." + str.substring(14, 17) ;
+	                    return returnVal;
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_viewTime"});
+	                }
+	            },
+				//-----------------------------------------------------------------------
+				// Description :: Grid DBClick 이벤트 - 상세 화면 이동
+				//-----------------------------------------------------------------------
+				fn_moveRequirementDetail : function() {
+
+					try {
+						var entityGrid = $("#grid").data("kendoGrid");
+				        var selectedItem = entityGrid.dataItem(entityGrid.select());
+				        mint.setDetailView('Y');
+				        mint.common.setScreenParam("caller", "OP-01-01-603");
+				        mint.common.setScreenParam("processDate", mint.common.replaceAll($("#processDate").val(), "/", ""));
+				        mint.common.setScreenParam("integrationServiceId", selectedItem.integrationServiceId);
+				        mint.common.setScreenParam("id", selectedItem.id);
+			      		mint.move('../sub-op/OP-01-01-604');
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_moveRequirementDetail"});
+					}
+				},//end fn_moveRequirementDetail()
+
+			}// end main
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//-----------------------------------------------------------------------
+		// Description :: 검색조건 초기화 클릭
+		//-----------------------------------------------------------------------
+		$('.btn-clear').on('click', function() {
+        	$.main.fn_clearSearchArea();
+    	});
+
+		//-----------------------------------------------------------------------
+		// Description :: 조회 버튼에 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$(".btn-ifsearch").click(function () {
+			if(callUrl == "") {
+				alert("조회 url이 등록되지 않았습니다.");
+				return ;
+			}
+			$.main.fn_searchRequirementList();
+        });
+
+		//-----------------------------------------------------------------------
+		// Description :: 그리드 Row DBClick 이벤트 설정 (상세 조회)
+		//-----------------------------------------------------------------------
+		$('#grid').on('dblclick', function () {
+			$.main.fn_moveRequirementDetail();
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 송신 시스템명 변경시 event 함수
+		//-----------------------------------------------------------------------
+		$('#tf-sendsystemNm').on('click', function () {
+			mint.common.setScreenParam("caller", "AN-02-00-001");
+			mint.common.setScreenParam('callback', '$.main.fn_setSendSystemInfo');
+			mint.common.setScreenParam('orgId', $('#tf-orgId_hidden').val());
+			mint.common.searchPopup('../sub-co/CO-01-00-901.html','CO-01-00-901');
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 수신 시스템명 변경시 event 함수
+		//-----------------------------------------------------------------------
+		$('#tf-recvsystemNm').on('click', function () {
+			mint.common.setScreenParam("caller", "AN-02-00-001");
+			mint.common.setScreenParam('callback', '$.main.fn_setRecvSystemInfo');
+			mint.common.setScreenParam('orgId', $('#tf-orgId_hidden').val());
+			mint.common.searchPopup('../sub-co/CO-01-00-901.html','CO-01-00-901');
+		});
+
+		//-----------------------------------------------------------------------
+		// Description :: 대시보드 back 버튼 click 이벤트
+		//-----------------------------------------------------------------------
+		$(".btn-dashboard").bind("click", function () {
+			mint.move('../sub-op/OP-02-00-601');
+		});
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+
+</script>
+
+
+<style>
+
+#grid .k-grid-header
+{
+   padding: 0 !important;
+}
+
+#grid .k-grid-content
+{
+   overflow-y: visible;
+}
+
+.k-grid tr {
+    cursor : pointer;
+}
+</style>
+

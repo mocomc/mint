@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.ifm.IfmJobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="selectInterfaces" resultType="map">
+    <![CDATA[
+		select distinct 
+		    a.MASTERLOG_ID  as "masterLogId"
+		   ,a.INTF_ID       as "integrationId"
+		   ,a.GROUP_ID		as "groupId"
+		  from MASTERLOG_ID_MAP a 
+		inner join MASTERLOG b on a.MASTERLOG_ID = b.MASTERLOG_ID
+		  and b.MSG_DATETIME >= #{fromDate}
+		  and b.MSG_DATETIME <= #{toDate}
+		  
+    ]]>
+    </select>
+  
+    <select id="selectInterfaceTransactionSummary" resultType="map">
+    <![CDATA[
+    	select   
+             A.MASTERLOG_ID as "masterLogId"
+            ,SUBSTR(B.MSG_DATETIME, 1, 10) as "trDate"
+            ,SUM(CASE WHEN B.MSG_STATUS='01' THEN 1 ELSE 0 END) as "processCnt"
+            ,SUM(CASE WHEN B.MSG_STATUS='00' THEN 1 ELSE 0 END) as "successCnt"
+            ,SUM(CASE WHEN B.MSG_STATUS='99' THEN 1 ELSE 0 END) as "errorCnt"            
+          from MASTERLOG_ID_MAP A
+  	inner join MASTERLOG B ON A.MASTERLOG_ID = B.MASTERLOG_ID
+           and  B.MASTERLOG_ID = #{masterLogId}
+           and (B.MSG_DATETIME >= #{fromDate} AND B.MSG_DATETIME <= #{toDate})
+   	  group by  A.MASTERLOG_ID ,SUBSTR(B.MSG_DATETIME, 1, 10)
+   	  order by  A.MASTERLOG_ID ,SUBSTR(B.MSG_DATETIME, 1, 10)
+    ]]>
+    </select>
+    
+    <select id="selectDataSize" resultMap="selectDataSizeResultMap">
+    <![CDATA[
+		SELECT 
+			 SUM(CASE WHEN PR_PROCESS_MODE='SNDR' THEN DATA_SIZE ELSE 0 END ) AS "sndDataSize"
+            ,SUM(CASE WHEN PR_PROCESS_MODE='RCVR' THEN DATA_SIZE ELSE 0 END ) AS "rcvDataSize"
+       FROM DETAILLOG
+      WHERE MASTERLOG_ID = #{masterLogId}
+        AND MSG_DATETIME >= #{fromDate}
+        AND MSG_DATETIME <= #{toDate}
+        
+    ]]>
+    </select>
+    
+    <resultMap type="map" id="selectDataSizeResultMap">
+    	<result property="sndDataSize" column="sndDataSize" javaType="double"/>
+    	<result property="rcvDataSize" column="rcvDataSize" javaType="double"/>
+    </resultMap>
+
+</mapper>

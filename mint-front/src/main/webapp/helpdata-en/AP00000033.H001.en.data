@@ -1,0 +1,19 @@
+AP00000033$$$H001$$$en$$$조회 조건$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Search Conditions<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">Show percentage and the number of normal/error
+interfaces that occured for certain period <br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">It is Connected to "Interface
+processing status" in "KPI status"<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 1. Search Division<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">After selecting "whole company
+solution", "business name", "ARIS process" and
+"system", input detail conditions<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">example) After click
+"system",</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">select a list of
+ComboBox List<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Search period<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Default value : the very day 00:00 ~
+23:59</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

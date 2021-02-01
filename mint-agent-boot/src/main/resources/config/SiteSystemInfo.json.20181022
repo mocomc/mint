@@ -1,0 +1,25 @@
+{
+	"objectType":"SiteInfo",
+		"applicationInfo":[],
+		"defInterfaceCallPath":"/home/iip/nhiip/agent/linux004/iipagent/script/interfaceCall.sh",
+		"siteHomeInfo":[
+			{
+				"objectType":"SiteHomeInfo",
+				"systemCd":"PIPICM",
+				"home":"",
+				"binaryPath":"/var/mqm/interface.sh"
+			},
+			{
+				"objectType":"SiteHomeInfo",
+				"systemCd":"MDMIDR",
+				"home":"",
+				"binaryPath":"/var/mqm/EAI2/interface.sh"
+			},
+			{
+				"objectType":"SiteHomeInfo",
+				"systemCd":"HCHWHC",
+				"home":"",
+				"binaryPath":"/var/mqm/EAI3/interface.sh"
+			}
+		]
+}

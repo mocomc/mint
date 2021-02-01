@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.ifm.IfmJobMapper">
+
+    <!--
+    <cache/>
+    -->
+
+    <select id="selectInterfaces" resultType="map">
+    <![CDATA[
+		SELECT DISTINCT
+		    a.MASTERLOG_ID  AS "masterLogId"
+		   ,a.INTF_ID       AS "integrationId"
+		   ,a.GROUP_ID		AS "groupId"
+		FROM MASTERLOG_ID_MAP a
+		INNER JOIN MASTERLOG b ON a.MASTERLOG_ID = b.MASTERLOG_ID
+		AND b.MSG_DATETIME >= #{fromDate}
+		AND b.MSG_DATETIME <= #{toDate}
+    ]]>
+    </select>
+
+    <select id="selectInterfacesType2" resultType="map">
+    <![CDATA[
+		SELECT DISTINCT
+			a.INTF_ID       AS "integrationId"
+			,a.GROUP_ID      AS "groupId"
+		FROM MASTERLOG_ID_MAP a
+		INNER JOIN MASTERLOG b ON a.MASTERLOG_ID = b.MASTERLOG_ID
+		AND b.MSG_DATETIME >= #{fromDate}
+		AND b.MSG_DATETIME <= #{toDate}
+		ORDER BY a.INTF_ID
+    ]]>
+    </select>
+
+    <select id="selectInterfaceTransactionSummary" resultType="map">
+    <![CDATA[
+    	SELECT
+             A.MASTERLOG_ID as "masterLogId"
+            ,SUBSTR(B.MSG_DATETIME, 1, 10) AS "trDate"
+            ,SUM(CASE WHEN B.MSG_STATUS='01' THEN 1 ELSE 0 END) AS "processCnt"
+            ,SUM(CASE WHEN B.MSG_STATUS='00' THEN 1 ELSE 0 END) AS "successCnt"
+            ,SUM(CASE WHEN B.MSG_STATUS='99' THEN 1 ELSE 0 END) AS "errorCnt"
+        FROM MASTERLOG_ID_MAP A
+  		INNER JOIN MASTERLOG B ON A.MASTERLOG_ID = B.MASTERLOG_ID
+        AND  B.MASTERLOG_ID = #{masterLogId}
+        AND (B.MSG_DATETIME >= #{fromDate} AND B.MSG_DATETIME <= #{toDate})
+   	  	GROUP BY A.MASTERLOG_ID ,SUBSTR(B.MSG_DATETIME, 1, 10)
+   	  	ORDER BY A.MASTERLOG_ID ,SUBSTR(B.MSG_DATETIME, 1, 10)
+    ]]>
+    </select>
+
+    <select id="selectInterfaceTransactionSummaryType2" resultType="map">
+    <![CDATA[
+    	SELECT
+			A.INTF_ID AS "integrationId"
+			,SUBSTR(B.MSG_DATETIME, 1, 10) AS "trDate"
+			,SUM(CASE WHEN B.MSG_STATUS='01' THEN 1 ELSE 0 END) AS "processCnt"
+			,SUM(CASE WHEN B.MSG_STATUS='00' THEN 1 ELSE 0 END) AS "successCnt"
+			,SUM(CASE WHEN B.MSG_STATUS='99' THEN 1 ELSE 0 END) AS "errorCnt"
+		FROM MASTERLOG_ID_MAP A
+		INNER JOIN MASTERLOG B ON A.MASTERLOG_ID = B.MASTERLOG_ID
+		AND  A.INTF_ID = #{integrationId}
+		AND (B.MSG_DATETIME >= #{fromDate} AND B.MSG_DATETIME <= #{toDate})
+		GROUP BY A.INTF_ID , SUBSTR(B.MSG_DATETIME, 1, 10)
+		ORDER BY A.INTF_ID , SUBSTR(B.MSG_DATETIME, 1, 10)
+    ]]>
+    </select>
+
+    <select id="selectDataSize" resultMap="selectDataSizeResultMap">
+    <![CDATA[
+		SELECT
+			 SUM(CASE WHEN PR_PROCESS_MODE='SNDR' THEN DATA_SIZE ELSE 0 END ) AS "sndDataSize"
+            ,SUM(CASE WHEN PR_PROCESS_MODE='RCVR' THEN DATA_SIZE ELSE 0 END ) AS "rcvDataSize"
+		FROM DETAILLOG
+		WHERE MASTERLOG_ID = #{masterLogId}
+        AND MSG_DATETIME >= #{fromDate}
+        AND MSG_DATETIME <= #{toDate}
+    ]]>
+    </select>
+
+    <select id="selectDataSizeType2" resultMap="selectDataSizeResultMap">
+    <![CDATA[
+		SELECT
+			SUM(CASE WHEN A.PR_PROCESS_MODE='SNDR' THEN A.DATA_SIZE ELSE 0 END ) AS "sndDataSize"
+			,SUM(CASE WHEN A.PR_PROCESS_MODE='RCVR' THEN A.DATA_SIZE ELSE 0 END ) AS "rcvDataSize"
+		FROM DETAILLOG A
+		INNER JOIN MASTERLOG_ID_MAP B ON A.MASTERLOG_ID =B.MASTERLOG_ID
+		WHERE B.INTF_ID =#{integrationId}
+		AND MSG_DATETIME >= #{fromDate}
+		AND MSG_DATETIME <= #{toDate}
+    ]]>
+    </select>
+
+    <resultMap type="map" id="selectDataSizeResultMap">
+    	<result property="sndDataSize" column="sndDataSize" javaType="double"/>
+    	<result property="rcvDataSize" column="rcvDataSize" javaType="double"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.NoticeMapper">
+	<!--
+  	<cache/>
+  	-->
+
+  	<!--
+  	공지사항 등록
+  	 -->
+  	<insert id="insertNotice" parameterType="Notice">
+  		<selectKey keyProperty="noticeId" resultType="string" order="BEFORE" >
+  			<choose>
+        		<when test="_databaseId == 'postgres'">
+				SELECT COALESCE(MAX(COALESCE(NOTICE_ID,'0')::numeric) + 1, 0) AS noticeId FROM TSU0402
+        		</when>
+        		<when test="_databaseId == 'altibase'">
+				SELECT TO_CHAR(NVL(MAX(TO_NUMBER(NVL(NOTICE_ID,'0'))) + 1, 0)) AS noticeId FROM TSU0402
+        		</when>
+        		<otherwise>
+				SELECT NVL(MAX(TO_NUMBER(NVL(NOTICE_ID,'0'))) + 1, 0) AS noticeId FROM TSU0402
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+  		INSERT INTO TSU0402 (
+			 NOTICE_ID
+			,CATEGORY_ID
+			,START_DATE
+			,SUBJECT
+			,CONTENTS
+			,IMPORTANCE
+			,FLAG
+			,HTML
+			,END_DATE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{noticeId 	, jdbcType=VARCHAR}
+			,#{categoryId 	, jdbcType=VARCHAR}
+			,#{startDate 	, jdbcType=VARCHAR}
+			,#{subject 		, jdbcType=VARCHAR}
+			,#{contents 	, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{importance 	, jdbcType=VARCHAR}
+			,#{flag 		, jdbcType=VARCHAR}
+			,#{html 		, jdbcType=VARCHAR}
+			,#{endDate 		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate 		, jdbcType=VARCHAR}
+			,#{regUser 		, jdbcType=VARCHAR}
+		)
+  	</insert>
+
+  	<update id="updateNotice" parameterType="Notice">
+  		UPDATE TSU0402
+		   SET
+			   CATEGORY_ID 	= #{categoryId 	, jdbcType=VARCHAR}
+			  ,START_DATE 	= #{startDate 	, jdbcType=VARCHAR}
+			  ,SUBJECT 		= #{subject 	, jdbcType=VARCHAR}
+			  ,CONTENTS 	= #{contents 	, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			  ,IMPORTANCE 	= #{importance 	, jdbcType=VARCHAR}
+			  ,FLAG 		= #{flag 		, jdbcType=VARCHAR}
+			  ,HTML 		= #{html 		, jdbcType=VARCHAR}
+			  ,END_DATE 	= #{endDate 	, jdbcType=VARCHAR}
+			  ,DEL_YN 		= #{delYn 		, jdbcType=VARCHAR}
+			  ,MOD_DATE 	= #{modDate 	, jdbcType=VARCHAR}
+			  ,MOD_USER 	= #{modUser		, jdbcType=VARCHAR}
+		WHERE NOTICE_ID = #{noticeId, jdbcType=VARCHAR}
+  	</update>
+
+  	<select id="getNoticeList" resultMap="noticeResultMapForList">
+		SELECT
+			x.NOTICE_ID
+			,x.CATEGORY_ID
+			,x.CATEGORY_NM
+			,x.SUBJECT
+			,x.IMPORTANCE
+			,x.FLAG
+			,x.START_DATE
+			,x.END_DATE
+			,x.DEL_YN
+			,x.REG_DATE
+			,x.REG_USER
+			,x.MOD_DATE
+			,x.MOD_USER
+			, (SELECT USER_NM  FROM TSU0101 WHERE USER_ID = x.REG_USER) AS REG_USER_NM
+	  	FROM (
+			SELECT *
+	  		FROM (
+	  			SELECT
+	  				 a.NOTICE_ID
+	  				,a.CATEGORY_ID
+	  				,b.CATEGORY_NM
+	  				,a.SUBJECT
+	  				,a.IMPORTANCE
+	  				,a.FLAG
+	  				,a.START_DATE
+	  				,a.END_DATE
+	  				,a.DEL_YN
+	  				,a.REG_DATE
+	  				,a.REG_USER
+	  				,a.MOD_DATE
+	  				,a.MOD_USER
+		  		FROM
+	  				TSU0402 a
+	  				LEFT OUTER JOIN (
+						SELECT
+							CATEGORY_ID
+							,CATEGORY_NM
+						FROM TSU0401
+						WHERE DEL_YN = 'N'
+		  			) b ON b.CATEGORY_ID = a.CATEGORY_ID
+		  		WHERE a.DEL_YN = 'N'
+		  		AND a.FLAG = 'Y'
+		  		<if test="categoryId != null and (categoryId != '')">
+				AND a.CATEGORY_ID = #{categoryId, jdbcType=VARCHAR}
+				</if>
+				<if test="searchText != null and (searchText != '')">
+				AND a.SUBJECT LIKE '%'||#{searchText}||'%'
+				</if>
+				ORDER BY a.REG_DATE DESC
+	  		) SUB1
+			<if test="alwaysRows != null and (alwaysRows != '')">
+			WHERE ROWNUM <![CDATA[<=]]> #{alwaysRows}
+			</if>
+	  		UNION
+	  		SELECT *
+	  		FROM (
+		  		SELECT
+		  			c.NOTICE_ID
+		  			,c.CATEGORY_ID
+		  			,d.CATEGORY_NM
+		  			,c.SUBJECT
+		  			,c.IMPORTANCE
+		  			,c.FLAG
+		  			,c.START_DATE
+		  			,c.END_DATE
+		  			,c.DEL_YN
+		  			,c.REG_DATE
+		  			,c.REG_USER
+		  			,c.MOD_DATE
+		  			,c.MOD_USER
+		  		FROM TSU0402 c
+		  		LEFT OUTER JOIN (
+		  			SELECT
+			  			CATEGORY_ID
+			  			,CATEGORY_NM
+		  			FROM TSU0401
+		  			WHERE DEL_YN = 'N'
+		  		) d ON d.CATEGORY_ID = c.CATEGORY_ID
+		  		WHERE c.DEL_YN = 'N'
+		  		AND c.FLAG = 'N'
+		  		<choose>
+		  			<when test="isInterfaceAdmin != null and (isInterfaceAdmin eq 'Y'.toString())">
+		  			</when>
+		  			<otherwise>
+	  			AND TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN c.START_DATE AND c.END_DATE
+		  			</otherwise>
+		  		</choose>
+		  		<if test="categoryId != null and (categoryId != '')">
+				AND c.CATEGORY_ID = #{categoryId, jdbcType=VARCHAR}
+				</if>
+				<if test="searchText != null and (searchText != '')">
+				AND c.SUBJECT LIKE '%'||#{searchText}||'%'
+				</if>
+				ORDER BY c.REG_DATE DESC
+	  		) SUB2
+			<if test="rows != null and (rows != '')">
+			WHERE ROWNUM <![CDATA[<=]]> #{rows}
+			</if>
+	  	) x
+  		ORDER BY x.FLAG DESC, x.REG_DATE DESC
+  	</select>
+
+  	<resultMap id="noticeResultMapForList" type="Notice">
+  		<id property="noticeId" 		column="NOTICE_ID"/>
+		<result property="categoryId" 	column="CATEGORY_ID"/>
+		<result property="categoryNm"	column="CATEGORY_NM"/>
+		<result property="startDate" 	column="START_DATE"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<!-- <result property="contents" 	column="CONTENTS"/> -->
+		<result property="importance" 	column="IMPORTANCE"/>
+		<result property="flag" 		column="FLAG"/>
+		<!-- <result property="html" 		column="HTML"/> -->
+		<result property="endDate" 		column="END_DATE"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regUser" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modUser" 		column="MOD_USER"/>
+		<result property="regUserNm" 	column="REG_USER_NM"/>
+  	</resultMap>
+
+  	<select id="getNoticeDetail" parameterType="string" resultMap="getNoticeDetailResultDefault" databaseId="oracle">
+        <include refid="selectNoticeDetail"/>
+    </select>
+
+  	<select id="getNoticeDetail" parameterType="string" resultMap="getNoticeDetailResultDefault" databaseId="tibero">
+        <include refid="selectNoticeDetail"/>
+    </select>
+
+  	<select id="getNoticeDetail" parameterType="string" resultMap="getNoticeDetailResultDefault" databaseId="altibase">
+        <include refid="selectNoticeDetail"/>
+    </select>
+
+  	<select id="getNoticeDetail" parameterType="string" resultMap="getNoticeDetailResultPostgreSQL" databaseId="postgres">
+        <include refid="selectNoticeDetail"/>
+    </select>
+
+    <sql id="selectNoticeDetail">
+		SELECT
+			a.NOTICE_ID
+  			,a.CATEGORY_ID
+  			,b.CATEGORY_NM
+  			,a.START_DATE
+  			,a.SUBJECT
+  			,a.CONTENTS
+  			,a.IMPORTANCE
+  			,a.FLAG
+  			,a.HTML
+  			,a.END_DATE
+  			,a.DEL_YN
+  			,a.REG_DATE
+  			,a.REG_USER
+  			,a.MOD_DATE
+  			,a.MOD_USER
+  			,c.FILE_ID
+  			,c.FILE_NM
+  			,c.FILE_PATH
+  		FROM TSU0402 a
+  		LEFT OUTER JOIN (
+			SELECT
+				CATEGORY_ID
+	  			,CATEGORY_NM
+	  			,TYPE
+  			FROM TSU0401
+			WHERE DEL_YN = 'N'
+			AND TYPE = '0'
+  		) b ON b.CATEGORY_ID = a.CATEGORY_ID
+  		LEFT OUTER JOIN TSU0404 c ON c.OWNER_ID = a.NOTICE_ID
+  			AND c.TYPE = b.TYPE and c.DEL_YN = 'N'
+  		WHERE a.NOTICE_ID = #{noticeId , jdbcType=VARCHAR}
+    </sql>
+
+  	<resultMap id="getNoticeDetailResultDefault" type="Notice">
+  		<id property="noticeId" 		column="NOTICE_ID"/>
+		<result property="categoryId" 	column="CATEGORY_ID"/>
+		<result property="categoryNm"	column="CATEGORY_NM"/>
+		<result property="startDate" 	column="START_DATE"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<result property="contents" 	column="CONTENTS" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+		<result property="importance" 	column="IMPORTANCE"/>
+		<result property="flag" 		column="FLAG"/>
+		<result property="html" 		column="HTML"/>
+		<result property="endDate" 		column="END_DATE"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regUser" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modUser" 		column="MOD_USER"/>
+
+		<collection property="noticeAttachFile" ofType="NoticeAttachFile">
+			<id property="fileId"		column="FILE_ID"/>
+			<result property="fileNm"	column="FILE_NM"/>
+			<result property="filePath"	column="FILE_PATH"/>
+		</collection>
+  	</resultMap>
+
+  	<resultMap id="getNoticeDetailResultPostgreSQL" type="Notice">
+  		<id property="noticeId" 		column="NOTICE_ID"/>
+		<result property="categoryId" 	column="CATEGORY_ID"/>
+		<result property="categoryNm"	column="CATEGORY_NM"/>
+		<result property="startDate" 	column="START_DATE"/>
+		<result property="subject" 		column="SUBJECT"/>
+		<result property="contents" 	column="CONTENTS"/>
+		<result property="importance" 	column="IMPORTANCE"/>
+		<result property="flag" 		column="FLAG"/>
+		<result property="html" 		column="HTML"/>
+		<result property="endDate" 		column="END_DATE"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regUser" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modUser" 		column="MOD_USER"/>
+
+		<collection property="noticeAttachFile" ofType="NoticeAttachFile">
+			<id property="fileId"		column="FILE_ID"/>
+			<result property="fileNm"	column="FILE_NM"/>
+			<result property="filePath"	column="FILE_PATH"/>
+		</collection>
+  	</resultMap>
+
+  	<delete id="deleteNotice">
+  		<!-- delete from TSU0402 where NOTICE_ID = #{noticeId , jdbcType=VARCHAR} -->
+  		UPDATE TSU0402
+		   SET
+		   		 DEL_YN   = 'Y'
+		   		,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+		   		,MOD_USER = #{modUser, jdbcType=VARCHAR}
+		WHERE NOTICE_ID = #{noticeId, jdbcType=VARCHAR}
+  	</delete>
+
+
+  	<insert id="insertNoticeAttachFile" parameterType="NoticeAttachFile">
+  		<selectKey keyProperty="fileId" resultType="String" order="BEFORE">
+  			<choose>
+        		<when test="_databaseId == 'postgres'">
+	  			SELECT COALESCE(MAX(COALESCE(FILE_ID, '0')::numeric) + 1, 0) AS fileId FROM TSU0404
+        		</when>
+        		<otherwise>
+	  			SELECT NVL(MAX(TO_NUMBER(NVL(FILE_ID, '0'))) + 1, 0) AS fileId FROM TSU0404
+        		</otherwise>
+        	</choose>
+  		</selectKey>
+
+  		INSERT INTO TSU0404 (
+  			OWNER_ID,
+  			FILE_ID,
+  			TYPE,
+  			FILE_NM,
+  			FILE_PATH,
+  			DEL_YN,
+  			REG_DATE,
+  			REG_USER
+  		) VALUES (
+  			#{ownerId, jdbcType=VARCHAR},
+  			#{fileId, jdbcType=VARCHAR},
+  			#{type, jdbcType=VARCHAR},
+  			#{fileNm, jdbcType=VARCHAR},
+  			#{filePath, jdbcType=VARCHAR},
+  			'N',
+  			#{regDate, jdbcType=VARCHAR},
+  			#{regUser, jdbcType=VARCHAR}
+  		)
+  	</insert>
+
+  	<update id="deleteNoticeAttachFile" parameterType="NoticeAttachFile">
+  		UPDATE TSU0404
+  			SET
+  				  DEL_YN = 'Y'
+  				, MOD_DATE = #{modDate, jdbcType=VARCHAR}
+		   		, MOD_USER = #{modUser, jdbcType=VARCHAR}
+		WHERE OWNER_ID = #{ownerId, jdbcType=VARCHAR}
+			AND FILE_ID = #{fileId, jdbcType=VARCHAR}
+			AND TYPE = #{type, jdbcType=VARCHAR}
+  	</update>
+</mapper>

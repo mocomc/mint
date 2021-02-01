@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.tu.TutorialMapper">
+  	<!--
+  	<cache/>
+  	-->
+	  
+	<select id="getFlowerList" resultMap="flowerResultMap">
+		select 
+			 FLOWER_ID
+			,NM
+			,AGE
+			,COLOR
+			,COMMENTS
+		    ,DEL_YN
+		    ,REG_DATE
+		    ,REG_USER
+		    ,MOD_DATE
+		    ,MOD_USER
+		from TTU0101
+		where DEL_YN = 'N'
+		<if test="flowerId != null">
+			and FLOWER_ID = #{flowerId}
+		</if>
+		<if test="nm != null">
+			and NM like '%#{nm}%'
+		</if>
+		<if test="age != null">
+			and AGE = #{age}
+		</if>
+		<if test="color != null">
+			and COLOR = #{color}
+		</if>
+		order by FLOWER_ID, NM, AGE, COLOR
+	</select>
+
+ 
+
+	<resultMap id="flowerResultMap" type="Flower" >
+		<id property="flowerId" 		column="FLOWER_ID" />
+		<result property="nm" 			column="NM" />
+		<result property="color" 		column="COLOR" />
+		<result property="age" 			column="AGE"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+	</resultMap>
+	  
+</mapper>

@@ -1,0 +1,2760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.DashboardPushMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<!-- 로그인 사용자 데이터 접근 권한 조회 -->
+	<sql id="getDataAccessRoleUser">
+		-----------------------------------------------
+		-- 로그인 사용자 데이터 접근 권한 조회(공통)
+		-----------------------------------------------
+		(
+			SELECT
+				DISTINCT
+				TSU0219.USER_ID   AS USER_ID,
+				TSU0221.C_ROLE_ID AS ROLE_ID,
+				TSU0221.DEPTH     AS DEPTH
+			FROM
+				(
+					SELECT
+						TSU0101.USER_ID,
+						TSU0219.ROLE_ID
+					FROM
+						TSU0101 TSU0101
+						INNER JOIN TSU0219 ON
+							TSU0101.USER_ID = TSU0219.USER_ID
+					WHERE
+						1 = 1
+						AND TSU0101.DEL_YN = 'N'
+						AND TSU0101.USER_ID = #{userId}
+				) TSU0219
+					INNER JOIN TSU0221 ON
+					TSU0219.ROLE_ID = TSU0221.P_ROLE_ID
+		) ACCESS_ROLE
+	</sql>
+
+	<!-- 로그인 사용자 데이터 접근 권한 중 DEPTH 가 1인 리스트 조회 -->
+	<select id="getDataAccessRoleFirstDepth" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT
+			  TSU0218.ROLE_ID AS "ROLE_ID"
+		FROM
+			<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+			INNER JOIN TSU0218 ON
+				ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+				AND ACCESS_ROLE.DEPTH = 1
+		WHERE
+			1 = 1
+			AND TSU0218.DEL_YN = 'N'
+	</select>
+
+	<!-- 로그인 사용자 데이터 접근 권한 중 DEPTH 가 조건에 해당하는 리스트 조회 -->
+	<select id="getDataAccessRoleDepth" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT
+			  TSU0218.ROLE_ID AS "ROLE_ID"
+		FROM
+			<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+			INNER JOIN TSU0218 ON
+				ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				AND ACCESS_ROLE.DEPTH IN <foreach item="item" index="index" collection="depth" open="(" separator="," close=")"> #{item}::numeric </foreach>
+        		</when>
+        		<otherwise>
+				AND ACCESS_ROLE.DEPTH IN <foreach item="item" index="index" collection="depth" open="(" separator="," close=")"> #{item} </foreach>
+        		</otherwise>
+        	</choose>
+	</select>
+
+
+	<!-- 데이터 접근 권한별 인터페이스 조회 -->
+	<sql id="getDataAccessRoleInterface">
+		-----------------------------------------------
+		-- 데이터 접근 권한 별 인터페이스 조회
+		-----------------------------------------------
+		SELECT
+			DISTINCT
+			TSU0220.INTERFACE_ID
+		FROM
+			<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+			-----------------------------------------------
+			-- 데이터 접근 권한
+			-----------------------------------------------
+			INNER JOIN TSU0218 TSU0218 ON
+				ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			-----------------------------------------------
+			-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+			-----------------------------------------------
+			INNER JOIN TSU0220 TSU0220 ON
+				TSU0220.ROLE_ID = ACCESS_ROLE.ROLE_ID
+		WHERE
+			1 = 1
+			AND TSU0218.DEL_YN = 'N'
+	</sql>
+
+	<sql id="getDataAccessRoleServer">
+		SELECT
+			ACCESS_ROLE.ROLE_ID,
+			TIM0101.SYSTEM_ID,
+			TIM0101.SYSTEM_CD,
+			TIM0101.SYSTEM_NM,
+			TIM0201.SERVER_ID,
+			TIM0201.SERVER_CD,
+			TIM0201.SERVER_NM
+		FROM
+			<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+			-----------------------------------------------
+			-- 데이터 접근 권한
+			-----------------------------------------------
+			INNER JOIN TSU0218 TSU0218 ON
+				ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			-----------------------------------------------
+			-- 데이터 접근 권한 :: 시스템 맵핑
+			-----------------------------------------------
+			INNER JOIN TSU0222 TSU0222 ON
+				ACCESS_ROLE.ROLE_ID = TSU0222.ROLE_ID
+			-----------------------------------------------
+			-- 시스템
+			-----------------------------------------------
+			INNER JOIN TIM0101 TIM0101 ON
+				TSU0222.SYSTEM_ID = TIM0101.SYSTEM_ID
+			-----------------------------------------------
+			-- 시스템 :: 서버 맵핑
+			-----------------------------------------------
+			INNER JOIN TIM0202 TIM0202 ON
+				TSU0222.SYSTEM_ID = TIM0202.SYSTEM_ID
+			-----------------------------------------------
+			-- 서버
+			-----------------------------------------------
+			INNER JOIN TIM0201 TIM0201 ON
+				TIM0202.SERVER_ID = TIM0201.SERVER_ID
+		WHERE
+			1 = 1
+			AND TSU0218.DEL_YN = 'N'
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0201.DEL_YN = 'N'
+	</sql>
+
+	<!-- WS0001(접근권할별 금일누적건수) TODD:로직점검필요-->
+	<select id="getWS0001" parameterType="Map" resultMap="getWS0001Result">
+		SELECT
+		    A.ROLE_NM
+		  , A.ROLE_ID
+		  , A.DEPTH
+		  , COALESCE(B.TOTAL_CNT,0) AS TOTAL_CNT
+		  , COALESCE(B.SUCCESS_CNT,0) AS SUCCESS_CNT
+		  , COALESCE(B.ERROR_CNT,0) AS ERROR_CNT
+		  , COALESCE(B.PROCESS_CNT,0) AS PROCESS_CNT
+		FROM
+			(
+				SELECT
+					  TSU0218.ROLE_ID
+					, TSU0218.ROLE_CD
+					, TSU0218.ROLE_NM
+					, ACCESS_ROLE.DEPTH
+				FROM
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+					INNER JOIN TSU0218 ON
+						 ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			) A
+			-----------------------------------------------
+			-- 접근권한별 집계정보
+			-----------------------------------------------
+			LEFT OUTER JOIN
+			(
+				SELECT
+					B.ROLE_ID
+					, SUM(A.SUCCESS_CNT) + SUM(A.ERROR_CNT) + SUM(A.PROCESS_CNT) AS TOTAL_CNT
+					, SUM(A.SUCCESS_CNT) AS SUCCESS_CNT
+					, SUM(A.ERROR_CNT) AS ERROR_CNT
+					, SUM(A.PROCESS_CNT) AS PROCESS_CNT
+				FROM
+					-----------------------------------------------
+					-- 인터페이스 집계 정보
+					-----------------------------------------------
+					TSU0803 A
+					-----------------------------------------------
+					-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+					-----------------------------------------------
+					INNER JOIN TSU0220 B ON
+						A.INTERFACE_ID = B.INTERFACE_ID
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				WHERE SUBSTR(TR_DATE,1,8) = TO_CHAR(NOW(),'YYYYMMDD')
+        		</when>
+        		<otherwise>
+				WHERE SUBSTR(TR_DATE,1,8) = TO_CHAR(SYSDATE,'YYYYMMDD')
+        		</otherwise>
+        	</choose>
+				GROUP BY B.ROLE_ID
+			) B ON
+				A.ROLE_ID = B.ROLE_ID
+		WHERE
+			1 = 1
+			<if test="dataAccessList != null">
+			AND A.ROLE_ID IN <foreach item="item" index="index" collection="dataAccessList" open="(" separator="," close=")"> #{item} </foreach>
+			</if>
+		ORDER BY DEPTH, ROLE_ID
+	</select>
+
+	<resultMap id="getWS0001Result" type="java.util.LinkedHashMap">
+		<id property="roleId"         column="ROLE_ID"/>
+		<result property="roleNm"     column="ROLE_NM"/>
+		<result property="depth"      column="DEPTH"/>
+		<result property="totalCnt"   column="TOTAL_CNT"/>
+		<result property="successCnt" column="SUCCESS_CNT"/>
+		<result property="errorCnt"   column="ERROR_CNT"/>
+		<result property="processCnt" column="PROCESS_CNT"/>
+	</resultMap>
+
+	<!--  WS0002(트레킹오류리스트TOP-집계테이블기준) -->
+	<select id="getWS0002" parameterType="Map" resultMap="getWS0002Result">
+		SELECT
+			INTERFACE_ID,
+			INTERFACE_NM,
+			INTEGRATION_ID,
+			ERROR_CNT,
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+       		ROW_NUMBER () OVER () as ROWNUM
+       		</when>
+       		<otherwise>
+			ROWNUM
+       		</otherwise>
+       	</choose>
+		FROM
+			(
+				SELECT
+					TAN0201.INTERFACE_ID,
+					TAN0201.INTERFACE_NM,
+					TAN0201.INTEGRATION_ID,
+					B.ERROR_CNT
+				FROM
+				  	TAN0201 TAN0201
+					INNER JOIN
+					(
+						SELECT
+							INTERFACE_ID,
+							SUM(A.ERROR_CNT) AS ERROR_CNT
+						FROM
+							TSU0803 A
+						WHERE
+						<choose>
+				       		<when test="_databaseId == 'postgres'">
+							SUBSTR(TR_DATE,1,8) = TO_CHAR(NOW(),'YYYYMMDD')
+				       		</when>
+				       		<otherwise>
+							SUBSTR(TR_DATE,1,8) = TO_CHAR(SYSDATE,'YYYYMMDD')
+				       		</otherwise>
+				       	</choose>
+							AND ERROR_CNT > 0
+						GROUP BY INTERFACE_ID
+					) B ON
+						TAN0201.INTERFACE_ID = B.INTERFACE_ID
+
+					-----------------------------------------------
+					-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+					-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+					-----------------------------------------------
+					<choose>
+					<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+					</when>
+					<otherwise>
+					INNER JOIN
+					(
+						<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+					) ACCESS_ROLE_INTF ON
+						TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+					</otherwise>
+					</choose>
+				ORDER BY ERROR_CNT DESC
+			) ERR_LIST
+		<choose>
+      		<when test="_databaseId == 'postgres'">
+      			<choose>
+					<when test="max != null">
+			LIMIT #{max}::numeric
+					</when>
+					<otherwise>
+			LIMIT 4
+					</otherwise>
+				</choose>
+      		</when>
+      		<otherwise>
+		WHERE
+			1 = 1
+				<choose>
+					<when test="max != null">
+			AND ROWNUM <![CDATA[<=]]> #{max}
+					</when>
+					<otherwise>
+			AND ROWNUM <![CDATA[<=]]> 4
+					</otherwise>
+				</choose>
+      		</otherwise>
+      	</choose>
+	</select>
+
+	<resultMap id="getWS0002Result" type="java.util.LinkedHashMap">
+		<id property="interfaceId"    	   column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="errorCnt"        column="ERROR_CNT"/>
+	</resultMap>
+
+	<!--  WS0003(지연인터페이스TOP) -->
+	<select id="getWS0003" parameterType="Map" resultMap="getWS0003Result">
+		SELECT
+		<choose>
+			<when test="_databaseId == 'postgres'">
+		    TO_CHAR(MASTERLOG_ID) AS MASTERLOG_IDMASTERLOG_ID
+		  , MSG_DATETIME
+		  , INTEGRATION_ID
+		  , INTERFACE_ID
+		  , INTERFACE_NM
+		  , STATUS_NM
+		  , LTRIM(TO_CHAR( TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) ,'00')) || ':' ||
+		    LTRIM(TO_CHAR( TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60  ,'00')) || ':' ||
+		    LTRIM(TO_CHAR( TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60 * 60) -
+		                 ( TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 * 60 + ( TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((TO_DATE(TO_CHAR(NOW()::timestamp,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS') - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 ) * 60 ) ,'00'))
+		    AS ELAPSED_TIME
+			</when>
+	       	<otherwise>
+		    MASTERLOG_ID
+		  , MSG_DATETIME
+		  , INTEGRATION_ID
+		  , INTERFACE_ID
+		  , INTERFACE_NM
+		  , STATUS_NM
+		  , LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) ,'00')) || ':' ||
+		    LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60  ,'00')) || ':' ||
+		    LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60 * 60) -
+		                 ( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 * 60 + ( TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((SYSDATE - TO_DATE(SUBSTR(MSG_DATETIME,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 ) * 60 ) ,'00'))
+		    AS ELAPSED_TIME
+	       	</otherwise>
+		</choose>
+		  , RNUM
+		FROM
+			(
+				SELECT
+					---------------------
+					-- 트래킹
+					---------------------
+					  A.MASTERLOG_ID
+					, A.MSG_DATETIME
+					---------------------
+					-- 인터페이스
+					---------------------
+					, TAN0201.INTEGRATION_ID
+					, TAN0201.INTERFACE_ID
+					, TAN0201.INTERFACE_NM
+					---------------------
+					-- 상태
+					---------------------
+					, A.MSG_STATUS
+					, CDOP01.NM AS STATUS_NM
+				<choose>
+					<when test="_databaseId == 'postgres'">
+					, ROW_NUMBER () OVER () AS RNUM
+					</when>
+			       	<otherwise>
+					, ROWNUM AS RNUM
+			       	</otherwise>
+				</choose>
+				FROM
+					(
+						SELECT *
+						FROM
+							MASTERLOG
+						WHERE
+							1 = 1
+							AND MSG_STATUS = '01'
+						<choose>
+							<when test="_databaseId == 'postgres'">
+							AND ( MSG_DATETIME BETWEEN TO_CHAR(NOW()::timestamp - '1 hour'::interval, 'YYYYMMDDHH24')||'0000000000' AND TO_CHAR(NOW(), 'YYYYMMDDHH24')||'5959999999' )
+							AND TO_CHAR(TO_DATE(SUBSTR(MSG_DATETIME,1,12), 'YYYYMMDDHH24MI') + (${checkTime}/24/60), 'YYYYMMDDHH24MI') <![CDATA[<=]]> TO_CHAR(NOW(), 'YYYYMMDDHH24MI')
+							</when>
+					       	<otherwise>
+							AND ( MSG_DATETIME BETWEEN TO_CHAR(SYSDATE - (1/24), 'YYYYMMDDHH24')||'0000000000' AND TO_CHAR(SYSDATE - (0/24), 'YYYYMMDDHH24')||'5959999999' )
+							AND TO_CHAR(TO_DATE(SUBSTR(MSG_DATETIME,1,12), 'YYYYMMDDHH24MI') + (#{checkTime}/24/60), 'YYYYMMDDHH24MI') <![CDATA[<=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MI')
+					       	</otherwise>
+						</choose>
+					) A
+					---------------------
+					-- 마스터 로그 아이디 조인
+					---------------------
+					INNER JOIN MASTERLOG_ID_MAP B ON
+						A.MASTERLOG_ID = B.MASTERLOG_ID
+					---------------------
+					-- 인터페이스 조인
+					---------------------
+					INNER JOIN
+					(
+						SELECT
+							  TAN0201.INTERFACE_ID
+							, TAN0201.INTERFACE_NM
+							, TAN0201.INTEGRATION_ID
+						FROM
+							TAN0201 TAN0201
+
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+							-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+							-----------------------------------------------
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							INNER JOIN
+							(
+								<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+
+						WHERE TAN0201.DEL_YN = 'N'
+					) TAN0201 ON
+					  ( B.INTF_ID = TAN0201.INTEGRATION_ID OR B.GROUP_ID||'_'||B.INTF_ID = TAN0201.INTEGRATION_ID )
+					---------------------
+					-- 공통코드(상태값) 조인
+					---------------------
+					LEFT OUTER JOIN
+					(
+						SELECT CD, NM
+						FROM TSU0301
+						WHERE LEVEL1 = 'OP' AND LEVEL2 = '01'
+					) CDOP01 ON
+						A.MSG_STATUS = CDOP01.CD
+			) PROCESSING_LIST
+		WHERE
+			1 = 1
+		<choose>
+			<when test="max != null">
+				<choose>
+					<when test="_databaseId == 'postgres'">
+			AND RNUM <![CDATA[<=]]> #{max}::numeric
+					</when>
+			       	<otherwise>
+			AND RNUM <![CDATA[<=]]> #{max}
+			       	</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+			AND RNUM <![CDATA[<=]]> 4
+			</otherwise>
+		</choose>
+	</select>
+
+	<resultMap id="getWS0003Result" type="java.util.LinkedHashMap">
+		<id property="masterlogId"    	   column="MASTERLOG_ID"/>
+		<id property="msgDateTime"    	   column="MSG_DATETIME"/>
+		<id property="interfaceId"    	   column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="statusNm"        column="STATUS_NM"/>
+		<result property="minPrDt"         column="MIN_PR_DT"/>
+		<result property="maxPrDt"         column="MAX_PR_DT"/>
+		<result property="elapsedTime"     column="ELAPSED_TIME"/>
+	</resultMap>
+
+	<!--  WS0004(실시간-전체처리건수) -->
+	<select id="getWS0004" parameterType="Map" resultMap="getWS0004Result">
+		SELECT
+			  A.ROLE_NM
+			, A.ROLE_ID
+			, COALESCE(B.CNT,0) AS CNT
+			, ' ' AS FLAG
+		FROM
+			(
+				SELECT
+					  TSU0218.ROLE_ID
+					, TSU0218.ROLE_CD
+					, TSU0218.ROLE_NM
+				FROM
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+					INNER JOIN TSU0218 ON
+						 ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			) A
+			LEFT OUTER JOIN
+			(
+				SELECT
+					TSU0220.ROLE_ID,
+					COUNT(A.MSG_DATETIME) AS CNT
+				FROM MASTERLOG A
+					---------------------
+					-- 마스터 로그 아이디 조인
+					---------------------
+					INNER JOIN MASTERLOG_ID_MAP B ON
+						A.MASTERLOG_ID = B.MASTERLOG_ID
+					---------------------
+					-- 인터페이스 조인
+					---------------------
+					INNER JOIN
+					(
+					  SELECT
+					      INTERFACE_ID
+					    , INTERFACE_NM
+					    , INTEGRATION_ID
+					  FROM
+					    TAN0201
+					  WHERE DEL_YN = 'N'
+					) TAN0201 ON
+		        		( B.INTF_ID = TAN0201.INTEGRATION_ID OR B.GROUP_ID||'_'||B.INTF_ID = TAN0201.INTEGRATION_ID )
+					LEFT OUTER JOIN TSU0220 TSU0220 ON
+						TAN0201.INTERFACE_ID = TSU0220.INTERFACE_ID
+				WHERE
+					1 = 1
+				<choose>
+	        		<when test="_databaseId == 'postgres'">
+					AND ( A.MSG_DATETIME BETWEEN TO_CHAR(NOW(),'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(NOW(),'YYYYMMDDHH24MISS')||'99999999' )
+	        		</when>
+	        		<otherwise>
+					AND ( A.MSG_DATETIME BETWEEN TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'99999999' )
+	        		</otherwise>
+	        	</choose>
+				GROUP BY TSU0220.ROLE_ID
+			) B ON
+				A.ROLE_ID = B.ROLE_ID
+		WHERE
+			1 = 1
+			<if test="dataAccessList != null">
+			AND A.ROLE_ID IN <foreach item="item" index="index" collection="dataAccessList" open="(" separator="," close=")"> #{item} </foreach>
+			</if>
+	</select>
+
+	<resultMap id="getWS0004Result" type="java.util.LinkedHashMap">
+		<id property="roleId"         column="ROLE_ID"/>
+		<result property="roleNm"     column="ROLE_NM"/>
+		<result property="cnt"        column="CNT"/>
+		<result property="flag"        column="FLAG"/>
+	</resultMap>
+
+	<!-- WS0005(실시간-관심인터페이스처리건수) -->
+	<select id="getWS0005" parameterType="Map" resultMap="getWS0005Result">
+		SELECT
+		    A.INTERFACE_ID
+		  , A.INTERFACE_NM
+		  , A.INTEGRATION_ID
+		  , COALESCE(B.CNT,0) AS CNT
+		  , ' ' AS FLAG
+		FROM
+	      (
+	        SELECT
+	            A.INTERFACE_ID,
+	            A.INTERFACE_NM,
+	            A.INTEGRATION_ID
+	        FROM
+	          	TAN0201 A
+				INNER JOIN TAN0214 B ON
+					A.INTERFACE_ID = B.INTERFACE_ID
+					AND B.USER_ID = #{userId}
+					AND B.TYPE = '0'
+					AND B.MONITOR_YN = 'Y'
+
+				-----------------------------------------------
+				-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+				-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+				-----------------------------------------------
+				<choose>
+				<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+				</when>
+				<otherwise>
+				INNER JOIN
+				(
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+				) ACCESS_ROLE_INTF ON
+					A.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+				</otherwise>
+				</choose>
+
+			WHERE A.DEL_YN = 'N'
+	      ) A
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		      TAN0201.INTERFACE_ID,
+		      COUNT(A.MSG_DATETIME) AS CNT
+		    FROM
+		      MASTERLOG A
+		      ---------------------
+		      -- 마스터 로그 아이디 조인
+		      ---------------------
+		      INNER JOIN MASTERLOG_ID_MAP B ON
+		        A.MASTERLOG_ID = B.MASTERLOG_ID
+		      ---------------------
+		      -- 인터페이스 조인
+		      ---------------------
+		      INNER JOIN
+		      (
+		        SELECT
+		            A.INTERFACE_ID,
+		            A.INTEGRATION_ID
+		        FROM
+		          	TAN0201 A
+					INNER JOIN TAN0214 B ON
+						A.INTERFACE_ID = B.INTERFACE_ID
+						AND B.USER_ID = #{userId}
+						AND B.TYPE = '0'
+						AND B.MONITOR_YN = 'Y'
+		        WHERE A.DEL_YN = 'N'
+		      ) TAN0201 ON
+		        ( B.INTF_ID = TAN0201.INTEGRATION_ID OR B.GROUP_ID||'_'||B.INTF_ID = TAN0201.INTEGRATION_ID )
+		    WHERE
+		      1 = 1
+		      <choose>
+        		<when test="_databaseId == 'postgres'">
+		      AND ( A.MSG_DATETIME BETWEEN TO_CHAR(NOW(),'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(NOW(),'YYYYMMDDHH24MISS')||'99999999' )
+        		</when>
+        		<otherwise>
+		      AND ( A.MSG_DATETIME BETWEEN TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'99999999' )
+        		</otherwise>
+        	</choose>
+		    GROUP BY TAN0201.INTERFACE_ID
+		  ) B ON
+		    A.INTERFACE_ID = B.INTERFACE_ID
+	</select>
+
+	<resultMap id="getWS0005Result" type="java.util.LinkedHashMap">
+		<id property="interfaceId"         column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="cnt"        column="CNT"/>
+		<result property="flag"        column="FLAG"/>
+	</resultMap>
+
+	<!--  WS0006(처리량추이-전일/금일) -->
+	<select id="getWS0006" parameterType="Map" resultMap="getWS0006Result">
+		SELECT
+			  TIMES.HOURS    AS HOURS
+			, COALESCE(D1.CNT, 0) AS D1
+			, COALESCE(D0.CNT, 0) AS D0
+		FROM
+			(
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				SELECT TO_CHAR(make_interval(MINS=>x)::time, 'HH24') AS HOURS
+				FROM generate_series(0, 60 * TO_CHAR(NOW(), 'HH24')::integer, 60) AS t(x)
+        		</when>
+        		<otherwise>
+				SELECT
+					CASE WHEN (LEVEL-1) <![CDATA[<]]> 10 THEN '0'||(LEVEL-1) ELSE ''||(LEVEL-1) END AS HOURS
+				FROM DUAL CONNECT BY (LEVEL-1) <![CDATA[<]]> (TO_CHAR(SYSDATE, 'HH24') +1)
+        		</otherwise>
+        	</choose>
+			) TIMES
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					  D1.TR_DATE            AS TR_DATE
+					, SUM( COALESCE(D1.CNT, 0) ) AS CNT
+				FROM
+					(
+						SELECT
+							TAN0201.INTERFACE_ID,
+							TAN0201.INTERFACE_NM,
+							TAN0201.INTEGRATION_ID
+						FROM
+							TAN0201 TAN0201
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+							-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+							-----------------------------------------------
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							INNER JOIN
+							(
+								<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+
+						WHERE
+						  1 = 1
+						  AND TAN0201.DEL_YN = 'N'
+					) INTF_INFO
+					-----------------------------------------------
+					-- 어제
+					-----------------------------------------------
+					INNER JOIN
+					(
+						SELECT
+							  TR_DATE
+							, INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0803
+					<choose>
+		        		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_DATE, 1, 8) = TO_CHAR(NOW()::date -1, 'YYYYMMDD')
+		        		</when>
+		        		<otherwise>
+						WHERE SUBSTR(TR_DATE, 1, 8) = TO_CHAR(SYSDATE -1, 'YYYYMMDD')
+		        		</otherwise>
+		        	</choose>
+						GROUP BY TR_DATE, INTERFACE_ID
+					) D1 ON
+					  INTF_INFO.INTERFACE_ID = D1.INTERFACE_ID
+				GROUP BY TR_DATE
+				--ORDER BY TR_DATE
+			) D1 ON
+				TIMES.HOURS = TO_CHAR(TO_DATE(D1.TR_DATE, 'YYYYMMDDHH24'), 'HH24')
+
+			LEFT OUTER JOIN
+			(
+				SELECT
+					  D0.TR_DATE            AS TR_DATE
+					, SUM( COALESCE(D0.CNT, 0) ) AS CNT
+				FROM
+					(
+						SELECT
+							TAN0201.INTERFACE_ID,
+							TAN0201.INTERFACE_NM,
+							TAN0201.INTEGRATION_ID
+						FROM
+							TAN0201 TAN0201
+
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+							-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+							-----------------------------------------------
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							INNER JOIN
+							(
+								<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+
+						WHERE
+						  1 = 1
+						  AND TAN0201.DEL_YN = 'N'
+					) INTF_INFO
+					-----------------------------------------------
+					-- 오늘
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  TR_DATE
+							, INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0803
+					<choose>
+		        		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_DATE, 1, 8) = TO_CHAR(NOW(), 'YYYYMMDD')
+		        		</when>
+		        		<otherwise>
+						WHERE SUBSTR(TR_DATE, 1, 8) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		        		</otherwise>
+		        	</choose>
+						GROUP BY TR_DATE, INTERFACE_ID
+					) D0 ON
+					  INTF_INFO.INTERFACE_ID = D0.INTERFACE_ID
+				GROUP BY TR_DATE
+				--ORDER BY TR_DATE
+			) D0 ON
+				TIMES.HOURS = TO_CHAR(TO_DATE(D0.TR_DATE, 'YYYYMMDDHH24'), 'HH24')
+		ORDER BY TIMES.HOURS
+	</select>
+
+	<resultMap id="getWS0006Result" type="java.util.LinkedHashMap">
+		<result property="HOURS"	column="HOURS"/>
+		<result property="D1"		column="D1"/>
+		<result property="D0"		column="D0"/>
+	</resultMap>
+
+	<!--  WS0007(처리량추이-최근4개월) -->
+	<select id="getWS0007" parameterType="Map" resultMap="getWS0007Result">
+		SELECT
+			  SUM(M3) AS M3
+			, SUM(M2) AS M2
+			, SUM(M1) AS M1
+			, SUM(M0) AS M0
+		FROM
+			(
+				SELECT
+					  INTF_INFO.INTERFACE_ID
+					, COALESCE(M3.CNT, 0) AS M3
+					, COALESCE(M2.CNT, 0) AS M2
+					, COALESCE(M1.CNT, 0) AS M1
+					, COALESCE(M0.CNT, 0) AS M0
+				FROM
+					(
+						SELECT
+							TAN0201.INTERFACE_ID,
+							TAN0201.INTERFACE_NM,
+							TAN0201.INTEGRATION_ID
+						FROM
+							TAN0201 TAN0201
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+							-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+							-----------------------------------------------
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							INNER JOIN
+							(
+								<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+
+						WHERE
+						  1 = 1
+						  AND TAN0201.DEL_YN = 'N'
+					) INTF_INFO
+					-----------------------------------------------
+					-- 3개월 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0804
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(current_timestamp + '-3 months', 'YYYYMM')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(ADD_MONTHS(SYSDATE, -3), 'YYYYMM')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) M3 ON
+					  INTF_INFO.INTERFACE_ID = M3.INTERFACE_ID
+					-----------------------------------------------
+					-- 2개월 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0804
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(current_timestamp + '-2 months', 'YYYYMM')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(ADD_MONTHS(SYSDATE, -2), 'YYYYMM')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) M2 ON
+					  INTF_INFO.INTERFACE_ID = M2.INTERFACE_ID
+					-----------------------------------------------
+					-- 1개월 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0804
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(current_timestamp + '-1 months', 'YYYYMM')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) M1 ON
+					  INTF_INFO.INTERFACE_ID = M1.INTERFACE_ID
+					-----------------------------------------------
+					-- 0개월 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0804
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(current_timestamp, 'YYYYMM')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_DAY, 1, 6) = TO_CHAR(ADD_MONTHS(SYSDATE, -0), 'YYYYMM')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) M0 ON
+					  INTF_INFO.INTERFACE_ID = M0.INTERFACE_ID
+			) WS0007
+	</select>
+
+	<resultMap id="getWS0007Result" type="java.util.LinkedHashMap">
+		<result property="M-3"	column="M3"/>
+		<result property="M-2"	column="M2"/>
+		<result property="M-1"	column="M1"/>
+		<result property="T"	column="M0"/>
+	</resultMap>
+
+	<!--  WS0008(처리량추이-최근4년) -->
+	<select id="getWS0008" parameterType="Map" resultMap="getWS0008Result">
+		SELECT
+			  SUM(Y3) AS Y3
+			, SUM(Y2) AS Y2
+			, SUM(Y1) AS Y1
+			, SUM(Y0) AS Y0
+		FROM
+			(
+				SELECT
+					  INTF_INFO.INTERFACE_ID
+					, COALESCE(Y3.CNT, 0) AS Y3
+					, COALESCE(Y2.CNT, 0) AS Y2
+					, COALESCE(Y1.CNT, 0) AS Y1
+					, COALESCE(Y0.CNT, 0) AS Y0
+				FROM
+					(
+						SELECT
+							TAN0201.INTERFACE_ID,
+							TAN0201.INTERFACE_NM,
+							TAN0201.INTEGRATION_ID
+						FROM
+							TAN0201 TAN0201
+
+							-----------------------------------------------
+							-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+							-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+							-----------------------------------------------
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							INNER JOIN
+							(
+								<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+
+						WHERE
+						  1 = 1
+						  AND TAN0201.DEL_YN = 'N'
+					) INTF_INFO
+					-----------------------------------------------
+					-- 3년 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0805
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(current_timestamp + '-36 months', 'YYYY')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(ADD_MONTHS(SYSDATE, -36), 'YYYY')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) Y3 ON
+					  INTF_INFO.INTERFACE_ID = Y3.INTERFACE_ID
+					-----------------------------------------------
+					-- 2년 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0805
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(current_timestamp + '-24 months', 'YYYY')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(ADD_MONTHS(SYSDATE, -24), 'YYYY')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) Y2 ON
+					  INTF_INFO.INTERFACE_ID = Y2.INTERFACE_ID
+					-----------------------------------------------
+					-- 1년 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0805
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(current_timestamp + '-12 months', 'YYYY')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'YYYY')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) Y1 ON
+					  INTF_INFO.INTERFACE_ID = Y1.INTERFACE_ID
+					-----------------------------------------------
+					-- 0년 전
+					-----------------------------------------------
+					LEFT OUTER JOIN
+					(
+						SELECT
+							  INTERFACE_ID
+							, SUM( COALESCE(SUCCESS_CNT,0) + COALESCE(ERROR_CNT,0) + COALESCE(PROCESS_CNT,0) ) AS CNT
+						FROM TSU0805
+					<choose>
+			       		<when test="_databaseId == 'postgres'">
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(current_timestamp, 'YYYY')
+			       		</when>
+			       		<otherwise>
+						WHERE SUBSTR(TR_MONTH, 1, 4) = TO_CHAR(ADD_MONTHS(SYSDATE, -0), 'YYYY')
+			       		</otherwise>
+			       	</choose>
+						GROUP BY INTERFACE_ID
+					) Y0 ON
+					  INTF_INFO.INTERFACE_ID = Y0.INTERFACE_ID
+			) WS0008
+	</select>
+
+	<resultMap id="getWS0008Result" type="java.util.LinkedHashMap">
+		<result property="Y-3"	column="Y3"/>
+		<result property="Y-2"	column="Y2"/>
+		<result property="Y-1"	column="Y1"/>
+		<result property="T"	column="Y0"/>
+	</resultMap>
+
+	<!-- WS0009, WS0010, WS0011(리소스사용율 조회) -->
+	<select id="getResourceLimitList" parameterType="String" resultMap="resourceResult">
+		 SELECT
+				A.RESOURCE_ID,
+				A.RESOURCE_NM,
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				A."LIMIT" AS LIMIT,
+        		</when>
+        		<otherwise>
+				A.LIMIT,
+        		</otherwise>
+        	</choose>
+				A.INFO1,
+				A.INFO2,
+				A.INFO3,
+				A.STATUS,
+				A.SERVER_ID,
+				B.SERVER_NM,
+				B.HOST_NM,
+				B.IP,
+				C.GET_DATE,
+				C.TOTAL_AMOUNT,
+				C.USED_AMOUNT,
+				C.USED_PER
+			FROM
+				TIM0204 A
+				INNER JOIN TIM0201 B ON
+					A.SERVER_ID = B.SERVER_ID
+					AND A.DEL_YN='N'
+				INNER JOIN
+				(
+						SELECT J.RESOURCE_ID, J.GET_DATE, J.TOTAL_AMOUNT, J.USED_AMOUNT, J.USED_PER
+						FROM
+							TOP0801 J
+							INNER JOIN
+							(
+								SELECT K.RESOURCE_ID, MAX(K.GET_DATE) AS GET_DATE
+								FROM TOP0801 K
+						  INNER JOIN TIM0204 L
+								  ON K.RESOURCE_ID = L.RESOURCE_ID
+								 AND L.TYPE = #{type}
+							GROUP BY K.RESOURCE_ID
+							) H ON
+								J.RESOURCE_ID = H.RESOURCE_ID AND J.GET_DATE = H.GET_DATE
+				) C ON
+					A.RESOURCE_ID = C.RESOURCE_ID
+				INNER JOIN
+				(
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+				) ACCESS_ROLE_SERVER ON
+					A.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+			WHERE
+				1 = 1
+				AND A.STATUS IN ('9')
+	</select>
+
+	<resultMap id="resourceResult" type="ServerResource">
+		<id property="resourceId"       column="RESOURCE_ID"/>
+		<result property="resourceNm"   column="RESOURCE_NM"/>
+		<result property="limit" 		column="LIMIT"/>
+		<result property="totalAmount" 	column="TOTAL_AMOUNT"/>
+		<result property="usedAmount" 	column="USED_AMOUNT"/>
+		<result property="usedPer" 		column="USED_PER"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="getDate" 	    column="GET_DATE"/>
+		<result property="info1" 		column="INFO1"/>
+		<result property="info2" 		column="INFO2"/>
+		<result property="info3" 		column="INFO3"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0012(Process) -->
+	<select id="getWS0012" parameterType="String" resultMap="getWS0012Result">
+		SELECT
+			A.PROCESS_ID,
+			A.PROCESS_NM,
+			A.CHECK_VALUE,
+			A.CHECK_CNT,
+			C.STATUS,
+			B.SERVER_ID,
+			B.SERVER_NM,
+			B.HOST_NM,
+			B.IP,
+			C.GET_DATE,
+			C.CNT,
+			C.PROCESS_NO
+		FROM
+			TIM0205 A
+			INNER JOIN TIM0201 B ON
+				A.SERVER_ID = B.SERVER_ID
+					AND A.DEL_YN='N'
+			INNER JOIN
+			(
+				SELECT K.PROCESS_ID, K.CNT, K.PROCESS_NO, K.GET_DATE, K.STATUS
+				FROM
+					TOP0802 K
+					INNER JOIN
+					(
+						SELECT
+							D.PROCESS_ID,
+							MAX(D.GET_DATE) AS GET_DATE
+						FROM TOP0802 D
+						GROUP BY PROCESS_ID
+					) G ON
+						K.PROCESS_ID = G.PROCESS_ID
+						AND K.GET_DATE = G.GET_DATE
+			) C ON
+				A.PROCESS_ID = C.PROCESS_ID
+				AND C.STATUS = '9'
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				A.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+	</select>
+
+	<resultMap id="getWS0012Result" type="ServerProcess">
+		<id property="processId"            column="PROCESS_ID"/>
+		<result property="processNm" 		column="PROCESS_NM"/>
+		<result property="checkValue" 		column="CHECK_VALUE"/>
+		<result property="checkCnt" 		column="CHECK_CNT"/>
+		<result property="status" 			column="STATUS"/>
+		<result property="cnt" 				column="CNT"/>
+		<result property="processNo" 		column="PROCESS_NO"/>
+		<result property="getDate"	 		column="GET_DATE"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0013(MIAgent) -->
+	<select id="getWS0013" parameterType="String" resultMap="getWS0013Result">
+		SELECT
+			A.AGENT_NM,
+			C.STATUS,
+			TSU0301.NM AS STATUS_NM,
+			A.SERVER_ID,
+			B.SERVER_NM,
+			B.HOST_NM,
+			B.IP,
+			C.GET_DATE
+		FROM
+			TIM0209 A
+			INNER JOIN TIM0201 B ON
+				B.SERVER_ID = A.SERVER_ID
+				AND A.DEL_YN='N'
+			INNER JOIN
+			(
+				SELECT TOP0809.AGENT_ID, TOP0809.GET_DATE, TOP0809.STATUS
+				FROM
+					TOP0809
+					INNER JOIN
+					(
+						SELECT AGENT_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0809
+						GROUP BY AGENT_ID
+					) MAX ON
+						TOP0809.AGENT_ID = MAX.AGENT_ID
+						AND TOP0809.GET_DATE = MAX.GET_DATE
+				WHERE
+					1 = 1
+					AND TOP0809.STATUS = '9'
+			) C ON
+				A.AGENT_ID = C.AGENT_ID
+			LEFT OUTER JOIN
+			(
+			  SELECT CD, NM
+			  FROM TSU0301
+			  WHERE TSU0301.LEVEL1 = 'IM' AND TSU0301.LEVEL2='27'
+			) TSU0301 ON
+				TSU0301.CD = A.STATUS
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				A.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+
+	</select>
+
+	<resultMap id="getWS0013Result" type="EAIEngine">
+		<result property="agentNm" 	column="AGENT_NM"/>
+		<result property="runnerNm" 	column="RUNNER_NM"/>
+		<result property="getDate" 		column="GET_DATE"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0014(MIRunner) -->
+	<select id="getWS0014" parameterType="String" resultMap="getWS0014Result">
+		SELECT
+			D.AGENT_NM,
+			A.RUNNER_NM,
+			C.STATUS,
+			TSU0301.NM AS STATUS_NM,
+			D.SERVER_ID,
+			D.SERVER_NM,
+			D.HOST_NM,
+			D.IP,
+			C.GET_DATE
+		FROM
+			TIM0210 A
+			INNER JOIN
+			(
+				SELECT E.AGENT_ID, E.AGENT_NM, E.SERVER_ID, B.SERVER_NM, B.HOST_NM, B.IP
+				FROM
+					TIM0209 E
+					INNER JOIN TIM0201 B ON
+						B.SERVER_ID = E.SERVER_ID
+			) D ON
+				D.AGENT_ID = A.AGENT_ID
+				AND A.DEL_YN='N'
+			INNER JOIN
+			(
+				SELECT TOP0808.RUNNER_ID, TOP0808.GET_DATE, TOP0808.STATUS
+				FROM
+					TOP0808
+					INNER JOIN
+					(
+						SELECT RUNNER_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0808
+						GROUP BY RUNNER_ID
+					) MAX ON
+						TOP0808.RUNNER_ID = MAX.RUNNER_ID
+						AND TOP0808.GET_DATE = MAX.GET_DATE
+				WHERE
+					1 = 1
+					AND TOP0808.STATUS = '9'
+			) C ON
+				A.RUNNER_ID = C.RUNNER_ID
+			LEFT OUTER JOIN
+			(
+			  SELECT CD, NM
+			  FROM TSU0301
+			  WHERE TSU0301.LEVEL1 = 'IM' AND TSU0301.LEVEL2='27'
+			) TSU0301 ON
+				TSU0301.CD = A.STATUS
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				D.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+	</select>
+
+	<resultMap id="getWS0014Result" type="EAIEngine">
+		<result property="agentNm" 	column="AGENT_NM"/>
+		<result property="runnerNm" 	column="RUNNER_NM"/>
+		<result property="getDate" 		column="GET_DATE"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0015(Qmgr) -->
+	<select id="getWS0015" parameterType="String" resultMap="getWS0015Result">
+		SELECT
+			A.QMGR_NM,
+			C.STATUS,
+			TSU0301.NM AS STATUS_NM,
+			B.SERVER_ID,
+			B.SERVER_NM,
+			B.HOST_NM,
+			B.IP,
+			C.GET_DATE
+		FROM
+			TIM0206 A
+			INNER JOIN TIM0201 B ON
+				A.SERVER_ID = B.SERVER_ID
+				AND A.DEL_YN='N'
+			INNER JOIN
+			(
+				SELECT D1.QMGR_ID, D1.GET_DATE, D1.STATUS
+				FROM TOP0805 D1
+				INNER JOIN
+				(
+					SELECT QMGR_ID, MAX(GET_DATE) AS GET_DATE FROM TOP0805 GROUP BY QMGR_ID
+				) D2 ON
+					D1.QMGR_ID = D2.QMGR_ID
+					AND D1.GET_DATE = D2.GET_DATE
+			) C ON
+				A.QMGR_ID = C.QMGR_ID
+				AND C.STATUS = '9'
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				A.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+			LEFT OUTER JOIN
+			(
+				SELECT CD, NM FROM TSU0301 WHERE TSU0301.LEVEL1 = 'IM' AND TSU0301.LEVEL2='27'
+			) TSU0301 ON
+				TSU0301.CD = C.STATUS
+	</select>
+
+
+	<resultMap id="getWS0015Result" type="QueueManager">
+		<result property="qmgrNm" 		column="QMGR_NM"/>
+		<result property="getDate"	 		column="GET_DATE"/>
+		<result property="status" 			column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0016(Channel) -->
+	<select id="getWS0016" parameterType="String" resultMap="getWS0016Result">
+		SELECT
+			D.QMGR_NM,
+			A.CHANNEL_NM,
+			C.STATUS,
+			TSU0301.NM AS STATUS_NM,
+			D.SERVER_ID,
+			D.SERVER_NM,
+			D.HOST_NM,
+			D.IP,
+			C.GET_DATE
+		FROM
+			TIM0207 A
+			INNER JOIN
+			(
+				SELECT E.QMGR_ID, E.QMGR_NM, E.SERVER_ID, B.SERVER_NM, B.HOST_NM, B.IP
+				FROM
+					TIM0206 E
+					INNER JOIN TIM0201 B ON
+						B.SERVER_ID = E.SERVER_ID
+			) D ON
+				D.QMGR_ID = A.QMGR_ID AND A.DEL_YN='N'
+			INNER JOIN
+			(
+				SELECT D1.CHANNEL_ID, D1.QMGR_ID, D1.GET_DATE, D1.STATUS
+				FROM
+					TOP0806 D1
+					INNER JOIN
+					(
+						SELECT CHANNEL_ID, QMGR_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0806
+						GROUP BY CHANNEL_ID, QMGR_ID
+					) D2 ON
+						D1.CHANNEL_ID = D2.CHANNEL_ID
+						AND D1.QMGR_ID = D2.QMGR_ID
+						AND D1.GET_DATE = D2.GET_DATE
+			) C ON
+				A.CHANNEL_ID = C.CHANNEL_ID
+				AND A.QMGR_ID = C.QMGR_ID
+				AND C.STATUS = '9'
+			LEFT OUTER JOIN
+			(
+				SELECT CD, NM
+				FROM TSU0301
+				WHERE TSU0301.LEVEL1 = 'IM' AND TSU0301.LEVEL2='27'
+			) TSU0301 ON
+				TSU0301.CD = C.STATUS
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				D.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+	</select>
+
+	<resultMap id="getWS0016Result" type="QmgrChannel">
+		<result property="qmgrNm" 	column="QMGR_NM"/>
+		<result property="channelNm" 	column="CHANNEL_NM"/>
+		<result property="getDate" 		column="GET_DATE"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0017(Queue) -->
+	<select id="getWS0017" parameterType="String" resultMap="getWS0017Result">
+		SELECT
+			D.QMGR_NM,
+			A.QUEUE_NM,
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+			A."LIMIT" AS LIMIT,
+       		</when>
+       		<otherwise>
+			A.LIMIT,
+       		</otherwise>
+       	</choose>
+			A.LIMIT_OPT,
+			A.STATUS,
+			D.SERVER_ID,
+			D.SERVER_NM,
+			D.HOST_NM,
+			D.IP,
+			C.GET_DATE,
+			C.DEPTH,
+			C.PER_DEPTH
+		FROM
+			TIM0208 A
+			INNER JOIN
+			(
+				SELECT E.QMGR_ID, E.QMGR_NM, E.SERVER_ID, B.SERVER_NM, B.HOST_NM, B.IP
+				FROM
+					TIM0206 E
+					INNER JOIN TIM0201 B ON
+						B.SERVER_ID = E.SERVER_ID
+			) D ON
+				D.QMGR_ID = A.QMGR_ID AND A.DEL_YN='N'
+			INNER JOIN
+			(
+				SELECT K.QMGR_ID, K.QUEUE_ID, K.DEPTH, K.PER_DEPTH, K.GET_DATE
+				FROM
+					TOP0807 K
+					INNER JOIN
+					(
+						SELECT QMGR_ID, QUEUE_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0807
+						GROUP BY QMGR_ID, QUEUE_ID
+					) G ON
+						K.QUEUE_ID = G.QUEUE_ID
+						AND K.QMGR_ID = G.QMGR_ID
+						AND K.GET_DATE = G.GET_DATE
+			) C ON
+			<choose>
+	       		<when test="_databaseId == 'postgres'">
+				A.QUEUE_ID = C.QUEUE_ID AND A.QMGR_ID = C.QMGR_ID AND A."LIMIT"::integer <![CDATA[<]]> C.DEPTH
+	       		</when>
+	       		<otherwise>
+				A.QUEUE_ID = C.QUEUE_ID AND A.QMGR_ID = C.QMGR_ID AND A.LIMIT <![CDATA[<]]> C.DEPTH
+	       		</otherwise>
+	       	</choose>
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				D.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+	</select>
+
+	<resultMap id="getWS0017Result" type="Queue">
+		<result property="qmgrNm" 	column="QMGR_NM"/>
+		<result property="queueNm" 		column="QUEUE_NM"/>
+		<result property="getDate" 		column="GET_DATE"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="limit" 		column="LIMIT"/>
+		<result property="limitOpt" 	column="LIMIT_OPT"/>
+		<result property="depth" 		column="DEPTH"/>
+		<result property="perDepth" 	column="PER_DEPTH"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0018(주요배치) -->
+	<select id="getWS0018" parameterType="Map" resultMap="getWS0018Result">
+		SELECT
+			INTERFACE_ID,
+			INTERFACE_NM,
+			INTEGRATION_ID,
+			STATUS,
+			CASE WHEN STATUS = 0 THEN '정상' WHEN STATUS = 1 THEN '에러' WHEN STATUS = 2 THEN '미수행' END AS STATUS_NM,
+			MON_START_DATE,
+			MON_END_DATE
+		FROM
+		(
+		  SELECT
+		    A.INTERFACE_ID,
+		    A.INTERFACE_NM,
+		    A.INTEGRATION_ID,
+		    CASE
+		      -- 미수행
+		      WHEN NVL(B.TOTAL_CNT,0) <![CDATA[<=]]> 0 THEN
+		        2
+		      -- 수행(에러)
+		      WHEN ( NVL(B.TOTAL_CNT,0) <![CDATA[>]]> 0 AND NVL(B.ERROR_CNT,0) <![CDATA[>]]> 0 ) THEN
+		        1
+		      -- 수행(정상)
+		      ELSE
+		        0
+		    END AS STATUS,
+			TO_CHAR(SYSDATE-1,'YYYYMMDD') AS MON_START_DATE,
+			TO_CHAR(SYSDATE,'YYYYMMDD') AS MON_END_DATE
+		  FROM
+		    (
+		      SELECT
+		          A.INTERFACE_ID,
+		          A.INTERFACE_NM,
+		          A.INTEGRATION_ID
+		      FROM
+		        TAN0201 A
+		        INNER JOIN TAN0214 B ON
+		          A.INTERFACE_ID = B.INTERFACE_ID
+		          AND B.USER_ID = #{userId}
+		          AND B.TYPE = '1'
+
+				-----------------------------------------------
+				-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+				-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+				-----------------------------------------------
+				<choose>
+				<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+				</when>
+				<otherwise>
+				INNER JOIN
+				(
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+				) ACCESS_ROLE_INTF ON
+					A.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+				</otherwise>
+				</choose>
+
+		      WHERE A.DEL_YN = 'N'
+		    ) A
+		    LEFT OUTER JOIN
+		    (
+		      SELECT
+		          INTERFACE_ID
+		        , SUM(SUCCESS_CNT + PROCESS_CNT + ERROR_CNT) AS TOTAL_CNT
+		        , SUM(SUCCESS_CNT) AS SUCCESS_CNT
+		        , SUM(PROCESS_CNT) AS PROCESS_CNT
+		        , SUM(ERROR_CNT) AS ERROR_CNT
+		      FROM
+		        TSU0803
+		      WHERE
+		        SUBSTR(TR_DATE,1,8) BETWEEN TO_CHAR(SYSDATE-1,'YYYYMMDD') AND TO_CHAR(SYSDATE,'YYYYMMDD')
+		      GROUP BY INTERFACE_ID
+		    ) B ON
+		      A.INTERFACE_ID = B.INTERFACE_ID
+		)
+		WHERE STATUS > 0
+	</select>
+
+	<resultMap id="getWS0018Result" type="java.util.LinkedHashMap">
+		<id property="interfaceId"         column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="status"          column="STATUS"/>
+		<result property="statusNm"        column="STATUS_NM"/>
+		<result property="monStartDate"    column="MON_START_DATE"/>
+		<result property="monEndDate"      column="MON_END_DATE"/>
+	</resultMap>
+
+	<!-- WS0019(IIPAgent) -->
+	<select id="getWS0019" parameterType="String" resultMap="getWS0019Result">
+		SELECT
+			A.AGENT_NM,
+			A.STATUS,
+			TSU0301.NM AS STATUS_NM,
+			A.SERVER_ID,
+			B.SERVER_NM,
+			B.HOST_NM,
+			B.IP,
+			A.MOD_DATE AS GET_DATE,
+			A.AGENT_ID
+		FROM
+			TIM0211 A
+			INNER JOIN TIM0201 B ON
+				B.SERVER_ID = A.SERVER_ID
+				AND A.DEL_YN='N'
+			LEFT OUTER JOIN
+			(
+				SELECT CD, NM FROM TSU0301 WHERE TSU0301.LEVEL1 = 'IM' AND TSU0301.LEVEL2='27'
+			) TSU0301 ON
+				TSU0301.CD = A.STATUS
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleServer"/>
+			) ACCESS_ROLE_SERVER ON
+				A.SERVER_ID = ACCESS_ROLE_SERVER.SERVER_ID
+		WHERE A.DEL_YN='N'
+		AND A.STATUS='9'
+	</select>
+
+	<resultMap id="getWS0019Result" type="IIPAgent">
+		<result property="agentNm" 	column="AGENT_NM"/>
+		<result property="getDate" 		column="GET_DATE"/>
+		<result property="status" 		column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+		<association property="server" javaType="Server">
+			<id property="serverId"			column="SERVER_ID"/>
+			<result property="serverNm" 	column="SERVER_NM" />
+			<result property="hostNm" 		column="HOST_NM" />
+			<result property="ip" 			column="IP" />
+		</association>
+	</resultMap>
+
+	<!-- WS0035(데이터처리방식별 금일누적건수) -->
+	<select id="getWS0035" parameterType="Map" resultMap="WS0035Result">
+		SELECT
+			CATEGORY_ID,
+			CATEGORY_NM,
+			SUM(TOTAL_CNT) AS TOTAL_CNT,
+			SUM(SUCCESS_CNT) AS SUCCESS_CNT,
+			SUM(ERROR_CNT) AS ERROR_CNT,
+			SUM(PROCESS_CNT) AS PROCESS_CNT
+		FROM
+			(
+				SELECT
+					CD AS CATEGORY_ID,
+					NM AS CATEGORY_NM,
+					0 AS TOTAL_CNT,
+					0 AS SUCCESS_CNT,
+					0 AS ERROR_CNT,
+					0 AS PROCESS_CNT
+				FROM TSU0301
+				WHERE LEVEL1 = 'IM' AND LEVEL2 = '12' AND DEL_YN = 'N'
+
+				UNION ALL
+
+				SELECT
+					INTERFACE_INFO.CATEGORY_ID,
+					INTERFACE_INFO.CATEGORY_NM,
+					SUM(TSU0803.SUCCESS_CNT) + SUM(TSU0803.ERROR_CNT) + SUM(TSU0803.PROCESS_CNT) AS TOTAL_CNT,
+					SUM(TSU0803.SUCCESS_CNT) AS SUCCESS_CNT,
+					SUM(TSU0803.ERROR_CNT) AS ERROR_CNT,
+					SUM(TSU0803.PROCESS_CNT) AS PROCESS_CNT
+				FROM
+					-----------------------------------------------
+					-- 인터페이스 집계 정보
+					-----------------------------------------------
+					TSU0803 TSU0803
+					INNER JOIN
+					(
+						SELECT
+							TAN0201.INTERFACE_ID,
+							TAN0201.INTEGRATION_ID,
+							IM12.CD AS CATEGORY_ID,
+							IM12.NM AS CATEGORY_NM
+						FROM
+							(
+								SELECT B.INTERFACE_ID, B.INTEGRATION_ID, DATA_PR_METHOD
+								FROM TAN0101 A, TAN0201 B
+								WHERE A.DEL_YN = 'N' AND A.INTERFACE_ID = B.INTERFACE_ID
+							) TAN0201
+							INNER JOIN
+							(
+								SELECT CD, NM
+								FROM TSU0301
+								WHERE LEVEL1 = 'IM' AND LEVEL2 = '12' AND DEL_YN = 'N'
+							) IM12 ON
+								TAN0201.DATA_PR_METHOD = IM12.CD
+					) INTERFACE_INFO ON
+						TSU0803.INTERFACE_ID = INTERFACE_INFO.INTERFACE_ID
+
+					-----------------------------------------------
+					-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+					-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+					-----------------------------------------------
+					<choose>
+					<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+					</when>
+					<otherwise>
+					INNER JOIN
+					(
+						<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+					) ACCESS_ROLE_INTF ON
+						INTERFACE_INFO.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+					</otherwise>
+					</choose>
+
+
+				WHERE SUBSTR(TR_DATE,1,8) = TO_CHAR(SYSDATE,'YYYYMMDD')
+				GROUP BY INTERFACE_INFO.CATEGORY_ID, INTERFACE_INFO.CATEGORY_NM
+			)
+		GROUP BY CATEGORY_ID, CATEGORY_NM
+		ORDER BY CATEGORY_ID, CATEGORY_NM
+	</select>
+
+	<resultMap id="WS0035Result" type="java.util.LinkedHashMap">
+		<id property="categoryId"     column="CATEGORY_ID"/>
+		<result property="categoryNm" column="CATEGORY_NM"/>
+		<result property="totalCnt"   column="TOTAL_CNT"/>
+		<result property="successCnt" column="SUCCESS_CNT"/>
+		<result property="errorCnt"   column="ERROR_CNT"/>
+		<result property="processCnt" column="PROCESS_CNT"/>
+	</resultMap>
+
+	<!-- WS0037(초당처리건수) - NH농협 전용, 트레킹테이블 상이 -->
+	<select id="getWS0037" parameterType="Map" resultType="java.lang.Integer">
+		SELECT
+			NVL(ROUND(SUM(TRACKING_INFO.CNT) / 60 ), 0) AS CNT
+		FROM
+			(
+				SELECT B.INTERFACE_ID, B.INTEGRATION_ID
+				FROM TAN0101 A, TAN0201 B
+				WHERE A.DEL_YN = 'N' AND A.INTERFACE_ID = B.INTERFACE_ID
+			) INTERFACE_INFO
+			INNER JOIN
+			(
+				SELECT
+					MSG_INTF_ID AS INTEGRATION_ID,
+					COUNT(*) AS CNT
+				FROM
+					MASTERLOG
+				WHERE
+					MSG_DT BETWEEN TO_TIMESTAMP(TO_CHAR(SYSDATE - (9/24) - (1/24/60), 'YYYYMMDDHH24MISS')||'000000000', 'YYYYMMDDHH24MISSFF9') AND TO_TIMESTAMP(TO_CHAR(SYSDATE - (9/24) - (0/24/60), 'YYYYMMDDHH24MISS')||'999999999', 'YYYYMMDDHH24MISSFF9')
+				GROUP BY MSG_INTF_ID
+			) TRACKING_INFO ON
+				TRACKING_INFO.INTEGRATION_ID = INTERFACE_INFO.INTEGRATION_ID
+
+			-----------------------------------------------
+			-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+			-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+			-----------------------------------------------
+			<choose>
+			<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+			</when>
+			<otherwise>
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+			) ACCESS_ROLE_INTF ON
+				INTERFACE_INFO.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+			</otherwise>
+			</choose>
+	</select>
+
+	<!-- WS0038(SMS전송로그) -->
+	<select id="getWS0038" parameterType="Map" resultMap="WS0038Result">
+		SELECT
+		  SMS_ID,
+		  TYPE,
+		  CONTENTS,
+		  REG_DATE
+		FROM TOP0904
+		WHERE
+			REG_DATE BETWEEN TO_CHAR(SYSDATE - 0 - (120/24/60), 'YYYYMMDDHH24MI')||'00000000' AND TO_CHAR(SYSDATE - (0/24/60), 'YYYYMMDDHH24MI')||'99999999'
+		ORDER BY REG_DATE
+	</select>
+
+	<resultMap id="WS0038Result" type="java.util.LinkedHashMap">
+		<id property="smsId"    	 column="SMS_ID"/>
+		<result property="type"      column="TYPE"/>
+		<result property="contents"  column="CONTENTS"/>
+		<result property="regDate"   column="REG_DATE"/>
+	</resultMap>
+
+	<!-- WS0039(오류인터페이스TOP-N) - NH농협 전용, 트레킹테이블 상이, 성능개선위해 TAN0101 JOIN 제거 -->
+	<select id="getWS0039" parameterType="Map" resultMap="WS0039Result">
+		SELECT
+			TRACKING.INTERFACE_ID,
+			TRACKING.INTERFACE_NM,
+			TRACKING.INTEGRATION_ID,
+			TRACKING.ERROR_CNT,
+			TRACKING.F_DATE,
+			TRACKING.T_DATE,
+			SYSTEM_INFO.SND_SYSTEM_NM,
+			SYSTEM_INFO.RCV_SYSTEM_NM
+		FROM
+			(
+				SELECT
+					INTERFACE_ID,
+					INTERFACE_NM,
+					INTEGRATION_ID,
+					ERROR_CNT,
+					F_DATE,
+					T_DATE,
+					ROWNUM AS IDX
+				FROM
+					(
+						SELECT
+							TAN0201.INTERFACE_ID,
+							TAN0201.INTERFACE_NM,
+							TAN0201.INTEGRATION_ID,
+							TRACKING_INFO.ERROR_CNT,
+							TO_CHAR(SYSDATE - (#{tScope}/24/60/60), 'YYYYMMDDHH24MISS')||'000000' AS F_DATE,
+							TO_CHAR(SYSDATE - (0/24/60/60), 'YYYYMMDDHH24MISS')||'999999' AS T_DATE
+						FROM
+							TAN0201
+							INNER JOIN
+							(
+								SELECT
+									MSG_INTF_ID AS INTEGRATION_ID,
+									COUNT(*) AS ERROR_CNT
+								FROM
+									MASTERLOG
+								WHERE
+									MSG_DT BETWEEN TO_TIMESTAMP(TO_CHAR(SYSDATE - (9/24) - (#{tScope}/24/60/60), 'YYYYMMDDHH24MISS')||'000000000', 'YYYYMMDDHH24MISSFF9') AND TO_TIMESTAMP(TO_CHAR(SYSDATE - (9/24) - (0/24/60/60), 'YYYYMMDDHH24MISS')||'999999999', 'YYYYMMDDHH24MISSFF9')
+									AND MSG_STATUS IN('99')
+								GROUP BY MSG_INTF_ID
+							) TRACKING_INFO ON
+								TRACKING_INFO.INTEGRATION_ID = TAN0201.INTEGRATION_ID
+
+							-----------------------------------------------
+							-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+							-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+							-----------------------------------------------
+							<choose>
+							<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+							</when>
+							<otherwise>
+							INNER JOIN
+							(
+								<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+							) ACCESS_ROLE_INTF ON
+								TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+							</otherwise>
+							</choose>
+						ORDER BY ERROR_CNT DESC
+					)
+				WHERE
+					1 = 1
+				<choose>
+					<when test="max != null">
+					AND ROWNUM <![CDATA[<=]]> #{max}
+					</when>
+					<otherwise>
+					AND ROWNUM <![CDATA[<=]]> 4
+					</otherwise>
+				</choose>
+			) TRACKING
+			INNER JOIN
+			(
+				SELECT
+					SND.INTERFACE_ID,
+					SND.SYSTEM_ID AS SND_SYSTEM,
+					RCV.SYSTEM_ID AS RCV_SYSTEM,
+					( SELECT SYSTEM_NM FROM TIM0101 WHERE SYSTEM_ID = SND.SYSTEM_ID ) AS SND_SYSTEM_NM,
+					( SELECT SYSTEM_NM FROM TIM0101 WHERE SYSTEM_ID = RCV.SYSTEM_ID ) AS RCV_SYSTEM_NM
+				FROM
+					( SELECT INTERFACE_ID, MAX(SYSTEM_ID) AS SYSTEM_ID FROM TAN0213 WHERE NODE_TYPE = '0' GROUP BY INTERFACE_ID) SND,
+					( SELECT INTERFACE_ID, MAX(SYSTEM_ID) AS SYSTEM_ID FROM TAN0213 WHERE NODE_TYPE = '2' GROUP BY INTERFACE_ID) RCV
+				WHERE
+					1 = 1
+					AND SND.INTERFACE_ID = RCV.INTERFACE_ID
+			) SYSTEM_INFO ON
+				TRACKING.INTERFACE_ID = SYSTEM_INFO.INTERFACE_ID
+		ORDER BY IDX
+	</select>
+
+	<resultMap id="WS0039Result" type="java.util.LinkedHashMap">
+		<id property="interfaceId"    	   column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="errorCnt"        column="ERROR_CNT"/>
+		<result property="fDate"           column="F_DATE"/>
+		<result property="tDate"           column="T_DATE"/>
+		<result property="sndSystemNm"     column="SND_SYSTEM_NM"/>
+		<result property="rcvSystemNm"     column="RCV_SYSTEM_NM"/>
+	</resultMap>
+
+	<!-- WS0040(시스템별 거래현황) - NH농협 전용, 트레킹테이블 상이 -->
+	<select id="getWS0040" parameterType="Map" resultMap="WS0040Result">
+		SELECT
+			A.SYSTEM_ID,
+			NVL(B.RCV_F_CNT,0) AS RCV_F_CNT,
+			NVL(B.RCV_E_CNT,0) AS RCV_E_CNT,
+      		NVL(B.SND_F_CNT,0) AS SND_F_CNT,
+			NVL(B.SND_E_CNT,0) AS SND_E_CNT,
+			NVL(B.T_CNT,0) AS T_CNT,
+			TO_CHAR(SYSDATE - (#{tScope}/24/60/60), 'YYYYMMDDHH24MISS')||'000000' AS F_DATE,
+			TO_CHAR(SYSDATE - (0/24/60/60), 'YYYYMMDDHH24MISS')||'999999' AS T_DATE
+		FROM
+			( SELECT SYSTEM_ID FROM TIM0106 WHERE DEL_YN='N' ) A
+			LEFT OUTER JOIN
+			(
+				SELECT
+					INTERFACE_INFO.SYSTEM_ID,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '2' THEN TRACKING_INFO.F_CNT ELSE 0 END) AS RCV_F_CNT,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '2' THEN TRACKING_INFO.E_CNT ELSE 0 END) AS RCV_E_CNT,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '0' THEN TRACKING_INFO.F_CNT ELSE 0 END) AS SND_F_CNT,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '0' THEN TRACKING_INFO.E_CNT ELSE 0 END) AS SND_E_CNT,
+					SUM(TRACKING_INFO.F_CNT + TRACKING_INFO.E_CNT) AS T_CNT
+				FROM
+				(
+					SELECT
+						TAN0213.SYSTEM_ID,
+						TAN0213.SYSTEM_CD,
+						TAN0213.NODE_TYPE,
+						TAN0201.INTERFACE_ID,
+						TAN0201.INTEGRATION_ID
+					FROM
+						(
+							SELECT B.INTERFACE_ID, B.INTEGRATION_ID
+							FROM TAN0101 A, TAN0201 B
+							WHERE A.DEL_YN = 'N' AND A.INTERFACE_ID = B.INTERFACE_ID
+						) TAN0201
+						INNER JOIN
+						(
+							SELECT TIM0101.SYSTEM_ID, TIM0101.SYSTEM_CD, TAN0213.INTERFACE_ID, TAN0213.NODE_TYPE
+							FROM
+								TAN0213
+								INNER JOIN TIM0101 ON
+									TAN0213.SYSTEM_ID = TIM0101.SYSTEM_ID
+								INNER JOIN TIM0106 ON
+									TAN0213.SYSTEM_ID = TIM0106.SYSTEM_ID
+							WHERE
+								1 = 1
+								AND TAN0213.DEL_YN = 'N'
+								AND TIM0101.DEL_YN = 'N'
+								AND TIM0101.GRP_YN = 'N'
+								AND TIM0106.DEL_YN = 'N'
+						) TAN0213 ON
+							TAN0201.INTERFACE_ID = TAN0213.INTERFACE_ID
+				) INTERFACE_INFO
+				INNER JOIN
+				(
+					SELECT
+						MSG_INTF_ID AS INTEGRATION_ID,
+						MSG_STATUS,
+						SUM(CASE WHEN MSG_STATUS = '00' THEN 1 ELSE 0 END) AS F_CNT,
+						SUM(CASE WHEN MSG_STATUS = '99' THEN 1 ELSE 0 END) AS E_CNT
+					FROM
+						MASTERLOG
+					WHERE
+						MSG_DT BETWEEN TO_TIMESTAMP(TO_CHAR(SYSDATE - (9/24) - (#{tScope}/24/60/60), 'YYYYMMDDHH24MISS')||'000000000', 'YYYYMMDDHH24MISSFF9') AND TO_TIMESTAMP(TO_CHAR(SYSDATE - (9/24) - (0/24/60/60), 'YYYYMMDDHH24MISS')||'999999999', 'YYYYMMDDHH24MISSFF9')
+						AND MSG_STATUS IN ('00','99')
+					GROUP BY MSG_INTF_ID, MSG_STATUS
+				) TRACKING_INFO ON
+					TRACKING_INFO.INTEGRATION_ID = INTERFACE_INFO.INTEGRATION_ID
+
+				-----------------------------------------------
+				-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+				-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+				-----------------------------------------------
+				<choose>
+				<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+				</when>
+				<otherwise>
+				INNER JOIN
+				(
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+				) ACCESS_ROLE_INTF ON
+					INTERFACE_INFO.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+				</otherwise>
+				</choose>
+
+
+				GROUP BY INTERFACE_INFO.SYSTEM_ID
+			) B ON
+		    	A.SYSTEM_ID = B.SYSTEM_ID
+	</select>
+
+	<resultMap id="WS0040Result" type="java.util.LinkedHashMap">
+		<id property="systemId"   column="SYSTEM_ID"/>
+		<result property="sndFCnt"   column="SND_F_CNT"/>
+		<result property="sndECnt"   column="SND_E_CNT"/>
+		<result property="rcvFCnt"   column="RCV_F_CNT"/>
+		<result property="rcvECnt"   column="RCV_E_CNT"/>
+		<result property="tCnt"   column="T_CNT"/>
+		<result property="fDate"  column="F_DATE"/>
+		<result property="tDate"  column="T_DATE"/>
+	</resultMap>
+
+	<!-- WS0041(시스템별 거래현황-금일누적) -->
+	<select id="getWS0041" parameterType="Map" resultMap="WS0041Result">
+		SELECT
+			A.SYSTEM_ID,
+			NVL(B.RCV_F_CNT,0) AS RCV_F_CNT,
+			NVL(B.RCV_E_CNT,0) AS RCV_E_CNT,
+      		NVL(B.SND_F_CNT,0) AS SND_F_CNT,
+			NVL(B.SND_E_CNT,0) AS SND_E_CNT,
+			NVL(B.T_CNT,0) AS T_CNT
+		FROM
+			( SELECT SYSTEM_ID FROM TIM0106 WHERE DEL_YN='N' ) A
+			LEFT OUTER JOIN
+			(
+				SELECT
+					INTERFACE_INFO.SYSTEM_ID,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '2' THEN TRACKING_INFO.F_CNT ELSE 0 END) AS RCV_F_CNT,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '2' THEN TRACKING_INFO.E_CNT ELSE 0 END) AS RCV_E_CNT,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '0' THEN TRACKING_INFO.F_CNT ELSE 0 END) AS SND_F_CNT,
+					SUM(CASE WHEN INTERFACE_INFO.NODE_TYPE = '0' THEN TRACKING_INFO.E_CNT ELSE 0 END) AS SND_E_CNT,
+					SUM(TRACKING_INFO.F_CNT + TRACKING_INFO.E_CNT) AS T_CNT
+				FROM
+				(
+					SELECT
+						TAN0213.SYSTEM_ID,
+						TAN0213.SYSTEM_CD,
+						TAN0213.NODE_TYPE,
+						TAN0201.INTERFACE_ID,
+						TAN0201.INTEGRATION_ID
+					FROM
+						(
+							SELECT B.INTERFACE_ID, B.INTEGRATION_ID
+							FROM TAN0101 A, TAN0201 B
+							WHERE A.DEL_YN = 'N' AND A.INTERFACE_ID = B.INTERFACE_ID
+						) TAN0201
+						INNER JOIN
+						(
+							SELECT TIM0101.SYSTEM_ID, TIM0101.SYSTEM_CD, TAN0213.INTERFACE_ID, TAN0213.NODE_TYPE
+							FROM
+								TAN0213
+								INNER JOIN TIM0101 ON
+									TAN0213.SYSTEM_ID = TIM0101.SYSTEM_ID
+								INNER JOIN TIM0106 ON
+									TAN0213.SYSTEM_ID = TIM0106.SYSTEM_ID
+							WHERE
+								1 = 1
+								AND TAN0213.DEL_YN = 'N'
+								AND TIM0101.DEL_YN = 'N'
+								AND TIM0101.GRP_YN = 'N'
+								AND TIM0106.DEL_YN = 'N'
+						) TAN0213 ON
+							TAN0201.INTERFACE_ID = TAN0213.INTERFACE_ID
+				) INTERFACE_INFO
+				INNER JOIN
+				(
+		          SELECT
+		            TSU0803.INTERFACE_ID,
+		            SUM(TSU0803.SUCCESS_CNT) + SUM(TSU0803.ERROR_CNT) + SUM(TSU0803.PROCESS_CNT) AS T_CNT,
+		            SUM(TSU0803.SUCCESS_CNT) AS F_CNT,
+		            SUM(TSU0803.ERROR_CNT) AS E_CNT,
+		            SUM(TSU0803.PROCESS_CNT) AS P_CNT
+		          FROM
+		            -----------------------------------------------
+		            -- 인터페이스 집계 정보
+		            -----------------------------------------------
+		            TSU0803 TSU0803
+		          WHERE SUBSTR(TR_DATE,1,8) = TO_CHAR(SYSDATE,'YYYYMMDD')
+		          GROUP BY TSU0803.INTERFACE_ID
+				) TRACKING_INFO ON
+					TRACKING_INFO.INTERFACE_ID = INTERFACE_INFO.INTERFACE_ID
+
+				-----------------------------------------------
+				-- 데이터 접근 권한 :: 인터페이스 맵핑 조인
+				-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+				-----------------------------------------------
+				<choose>
+				<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+				</when>
+				<otherwise>
+				INNER JOIN
+				(
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+				) ACCESS_ROLE_INTF ON
+					INTERFACE_INFO.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+				</otherwise>
+				</choose>
+
+				GROUP BY INTERFACE_INFO.SYSTEM_ID
+			) B ON
+		    	A.SYSTEM_ID = B.SYSTEM_ID
+	</select>
+
+	<resultMap id="WS0041Result" type="java.util.LinkedHashMap">
+		<id property="systemId"         column="SYSTEM_ID"/>
+		<result property="sndFCnt"     column="SND_F_CNT"/>
+		<result property="sndECnt"      column="SND_E_CNT"/>
+		<result property="rcvFCnt"     column="RCV_F_CNT"/>
+		<result property="rcvECnt"      column="RCV_E_CNT"/>
+		<result property="tCnt"   column="T_CNT"/>
+	</resultMap>
+
+	<!-- WS0042(WMQ종합상황판) : 접근권한조인 없음-->
+	<select id="getWS0042" parameterType="Map" resultMap="WS0042Result">
+		SELECT
+			TIM0101.SYSTEM_ID,
+			SUM( NVL(QMGR_CNT,0) ) AS QMGR_CNT,
+			SUM( NVL(QUEUE_CNT,0) ) AS QUEUE_CNT,
+			SUM( NVL(CHANNEL_CNT,0) ) AS CHANNEL_CNT,
+			SUM( NVL(QMGR_CNT,0) + NVL(QUEUE_CNT,0) + NVL(CHANNEL_CNT,0) ) AS ERR_CNT
+		FROM
+			TIM0101
+			LEFT OUTER JOIN
+			(
+				----------------------------------------------------
+				-- QMGR
+				----------------------------------------------------
+				SELECT
+					TIM0604.SYSTEM_ID,
+					COUNT(TIM0604.QMGR_ID) AS QMGR_CNT,
+					0 AS QUEUE_CNT,
+					0 AS CHANNEL_CNT
+				FROM
+					TIM0206
+					INNER JOIN
+					(
+						SELECT TOP0805.QMGR_ID, TOP0805.GET_DATE, TOP0805.STATUS
+						FROM
+							TOP0805
+							INNER JOIN
+							(
+								SELECT QMGR_ID, MAX(GET_DATE) AS GET_DATE
+								FROM TOP0805
+								GROUP BY QMGR_ID
+							) MAX ON
+								TOP0805.QMGR_ID = MAX.QMGR_ID
+								AND TOP0805.GET_DATE = MAX.GET_DATE
+						WHERE
+							1 = 1
+							AND TOP0805.STATUS = '9'
+					) TOP0805 ON
+						TIM0206.QMGR_ID = TOP0805.QMGR_ID
+					INNER JOIN TIM0604 ON
+						TIM0206.QMGR_ID = TIM0604.QMGR_ID
+				WHERE
+					1 = 1
+					AND TIM0206.DEL_YN = 'N'
+				GROUP BY TIM0604.SYSTEM_ID
+
+				UNION ALL
+				----------------------------------------------------
+				-- QUEUE
+				----------------------------------------------------
+				SELECT
+					/*+ LEADING(TOP0807) */
+					TIM0604.SYSTEM_ID,
+					0 AS QMGR_CNT,
+					COUNT(TIM0604.QMGR_ID) AS QUEUE_CNT,
+					0 AS CHANNEL_CNT
+				FROM
+					TIM0208
+					INNER JOIN
+					(
+						SELECT TOP0807.QMGR_ID, TOP0807.QUEUE_ID, TOP0807.DEPTH, TOP0807.PER_DEPTH, TOP0807.GET_DATE
+						FROM
+							TOP0807
+							INNER JOIN
+							(
+								SELECT QMGR_ID, QUEUE_ID, MAX(GET_DATE) AS GET_DATE
+								FROM TOP0807
+								GROUP BY QMGR_ID, QUEUE_ID
+							) MAX ON
+								TOP0807.QMGR_ID = MAX.QMGR_ID
+								AND TOP0807.QUEUE_ID = MAX.QUEUE_ID
+								AND TOP0807.GET_DATE = MAX.GET_DATE
+					) TOP0807 ON
+						TIM0208.QMGR_ID = TOP0807.QMGR_ID
+						AND TIM0208.QUEUE_ID = TOP0807.QUEUE_ID
+						AND TIM0208.LIMIT <![CDATA[<]]> TOP0807.DEPTH
+					INNER JOIN TIM0604 ON
+						TIM0208.QMGR_ID = TIM0604.QMGR_ID
+				WHERE
+					1 = 1
+					AND TIM0208.DEL_YN = 'N'
+				GROUP BY TIM0604.SYSTEM_ID
+
+				UNION ALL
+				----------------------------------------------------
+				-- CHANNEL
+				----------------------------------------------------
+				SELECT
+					TIM0604.SYSTEM_ID,
+					0 AS QMGR_CNT,
+					0 AS QUEUE_CNT,
+					COUNT(TIM0604.QMGR_ID) AS CHANNEL_CNT
+				FROM
+					TIM0207 TIM0207
+					INNER JOIN
+					(
+						SELECT TOP0806.QMGR_ID, TOP0806.CHANNEL_ID, TOP0806.GET_DATE, TOP0806.STATUS
+						FROM
+							TOP0806
+							INNER JOIN
+							(
+								SELECT QMGR_ID, CHANNEL_ID, MAX(GET_DATE) AS GET_DATE
+								FROM TOP0806
+								GROUP BY QMGR_ID, CHANNEL_ID
+							) MAX ON
+								TOP0806.QMGR_ID = MAX.QMGR_ID
+								AND TOP0806.CHANNEL_ID = MAX.CHANNEL_ID
+								AND TOP0806.GET_DATE = MAX.GET_DATE
+						WHERE
+							1 = 1
+							AND TOP0806.STATUS = '9'
+					) TOP0806 ON
+						TIM0207.QMGR_ID = TOP0806.QMGR_ID
+						AND TIM0207.CHANNEL_ID = TOP0806.CHANNEL_ID
+					INNER JOIN TIM0604 ON
+						TIM0207.QMGR_ID = TIM0604.QMGR_ID
+				WHERE
+					1 = 1
+					AND TIM0207.DEL_YN = 'N'
+				GROUP BY TIM0604.SYSTEM_ID
+			) QMGR ON
+				QMGR.SYSTEM_ID = TIM0101.SYSTEM_ID
+		WHERE
+			1 = 1
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+		GROUP BY TIM0101.SYSTEM_ID
+	</select>
+
+	<resultMap id="WS0042Result" type="java.util.LinkedHashMap">
+		<id property="systemId"        column="SYSTEM_ID"/>
+		<result property="qmgrCnt"     column="QMGR_CNT"/>
+		<result property="queueCnt"    column="QUEUE_CNT"/>
+		<result property="channelCnt"  column="CHANNEL_CNT"/>
+		<result property="errCnt"      column="ERR_CNT"/>
+	</resultMap>
+
+	<!-- WS0042(WMQ종합상황판) : 큐매니져 알림 리스트 조회, 접근권한조인 없음 -->
+	<select id="getQmgrAlertListBySystem" parameterType="String" resultMap="getQmgrAlertListBySystemResult">
+		SELECT
+			TIM0101.SYSTEM_ID,
+			TIM0101.SYSTEM_CD,
+			TIM0101.SYSTEM_NM,
+			TIM0201.SERVER_ID,
+			TIM0201.SERVER_CD,
+			TIM0201.SERVER_NM,
+			TIM0201.HOST_NM,
+			TIM0201.IP,
+			TIM0206.QMGR_NM,
+			TOP0805.STATUS,
+			IM27.NM AS STATUS_NM,
+			TOP0805.GET_DATE
+		FROM
+			------------------------------
+			-- QMGR
+			------------------------------
+			TIM0206 TIM0206
+			------------------------------
+			-- QMGR MONITOR LOG
+			------------------------------
+			INNER JOIN
+			(
+				SELECT TOP0805.QMGR_ID, TOP0805.GET_DATE, TOP0805.STATUS
+				FROM
+					TOP0805
+					INNER JOIN
+					(
+						SELECT QMGR_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0805
+						GROUP BY QMGR_ID
+					) MAX ON
+						TOP0805.QMGR_ID = MAX.QMGR_ID
+						AND TOP0805.GET_DATE = MAX.GET_DATE
+				WHERE
+					1 = 1
+					AND TOP0805.STATUS = '9'
+			) TOP0805 ON
+				TIM0206.QMGR_ID = TOP0805.QMGR_ID
+			------------------------------
+			-- QMGR :: SYSTEM MAPPING
+			------------------------------
+			INNER JOIN TIM0604 TIM0604 ON
+				TIM0206.QMGR_ID = TIM0604.QMGR_ID
+			------------------------------
+			-- SERVER
+			------------------------------
+			INNER JOIN TIM0201 TIM0201 ON
+				TIM0206.SERVER_ID = TIM0201.SERVER_ID
+			------------------------------
+			-- SYSTEM
+			------------------------------
+			INNER JOIN TIM0101 TIM0101 ON
+				TIM0604.SYSTEM_ID = TIM0101.SYSTEM_ID
+			LEFT OUTER JOIN
+			(
+				SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2='27'
+			) IM27 ON
+			IM27.CD = TOP0805.STATUS
+		WHERE
+			1 = 1
+			AND TIM0206.DEL_YN = 'N'
+			AND TIM0201.DEL_YN = 'N'
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+			AND TIM0101.SYSTEM_ID = #{systemId}
+	</select>
+
+	<resultMap id="getQmgrAlertListBySystemResult" type="java.util.LinkedHashMap">
+		<id property="systemId"         column="SYSTEM_ID"/>
+		<result property="systemCd"     column="SYSTEM_CD"/>
+		<result property="systemNm"     column="SYSTEM_NM"/>
+		<result property="serverId"     column="SERVER_ID"/>
+		<result property="serverCd"     column="SERVER_CD"/>
+		<result property="serverNm"     column="SERVER_NM"/>
+		<result property="hostNm"       column="HOST_NM"/>
+		<result property="ip"           column="IP"/>
+		<result property="qmgrNm"       column="QMGR_NM"/>
+		<result property="status"       column="STATUS"/>
+		<result property="statusNm"     column="STATUS_NM"/>
+		<result property="getDate"      column="GET_DATE"/>
+	</resultMap>
+
+	<!-- WS0042(WMQ종합상황판) : 큐 알림 리스트 조회, 접근권한조인 없음 -->
+	<select id="getQueueAlertListBySystem" parameterType="String" resultMap="getQueueAlertListBySystemResult">
+		SELECT
+			TIM0101.SYSTEM_ID,
+			TIM0101.SYSTEM_CD,
+			TIM0101.SYSTEM_NM,
+			TIM0201.SERVER_ID,
+			TIM0201.SERVER_CD,
+			TIM0201.SERVER_NM,
+			TIM0201.HOST_NM,
+			TIM0201.IP,
+			TIM0206.QMGR_NM,
+			TIM0208.QUEUE_NM,
+			TIM0208.LIMIT,
+			TIM0208.LIMIT_OPT,
+			TIM0208.STATUS,
+			TOP0807.DEPTH,
+			TOP0807.PER_DEPTH,
+			TOP0807.GET_DATE
+		FROM
+			------------------------------
+			-- QUEUE
+			------------------------------
+			TIM0208 TIM0208
+			------------------------------
+			-- QUEUE MONITOR LOG
+			------------------------------
+			INNER JOIN
+			(
+				SELECT TOP0807.QMGR_ID, TOP0807.QUEUE_ID, TOP0807.DEPTH, TOP0807.PER_DEPTH, TOP0807.GET_DATE
+				FROM
+					TOP0807
+					INNER JOIN
+					(
+						SELECT QMGR_ID, QUEUE_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0807
+						GROUP BY QMGR_ID, QUEUE_ID
+					) MAX ON
+						TOP0807.QMGR_ID = MAX.QMGR_ID
+						AND TOP0807.QUEUE_ID = MAX.QUEUE_ID
+						AND TOP0807.GET_DATE = MAX.GET_DATE
+			) TOP0807 ON
+				TIM0208.QMGR_ID = TOP0807.QMGR_ID
+				AND TIM0208.QUEUE_ID = TOP0807.QUEUE_ID
+				AND TIM0208.LIMIT <![CDATA[<]]> TOP0807.DEPTH
+			------------------------------
+			-- QMGR :: SYSTEM MAPPING
+			------------------------------
+			INNER JOIN TIM0604 ON
+				TIM0208.QMGR_ID = TIM0604.QMGR_ID
+			------------------------------
+			-- QMGR
+			------------------------------
+			INNER JOIN TIM0206 ON
+				TIM0208.QMGR_ID = TIM0206.QMGR_ID
+			------------------------------
+			-- SERVER
+			------------------------------
+			INNER JOIN TIM0201 ON -- SERVER
+				TIM0206.SERVER_ID = TIM0201.SERVER_ID
+			------------------------------
+			-- SYSTEM
+			------------------------------
+			INNER JOIN TIM0101 TIM0101 ON
+				TIM0604.SYSTEM_ID = TIM0101.SYSTEM_ID
+		WHERE
+			1 = 1
+			AND TIM0208.DEL_YN = 'N'
+			AND TIM0206.DEL_YN = 'N'
+			AND TIM0201.DEL_YN = 'N'
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+			AND TIM0101.SYSTEM_ID = #{systemId}
+	</select>
+
+	<resultMap id="getQueueAlertListBySystemResult" type="java.util.LinkedHashMap">
+		<id property="systemId"         column="SYSTEM_ID"/>
+		<result property="systemCd"     column="SYSTEM_CD"/>
+		<result property="systemNm"     column="SYSTEM_NM"/>
+		<result property="serverId"     column="SERVER_ID"/>
+		<result property="serverCd"     column="SERVER_CD"/>
+		<result property="serverNm"     column="SERVER_NM"/>
+		<result property="hostNm"       column="HOST_NM"/>
+		<result property="ip"           column="IP"/>
+		<result property="qmgrNm"       column="QMGR_NM"/>
+		<result property="queueNm"      column="QUEUE_NM"/>
+		<result property="limit"        column="LIMIT"/>
+		<result property="limitOpt"     column="LIMIT_OPT"/>
+		<result property="status"       column="STATUS"/>
+		<result property="depth"        column="DEPTH"/>
+		<result property="perDepth"     column="PER_DEPTH"/>
+		<result property="getDate"      column="GET_DATE"/>
+	</resultMap>
+
+	<!-- WS0042(WMQ종합상황판) : 채널 알림 리스트 조회, 접근권한조인 없음 -->
+	<select id="getChannelAlertListBySystem" parameterType="String" resultMap="getChannelAlertListBySystemResult">
+		SELECT
+			TIM0101.SYSTEM_ID,
+			TIM0101.SYSTEM_CD,
+			TIM0101.SYSTEM_NM,
+			TIM0201.SERVER_ID,
+			TIM0201.SERVER_CD,
+			TIM0201.SERVER_NM,
+			TIM0201.HOST_NM,
+			TIM0201.IP,
+			TIM0206.QMGR_NM,
+			TIM0207.CHANNEL_NM,
+			TOP0806.STATUS,
+			IM27.NM AS STATUS_NM,
+			TOP0806.GET_DATE
+		FROM
+			------------------------------
+			-- CHANNEL
+			------------------------------
+			TIM0207 TIM0207
+			------------------------------
+			-- CHANNEL MONITOR LOG
+			------------------------------
+			INNER JOIN
+			(
+				SELECT TOP0806.QMGR_ID, TOP0806.CHANNEL_ID, TOP0806.GET_DATE, TOP0806.STATUS
+				FROM
+					TOP0806
+					INNER JOIN
+					(
+						SELECT QMGR_ID, CHANNEL_ID, MAX(GET_DATE) AS GET_DATE
+						FROM TOP0806
+						GROUP BY QMGR_ID, CHANNEL_ID
+					) MAX ON
+						TOP0806.QMGR_ID = MAX.QMGR_ID
+						AND TOP0806.CHANNEL_ID = MAX.CHANNEL_ID
+						AND TOP0806.GET_DATE = MAX.GET_DATE
+				WHERE
+					1 = 1
+					AND TOP0806.STATUS = '9'
+			) TOP0806 ON
+				TIM0207.QMGR_ID = TOP0806.QMGR_ID
+				AND TIM0207.CHANNEL_ID = TOP0806.CHANNEL_ID
+			------------------------------
+			-- QMGR :: SYSTEM MAPPING
+			------------------------------
+			INNER JOIN TIM0604 ON
+				TIM0207.QMGR_ID = TIM0604.QMGR_ID
+			------------------------------
+			-- QMGR
+			------------------------------
+			INNER JOIN TIM0206 ON
+				TIM0207.QMGR_ID = TIM0206.QMGR_ID
+			------------------------------
+			-- SERVER
+			------------------------------
+			INNER JOIN TIM0201 ON
+				TIM0206.SERVER_ID = TIM0201.SERVER_ID
+			------------------------------
+			-- SYSTEM
+			------------------------------
+			INNER JOIN TIM0101 TIM0101 ON
+				TIM0604.SYSTEM_ID = TIM0101.SYSTEM_ID
+			LEFT OUTER JOIN
+			(
+				SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2='27'
+			) IM27 ON
+			IM27.CD = TOP0806.STATUS
+		WHERE
+			1 = 1
+			AND TIM0207.DEL_YN = 'N'
+			AND TIM0206.DEL_YN = 'N'
+			AND TIM0201.DEL_YN = 'N'
+			AND TIM0101.DEL_YN = 'N'
+			AND TIM0101.GRP_YN = 'N'
+			AND TIM0101.SYSTEM_ID = #{systemId}
+	</select>
+
+	<resultMap id="getChannelAlertListBySystemResult" type="java.util.LinkedHashMap">
+		<id property="systemId"         column="SYSTEM_ID"/>
+		<result property="systemCd"     column="SYSTEM_CD"/>
+		<result property="systemNm"     column="SYSTEM_NM"/>
+		<result property="serverId"     column="SERVER_ID"/>
+		<result property="serverCd"     column="SERVER_CD"/>
+		<result property="serverNm"     column="SERVER_NM"/>
+		<result property="hostNm"       column="HOST_NM"/>
+		<result property="ip"           column="IP"/>
+		<result property="qmgrNm"       column="QMGR_NM"/>
+		<result property="channelNm"    column="CHANNEL_NM"/>
+		<result property="status"       column="STATUS"/>
+		<result property="statusNm"     column="STATUS_NM"/>
+		<result property="getDate"      column="GET_DATE"/>
+	</resultMap>
+
+	<!--  WS0045(지연인터페이스 조회 - IIP 4.0) -->
+	<select id="getWS0045" parameterType="Map" resultMap="getWS0045Result">
+		SELECT
+		  INTEGRATION_ID ,
+		  TRACKING_DATE ,
+		  ORG_HOST_ID ,
+		  INTERFACE_ID ,
+		  INTERFACE_NM ,
+		  STATUS_NM ,
+		  LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24) ,'00')) || ':' ||
+		  LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 ,'00')) || ':' ||
+		  LTRIM(TO_CHAR( TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60 * 60) - ( TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 * 60 + ( TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24 * 60) - TRUNC((SYSDATE - TO_DATE(SUBSTR(TRACKING_DATE,1,14), 'YYYYMMDDHH24MISS')) * 24) * 60 ) * 60 ) ,'00'))
+		  AS ELAPSED_TIME
+		FROM
+		  (
+		  SELECT
+		  	TAN0201.INTEGRATION_ID AS INTEGRATION_ID ,
+		    A.TRACKING_DATE              AS TRACKING_DATE ,
+		    A.ORG_HOST_ID                AS ORG_HOST_ID ,
+		    TAN0201.INTERFACE_ID         AS INTERFACE_ID ,
+		    TAN0201.INTERFACE_NM         AS INTERFACE_NM ,
+		    CDOP01.NM                    AS STATUS_NM ,
+		    ROWNUM                       AS RNUM
+		  FROM
+		    (
+		    SELECT
+		      INTEGRATION_ID ,
+		      TRACKING_DATE ,
+		      ORG_HOST_ID ,
+		      INTERFACE_ID ,
+		      INTERFACE_NM ,
+		      STATUS
+		    FROM TOP0503
+		    WHERE 1    = 1
+		    AND STATUS = '01'
+		    AND ( TRACKING_DATE BETWEEN TO_CHAR(SYSDATE - (1/24), 'YYYYMMDDHH24') ||'0000000000'
+		    AND TO_CHAR(SYSDATE - (0/24), 'YYYYMMDDHH24') ||'5959999999' )
+		    AND TO_CHAR(TO_DATE(SUBSTR(TRACKING_DATE,1,12), 'YYYYMMDDHH24MI') + (#{checkTime}/24/60), 'YYYYMMDDHH24MI') <![CDATA[<=]]> TO_CHAR(SYSDATE, 'YYYYMMDDHH24MI')
+		    ORDER BY TRACKING_DATE DESC
+		    ) A
+		    ---------------------
+		    -- 인터페이스 조인
+		    ---------------------
+		  INNER JOIN
+		    (
+		    SELECT
+		      TAN0201.INTERFACE_ID ,
+		      TAN0201.INTERFACE_NM ,
+		      TAN0201.INTEGRATION_ID
+		    FROM TAN0201 TAN0201
+			-----------------------------------------------
+			-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+			-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+			-----------------------------------------------
+			<choose>
+			<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+			</when>
+			<otherwise>
+			INNER JOIN
+			(
+				<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+			) ACCESS_ROLE_INTF ON
+				TAN0201.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+			</otherwise>
+			</choose>
+		    WHERE TAN0201.DEL_YN = 'N'
+		    ) TAN0201
+		  ON A.INTERFACE_ID = TAN0201.INTERFACE_ID
+		    ---------------------
+		    -- 공통코드(상태값) 조인
+		    ---------------------
+		  LEFT OUTER JOIN
+		    ( SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'OP' AND LEVEL2 = '01'
+		    ) CDOP01
+		  ON A.STATUS = CDOP01.CD
+		  )
+		WHERE 1 = 1
+		<choose>
+			<when test="max != null">
+			AND RNUM <![CDATA[<=]]> #{max}
+			</when>
+			<otherwise>
+			AND RNUM <![CDATA[<=]]> 4
+			</otherwise>
+		</choose>
+	</select>
+
+	<resultMap id="getWS0045Result" type="java.util.LinkedHashMap">
+		<id property="integrationId"       column="INTEGRATION_ID"/>
+		<id property="trackingDate"    	   column="TRACKING_DATE"/>
+		<id property="orgHostId"    	   column="ORG_HOST_ID"/>
+		<result property="interfaceNm"        column="INTERFACE_NM"/>
+		<result property="statusNm"        column="STATUS_NM"/>
+		<result property="elapsedTime"     column="ELAPSED_TIME"/>
+	</resultMap>
+
+	<!--  WS0047(실시간-처리현황(전체) - IIP 4.0) -->
+	<select id="getWS0047" parameterType="Map" resultMap="getWS0047Result">
+		SELECT
+			  A.ROLE_NM
+			, A.ROLE_ID
+			, NVL(B.CNT,0) AS CNT
+			, ' ' AS FLAG
+		FROM
+			(
+				SELECT
+					  TSU0218.ROLE_ID
+					, TSU0218.ROLE_CD
+					, TSU0218.ROLE_NM
+				FROM
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleUser"/>
+					INNER JOIN TSU0218 ON
+						 ACCESS_ROLE.ROLE_ID = TSU0218.ROLE_ID
+			) A
+			LEFT OUTER JOIN
+			(
+				SELECT
+					TSU0220.ROLE_ID,
+					COUNT(A.TRACKING_DATE) AS CNT
+				FROM
+					TOP0503 A
+					---------------------
+					-- 인터페이스 조인
+					---------------------
+					INNER JOIN
+					(
+					  SELECT
+					      INTERFACE_ID
+					    , INTERFACE_NM
+					    , INTEGRATION_ID
+					  FROM
+					    TAN0201
+					  WHERE DEL_YN = 'N'
+					) TAN0201 ON
+		        		A.INTERFACE_ID = TAN0201.INTERFACE_ID
+					LEFT OUTER JOIN TSU0220 TSU0220 ON
+						TAN0201.INTERFACE_ID = TSU0220.INTERFACE_ID
+				WHERE
+					1 = 1
+					AND ( A.TRACKING_DATE BETWEEN TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'99999999' )
+				GROUP BY TSU0220.ROLE_ID
+			) B ON
+				A.ROLE_ID = B.ROLE_ID
+		WHERE
+			1 = 1
+			<if test="dataAccessList != null">
+			AND A.ROLE_ID IN <foreach item="item" index="index" collection="dataAccessList" open="(" separator="," close=")"> #{item} </foreach>
+			</if>
+	</select>
+
+	<resultMap id="getWS0047Result" type="java.util.LinkedHashMap">
+		<id property="roleId"         column="ROLE_ID"/>
+		<result property="roleNm"     column="ROLE_NM"/>
+		<result property="cnt"        column="CNT"/>
+		<result property="flag"        column="FLAG"/>
+	</resultMap>
+
+	<!-- WS0048(실시간-처리현황(관심) - IIP 4.0) -->
+	<select id="getWS0048" parameterType="Map" resultMap="getWS0048Result">
+		SELECT
+		    A.INTERFACE_ID
+		  , A.INTERFACE_NM
+		  , A.INTEGRATION_ID
+		  , NVL(B.CNT,0) AS CNT
+		  , ' ' AS FLAG
+		FROM
+	      (
+	        SELECT
+	            A.INTERFACE_ID,
+	            A.INTERFACE_NM,
+	            A.INTEGRATION_ID
+	        FROM
+	          	TAN0201 A
+				INNER JOIN TAN0214 B ON
+					A.INTERFACE_ID = B.INTERFACE_ID
+					AND B.USER_ID = #{userId}
+					AND B.TYPE = '0'
+					AND B.MONITOR_YN = 'Y'
+
+				-----------------------------------------------
+				-- 데이터 엑세스 권한 :: 인터페이스 맵핑 조인
+				-- 인터페이스 접근 권한 조인이 필요할 경우 복사해서 사용할것
+				-----------------------------------------------
+				<choose>
+				<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+				</when>
+				<otherwise>
+				INNER JOIN
+				(
+					<include refid="pep.per.mint.database.mapper.op.DashboardPushMapper.getDataAccessRoleInterface"/>
+				) ACCESS_ROLE_INTF ON
+					A.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+				</otherwise>
+				</choose>
+
+			WHERE A.DEL_YN = 'N'
+	      ) A
+		  LEFT OUTER JOIN
+		  (
+		    SELECT
+		      TAN0201.INTERFACE_ID,
+		      COUNT(A.TRACKING_DATE) AS CNT
+		    FROM
+		      TOP0503 A
+		      ---------------------
+		      -- 인터페이스 조인
+		      ---------------------
+		      INNER JOIN
+		      (
+		        SELECT
+		            A.INTERFACE_ID,
+		            A.INTEGRATION_ID
+		        FROM
+		          	TAN0201 A
+					INNER JOIN TAN0214 B ON
+						A.INTERFACE_ID = B.INTERFACE_ID
+						AND B.USER_ID = #{userId}
+						AND B.TYPE = '0'
+						AND B.MONITOR_YN = 'Y'
+		        WHERE A.DEL_YN = 'N'
+		      ) TAN0201 ON
+		        A.INTERFACE_ID = TAN0201.INTERFACE_ID
+		    WHERE
+		      1 = 1
+		      AND ( A.TRACKING_DATE BETWEEN TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'00000000' AND TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')||'99999999' )
+		    GROUP BY TAN0201.INTERFACE_ID
+		  ) B ON
+		    A.INTERFACE_ID = B.INTERFACE_ID
+	</select>
+
+	<resultMap id="getWS0048Result" type="java.util.LinkedHashMap">
+		<id property="interfaceId"         column="INTERFACE_ID"/>
+		<result property="interfaceNm"     column="INTERFACE_NM"/>
+		<result property="integrationId"   column="INTEGRATION_ID"/>
+		<result property="cnt"        column="CNT"/>
+		<result property="flag"        column="FLAG"/>
+	</resultMap>
+</mapper>

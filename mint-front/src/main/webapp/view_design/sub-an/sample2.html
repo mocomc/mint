@@ -1,0 +1,1793 @@
+﻿<!DOCTYPE html>
+<html >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IPS (Interface Portal System)</title>
+
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: common                                  -->
+		<!---------------------------------------------------------------------->		
+		<link rel="stylesheet" type="text/css" href="../../css/common/common.css">
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: bootstrap-inspina                       -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/font-awesome/css/font-awesome.css">		
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/animate.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/bootstrap-inspinia/css/style.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- Cascading Style Sheet :: kendo                                   -->
+		<!---------------------------------------------------------------------->
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.common.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.rtl.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.default.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/external/kendo/css/kendo.dataviz.default.min.css">
+		
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: JQuery                                             -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/jquery/js/jquery.min.js"></script>
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: bootstrap-inspina                                  -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/peity/jquery.peity.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/pace/pace.min.js"></script>
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/plugins/iCheck/icheck.min.js"></script>	
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/bootstrap.min.js"></script>  
+		<script type="text/javascript" src="../../js/external/bootstrap-inspinia/js/inspinia.js"></script>			  
+		<!---------------------------------------------------------------------->
+		<!-- JavaScript :: Kendo                                              -->
+		<!---------------------------------------------------------------------->
+		<script type="text/javascript" src="../../js/external/kendo/js/kendo.all.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+	<!--왼쪽메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+              <li class="nav-header">
+                  <div class="dropdown profile-element"><a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                      <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Interface Portal System</strong>
+                       </span> <span class="text-muted text-xs block">My page <b class="caret"></b></span> </span> </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="mailbox.html">Mailbox</a></li>
+                            <li class="divider"></li>
+                            <li><a href="login.html">Logout</a></li>
+                        </ul>
+                </div>
+                    <div class="logo-element">
+                        IN+
+                    </div>
+              </li>
+				<li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">라이프사이클 관리</span> </a>
+                </li>
+                <li class="active" style="padding-left:10px;">
+                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">요건관리</span> <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li ><a href="index.html">요건조회</a></li>
+                        <li ><a href="dashboard_2.html">요건등록</a></li>
+                        <li ><a href="dashboard_3.html">요건 히스토리</a></li>
+                    </ul>
+                </li>
+              
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-retweet"></i> <span class="nav-label">인터페이스 관리<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="graph_flot.html">인터페이스 조회</a></li>
+                        <li><a href="graph_morris.html">인터페이스 등록</a></li>
+                        <li><a href="graph_rickshaw.html">인터페이스 히스토리</a></li>
+                    </ul>
+                </li>
+                <li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">운영 관리</span> </a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">인프라</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="form_basic.html">시스템(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시스템(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+
+                        <li><a href="form_advanced.html">서버(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">서버(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">서버(그룹) 등록</a>
+                                </li>
+                            </ul>
+							</li>
+                        <li><a href="form_wizard.html">업무(그룹)<span class="fa arrow"></span></a>
+							<ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무(그룹) 조회</a>
+                                </li>
+                                <li>
+                                    <a href="#">업무(그룹) 등록</a>
+                                </li>
+                            </ul>
+						</li>	
+                   	 </ul>
+                </li>
+
+				<li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">모니터링</span> </a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Data Tracking</span></a>
+                   
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-pie-chart"></i> <span class="nav-label">대시보드</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">자원 모니터링</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-warning"></i> <span class="nav-label">장애관리</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="typography.html">장애대장</a></li>
+                        <li><a href="icons.html">장애 히스토리 관리</a></li>
+                    </ul>
+                </li>
+				<li style="border-top:1px solid #47627a">
+                    <a href="#"><span style="font-size:16px;color:#85d3c3">통계/KPI</span> </a>
+                </li>
+
+                <li style="padding-left:10px;">
+                    <a href="grid_options.html"><i class="fa fa-laptop"></i> <span class="nav-label">표준화 준수율</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-exchange"></i> <span class="nav-label">인터페이스 재 사용율</span></a>
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span class="nav-label">진척률 통계</span></a>
+                    
+                </li>
+                <li style="padding-left:10px;">
+                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">인터페이스 통계</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">인터페이스 운영통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">시간별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">일별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">월별 통계</a>
+                                </li>
+								<li>
+                                    <a href="#">년간 통계</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        
+						<li>
+                            <a href="#">인터페이스 현황통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">업무별 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">시스템별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+						<li>
+                            <a href="#">장애통계<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#">장애발생 순위 통계</a>
+                                </li>
+                                <li>
+                                    <a href="#">장애 유형별 통계</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+					<!--nav nav-second-level 끝-->
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+	<!--왼쪽메뉴 끝-->
+	
+
+        <div id="page-wrapper" class="gray-bg">
+
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome to IPS (Interface Portal System)</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/a7.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <small class="pull-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/a4.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/profile.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="grid_options.html">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="login.html">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+		<!--header end-->
+     		<!--location -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-5">
+                    <h2>인터페이스 요건등록</h2>
+                    <ol class="breadcrumb">
+                        <li><a href="index.html">라이프 사이클관리</a>
+                        </li>
+                        <li><a>요건관리</a>
+                        </li>
+                        <li class="active"><strong>인터페이스 요건등록</strong>
+                        </li>
+                    </ol>
+                </div>
+				<!--button-->
+					<div class="col-lg-7">
+                    <div class="title-action" >
+                    	<a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-desktop"></i> 심의 </a>
+                        <a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-folder-o"></i> 결재 </a>		
+                        <a href="#" class="btn btn-white"><i class="fa fa-clock-o"></i> 히스토리 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-save"></i> 저장</a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-trash-o"></i> 삭제 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-file-o"></i> 임시저장 </a>	
+                        <a href="#" class="btn btn-white"><i class="fa fa-file-text-o"></i> 목록 </a>
+                    </div>
+                </div>
+				<!--button end-->
+             
+            </div>
+			<!--location end-->
+		
+				
+
+		<!--wrapper wrapper-content-->
+        <div class="wrapper wrapper-content animated fadeInRight" >
+
+
+			<!--요건정보row-->
+            <div class="row">
+				<!--요건정보 col-lg-12-->
+                <div class="col-lg-12">
+				<!--요건정보 ibox float-e-margins-->
+                <div class="ibox float-e-margins">
+				 <div class="ibox-title">
+                        <h5>요건 정보</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                  </div>
+                 
+			<!--요건정보 ibox-content-->   
+              <div class="ibox-content">
+              <!--요건정보 row--> 
+                <div class="row">
+                
+                  			<!--col-sm-4 1 -->   
+                            <div class="col-sm-4">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">프로세스</span>
+										
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default" style="width:42%;">
+                                          <input type="text" class="k-input" placeholder="1.4.2.4.A파트" style="width: 100%;">
+                                          </span> <button class="k-button" id="get">Search</button>
+										  
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 1end -->
+							<hr class="hr-space">
+                         
+                  
+                  
+                					
+                              <!--col-sm-4 2-->   
+                            <div class="col-sm-4">
+								<form class="form-horizontal">
+             
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">요건명</span>
+										<!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width">
+                                          <input type="text" class="k-input" placeholder="매출정보조회" style="width: 100%;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                    <!--form-group end-->
+                                    
+                                   
+                                </form>
+							</div>
+							<!--col-sm-4 2end -->
+ 				
+                
+							<!--col-sm-4 3-->
+							 <div class="col-sm-4">
+								<form class="form-horizontal">
+
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">요건ID</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width">
+                                          <input type="text" class="k-input" placeholder="REQ- 0001" style="width:100%;background-color:#eee;cursor: not-allowed;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                              <!--form-group end-->
+                                    
+                                   	
+                                </form>
+							</div>
+							<!--col-sm-4 3end -->
+
+
+							 <!--col-sm-4 4-->	
+							  <div class="col-sm-4">
+								<form class="form-horizontal">
+
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">상태</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width">
+                                          <input type="text" class="k-input" placeholder="요건등록" style="width:100%;background-color:#eee;cursor: not-allowed;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                              <!--form-group end-->
+                                    
+                                  
+                                </form>
+							</div>
+                            <!--col-sm-4 4end -->
+                            
+                          <!--description start -->
+                         <div class="col-lg-12">
+						 <div class="bs-callout01">
+                         <h4>요건 등록자</h4>
+                         <div style="float:left">- 홍길동, 031)211-3434, 010-1111-2222, CRM Team</div>  <div style="float:right"><i class="fa fa-clock-o"></i> 요건 등록일 : 2015-06-18</div>
+                         </div>
+                         </div>
+                         <!--description end -->
+
+
+           	    </div>
+				 <!--요건정보 row end--> 
+
+			
+               </div>
+			<!--요건정보 ibox-content end-->  
+
+
+
+               </div>
+			<!--요건정보ibox float-e-margins end-->
+           </div>
+		<!--요건정보 col-lg-12 end-->
+
+            </div>
+           <!--요건정보row end-->
+
+			
+			 <!--인터페이스 정보row -->
+            <div class="row">
+
+				<!--인터페이스 정보 col-lg-12-->
+                <div class="col-lg-12">
+				
+
+				<!--인터페이스 정보 ibox float-e-margins-->
+                <div class="ibox float-e-margins">
+
+					<!--ibox-title-->
+                   <div class="ibox-title">
+                        
+                             <h5>인터페이스 정보</h5>
+                                              
+                             <!--ibox-tools start-->
+                              <div class="ibox-tools">
+							  <a href="#" class="a2">인터페이스 검색 <i class="fa fa-search"></i></a>
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                            <!--ibox-tools end-->
+						
+                        
+                  </div>
+					<!---인터페이스 정보ibox-title end--> 
+
+					<!--기본 정보 ibox-content-->
+					
+                    <div class="ibox-content">
+
+				<!--description start -->
+				<div class="bs-callout02">
+                <h4>인터페이스 정보 입력 Tip</h4>
+                <div style="float:left">- 등록된 인터페이스를 검색 하여 복사 또는 재사용 할 수 있습니다.</div> 
+                </div>
+                 <!--description end -->
+
+		
+					  <h3>기본정보</h3>
+                       <!--기본정보 row-->
+                        <div class="row">
+                				
+                              <!--col-sm-4 1-->   
+                            <div class="col-sm-4">
+								<form class="form-horizontal">
+             
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">연계채널</span>
+										<!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width">
+                                          <input type="text" class="k-input" placeholder="IIB" style="width: 100%;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                    <!--form-group end-->
+                                    <hr class="hr-space">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">연계흐름</span>
+                                    	 <!--comboBox-->
+                                         <input id="fabric" placeholder="Select fabric..." class="input-width"/>
+                                       <!--comboBox end-->
+                                  </div>
+                              <!--form-group end-->
+                                    <hr class="hr-space">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">발생유형</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									<hr class="hr-space">
+								 	<!--form-group -->
+                                  <div class="form-group">
+                                    	<span class="lable_tag">건당사이즈</span>
+                                    	 <!--comboBox-->
+										 <span class="k-widget k-combobox k-header" style="width:43%">
+                                          <input id="numeric" type="number" value="17" min="0" max="100" step="1" style="width: 100%;" />
+										  </span>
+                                        <!--comboBox end-->
+                                              <span style="padding-top:6px; padding-left:3px;">Byte</span>
+                             </div>
+                                   
+                                  <!--form-group end-->
+
+                                </form>
+							</div>
+							<!--col-sm-4 1 end -->
+ 				
+                
+							<!--col-sm-4 2-->
+							 <div class="col-sm-4">
+								<form class="form-horizontal">
+
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">인터페이스 명</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width">
+                                          <input type="text" class="k-input" placeholder="매출정보조회" style="width: 100%;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                              <!--form-group end-->
+                                    <hr class="hr-space">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">동기/비동기</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="비동기"  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                              <!--form-group end-->
+                                    <hr class="hr-space">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">발생주기</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="시"  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                  <hr class="hr-space">
+                                  	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">주기별건수</span>
+                                    	<!--comboBox-->
+										   <span class="k-widget k-combobox k-header input-width" >
+                                          <input id="numeric2" type="number" value="17" min="0" max="100" step="1" style="width: 100%;" />
+										  </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 2 end -->
+
+
+							 <!--col-sm-4 3-->	
+							  <div class="col-sm-4">
+								<form class="form-horizontal">
+
+                                   	<!--form-group -->
+                                  <div class="form-group">
+                                    	<span class="lable_tag">인터페이스 ID</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width">
+                                          <input type="text" class="k-input" placeholder="INTF-0001" style="width:100%;background-color:#eee;cursor: not-allowed;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                             	 <!--form-group end-->
+                                    <hr class="hr-space">
+                                   	<!--form-group -->
+                                  <div class="form-group">
+                                    	<span class="lable_tag">데이터순차성</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Yes" style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span></span>
+                                        <!--comboBox end-->
+                                  </div>
+                              	<!--form-group end-->
+                                  <hr class="hr-space"><hr class="hr-space"><hr class="hr-space"><hr class="hr-space"><hr class="hr-space"><hr class="hr-space">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">일일발생횟수</span>
+                                    	<!--comboBox-->
+										   <span class="k-widget k-combobox k-header input-width" >
+                                          <input id="numeric3" type="number" value="17" min="0" max="100" step="1" style="width: 100%;" />
+										  </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+                            <!--col-sm-4 3 end -->
+							<hr class="hr-space">
+                              <!--col-sm-4 4-->
+							<div class="col-sm-9" >
+                              <form class="form-horizontal" >
+                                <!--form-group -->
+                                <div class="form-group" > <span class="lable_tag2">일일총전송량</span> 
+								 <!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:19%">
+                                          <input type="text" class="k-input" placeholder="IIB" style="width: 100%;">
+                                          </span> <span style="padding-left:3px;">Byte(건당사이즈 * 주기별 건수 * 일일발생횟수 )</span>
+                                        <!--comboBox end-->		
+                                </div>
+                                <!--form-group end-->
+                              </form>
+							 
+                            </div>
+                            <!--col-sm-4 4 end -->
+							
+                          
+
+                           
+							</div>
+                		<!--기본 정보 row end--> 
+					 </div>
+				<!--기본 정보 ibox-content end-->
+
+				<!--연계시스템 ibox-content2-->
+				<div class="ibox-content2">
+					
+					<h3>연계시스템</h3> 
+
+					<!--연계시스템 row--> 
+                	<div class="row">
+					
+					<div class="col-sm-6" >
+						 <!-- kendo table-->
+                 <div id="example">
+        	     <div id="grid" ></div>
+				   <script>
+         	       $(document).ready(function () {
+          	          $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+                            },
+                            pageSize: 20
+                        },
+                        height: 300,
+                        groupable: true,
+                        sortable: true,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: true,
+                            buttonCount: 5
+                        },
+                        columns: [{
+                            field: "ContactName",
+                            title: "Contact Name",
+                            width: 200
+                        }, {
+                            field: "ContactTitle",
+                            title: "Contact Title"
+                        }, {
+                            field: "CompanyName",
+                            title: "Company Name"
+                        }]
+                    });
+        	        });
+        	    </script>
+				</div>
+				<!--kendo table end-->
+					</div>
+					<!--col-sm-6 end-->
+
+					<div class="col-sm-6">
+					 <!-- kendo table-->
+                 <div id="example">
+        	     <div id="grid2" ></div>
+				   <script>
+         	       $(document).ready(function () {
+          	          $("#grid2").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+                            },
+                            pageSize: 20
+                        },
+                        height: 300,
+                        groupable: true,
+                        sortable: true,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: true,
+                            buttonCount: 5
+                        },
+                        columns: [{
+                            field: "ContactName",
+                            title: "Contact Name",
+                            width: 200
+                        }, {
+                            field: "ContactTitle",
+                            title: "Contact Title"
+                        }, {
+                            field: "CompanyName",
+                            title: "Company Name"
+                        }]
+                    });
+        	        });
+        	    </script>
+				</div>
+				<!--kendo table end-->
+
+					</div>
+                <!--col-sm-6 end-->
+
+					</div>
+					<!--연계시스템 row end-->
+					 </div>
+					<!--연계시스템 ibox-content2 end-->
+                
+					<!--인터페이스 패턴 ibox-content2 -->
+					<div class="ibox-content2" >
+					<div style="float:left"><h3>인터페이스 패턴</h3></div>
+                    <!--ibox-tools start-->
+                    <div class="ibox-tools"> <a href="#" class="a2">패턴검색 <i class="fa fa-search"></i></a></div>
+                    <!--ibox-tools end-->
+                    
+                    
+					<!--인터페이스 패턴 row--> 
+                    <div class="row">
+
+                    <!--인터페이스 패턴 col-lg-12--> 
+					<div class="col-lg-12">
+                    <div style="background-color:#f3f3f4; width:100%; padding:15px 0px 15px 0px;">
+                    <div class="col-lg-5" style="padding:40px 0px 0px 70px;"><h2>Asynchronous(비동기)</h2><h4>- 단방향, 송신/수신, 1:N(Broadcast)</h4></div><div><img src="../../img/diagram.png"></div>
+                    </div>
+					 
+                    </div>
+                    <!--인터페이스 패턴 col-lg-12 end--> 
+
+					<!--description start -->
+                     <div class="col-lg-12">
+				     <div class="bs-callout03">  
+                     <div style="width:500px;float:left;"><h4>연계 채널을 확인하세요 Tip</h4>
+                     - 다음 버튼을 클릭하면 입력된 정보를 바탕으로 적절한 연계 채널을 제시 합니다. </div> <div style="float:left;"><a href="#"><i class="fa fa-sign-in big-icon"></i></a></div> 
+                     </div>
+                     </div>
+                     <!--description end -->
+
+
+					</div>
+					<!--인터페이스 패턴 row end--> 
+					</div>	
+					<!--인터페이스 패턴 ibox-content2 end-->
+
+					
+				<!--장애영향도 ibox-content2 -->
+					<div class="ibox-content2" >
+					<h3>장애영향도</h3>
+					<!--장애영향도 row--> 
+                    <div class="row">
+
+                				
+                              <!--col-sm-4 1-->   
+                            <div class="col-sm-4">
+					<form class="form-horizontal">
+             
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">중요도</span>
+										<!--radio-->
+                                         <div>
+                                            <label style="padding-left:10px;">
+                                                <input type="radio" checked="" value="option1"> 상 </label>
+                                            <label style="padding-left:10px;">
+                                                <input type="radio" value="option2" > 중</label>
+                                            <label style="padding-left:10px;">
+                                                <input type="radio" value="option2" > 하 </label>
+                                            </div>
+                                        <!--radio end-->
+                                  </div>
+                                    <!--form-group end-->
+                         
+                                </form>
+							</div>
+							<!--col-sm-4 1 end -->
+ 							
+ 				    		 <!--col-sm-4 2-->   
+                            <div class="col-sm-4">
+							<form class="form-horizontal">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">지연 임계치</span>
+										<!--comboBox-->
+                                        <div style="float:left;padding-right:5px;"><span class="k-widget k-autocomplete k-header k-state-default" style="float:left;width:80px;">
+                                          <input type="text" class="k-input" placeholder="시" style="width: 100%;">
+                                          </span></div>
+										  <span class="k-widget k-combobox k-header" style="width:80px;">
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text" placeholder="분" style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1">select</span></span> </span> </span>
+                                        
+                                        <!--comboBox end-->
+                                  </div>
+                                    <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 2 end -->
+
+							 <!--col-sm-4 3-->   
+                            <div class="col-sm-4">
+							<form class="form-horizontal">
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">장애 임계치</span>
+										<!--comboBox-->
+                                        <div style="float:left;padding-right:5px;"><span class="k-widget k-autocomplete k-header k-state-default" style="float:left;width:80px;">
+                                          <input type="text" class="k-input" placeholder="시" style="width: 100%;">
+                                          </span></div>
+										  <span class="k-widget k-combobox k-header" style="width:80px;">
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text" placeholder="분" style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1">select</span></span> </span> </span>
+                                        
+                                        <!--comboBox end-->
+                                  </div>
+                                    <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 3 end -->
+
+					<!--col-sm-6 -->
+                <div class="col-sm-6" style="padding-top:10px;" >
+				 <!--grid 3 -->
+            <div id="grid3">
+            <script>
+                $(document).ready(function() {
+                    $("#grid3").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        Freight: { type: "number" },
+                                        ShipName: { type: "string" },
+                                        OrderDate: { type: "date" },
+                                        ShipCity: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        height: 300,
+                        filterable: true,
+                        sortable: true,
+                        pageable: true,
+                        columns: [{
+                                field:"OrderID",
+                                filterable: false
+                            },
+                            "Freight",
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:MM/dd/yyyy}"
+                            }, {
+                                field: "ShipName",
+                                title: "Ship Name"
+                            }, {
+                                field: "ShipCity",
+                                title: "Ship City"
+                            }
+                        ]
+                    });
+                });
+            </script>
+           
+                   </div>
+                   <!--grid 3 end-->
+					</div>
+					<!--col-sm-6 end-->
+
+				<!--col-sm-6-->
+                   
+                <div class="col-sm-6" style="padding-top:10px;" >
+				 <!--grid 4-->
+            <div id="grid4">
+            <script>
+                $(document).ready(function() {
+                    $("#grid4").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        Freight: { type: "number" },
+                                        ShipName: { type: "string" },
+                                        OrderDate: { type: "date" },
+                                        ShipCity: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        height: 300,
+                        filterable: true,
+                        sortable: true,
+                        pageable: true,
+                        columns: [{
+                                field:"OrderID",
+                                filterable: false
+                            },
+                            "Freight",
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:MM/dd/yyyy}"
+                            }, {
+                                field: "ShipName",
+                                title: "Ship Name"
+                            }, {
+                                field: "ShipCity",
+                                title: "Ship City"
+                            }
+                        ]
+                    });
+                });
+            </script>
+           
+                   </div>
+                   <!--grid 4 end-->
+					</div>
+ 				  <!--col-sm-6 end-->
+					</div>
+					<!--장애영향도 row end--> 
+					</div>	
+					<!--장애영향도 ibox-content2 end-->
+
+					
+
+			
+
+					<!--스케줄 ibox-content2 -->
+					<div class="ibox-content2" >
+					<h3>스케줄</h3>
+					<!--장애영향도 row--> 
+                    <div class="row">
+
+                    	<!--col-sm-4 1 -->   
+                            <div class="col-sm-4">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">개발 예정일</span>
+                                    	<!--comboBox-->
+                                         <input id="value" value="10/10/2000" / class="input-width">                                 
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									   <hr class="hr-space">
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">개발 완료일</span>
+                                    	<!--comboBox-->
+                                         <input id="value2" value="10/10/2000" / class="input-width">   
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 1end -->
+                          
+						<!--col-sm-4 2 -->   
+                            <div class="col-sm-4">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">테스트 예정일</span>
+                                    	 <!--comboBox-->
+                                           <input id="value3" value="10/10/2000" / class="input-width"> 
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									   <hr class="hr-space">
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">테스트 완료일</span>
+                                    	 <!--comboBox-->
+                                           <input id="value4" value="10/10/2000" / class="input-width"> 
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 2end -->
+
+
+					<!--col-sm-4 3 -->   
+                            <div class="col-sm-4">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">운영반영 예정일</span>
+                                    	 <!--comboBox-->
+                                          <input id="value5" value="10/10/2000" / class="input-width"> 
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									   <hr class="hr-space">
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag">운영반영 완료일</span>
+                                    	 <!--comboBox-->
+                                          <input id="value6" value="10/10/2000" / class="input-width"> 
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-4 3end -->
+                         
+                  
+                					
+                            
+
+					</div>
+					<!--스케줄 row end--> 
+					</div>	
+
+					
+					<!--스케줄 ibox-content2 end-->
+
+
+
+
+					<!--담당자 ibox-content2 -->
+					<div class="ibox-content2" >
+					<h3>담당자</h3>
+					<!--담당자도 row--> 
+                    <div class="row">
+
+                    <!--담당자 col-lg-12--> 
+					<div class="col-lg-12">
+
+                    
+             <div id="example">
+            <div id="grid5"></div>
+            <script>
+                $(document).ready(function() {
+                    $("#grid5").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        Freight: { type: "number" },
+                                        ShipName: { type: "string" },
+                                        OrderDate: { type: "date" },
+                                        ShipCity: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        height: 160,
+                        filterable: true,
+                        sortable: true,
+                        pageable: true,
+                        columns: [{
+                                field:"OrderID",
+                                filterable: false
+                            },
+                            "Freight",
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:MM/dd/yyyy}"
+                            }, {
+                                field: "ShipName",
+                                title: "Ship Name"
+                            }, {
+                                field: "ShipCity",
+                                title: "Ship City"
+                            }
+                        ]
+                    });
+                });
+            </script>
+</div>
+       
+
+
+                    </div>
+                    <!--담당자 col-lg-12 end--> 
+
+
+
+					</div>
+					<!--담당자 row end--> 
+					</div>	
+					<!--담당자 ibox-content2 end-->
+
+
+
+					<!--인터페이스 맵핑 ibox-content2 -->
+					<div class="ibox-content2" >
+					<h3>인터페이스 맵핑</h3>
+					<!--인터페이스 맵핑 row--> 
+                    <div class="row">
+
+                    <!--인터페이스 맵핑 col-lg-12--> 
+					<div class="col-lg-12">
+
+                    	<!--panel blank-panel-->
+                    <div class="panel blank-panel">
+                    
+						<!--panel-options-->
+                        
+                            <div class="panel-options">
+
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#tab-01">IIB</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-02">SAP-PO
+</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-03">DataStage</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-04">BizTalk</a></li>
+                                </ul>
+                            </div>
+                  
+						<!--panel-options end-->
+                        
+                        <!--panel-body-->	
+                        <div class="panel-body">
+
+                            <div class="tab-content">
+
+								<!--tab-1 end--> 
+                                <div id="tab-01" class="tab-pane active">
+             
+                               <!--col-sm-6 1 -->   
+                            <div class="col-sm-6">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Interface Mapping Key</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-autocomplete k-header k-state-default" style="width:54%">
+                                          <input type="text" class="k-input" placeholder="IIB" style="width: 100%;">
+                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+
+                                </form>
+							</div>
+							<!--col-sm-6 1end -->
+                             <hr class="hr-space">
+                             <div style=" padding:20px 0px 10px 15px"><h3>Dependency Attribute</h3><h4>— IBM Integration Bus + IBM WebSphere MQ</h4>
+                             </div>
+                                    
+                                            
+                                        <!--col-sm-6 2 -->   
+                            <div class="col-sm-6">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Sender Interface</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									<hr class="hr-space">
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Sender Component</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									<hr class="hr-space">
+									
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Sender Party</span>
+                                    	<!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-6 2end -->
+                          
+						<!--col-sm-6 3 -->   
+                            <div class="col-sm-6">
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Receiver Interface</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width">
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+										<hr class="hr-space">
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Receiver Conponent</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width" >
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+									<hr class="hr-space">
+									
+										<!--form-group -->
+                                   <div class="form-group">
+                                    	<span class="lable_tag3">Receiver Party</span>
+                                    	 <!--comboBox-->
+                                          <span class="k-widget k-combobox k-header input-width">
+                                          <span tabindex="-1" unselectable="on" class="k-dropdown-wrap k-state-default"><input class="k-input" type="text"  placeholder="Search..."  style="width: 100%;">
+                                          <span tabindex="-1" unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s" role="button" tabindex="-1" >select</span></span>                                          </span>                                          </span>
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--col-sm-6 3end -->
+
+
+                               
+                                       
+                                   
+                                </div>
+								 <!--tab-1 end--> 
+
+								<!--tab-2 --> 
+                                <div id="tab-02" class="tab-pane">
+                                    <strong>SAP-PO</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+
+                                </div>
+								<!--tab-2 end--> 
+                                <!--tab-3 --> 
+                                 <div id="tab-03" class="tab-pane">
+                                    <strong>DataStage</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+
+                                </div>	
+								<!--tab-3 end--> 
+                                <!--tab-4 --> 
+                                <div id="tab-04" class="tab-pane">
+                                    <strong>BizTalk</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+
+                                </div>	
+                                <!--tab-4 end-->
+                                
+                            </div>
+                             <!--tab-content end-->	
+                             
+
+                        </div>
+					<!--panel-body-->	
+                    
+                    
+                    
+                    </div>
+              		<!--panel blank-panel-->
+
+                    </div>
+                    <!--인터페이스 맵핑 col-lg-12 end--> 
+					</div>
+					<!--인터페이스 맵핑 row end--> 
+					</div>	
+					<!--인터페이스 맵핑 ibox-content2 end-->
+
+
+
+
+					<!--Tag ibox-content2 -->
+					<div class="ibox-content2" >
+					<h3>Tag</h3>
+					<!--Tag row--> 
+                    <div class="row">
+
+                    <!--Tag col-lg-12--> 
+					<div class="col-lg-12">
+
+                    <!--description start -->
+				<div class="bs-callout04">
+                <h4>인터페이스와 관련된 Tag 정보를 입력하세요 Tip</h4>
+                <div style="float:left">- 태그를 이용하여 인터페이스 정보를 검색할 수 있습니다 .</div> 
+                </div>
+                 <!--description end -->
+				
+                    </div>
+					
+                   <!-- Tag-->   
+                            <div  style="width: 33.33333333%;padding-left: 15px;min-height: 1px;">
+							<span class="lable_tag">Tag</span>
+							</div>
+							<!--Tag end -->
+							<!--search-->
+							<div >
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	
+                                    	 <!--comboBox-->
+										<span class="k-widget k-autocomplete k-header k-state-default" style="float:left;width:10%;">
+                                          <input type="text" class="k-input" placeholder="Search..." style="width: 100%;">
+                                          </span>
+                                        <span style="float:left; padding-left:5px;padding-right:5px"><button class="k-button" id="get">ADD</button></span>
+										<span class="k-widget k-autocomplete k-header k-state-default" style="float:left;width:35%;">
+                                          <input type="text" class="k-input" placeholder="Search..." style="width: 100%;">
+                                          </span>
+									
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--search end -->
+							
+					</div>
+					<!--Tag row end--> 
+					</div>	
+					<!--Tag ibox-content2 end-->
+
+
+                </div>
+				<!---대분류 인터페이스 정보ibox float-e-margins end-->
+            </div>
+			<!---대분류 인터페이스 정보 col-lg-12 end-->
+            </div>
+             <!---대분류 인터페이스 정보row end-->
+
+
+		<!--부가정보row-->
+            <div class="row">
+				<!--부가정보 col-lg-12-->
+                <div class="col-lg-12">
+				<!--부가정보 ibox float-e-margins-->
+                <div class="ibox float-e-margins">
+				 <div class="ibox-title">
+                        <h5>부가정보</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                  </div>
+                 
+			<!--첨부파일 ibox-content-->   
+              <div class="ibox-content">
+              <h3>첨부파일</h3>
+              <!--첨부파일row--> 
+                <div class="row">
+					<!--첨부파일 -->   
+                            <div  style="width: 33.33333333%;padding-left: 15px;min-height: 1px;">
+							<span class="lable_tag">첨부파일</span>
+							</div>
+							<!--첨부파일 end -->
+							<!--search-->
+							<div>
+								<form class="form-horizontal">
+         
+                                   	<!--form-group -->
+                                   <div class="form-group">
+                                    	
+                                    	 <!--comboBox-->
+										<span class="k-widget k-autocomplete k-header k-state-default" style="float:left;width:42%;">
+                                          <input type="text" class="k-input" placeholder="Search..." style="width: 100%;">
+                                          </span>
+                                        <span style="float:left; padding-left:5px"><input name="files" id="files" type="file" /></span>
+									
+                                        <!--comboBox end-->
+                                  </div>
+                                  <!--form-group end-->
+                                </form>
+							</div>
+							<!--search end -->
+          
+               </div>
+			  <!--첨부파일 row end--> 
+
+                </div>
+				<!--첨부파일 ibox-content end-->  
+                
+                
+					<!--기타 ibox-content2 -->
+					<div class="ibox-content2" >
+					<h3>기타</h3>
+					<!--기타 row--> 
+                    <div class="row">
+					 <!--기타 col-lg-12--> 
+					<div class="col-lg-12">
+								<!--panel blank-panel--> 
+                                <div class="panel blank-panel">
+                                	<!--panel-options-->
+                                    <div class="panel-options">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a href="#tab-05" data-toggle="tab">Comments</a></li>
+                                            <li class=""><a href="#tab-06" data-toggle="tab">Description</a></li>
+                                        </ul>
+                                    </div>
+                                	<!--panel-options-->
+								<!--panel-body-->
+                                <div class="panel-body">
+								<!--tab-tab-content-->
+                                <div class="tab-content">
+								<!--tab-05-->
+                                <div class="tab-pane active" id="tab-05">
+									<!--feed-activity-list-->
+                                    <div class="feed-activity-list">
+											
+                                        <div class="feed-element">
+                                            <a href="#" class="pull-left">
+                                                <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/a4.jpg">
+                                            </a>
+                                            <div class="media-body ">
+                                                <small class="pull-right">2h ago</small>
+                                                <h4>송신측 인터페이스 요건 추가 의견입니다.</h4> 기본 정보를 입력하고 Recommand 버튼을 클릭하면, 팝업창이 오픈되고 해당 요건에 맞는 연계 방식을 제시한다. Recommand 정보는 향후 결제 프로세스에서 참고 자료로 활용 될 수 있다. 송/수신 서비스명을 입력한다. 각각 멀티 입력이 가능하다. 기본 정보를 입력하고 Recommand 버튼을 클릭하면, 팝업창이 오픈되고 해당 요건에 맞는 연계 방식을 제시한다. Recommand 정보는 향후 결제 프로세스에서 참고 자료로 활용 될 수 있다. 송/수신 서비스명을 입력한다. 각각 멀티 입력이 가능하다.
+                                                
+                                            </div>
+                                        </div>
+
+
+                                        <div class="feed-element">
+                                            <a href="#" class="pull-left">
+                                                <img alt="image" class="img-circle" src="../../img/external/bootstrap-inspinia/a5.jpg">
+                                            </a>
+                                           <div class="media-body ">
+                                                <small class="pull-right">2h ago</small>
+                                                <h4>송신측 인터페이스 요건 추가 의견입니다.</h4> 기본 정보를 입력하고 Recommand 버튼을 클릭하면, 팝업창이 오픈되고 해당 요건에 맞는 연계 방식을 제시한다. Recommand 정보는 향후 결제 프로세스에서 참고 자료로 활용 될 수 있다. 송/수신 서비스명을 입력한다. 각각 멀티 입력이 가능하다. 기본 정보를 입력하고 Recommand 버튼을 클릭하면, 팝업창이 오픈되고 해당 요건에 맞는 연계 방식을 제시한다. Recommand 정보는 향후 결제 프로세스에서 참고 자료로 활용 될 수 있다. 송/수신 서비스명을 입력한다. 각각 멀티 입력이 가능하다.
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="feed-element">
+											<button type="button" class="btn btn-default btn-sm2" style=" float:right; margin-left:5px;">
+                                             <i class="fa fa-check"></i> Write message</button>
+                                          <div class="media-body"><textarea class="form-control" placeholder="Write comment..." ></textarea></div>
+                                        </div>
+                                        
+                                       
+                                       
+                                    </div>
+									<!--feed-activity-list end-->
+
+                                </div>
+								<!--tab-05 end-->
+								<!--tab-06-->
+                                <div class="tab-pane" id="tab-06">
+
+                                    <textarea id="editor" rows="5" cols="30" style="height:200px">
+
+                </textarea>
+
+                                </div>
+								<!--tab-06 end-->
+
+                                </div>
+								<!--tab-tab-content end-->
+                                </div>
+								<!--panel-body end-->
+                                </div>
+								<!--panel blank-panel end--> 
+                                </div>
+                    <!--기타 col-lg-12 end--> 
+                   
+					</div>
+					<!--기타 row end--> 
+					</div>	
+					<!--기타 ibox-content2 end-->
+
+                </div>
+				<!--부가정보ibox float-e-margins end-->
+            </div>
+			<!--부가정보 col-lg-12 end-->
+
+            </div>
+           <!--부가정보row end-->
+			
+			
+
+        </div>
+		<!--wrapper wrapper-content end-->
+
+
+			<!--location -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+              	<div class="col-lg-12">
+				<!--button-->
+                    <div class="title-action2">
+                    	<a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-desktop"></i> 심의 </a>
+                        <a href="invoice_print.html" target="_blank" class="btn btn-primary"><i class="fa fa-folder-o"></i> 결재 </a>		
+                        <a href="#" class="btn btn-white"><i class="fa fa-clock-o"></i> 히스토리 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-save"></i> 저장</a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-trash-o"></i> 삭제 </a>
+                        <a href="#" class="btn btn-white"><i class="fa fa-file-o"></i> 임시저장 </a>	
+                        <a href="#" class="btn btn-white"><i class="fa fa-file-text-o"></i> 목록 </a>
+                    </div>
+				<!--button end-->
+             	</div>
+            </div>
+			<!--location end-->
+
+
+		<!--footer-->
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2015
+            </div>
+        </div>
+		<!--footer end-->
+
+
+        </div>
+		<!--page-wrapper end-->
+
+</div>
+<!--wrapper end-->
+
+
+
+    
+	<script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+				$("#value").kendoDatePicker({
+                       
+                  });
+				$("#value2").kendoDatePicker({
+                     
+                  });
+				$("#value3").kendoDatePicker({
+                     
+                  });
+				$("#value4").kendoDatePicker({
+                     
+                  });
+				$("#value5").kendoDatePicker({
+                     
+                  });
+				$("#value6").kendoDatePicker({
+                     
+                  });
+
+			 	$("#fabric").kendoComboBox({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        dataSource: [
+                            { text: "Cotton", value: "1" },
+                            { text: "Polyester", value: "2" },
+                            { text: "Cotton/Polyester", value: "3" },
+                            { text: "Rib Knit", value: "4" }
+                        ],
+                        filter: "contains",
+                        suggest: true,
+                        index: 3
+                    });
+				var viewModel = kendo.observable({
+			        	isEnabled: true,
+			        	isVisible: true,
+			        	onSelect: function(e) {
+			            		var message = $.map(e.files, function(file) { return file.name; }).join(", ");
+			            		kendoConsole.log("event :: select (" + message + ")");
+			        	}
+			    	});
+    		kendo.bind($("#example"), viewModel);  
+				$("#files").kendoUpload();
+	
+	
+				$("#numeric").kendoNumericTextBox();
+				$("#numeric2").kendoNumericTextBox();	
+				$("#numeric3").kendoNumericTextBox();				
+				$("#editor").kendoEditor({ resizable: {
+										content: true,
+										toolbar: true
+									}});
+
+        });
+    </script>
+    
+
+
+</body>
+
+</html>

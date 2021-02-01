@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다. 
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605, 
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0601JobMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<delete id="deleteTSU0601">
+		delete from TSU0601
+		 where ST_DATE <![CDATA[>=]]> #{stDate} || '00'
+		   and ST_DATE <![CDATA[<=]]> #{stDate} || '24'
+	</delete>
+
+	<insert id="insertTSU0601">
+		insert into TSU0601 (
+			ST_DATE,
+			SYSTEM_ID,
+			MIN_CPU,
+			MAX_CPU,
+			AVG_CPU,
+			MIN_MEM,
+			MAX_MEM,
+			AVG_MEM
+		)
+		select
+			 substr(DATETIME,1,10) as ST_DATE
+			,IP 			 as SYSTEM_ID
+			,round(min(CPU)) as MIN_CPU
+			,round(max(CPU)) as MAX_CPU
+			,round(avg(CPU)) as AVG_CPU
+			,round(min(MEM)) as MIN_MEM
+			,round(max(MEM)) as MAX_MEM
+			,round(avg(MEM)) as AVG_MEM
+		 from DB_SYSTEM_LOG
+		where DATETIME <![CDATA[>=]]> #{stDate} ||'000000'
+		  and DATETIME <![CDATA[<=]]> #{stDate} ||'240000'
+		 group by substr(DATETIME,1,10), IP
+
+	</insert>
+	
+</mapper>

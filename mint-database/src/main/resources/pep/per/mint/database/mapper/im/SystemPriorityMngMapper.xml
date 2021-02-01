@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.SystemPriorityMngMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertSystemPriority">
+		insert into TIM0106 (
+		    SYSTEM_ID,
+		    PRIORITY,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) values (
+			#{systemId, jdbcType=VARCHAR},
+			#{priority, jdbcType=NUMERIC},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regUser, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+
+
+	<delete id="deleteSystemPriority">
+		DELETE FROM TIM0106
+	</delete>
+
+
+	<select id="getSystemPriorityList" parameterType="Map" resultMap="systemPriorityResultMap">
+		SELECT A.SYSTEM_ID as systemId,
+		B.SYSTEM_CD as systemCd,
+		B.SYSTEM_NM as systemNm ,
+		A.PRIORITY as priority
+		FROM TIM0106 A
+		INNER JOIN (SELECT SYSTEM_ID, SYSTEM_CD, SYSTEM_NM FROM TIM0101 WHERE DEL_YN='N') B ON B.SYSTEM_ID = A.SYSTEM_ID
+		WHERE A.DEL_YN ='N'
+		ORDER BY A.PRIORITY ASC
+	</select>
+
+
+
+	<resultMap  type="java.util.Map" id="systemPriorityResultMap">
+		<result property="systemId" 			column="systemId"/>
+		<result property="systemCd" 			column="systemCd"/>
+		<result property="systemNm" 			column="systemNm"/>
+		<result property="priority"			column="priority"/>
+	</resultMap>
+
+</mapper>

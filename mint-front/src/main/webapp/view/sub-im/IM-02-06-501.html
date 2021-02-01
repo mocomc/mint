@@ -1,0 +1,213 @@
+﻿<!--
+	Screen ID : IM-02-06-501
+	Screen NM : 인터페이스 비교내역 (NH 농협)
+-->
+<div class="modal inmodal" id="IM-02-06-501" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div id="popup-h2-title" class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+					<span aria-hidden="true">&times;</span> <span class="sr-only"><lb class="lb-488"></lb></span>
+				</button>
+				<div>
+					<h2><lb class="lb-488">비교</lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="ibox-content4">
+					<div class="panel blank-panel">
+						<div class="panel-body">
+							<div  class="full-height-scroll">
+								<div class="col-lg-6">
+									<div sytle="align:center">
+									   <h4> Repository <lb class="lb-225">비교</lb><lb class="template-repo-change"></lb></h4>
+									</div>
+<!-- 									<div id="IM-02-06-501-LIST-001"></div> -->
+									<textarea id="IM-02-06-501-LIST-001" rows="40" cols="50" style="resize:none"></textarea>
+								</div>
+
+								<div class="col-lg-6">
+									<div>
+										<h4>Deploy <lb class="lb-225">비교</lb><lb class="template-dep-change"></lb></h4>
+									</div>
+<!-- 									<div id="IM-02-06-501-LIST-002"></div> -->
+									<textarea id="IM-02-06-501-LIST-002" rows="40" cols="50" style="resize:none"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--modal-footer-->
+				<div class="modal-footer-original" style="clear: both">
+					<button class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+				</div>
+				<!--modal-footer END-->
+			</div>
+			<!--modal-content animated fadeIn END-->
+		</div>
+		<!-- modal-dialog END-->
+	</div>
+</div>
+
+<script>
+
+$(document).ready(function () {
+
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "IM-02-06-501";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			fontColor       : "#fff",
+			backgroundColor : "#f35800",
+
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					//인터페이스 검색 팝업은 일단 scroll 을 달지 말자..
+					mint.init('$.sub.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					$.sub.fn_getInterfaceCompare();
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: Grid DataSource return
+			//-----------------------------------------------------------------------
+			fn_getGridDataSource : function(gridId, jsonData) {
+				try {
+					var dataSource = null;
+
+					if( !mint.common.isEmpty(gridId) ) {
+						dataSource = new kendo.data.DataSource({
+							  data: jsonData
+						});
+					} else {
+						dataSource = new kendo.data.DataSource({
+							  data: jsonData
+						});
+					}
+
+					return dataSource;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getGridDataSource"});
+				}
+			},//end fn_getGridDataSource()
+
+
+
+			//-----------------------------------------------------------------------
+			// Description :: 조회 ( 요건 히스토리 조회 )
+			//-----------------------------------------------------------------------
+			fn_getInterfaceCompare : function() {
+				try {
+					var requestObject = new Object();
+					var selectedItem = mint.common.getScreenParam("jsonData");
+					mint.callService(selectedItem, 'IM-02-06-501', 'REST-R02-IM-02-06', '$.sub.fn_setInterfaceCompare',
+							{
+								errorCall : true,
+							}
+					);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getInterfaceCompare"});
+				}
+			},//end fn_getRequireHistory()
+
+			//-----------------------------------------------------------------------
+			// Description :: 조회 ( 요건 히스토리 조회 ) - 콜백
+			//-----------------------------------------------------------------------
+			fn_setInterfaceCompare : function(jsonData) {
+				try {
+					if( ! mint.common.isEmpty(jsonData) ) {
+
+						var content = "";
+						for (var property in jsonData.L1) {
+					    	var value = jsonData.L1[property];
+					        if (value)
+					        	content= content + value +"\n";
+					    }
+						var total_ta1 = document.getElementById('IM-02-06-501-LIST-001');
+						total_ta1.value = content;
+						$('.template-repo-change').text('('+jsonData.L1.length +')'+mint.label.getLabel('lb-64'));
+
+						content = "";
+						for (var property in jsonData.L2) {
+					    	var value = jsonData.L2[property];
+					        if (value)
+					        	content= content + value +"\n";
+					    }
+						var total_ta = document.getElementById('IM-02-06-501-LIST-002');
+						total_ta.value = content;
+
+
+						$('.template-dep-change').text('('+jsonData.L2.length +')'+mint.label.getLabel('lb-64'));
+
+					} else {
+
+						document.getElementById('IM-02-06-501-LIST-001').value ="";
+						document.getElementById('IM-02-06-501-LIST-002').value ="";
+						$('.template-repo-change').text('');
+						$('.template-dep-change').text('');
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setInterfaceCompare"});
+				}
+			},//end fn_setInterfaceCompare()
+
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>
+<style>
+.k-grid-content {
+	overflow-x : auto;
+}
+#IM-02-06-501 .k-listbox {
+    width: 400px;
+    height: 310px;
+}
+
+#IM-02-06-501 .k-listbox:first-of-type {
+    width: 400px;
+    margin-right: 1px;
+}
+</style>

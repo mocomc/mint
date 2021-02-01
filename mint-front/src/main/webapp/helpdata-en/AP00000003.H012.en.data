@@ -1,0 +1,33 @@
+AP00000003$$$H012$$$en$$$장애영향도$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Criticality<br></font><font size="2">
+</font><font size="2"><span style="mso-spacerun: yes;">&nbsp;</span><span style="mso-spacerun: yes;">&nbsp;</span></font><font size="2">Purpose
+of it is to prioritize according to effectiveness when interface error/failure
+occured<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">1. Severity<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; a. </font></span><font size="2">High level<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Higher priority interfaces that
+have lots of throughput<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* In the case of Interface A -&gt;
+Interface B -&gt; Interface C have mutual relation (nedded to manage interface
+groups)<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* a type needed to be took immediate
+actions like "finishing touches" on work-site<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; b. </font></span><font size="2">Middle level<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* default<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; c. </font></span><font size="2">Low level<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Interfaces that are batch-centered
+and have few occurrences <br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">2.
+Delay threshold<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* Enter "average treatment
+time" in IIP based on Interface transactional information every 3 months<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">3.
+Trouble threshold<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* The person in charge should
+enter this when needs max time of deferred processing interface<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">* An interface which is delayed over
+max time is regarded as an "Error" and becomes a target of reporting
+or "Error/Failure management"</font></span><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp;</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

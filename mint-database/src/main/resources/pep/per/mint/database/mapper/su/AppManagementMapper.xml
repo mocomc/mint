@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.AppManagementMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<select id="getMessages" resultMap="appMessageResultMap">
+
+		select
+			 LANG_ID
+			,MSG_ID
+			,MSG
+			,TAG
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		from TSU0217
+       where 1 = 1
+		<if test="langId != null">
+         and LANG_ID = #{langId}
+		</if>
+
+	</select>
+
+	<resultMap id="appMessageResultMap" type="AppMessage">
+		<id property="msgId" 				column="MSG_ID"/>
+		<id property="langId"				column="LANG_ID"/>
+		<result property="tag"				column="TAG"/>
+		<result property="msg"				column="MSG"/>
+		<result property="delYn"			column="DEL_YN"/>
+	</resultMap>
+
+
+</mapper>

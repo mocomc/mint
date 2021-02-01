@@ -1,0 +1,7 @@
+/*
+ * Copyright 2013 ~ 2014 Mocomsys(dhkim, whoana.j), Inc.  All Rights Reserved.
+ *
+ * Please contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605, 
+ * Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com 
+ * if you need additional information or have any questions.
+*/

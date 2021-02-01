@@ -1,0 +1,435 @@
+//==========================================================================================//
+// IIP에이전트 INSTALL & QUICK START          													//
+//------------------------------------------------------------------------------------------//
+// date   : 20180801                   														//
+// author : bill                     														//
+//------------------------------------------------------------------------------------------//
+1.IIP에이전트 INSTALL
+	1.1.설치파일을 내려받습니다.(*다운로드 위치는 아래 1.1.2항 참고)
+		1.1.1.현재는 SVN 또는 MPOWER에 공유되어 있다.(* 향후 배포위치는 IIP서버 배포파일에 포함 예정)
+		1.1.2.배포파일위치
+			SVN :
+				https://defect.mocomsys.com/svn/fiip/trunk/mint/mint-agent-boot/install/iipagent.zip
+			MOPOWER:
+				프로젝트/서비스사업부_TA팀/01.PRODUCT/02.IIP-AGENT/02.INSTALL_V3/iipagent.zip
+	1.2.내려받은 파일을 설치를 원하는 위치에 압축 해제한다.
+		1.2.1.설치 예
+			/home/iip/nhiip/agent/linux002/
+			> tar -zxvf iipagent.tar.gz
+
+				-rw-rw-r--. 1 iip iip    80 Jul 30 09:42 application.properties
+				-rw-rw-r--. 1 iip iip    13 Jul 30 09:42 banner.txt
+				drwxrwxr-x. 2 iip iip  4096 Aug  1 11:19 bin
+				drwxrwxr-x. 3 iip iip  4096 Jul 30 14:09 classes
+				drwxrwxr-x. 2 iip iip  4096 Jul 30 13:22 lib
+				drwxrwxr-x. 2 iip iip  4096 Jul 30 13:53 log
+				-rw-rw-r--. 1 iip iip  3975 Aug  1 11:18 logback.xml
+				-rw-rw-r--. 1 iip iip 23738 Aug  1 11:06 mint-agent-boot-0.0.1-SNAPSHOT.jar
+				drwxrwxr-x. 2 iip iip  4096 Jul 30 14:05 repository
+		1.2.2.설치된 위치 내의 내용은 아래와 같은 디렉토리및 파일로 구성되어 있다.
+			bin:에이전트 실행 쉘파일 위치
+				-rwxr-xr-x. 1 iip iip 416 Aug  1 10:54 mng.sh
+				-rwxr-xr-x. 1 iip iip 710 Aug  1 10:56 setenv.sh
+				-rw-rw-r--. 1 iip iip 866 Jul 30 13:11 str.bat
+				-rwxr-xr-x. 1 iip iip 867 Jul 30 13:53 str.sh
+			classes:클래스 및 리소스 파일 위치
+				drwxr-xr-x  5 whoana  staff   170  4 25 14:03 config
+				config:에이전트 프로퍼티 설정파일 위치
+					-rw-rw-r--. 1 iip iip 5174 Aug  1 11:07 agent-context.xml
+					-rw-rw-r--. 1 iip iip  976 Jul 30 16:00 agent.properties
+					-rw-rw-r--. 1 iip iip  565 Aug  1 11:07 ext-context.xml
+					-rw-rw-r--. 1 iip iip  565 Aug  1 11:07 SiteInfo.json
+			lib:라이브러리 파일 위치
+				-rw-rw-r--. 1 iip iip   80693 Jul 30 09:42 accessors-smart-1.1.jar
+				-rw-rw-r--. 1 iip iip   18279 Jul 30 09:42 android-json-0.0.20131108.vaadin1.jar
+				-rw-rw-r--. 1 iip iip   53231 Jul 30 09:42 asm-5.0.3.jar
+				-rw-rw-r--. 1 iip iip  118753 Jul 30 09:42 aspectjrt-1.8.13.jar
+				-rw-rw-r--. 1 iip iip  979294 Jul 30 09:42 assertj-core-2.6.0.jar
+				-rw-rw-r--. 1 iip iip   65100 Jul 30 09:42 classmate-1.3.4.jar
+				-rw-rw-r--. 1 iip iip  284184 Jul 30 09:42 commons-codec-1.10.jar
+				-rw-rw-r--. 1 iip iip  185140 Jul 30 09:42 commons-io-2.4.jar
+				-rw-rw-r--. 1 iip iip  315805 Jul 30 09:42 commons-lang3-3.1.jar
+				-rw-rw-r--. 1 iip iip   45024 Jul 30 09:42 hamcrest-core-1.3.jar
+				-rw-rw-r--. 1 iip iip   53070 Jul 30 09:42 hamcrest-library-1.3.jar
+				-rw-rw-r--. 1 iip iip  726778 Jul 30 09:42 hibernate-validator-5.3.6.Final.jar
+				-rw-rw-r--. 1 iip iip  235018 Jul 30 09:42 iLink-lib-20160801.jar
+				-rw-rw-r--. 1 iip iip   55786 Jul 30 09:42 jackson-annotations-2.8.11.jar
+				-rw-rw-r--. 1 iip iip  282633 Jul 30 09:42 jackson-core-2.8.11.jar
+				-rw-rw-r--. 1 iip iip 1247013 Jul 30 09:42 jackson-databind-2.8.11.jar
+				-rw-rw-r--. 1 iip iip   66469 Jul 30 09:42 jboss-logging-3.3.2.Final.jar
+				-rw-rw-r--. 1 iip iip   16515 Jul 30 09:42 jcl-over-slf4j-1.7.25.jar
+				-rw-rw-r--. 1 iip iip   18444 Jul 30 09:42 jPowerShell-1.9.jar
+				-rw-rw-r--. 1 iip iip   24866 Jul 30 09:42 jProcesses-1.6.4.jar
+				-rw-rw-r--. 1 iip iip   29078 Jul 30 09:42 jsonassert-1.4.0.jar
+				-rw-rw-r--. 1 iip iip  207058 Jul 30 09:42 json-path-2.2.0.jar
+				-rw-rw-r--. 1 iip iip  120501 Jul 30 09:42 json-smart-2.2.1.jar
+				-rw-rw-r--. 1 iip iip    4596 Jul 30 09:42 jul-to-slf4j-1.7.25.jar
+				-rw-rw-r--. 1 iip iip  314932 Jul 30 09:42 junit-4.12.jar
+				-rw-rw-r--. 1 iip iip  481535 Jul 30 09:42 log4j-1.2.16.jar
+				-rw-rw-r--. 1 iip iip   23645 Jul 30 09:42 log4j-over-slf4j-1.7.25.jar
+				-rw-rw-r--. 1 iip iip  309130 Jul 30 09:42 logback-classic-1.1.11.jar
+				-rw-rw-r--. 1 iip iip  475477 Jul 30 09:42 logback-core-1.1.11.jar
+				-rw-rw-r--. 1 iip iip  508632 Jul 30 09:42 mint-common-3.0.0.jar
+				-rw-rw-r--. 1 iip iip 1172979 Jul 30 09:42 mockito-core-1.10.19.jar
+				-rw-rw-r--. 1 iip iip   41755 Jul 30 09:42 objenesis-2.1.jar
+				-rw-rw-r--. 1 iip iip   41203 Jul 30 09:42 slf4j-api-1.7.25.jar
+				-rw-rw-r--. 1 iip iip  273599 Jul 30 09:42 snakeyaml-1.17.jar
+				-rw-rw-r--. 1 iip iip  380249 Jul 30 09:42 spring-aop-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  763402 Jul 30 09:42 spring-beans-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  677684 Jul 30 09:42 spring-boot-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip 1071570 Jul 30 09:42 spring-boot-autoconfigure-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip    2292 Jul 30 09:42 spring-boot-starter-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip    2312 Jul 30 09:42 spring-boot-starter-logging-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip    2668 Jul 30 09:42 spring-boot-starter-test-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip    2296 Jul 30 09:42 spring-boot-starter-tomcat-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip    2348 Jul 30 09:42 spring-boot-starter-web-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  148968 Jul 30 09:42 spring-boot-test-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  122891 Jul 30 09:42 spring-boot-test-autoconfigure-1.5.13.RELEASE.jar
+				-rw-rw-r--. 1 iip iip 1142201 Jul 30 09:42 spring-context-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  187067 Jul 30 09:42 spring-context-support-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip 1131063 Jul 30 09:42 spring-core-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  274801 Jul 30 09:42 spring-expression-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  430997 Jul 30 09:42 spring-jdbc-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  388336 Jul 30 09:42 spring-messaging-4.3.15.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  478158 Jul 30 09:42 spring-orm-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  604150 Jul 30 09:42 spring-test-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  268011 Jul 30 09:42 spring-tx-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  827802 Jul 30 09:42 spring-web-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  919032 Jul 30 09:42 spring-webmvc-4.3.17.RELEASE.jar
+				-rw-rw-r--. 1 iip iip  456437 Jul 30 09:42 spring-websocket-4.3.15.RELEASE.jar
+				-rw-rw-r--. 1 iip iip   12402 Jul 30 09:42 tomcat-annotations-api-8.5.31.jar
+				-rw-rw-r--. 1 iip iip 3115994 Jul 30 09:42 tomcat-embed-core-8.5.31.jar
+				-rw-rw-r--. 1 iip iip  240244 Jul 30 09:42 tomcat-embed-el-8.5.31.jar
+				-rw-rw-r--. 1 iip iip  256776 Jul 30 09:42 tomcat-embed-websocket-8.5.31.jar
+				-rw-rw-r--. 1 iip iip   63777 Jul 30 09:42 validation-api-1.1.0.Final.jar
+				-rw-rw-r--. 1 iip iip   54626 Jul 30 09:42 WMI4Java-1.6.1.jar
+				-rw-rw-r--. 1 iip iip  784989 Jul 30 09:42 wmq-commonservices-7.5.jar
+				-rw-rw-r--. 1 iip iip   17978 Jul 30 09:42 wmq-connector-7.5.jar
+				-rw-rw-r--. 1 iip iip  271143 Jul 30 09:42 wmq-headers-7.5.jar
+				-rw-rw-r--. 1 iip iip 2778428 Jul 30 09:42 wmq-jmqi-7.5.jar
+				-rw-rw-r--. 1 iip iip  430254 Jul 30 09:42 wmq-mq-7.5.jar
+				-rw-rw-r--. 1 iip iip   88388 Jul 30 09:42 wmq-pcf-7.5.jar
+				-rw-rw-r--. 1 iip iip 1367760 Jul 30 09:42 xercesImpl-2.11.0.jar
+				-rw-rw-r--. 1 iip iip  220536 Jul 30 09:42 xml-apis-1.4.01.jar
+			deploy:IIP WAS 서버위치에 배포될 에이전트 비지니스 처리 라이브러리
+				-rw-r--r--  1 whoana  staff   22  4 25 14:01 library.list
+				drwxr-xr-x  3 whoana  staff  102  4 25 14:01 lib
+				drwxr-xr-x  5 whoana  staff  170  4 25 14:01 classes
+
+2.구성
+	2.1.에이전트 프로퍼티파일을 수정한다.
+		2.1.1.설치위치 내의 에이전트 프로퍼티파일을 텍스트편집기로 OPEN한다.(${IIPAGENT_HOME}/classes/config/agent.properties)
+		2.1.2.내용 중 아래에 주석 마크한 (1)~(6) 부분을 설치 호스트 환경에 맞게 변경해 준다.
+			  주석표시가 되어 있지 않은 항목은 변경이 필요없다.
+			#=====================================================
+			#IIP AGENT PROPERTIES DEFINITION
+			#----------------------------------------------------
+			iip.agent.cd=NH_LUX_001										#(1)<--에이전트 코드 변경(IIP서버에 등록된 값으로 변경)
+			iip.agent.nm=NH_LUX_001										#(2)<--에이전트 명 변경(IIP서버에 등록된 값으로 변경)
+			iip.agent.home=/home/iip/nhiip/agent/linux001/iipagent		#(3)<--에이전트 설치 위치 변경(설치 호스트 환경에 맞게 변경)
+			iip.agent.repository.path=${iip.agent.home}/repository
+			iip.agent.console.ip=localhost
+			iip.agent.console.port=4885									#(4)<--application.properties에서 지정한 server.port 값 동일하게 지정
+			iip.agent.console.path=/console
+			iip.agent.charset=UTF-8
+			iip.server.websocket.protocol=ws
+			#for local test
+			#------------------------------
+			#iip.server.websocket.ip=localhost
+			#iip.server.websocket.port=8082
+			#------------------------------
+			#for server test
+			#------------------------------
+			iip.server.ip=nh.eai.co.kr									#(5)<--에이전트가 접속할 IIP서버 주소값으로 변경해준다.
+			iip.server.port=38080										#(6)<--에이전트가 접속할 IIP서버 포트값으로 변경해준다.
+			iip.server.websocket.contextroot=mint
+			iip.server.websocket.agentpath=push
+			iip.server.websocket.websocketUrl=/agent
+
+
+			#------------------------------
+			#IIP server library dowonload
+			#------------------------------
+			iip.server.protocol=http
+			iip.server.ip=nh.eai.co.kr									#(7)<--에이전트가 접속할 IIP서버 주소값으로 변경해준다.
+			iip.server.port=38080										#(8)<--에이전트가 접속할 IIP서버 포트값으로 변경해준다.
+			iip.server.contextroot=mint
+			iip.server.agentpath=agent
+
+
+	2.2.에이전트 실행 및 종료를 위한 쉘실행환경파일을 수정한다.
+		2.2.1.설치위치 내의 쉘실행환경팡리을 테스트 편집기로 OPEN한다.(${IIPAGENT_HOME}/bin/setenv.sh)
+		      내용 중 아래에 주석 마크한 (1)~(2) 부분을 설치 호스트 환경에 맞게 변경해 준다.
+			  주석표시가 되어 있지 않은 항목은 변경이 필요없다.
+			# ------------------
+			# iip_agent_home
+			# ------------------
+			export IIPAGENT_HOME=/home/iip/nhiip/agent/linux001/iipagent				#(1)<--에이전트 설치 위치를 현재 호스트에 맞게 변경해 준다.
+			# ------------------
+			# java_home
+			# ------------------
+			export JAVA_HOME=/opt/jdk1.8.0_161											#(2)<--JAVA HOME을 현재 호스트에 맞게 설정해 준다.(자바버전 1.7이상)
+			# ------------------
+			# memory option
+			# ------------------
+			export JAVA_OPTS="-Xms64m -Xmx128m"
+			# ------------------
+			# sigar lib option
+			# ------------------
+			export CMD_OPTS="-Dfile.encoding=utf-8 -DIIPAGENT_HOME=${IIPAGENT_HOME}"
+			# ------------------
+			# export classpath
+			# ------------------
+			export CLASSPATH=.:${IIPAGENT_HOME}/classes
+			export CLASSPATH=${CLASSPATH}:${IIPAGENT_HOME}/mint-agent-boot-0.0.1-SNAPSHOT.jar
+		2.2.3.설치위치 내의 에이전트 시작 쉘을 테스트 편집기로 OPEN한다.(${IIPAGENT_HOME}/bin/str.sh)
+		      내용 중 아래에 주석 마크한 (1) 부분을 설치 호스트 환경에 맞게 변경해 준다.
+			# ------------------
+			# iip_agent_home
+			# ------------------
+			export IIPAGENT_HOME=/home/iip/nhiip/agent/linux001/iipagent #(1)<----------------에이전트 설치 위치를 현재 호스트에 맞게 변경해 준다.
+		2.2.4.설치위치 내의 에이전트 관리명령 쉘을 테스트 편집기로 OPEN한다.(${IIPAGENT_HOME}/bin/mng.sh)
+		      내용 중 아래에 주석 마크한 (1) 부분을 설치 호스트 환경에 맞게 변경해 준다.
+			# ------------------
+			# iip_agent_home
+			# ------------------
+			export IIPAGENT_HOME=/home/iip/nhiip/agent/linux001/iipagent #(1)<----------------에이전트 설치 위치를 현재 호스트에 맞게 변경해 준다.
+	2.3.IIP에이전트 비지니스 라이브러리 재배포하기
+
+	2.4.에이전트 실행해보기
+		2.4.1.아래와 같이 포그라운드 모드로 에이전트를 실행해 본다.
+			${IIPAGENT_HOME}/bin/str.sh -f
+
+			  (*실행하기 전 ls {IIPAGENT_HOME}/bin 으로 실행 쉘들의 실행권한을 체크해 본다. 실행권한이 없다면 아래 명령으로 실행 권한을 추가한다.)
+			    chmod +x ${IIPAGENT_HOME}/bin/*.sh
+
+			  콘솔 로그에 문제없이 수행 되었는지 확인한다.
+			  정상 실행 예) "명령 결과 처리 실행 실행 OK" 라는 문장을 확인하면 되다.
+
+			 =========== console 화면 ============================================================
+			forground start...
+			ClassPath Add[/home/iip/nhiip/agent/linux001/iipagent/]
+			spring-context-support-4.3.17.RELEASE.jar is loaded.
+			commons-io-2.4.jar is loaded.
+			json-path-2.2.0.jar is loaded.
+			jsonassert-1.4.0.jar is loaded.
+			json-smart-2.2.1.jar is loaded.
+			hamcrest-library-1.3.jar is loaded.
+			assertj-core-2.6.0.jar is loaded.
+			spring-beans-4.3.17.RELEASE.jar is loaded.
+			android-json-0.0.20131108.vaadin1.jar is loaded.
+			tomcat-embed-core-8.5.31.jar is loaded.
+			tomcat-annotations-api-8.5.31.jar is loaded.
+			slf4j-api-1.7.25.jar is loaded.
+			wmq-mq-7.5.jar is loaded.
+			xercesImpl-2.11.0.jar is loaded.
+			spring-boot-starter-web-1.5.13.RELEASE.jar is loaded.
+			WMI4Java-1.6.1.jar is loaded.
+			spring-context-4.3.17.RELEASE.jar is loaded.
+			wmq-connector-7.5.jar is loaded.
+			spring-boot-autoconfigure-1.5.13.RELEASE.jar is loaded.
+			tomcat-embed-websocket-8.5.31.jar is loaded.
+			jPowerShell-1.9.jar is loaded.
+			spring-websocket-4.3.15.RELEASE.jar is loaded.
+			junit-4.12.jar is loaded.
+			tomcat-embed-el-8.5.31.jar is loaded.
+			spring-boot-starter-test-1.5.13.RELEASE.jar is loaded.
+			jackson-core-2.8.11.jar is loaded.
+			spring-boot-1.5.13.RELEASE.jar is loaded.
+			hibernate-validator-5.3.6.Final.jar is loaded.
+			accessors-smart-1.1.jar is loaded.
+			spring-aop-4.3.17.RELEASE.jar is loaded.
+			logback-core-1.1.11.jar is loaded.
+			jackson-annotations-2.8.11.jar is loaded.
+			asm-5.0.3.jar is loaded.
+			jackson-databind-2.8.11.jar is loaded.
+			snakeyaml-1.17.jar is loaded.
+			spring-boot-starter-tomcat-1.5.13.RELEASE.jar is loaded.
+			spring-orm-4.3.17.RELEASE.jar is loaded.
+			jcl-over-slf4j-1.7.25.jar is loaded.
+			xml-apis-1.4.01.jar is loaded.
+			spring-core-4.3.17.RELEASE.jar is loaded.
+			spring-expression-4.3.17.RELEASE.jar is loaded.
+			wmq-pcf-7.5.jar is loaded.
+			spring-boot-test-autoconfigure-1.5.13.RELEASE.jar is loaded.
+			jProcesses-1.6.4.jar is loaded.
+			log4j-over-slf4j-1.7.25.jar is loaded.
+			objenesis-2.1.jar is loaded.
+			jul-to-slf4j-1.7.25.jar is loaded.
+			spring-boot-starter-1.5.13.RELEASE.jar is loaded.
+			spring-web-4.3.17.RELEASE.jar is loaded.
+			log4j-1.2.16.jar is loaded.
+			spring-test-4.3.17.RELEASE.jar is loaded.
+			wmq-jmqi-7.5.jar is loaded.
+			commons-codec-1.10.jar is loaded.
+			spring-messaging-4.3.15.RELEASE.jar is loaded.
+			spring-boot-starter-logging-1.5.13.RELEASE.jar is loaded.
+			aspectjrt-1.8.13.jar is loaded.
+			mockito-core-1.10.19.jar is loaded.
+			jboss-logging-3.3.2.Final.jar is loaded.
+			hamcrest-core-1.3.jar is loaded.
+			spring-webmvc-4.3.17.RELEASE.jar is loaded.
+			logback-classic-1.1.11.jar is loaded.
+			classmate-1.3.4.jar is loaded.
+			spring-tx-4.3.17.RELEASE.jar is loaded.
+			wmq-headers-7.5.jar is loaded.
+			spring-boot-test-1.5.13.RELEASE.jar is loaded.
+			validation-api-1.1.0.Final.jar is loaded.
+			commons-lang3-3.1.jar is loaded.
+			mint-common-3.0.0.jar is loaded.
+			wmq-commonservices-7.5.jar is loaded.
+			iLink-lib-20160801.jar is loaded.
+			spring-jdbc-4.3.17.RELEASE.jar is loaded.
+			-- listing properties --
+			iip.server.contextroot=mint
+			iip.agent.nm=NH_LUX_001
+			iip.agent.console.ip=localhost
+			iip.server.websocket.ip=10.10.9.160
+			iip.server.port=8082
+			iip.server.websocket.agentpath=push
+			iip.agent.repository.path=/home/iip/nhiip/agent/linux001/iipage...
+			iip.server.protocol=http
+			iip.agent.cd=NH_LUX_001
+			iip.server.ip=10.10.9.160
+			iip.agent.console.port=4885
+			iip.server.websocket.protocol=ws
+			iip.server.websocket.contextroot=mint
+			iip.agent.console.path=/console
+			iip.server.websocket.port=8082
+			iip.agent.charset=UTF-8
+			iip.server.websocket.websocketUrl=/agent
+			iip.agent.home=/home/iip/nhiip/agent/linux001/iipagent
+			iip.server.agentpath=agent
+			12:54:35,652 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+			12:54:35,652 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+			12:54:35,652 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/home/iip/nhiip/agent/linux001/iipagent/logback.xml]
+			12:54:36,371 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+			12:54:36,447 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - Will scan for changes in [file:/home/iip/nhiip/agent/linux001/iipagent/logback.xml]
+			12:54:36,447 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - Setting ReconfigureOnChangeTask scanning period to 30 seconds
+			12:54:36,471 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+			12:54:36,483 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+			12:54:36,923 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+			12:54:36,923 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+			12:54:36,923 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+			12:54:36,925 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.rolling.RollingFileAppender]
+			12:54:36,934 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [daily-file]
+			12:54:36,948 |-INFO in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@4e1d422d - No compression will be used
+			12:54:36,948 |-WARN in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@4e1d422d - Large window sizes are not allowed.
+			12:54:36,948 |-WARN in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@4e1d422d - MaxIndex reduced to 21
+			12:54:36,955 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+			12:54:36,958 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[daily-file] - Active log file name: /home/iip/nhiip/agent/linux001/iipagent//log//iipagent.log
+			12:54:36,958 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[daily-file] - File property is set to [/home/iip/nhiip/agent/linux001/iipagent//log//iipagent.log]
+			12:54:36,959 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.rolling.RollingFileAppender]
+			12:54:36,959 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [MSG]
+			12:54:36,961 |-INFO in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@66480dd7 - No compression will be used
+			12:54:36,961 |-WARN in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@66480dd7 - Large window sizes are not allowed.
+			12:54:36,961 |-WARN in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@66480dd7 - MaxIndex reduced to 21
+			12:54:36,962 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+			12:54:36,963 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[MSG] - Active log file name: /home/iip/nhiip/agent/linux001/iipagent//log//iipagent_msg.log
+			12:54:36,963 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[MSG] - File property is set to [/home/iip/nhiip/agent/linux001/iipagent//log//iipagent_msg.log]
+			12:54:36,963 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.rolling.RollingFileAppender]
+			12:54:36,963 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [error-log]
+			12:54:36,965 |-INFO in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@52a86356 - No compression will be used
+			12:54:36,965 |-WARN in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@52a86356 - Large window sizes are not allowed.
+			12:54:36,965 |-WARN in ch.qos.logback.core.rolling.FixedWindowRollingPolicy@52a86356 - MaxIndex reduced to 21
+			12:54:36,966 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+			12:54:36,967 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[error-log] - Active log file name: /home/iip/nhiip/agent/linux001/iipagent//log//iipagent_err.log
+			12:54:36,967 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[error-log] - File property is set to [/home/iip/nhiip/agent/linux001/iipagent//log//iipagent_err.log]
+			12:54:36,968 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - pep.per.mint level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - pep.per.mint.agent level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - pep.per.mint.common level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.springframework.core level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.springframework.beans level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.springframework.context level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.springframework.web level set to DEBUG
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [pep.per.mint.agent.ws.client.handler] to false
+			12:54:36,969 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - pep.per.mint.agent.ws.client.handler level set to DEBUG
+			12:54:36,970 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [MSG] to Logger[pep.per.mint.agent.ws.client.handler]
+			12:54:36,971 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
+			12:54:36,971 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [daily-file] to Logger[ROOT]
+			12:54:36,971 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [error-log] to Logger[ROOT]
+			12:54:36,971 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+			12:54:36,972 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5ce81285 - Registering current configuration as safe fallback point
+
+			IIP Agent 3.0
+			-- listing properties --
+			iip.server.contextroot=mint
+			iip.agent.nm=NH_LUX_001
+			iip.agent.console.ip=localhost
+			iip.server.websocket.ip=10.10.9.160
+			iip.server.port=8082
+			iip.server.websocket.agentpath=push
+			iip.agent.repository.path=/home/iip/nhiip/agent/linux001/iipage...
+			iip.server.protocol=http
+			iip.agent.cd=NH_LUX_001
+			iip.server.ip=10.10.9.160
+			iip.agent.console.port=4885
+			iip.server.websocket.protocol=ws
+			iip.server.websocket.contextroot=mint
+			iip.agent.console.path=/console
+			iip.server.websocket.port=8082
+			iip.agent.charset=UTF-8
+			iip.server.websocket.websocketUrl=/agent
+			iip.agent.home=/home/iip/nhiip/agent/linux001/iipagent
+			iip.server.agentpath=agent
+
+			================================iipagent.log===================================================
+
+			12:56:31.196 DEBUG  6183 [                main]  o.s.b.f.s.AbstractBeanFactory: 251 - Returning cached instance of singleton bean 'org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor'
+			12:56:31.196 DEBUG  6183 [                main]  o.s.b.f.s.AbstractBeanFactory: 251 - Returning cached instance of singleton bean 'mvcResourceUrlProvider'
+			12:56:31.196 DEBUG  6183 [                main] ropertySourcesPropertyResolver:  92 - Could not find key 'spring.liveBeansView.mbeanDomain' in any property source
+			12:56:31.199 DEBUG  6183 [                main]  o.s.b.f.s.AbstractBeanFactory: 251 - Returning cached instance of singleton bean 'agentController'
+			12:56:31.199 DEBUG  6183 [                main]  o.s.b.f.s.AbstractBeanFactory: 251 - Returning cached instance of singleton bean 'queueListener'
+			12:56:31.200  INFO  6183 [                main]               p.p.m.a.IIPAgent: 118 - //--------------------------------------------
+			12:56:31.201  INFO  6183 [                main]               p.p.m.a.IIPAgent: 119 - //        IIP AGENT(Version.3.0.0-180703.1) STARTED!
+			12:56:31.201  INFO  6183 [                main]               p.p.m.a.IIPAgent: 120 - //--------------------------------------------
+			12:56:31.201  INFO  6183 [                main]          p.p.m.a.AgentLauncher: 303 - //--------------------------------------------
+			12:56:31.201  INFO  6183 [                main]          p.p.m.a.AgentLauncher: 304 - // IIP AGENT 실행 OK!
+			12:56:31.201  INFO  6183 [                main]          p.p.m.a.AgentLauncher: 305 - //--------------------------------------------
+			12:56:31.201  INFO  6183 [                main]          p.p.m.a.AgentLauncher: 308 - //--------------------------------------------
+			12:56:31.201  INFO  6183 [                main]          p.p.m.a.AgentLauncher: 309 - // IIP AGENT LAUNCHER 실행 OK!
+			12:56:31.201  INFO  6183 [                main]          p.p.m.a.AgentLauncher: 310 - //--------------------------------------------
+			12:56:31.203  INFO  6183 [            Thread-5]    p.p.m.a.e.QueueListenerImpl: 101 - [0]ea Messsage Clear start!!
+			12:56:31.204  INFO  6183 [            Thread-5]    p.p.m.a.e.QueueListenerImpl: 103 - [0]ea Messsage Clear end!!
+			12:56:31.204 DEBUG  6183 [            Thread-5]    p.p.m.a.e.QueueListenerImpl: 116 - login URL [ws://10.10.9.160:8082/mint/push//agent]
+			12:56:31.517  INFO  6183 [            Thread-5] w.s.c.ConnectionManagerSupport: 117 - Starting WebSocketConnectionManager
+			12:56:31.517  INFO  6183 [            Thread-5] s.c.WebSocketConnectionManager: 133 - Connecting to WebSocket at ws://10.10.9.160:8082/mint/push/agent
+			12:56:31.517 DEBUG  6183 [            Thread-5] .w.s.c.AbstractWebSocketClient:  81 - Connecting to ws://10.10.9.160:8082/mint/push/agent
+			12:56:31.771 DEBUG  6183 [eAsyncTaskExecutor-1] ggingWebSocketHandlerDecorator:  46 - New StandardWebSocketSession[id=0, uri=null]
+			12:56:32.099  INFO  6183 [eAsyncTaskExecutor-1] c.WebSocketConnectionManager$1: 143 - Successfully connected
+			12:56:32.194 DEBUG  6183 [anagementScheduler-1]      p.p.m.a.c.AgentController: 458 - IIPAgent have not collected qmgr logs since It have no qmgrs list
+			12:56:32.195 DEBUG  6183 [anagementScheduler-1]      p.p.m.a.c.AgentController: 241 - IIPAgent have not collected CPU resource logs since It have no resource list
+			12:56:32.195 DEBUG  6183 [anagementScheduler-1]      p.p.m.a.c.AgentController: 297 - IIPAgent have not collected Memory resource logs since It have no resource list
+			12:56:32.195 DEBUG  6183 [anagementScheduler-1]      p.p.m.a.c.AgentController: 351 - IIPAgent have not collected Disk resource logs since It have no resource list
+			12:56:32.196 DEBUG  6183 [anagementScheduler-1]      p.p.m.a.c.AgentController: 405 - IIPAgent have not collected process logs since It have no process list
+			12:56:32.750 DEBUG  6183 [cketClient-AsyncIO-1]      p.p.m.a.c.AgentController: 152 - IIPAgent:NH_LUX_001 init...[0][1]
+			12:56:32.789 DEBUG  6183 [cketClient-AsyncIO-1]      p.p.m.a.c.AgentController: 175 - agentInfo:{"objectType":"IIPAgentInfo","objectType":"IIPAgentInfo","agentId":"AG00000003","type":"0","logDelay":30,"server":{"objectType":"Server","objectType":"Server","userTypeNm":"","relUser":[],"serverId":"SV00000024","serverNm":"강원도-철원군_서버1","serverCd":"C007_SVR1","hostNm":"","useType":"","useTypeNm":"","ip":"","redundancyYn":"","hwInstPosition":"","os":"","firewallYn":"","zoneInfo":null,"areaInput":"","comments":"","delYn":"N","regDate":"","regId":"","modDate":"","modId":"","seq":0,"relUsers":[]},"monitorItems":[{"objectType":"MonitorItem","objectType":"MonitorItem","itemId":"","itemType":"0","seq":0,"resources":[{"objectType":"ResourceInfo","objectType":"ResourceInfo","serverId":"SV00000024","resourceId":"SR00000004","resourceName":"CPU","type":"0","typeNm":"CPU","limit":"20","info1":"","info2":"","info3":"","status":"","comments":"","regDate":"","regId":"","modDate":"","modId":""},{"objectType":"ResourceInfo","objectType":"ResourceInfo","serverId":"SV00000024","resourceId":"SR00000005","resourceName":"MEMORY","type":"1","typeNm":"MEMORY","limit":"30","info1":"","info2":"","info3":"","status":"","comments":"","regDate":"","regId":"","modDate":"","modId":""},{"objectType":"ResourceInfo","objectType":"ResourceInfo","serverId":"SV00000024","resourceId":"SR00000006","resourceName":"DISK","type":"2","typeNm":"DISK","limit":"40","info1":"/home/iip","info2":"","info3":"","status":"","comments":"","regDate":"","regId":"","modDate":"","modId":""}],"processes":null,"qmgrs":null,"qmgrInfoMap":{}},{"objectType":"MonitorItem","objectType":"MonitorItem","itemId":"","itemType":"1","seq":0,"resources":null,"processes":[{"objectType":"ProcessInfo","objectType":"ProcessInfo","processId":"SP00000002","processNm":"IIPAgent","displayNm":"AGENT","checkValue":"ex","checkCount":1,"status":"","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}],"qmgrs":null,"qmgrInfoMap":{}},{"objectType":"MonitorItem","objectType":"MonitorItem","itemId":"","itemType":"2","seq":0,"resources":null,"processes":null,"qmgrs":[{"objectType":"QmgrInfo","objectType":"QmgrInfo","qmgrId":"QM00000002","qmgrNm":"TESTQM","type":"1","typeNm":"MQ","ip":"10.10.1.168","port":"1415","status":"0","channels":[{"objectType":"ChannelInfo","objectType":"ChannelInfo","qmgrId":"","channelId":"QC00000003","serverId":"","channelNm":"TEST.SND.CH","type":"3","typeNm":"송신채널(MQ)","xqName":"TEST.TQ","status":"9","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}],"queues":[{"objectType":"QueueInfo","objectType":"QueueInfo","qmgrId":"","queueId":"QU00000003","serverId":"","type":"0","typeNm":"로컬큐","queueNm":"TEST.LQ","limit":"1","limitOpt":"0","limitOptNm":"값","depth":0,"status":"","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}],"channelMap":{"QC00000003":{"objectType":"ChannelInfo","objectType":"ChannelInfo","qmgrId":"","channelId":"QC00000003","serverId":"","channelNm":"TEST.SND.CH","type":"3","typeNm":"송신채널(MQ)","xqName":"TEST.TQ","status":"9","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}},"queueMap":{"QU00000003":{"objectType":"QueueInfo","objectType":"QueueInfo","qmgrId":"","queueId":"QU00000003","serverId":"","type":"0","typeNm":"로컬큐","queueNm":"TEST.LQ","limit":"1","limitOpt":"0","limitOptNm":"값","depth":0,"status":"","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}},"comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}],"qmgrInfoMap":{"QM00000002":{"objectType":"QmgrInfo","objectType":"QmgrInfo","qmgrId":"QM00000002","qmgrNm":"TESTQM","type":"1","typeNm":"MQ","ip":"10.10.1.168","port":"1415","status":"0","channels":[{"objectType":"ChannelInfo","objectType":"ChannelInfo","qmgrId":"","channelId":"QC00000003","serverId":"","channelNm":"TEST.SND.CH","type":"3","typeNm":"송신채널(MQ)","xqName":"TEST.TQ","status":"9","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}],"queues":[{"objectType":"QueueInfo","objectType":"QueueInfo","qmgrId":"","queueId":"QU00000003","serverId":"","type":"0","typeNm":"로컬큐","queueNm":"TEST.LQ","limit":"1","limitOpt":"0","limitOptNm":"값","depth":0,"status":"","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}],"channelMap":{"QC00000003":{"objectType":"ChannelInfo","objectType":"ChannelInfo","qmgrId":"","channelId":"QC00000003","serverId":"","channelNm":"TEST.SND.CH","type":"3","typeNm":"송신채널(MQ)","xqName":"TEST.TQ","status":"9","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}},"queueMap":{"QU00000003":{"objectType":"QueueInfo","objectType":"QueueInfo","qmgrId":"","queueId":"QU00000003","serverId":"","type":"0","typeNm":"로컬큐","queueNm":"TEST.LQ","limit":"1","limitOpt":"0","limitOptNm":"값","depth":0,"status":"","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}},"comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}}}],"agentServiceMap":null,"agentCd":"NH_LUX_001","agentNm":"NH_LUX_001","spContextRoot":"","spIp":"","spPort":"","spProtocol":"","status":"9","hostname":"NH_LUX_001","port":38080,"logLevel":"DEBUG","comments":"","delYn":"","regDate":"","regId":"","modDate":"","modId":""}
+			12:56:32.793  INFO  6183 [cketClient-AsyncIO-1]      p.p.m.a.c.AgentController: 216 - //--------------------------------------------
+			12:56:32.793  INFO  6183 [cketClient-AsyncIO-1]      p.p.m.a.c.AgentController: 217 - // agent commonDelay delay:30000ms
+			12:56:32.793  INFO  6183 [cketClient-AsyncIO-1]      p.p.m.a.c.AgentController: 218 - //--------------------------------------------
+
+		2.4.2.테스트 실행 종료하기
+			실행된 콘솔창에서 "ctrl+C" 를 눌러 종료한다.
+
+3.QUICK START
+	3.1.에이전트 실행하기
+		3.1.1.포그라운드 모드 실행하기
+			${IIPAGENT_HOME}/bin/str.sh -f
+		3.1.2.백그라운드 모드 실행하기
+			${IIPAGENT_HOME}/bin/str.sh
+	3.2.에이전트 종료하기
+		본 명령은 에이전트를 실행한 JVM을 완전히 종료한다.
+		${IIPAGENT_HOME}/bin/mng.sh EXT
+
+		
+4. 체크사항
+	AIX ( JVM IBM java 인경우)
+	  - jlm.jar   포함되어있는지 확인 필요
+	  
+	Sun OS 
+	  - /bin/sh   -> /bin/ksh  로 변경 필요 할수 있음
+	  
+	  
+	HP 
+	  -  export UNIX95=XPG4 옵션 반영 필요 ( 기반영되어 있을수 있음)
+

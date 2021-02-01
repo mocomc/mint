@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>/mint/sample/sam-paging.html[인터페이스조회-페이징처리-샘플소스]</title>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.default.mobile.min.css" />
+    <script   src="https://code.jquery.com/jquery-3.2.1.js"   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="   crossorigin="anonymous"></script>
+    <script src="http://kendo.cdn.telerik.com/2017.2.504/js/kendo.all.min.js"></script>
+    <style type="text/css">
+    	label {
+    		font-size : 8px;
+    		text-align: left;
+    		width: 400px
+    	}
+
+    	input {
+			font-size : 8px;
+    		text-align: right;
+    		width: 100px
+		}
+
+		.k-gid {
+			font-size:8px
+		}
+    </style>
+</head>
+<body>
+
+	<div id="example">
+
+    	<div id="grid" class="k-gid"></div>
+		<button id="searchBtn" value="재조회">재조회</button>
+		<div id="searchFilter">
+		     <div>
+		     	<input type="text" id="dataPrMethod" tabindex="1"/><label>데이터처리방식(0:배치, 1:온라인, 2:요청, 3:온라인조회,4:온라인전송):</label>
+		     </div>
+		     <div>
+				<input type="text" id="dataFrequency"  tabindex="2"/><label>발생주기(0:초, 1:분, 2:시, 3:일, 4:월, 5:년, 9:수시, 10:스케줄)</label>
+		     </div>
+		     <div>
+				<input type="text" id="dataPrDir"  tabindex="3"/><label>처리방향(0:단방향 ,1:양방향)</label>
+		     </div>
+		     <div>
+				<input type="text" id="appPrMethod"  tabindex="4"/><label>APP처리방식(0:동기, 1:비동기)</label>
+			 </div>
+		     <div>
+				<input type="text" id="importance"  tabindex="5"/><label>중요도(0:상, 1:중, 2:하)</label>
+		     </div>
+		     <div>
+				<input type="text" id="integrationId"  tabindex="6"/><label>인터페이스ID</label>
+		     </div>
+		     <div>
+				<input type="text" id="interfaceNm"  tabindex="7"/><label>인터페이스명</label>
+		     </div>
+		     <div>
+				<input type="text" id="channelId"  tabindex="8"/><label>채널ID</label>
+			 </div>
+		     <div>
+				<input type="text" id="status"  tabindex="9"/><label>상태</label>
+		     </div>
+		     <div>
+				<input type="text" id="requirementId"  tabindex="10"/><label>요건ID</label>
+		     </div>
+		     <div>
+				<input type="text" id="requirementNm"  tabindex="11"/><label>요건명</label>
+		     </div>
+		     <div>
+				<input type="text" id="systemId"  tabindex="12"/><label>송수신시스템</label>
+		     </div>
+		     <div>
+				<input type="text" id="service"  tabindex="13"/><label>서비스</label>
+		     </div>
+		     <div>
+				<input type="text" id="serviceDesc"  tabindex="14"/><label>서비스디스크립션</label>
+		     </div>
+		     <div>
+				<input type="text" id="resourceNm"  tabindex="15"/><label>리소스명(0:DB, 1:FILE, 2:RFC, 3:Proxy, 4:WS 5:APP 6:HTTP)</label>
+		     </div>
+		     <div>
+				<input type="text" id="organizationId"  tabindex="16"/><label>기관ID</label>
+		     </div>
+		     <div>
+				<input type="text" id="businessId"  tabindex="17"/><label>업무ID</label>
+			</div>
+		</div>
+
+        <script>
+
+            	//페이지당 보여줄 앙템 개수, 환경변수로 관리 필요
+            	var itemCountPerPage = 10;
+            	var initSearch = true;
+
+            	//---------
+ 				var research = function(){
+		                $("#grid").kendoGrid({
+		                    dataSource: {
+		                        transport: {
+
+		                           	read: {
+		                                   type: "POST",
+		                                   url: initSearch ? "http://iip.mocomsys.com:8080/mint/an/requirements/by-page-v1?method=GET" : "http://iip.mocomsys.com:8080/mint/an/requirements/by-page?method=GET",
+		                                   contentType: "application/json; charset=utf-8",
+		                                   dataType: 'json'
+		                               },
+		                               parameterMap: function(options, operation) {
+		                                   // note that you may need to merge that postData with the options send from the DataSource
+
+		                                    leadingZeros = function(n, digits) {
+						                		try {
+						                			var zero = '';
+						                			n = n.toString();
+
+						                			if (n.length < digits) {
+						                				for (i = 0; i < digits - n.length; i++)
+						                				    zero += '0';
+						                			}
+						                			return zero + n;
+						                		} catch( e ) {
+						                			console.log(e, {"fnName" : "mint.common.leadingZeros"});
+						                		}
+						                	};
+
+
+						                	//grid current page
+						                	var grid = $("#grid").data("kendoGrid");
+						                	var currentPage = initSearch ? 1 : grid.dataSource.page();
+
+
+						                	var params = new Object();
+						                	params.isRelUser = "Y";
+						                	params.userId = "iip";
+						                	params.page = currentPage; //현재페이지
+						                	params.perCount = itemCountPerPage;//한페이당 아이템 개수
+						                	//조회조건 세팅
+						                	if($("#dataPrMethod").val() != "") { params.dataPrMethod = $("#dataPrMethod").val(); }
+						                	if($("#dataFrequency").val() != "") {params.dataFrequency = $("#dataFrequency").val(); }
+						                	if($("#dataPrDir").val() != "") {params.dataPrDir = $("#dataPrDir").val(); }
+						                	if($("#appPrMethod").val() != "") {params.appPrMethod = $("#appPrMethod").val(); }
+						                	if($("#importance").val() != "") {params.importance = $("#importance").val(); }
+						                	if($("#integrationId").val() != "") {params.integrationId = $("#integrationId").val(); }
+						                	if($("#interfaceNm").val() != "") {params.interfaceNm = $("#interfaceNm").val(); }
+						                	if($("#channelId").val() != "") {params.channelId = $("#channelId").val(); }
+						                	if($("#status").val() != "") {params.status = $("#status").val(); }
+						                	if($("#requirementId").val() != "") {params.requirementId = $("#requirementId").val(); }
+						                	if($("#requirementNm").val() != "") {params.requirementNm = $("#requirementNm").val(); }
+						                	if($("#systemId").val() != "") {params.systemId = $("#systemId").val(); }
+						                	if($("#service").val() != "") {params.service = $("#service").val(); }
+						                	if($("#serviceDesc").val() != "") {params.serviceDesc = $("#serviceDesc").val(); }
+						                	if($("#resourceNm").val() != "") {params.resourceNm = $("#resourceNm").val(); }
+						                	if($("#organizationId").val() != "") {params.organizationId = $("#organizationId").val(); }
+						                	if($("#businessId").val() != "") {params.businessId = $("#businessId").val(); }
+
+
+						                	var d = new Date();
+						            		var s =
+						            		  leadingZeros(d.getFullYear(), 4) +
+						            		  leadingZeros(d.getMonth() + 1, 2) +
+						            		  leadingZeros(d.getDate(), 2) +
+						            		  leadingZeros(d.getHours(), 2) +
+						            		  leadingZeros(d.getMinutes(), 2) +
+						            		  leadingZeros(d.getSeconds(), 2) +
+						            		  d.getMilliseconds();
+
+						                	var comMessage = new Object();
+						            		{
+						            			comMessage.objectType = "ComMessage";
+						            			comMessage.requestObject = params;
+						            			comMessage.startTime = s;
+						            			comMessage.endTime = null;
+						            			comMessage.errorCd = "0";
+						            			comMessage.errorMsg = "";
+						            			comMessage.userId = "iip";
+						            			comMessage.appId = "sample";
+						            			comMessage.checkSession = false;
+						            		}
+
+
+		                                   return JSON.stringify(comMessage);
+		                               }
+		                        },
+		                        schema: {
+		                        	type:'json',
+		                           	data:  function(data) {
+		                           		return data == null || data.responseObject == null ? [] : data.responseObject;
+		                           	},
+		                           	total : function(data) {
+		                           		return data.requestObject.total;
+		                           	},
+		                           	//에러처리 코드 넣어주세요
+		                           	errors: function(data) {
+		                           		if(data == null || data.responseObject == null) return "no data found!";
+		                           		else "success!";
+
+		                            },
+		                            error: function(e) {
+		                            	console.log(e.errors); // displays "Invalid query"
+		                            }
+		                        },
+		                        pageSize: itemCountPerPage,
+		                        serverPaging: true,
+		                        serverFiltering: true,
+		                        serverSorting: true
+		                    },
+		                    height: 350,
+		                    filterable: true,
+		                    sortable: true,
+		                    pageable: true,
+		                    columns: [
+		                        {
+		                            field:"interface.channel.channelNm",
+		                            title:"연계솔루션"
+		                    	}, {
+		                            field: "business.businessNm",
+		                            title: "업무",
+		                            format: "{0:MM/dd/yyyy}"
+		                        }, {
+		                            field: "interface.interfaceNm",
+		                            title: "인터페이스명"
+		                        }, {
+		                            field: "interface.integrationId",
+		                            title: "인터페이스아이디"
+		                        }, {
+		                            field: "modDate",
+		                            title: "수정일",
+		                           	format: "{0:MM/dd/yyyy}"
+		                        }, {
+		                            field: "regDate",
+		                            title: "등록일",
+		                           	format: "{0:MM/dd/yyyy}"
+		                        }, {
+		                            field: "devFinYmd",
+		                            title: "개발완료일",
+		                           	format: "{0:MM/dd/yyyy}"
+		                        }, {
+		                            field: "testFinYmd",
+		                            title: "테스트왈료일",
+		                           	format: "{0:MM/dd/yyyy}"
+		                        }, {
+		                            field: "realFinYmd",
+		                            title: "이행일",
+		                           	format: "{0:MM/dd/yyyy}"
+		                        }, {
+		                            field: "statusNm",
+		                            title: "상태"
+		                        }
+		                    ]
+		                });
+	                }
+            	//----------
+
+
+                $(document).ready(function() {
+
+                    	$("#searchBtn").bind("click", function(){
+                   			research();
+                   			initSearch = false;
+                    	});
+                   		research();
+                   		initSearch = false;
+
+                });
+
+         </script>
+	</div>
+
+</body>
+</html>

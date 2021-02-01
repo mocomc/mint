@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="model">
+		<xs:annotation>
+			<xs:documentation>인터페이스모델 배포용 xml 정의서</xs:documentation>
+		</xs:annotation>
+ 
+		<xs:complexType>
+			<xs:sequence>
+				
+				<xs:element name="id" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델ID</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델명</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="stage" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델 배포 스테이지 코드(0:개발,1:테스트,2:운영)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="createDate" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델 배포파일 생성일자(yyyymmddHH24miss)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="description" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델 배포파일 Comments</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="interface">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델의 인터페이스 정보</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="id"   type="xs:string" />
+						<xs:attribute name="name" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="apps">
+					<xs:annotation>
+						<xs:documentation>인터페이스 모델을 실행하는 Application 정의</xs:documentation>
+					</xs:annotation>
+					
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="app" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+									
+									
+										<xs:element name="type">
+											<xs:annotation>
+												<xs:documentation>Application 유형 코드값 정의</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="cd"   type="xs:string" />
+												<xs:attribute name="name" type="xs:string" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="system">
+											<xs:annotation>
+												<xs:documentation>Application 실행 시스템 정의</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="cd"   type="xs:string" />
+												<xs:attribute name="name" type="xs:string" />
+												<xs:attribute name="seq"  type="xs:string" />
+												<xs:attribute name="type" type="xs:string" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="server">
+											<xs:annotation>
+												<xs:documentation>Application 실행 서버 정의</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:attribute name="cd"   type="xs:string" />
+												<xs:attribute name="name" type="xs:string" />
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="properties">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="property" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="name"  type="xs:string" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="layouts">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="layout" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="ref"  type="xs:string" />
+															<xs:attribute name="type" type="xs:string" />
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+						
+				
+				<xs:element name="layouts">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="layout" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="id"   type="xs:string" />
+									<xs:attribute name="type" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="mappings">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="mapping" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="id"   type="xs:string" />
+									<xs:attribute name="type" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				
+				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

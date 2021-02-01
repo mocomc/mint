@@ -1,0 +1,1062 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.ut.SiteDataUploadMapper">
+	<!--
+  	<cache/>
+  	-->
+
+	<delete id="deleteTCO0103" >
+		DELETE FROM TCO0103 --결재링크
+	</delete>
+
+	<delete id="deleteTCO0102" >
+		DELETE FROM TCO0102 --심의결재자내역
+	</delete>
+	<delete id="deleteTCO0101" >
+		DELETE FROM TCO0101 --심의결재내역
+	</delete>
+
+	<delete id="deleteTSU0220" >
+		DELETE FROM TSU0220 --데이터접근권한인터페이스맵핑
+	</delete>
+
+	<delete id="deleteTSU0803" >
+		DELETE FROM TSU0803 --인터페이스처리현황
+	</delete>
+
+	<delete id="deleteTOP0401" >
+		DELETE FROM TOP0401 --인터페이스배포이력
+	</delete>
+
+	<delete id="deleteTAN0227" >
+		DELETE FROM TAN0227 --인터페이스일괄등록임시저장
+	</delete>
+
+	<delete id="deleteTAN0226" >
+		DELETE FROM TAN0226 --인터페이스일괄등록
+	</delete>
+
+	<delete id="deleteTAN0327" >
+		DELETE FROM TAN0327 --요건히스토리
+	</delete>
+
+	<delete id="deleteTAN0111" >
+		DELETE FROM TAN0111 --요건임시저장
+	</delete>
+
+	<delete id="deleteTAN0109" >
+		DELETE FROM TAN0109 --요건첨부파일히스토리
+	</delete>
+
+	<delete id="deleteTAN0103" >
+		DELETE FROM TAN0103 --요건첨부파일
+	</delete>
+
+	<delete id="deleteTAN0107" >
+		DELETE FROM TAN0107 --요건변경히스토리
+	</delete>
+
+	<delete id="deleteTAN0108" >
+		DELETE FROM TAN0108 --인터페이스설명히스토리
+	</delete>
+
+	<delete id="deleteTAN0102" >
+		DELETE FROM TAN0102 --요건설명
+	</delete>
+
+	<delete id="deleteTAN0101" >
+		DELETE FROM TAN0101 --요건
+	</delete>
+
+	<delete id="deleteTAN0214" >
+		DELETE FROM TAN0214 --관심인터페이스
+	</delete>
+
+	<delete id="deleteTAN0205" >
+		DELETE FROM TAN0205 --연계채널별인터페이스특성값
+	</delete>
+
+	<delete id="deleteTAN0322" >
+		DELETE FROM TAN0322 --인터페이스변경히스토리
+	</delete>
+
+	<delete id="deleteTAN0323" >
+		DELETE FROM TAN0323 --인터페이스시스템맵핑변경히스토리
+	</delete>
+
+	<delete id="deleteTAN0324" >
+		DELETE FROM TAN0324 --인터페이스업무맵핑변경히스토리
+	</delete>
+
+	<delete id="deleteTAN0325" >
+		DELETE FROM TAN0325 --인터페이스담당자변경히스토리
+	</delete>
+
+	<delete id="deleteTAN0219" >
+		DELETE FROM TAN0219 --인터페이스담당자
+	</delete>
+
+	<delete id="deleteTAN0218" >
+		DELETE FROM TAN0218 --인터페이스업무맵핑
+	</delete>
+
+	<delete id="deleteTAN0213" >
+		DELETE FROM TAN0213 --인터페이스시스템맵핑
+	</delete>
+
+	<delete id="deleteTAN0203" >
+		DELETE FROM TAN0203 --인터페이스추가특성값
+	</delete>
+
+	<delete id="deleteTAN0202" >
+		DELETE FROM TAN0202 --인터페이스추가특성
+	</delete>
+
+	<delete id="deleteTAN0201" >
+		DELETE FROM TAN0201 --인터페이스
+	</delete>
+
+	<delete id="deleteTSU0221">
+		DELETE FROM TSU0221 --데이터접근권한경로
+	</delete>
+
+	<delete id="deleteTSU0222" >
+		DELETE FROM TSU0222 --데이터접근권한시스템맵핑
+	</delete>
+
+	<delete id="deleteTSU0219" >
+		DELETE FROM TSU0219 --데이터접근권한사용자맵핑
+	</delete>
+
+	<delete id="deleteTSU0218" >
+		DELETE FROM TSU0218 --데이터접근권한
+	</delete>
+
+	<delete id="deleteTAN0204" >
+		DELETE FROM TAN0204 --연계채널별인터페이스특성
+	</delete>
+
+	<delete id="deleteTIM0003" >
+		DELETE FROM TIM0003 --연계채널담당자
+	</delete>
+
+	<delete id="deleteTIM0002" >
+		DELETE FROM TIM0002 --연계채널
+	</delete>
+
+	<delete id="deleteTIM0404" >
+		DELETE FROM TIM0404 --기관담당자
+	</delete>
+
+	<delete id="deleteTIM0402" >
+		DELETE FROM TIM0402 --기관경로
+	</delete>
+
+	<delete id="deleteTIM0403" >
+		DELETE FROM TIM0403 --기관시스템맵핑
+	</delete>
+
+	<delete id="deleteTIM0401" >
+		DELETE FROM TIM0401 --기관
+	</delete>
+
+	<delete id="deleteTOP0807" >
+		DELETE FROM TOP0807 --큐상태로그
+	</delete>
+
+	<delete id="deleteTIM0208" >
+		DELETE FROM TIM0208 --큐
+	</delete>
+
+	<delete id="deleteTOP0806" >
+		DELETE FROM TOP0806 --채널상태로그
+	</delete>
+
+	<delete id="deleteTIM0207" >
+		DELETE FROM TIM0207 --채널
+	</delete>
+
+	<delete id="deleteTOP0805" >
+		DELETE FROM TOP0805 --큐매니져상태로그
+	</delete>
+
+	<delete id="deleteTIM0206" >
+		DELETE FROM TIM0206 --큐매니져
+	</delete>
+
+	<delete id="deleteTOP0802" >
+		DELETE FROM TOP0802 --프로세스상태로그
+	</delete>
+
+	<delete id="deleteTIM0205" >
+		DELETE FROM TIM0205 --프로세스
+	</delete>
+
+	<delete id="deleteTOP0801" >
+		DELETE FROM TOP0801 --자원상태로그
+	</delete>
+
+	<delete id="deleteTIM0204" >
+		DELETE FROM TIM0204 --자원
+	</delete>
+
+	<delete id="deleteTIM0213" >
+		DELETE FROM TIM0213 --IIPAGENT관리콘솔
+	</delete>
+
+	<delete id="deleteTIM0214" >
+		DELETE FROM TIM0214 --IIPAGENT관리명령
+	</delete>
+
+	<delete id="deleteTOP0810" >
+		DELETE FROM TOP0810 --IIPAGENT상태로그
+	</delete>
+
+	<delete id="deleteTIM0212" >
+		DELETE FROM TIM0212 --IIPAGENT모니터링아이템
+	</delete>
+
+	<delete id="deleteTIM0211" >
+		DELETE FROM TIM0211 --IIPAGENT
+	</delete>
+
+	<delete id="deleteTOP0808" >
+		DELETE FROM TOP0808 --MI러너상태로그
+	</delete>
+
+	<delete id="deleteTIM0210" >
+		DELETE FROM TIM0210 --MI러너MI러너
+	</delete>
+
+	<delete id="deleteTOP0809" >
+		DELETE FROM TOP0809 --MI에이젼트상태로그
+	</delete>
+
+	<delete id="deleteTIM0209" >
+		DELETE FROM TIM0209 --MI에이젼트
+	</delete>
+
+	<delete id="deleteTIM0203" >
+		DELETE FROM TIM0203 --서버담당자
+	</delete>
+
+	<delete id="deleteTIM0202" >
+		DELETE FROM TIM0202 --시스템서버맵핑
+	</delete>
+
+	<delete id="deleteTIM0201" >
+		DELETE FROM TIM0201 --서버
+	</delete>
+
+	<delete id="deleteTIM0102" >
+		DELETE FROM TIM0102 --시스템경로
+	</delete>
+
+	<delete id="deleteTIM0105" >
+		DELETE FROM TIM0105 --시스템담당자
+	</delete>
+
+	<delete id="deleteTIM0101" >
+		DELETE FROM TIM0101 --시스템
+	</delete>
+
+	<delete id="deleteTIM0304" >
+		DELETE FROM TIM0304 --업무담당자
+	</delete>
+
+	<delete id="deleteTIM0302" >
+		DELETE FROM TIM0302 --업무경로
+	</delete>
+
+	<delete id="deleteTIM0301" >
+		DELETE FROM TIM0301 --업무
+	</delete>
+
+	<delete id="deleteTOP0902" >
+		DELETE FROM TOP0902 --이메일수신자관리
+	</delete>
+
+	<delete id="deleteTSU0101" >
+		DELETE FROM TSU0101 WHERE ROLE_ID != 'UR00000000'
+	</delete>
+
+	<!-- 기초정보 조회 -->
+	<select id="getChannelIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			CHANNEL_NM AS "NM",
+			CHANNEL_ID AS "ID"
+		FROM TIM0002
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getOrganizationIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			ORG_NM AS "NM",
+			ORG_ID AS "ID"
+		FROM TIM0401
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getSystemIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			SYSTEM_NM AS "NM",
+			SYSTEM_ID AS "ID",
+			SYSTEM_CD AS "CD"
+		FROM TIM0101
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getServerIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			SERVER_NM AS "NM",
+			SERVER_ID AS "ID"
+		FROM TIM0201
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getUserIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			USER_NM AS "NM",
+			USER_ID AS "ID",
+			CELL_PHONE AS "CPHONE",
+			PHONE AS "PHONE",
+			EMAIL AS "EMAIL"
+		FROM TSU0101
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getBusinessIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			BUSINESS_NM AS "NM",
+			BUSINESS_ID AS "ID"
+		FROM TIM0301
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getUserRoleIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			ROLE_NM AS "NM",
+			ROLE_ID AS "ID"
+		FROM TSU0201
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getDataAccessRoleIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			ROLE_NM AS "NM",
+			ROLE_ID AS "ID"
+		FROM TSU0218
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getDataAccessRoleParentList" resultType="java.util.LinkedHashMap">
+		SELECT
+			P_ROLE_ID AS "P_ROLE_ID",
+			C_ROLE_ID AS "C_ROLE_ID"
+		FROM TSU0221
+		WHERE DEL_YN ='N'
+		ORDER BY C_ROLE_ID, DEPTH DESC
+	</select>
+
+	<select id="getAdditionalAttributeIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			ATTRIBUTE_NM AS "NM",
+			ATTRIBUTE_ID AS "ID",
+			ATTRIBUTE_CD AS "CD"
+		FROM TAN0202
+		WHERE DEL_YN='N'
+	</select>
+
+	<select id="getChannelAttributeIdList" resultType="java.util.LinkedHashMap">
+		SELECT
+			ATTRIBUTE_NM AS "NM",
+			ATTRIBUTE_ID AS "ID",
+			ATTRIBUTE_CD AS "CD"
+		FROM TAN0204
+		WHERE DEL_YN='N'
+	</select>
+
+  	<select id="getCommonCodeList" parameterType="String" resultType="java.util.LinkedHashMap">
+		SELECT
+			NM AS "NM",
+			CD AS "CD"
+		FROM TSU0301
+		WHERE DEL_YN = 'N'
+		<if test="level1 != null">
+			AND LEVEL1 = #{level1}
+		</if>
+		<if test="level2 != null">
+			AND LEVEL2 = #{level2}
+		</if>
+	</select>
+
+  	<select id="getIntegrationId" parameterType="String" resultType="String">
+		SELECT
+			INTEGRATION_ID
+		FROM TAN0201
+		WHERE INTEGRATION_ID = #{integrationId}
+	</select>
+
+	<!-- 채널정보 CRUD -->
+	<insert id="insertChannel">
+		INSERT INTO TIM0002 (
+			CHANNEL_ID,
+			CHANNEL_NM,
+			CHANNEL_CD,
+			EXTERNAL_YN,
+			MAP_RULE,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{channelId , jdbcType=VARCHAR},
+			#{channelNm , jdbcType=VARCHAR},
+			#{channelCd , jdbcType=VARCHAR},
+			#{externalYn, jdbcType=VARCHAR},
+			#{mapRule   , jdbcType=VARCHAR},
+			#{comments  , jdbcType=VARCHAR},
+			'N',
+			#{regDate   , jdbcType=VARCHAR},
+			#{regId     , jdbcType=VARCHAR},
+			#{modDate   , jdbcType=VARCHAR},
+			#{modId     , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertChannelAttribute">
+		<selectKey keyProperty="attrId" resultType="string" order="BEFORE" >
+			<choose>
+				<when test="_databaseId == 'postgres'">
+			SELECT 'CA' || LPAD((COALESCE(MAX(SUBSTR(ATTRIBUTE_ID,3)),'0')::numeric+1)::text,8,'0') FROM TAN0204 WHERE CHANNEL_ID = #{channelId}
+				</when>
+				<otherwise>
+			SELECT 'CA' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(ATTRIBUTE_ID,3)),'0')) + 1),8,'0') FROM TAN0204 WHERE CHANNEL_ID = #{channelId}
+				</otherwise>
+			</choose>
+		</selectKey>
+
+		INSERT INTO TAN0204 (
+			CHANNEL_ID,
+			ATTRIBUTE_ID,
+			ATTRIBUTE_CD,
+			ATTRIBUTE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{channelId, jdbcType=VARCHAR},
+			#{attrId   , jdbcType=VARCHAR},
+			#{attrCd   , jdbcType=VARCHAR},
+			#{attrNm   , jdbcType=VARCHAR},
+			#{comments , jdbcType=VARCHAR},
+			'N',
+			#{regDate  , jdbcType=VARCHAR},
+			#{regId    , jdbcType=VARCHAR},
+			#{modDate  , jdbcType=VARCHAR},
+			#{modId    , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertAdditionalAttribute">
+		INSERT INTO TAN0202 (
+			ATTRIBUTE_ID,
+			ATTRIBUTE_CD,
+			ATTRIBUTE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{attrId   , jdbcType=VARCHAR},
+			#{attrCd   , jdbcType=VARCHAR},
+			#{attrNm   , jdbcType=VARCHAR},
+			#{comments , jdbcType=VARCHAR},
+			'N',
+			#{regDate  , jdbcType=VARCHAR},
+			#{regId    , jdbcType=VARCHAR},
+			#{modDate  , jdbcType=VARCHAR},
+			#{modId    , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 기관정보 CRUD -->
+	<insert id="insertOrganization">
+		INSERT INTO TIM0401 (
+			ORG_ID,
+			ORG_NM,
+			ORG_CD,
+			ROOT_YN,
+			GRP_YN,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{organizationId, jdbcType=VARCHAR},
+			#{organizationNm, jdbcType=VARCHAR},
+			#{organizationCd, jdbcType=VARCHAR},
+			#{rootYn        , jdbcType=VARCHAR},
+			#{grpYn         , jdbcType=VARCHAR},
+			#{comments      , jdbcType=VARCHAR},
+			'N',
+			#{regDate       , jdbcType=VARCHAR},
+			#{regId         , jdbcType=VARCHAR},
+			#{modDate       , jdbcType=VARCHAR},
+			#{modId         , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateOrganization">
+		UPDATE TIM0401
+			SET
+			 ROOT_YN   	= #{rootYn        , jdbcType=VARCHAR}
+			,GRP_YN    	= #{grpYn         , jdbcType=VARCHAR}
+			,MOD_DATE   = #{modDate       , jdbcType=VARCHAR}
+			,MOD_USER   = #{modId         , jdbcType=VARCHAR}
+		WHERE ORG_ID    = #{organizationId}
+	</update>
+
+	<insert id="insertOrganizationPath" parameterType="OrganizationPath">
+		INSERT INTO TIM0402 (
+			 P_ORG_ID
+			,C_ORG_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+
+	<insert id="createOrganizationPathRelation" parameterType="Map">
+		<!--
+		[InfraMapper.createOrganizationPathRelation 정보 그대로 가지고 옴]
+
+		cross join 값으로 나온 패스값이 0 만 나오는 SQL문제 해결필요함
+		당장은 DEPTH가 1만 존재하므로 아래 SQL로 대체하고
+		1이상 존재하는 경우에 대해서는 차후 고민한다(20160330)
+		-->
+		INSERT INTO TIM0402 (
+			 P_ORG_ID
+			,C_ORG_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		)
+		SELECT
+			 A.P_ORG_ID
+			,B.C_ORG_ID
+			,A.DEPTH + B.DEPTH +1
+			,'N'
+			<choose>
+        		<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+			,'${modDate}'
+			,'${modId}'
+		FROM TIM0402 A, TIM0402 B
+        		</when>
+        		<otherwise>
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		FROM TIM0402 A CROSS JOIN TIM0402 B
+        		</otherwise>
+        	</choose>
+		WHERE A.C_ORG_ID = #{pid}
+		AND B.P_ORG_ID = #{cid}
+	</insert>
+
+	<!-- 시스템정보 CRUD -->
+	<insert id="insertSystem">
+		INSERT INTO TIM0101 (
+			SYSTEM_ID,
+			SYSTEM_NM,
+			SYSTEM_CD,
+			ROOT_YN,
+			GRP_YN,
+			EXTERNAL_YN,
+			ZONE_ID,
+			COUNTRY_ID,
+			AREA_INPUT,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{systemId                       , jdbcType=VARCHAR},
+			#{systemNm                       , jdbcType=VARCHAR},
+			#{systemCd                       , jdbcType=VARCHAR},
+			#{rootYn                         , jdbcType=VARCHAR},
+			#{grpYn                          , jdbcType=VARCHAR},
+			#{externalYn                     , jdbcType=VARCHAR},
+			#{zoneInfo.zoneId                , jdbcType=VARCHAR},
+			#{zoneInfo.countryInfo.countryId , jdbcType=VARCHAR},
+			#{areaInput                      , jdbcType=VARCHAR},
+			#{comments                       , jdbcType=VARCHAR},
+			'N',
+			#{regDate                        , jdbcType=VARCHAR},
+			#{regId                          , jdbcType=VARCHAR},
+			#{modDate                        , jdbcType=VARCHAR},
+			#{modId                          , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateSystem">
+		UPDATE TIM0101
+			 SET
+			 ROOT_YN    = #{rootYn          , jdbcType=VARCHAR}
+			,GRP_YN     = #{grpYn           , jdbcType=VARCHAR}
+			,MOD_DATE   = #{modDate         , jdbcType=VARCHAR}
+			,MOD_USER   = #{modId           , jdbcType=VARCHAR}
+		WHERE SYSTEM_ID = #{systemId}
+	</update>
+
+	<insert id="insertSystemPath" parameterType="SystemPath">
+		INSERT INTO TIM0102 (
+			 P_SYS_ID
+			,C_SYS_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="createSystemPathRelation" parameterType="Map">
+		<!--
+		[InfraMapper.createSystemPathRelation 정보 그대로 가지고 옴]
+		cross join 값으로 나온 패스값이 0 만 나오는 SQL문제 해결필요함
+		당장은 DEPTH가 1만 존재하므로 아래 SQL로 대체하고
+		1이상 존재하는 경우에 대해서는 차후 고민한다(20160330)
+		-->
+
+		INSERT INTO TIM0102 (
+			 P_SYS_ID
+			,C_SYS_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		)
+		SELECT
+			 A.P_SYS_ID
+			,B.C_SYS_ID
+			,A.DEPTH + B.DEPTH +1
+			,'N'
+			<choose>
+        		<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+			,'${modDate}'
+			,'${modId}'
+		FROM TIM0102 A, TIM0102 b
+        		</when>
+        		<otherwise>
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		FROM TIM0102 A CROSS JOIN TIM0102 b
+        		</otherwise>
+        	</choose>
+		WHERE A.C_SYS_ID = #{pid}
+			AND B.P_SYS_ID = #{cid}
+	</insert>
+
+	<!-- 기관시스템정보 CRUD -->
+	<insert id="insertOrganizationSystemMap">
+		INSERT INTO TIM0403 (
+			 ORG_ID
+			,SYSTEM_ID
+			,SEQ
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+		     #{organizationId}
+			,#{system.systemId}
+			,#{system.seq}
+			,'N'
+			,#{system.regDate}
+			,#{system.regId}
+			,#{system.modDate}
+			,#{system.modId}
+		)
+	</insert>
+
+	<!-- 서버 CRUD -->
+	<insert id="insertServer">
+		INSERT INTO TIM0201 (
+			SERVER_ID,
+			SERVER_NM,
+			SERVER_CD,
+			HOST_NM,
+			USE_TYPE,
+			IP,
+			REDUNDANCY_YN,
+			HW_INST_POSITION,
+			OS,
+			FIREWALL_YN,
+			ZONE_ID,
+			COUNTRY_ID,
+			AREA_INPUT,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{serverId                       , jdbcType=VARCHAR},
+			#{serverNm                       , jdbcType=VARCHAR},
+			#{serverCd                       , jdbcType=VARCHAR},
+			#{hostNm                         , jdbcType=VARCHAR},
+			#{useType                        , jdbcType=VARCHAR},
+			#{ip                             , jdbcType=VARCHAR},
+			#{redundancyYn                   , jdbcType=VARCHAR},
+			#{hwInstPosition                 , jdbcType=VARCHAR},
+			#{os                             , jdbcType=VARCHAR},
+			#{firewallYn                     , jdbcType=VARCHAR},
+			#{zoneInfo.zoneId                , jdbcType=VARCHAR},
+			#{zoneInfo.countryInfo.countryId , jdbcType=VARCHAR},
+			#{areaInput                      , jdbcType=VARCHAR},
+			#{comments                       , jdbcType=VARCHAR},
+			'N',
+			#{regDate                        , jdbcType=VARCHAR},
+			#{regId                          , jdbcType=VARCHAR},
+			#{modDate                        , jdbcType=VARCHAR},
+			#{modId                          , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 시스템서버정보 CRUD -->
+	<insert id="insertSystemServerMap">
+		INSERT INTO TIM0202 (
+			 SERVER_ID
+			,SYSTEM_ID
+			,SEQ
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+			 #{server.serverId}
+			,#{systemId}
+			,#{server.seq}
+			,'N'
+			,#{server.regDate}
+			,#{server.regId}
+			,#{server.modDate}
+			,#{server.modId}
+		)
+	</insert>
+
+	<!-- 업무정보 CRUD -->
+	<insert id="insertBusiness">
+		INSERT INTO TIM0301 (
+			BUSINESS_ID,
+			BUSINESS_NM,
+			BUSINESS_CD,
+			ROOT_YN,
+			GRP_YN,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{businessId},
+			#{businessNm, jdbcType=VARCHAR},
+			#{businessCd, jdbcType=VARCHAR},
+			#{rootYn,     jdbcType=VARCHAR},
+			#{grpYn,      jdbcType=VARCHAR},
+			#{comments,   jdbcType=VARCHAR},
+			'N',
+			#{regDate,    jdbcType=VARCHAR},
+			#{regId,      jdbcType=VARCHAR},
+			#{modDate,    jdbcType=VARCHAR},
+			#{modId,      jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateBusiness">
+		UPDATE TIM0301
+		SET
+			 ROOT_YN    = #{rootYn , jdbcType=VARCHAR}
+			,GRP_YN     = #{grpYn  , jdbcType=VARCHAR}
+			,MOD_DATE   = #{modDate, jdbcType=VARCHAR}
+			,MOD_USER   = #{modId  , jdbcType=VARCHAR}
+		WHERE BUSINESS_ID = #{businessId}
+	</update>
+
+	<insert id="insertBusinessPath" parameterType="BusinessPath">
+		INSERT INTO TIM0302 (
+			 P_BIZ_ID
+			,C_BIZ_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+
+	<insert id="createBusinessPathRelation" parameterType="Map">
+		<!--
+		[InfraMapper.createBusinessPathRelation 정보 그대로 가지고 옴]
+		cross join 값으로 나온 패스값이 0 만 나오는 SQL문제 해결필요함
+		당장은 DEPTH가 1만 존재하므로 아래 SQL로 대체하고
+		1이상 존재하는 경우에 대해서는 차후 고민한다(20160330)
+		-->
+		INSERT INTO TIM0302 (
+			 P_BIZ_ID
+			,C_BIZ_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		)
+		SELECT
+			 A.P_BIZ_ID
+			,B.C_BIZ_ID
+			,A.DEPTH + B.DEPTH +1
+			,'N'
+			<choose>
+        		<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+			,'${modDate}'
+			,'${modId}'
+		FROM TIM0302 A, TIM0302 B
+        		</when>
+        		<otherwise>
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		FROM TIM0302 A CROSS JOIN TIM0302 B
+        		</otherwise>
+        	</choose>
+		WHERE A.C_BIZ_ID = #{pid}
+		AND B.P_BIZ_ID = #{cid}
+	</insert>
+
+	<!-- 사용자정보 CRUD -->
+	<insert id="insertUser">
+		INSERT INTO TSU0101 (
+		    USER_ID,
+			PASSWORD,
+			USER_NM,
+			CELL_PHONE,
+			PHONE,
+			EMAIL,
+			COMPANY_NM,
+			DEPARTMENT_NM,
+			POSITION_NM,
+			ROLE_ID,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{userId,	     jdbcType=VARCHAR},
+			#{password,      jdbcType=VARCHAR},
+			#{userNm,	     jdbcType=VARCHAR},
+			#{cellPhone,     jdbcType=VARCHAR},
+			#{phone,	     jdbcType=VARCHAR},
+			#{email,	     jdbcType=VARCHAR},
+			#{companyNm,     jdbcType=VARCHAR},
+			#{departmentNm,  jdbcType=VARCHAR},
+			#{positionNm,    jdbcType=VARCHAR},
+			#{role.roleId,   jdbcType=VARCHAR},
+			'N',
+			#{regDate,       jdbcType=VARCHAR},
+			#{regId,         jdbcType=VARCHAR},
+			#{modDate,       jdbcType=VARCHAR},
+			#{modId,         jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 데이터접근권한 CRUD -->
+	<insert id="insertDataAccessRole">
+		INSERT INTO TSU0218 (
+			ROLE_ID,
+			ROLE_CD,
+			ROLE_NM,
+			COMMENTS,
+			ROOT_YN,
+			GRP_YN,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		) VALUES (
+			#{roleId,   jdbcType=VARCHAR},
+			#{roleCd,   jdbcType=VARCHAR},
+			#{roleNm,   jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			#{rootYn,   jdbcType=VARCHAR},
+			#{grpYn,    jdbcType=VARCHAR},
+			'N',
+			#{regDate,  jdbcType=VARCHAR},
+			#{regId,    jdbcType=VARCHAR},
+			#{modDate,  jdbcType=VARCHAR},
+			#{modId,    jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateDataAccessRole">
+		UPDATE TSU0218
+			SET
+			 ROOT_YN  = #{rootYn  , jdbcType=VARCHAR}
+			,GRP_YN	  = #{grpYn   , jdbcType=VARCHAR}
+			,MOD_DATE = #{modDate , jdbcType=VARCHAR}
+			,MOD_USER = #{modId   , jdbcType=VARCHAR}
+		WHERE ROLE_ID = #{roleId}
+	</update>
+
+	<insert id="insertDataAccessRolePath" parameterType="DataAccessRolePath">
+		INSERT INTO TSU0221 (
+			 P_ROLE_ID
+			,C_ROLE_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+			 #{pid}
+			,#{cid}
+			,#{depth}
+			,'N'
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+	</insert>
+
+	<insert id="createDataAccessRolePathRelation" parameterType="Map">
+		<!--
+		[InfraMapper.createDataAccessRolePathRelation 정보 그대로 가지고 옴]
+		cross join 값으로 나온 패스값이 0 만 나오는 SQL문제 해결필요함
+		당장은 DEPTH가 1만 존재하므로 아래 SQL로 대체하고
+		1이상 존재하는 경우에 대해서는 차후 고민한다(20160330)
+		-->
+		INSERT INTO TSU0221 (
+			 P_ROLE_ID
+			,C_ROLE_ID
+			,DEPTH
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		)
+		SELECT
+			 A.P_ROLE_ID
+			,B.C_ROLE_ID
+			,A.DEPTH + B.DEPTH +1
+			,'N'
+			<choose>
+        		<when test="_databaseId == 'altibase'">
+			,'${regDate}'
+			,'${regId}'
+			,'${modDate}'
+			,'${modId}'
+		FROM TSU0221 A, TSU0221 B
+        		</when>
+        		<otherwise>
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		FROM TSU0221 A CROSS JOIN TSU0221 B
+        		</otherwise>
+        	</choose>
+		WHERE A.C_ROLE_ID = #{pid}
+			AND B.P_ROLE_ID = #{cid}
+	</insert>
+
+	<insert id="insertDataAccessRoleSystemMap">
+		INSERT INTO TSU0222 (
+			 ROLE_ID
+			,SYSTEM_ID
+			,SEQ
+		) VALUES (
+			 #{roleId}
+			,#{system.systemId}
+			,#{system.seq}
+		)
+	</insert>
+
+	<insert id="insertDataAccessRoleUserMap">
+		INSERT INTO TSU0219 (
+			 ROLE_ID
+			,USER_ID
+			,SEQ
+		) VALUES (
+			 #{roleId}
+			,#{relUser.user.userId}
+			,#{relUser.seq}
+		)
+	</insert>
+
+</mapper>

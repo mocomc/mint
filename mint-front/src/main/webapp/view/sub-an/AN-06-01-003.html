@@ -1,0 +1,1074 @@
+﻿<!--
+	Screen ID : AN-06-01-002
+	Screen NM : 레이아웃맵핑 등록/수정
+	[변경 이력]
+	* 20200225-001 : New
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div id="oldPath" class="col-lg-5">
+ 		<h2 class="lb-change">전문I/O 맵핑 상세</h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-9999">전문I/O 맵핑 관리</lb></li>
+	        <li class="active"><strong class="lb-change">전문I/O 맵핑 상세</strong></li>
+		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" >
+	<div class="row">
+		<div class="col-lg-12">
+			<div class='ibox'>
+				<div class='ibox-title'>
+					<h5><lb class="lb-9999">전문I/O 맵핑</lb></h5>
+                    <div class="ibox-tools" id="xxx-help">
+                    	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+			            <a class="btn btn-w-m btn-default btn-outline btn-update"><i class="fa fa-pencil"></i> <lb class="lb-12"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-delete"><i class="fa fa-trash-o"></i> <lb class="lb-343"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-back" style="display:none;"><i class="fa fa-reply"></i> <lb class="lb-311"></lb></a>
+					</div>
+				</div>
+				<div class='ibox-content'>
+					<div class="row">
+						<div class="col-sm-4" style="display:none;">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="label-tag-4"><lb class="lb-9999">맵핑ID</lb></label>
+									<input id="tf-mapId" name="mapId" type="text" class="input-tag-4 k-textbox input-tag-view mint-readonly" placeholder="" readonly="readonly" disabled="disabled">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="label-tag-4"><lb class="lb-9999">맵핑명</lb></label>
+									<input id="tf-mapNm" name="mapNm" type="text" class="input-tag-4 k-textbox input-tag-view mint-readonly" placeholder="">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="label-tag-4"><lb class="lb-9999">맵핑코드(CD)</lb></label>
+									<input id="tf-mapCd" name="mapCd" type="text" class="input-tag-4 k-textbox input-tag-view mint-readonly" placeholder="">
+                              		<input id="hd-mapCd" name="hd-mapCd" type="hidden">
+								</div>
+							</div>
+						</div>
+
+						<hr class="hr-space">
+						<div class="col-sm-12">
+							<div class="b-col"></div>
+						</div>
+						<hr class="hr-space">
+
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+                               	<div class="form-group">
+                               		<label class="label-tag-4"><lb class="lb-3007">등록자</lb></label>
+                               		<input id="tf-regUserNm"    name="regUserNm"    type="text" class="input-tag-4 input-tag-disabled k-textbox" style="text-align:center;" placeholder="" readonly="readonly" disabled="disabled">
+                               		<input id="hd-regUserId"    name="regUserId"    type="hidden">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+	                            <div class="form-group">
+	                            	<label class="label-tag-4"><lb class="lb-71">등록일</lb></label>
+                                	<input id="tf-regDate" name="regDate" type="dates" class="input-tag-4 input-tag-disabled k-textbox" style="text-align:center;" placeholder="" readonly="readonly" disabled="disabled">
+                              	</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-horizontal">
+								<div class="form-group">
+									<label class="label-tag-4"><lb class="lb-582">수정일</lb></label>
+									<input id="tf-modDate" name="modDate" type="dates" class="input-tag-4 input-tag-disabled k-textbox" style="text-align:center;" placeholder="" readonly="readonly" disabled="disabled">
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class='ibox'>
+				<div class='ibox-content'>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="col-sm-5 mint-col-0">
+								<div class="panel panel-default mint-panel">
+									<div class="panel-heading mint-panel-title mint-align-center">
+										<h5><lb class="lb-9999">전문I/O(Source)</lb></h5>
+				                        <div class="mint-panel-tools-nw">
+				                        </div>
+									</div>
+									<div class="panel-body mint-panel-content mint-align-center">
+										<div>
+											<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">코드(CD)</lb></span>
+											<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">영문명</lb></span>
+											<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">한글명</lb></span>
+										</div>
+										<hr class="hr-space-2">
+										<div>
+											<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetId" type="hidden">
+											<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetCd" style="width:32.7777%">
+											<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetNm1" style="width:32.7777%">
+											<input class="k-textbox mint-align-center mint-readonly layout-source-dataSetNm2" style="width:32.7777%">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-2 mint-col-default"></div>
+
+							<div class="col-sm-5 mint-col-0">
+								<div class="panel panel-default mint-panel">
+									<div class="panel-heading mint-panel-title mint-align-center">
+										<h5><lb class="lb-9999">전문I/O(Target)</lb></h5>
+				                        <div class="mint-panel-tools-nw">
+				                        </div>
+									</div>
+									<div class="panel-body mint-panel-content">
+										<div>
+											<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">코드(CD)</lb></span>
+											<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">영문명</lb></span>
+											<span class="k-textbox label-tag" style="width:32.7777%"><lb class="lb-9999">한글명</lb></span>
+										</div>
+										<hr class="hr-space-2">
+										<div>
+											<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetId" type="hidden">
+											<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetCd" style="width:32.7777%">
+											<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetNm1" style="width:32.7777%">
+											<input class="k-textbox mint-align-center mint-readonly layout-target-dataSetNm2" style="width:32.7777%">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<hr class="hr-space">
+
+							<div class="col-sm-12 mint-col-0">
+								<div class="mapping">
+									<div class="mappingContainer">
+										<div class="col-lg-5" style="padding-right:0px; padding-left:0px; margin-right:0px; margin-left:0px;">
+											<div class="mappingSource"></div>
+										</div>
+										<div class="col-lg-2" style="padding:0px;margin:0px;">
+											<div class="mappingDiv"></div>
+										</div>
+										<div class="col-lg-5" style="padding-right:0px; padding-left:0px; margin-right:0px; margin-left:0px;">
+						                    <div class="mappingTarget"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</div>
+</div><!-- end wrapper -->
+
+<script>
+$(document).ready(function(){
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "AN-06-01-003";
+	$.extend({
+		main_detail : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main_detail.fn_initCallback');
+					//mint.common.siteMenuPath(screenName);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 화면 초기화
+					//-----------------------------------------------------------------------
+					$.main_detail.isModify = mint.common.getScreenParam('isModify');
+					$.main_detail.fn_initComponent(null);
+					$.main_detail.fn_enableComponent($.main_detail.isModify);
+
+					//-----------------------------------------------------------------------
+					// 상세/수정 체크
+					//-----------------------------------------------------------------------
+					$.main_detail.mapId = mint.common.getScreenParam('mapId');
+		      		if( ! mint.common.isEmpty( $.main_detail.mapId ) ) {
+						mint.callService(null, 'AN-06-01-003', 'REST-R02-AN-06-01', function(responseData) {
+							$.main_detail.fn_setLayoutBinding(null, responseData);
+						},
+							{
+						    	  errorCall : true
+						    	, params : {mapId : $.main_detail.mapId}
+						    }
+						);
+		      		}
+
+					//-----------------------------------------------------------------------
+					// Screen Parameter Clear
+					//-----------------------------------------------------------------------
+					{
+						mint.common.removeScreenParam('isModify');
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+
+			//-----------------------------------------------------------------------
+			// Description :: component enable/disable
+			//-----------------------------------------------------------------------
+			fn_enableComponent : function(isModify) {
+				try {
+					if(isModify) {
+						$('.btn-cancel').show();
+						$('.btn-back').show();
+						$('.btn-tmp-save').show();
+						$('.btn-tmp-read').show();
+					} else {  // create
+						$('.btn-cancel').hide();
+						$('.btn-back').show();
+						$('.btn-tmp-save').show();
+						$('.btn-tmp-read').show();
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_enableComponent"});
+				}
+			},//end fn_enableComponent()
+
+			//-----------------------------------------------------------------------
+			// Description :: component 초기화
+			//-----------------------------------------------------------------------
+			fn_initComponent : function(options) {
+				try {
+					//-----------------------------------------------------------------------
+					// readOnly Input Field
+					//-----------------------------------------------------------------------
+					{
+
+						$(':input[class*="mint-readonly"]').each(function(){
+							$(this).prop("readonly", true);
+							$(this).prop("disabled", true);
+						});
+					}
+
+					//-----------------------------------------------------------------------
+					// TreeList
+					//-----------------------------------------------------------------------
+					$.main_detail.fn_initLayoutTreeList();
+
+					//-----------------------------------------------------------------------
+					// Style
+					//-----------------------------------------------------------------------
+					$('input[type=number]').css("text-align", 'right');
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initComponent"});
+				}
+			},//end fn_initComponent()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initLayoutTreeList
+			//-----------------------------------------------------------------------
+			fn_initLayoutTreeList : function(jsonData) {
+				try {
+
+					var hCSSCenter = {style: 'text-align: center; vertical-align:middle;'};
+					var aCSSCenter = {style: 'text-align: center; white-space: nowrap;'};
+					var aCSSLeft = {style: 'text-align: left; white-space: nowrap;'};
+					var locked = false;
+					var scrollable = false;
+
+					var treeListTemplate = function(layer) {
+						var gridEl = (layer == 'source' ? $('.mappingSource') : $('.mappingTarget'))
+						var treeListTemplate = {
+				          	dataSource : $.main_detail.fn_getTreeListDataSource([]),
+							filterable: false,
+							resizable: true,
+				            sortable: true,
+				            selectable: true,
+				            scrollable: scrollable,
+				            editable: {
+				            	move: false
+				            },
+				            height: mint.ui.gridInitHeight(gridEl, scrollable),
+							columns: [
+								{
+									field: "name1",
+									title: mint.label.getLabel('lb-1014'),
+									headerAttributes: hCSSCenter, attributes: aCSSLeft,
+									width: "130px", expandable: true, locked: locked,
+								},
+								{
+									field: "name2",
+									title: mint.label.getLabel('lb-1015'),
+									headerAttributes: hCSSCenter, attributes : aCSSCenter,
+									width: "130px", locked: locked,
+								},
+								{
+									field: "typeNm",
+									title:  mint.label.getLabel('lb-48'),
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									editor : function(container, options) {
+										mint.ui.gridEditorFieldTypeComboBox(container, options, '$.main_detail.fn_fieldTypeCheck');
+									},
+									width: "120px", locked: locked,
+								},
+								{
+									field: "offset",
+									title: mint.label.getLabel('lb-1016'),
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: "100px",
+									hidden : true
+								},
+								{
+									field: "length",
+									title: mint.label.getLabel('lb-1012'),
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: "100px",
+								},
+
+								{ field : "seq", hidden : true },
+								{ field : "type", hidden : true },
+								{ field : "typeCd", hidden : true },
+								{ field : "encryptType", hidden : true },
+								{ field : "justify", hidden : true },
+								{ field : "dataFieldId", hidden : true },
+								{ field : "fieldSetId", hidden : true },
+								{ field : "dataSetId", hidden : true },
+								{ field : "id", hidden : true },
+
+							],
+							beforeEdit: function(e) {
+							},
+							edit: function(e) {
+								e.container.find("button[class*='k-button']").each(function(){
+									var command = $(this).data('command');
+									if( command === 'update' || command === 'canceledit' ) {
+										var span = $(this).find('span')[0];
+										$(this).addClass('mint-i-btn');
+										$(this).html(span);
+									}
+								});
+							},
+ 							change: function(e) {
+							},
+							dataBound: function (e) {
+								//-----------------------------------------------------------------------
+								// ROW / COL CSS 처리
+								//-----------------------------------------------------------------------
+								var items = e.sender.dataItems();
+								if( items.length > 0 ) {
+									for(var i = 0; i < items.length; i++ ) {
+										var tr = e.sender.wrapper.find("tr[data-uid='" + items[i].uid + "']:first");
+										tr.attr('data-offset', items[i].id);
+										tr.attr('data-name', items[i].Name);
+
+										var ioType = (layer == 'source') ? '0' : '1';
+										$(tr).data('item', $.main_detail.fn_getTreeListItemObject(items[i], ioType));
+									}
+								}
+
+								mint.ui.gridVerticalScrollBar(e);
+ 							},
+ 							dataBinding: function(e) {
+ 							},
+							collapse: function(e) {
+								e.preventDefault();
+							},
+							beforeEdit: function(e) {
+							},
+							save: function(e) {
+							},
+							saveChanges: function(e) {
+							},
+							remove: function(e) {
+							},
+							cancel: function(e) {
+							},
+							dragend: function(e) {
+							},
+						}
+
+						return treeListTemplate;
+
+					};
+
+					$(".mappingSource").kendoTreeList(treeListTemplate('source'));
+					$(".mappingTarget").kendoTreeList(treeListTemplate('target'));
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initLayoutTreeList"});
+				}
+			},//end fn_initLayoutTreeList()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListItemObject
+			//-----------------------------------------------------------------------
+			fn_getTreeListItemObject : function(item, ioType) {
+				try {
+					var itemObject = {
+						objectType: 'DataMapItemField',
+						dataSetId: item.dataSetId,
+						dataFieldId: item.dataFieldId,
+						seq: item.seq,
+						mapId: '',
+						mapItemId: '',
+						ioType: ioType
+					};
+
+					return itemObject;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTreeListItemObject"});
+				}
+			},//end fn_getTreeListItemObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListDataSource
+			//-----------------------------------------------------------------------
+			fn_getTreeListDataSource : function(jsonData) {
+				try {
+					var	dataSource = new kendo.data.TreeListDataSource({
+							data: jsonData,
+						    schema: {
+						    	model: $.main_detail.fn_getTreeListModel()
+						    },
+						});
+					return dataSource;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTreeListDataSource"});
+				}
+			},//end fn_getTreeListDataSource()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getTreeListModel
+			//-----------------------------------------------------------------------
+			fn_getTreeListModel : function() {
+				try {
+					var model = {
+						id: "id",
+						parentId: "parentId",
+	            		fields: {
+	            			objectType: {type: "string", editable:false, nullable:false, defaultValue: "DataField"},
+	            			id: {type: "string", editable:true, nullable: false},
+	            			parentId: {type: "string", editable:true, nullable: true},
+	            			dataSetId:   {type: "string", editable:false, nullable: false, defaultValue: ""},
+	            			dataFieldId: {type: "string", editable:false, nullable: false, defaultValue: ""},
+	            			fieldSetId:  {type: "string", editable:false, nullable: true, defaultValue: ""},
+	            			seq:         {type: "string", editable: false, nullable: false, defaultValue: ""},
+		            		name1:       {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		name2:       {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		cd:          {type: "string", editable: false, nullable: true, defaultValue: ""},
+		            		type:        {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		typeCd:      {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		typeNm:      {type: "string", editable: true, nullable: false, defaultValue: ""},
+		            		offset:      {type: "number", validation: { required: true, min: 0, step: 1, format: 'n0', decimals: 1 } , editable: true, nullable: false, defaultValue: 0},
+	            			length:      {type: "number", validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: 0},
+	            			encryptType : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			encryptTypeNm : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			isLengthField : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatCount : {type: "number", validation: { required: true, min: 0} , editable: true, nullable: false, defaultValue: 0},
+	            			hasRepeatCountField : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatDataSetId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			repeatFieldId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			defaultValue: {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			justify : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			justifyNm : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			padding : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			regDate : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			regId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			modDate : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            			modId : {type: "string", editable: true, nullable: false, defaultValue: ""},
+	            		},
+	            		expanded: true
+					};
+
+					var TreeListModel = new kendo.data.TreeListModel.define(model);
+					return TreeListModel;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getTreeListModel"});
+				}
+			}, //end fn_getTreeListModel()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getMapperOptions
+			//-----------------------------------------------------------------------
+			fn_getMapperOptions : function() {
+				try {
+					var mapperOptions = {
+							associationMode: 'manyToMany', // oneToOne, manyToMany
+							lineStyle: 'square-ends',
+							buttonErase: 'Erase Links',
+							addAttributes: {mapId: '', mapItemId: '', seq: 0, mapCtrlType: '0'},
+							isDisabled: true
+					}
+
+					return mapperOptions;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getMapperOptions"});
+				}
+			},//end fn_getMapperOptions()
+
+			//-----------------------------------------------------------------------
+			// Description ::  Validation 체크
+			//-----------------------------------------------------------------------
+			fn_validationCheck : function() {
+				try {
+					var mappingObject = $('.mapping').data('mintMapper');
+					var mappingInfo = mappingObject.getMappingInfo();
+					if( mappingInfo ) {
+						var links = mappingInfo.links;
+						if(mint.common.isEmpty(links) || links.length == 0) {
+							mint.common.alert('Mapping 정보가 없습니다.');
+							return false;
+						}
+					}
+
+					return true;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_validationCheck"});
+				}
+			},//end fn_validationCheck()
+
+			//-----------------------------------------------------------------------
+			// Description :: 저장
+			//-----------------------------------------------------------------------
+			fn_save : function() {
+				try {
+					if( $.main_detail.fn_validationCheck() ) {
+						$.main_detail.fn_saveMapping();
+					} else {
+						// doSomething
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_save"});
+				}
+			},//end fn_save()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getMappingObject
+			//-----------------------------------------------------------------------
+			fn_getMappingObject : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// Mappping Master
+					//-----------------------------------------------------------------------
+					var source = $('.mappingSource');
+					var target = $('.mappingTarget');
+
+					var mapperObject = $('.mapping').data('mintMapper');
+					var mappingInfo = mapperObject.getMappingInfo();
+
+					//-----------------------------------------------------------------------
+					// Mappping Master
+					//-----------------------------------------------------------------------
+					var mappingObject = new Object();
+					mappingObject.objectType      = 'DataMap';
+					mappingObject.mapId			  = $("#tf-mapId").val();
+					mappingObject.cd			  = $("#tf-mapCd").val();
+					mappingObject.name			  = $("#tf-mapNm").val();
+					mappingObject.srcDataSetId	  = $('.layout-source-dataSetId').val();
+					mappingObject.tagDataSetId	  = $('.layout-target-dataSetId').val();
+					mappingObject.delYn           = 'N';
+					mappingObject.dataMapItemList = mappingInfo.links;
+
+					return mappingObject;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getMappingObject"});
+				}
+			},//end fn_getMappingObject()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_saveMappingt
+			//-----------------------------------------------------------------------
+			fn_saveMapping : function() {
+				try {
+					var mappingObject = $.main_detail.fn_getMappingObject();
+
+					if( !mint.common.isEmpty($('#tf-mapId').val()) && $.main_detail.isModify == true ) {
+						// 수정일 경우
+						if( !mint.common.isEmpty($('#hd-mapCd-Old').val()) && $('#hd-mapCd-Old').val() != $('#tf-mapCd').val() ) {
+							$.main_detail.fn_mapCdCheck(function() {
+								$.main_detail.fn_updateMapping(mappingObject);
+							});
+						} else {
+							$.main_detail.fn_updateMapping(mappingObject);
+						}
+
+					} else {
+						// 등록일 경우, MAP_CD 중복체크
+						$.main_detail.fn_mapCdCheck(function() {
+							$.main_detail.fn_createMapping(mappingObject);
+						});
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_saveMapping"});
+				}
+			},//end fn_saveMapping()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_mapCdCheck
+			//-----------------------------------------------------------------------
+			fn_mapCdCheck : function(func) {
+				try {
+					mint.callService(null, screenName, 'REST-R03-AN-06-01', function(responseData) {
+						if( !mint.common.isEmpty(responseData) && responseData == 0 ) {
+							func();
+						} else {
+							mint.common.alert('전문I/O 맵핑 코드 [' + $("#tf-mapCd").val() + '] 로 이미 등록되어 있습니다.');//TODO::Message
+							return;
+						}
+					},
+					{
+						  errorCall : true
+						, notificationView : false
+						, params 	: {mapCd : $("#tf-mapCd").val()}
+					});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_mapCdCheck"});
+				}
+			},//end fn_mapCdCheck()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_updateMapping
+			//-----------------------------------------------------------------------
+			fn_updateMapping : function(mappingObject) {
+				try {
+					mint.callService(mappingObject, screenName, 'REST-U01-AN-06-01', '$.main_detail.fn_saveComplete',
+						{
+							  errorCall : true
+							, notificationView : false
+							, params 	: {mapId : $("#hd-mapId").val()}
+						}
+					);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_updateMapping"});
+				}
+			},//end fn_updateMapping()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_createMapping
+			//-----------------------------------------------------------------------
+			fn_createMapping : function(mappingObject) {
+				try {
+					mint.callService(mappingObject, screenName, 'REST-C01-AN-06-01', '$.main_detail.fn_saveComplete',
+						{
+							  errorCall : true
+							, notificationView : false
+						}
+					);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_createMapping"});
+				}
+			},//end fn_createMapping()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: 저장 콜백
+			//-----------------------------------------------------------------------
+			fn_saveComplete : function(jsonObject) {
+				try {
+					if( !mint.common.isEmpty(jsonObject) ) {
+						//-----------------------------------------------------------------------
+						// - Alert Message 를 Display 한다.
+						//-----------------------------------------------------------------------
+						var msgCode = null;
+						if( mint.common.isEmpty($('#tf-mapId').val()) ) {
+							msgCode = 'CI00101';
+						} else {
+							msgCode = 'CI00102';
+						}
+						mint.common.alert(msgCode, null);
+
+						{
+							mint.setDetailView('Y');
+							mint.common.setScreenParam("mapId", jsonObject.mapId);
+							mint.move('../sub-an/AN-06-01-003');
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_saveComplete"});
+				}
+			},//end fn_saveComplete()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLayout
+			//-----------------------------------------------------------------------
+			fn_loadLayout : function(caller) {
+				try {
+					mint.common.setScreenParam("caller", caller);
+					mint.common.setScreenParam('callback', '$.main_detail.fn_loadLayoutCallback');
+					mint.common.searchPopup('../sub-an/AN-06-02-001.html','AN-06-02-001');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_loadLayout"});
+				}
+			}, //fn_loadLayout
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadLayoutCallback( callback )
+			//-----------------------------------------------------------------------
+			fn_loadLayoutCallback : function(selectedItem) {
+				try {
+					if( !mint.common.isEmpty(selectedItem) ) {
+						var caller = mint.common.getScreenParam('caller');
+						mint.common.removeScreenParam('caller');
+
+						var responseData = {
+							mapData: null,
+							srcDataSet: caller === 'source' ? selectedItem : null,
+							tagDataSet: caller === 'target' ? selectedItem : null
+						};
+
+						$.main_detail.fn_setLayoutBinding(caller, responseData);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_loadLayoutCallback"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: (1) fn_setLayoutBinding
+			// - 레이이웃 선처리
+			//-----------------------------------------------------------------------
+			fn_setLayoutBinding : function(caller, responseData) {
+				try {
+		      		if( !mint.common.isEmpty(responseData) ) {
+		      			{
+			      			responseData.mapData = mint.common.isEmpty(responseData.mapData) ? $.main_detail.fn_getLayoutModel('map') : responseData.mapData;
+			      			responseData.srcDataSet = mint.common.isEmpty(responseData.srcDataSet) ? $.main_detail.fn_getLayoutModel('layout') : responseData.srcDataSet;
+			      			responseData.tagDataSet = mint.common.isEmpty(responseData.tagDataSet) ? $.main_detail.fn_getLayoutModel('layout') : responseData.tagDataSet;
+		      			}
+
+						$.main_detail.fn_setLayoutMapping(caller, responseData);
+		      		}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setLayoutBinding"});
+				}
+			},//end fn_setLayoutBinding()
+
+			//-----------------------------------------------------------------------
+			// Description :: (2) fn_setLayoutMapping
+			// - Layout Layer :: 맵핑 정보 binding
+			//-----------------------------------------------------------------------
+			fn_setLayoutMapping : function(caller, responseData) {
+				try {
+
+					if( !mint.common.isEmpty(responseData) ) {
+						//-----------------------------------------------------------------------
+						// init
+						//-----------------------------------------------------------------------
+						var mapData = responseData.mapData;
+						var srcDataSet = responseData.srcDataSet;
+						var tagDataSet = responseData.tagDataSet;
+
+						var srcDiv = $('.mappingSource');
+						var tagDiv = $('.mappingTarget');
+
+						var srcTreeList = srcDiv.data('kendoTreeList');
+						var tagTreeList = tagDiv.data('kendoTreeList');
+
+						//-----------------------------------------------------------------------
+						// Source/Target Layout
+						//-----------------------------------------------------------------------
+						if( caller ) {
+							$.main_detail.fn_setLayout(caller, caller == 'source' ? srcDataSet : tagDataSet);
+						} else {
+							$.main_detail.fn_setLayout('source', srcDataSet);
+							$.main_detail.fn_setLayout('target', tagDataSet);
+						}
+
+						//-----------------------------------------------------------------------
+						// Mapping Basic Info
+						//-----------------------------------------------------------------------
+						$('#tf-mapId').val( mapData.mapId );
+						$('#tf-mapNm').val( mapData.name );
+						$('#tf-mapCd').val( mapData.cd );
+
+						$('#tf-regUserNm').val( mapData.regUser.userNm );
+						$('#tf-regDate').val( mint.common.formatDate(mapData.regDate) );
+						$('#tf-modDate').val( mint.common.formatDate(mapData.modDate) );
+
+						//-----------------------------------------------------------------------
+						// Mapping Item Setting(TODO: 공통모듈 처리)
+						//-----------------------------------------------------------------------
+						var mappingObject = mapData.dataMapItemList;
+						mappingObject.forEach(function(value, index, array) {
+							value.items.filter(function(v, i, a) {
+								if( v.ioType === "0" ) {
+									value.src = v.dataFieldId;
+								} else if( v.ioType === "1") {
+									value.tag = v.dataFieldId;
+								}
+							});
+						});
+
+						//-----------------------------------------------------------------------
+						// Mapping Draw(TODO: 공통모듈 처리)
+						//-----------------------------------------------------------------------
+						var input = {
+							Lists: [
+								{
+									"name": "Source Fields",
+									"list" : []
+								},
+								{
+									"name": "Target Fields",
+									"list" : [],
+									"mandatories" :[]
+								}
+							],
+							existingLinks: mappingObject
+						};
+
+						$(".mapping").mintMapper(input, $.main_detail.fn_getMapperOptions());
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setLayoutMapping"});
+				}
+			},//end fn_setLayoutMapping()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setLayout(callBack)
+			//-----------------------------------------------------------------------
+			fn_setLayout : function(caller, dataSetItem) {
+				try {
+
+					if(caller == 'source') {
+						var bindingTreeList = $('.mappingSource').data("kendoTreeList");
+					} else {
+						var bindingTreeList = $('.mappingTarget').data("kendoTreeList");
+					}
+
+					//-----------------------------------------------------------------------
+					// Layout(DataSet) 기본 정보
+					//-----------------------------------------------------------------------
+					$('.layout-' + caller + '-dataSetId').val(dataSetItem.dataSetId);
+					$('.layout-' + caller + '-dataSetCd').val(dataSetItem.cd);
+					$('.layout-' + caller + '-dataSetNm1').val(dataSetItem.name1);
+					$('.layout-' + caller + '-dataSetNm2').val(dataSetItem.name2);
+
+					//-----------------------------------------------------------------------
+					// Layout(DataField) List
+					//-----------------------------------------------------------------------
+					bindingTreeList.setDataSource($.main_detail.fn_getTreeListDataSource(dataSetItem.dataFieldList));
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_setLayout"});
+				}
+			},//end fn_setLayout()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getLayoutModel
+			//-----------------------------------------------------------------------
+			fn_getLayoutModel : function(layoutType) {
+				try {
+
+					var MapModel = {
+						mapId: '',
+						name: '',
+						cd: '',
+						dataMapItemList: []
+					};
+
+					var DataSetModel = {
+						dataSetId: '',
+						cd: '',
+						name1: '',
+						name2: '',
+						dataFieldList: []
+					};
+
+					var LayoutModel = {
+						mapData: MapModel,
+						srcDataSet: DataSetModel,
+						tagDataSet: DataSetModel
+					};
+
+					if(layoutType == 'map') {
+						return MapModel;
+					} if(layoutType == 'layout') {
+						return DataSetModel;
+					} else {
+						return LayoutModel;
+					}
+
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_getLayoutModel"});
+				}
+			},//end fn_getLayoutModel()
+
+			//-----------------------------------------------------------------------
+			// Description :: 수정 삭제 및 심의 가능 여부 체크
+			//-----------------------------------------------------------------------
+			fn_isModifyer : function() {
+				try {
+					var isModifyer = false;
+					//등록자 및 어드민 검사
+					if($('#hd-regUserId').val() == mint.session.getUserId() || mint.session.isInterfaceAdmin() == 'Y') {
+						isModifyer = true;
+					}
+					return isModifyer;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_isModifyer"});
+				}
+			},//end fn_isModifyer()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_update
+			//-----------------------------------------------------------------------
+			fn_update : function() {
+				try {
+					if($.main_detail.fn_isModifyer()) {
+						mint.setDetailView("Y");
+						mint.common.setScreenParam("isModify", true);
+						mint.common.setScreenParam('mapId', $('#tf-mapId').val());
+						mint.move('../sub-an/AN-06-01-002');
+					} else {
+						mint.common.alert('CW00007', null);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_update"});
+				}
+			},//end fn_update()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dataMapDelete
+			//-----------------------------------------------------------------------
+			fn_dataMapDelete : function(confirmCheck) {
+				try {
+
+					if( mint.common.isEmpty(confirmCheck) )
+						confirmCheck = mint.common.confirm('CI00003');
+
+					if(confirmCheck) {
+						mint.callService(null, screenName, 'REST-D01-AN-06-01'
+							,function(jsonData) {
+								mint.common.alert('CI00103', null);
+					      		mint.move('../sub-an/AN-06-01-001');
+							}
+							,{
+								 errorCall : false
+								,params : { mapId : $.main_detail.mapId }
+							}
+						);
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_dataMapDelete"});
+				}
+			},//end fn_dataMapDelete()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_delete
+			//-----------------------------------------------------------------------
+			fn_delete : function() {
+				try {
+					if( $.main_detail.fn_isModifyer() ) {
+
+						mint.callService(null, screenName, 'REST-R04-AN-06-01', function(responseData) {
+								if( !mint.common.isEmpty(responseData) && responseData == 0 ) {
+									$.main_detail.fn_dataMapDelete();
+								} else {
+									var confirmCheck = mint.common.confirm('전문I/O 맵핑 코드[' + $("#tf-mapCd").val() + '] 가 인터페이스에서 사용중입니다\n인터페이스는 전문I/O는 유지되고 맵핑 정보만 삭제됩니다\n삭제하시겠습니까? ');//TODO::Message
+									if(confirmCheck) {
+										$.main_detail.fn_dataMapDelete(confirmCheck);
+									} else {
+										return;
+									}
+								}
+							},
+							{
+								  errorCall : true
+								, notificationView : false
+								, params 	: {mapId : $("#tf-mapId").val()}
+							}
+
+						);
+					} else {
+						mint.common.alert('CW00007', null);
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_delete"});
+				}
+			},//end fn_save()
+
+
+		}// end main
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 수정 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-update').on('click', function(e) {
+		$.main_detail.fn_update();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 삭제 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-delete').on('click', function(e) {
+		$.main_detail.fn_delete();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 이전 버튼 Click 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-back').on('click', function(e) {
+		mint.back(null);
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main_detail.fn_init();
+	mint.label.attachLabel(null);
+
+});
+</script>

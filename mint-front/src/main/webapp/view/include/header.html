@@ -1,0 +1,399 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<div class="row border-bottom">
+	<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+		<div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " ><i id="mint-menu-bar" class="fa fa-angle-double-left"></i> </a>
+            <div style="padding:5px 12px 4px 12px; margin:10px 5px 2px 20px; float:left;" class="text-muted"><h3><lb class="lb-2 iip-version"></lb></h3></div>
+       	</div>
+
+    	<!--//2016.05.24 삼성전기 요청으로 위치 조정함.
+    	<div style="padding:5px 12px 4px 12px; margin:10px 5px 2px 20px; float:left;" class="m-r-sm text-muted welcome-message">
+    	-->
+   		<div id="lang-multi-select-div" style="padding:5px 12px 4px 12px; margin:10px 20px 2px -25px; float:right; display:none;" class="m-r-sm text-muted welcome-message">
+			<span class="btn-group" >
+				<button data-toggle="dropdown" class="btn btn-sm btn-block btn-default btn-outline dropdown-toogle" onclick="$.header.fn_hidePannel('ICON-LANG');"><span id="currentLang" style="margin-top:30px;"></span> <span class="caret"></span></button>
+				<ul class="dropdown-menu" style="right:0px; left:auto;">
+					<li id="lang-ko" onclick="$.header.fn_setLang('ko')"><a><img src="../../img/flag/ko.png"> 한국어</a></li>
+					<li id="lang-en" onclick="$.header.fn_setLang('en')"><a><img src="../../img/flag/en.png"> English</a></li>
+					<!--<li id="lang-cn" onclick="$.header.fn_setLang('cn')"><a><img src="../../img/flag/cn.png"> 中國語</a></li>  -->
+				</ul>
+			</span>
+			<span>&nbsp;</span>
+		</div>
+
+      	<div>
+			<ul class="nav navbar-top-links navbar-right">
+				<li>
+					<span id="welcomMsg" class="m-r-sm text-muted welcome-message"></span>
+				</li>
+
+				<!-- 방문자 수 -->
+				<li>
+					<small>
+						<span id="userCount" class="m-r-sm text-muted"><lb class="lb-3"></lb>
+							<span class="label label-primary"><lb class="lb-4"></lb><span id="userCount-today">( 0 )</span></span>
+							<span class="label label-success"><lb class="lb-5"></lb><span id="userCount-total">( 0 )</span></span>
+						</span>
+					</small>
+				</li>
+
+				<!-- 메인화면 설정 버튼 -->
+				<li>
+					<a class="text-muted welcome-message text-xs" style="font-weight:100; display:none;" onclick="$.header.fn_hidePannel('ICON-MAIN');">
+						<small><i class="fa fa-lg fa-gear btn-mainConfig"></i></small>
+					</a>
+				</li>
+
+				<!-- 사용자 정보 버튼 -->
+				<li class="right-sidebar-toggle">
+					<a class="text-muted welcome-message text-xs" style="font-weight:100;" onclick="$.header.fn_hidePannel('ICON-USER');">
+						<small><i class="fa fa-lg fa-user"></i><span id="userNm"></span></small>
+					</a>
+					<div id="userInfo"></div>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</div>
+
+
+<div id="right-sidebar" style="display: none">
+    <div class="sidebar-container">
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane active">
+                <div class="setings-item">
+                	<span class="label label-primary"><mideum>User Info</mideum></span>
+                	<div style="padding-bottom: 5px;"></div>
+                	<span>
+	                    <table class="table small m-b-xs">
+	                        <tbody>
+	                        <tr>
+	                            <td style="text-align:right"><strong>Name</strong></td>
+	                            <td><span id="right-userNm"></span></td>
+	                        </tr>
+	                        <tr>
+	                            <td style="text-align:right"><strong>Company</strong></td>
+	                            <td><span id="right-companyNm"></span></td>
+	                        </tr>
+	                        <tr>
+	                            <td style="text-align:right"><strong>Department</strong></td>
+	                            <td><span id="right-departmentNm"></span></td>
+	                        </tr>
+	                        <tr>
+	                            <td style="text-align:right"><strong>Position</strong></td>
+	                            <td><span id="right-positionNm"></span></td>
+	                        </tr>
+	                        <tr>
+	                            <td style="text-align:right"><strong>Role</strong></td>
+	                            <td><span id="right-roleNm"></span></td>
+	                        </tr>
+	                        <tr>
+	                            <td style="text-align:right"><strong>Interface Admin</strong></td>
+	                            <td><span id="right-isInterfaceAdmin"></span></td>
+	                        </tr>
+	                        <tr style="display:none;">
+	                            <td style="text-align:right"><strong>Solution Admin</strong></td>
+	                            <td><span id="right-isChannelAdmin"></span></td>
+	                        </tr>
+	                        <tr style="display:none;">
+	                            <td style="text-align:right"><strong>Last Login IP</strong></td>
+	                            <td><span id="right-loginIp"></span></td>
+	                        </tr>
+	                        <tr style="display:none;">
+	                            <td style="text-align:right"><strong>Last Login Date</strong></td>
+	                            <td><span id="right-loginDate"></span></td>
+	                        </tr>
+	                        <tr id="right-channelList">
+	                        	<!--
+	                            <td style="text-align:right"><strong>Solution List</strong></td>
+	                            <td>N/A</td>
+	                            -->
+	                        </tr>
+	                        </tbody>
+	                    </table>
+                    </span>
+					<span>
+						<button type="button" class="btn btn-block btn-danger btn-logOut"><i class="fa fa-sign-out"></i> <lb class="lb-6"></lb></button>
+						<button type="button" class="btn btn-block btn-primary btn-mainConfig" style="display:none;"><i class="fa fa-wrench"></i> <lb class="lb-7"></lb></button>
+						<button type="button" class="btn btn-block btn-primary btn-changePswd" style="display:none;"><i class="fa fa-unlock-alt"></i> 패스워드 변경</button>
+					</span>
+                </div>
+<!--
+                <div class="setings-item">
+                	<span class="btn-group">
+	                	<button data-toggle="dropdown" class="btn btn-block btn-default btn-outline dropdown-toogle">Language <span class="caret"></span></button>
+	               		<ul class="dropdown-menu">
+	               			<li id="lang-ko" onclick="$.header.fn_setLang('ko')"><a><img src="../../img/flag/ko.png"> 한국어</a></li>
+	               			<li id="lang-en" onclick="$.header.fn_setLang('en')"><a><img src="../../img/flag/en.png"> English</a></li>
+	               			<li id="lang-cn" onclick="$.header.fn_setLang('cn')"><a><img src="../../img/flag/cn.png"> 中國語</a></li>
+	               		</ul>
+
+                	</span>
+                	<span>&nbsp;&nbsp;&nbsp;</span>
+               		<span id="currentLang" style="text-align:right"></span>
+                </div>
+-->
+                <div class="sidebar-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Waiting Image -->
+<div id="waitingLoad"  style="display:none; align:center;">
+  <span id="waitingLoad-image"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span class="sr-only">Loading...</span></span>
+</div>
+
+<script>
+//=======================================================================
+//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+//=======================================================================
+screenName = "include.header";
+$(document).ready(function () {
+	$.extend({
+		header : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					//-----------------------------------------------------------------------
+					//초기 Lang 표시
+					//-----------------------------------------------------------------------
+					$('#currentLang').html( $('#lang-'+ mint.lang +' > a').html());
+					//-----------------------------------------------------------------------
+					//오른쪽 사이드에 사용자 정보를 설정 한다
+					//-----------------------------------------------------------------------
+					$.header.fn_setUserInfo();
+					//-----------------------------------------------------------------------
+					//오른쪽 사이드를 보이도록 설정한다
+					//-----------------------------------------------------------------------
+					$("#right-sidebar").show();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: Main 화면 Config(개인별 설정기능)
+			//-----------------------------------------------------------------------
+			fn_mainConfigPopup : function() {
+				try {
+					mint.common.searchPopup('../sub-co/CO-01-00-010.html','CO-01-00-010');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_mainConfigPopup"});
+				}
+			},// end fn_mainConfigPopup()
+
+			//-----------------------------------------------------------------------
+			// Description :: 사용자 접속 카운트 조회
+			//-----------------------------------------------------------------------
+			fn_getUserCount : function() {
+				try {
+					mint.callService(null, 'CO-00-00-003', 'REST-R03-CO-02-00-000',
+							function(jsonData) {
+								if( ! mint.common.isEmpty(jsonData) && ! mint.common.isEmpty(jsonData.todayLoginUserCnt) ) {
+									$('#userCount-today').html('( '+ mint.common.addComma(jsonData.todayLoginUserCnt) +' )');
+								}
+								if( ! mint.common.isEmpty(jsonData) && ! mint.common.isEmpty(jsonData.totalLoginUserCnt) ) {
+									$('#userCount-total').html('( '+ mint.common.addComma(jsonData.totalLoginUserCnt) +' )');
+								}
+
+							}, {errorCall: false, waitingView: false}
+						);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_getUserCount"});
+				}
+			},// end fn_getUserCount()
+
+			//-----------------------------------------------------------------------
+			// Description :: 오른쪽 패널에 사용자 정보를 표시 한다
+			//-----------------------------------------------------------------------
+			fn_setUserInfo : function() {
+				try {
+					if(! mint.common.isEmpty(mint.session) ) {
+						$("#userNm").html( mint.session.getUserNm() +"&nbsp;" );
+						$("#right-userNm").html( mint.session.getUserNm() );
+						$("#right-companyNm").html( mint.session.getCompanyNm() );
+						$("#right-departmentNm").html( mint.session.getDepartmentNm() );
+						$("#right-positionNm").html( mint.session.getPositionNm() );
+						$("#right-roleNm").html( mint.session.getRoleNm() );
+
+						if( mint.session.isInterfaceAdmin() === 'Y' ) {
+							$("#right-isInterfaceAdmin").html( 'Yes' );
+						} else {
+							$("#right-isInterfaceAdmin").html( 'No' );
+						}
+
+						if( mint.session.isChannelAdmin() === 'Y' ) {
+							$("#right-isChannelAdmin").html( 'Yes' );
+						} else {
+							$("#right-isChannelAdmin").html( 'No' );
+						}
+
+						if( mint.session.useHistory() == true ){
+							var loginHistory = mint.session.getLoginHistory();
+							var loginIp = loginHistory.ip;
+							var loginDate = loginHistory.loginDate;
+
+							if( !mint.common.isEmpty(loginIp) ) {
+								$("#right-loginIp").html(loginIp);
+							}
+							if( !mint.common.isEmpty(loginDate) ) {
+								$("#right-loginDate").html(loginDate.substr(0,4)+"/"+loginDate.substr(4,2)+"/"+loginDate.substr(6,2)+" "+loginDate.substr(8,2)+":"+loginDate.substr(10,2)+":"+loginDate.substr(12,2));
+							}
+
+							$("#right-loginIp").closest('tr').css('display', 'table-row');
+							$("#right-loginDate").closest('tr').css('display', 'table-row');
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_setUserInfo"});
+				}
+			}, // end fn_setUserInfo()
+
+
+			//-----------------------------------------------------------------------
+			// Description :: UI Language 설정
+			//-----------------------------------------------------------------------
+			fn_setLang : function( lang ) {
+			   try {
+				  var selectLangId = 'lang-' + lang;
+				  $('#currentLang').html( $('#'+selectLangId +' > a').html());
+
+				  mint.lang = lang;
+				  mint.label.attachLabel(null);
+				  mint.goMain();
+			   } catch( e ) {
+				   mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_setUserInfo"});
+			   }
+			}, // end fn_setLang()
+
+			//-----------------------------------------------------------------------
+			// Description :: Popup Visible Setting
+			//-----------------------------------------------------------------------
+			fn_hidePannel : function( clickIcon ) {
+				try {
+
+					switch( clickIcon ) {
+						case 'ICON-MAIN' : //메인 화면 설정.
+							break;
+						case 'ICON-USER' : //사용자 정보.
+							break;
+						case 'ICON-LANG' : //언어 설정.
+							$('#right-sidebar').removeClass('sidebar-open');
+							break;
+						default :
+							break;
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_hidePannel"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: 버전정보조회
+			//-----------------------------------------------------------------------
+			/*
+			fn_getVersion : function() {
+				try {
+					mint.callService(null, 'CO-00-00-003', 'REST-R01-SU-99-99-999',
+							function(jsonData) {
+								var versionInfo = jsonData;
+								console.log(
+									"\nverion:" 	+ versionInfo.version +
+									"\ndeployDate:" + versionInfo.deployDate +
+									"\ndesc:"		+ versionInfo.description
+								);
+
+							}, {errorCall: false, waitingView: false}
+						);
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_getVersion"});
+				}
+			}// end fn_getVersion()
+			*/
+
+			//-----------------------------------------------------------------------
+			// Description :: 패스워드 변경
+			//-----------------------------------------------------------------------
+			fn_changePassword : function() {
+				try{
+					mint.common.searchPopup("../sub-co/CO-01-00-016.html","CO-01-00-016");
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.header.fn_changePassword"});
+				}
+			}// end fn_changePassword()
+
+
+		}// end main
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: 메인화면 설정 이벤트
+	//-----------------------------------------------------------------------
+    $('.btn-mainConfig').on('click', function() {
+        $.header.fn_mainConfigPopup();
+    });
+
+	//-----------------------------------------------------------------------
+	// Description :: 로그아웃 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-logOut').on('click', function() {
+		mint.session.logOut();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 패스워드 변경 이벤트
+	//-----------------------------------------------------------------------
+	$('.btn-changePswd').on('click', function() {
+		$.header.fn_changePassword();
+	});
+
+
+	//-----------------------------------------------------------------------
+	// Description :: IIP Version 정보 조회 토스트 팝업
+	//-----------------------------------------------------------------------
+	/*
+	$('.iip-version').on('click', function() {
+		$.header.fn_getVersion();
+	});
+	*/
+
+	//=======================================================================
+	// (5) 기타 Function 정의 ( 모듈 단위로 정의 할것 )
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.header.fn_init();
+
+
+
+
+
+	/*
+	dhkim test
+    $.get("../include/skin-config.html", function (data) {
+        if (!$('body').hasClass('no-skin-config')) {
+            $('body').append(data);
+        }
+    });
+	*/
+});
+</script>

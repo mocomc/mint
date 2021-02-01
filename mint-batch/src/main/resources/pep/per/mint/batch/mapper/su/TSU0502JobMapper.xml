@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU0502JobMapper">
+    <!--
+    <cache/>
+    -->
+
+	<select id="selectSummary" resultMap="interfaceCountSummaryMap">
+	<![CDATA[
+		SELECT A.INTF_ID AS INTEGRATION_ID
+			  ,F.REQUIREMENT_NM
+		      ,A.TT AS TODAY_TOTAL
+		      ,B.TC AS TODAY_CUR_HOUR
+		      ,C.YT AS YESTERDAY_TOTAL
+		      ,D.YC AS YESTERDAY_CUR_HOUR
+		  FROM (SELECT A.INTF_ID
+		              ,SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) AS TT
+		  		  FROM SI_STAT_INTF_HOUR A, TAN0101 B, TAN0201 C
+		  		 WHERE A.INTF_ID = B.INTERFACE_ID
+		  		   AND B.INTERFACE_ID = C.INTERFACE_ID
+		  		   AND C.DATA_PR_METHOD = '1'
+		  		   AND B.DEL_YN = 'N'
+		  		   AND ST_YEAR = substr(#{today},1,4)
+		  		   AND ST_MONTH = substr(#{today},5,2)
+		  		   AND ST_DAY = substr(#{today},7,2)
+		  		   AND ST_HOUR >= '00'
+		  		   AND ST_HOUR <= substr(#{today},9,2)
+		  		 GROUP BY INTF_ID 
+		  		HAVING SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) > 50) A
+		      ,(SELECT A.INTF_ID
+		              ,SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) AS TC
+		  		  FROM SI_STAT_INTF_HOUR A, TAN0101 B, TAN0201 C
+		  		 WHERE A.INTF_ID = B.INTERFACE_ID
+		  		   AND B.INTERFACE_ID = C.INTERFACE_ID
+		  		   AND C.DATA_PR_METHOD = '1'
+		  		   AND B.DEL_YN = 'N'
+		  		   AND ST_YEAR = substr(#{today},1,4)
+		  		   AND ST_MONTH = substr(#{today},5,2)
+		  		   AND ST_DAY = substr(#{today},7,2)
+		  		   AND ST_HOUR = substr(#{today},9,2)
+		  		 GROUP BY INTF_ID 
+		  		HAVING SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) > 20) B
+		  	  ,(SELECT A.INTF_ID
+		              ,SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) AS YT
+		  		  FROM SI_STAT_INTF_HOUR A, TAN0101 B, TAN0201 C
+		  		 WHERE A.INTF_ID = B.INTERFACE_ID
+		  		   AND B.INTERFACE_ID = C.INTERFACE_ID
+		  		   AND C.DATA_PR_METHOD = '1'
+		  		   AND B.DEL_YN = 'N'
+		  		   AND ST_YEAR = substr(#{yesterday},1,4)
+		  		   AND ST_MONTH = substr(#{yesterday},5,2)
+		  		   AND ST_DAY = substr(#{yesterday},7,2)
+		  		   AND ST_HOUR >= '00'
+		  		   AND ST_HOUR <= substr(#{yesterday},9,2)
+		  		 GROUP BY INTF_ID 
+		  		HAVING SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) > 50) C
+		  	  ,(SELECT A.INTF_ID
+		              ,SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) AS YC
+		  		  FROM SI_STAT_INTF_HOUR A, TAN0101 B, TAN0201 C
+		  		 WHERE A.INTF_ID = B.INTERFACE_ID
+		  		   AND B.INTERFACE_ID = C.INTERFACE_ID
+		  		   AND C.DATA_PR_METHOD = '1'
+		  		   AND B.DEL_YN = 'N'
+		  		   AND ST_YEAR = substr(#{yesterday},1,4)
+		  		   AND ST_MONTH = substr(#{yesterday},5,2)
+		  		   AND ST_DAY = substr(#{yesterday},7,2)
+		  		   AND ST_HOUR = substr(#{yesterday},9,2)
+		  		 GROUP BY INTF_ID 
+		  		HAVING SUM(A.ST_PROCESSING + A.ST_FINISHED + A.ST_SEND_ERR) > 20) D
+		  	   ,TAN0201 E, TAN0101 F
+		 WHERE A.INTF_ID = B.INTF_ID AND B.INTF_ID = C.INTF_ID AND C.INTF_ID = D.INTF_ID 
+		   AND D.INTF_ID = E.INTEGRATION_ID AND E.INTERFACE_ID = F.INTERFACE_ID
+	]]>
+	</select>
+
+    <resultMap id="interfaceCountSummaryMap" type="InterfaceCountSummary" >
+        <result property="integrationId"	column="INTEGRATION_ID"/>
+        <result property="requirementName" 	column="REQUIREMENT_NM"/>
+        <result property="todayTotal"		column="TODAY_TOTAL"/>
+        <result property="todayCurHour"		column="TODAY_CUR_HOUR" />
+        <result property="yesterdayTotal"	column="YESTERDAY_TOTAL" />
+        <result property="yesterdayCurHour"	column="YESTERDAY_CUR_HOUR" />
+    </resultMap>
+
+	<insert id="insertTSU0502">
+		INSERT INTO TSU0502 VALUES (
+			TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+		   ,#{integrationId}
+		   ,#{subject}
+		   ,#{content}
+		   ,'IIP'
+		   ,'N'
+		   ,TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+		)
+	</insert>
+	
+</mapper>

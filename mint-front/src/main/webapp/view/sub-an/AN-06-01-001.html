@@ -1,0 +1,514 @@
+﻿<!--
+	Screen ID : AN-06-01-001
+	Screen NM : 데이타 레이아웃 맵핑 조회
+		[변경 이력]
+	* 20170124-001
+-->
+
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div id="oldPath" class="col-lg-5">
+		<h2><lb class="lb-10"></lb></h2>
+		<ol class="breadcrumb">
+			<li><lb class="lb-832"></lb></li>
+	        <li><lb class="lb-833"></lb></li>
+	        <li class="active"><strong><lb class="lb-10"></lb></strong></li>
+ 		</ol>
+	</div>
+	<div id="menuPath" class="col-lg-5">
+    </div>
+</div>
+<!--location end-->
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><lb class="lb-78"></h5>&nbsp;&nbsp;&nbsp;
+					<div class="ibox-tools">
+						<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H002')"></a>
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-clear"><i class="fa fa-check "></i> <lb class="lb-79"></lb></a>
+						<a class="btn btn-w-m btn-default btn-outline btn-search"><i class="fa fa-search "></i> <lb class="lb-10"></lb></a>
+						<a class="btn btn-w-m btn-primary btn-create"><i class="fa fa-check "></i> <lb class="lb-11"></a>
+					</div>
+				</div>
+
+             	<div class="ibox-content">
+               		<div class="row">
+						<div class="col-sm-4">
+                            <div class="form-group">
+                            	<span class="label-tag-4"><lb class="lb-9999">맵핑명</lb></span>
+                            	<input id="s-cb-mapNm" type="text" class="input-tag-4"  placeholder="Search...">
+                           	</div>
+						</div>
+
+						<div class="col-sm-4">
+                            <div class="form-group">
+                            	<span class="label-tag-4"><lb class="lb-9999">맵핑코드(CD)</lb></span>
+                            	<input id="s-cb-mapCd" type="text" class="input-tag-4"  placeholder="Search...">
+                           	</div>
+						</div>
+						<hr class="hr-space">
+						<div class="col-sm-4">
+                            <div class="form-group">
+                            	<span class="label-tag-4"><lb class="lb-9999">Source</lb></span>
+                            	<input id="s-cb-srcDataSetId" type="text" class="input-tag-4"  placeholder="Search...">
+                           	</div>
+						</div>
+
+						<div class="col-sm-4">
+                            <div class="form-group">
+                            	<span class="label-tag-4"><lb class="lb-9999">Target</lb></span>
+                            	<input id="s-cb-tagDataSetId" type="text" class="input-tag-4"  placeholder="Search...">
+                           	</div>
+						</div>
+                   	</div><!--row end-->
+
+                </div><!--ibox-content end-->
+           	</div><!--ibox float-e-margins end-->
+		</div><!--col-lg-12 end-->
+	</div><!--row end-->
+
+	<div class="row">
+ 		<div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+					<h5><lb class="lb-91"></h5>
+                    <div class="ibox-tools">
+                   		<a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000005','H001')"></a>
+                   		<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+					</div>
+               	</div>
+
+                <div class="ibox-content">
+	     			<div id="grid"></div>
+               	</div>
+            </div><!--ibox float-e-margins end-->
+       	</div><!--col-lg-12 end-->
+	</div><!--row end-->
+</div>
+
+<script>
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "AN-06-01-001";
+		$.extend({
+			main : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.main.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						mint.common.siteMenuPath(screenName);
+						$.main.fn_initComponent();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_initComponent
+				//-----------------------------------------------------------------------
+				fn_initComponent : function(options) {
+					try {
+						var dataset = new Object();
+
+						//레이아웃명, 레이아웃코드 데이터 조회
+// 					    mint.callService(dataset, screenName, 'REST-R06-AN-05-01',function(jsonData) {
+// 					    	mint.ui.setComboBoxWithValueSort('s-cb-srcDataSetId', jsonData, 0, 'nm1', 'id');
+// 					    	mint.ui.setComboBoxWithValueSort('s-cb-tagDataSetId', jsonData, 0, 'nm1', 'id');
+// 						}, {errorCall : true});
+
+
+					    mint.callService(null, screenName, 'REST-R00-AN-06-01',function(jsonData) {
+					    	if(jsonData) {
+					    		mint.ui.setComboBoxWithValueSort('s-cb-mapNm', jsonData.mapNm, 0, 'nm', 'nm');
+					    		mint.ui.setComboBoxWithValueSort('s-cb-mapCd', jsonData.mapNm, 0, 'cd', 'cd');
+						    	mint.ui.setComboBoxWithValueSort('s-cb-srcDataSetId', jsonData.srcDataSetNm, 0, 'nm1', 'nm1');
+						    	mint.ui.setComboBoxWithValueSort('s-cb-tagDataSetId', jsonData.tagDataSetNm, 0, 'nm1', 'nm1');
+					    	}
+						}, {errorCall : true});
+
+						// Dropdown
+	 					mint.ui.setComboBoxWithValueSort('s-cb-dataFormat', mint.common.commonCodeMap.get("cds").AN07, 0, 'nm', 'cd');
+	 					mint.ui.setComboBoxWithValueSort('s-cb-encryptType', mint.common.commonCodeMap.get("cds").AN08, 0, 'nm', 'cd');
+
+						// Grid
+						$.main.fn_initGrid();
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main_detail.fn_initComponent"});
+					}
+				},//end fn_initComponent()
+
+	            //-----------------------------------------------------------------------
+	            // Description :: 검색 조건 초기화 함수
+	            //-----------------------------------------------------------------------
+	            fn_resetComponent : function() {
+	                try {
+						$('input').each(function(){
+							$(this).val('');
+						});
+	                } catch( e ) {
+	                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_resetComponent"});
+	                }
+	            },
+
+				//-----------------------------------------------------------------------
+				// Description :: 엔터키 이벤트
+				//-----------------------------------------------------------------------
+				fn_onKeyDownSearchEvent : function() {
+					try {
+						if(event.keyCode == 13) {
+							$.main.fn_getData();
+				     	}
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownSearchEvent"});
+					}
+				},//end fn_onKeyDownSearchEvent()
+
+
+
+				//-----------------------------------------------------------------------
+				// Description ::  fn_initGrid
+				//-----------------------------------------------------------------------
+				fn_initGrid : function() {
+					try {
+						//var fixLeftGridWidth = ($('#grid')[0].clientWidth / 10) * 7;
+						var fixLeftGridWidth = $('#grid')[0].clientWidth;
+						var fixLeftCoulmnWidth = fixLeftGridWidth / 10;
+
+						//console.log('$(#grid)[0].clientWidth ' + $('#grid')[0].clientWidth);
+						//console.log('fixLeftGridWidth ' + fixLeftGridWidth);
+						//console.log('fixLeftCoulmnWidth ' + fixLeftCoulmnWidth);
+
+						var hCSSCenter = {style: 'text-align: center; vertical-align:middle;'};
+						var aCSSCenter = {style: 'text-align: center; white-space: nowrap;'};
+						var aCSSLeft = {style: 'text-align: left; white-space: nowrap;'};
+
+						var grid = $("#grid").kendoGrid({
+							dataSource: $.main.fn_getGridDataSource([]),
+							filterable: false,
+						    sortable : true,
+							selectable: "row",
+							resizable: true,
+							scrollable:true,
+							pageable : {
+								refresh : false,
+								pageSizes : mint.ui.getPageSizesS(),
+						    	buttonCount : 5,
+					            change:function(e) {
+					            	$.main.dataSetListCheckbox = {};
+						       	}
+							},
+						    toolbar: ["excel"],
+						    excel: {
+								allPages: true,
+								filterable: true,
+								fileName: mint.common.remakeYYMMDD(new Date()).substring(0, 14) + mint.label.getLabel('lb-10') + '.xlsx'
+						    },
+						    messages: {
+						        commands: {
+						          excel: mint.label.getLabel('lb-508')
+						        }
+						    },
+						    excelExport: function(e) {
+								//-----------------------------------------------------------------------
+						    	// 스타일 편집
+						    	//-----------------------------------------------------------------------
+						        var sheet = e.workbook.sheets[0];
+						        for (var i = 0; i < sheet.rows.length; i++) {
+						        	for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
+						            	sheet.rows[i].cells[ci].vAlign = "center";
+						            	//정렬
+						            	if( sheet.rows[i].type == 'header' ) {
+						            		//헤더일 경우
+						            		sheet.rows[i].cells[ci].hAlign = "center";
+						            		sheet.rows[i].cells[ci].bold = true;
+						            	}
+						            }
+						    	}
+					      	},
+						    columns: [
+								{
+									title: '맵핑명',
+									field: "name",
+									template: "<span title='${name}'>${name}</span>",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth,
+								},
+
+								{
+									title: '맵핑코드(CD)',
+									field: "cd",
+									template: "<span title='${cd}'>${cd}</span>",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth,
+								},
+								{
+									title: 'Source',
+									field: "srcDataSetNm1",
+									template: "<span title='${srcDataSetNm1}'>${srcDataSetNm1}</span>",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth,
+								},
+								{
+									title: 'Target',
+									field: "tagDataSetNm1",
+									template: "<span title='${tagDataSetNm1}'>${tagDataSetNm1}</span>",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth,
+								},
+								{
+									title: 'I/F맵핑',
+									field: "isInterfaceMapped",
+									template: "<span title='${isInterfaceMapped}'>${isInterfaceMapped}</span>",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth / 2,
+									hidden: true
+								},
+								{
+									title: mint.label.getLabel('lb-71'),
+									field: "regDate",
+									template: "#=kendo.toString(kendo.parseDate(regDate, 'yyyyMMddHHmm'), 'yyyy/MM/dd')#",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth / 2,
+								},
+								{
+									title: mint.label.getLabel('lb-535'),
+									field: "regUser.userNm",
+									template: "<span title='${regUser.userNm}'>${regUser.userNm}</span>",
+									headerAttributes: hCSSCenter, attributes: aCSSCenter,
+									width: fixLeftCoulmnWidth / 2,
+								},
+							],
+						    dataBound: function (e) {
+						    	if(0 == $("#grid").data('kendoGrid').dataSource.view().length) {
+						    		var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+						    		$("#grid").children(".k-grid-content").height(gridHeight /3.5);
+						    		$("#grid").children(".k-grid-content-locked").height(gridHeight / 3.5);
+						    	} else {
+						    		$("#grid").children(".k-grid-content").height('auto');
+							    	$("#grid").children(".k-grid-content-locked").height('auto');
+						    	}
+
+						    	mint.ui.gridVerticalScrollBar(e);
+						    }
+						});
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+					}
+				},//end fn_initGrid()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_getGridDataSource
+				//-----------------------------------------------------------------------
+				fn_getGridDataSource : function(jsonData) {
+					try {
+						var	dataSource = new kendo.data.DataSource({
+								  data: jsonData
+							    , page:1
+							    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+							    , schema: {
+							    	model: $.main.fn_getGridModel()
+							    }
+							});
+
+						return dataSource;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridDataSource"});
+					}
+				},//end fn_getGridDataSource()
+
+				//-----------------------------------------------------------------------
+				// Description ::fn_getGridModel
+				//-----------------------------------------------------------------------
+				fn_getGridModel : function() {
+					try {
+						var UserModel = new kendo.data.Model.define({
+		            		id: "userId",
+		            		fields: {
+		            			objectType	: {editable: false, nullable: false, defaultValue: "User"},
+		            			userId	    : {editable: false, nullable: false, defaultValue: ""},
+		            			userNm	    : {editable: false, nullable: false, defaultValue: ""},
+		            			password	: {editable: false, nullable: false, defaultValue: ""},
+		            			companyNm	: {editable: false, nullable: false, defaultValue: ""},
+		            			cellPhone   : {editable: false, nullable: false, defaultValue: ""},
+		            			phone	    : {editable: false, nullable: false, defaultValue: ""},
+		            			email	    : {editable: false, nullable: false, defaultValue: ""},
+		            		}
+						});
+
+						var GridModel = new kendo.data.Model.define({
+		            		fields: {
+		            			mapId: {editable: false, nullable: false, defaultValue: ""},
+			            		name: {editable: false, nullable: false, defaultValue: ""},
+			            		cd: {editable: false, nullable: false, defaultValue: ""},
+			            		srcDataSetNm: {editable: false, nullable: false, defaultValue: ""},
+			            		tagDataSetNm: {editable: false, nullable: false, defaultValue: ""},
+			            		interfaceMapYn: {editable: false, nullable: true, defaultValue: "N"},
+			            		regDate: {editable: false, nullable: false, defaultValue: ""},
+			            		user: {editable: false, nullable: false, defaultValue: new UserModel()},
+		            		},
+		            		expanded: true
+						});
+
+						return GridModel;
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridModel"});
+					}
+				}, //end fn_getGridModel()
+
+				//-----------------------------------------------------------------------
+				// Description :: fn_getGridTemplateIsRoot
+				//-----------------------------------------------------------------------
+				fn_getGridTemplateIsRoot : function(isRoot) {
+					try {
+						//TODO : Label
+						var returnVal = '';
+						if(!mint.common.isEmpty(isRoot) && isRoot == 'Y') {
+							returnVal = '레이아웃';
+						} else {
+							returnVal = '복합유형';
+						}
+						return returnVal;
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridTemplateIsRoot"});
+					}
+				},//end fn_getGridTemplateIsRoot()
+
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 버튼 Click 이벤트
+				//-----------------------------------------------------------------------
+				fn_getData : function() {
+					try {
+						var requestObject = new Object();
+						requestObject.mapNm = $("#s-cb-datasetNm1").val();
+						requestObject.mapCd = $("#s-cb-datasetNm2").val();
+						requestObject.srcDataSetId = $("#s-cb-datasetCd").val();
+						requestObject.tagDataSetId = $("#s-cb-dataFormat").val();
+						requestObject.delYn = 'N';
+
+					    //데이터 조회
+					    mint.callService(requestObject, 'AN-06-01-001', 'REST-R01-AN-06-01', '$.main.fn_setData', {errorCall : true});
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "fn_getData"});
+					}
+				},//end fn_getData()
+
+				//-----------------------------------------------------------------------
+				// Description :: 조회 버튼 Click 이벤트 - Grid Data 설정
+				//-----------------------------------------------------------------------
+				fn_setData : function(jsonData) {
+					try {
+						var dataSource = new kendo.data.DataSource({
+								  data: jsonData
+							    , page:1
+							    , pageSize:mint.ui.getPageSizesS({'currentPage' : true})
+						});
+						$("#grid").data("kendoGrid").setDataSource(dataSource);
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setData"});
+					}
+				},//end fn_setData()
+
+				//-----------------------------------------------------------------------
+				// Description :: Grid DBClick 이벤트 - 상세 화면 이동
+				//-----------------------------------------------------------------------
+				fn_moveDetail : function() {
+					try {
+						var entityGrid = $("#grid").data("kendoGrid");
+				        var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+				        mint.setDetailView('Y');
+				        mint.common.setScreenParam("caller", "AN-06-01-001");
+				        mint.common.setScreenParam("mapId", selectedItem.mapId);
+				        //mint.common.setScreenParam("screenType", "R");
+			      		var options = mint.common.getScreenParam("options");
+			      		mint.move('../sub-an/AN-06-01-003', options);	//데이터셋 상세 정보 페이지
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_moveDetail"});
+					}
+				},//end fn_moveDetail()
+
+			}// end main
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//-----------------------------------------------------------------------
+		// Description :: 검색조건 초기화 클릭
+		//-----------------------------------------------------------------------
+		$('.btn-clear').on('click', function() {
+        	$.main.fn_resetComponent();
+    	});
+		//-----------------------------------------------------------------------
+		// Description :: 조회 버튼에 Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$(".btn-search").click(function () {
+			$.main.fn_getData();
+        });
+
+		//-----------------------------------------------------------------------
+		// Description ::  들옥  Click 이벤트 설정
+		//-----------------------------------------------------------------------
+		$(".btn-create").click(function () {
+			mint.move('../sub-an/AN-06-01-002',{CRUDPS:'C', detailView:'Y'});
+        });
+
+		//-----------------------------------------------------------------------
+		// Description :: 그리드 Row DBClick 이벤트 설정 (상세 조회)
+		//-----------------------------------------------------------------------
+		$('#grid').on('dblclick', "tr.k-state-selected", function () {
+			$.main.fn_moveDetail();
+		});
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.main.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+
+</script>

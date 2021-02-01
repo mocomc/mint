@@ -1,0 +1,6 @@
+catalina.sh stop
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_60.jdk/Contents/Home
+mvn -pl mint-common,mint-solution-mi,mint-database,mint-batch,mint-inhouse,mint-front clean package -Dmaven.test.skip=true -X
+rm -R /Users/whoana/DEV/apache-tomcat-7.0.72/webapps/mint
+cp -R ./mint-front/target/mint-front-product-2.0.0 /Users/whoana/DEV/apache-tomcat-7.0.72/webapps/mint
+catalina.sh start;tail -f /Users/whoana/DEV/apache-tomcat-7.0.72/log/logFile.log

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.op.InterfaceLogErrorHDELJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<select id="selectErrorTrLog" resultMap="TrLogMap">
+	<![CDATA[
+		SELECT
+			B.INTF_ID AS INTF_ID, COUNT(B.INTF_ID) AS ERROR_CNT
+		FROM MASTERLOG A
+		INNER JOIN MASTERLOG_ID_MAP B
+		ON A.MASTERLOG_ID = B.MASTERLOG_ID
+		WHERE 1=1
+		AND (A.MSG_DATETIME > #{fromDate}  AND A.MSG_DATETIME <= #{toDate} )
+		AND A.MSG_STATUS='99'
+		GROUP BY B.INTF_ID
+	]]>
+	</select>
+
+	<resultMap type="java.util.HashMap" id="TrLogMap">
+		<result javaType="java.lang.String" column="INTF_ID" property="intfId" />
+		<result javaType="java.lang.Integer" column="ERROR_CNT" property="errCnt" />
+	</resultMap>
+
+	<select id="selectSendUser" resultMap="SendUserMap">
+	<![CDATA[
+		SELECT
+			DISTINCT(CELL_PHONE) AS CELL_PHONE
+		FROM TSU0101 A
+		INNER JOIN TAN0219 B
+		ON B.USER_ID = A.USER_ID
+		INNER JOIN TAN0201 C
+		ON C.INTERFACE_ID = B.INTERFACE_ID
+		AND C.INTEGRATION_ID=#{intfId}
+	]]>
+	</select>
+
+	<resultMap type="java.util.HashMap" id="SendUserMap">
+		<result javaType="java.lang.String" column="CELL_PHONE" property="hpNum" />
+	</resultMap>
+
+
+ 	<insert id="insertInterfaceErrLogSms">
+
+		insert into TOP0904 (
+			 SMS_ID
+			,TYPE
+			,SUBJECT
+			,CONTENTS
+			,SENDER
+			,RECIPIENTS
+			,RETRY
+			,FORMAT
+			,SND_REQ_DATE
+			,SND_YN
+			,RES_DATE
+			,RES_CD
+			,RES_MSG
+			,REG_DATE
+			,REG_USER
+			,DEL_YN
+		) values (
+			 #{smsId, 	jdbcType=VARCHAR}
+			,#{type, 		jdbcType=VARCHAR}
+			,#{subject, 	jdbcType=VARCHAR}
+			,#{contents, 	jdbcType=VARCHAR}
+			,#{sender, 		jdbcType=VARCHAR}
+			,#{recipients, 	jdbcType=VARCHAR}
+			,#{retry, 		jdbcType=NUMERIC}
+			,#{format, 		jdbcType=VARCHAR}
+			,#{sndReqDate, 	jdbcType=VARCHAR}
+			,#{sndYn, 		jdbcType=VARCHAR}
+			,#{resDate, 	jdbcType=VARCHAR}
+			,#{resCd, 		jdbcType=VARCHAR}
+			,#{resMsg, 		jdbcType=VARCHAR}
+			,#{regDate, 	jdbcType=VARCHAR}
+			,#{regId, 		jdbcType=VARCHAR}
+			,#{delYn, 		jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

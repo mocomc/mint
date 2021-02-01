@@ -1,0 +1,701 @@
+/*------------------------------------------------------------------
+  DashBoard - PannelTiele
+-------------------------------------------------------------------*/
+.mint-col-default
+{
+	padding-right:5px;
+	padding-left:5px;
+}
+.mint-col-0
+{
+	padding-right:0px;
+	padding-left:0px;
+}
+
+.mint-panel
+{
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+.mint-panel-title
+{
+	padding: 8px 15px;
+	color: inherit;
+}
+.mint-panel-title > h1,
+.mint-panel-title > h2,
+.mint-panel-title > h3,
+.mint-panel-title > h4,
+.mint-panel-title > h5
+{
+	font-size:inherit;
+	margin-top:0px;
+	margin-bottom:0px;
+	color: inherit; /*#676a6c;*/
+	text-overflow: ellipsis;
+	display: inline-block;
+	float: none;
+}
+.mint-panel-label {
+    background-color: #7c8286;
+    color: #FFFFFF;
+    font-size: 12px;
+}
+.mint-panel-content
+{
+	text-align: center;
+    vertical-align: middle;
+	padding: 6px 6px 6px 6px;
+	/*
+	overflow-x: hidden;
+	overflow-y: hidden;
+	*/
+}
+
+.mint-panel-footer
+{
+	color: inherit;
+	border-top: 1px solid #e7eaec;
+	font-size: 90%;
+	padding: 10px 15px;
+	color: #c4c4c4 !important;
+
+	padding: 10px 15px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #ddd;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.mint-chart-square-large {
+  min-width:90px;
+  width: 90px;
+  height: 90px;
+  font-size: 42px;
+  margin-bottom:2px !important;
+}
+
+.mint-td-i-badge {
+  text-align:center;
+}
+
+
+
+.mint-th-m-center {
+  text-align:center;
+  font-size:13px;
+  font-weight:600;
+}
+
+.mint-th-m-left {
+  text-align:left;
+  font-size:13px;
+  font-weight:600;
+}
+
+.mint-th-m-right {
+  text-align:right;
+  font-size:13px;
+  font-weight:600;
+}
+
+.mint-td-m-center {
+  text-align:center;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-td-m-left {
+  text-align:left;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-td-m-right {
+  text-align:right;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-td-xs-center, .mint-td-xs-left, .mint-td-xs-right {
+  padding: 2px 2px 2px 2px !important;
+}
+
+.mint-td-xs-fixed-h {
+  text-align:center;
+  font-size:11px;
+  font-weight:600;
+}
+.mint-td-xs-fixed-d {
+  text-align:center;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-td-xs-center {
+  text-align:center;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-td-xs-left {
+  text-align:left;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-td-xs-right {
+  text-align:right;
+  font-size:11px;
+  font-weight:600;
+}
+
+.mint-success {
+	color: #1c84c6;
+}
+
+.mint-warning {
+	color: #f8ac59
+}
+.mint-danger {
+	color: #ed5565;
+}
+
+
+.mint-panel-tools {
+  display: block;
+  float: right;
+  /*margin-top: 5px;*/
+  position: relative;
+  padding: 0;
+  text-align: right;
+  width: 50%;
+}
+
+.mint-panel-tools-nw {
+  display: block;
+  float: right;
+  position: relative;
+  padding: 0;
+  text-align: right;
+}
+
+.mint-panel-tools a {
+  cursor: pointer;
+  margin-left: 5px;
+  color: #c4c4c4;
+}
+
+.mint-panel-tools-nw a {
+  cursor: pointer;
+  margin-left: 5px;
+  color: #666666;
+}
+.mint-panel-tools a.btn-primary {
+  color: #fff;
+}
+.mint-panel-tools .dropdown-menu > li > a {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.mint-panel .mint-panel-tools.open > .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+body.rtls .mint-panel-tools {
+  float: left;
+}
+
+.mint-align-center
+{
+	text-align: center;
+    vertical-align: middle;
+    color: inherit;
+}
+
+/*------------------------------------------------------------------
+  mint-pannel fullscreen
+-------------------------------------------------------------------*/
+.fullscreen-mint-panel-mode .animated {
+  animation: none;
+}
+body.fullscreen-mint-panel-mode {
+  overflow-y: hidden;
+}
+
+.mint-panel.fullscreen {
+  z-index: 2030;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  margin-bottom: 0;
+}
+.mint-panel.fullscreen .collapse-link {
+  display: none;
+}
+.mint-panel.fullscreen .ibox-content {
+  min-height: calc(100% - 48px);
+}
+
+.mint-page-top-group {
+	text-align:right;
+	padding-top:24px;
+	padding-bottom:0px;
+}
+
+.dashboard-item {
+	cursor : pointer;
+}
+
+/*------------------------------------------------------------------
+  mint-pannel align (순서대로 div 생성)
+-------------------------------------------------------------------*/
+.mint-center-container {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+	box-sizing:border-box;
+}
+
+.mint-center-outer {
+	display: table;
+	width: 100%;
+	height: 100%;
+	box-sizing:border-box;
+}
+
+.mint-center-inner {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	box-sizing:border-box;
+}
+
+.mint-center-centered {
+	position: relative;
+	display: inline-block;
+	box-sizing:border-box;
+}
+
+.mint-center-blocks-180-150 {
+	width:180px;
+	height: 150px;
+	margin-bottom: 20px;
+	text-align:center;
+	vertical-align:middle;
+	display:inline-block;
+	box-sizing:border-box;
+}
+
+.mint-center-blocks-160-150 {
+	width:160px;
+	height: 150px;
+	margin-bottom: 20px;
+	text-align:center;
+	vertical-align:middle;
+	display:inline-block;
+	box-sizing:border-box;
+}
+
+.mint-center-blocks-140-130 {
+	width:140px;
+	height: 130px;
+	margin-bottom: 20px;
+	text-align:center;
+	vertical-align:middle;
+	display:inline-block;
+	box-sizing:border-box;
+}
+
+.mint-list {
+	text-align: justify;
+	padding:0px 10px 0px 10px;
+	margin: 0px 0px 0px 0px;
+	box-sizing:border-box;
+}
+
+.mint-list li {
+	display:inline-block;
+	padding:0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	box-sizing:border-box;
+}
+
+.mint-list:after {
+	content:'';
+	display:inline-block;
+	width:100%;
+	box-sizing:border-box;
+}
+
+/*------------------------------------------------------------------
+  mint-console
+-------------------------------------------------------------------*/
+.mint-console-m-left {
+  text-align:left;
+  font-size:11px;
+  font-weight:400;
+}
+/*------------------------------------------------------------------
+  mint-widget
+-------------------------------------------------------------------*/
+div#mint-window {
+    padding: 0;
+}
+
+div#mint-toolbar {
+    border-width: 0 0 1px;
+}
+
+.mint-toolbar-icon {
+	color:gray;
+}
+
+.mint-content-item > * {
+  -webkit-box-sizing: border-box !important;
+     -moz-box-sizing: border-box !important;
+          box-sizing: border-box !important;
+}
+
+.mint-content-item {
+  box-sizing: border-box;
+}
+.mint-content-item-left, .mint-content-item-center {
+	position: relative;
+	min-height: 1px;
+}
+
+.mint-content-item-left {
+	float:left;
+	width:15%;
+}
+
+.mint-content-item-center {
+	float:left;
+	width:85%;
+}
+
+
+.mint-widget-wrapper {
+	height: 100%;
+	min-height: auto;
+	padding: 5px 5px;
+}
+
+.mint-widget-wrapper {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mint-widget-div {
+	padding : 5px 5px 5px 5px;
+}
+
+.mint-widget-panel {
+	box-sizing: border-box;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+.mint-widget-drop {
+	color:#03a9f4;
+	border: 1px solid;
+}
+
+.mint-widget-draggable {
+	cursor: move;
+}
+
+.mint-widget-draggable ~ * {
+	cursor: pointer;
+}
+
+.mint-widget-top {
+	height: 167px;
+}
+
+.mint-widget-m-box {
+	padding : 10px 10px;
+}
+
+.mint-widget-valign-center {
+  margin-right: -5px;
+  margin-left: -5px;
+}
+
+.mint-widget-valign-center:before,
+.mint-widget-valign-center:after {
+	display: table;
+	content: " ";
+}
+
+.mint-widget-heading
+{
+	padding: 8px 15px;
+	color: inherit;
+}
+.mint-widget-title
+{
+	display: inline-block;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	vertical-align: top;
+	width: 70%;
+}
+.mint-widget-heading > h1,
+.mint-widget-heading > h2,
+.mint-widget-heading > h3,
+.mint-widget-heading > h4,
+.mint-widget-heading > h5,
+.mint-widget-heading > .mint-widget-title > h1,
+.mint-widget-heading > .mint-widget-title > h2,
+.mint-widget-heading > .mint-widget-title > h3,
+.mint-widget-heading > .mint-widget-title > h4,
+.mint-widget-heading > .mint-widget-title > h5
+{
+	font-size:inherit;
+	margin-top:0px;
+	margin-bottom:0px;
+	color: inherit; /*#676a6c;*/
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	float: none;
+	white-space:nowrap;
+}
+.mint-widget-content
+{
+	text-align: center;
+    vertical-align: middle;
+	padding: 6px 6px 6px 6px;
+	min-height: 150px;
+}
+
+.mint-widget-tools {
+  display: block;
+  float: right;
+  /*margin-top: 5px;*/
+  position: relative;
+  padding: 0;
+  text-align: right;
+  width: 30%;
+}
+
+.mint-widget-tools a {
+  cursor: pointer;
+  margin-left: 0px;
+  color: #c4c4c4;
+}
+.mint-widget-tools a.btn-primary {
+  color: #fff;
+}
+.mint-widget-tools .dropdown-menu > li > a {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.mint-widget .mint-widget-tools.open > .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+body.rtls .mint-widget-tools {
+  float: left;
+}
+.mint-widget-tools > .control-link .fa-play {
+ 	color: RGBA(28, 132, 198, 0.34);
+ }
+
+.mint-widget-tools > .control-link .fa-pause {
+	color: RGBA(237, 85, 101, 0.34);
+}
+.mint-widget-bg {
+	background-color: #599ff8;
+	color: #ffffff;
+}
+
+.k-dialog .k-content .mint-widget {
+	font-size:12px;
+}
+
+.k-dialog .k-content .mint-widget .k-grid td {
+	padding: .2em .6em;
+}
+
+.k-dialog .k-content .mint-widget .k-grid td .k-button{
+	padding: 1px 3px;
+}
+
+.k-dialog .mint-sub-window.k-dialog-content {
+	padding: 12px 12px;
+}
+
+.mint-form-m {
+	border-bottom:1px dashed #ececec;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.mint-form-required:focus {
+
+  border-color: #E9322D;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+          /*RGB(233, 50, 45)*/
+/*
+  border-color: #843534;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+*/
+}
+
+.mint-marking-01 {
+	height:10px;
+	width:10px;
+	margin-bottom:3px;
+	border-radius:2px;
+}
+
+.mint-marking-02 {
+	height:10px;
+	width:20px;
+	margin:0px 2px 3px 2px;
+	vertical-align:middle;
+	border-radius:5px;
+}
+
+.mint-pie-overlay {
+	width: 70%;
+	height: 70%;
+	position: absolute;
+	top: 40px;
+	left: 22px;
+	opacity: .2;
+	filter: alpha(opacity=60);
+	text-align: center;
+	border:4px dashed #a5a3a3;
+	border-radius:50%;
+}
+
+.mint-pie-overlay div {
+	position: relative;
+	font-size: 18px;
+	margin-top: 0px;
+	top: 40%;
+}
+
+.mint-draggable-item {
+	font-size: 12px;
+	border-radius: 5px;
+	padding: 10px 10px;
+	border: 0px solid black;
+	margin: 5px;
+	background: RGBA(100,101,101,0.8);
+	color: white;
+}
+
+/*------------------------------------------------------------------
+  mint-btn
+-------------------------------------------------------------------*/
+.mint-hidden {
+	display: none;
+}
+
+.mint-i-btn,
+.mint-i-btn .k-icon {
+	min-width: 0 !important;
+}
+
+.mint-i-btn .k-icon {
+	margin: 0 !important;
+}
+
+/*------------------------------------------------------------------
+  mint-media
+-------------------------------------------------------------------*/
+@media print {
+  mint-widget-wrapper {
+    margin: 0;
+  }
+}
+
+@media (max-width: 350px) {
+/*
+  .mint-panel-tools {
+    float: none;
+    text-align: left;
+    display: inline-block;
+  }
+
+  .mint-widget-tools {
+    float: none;
+    text-align: left;
+    display: inline-block;
+  }
+*/
+}
+
+@media (min-width: 768px) {
+  .mint-widget-wrapper {
+    position: inherit;
+    /*margin: 0 0 0 220px;*/
+    /*min-height: 1200px;*/
+  }
+}
+
+@media (max-width: 768px) {
+  .mint-widget-wrapper {
+    position: inherit;
+    /*margin: 0 0 0 0;*/
+    /*min-height: 1000px;*/
+  }
+/*
+  .mint-panel-tools {
+    float: none;
+    text-align: right;
+    display: block;
+  }
+
+  .mint-widget-tools {
+    float: none;
+    text-align: right;
+    display: block;
+  }
+*/
+}
+
+@media (max-width: 1380px) {
+  .mint-panel-tools {
+    display: none;
+  }
+  .mint-widget-tools {
+    display: none;
+  }
+}
+
+@media (max-width: 1600px) {
+	.mint-widget-font {
+		font-size:11px;
+	}
+}
+
+/*------------------------------------------------------------------
+  test
+-------------------------------------------------------------------*/
+.mint-test{
+	color:
+		#ffba00, #795CF3,
+		#92BAFD, #2080D0,
+		#808000, #FF8000,
+		#DCC414, #800080,
+		#604800, #8D414E,
+		#48452D, #99A9B7,
+		#B68EED, #565656,
+		#2FBAE5, #CD1533,
+		#7977C2, #FF7800,
+		#1C84C6, #ed5565;
+}

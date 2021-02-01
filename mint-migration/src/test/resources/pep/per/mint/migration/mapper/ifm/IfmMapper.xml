@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.migration.mapper.ifm.IfmMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<select id="selectSI_STAT_INTF_DAY" resultType="map">
+	<![CDATA[
+	select
+		   GROUP_ID                       as "GROUP_ID"
+		  ,INTF_ID                        as "INTERFACE_ID"
+		  ,ST_YEAR || ST_MONTH || ST_DAY  as "TR_DAY"
+		  ,ST_N_COMPSIZE + ST_COMPSIZE    as "DATA_SIZE"
+		  ,ST_FINISHED                    as "SUCCESS_CNT"
+		  ,ST_SEND_ERR + ST_RECV_ERR      as "ERROR_CNT"
+		  ,ST_PROCESSING                  as "PROCESS_CNT"
+		from SI_STAT_INTF_DAY
+		where ST_YEAR  = #{year}
+		  and ST_MONTH = #{month}
+		  and ST_DAY   = #{day}
+
+	]]>
+	</select>
+
+	<select id="selectSI_STAT_INTF_MONTH" resultType="map">
+	<![CDATA[
+	  select
+		   GROUP_ID                       as "GROUP_ID"
+		  ,INTF_ID                        as "INTERFACE_ID"
+		  ,ST_YEAR || ST_MONTH            as "TR_MONTH"
+		  ,ST_N_COMPSIZE + ST_COMPSIZE    as "DATA_SIZE"
+		  ,ST_FINISHED                    as "SUCCESS_CNT"
+		  ,ST_SEND_ERR + ST_RECV_ERR      as "ERROR_CNT"
+		  ,ST_PROCESSING                  as "PROCESS_CNT"
+		from SI_STAT_INTF_MONTH
+		where ST_YEAR  = #{year}
+		  and ST_MONTH = #{month}
+
+	]]>
+	</select>
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.BridgeProviderMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<select id="getInterfaces" resultType="Map">
+
+			SELECT DISTINCT
+		    	  e.BUSINESS_CD	   	as "DOMAIN"
+		    	 ,b.INTEGRATION_ID	as "MODEL"
+		    	 ,g.VAL				as "DESCRIPTION"
+		    	 ,im04.NM           as "DATASOURCE"
+		      FROM TRT0101 a
+		INNER JOIN TAN0201 b
+		 		ON a.INTERFACE_ID 	= b.INTERFACE_ID
+		 	   AND a.DEL_YN 	 	= 'N'
+		 	   AND b.DEL_YN 		= 'N'
+		<if test="channelCd != null">
+		INNER JOIN TIM0002 c
+				ON b.CHANNEL_ID 	= c.CHANNEL_ID
+			   AND c.CHANNEL_CD 	= #{channelCd}
+		</if>
+		INNER JOIN TAN0101 d
+		        ON d.INTERFACE_ID 	= b.INTERFACE_ID
+		       AND d.DEL_YN			= 'N'
+		INNER JOIN TIM0301 e
+		        ON e.BUSINESS_ID 	= d.BUSINESS_ID
+		       AND e.BUSINESS_CD 	= #{businessCd}
+		INNER JOIN TRT0201 f
+		        ON f.INTERFACE_MID  = a.INTERFACE_MID
+		       AND f.SYSTEM_TYPE 	= '0'
+		       AND f.SYSTEM_ID 		= (SELECT SYSTEM_ID  FROM TIM0101 WHERE SYSTEM_CD = #{systemCd} AND DEL_YN = 'N')
+		       AND f.SEQ 			= (SELECT min(SEQ) FROM TRT0201 WHERE INTERFACE_MID = a.INTERFACE_MID AND SYSTEM_TYPE = '0')
+		INNER JOIN TRT0202 g
+                ON g.INTERFACE_MID 	= a.INTERFACE_MID
+               AND g.APP_MID 		= f.APP_MID
+        INNER JOIN TRT0203 h
+        	    ON h.AID      		= g.AID
+        	   AND h.APP_TYPE 		= g.APP_TYPE
+        	   AND h.CD       		= 'serviceId'
+        	   AND h.DEL_YN   		= 'N'
+        INNER JOIN TRT0207 i
+                ON i.APP_TYPE 		= f.APP_TYPE
+        INNER JOIN TSU0301 im04
+        		ON im04.CD 			= i.RSS_CD
+               AND im04.LEVEL1 		= 'IM'
+		       AND im04.LEVEL2 		= '04'
+
+	</select>
+
+
+ 	<select id="getInterfaceId" resultType="String">
+		SELECT INTERFACE_ID
+	      FROM TAN0201 a
+	     WHERE a.INTEGRATION_ID = #{integrationId}
+ 	</select>
+
+</mapper>

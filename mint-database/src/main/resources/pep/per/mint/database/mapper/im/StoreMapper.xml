@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.im.StoreMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertStore">
+		INSERT INTO TIM0502 (
+		    STORE_CD,
+		    POS_NO,
+		    POS_MONITOR_YN,
+		    REG_DATE,
+		    REG_USER,
+		    MOD_DATE,
+		    MOD_USER
+		  )
+		  VALUES
+		  (
+		    #{storeObj.storeCd			, jdbcType=VARCHAR},
+		    #{storeObj.posNo			, jdbcType=VARCHAR},
+		    #{storeObj.posMonitorYn			, jdbcType=VARCHAR},
+		    #{storeObj.regDate			, jdbcType=VARCHAR},
+		    #{storeObj.regUser			, jdbcType=VARCHAR},
+		    #{storeObj.modDate			, jdbcType=VARCHAR},
+		    #{storeObj.modUser			, jdbcType=VARCHAR}
+		  )
+	</insert>
+	
+	<delete id="deleteStore">
+		DELETE TIM0502
+		WHERE  STORE_CD = #{storeObj.storeCd			, jdbcType=VARCHAR}
+		AND POS_NO =#{storeObj.posNo			, jdbcType=VARCHAR}
+	</delete>
+	
+	<update id="updateStore">
+		update TIM0501
+		   set
+		   		 MOD_DATE 	= #{storeObj.modDate			, jdbcType=VARCHAR}
+				,MOD_USER 	= #{storeObj.modUser			, jdbcType=VARCHAR}
+		where  STORE_CD = #{storeObj.storeCd			, jdbcType=VARCHAR}
+		AND POS_NO =#{storeObj.posNo			, jdbcType=VARCHAR}
+	</update>
+
+	<select id="getStoreList" parameterType="Map" resultMap="storeResultMap">
+		SELECT
+			STORE_CD || POS_NO AS STORE_ID,
+			STORE_CD,
+			POS_NO,
+			STORE_NM,
+			CUST_STORE_CD,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER,
+			POS_MONITOR_YN
+		FROM ( 
+			SELECT A.STORE_CD AS STORE_CD,
+				A.POS_NO AS POS_NO,
+				A.STORE_NM AS STORE_NM,
+				A.CUST_STORE_CD AS CUST_STORE_CD,
+				A.REG_DATE AS REG_DATE,
+				A.REG_USER AS REG_USER,
+				A.MOD_DATE AS MOD_DATE,
+				A.MOD_USER AS MOD_USER,
+				NVL(B.POS_MONITOR_YN, 'Y') AS POS_MONITOR_YN
+			FROM TIM0501 A
+			LEFT OUTER JOIN TIM0502 B
+				ON A.STORE_CD = B.STORE_CD
+				AND A.POS_NO  = B.POS_NO
+		)
+		WHERE 1=1
+		<if test="storeCd != null and storeCd != ''">
+		AND LOWER(STORE_CD) LIKE LOWER('%'||#{storeCd}||'%')
+		</if>
+		<if test="storeNm != null and storeNm != ''">
+		AND STORE_NM LIKE '%'||#{storeNm}||'%'
+		</if>
+		<if test="posMonitorYn != null and posMonitorYn != ''">
+		AND POS_MONITOR_YN = #{posMonitorYn}
+		</if>
+		ORDER BY STORE_CD ASC
+	</select>
+
+
+	<resultMap type="Store" id="storeResultMap">
+		<result property="storeId" 			column="STORE_ID"/>
+		<result property="storeCd" 			column="STORE_CD"/>
+		<result property="posNo" 				column="POS_NO"/>
+		<result property="storeNm"			column="STORE_NM"/>
+		<result property="custStoreCd"		column="CUST_STORE_CD"/>
+		<result property="regDate"			column="REG_DATE"/>
+		<result property="regUser"			column="REG_USER"/>
+		<result property="modDate"			column="MOD_DATE"/>
+		<result property="modUser"			column="MOD_USER"/>
+		<result property="posMonitorYn"		column="POS_MONITOR_YN"/>
+	</resultMap>
+
+</mapper>

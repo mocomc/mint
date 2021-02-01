@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.SystemMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getSystemInfo" parameterType="string" resultMap="systemInfoResult">
+		select
+			* 
+	     from TB_SYS_SYSTEM
+	    where SYSTEM_ID = #{id} 
+  	</select>
+  
+  
+  	<resultMap id="systemInfoResult" type="SystemInfo">
+  		<id property="id" column="SYSTEM_ID"/>
+		<result property="name" 		column="SYSTEM_NM"/>
+		<!-- 
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+		 -->
+		<collection property="serverList" javaType="ArrayList" column="SYSTEM_ID" ofType="Server" select="selectServerList"/>
+	</resultMap>
+   	
+   	<select id="selectServerList" parameterType="string" resultMap="serverListResult">
+<!-- 
+   		select 
+   			* 
+   		  from TB_SYS_SERVER_LIST 
+   		 where SYSTEM_ID = #{id} 
+ -->
+		select 
+			 B.SERVER_ID
+			,B.SERVER_TYPE 
+		  from TB_SYS_SERVER_LIST A, TB_SYS_SERVER B
+		 where A.SYSTEM_ID = #{id}
+		   and A.SERVER_ID = B.SERVER_ID
+   	</select>
+   	
+   	<resultMap id="serverListResult" type="Server" >
+   		<id property="id" 					column="SERVER_ID"/>
+   		<result property="type" 			column="SERVER_TYPE"/>
+   		<!-- 
+		<result property="description" 		column="DESCRIPTION"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_ID"/>
+		<result property="modDate" 			column="MOD_DATE"/>
+		<result property="modId" 			column="MOD_ID"/>
+		 -->
+   	</resultMap>
+   	 
+   	<select id="getSocketServer" parameterType="string" resultMap="socketServerResult">
+   		select 
+   			  B.SERVER_ID
+   			 ,B.SERVER_NM
+   			 ,A.IP
+   			 ,A.PORT
+   		  from TB_SYS_SERVER_SOCKET A, TB_SYS_SERVER B
+   		 where A.SERVER_ID = #{id}
+   		   and A.SERVER_ID = B.SERVER_ID 
+   	</select>
+
+   	<resultMap id="socketServerResult" type="SocketServer">
+   		<id property="id" 						column="SERVER_ID"/>
+   		<result property="name" 				column="SERVER_NM"/>
+   		<result property="serverName" 			column="IP"/>
+   		<result property="port"	 				column="PORT"/>
+   		<!-- 
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+		-->
+   	</resultMap>
+   	
+   	<select id="getHTTPServer" parameterType="string" resultMap="httpServerResult">
+   		select 
+   			 B.SERVER_ID
+   			,B.SERVER_NM
+   			,A.URL
+   		  from TB_SYS_SERVER_HTTP A, TB_SYS_SERVER B
+   		 where A.SERVER_ID = #{id}
+   		   and A.SERVER_ID = B.SERVER_ID 
+   	</select>
+
+   	<resultMap id="httpServerResult" type="HTTPServer">
+   		<id property="id" 						column="SERVER_ID"/>
+   		<result property="name" 				column="SERVER_NM"/>
+   		<result property="url" 					column="URL"/>
+   		<!-- 
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+		 -->
+   	</resultMap>
+   	
+   	<select id="getDatabaseServer" parameterType="string" resultMap="databaseServerResult">
+   		select 
+   			 B.SERVER_ID
+   			,B.SERVER_NM
+   			,A.URL
+   		  from TB_SYS_SERVER_DATABASE A, TB_SYS_SERVER B
+   		 where A.SERVER_ID = #{id}
+   		   and A.SERVER_ID = B.SERVER_ID 
+   	</select>
+
+   	<resultMap id="databaseServerResult" type="DatabaseServer">
+   		<id property="id" 						column="SERVER_ID"/>
+   		<result property="name" 				column="SERVER_NM"/>
+   		<result property="url" 					column="URL"/>
+   		<!-- 
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+		-->
+   	</resultMap>
+   	 
+	<select id="getMQServer" parameterType="string" resultMap="mqServerResult">
+   		select 
+   			 B.SERVER_ID
+   			,B.SERVER_NM
+   			,A.CON_STR
+   			,A.QMGR
+   			,A.QNAME
+   		  from TB_SYS_SERVER_MQ A, TB_SYS_SERVER B
+   		 where A.SERVER_ID = #{id}
+   		   and A.SERVER_ID = B.SERVER_ID  
+   	</select>
+
+   	<resultMap id="mqServerResult" type="MQServer">
+   		<id property="id" 						column="SERVER_ID"/>
+   		<result property="name" 				column="SERVER_NM"/>
+   		<result property="connectionString" 	column="CON_STR"/>
+   		<result property="qmgr" 				column="QMGR"/>
+   		<result property="queueName" 			column="QNAME"/>
+   		<!-- 
+		<result property="description" 			column="DESCRIPTION"/>
+		<result property="regDate" 				column="REG_DATE"/>
+		<result property="regId" 				column="REG_ID"/>
+		<result property="modDate" 				column="MOD_DATE"/>
+		<result property="modId" 				column="MOD_ID"/>
+		-->
+   	</resultMap>
+   	   	
+   	
+   	<insert id="insertSystemInfo" parameterType="SystemInfo">
+   		insert into TB_SYS_SYSTEM (
+	   		 SYSTEM_ID
+			,SYSTEM_NM
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+   	</insert>
+   	
+   	
+   	
+   	<insert id="insertServerList" parameterType="ServerList">
+   		insert into TB_SYS_SERVER_LIST (
+	   		 SYSTEM_ID
+			,SERVER_ID
+			,SEQ
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{systemId}
+			,#{serverId}
+			,#{seq}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+   	</insert>
+   	
+   	<insert id="insertServer" parameterType="Server">
+   		insert into TB_SYS_SERVER (
+	   		 SERVER_ID
+			,SERVER_NM
+			,DESCRIPTION
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+		) values (
+			 #{id}
+			,#{name}
+			,#{description}
+			,#{regDate}
+			,#{regId}
+			,#{modDate}
+			,#{modId}
+		)
+   	</insert>
+   	
+   	<insert id="insertHTTPServer" parameterType="HTTPServer">
+   		insert into TB_SYS_SERVER_HTTP (
+	   		 SERVER_ID
+			,URL
+		) values (
+			 #{id}
+			,#{url}
+		)
+   	</insert>
+   	
+   	<insert id="insertSocketServer" parameterType="SocketServer">
+   		insert into TB_SYS_SERVER_SOCKET (
+	   		 SERVER_ID
+			,IP
+			,PORT
+		) values (
+			 #{id}
+			,#{serverName}
+			,#{port}
+		)
+   	</insert>
+   	
+   	<insert id="insertDatabaseServer" parameterType="DatabaseServer">
+   		insert into TB_SYS_SERVER_DATABASE (
+	   		 SERVER_ID
+			,URL
+		) values (
+			 #{id}
+			,#{url}
+		)
+   	</insert>
+   	
+	<insert id="insertMQServer" parameterType="MQServer">
+   		insert into TB_SYS_SERVER_MQ (
+	   		 SERVER_ID
+			,QMGR
+			,CON_STR
+			,QNAME
+		) values (
+			 #{id}
+			,#{qmgr}
+			,#{connectionString}
+			,#{queueName}
+		)
+   	</insert>
+   	   	
+   	<!-- update -->
+	<update id="updateSystemInfo" parameterType="SystemInfo">
+   		update TB_SYS_SYSTEM
+   		   set
+			 SYSTEM_NM   = #{name}
+			,DESCRIPTION = #{description}
+			,REG_DATE    = #{regDate}
+			,REG_ID      = #{regId}
+			,MOD_DATE    = #{modDate}
+			,MOD_ID      = #{modId}
+	   	where SYSTEM_ID  = #{id}
+   	</update>
+   	
+   	<update id="updateServerList" parameterType="ServerList">
+   		update TB_SYS_SERVER_LIST
+   		   set
+			 SEQ          = #{seq}
+			,REG_DATE     = #{regDate}
+			,REG_ID       = #{regId}
+			,MOD_DATE     = #{modDate}
+			,MOD_ID       = #{modId}
+	   	where SYSTEM_ID   = #{systemId}
+		  and SERVER_ID   = #{serverId}
+   	</update>
+   	
+   	<update id="updateServer" parameterType="Server">
+   		update TB_SYS_SERVER
+   		   set
+			 SERVER_NM   = #{name}
+			,DESCRIPTION = #{description}
+			,REG_DATE    = #{regDate}
+			,REG_ID      = #{regId}
+			,MOD_DATE    = #{modDate}
+			,MOD_ID      = #{modId}
+	   	where SERVER_ID  = #{id}
+   	</update>
+   	
+   	<update id="updateHTTPServer" parameterType="HTTPServer">
+   		update TB_SYS_SERVER_HTTP
+   		   set
+			 URL         = #{url}
+	   	where SERVER_ID  = #{id}
+   	</update>
+   	
+   	<update id="updateSocketServer" parameterType="SocketServer">
+   		update TB_SYS_SERVER_SOCKET
+   		   set
+			 IP          = #{serverName}
+			,PORT        = #{port}
+	   	where SERVER_ID  = #{id}
+   	</update>
+   	
+   	<update id="updateDatabaseServer" parameterType="DatabaseServer">
+   		update TB_SYS_SERVER_DATABASE
+   		   set
+			 URL         = #{url}
+	   	where SERVER_ID  = #{id}
+   	</update>
+   	
+	<update id="updateMQServer" parameterType="MQServer">
+   		update TB_SYS_SERVER_MQ
+   		   set
+			 QMGR        = #{qmgr}
+			,CON_STR     = #{connectionString}
+			,QNAME       = #{queueName}
+	   	where SERVER_ID  = #{id}
+   	</update>   	
+</mapper>

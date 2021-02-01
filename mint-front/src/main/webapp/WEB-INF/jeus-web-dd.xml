@@ -1,0 +1,47 @@
+<jeus-web-dd xmlns="http://www.tmaxsoft.com/xml/ns/jeus">
+	<context-path>/mint</context-path>
+	<auto-reload>
+		<enable-reload>true</enable-reload>
+		<check-on-demand>true</check-on-demand>
+	</auto-reload>
+	<library-ref>
+		<library-name>jsf</library-name>
+		<specification-version>
+			<value>2.2</value>
+		</specification-version>
+		<implementation-version>
+			<value>2.2.13</value>
+		</implementation-version>
+	</library-ref>
+	<library-ref>
+		<library-name>jstl</library-name>
+		<specification-version>
+			<value>1.2</value>
+		</specification-version>
+		<implementation-version>
+			<value>1.2</value>
+		</implementation-version>
+	</library-ref>
+
+	<library-ref>
+	    <library-name>spring-support</library-name>
+	    <specification-version>
+	       <value>4.2.0.RELEASE</value>
+	    </specification-version>
+	    <implementation-version>
+			<value>4.2.0.RELEASE</value>
+		</implementation-version>
+	</library-ref>
+
+	<!--
+	<websocket>
+		<max-incoming-binary-message-buffer-size>8192</max-incoming-binary-message-buffer-size>
+		<max-incoming-text-message-buffer-size>8192</max-incoming-text-message-buffer-size>
+		<max-session-idle-timeout-in-millis>1800000</max-session-idle-timeout-in-millis>
+		<monitoring-period-in-millis>300000</monitoring-period-in-millis>
+		<blocking-send-timeout-in-millis>10000</blocking-send-timeout-in-millis>
+		<async-send-timeout-in-millis>30000</async-send-timeout-in-millis>
+	</websocket>
+	 -->
+
+</jeus-web-dd>

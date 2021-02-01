@@ -1,0 +1,2628 @@
+<!--
+	Screen ID : OP-01-02-001
+	Screen NM : WMQ Object Monitor
+	Reference : NH농협
+-->
+<div id="mint-attachDiv">
+	<div class="mint-content-item" style="display:none;">
+		<nav class="mint-content-item-left navbar-default navbar-static-side" role="navigation">
+			<div class="sidebar-collapse">
+				<ul class="nav metismenu">
+					<li class="nav-header mint-menu-logo">
+						<strong class="font-bold">
+							<font color="white">
+								<lb class="lb-677">MQ Explorer</lb>
+							</font>
+						</strong>
+						<div class="logo-element">
+						    IIP
+						</div>
+					</li>
+					<li>
+						<div class="row">
+	 						 <div class="col-sm-12">
+	 						 	<input id="searchText" type="text" class="input-tag-8 k-textbox" placeholder="Search..." style="width:100%;">
+							</div>
+						</div>
+						<div class="mint-menu-viewpot">
+							<div style="height:100%;">
+								<div class="systemTree" id="systemTree"></div>
+							</div>
+						</div>
+					</li>
+		 		</ul>
+			</div>
+
+		</nav>
+        <div class="mint-content-item-center gray-bg">
+			<div class="mint-widget-wrapper animated fadeInRight">
+				<div class="mint-widget-view"></div>
+			</div>
+    	</div>
+	</div>
+
+	<div class="mint-widget mint-widget-savewindow" style="display:none;">
+		<div class="form-horizontal">
+			<div class="form-group mint-form-m">
+				<label class="control-label col-sm-3"><lb class="lb-68"></lb></label>
+				<div class="col-sm-9">
+					<input id="sub-popup-subject" type="text" class="input-tag-10 k-textbox" placeholder="" required>
+				</div>
+			</div>
+			<div class="form-group mint-form-m">
+				<label class="control-label col-sm-3"><lb class="lb-40">공유여부</lb></label>
+				<div class="col-sm-9">
+					<label style="padding-left:10px;"><input type="radio" name="sub-popup-shared" value="Y" > Yes </label>
+					<label style="padding-left:10px;"><input type="radio" name="sub-popup-shared" value="N" checked="checked"> No </label>
+				</div>
+			</div>
+			<div class="form-group mint-form-m">
+				<label class="control-label col-sm-3"><lb class="lb-398">설명</lb></label>
+				<div class="col-sm-9">
+					<textarea id="sub-popup-comments" class="k-textbox" rows="5" cols="30" style="border-radius: 4px; width: 100%; height: 80px; overflow-y: auto; display: block;"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="mint-widget mint-widget-loadwindow" style="display:none;">
+		<div class="tabs-container">
+			<ul class="nav nav-tabs" >
+				<li class="active">
+				  <a data-toggle="tab" href="#ownerPersonalizationList"><lb class="lb-72">내목록</lb></a>
+				</li>
+				<li class="">
+				  <a data-toggle="tab" href="#sharedPersonalizationList"><lb class="lb-73">공유된 목록</lb></a>
+				</li>
+			</ul>
+			<div style="height:10px;"></div>
+			<div class="tab-content">
+				<div class="tab-pane active" id="ownerPersonalizationList">
+					<div id="grid-personalization-owner"></div>
+				</div>
+				<div class="tab-pane" id="sharedPersonalizationList">
+					<div id="grid-personalization-shared"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <ul id="treeContextMenu">
+		<li class="refreshTree" data-command="refresh"><i class="fa fa-refresh"> <lb class="lb-42">새로고침</lb></i></li>
+    </ul>
+
+</div>
+<div class="empty" style="height:1200px;"></div>
+<div class='wsNotification' style='display:none;'></div>
+<style>
+
+</style>
+
+<script type="text/x-kendo-template" id="template-mint-window">
+<div id="mint-window">
+	<div id="mint-toolbar"></div>
+	<div id="mint-content" style="box-sizing: border-box;"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-mint-title">
+<h6 style="float:none; display:inline; padding-bottom:2px;">
+	<span><i class="fa fa-circle text-success"></i> </span>
+	<span><i class="fa fa-circle text-warning"></i> </span>
+	<span><i class="fa fa-circle text-danger"></i> </span>
+	<span style="font-size:13px; font-weight:600;">#= mint.label.getLabel('lb-676') #</span>
+</h6>
+</script>
+<script type="text/x-kendo-template" id="template-mint-widget-queue-inout-chart">
+					<div class="col-lg-3 mint-widget-div stop">
+						<div class="panel panel-default mint-widget-panel">
+							<div class="panel-heading mint-widget-heading">
+								<div class="mint-widget-title">
+									<h5><span class="title-text">Empty</span></h5>
+								</div>
+								<div class="mint-widget-tools">
+									<label class="label mint-panel-label interval-label" style="display: none"></label>
+									<label class="label mint-panel-label time-label" style="display: none"></label>
+									<a class="control-link">
+										<i class="fa fa-play" style="display:inline-block;"></i>
+									</a>
+									<a class="close-link">
+										<i class="fa fa-times"></i>
+									</a>
+								</div>
+							</div>
+							<div class="panel-body mint-widget-content" style="height:150px;">
+								<div class="mint-widget-data"></div>
+								<div class="mint-widget-chart" style="width:100%; height: 100%;" data-chart-type="1"></div>
+							</div>
+						</div>
+					</div>
+</script>
+
+
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "OP-01-02-001";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			//-----------------------------------------------------------------------
+			// Description :: 테스트 여부 플래그
+			//-----------------------------------------------------------------------
+			isTest: false,
+			//-----------------------------------------------------------------------
+			// Description :: 리스너 관리
+			//-----------------------------------------------------------------------
+			listeners: new Map(),
+			//-----------------------------------------------------------------------
+			// Description :: Chart Type 별 설정 (0: TEST, 1: QueueInOut)
+			//-----------------------------------------------------------------------
+			chartType: {0: {serviceCd: 'WS0038'}, 1: {serviceCd: 'WS0053'} },
+			//-----------------------------------------------------------------------
+			// Description :: 불러오기 데이터
+			//-----------------------------------------------------------------------
+			loadInfo: {isLoaded: false, loadData: ''},
+			//-----------------------------------------------------------------------
+			// Description :: 위젯 배치후 자동으로 서비스를 시작할지 여부
+			//-----------------------------------------------------------------------
+			isAutoServiceOn: true,
+			//-----------------------------------------------------------------------
+			// Description :: 웹소켓 타임아웃(milliseconds)
+			//-----------------------------------------------------------------------
+			wsTimeout: 20000,
+			//-----------------------------------------------------------------------
+			// Description :: System Object 조회 여부
+			//-----------------------------------------------------------------------
+			isSystemObjectView: true,
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Description :: 패널 초기화
+					//-----------------------------------------------------------------------
+					{
+						//$.main.fn_initMove();
+					}
+
+					$.main.fn_initTree();
+					$.main.fn_requireSystemList();
+					$.main.fn_mainWindowOpen();
+					$.main.fn_initDragAndDrop();
+
+
+					//-----------------------------------------------------------------------
+					// Scroll
+					//-----------------------------------------------------------------------
+					mint.ui.attachScrollY($('.mint-widget-wrapper'), {size: '10px', alwaysVisible:true});
+					mint.ui.attachScrollAll($('.systemTree'), {size: '10px', alwaysVisible:true});
+
+					//-----------------------------------------------------------------------
+					// Tree size
+					//-----------------------------------------------------------------------
+					$('.systemTree').css('height','98%');
+					$('.systemTree').css('width','95%');
+
+					//-----------------------------------------------------------------------
+					// Websocket listener 를 미리 등록한다.
+					//-----------------------------------------------------------------------
+                    $.main.fn_responseQueueInOutCount();
+
+					//-----------------------------------------------------------------------
+					// Description :: HealthCheck
+					//-----------------------------------------------------------------------
+					mint.healthCheck();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+
+			}, // end fn_initCallback
+
+			//=======================================================================
+			// ▶ 위젯 Drag & Drop
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initDragAndDrop
+			//-----------------------------------------------------------------------
+			fn_initDragAndDrop : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Description :: 패널 초기화
+					//-----------------------------------------------------------------------
+					$(".systemTree").kendoDraggable({
+							filter: ".mint-widget-draggable, .mint-widget-draggable ~ *",
+							hint: function(e) {
+								var draggableItem = $(e.context).closest('div').clone();
+								var itemTitle = $(draggableItem).find('.item-title').clone();
+								return '<div class="mint-draggable-item">' + itemTitle.text() + '</div>';
+							},
+							dragstart: function(e) {
+								//doSomething
+							},
+							dragend: function(e) {
+								//doSomething
+							}
+						});
+
+					$(".mint-widget-view").kendoDropTargetArea({
+						filter: ".mint-widget-panel",
+						dragenter: function(e) {
+							$.main.fn_dragenterEvent(e);
+						},
+						dragleave: function(e) {
+							$.main.fn_dragleaveEvent(e);
+						},
+						drop: function(e) {
+							$.main.fn_dropEvent(e);
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initDragAndDrop"});
+				}
+
+			}, // end fn_initDragAndDrop
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dragenterEvent
+			//-----------------------------------------------------------------------
+			fn_dragenterEvent : function(e) {
+				try {
+					var source = e.draggable;
+					var target = e.dropTarget;
+					target.addClass('mint-widget-drop');
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dragenterEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dragleaveEvent
+			//-----------------------------------------------------------------------
+			fn_dragleaveEvent : function(e) {
+				try {
+					var source = e.draggable;
+					var target = e.dropTarget;
+					target.removeClass('mint-widget-drop');
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dragleaveEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dropEvent
+			//-----------------------------------------------------------------------
+			fn_dropEvent : function(e) {
+				try {
+					var source = e.draggable;
+					var target = e.dropTarget;
+					target.removeClass('mint-widget-drop');
+
+					//-----------------------------------------------------------------------
+					// Tree to Panel
+					//-----------------------------------------------------------------------
+					var systemTree = $('.systemTree').data('kendoTreeView');
+					var sourceDataItem = systemTree.dataItem(source.currentTarget);
+
+					if( mint.common.isEmpty(sourceDataItem) ) {
+						return;
+					}
+					//-----------------------------------------------------------------------
+					// Chart 를 생성한다. (target 상위 division 을 전달)
+					//-----------------------------------------------------------------------
+					$.main.fn_initChart(sourceDataItem, target.closest('div.mint-widget-div'));
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dropEvent"});
+				}
+			},
+
+			//=======================================================================
+			// ▶ 위젯 차트 구성
+			//=======================================================================
+			fn_defaultChartData : function() {
+				try {
+					var chartData ={};
+					{
+						chartData.agentNm   = '';
+						chartData.qmgrNm    = '';
+						chartData.queueNm   = '';
+						chartData.delay     = 1;
+						chartData.objNm     = '';
+					}
+					return chartData;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_defaultChartData"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChart
+			//-----------------------------------------------------------------------
+			fn_initChart : function(chartData, target) {
+				try {
+
+					if( mint.common.isEmpty(chartData) ) {
+						target.removeClass('items');
+						return;
+					}
+					target.addClass('items');
+					var chartClass = $.main.fn_getChartClass(chartData.qmgrNm, chartData.objNm);
+					//-----------------------------------------------------------------------
+					// Title
+					//-----------------------------------------------------------------------
+					$.main.fn_setChartTitle(target, chartData.qmgrNm, chartData.objNm);
+					//-----------------------------------------------------------------------
+					// Chart Division Select
+					//-----------------------------------------------------------------------
+					var bindToObject = target.find('.mint-widget-chart');
+					//-----------------------------------------------------------------------
+					// Chart overwrite 시 기존 정보 삭제후 추가
+					//-----------------------------------------------------------------------
+					{
+						// chartData Remove
+						var oldchartData = bindToObject.data('chartData');
+						$.main.fn_runningServiceCheck(oldchartData);
+
+
+						// CSS Remove/Add
+						var oldchartClass  = bindToObject.data('chartClass');
+						if( !mint.common.isEmpty(oldchartClass) ) {
+							bindToObject.removeClass(oldchartClass);
+						}
+						bindToObject.addClass(chartClass);
+						bindToObject.data('chartClass', chartClass);
+
+						target.removeClass('stop').removeClass('start').addClass('stop');
+						var controlBtn = target.find('a.control-link > i');
+						controlBtn.removeClass('fa-play').removeClass('fa-pause').addClass('fa-play');
+
+
+					}
+					//-----------------------------------------------------------------------
+					// Chart Type 에 따라 function 호출
+					// TODO: Chart Type 추가시 내용 보완
+					//-----------------------------------------------------------------------
+					var chartType = bindToObject.data('chart-type');
+					switch(chartType) {
+						case 1 :
+							var requestObject = {};
+							{
+								requestObject.agentNm   = chartData.agentNm;
+								requestObject.qmgrNm    = chartData.qmgrNm;
+								requestObject.queueNm   = chartData.objNm;
+								requestObject.delay     = mint.common.isEmpty(chartData.delay) ? 1 : chartData.delay;
+								requestObject.objNm     = chartData.objNm;
+								requestObject.chartType = chartType;
+							}
+
+							bindToObject.data('chartData', requestObject);
+							$.main.fn_chartType1(bindToObject);
+							break;
+						default :
+							break;
+					}
+					//-----------------------------------------------------------------------
+					// 자동으로 서비스 시작할 경우
+					// TODO: function 으로 정의하는게 좋을듯..
+					//-----------------------------------------------------------------------
+					if( $.main.isAutoServiceOn ) {
+						target.find('.control-link').click();
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChart"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getChartClass ( qmgrNm + objNm )
+			//-----------------------------------------------------------------------
+			fn_getChartClass : function(qmgrNm, objNm) {
+				try {
+					//-----------------------------------------------------------------------
+					// TODO: Display 패턴 확인후 변경이 필요하면 보완할것
+					//-----------------------------------------------------------------------
+					var chartClass = $.main.fn_replaceString(qmgrNm + objNm);
+					if( $.main.isTest ) {
+						chartClass = 'TESTQMTEST__LQ';
+					}
+					return chartClass;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getChartClass"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setChartTitle ( qmgrNm + objNm )
+			//-----------------------------------------------------------------------
+			fn_setChartTitle : function(target, qmgrNm, objNm) {
+				try {
+
+					var widgetTitle = 'Empty';
+					if( !mint.common.isEmpty(qmgrNm) && !mint.common.isEmpty(objNm) ) {
+						widgetTitle = qmgrNm + '-' + objNm;
+					}
+
+					var widgetTitleObject = target.find('.title-text');
+					widgetTitleObject.html($.main.fn_attachTitle(widgetTitle));
+
+					/*
+                    widgetTitleObject.kendoTooltip({
+                        filter: "span",
+                        position: "top",
+                        animation: {
+                        	open: {
+                        		effects: "zoom",
+                        		duration: 150
+                        	}
+                        }
+                    });
+					*/
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setChartTitle"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_chartType1
+			//-----------------------------------------------------------------------
+			fn_chartType1 : function(bindToObject) {
+				try {
+
+					var oldChart = bindToObject.data('kendoChart');
+					if( !mint.common.isEmpty(oldChart) ) {
+						oldChart.destroy();
+					}
+					//-----------------------------------------------------------------------
+					// Chart Configuration Option
+					//-----------------------------------------------------------------------
+					var defaultFont = '11px Arial';
+
+					var seriesData = [
+						{ x: '0', inCnt: 0, otCnt: 0}
+					];
+					var chart = bindToObject.kendoChart({
+                        renderAs: "canvas",
+                        theme: "default",
+                        transitions: false,
+                        zoomable: false,
+                        seriesDefaults: {
+                        	type: "area",
+                        	style: "normal", //normal/step/smooth
+   							markers: {
+   				                size: 3
+   				            },
+			                line: {
+			                    width: 1
+			                },
+			                labels: {
+			                	visible: false,
+			                	background: "transparent"
+			                },
+							overlay: {
+								gradient: null
+							}
+                        },
+                        tooltip: {
+                        	font: defaultFont,
+                        	visible: true,
+                        	shared: true,
+                        	template: "#= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: true,
+                            position: "top",
+                            orientation: "horizontal",
+                    		margin: 0,
+                    		padding: 0,
+                            labels: {
+                            	font: defaultFont,
+                            }
+                        },
+                        seriesColors: ['#FF7800', '#1C84C6'],
+                        series: [
+                        	{
+                        		axis: 'count',
+    							type: 'line',
+    							name: 'PUT',
+    							data: seriesData,
+    							field: 'inCnt',
+    							categoryField: 'x'
+                        	},
+                        	{
+                        		axis: 'count',
+    							type: 'line',
+    							name: 'GET',
+    							data: seriesData,
+    							field: 'otCnt',
+    							categoryField: 'x'
+                        	},
+
+                        ],
+                        // Y축
+                        valueAxis: [
+	                        {
+	                        	name: "count",
+	                        	labels: {
+	                        		font: defaultFont
+	                        	},
+	                            line: {
+	                                visible: true
+	                            },
+	                            majorGridLines: {
+	                            	visible: false,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+	                            crosshair: {
+	                            	visible: false,
+	                            	width: 0.8,
+	                            	opacity: 0.7,
+	                            },
+	                            visible: true,
+	                            max: 10,
+	                        },
+   	                        {
+   	                        	name: "totalCount",
+   	                        	labels: {
+   	                        		font: defaultFont
+   	                        	},
+   	                            line: {
+   	                                visible: true
+   	                            },
+	                            majorGridLines: {
+	                            	visible: true,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+   	                            visible: false,
+   	                            max: 10,
+   	                        },
+                        ],
+                        // X축
+                        categoryAxis: {
+                        	justified: false,
+                        	title: {
+                        		font: defaultFont,
+                        		margin: {top: 2, bottom:0},
+                        		//padding: {bottom:0}
+                        		//margin: 0,
+                        		padding: 0
+                        	},
+                        	axisCrossingValues : [0, 59],
+                        	labels: {
+                        		font: defaultFont,
+                        		rotation: "auto"
+                        	},
+                            majorGridLines: {
+                                visible: false
+                            },
+                            crosshair: {
+                            	visible: false
+                            }
+                        },
+                        seriesHover: function(e) {
+                        	//$.main.seriesHoverChartId = e.sender.wrapper.context.id;
+                        },
+                    });
+
+
+
+					return chart;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_chartType1"});
+				}
+			},
+
+
+
+
+			//=======================================================================
+			// ▶ 위젯 서비스 ( 웹소켓 )
+			//=======================================================================
+			//-----------------------------------------------------------------------
+			// Description :: fn_getServiceCd
+			//-----------------------------------------------------------------------
+			fn_getServiceCd : function(chartType) {
+				try {
+					//-----------------------------------------------------------------------
+					// ChartType 에 따른 serviceCd 를 구한다
+					//-----------------------------------------------------------------------
+					var serviceCd = $.main.chartType[chartType].serviceCd;
+					if( $.main.isTest ) serviceCd = $.main.chartType[0].serviceCd; //'WS0038';
+
+					if( mint.common.isEmpty(serviceCd) ) {
+						serviceCd = '';
+						mint.common.alert('CE90001');
+					}
+
+					return serviceCd;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getServiceCd"});
+				}
+			},//end fn_getServiceCd
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_serviceOn
+			//-----------------------------------------------------------------------
+			fn_serviceOn : function(chartType, requestObject, callback) {
+				try {
+					switch(chartType) {
+						case 1 :
+							$.main.fn_requestQueueInOutCountOn(requestObject);
+							mint.common.debugLog('serviceOn :: fn_requestQueueInOutCountOn');
+							break;
+						default :
+							$.main.fn_requestQueueInOutCountOn(requestObject);
+							mint.common.debugLog('serviceOn :: All');
+							break;
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_serviceOn"});
+				}
+			},//end fn_serviceOn
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_serviceOff
+			//-----------------------------------------------------------------------
+			fn_serviceOff : function(chartType, requestObject, callback) {
+				try {
+					switch(chartType) {
+						case 1 :
+							$.main.fn_requestQueueInOutCountOff(requestObject);
+							mint.common.debugLog('serviceOff :: fn_requestQueueInOutCountOff');
+							break;
+						default :
+							$.main.fn_requestQueueInOutCountOff(requestObject);
+							mint.common.debugLog('serviceOff :: All');
+							break;
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_serviceOff"});
+				}
+			},//end fn_serviceOff
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requestQueueInOutCountOn ( ChartType 1 Service On )
+			//-----------------------------------------------------------------------
+			fn_requestQueueInOutCountOn : function(requestObject) {
+				try {
+					var chartType = 1;
+					var serviceCd = $.main.fn_getServiceCd(chartType);
+					if( mint.common.isEmpty(serviceCd) ) {
+						return;
+					}
+
+					mint.wsSend(requestObject, 'wsSereviceOn', serviceCd, mint.ws.msgType.ON, function(resultCd, msg, options){
+						if( resultCd === 0 ) {
+							var listenerList = $.main.listeners.get(serviceCd);
+							if( mint.common.isEmpty(listenerList) ) {
+								listenerList = new Array();
+							}
+
+							//remove
+							var index = $.main.fn_indexOfListener(listenerList, requestObject);
+							if( index !== -1 ) {
+								listenerList.splice(index,1);
+							}
+
+							//add
+							listenerList.push(requestObject);
+
+							if( !$.main.listeners.containsKey(serviceCd) ) {
+								$.main.listeners.put(serviceCd, listenerList);
+							}
+
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_requestQueueInOutCountOn"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requestQueueInOutCountOff ( ChartType 1 Service Off )
+			//-----------------------------------------------------------------------
+			fn_requestQueueInOutCountOff : function(requestObject) {
+				try {
+					var chartType = 1;
+					var serviceCd = $.main.fn_getServiceCd(chartType);
+					if( mint.common.isEmpty(serviceCd) ) {
+						return;
+					}
+
+					if( mint.common.isEmpty(requestObject) ) {
+						var requestObjectList = $.main.listeners.get(serviceCd);
+						var length = !mint.common.isEmpty(requestObjectList) ? requestObjectList.length : 0;
+						for( var i = 0; i < length; i++ ) {
+							var requestObject = requestObjectList[i];
+							mint.wsSend(requestObject, 'wsSereviceOff', serviceCd, mint.ws.msgType.OFF, function(resultCd, msg, options) {
+								//doSomething
+							});
+						}
+					} else {
+						mint.wsSend(requestObject, 'wsSereviceOff', serviceCd, mint.ws.msgType.OFF, function(resultCd, msg, options) {
+							//doSomething
+						});
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requestQueueInOutCountOff"});
+				}
+			},//end fn_requestQueueInOutCountOff
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_responseQueueInOutCount
+			//-----------------------------------------------------------------------
+			fn_responseQueueInOutCount : function() {
+				try {
+					var serviceCd = $.main.chartType[1].serviceCd; //'WS0053';
+					if( $.main.isTest ) serviceCd = $.main.chartType[0].serviceCd; //'WS0038';
+					var options = { serviceCd: serviceCd, includeRequest: true };
+
+					mint.wsReceive(function(requestObject, responseObject, time){
+
+						//-----------------------------------------------------------------------
+						// Sample Data
+						//-----------------------------------------------------------------------
+						if( $.main.isTest ) {
+							var max = 100;
+							var checkDate = new Date();
+							var count1 = Math.round(Math.random() * max);
+							var count2 = Math.round(Math.random() * max);
+							var data = { x: mint.common.formatDateTime(checkDate, "ss"), openInputCount: count1, openOutputCount: count2 };
+
+							responseObject = data;
+							responseObject.qmgrName = 'TESTQM';
+							responseObject.name     = 'TEST.LQ';
+						}
+
+						if( !mint.common.isEmpty(responseObject) ) {
+							//-----------------------------------------------------------------------
+							// Chart Configuration
+							//-----------------------------------------------------------------------
+							var POINTS = 20;
+							var chartClass = $.main.fn_replaceString(responseObject.qmgrName + responseObject.name);
+							var chartObj = $('.' + chartClass);
+
+							chartObj.each( function() {
+								var chart = $(this).data("kendoChart");
+
+								var categoryAxis = chart.options.categoryAxis;
+								var categories   = categoryAxis.categories;
+								var valueAxis    = chart.options.valueAxis;
+								var series       = chart.options.series;
+								var seriesData   = series[0].data;
+
+								//-----------------------------------------------------------------------
+								// Data Binding
+								//-----------------------------------------------------------------------
+								{
+									var minute = kendo.toString(kendo.parseDate(time, 'yyyyMMddHHmmss'), 'HH:mm');
+									var second = kendo.toString(kendo.parseDate(time, 'yyyyMMddHHmmss'), 'ss');
+
+									// X축 타이틀
+									categoryAxis.title.text = minute;
+									// X축 범례
+									categories.push(second);
+									// Data
+									seriesData.push({ x: second, inCnt: responseObject.openInputCount, otCnt: responseObject.openOutputCount });
+								}
+
+								//-----------------------------------------------------------------------
+								// Data Shift
+								//-----------------------------------------------------------------------
+								if (categories.length > POINTS) {
+									categories.shift();
+								}
+
+								if( seriesData.length > POINTS ) {
+									seriesData.shift();
+								}
+
+								//-----------------------------------------------------------------------
+								// Series 의 maxValue 값을 구한다. ( 데이터 별로 상이하므로, 그래프별 로직 수정 필요 )
+								//-----------------------------------------------------------------------
+								{
+									var seriesMaxValue = new Object();
+
+									//axis = count
+									var maxValue = seriesData.reduce(function(previous, current) {
+										var preMaxValue = previous.inCnt > previous.otCnt ? previous.inCnt : previous.otCnt;
+										var curMaxValue = current.inCnt > current.otCnt ? current.inCnt : current.otCnt;
+
+										previous.maxValue = preMaxValue;
+										current.maxValue = curMaxValue;
+
+										return preMaxValue > curMaxValue ? previous : current;
+									});
+
+									if( mint.common.isEmpty(seriesMaxValue[series[0].axis]) || seriesMaxValue[series[0].axis] < maxValue) {
+										seriesMaxValue[series[0].axis] = maxValue.maxValue;
+									}
+
+								}
+
+								//-----------------------------------------------------------------------
+								// Series 의 maxValue 값을 판단하여 valuAxis max 를 설정한다.
+								//-----------------------------------------------------------------------
+								for( var i = 0; i < valueAxis.length; i++ ) {
+									if( mint.common.isEmpty(seriesMaxValue[valueAxis[i].name]) || seriesMaxValue[valueAxis[i].name] < 10) {
+										valueAxis[i].max = 10;
+									} else {
+										valueAxis[i].max = undefined;
+									}
+								}
+								//-----------------------------------------------------------------------
+								// Chart Refresh
+								//-----------------------------------------------------------------------
+								chart.redraw();
+
+							});// end each
+
+						} else {
+							//doSomething()
+						}
+
+					}, options);
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_responseQueueInOutCount"});
+				}
+			},
+
+
+
+
+
+			//=======================================================================
+			// ▶ 유틸
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_attachTitle
+			//-----------------------------------------------------------------------
+			fn_attachTitle : function(value) {
+				try {
+					if( mint.common.isEmpty(value) ) {
+						return '';
+					} else {
+						var returnVal = value;
+						return "<span title='"+ returnVal +"'>"+ returnVal +"</span>";
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_attachTitle"});
+				}
+			}, // end fn_attachTitle()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_indexOfListener
+			//-----------------------------------------------------------------------
+			fn_indexOfListener : function(listenerList, requestObject) {
+				try{
+					for( var i=0; i<listenerList.length; i++) {
+						if( listenerList[i] === requestObject ) {
+							return i;
+						}
+					}
+					return -1;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_indexOfListener"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_replaceString
+			//-----------------------------------------------------------------------
+			fn_replaceString : function(val, options) {
+				try{
+					//TODO: replace 문자열 처리...
+					return val.replace(/\./g, '__');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_replaceString"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initMove
+			//-----------------------------------------------------------------------
+			fn_initMove : function() {
+				try {
+				    var element = "[class*=col]";
+				    var handle = ".mint-widget-heading";
+				    var connect = "[class*=col]";
+				    $(element).sortable(
+				        {
+				            handle: handle,
+				            connectWith: connect,
+				            tolerance: 'pointer',
+				            forcePlaceholderSize: true,
+				            opacity: 0.8
+				        })
+				        .disableSelection();
+
+
+
+//                     $(".mint-widget-panel").kendoSortable({
+//                         filter: ".mint-col-default",
+//                         cursor: "move",
+//                         //connectWith: "#sidebar",
+//                         placeholder: function(e) {
+//                         	return e.clone().addClass("placeholder");
+//                         },
+//                         hint: function(e) {
+//                             return e.clone().addClass("hint")
+//                             .height(e.height())
+//                             .width(e.width());
+//                         }
+//                     });
+
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initMove"});
+				}
+
+			}, // end fn_initMove
+
+
+
+
+			//=======================================================================
+			// ▶ 트리 구성
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initTree
+			//-----------------------------------------------------------------------
+			fn_initTree : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// Create Tree
+					//-----------------------------------------------------------------------
+					$(".systemTree").kendoTreeView({
+
+						dataTextField: 'objNm',
+						dataValueField :'id',
+						//dragAndDrop: true,
+			            loadOnDemand: false,
+			            template: '<span class="item-title">#= item.objNm #</span>',
+			            check: function(e) {
+			            	//$.sub.fn_setCheckedParentNodes(this, e.node);
+			            },
+						collapse: function(e) {
+							mint.ui.treeViewCollapse(e.node);
+						},
+						expand: function(e) {
+							mint.ui.treeViewExpand(e.node);
+						},
+						select: function(e) {
+
+						},
+						change: function(e) {
+							var selectedNode = this.select();
+							var dataItem     = this.dataItem(selectedNode);
+							$.main.fn_requireTreeItems(selectedNode, dataItem);
+						}
+
+	                });
+					//-----------------------------------------------------------------------
+					// add ContextMenu
+					//-----------------------------------------------------------------------
+	                var menu = $("#treeContextMenu").kendoContextMenu({
+	                    orientation: 'vertical',
+	                    target: ".systemTree",
+	                    filter: ".k-item .k-state-selected.k-in",
+	                    animation: {
+	                        open: { effects: "fadeIn" },
+	                        duration: 500
+	                    },
+	                    select: function(e) {
+	                    	$.main.fn_selectContextMenu(e);
+	                    }
+	                });
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initTree"});
+				}
+			},//end fn_initTree
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_selectContextMenu
+			//-----------------------------------------------------------------------
+			fn_selectContextMenu : function(e) {
+				try {
+                	//-----------------------------------------------------------------------
+                	// Command 를 추출한다
+                	//-----------------------------------------------------------------------
+                	var treeView     = $('.systemTree').data('kendoTreeView');
+                	var selectedItem = e.item;
+                	var target       = e.target;
+
+					var selectedNode = $(target).select();
+					var dataItem     = treeView.dataItem(target);
+
+                	var command = $(selectedItem).data('command');
+                	if( !mint.common.isEmpty(command) ) {
+                    	switch( command ) {
+                    		case 'refresh' :
+                    			$.main.fn_refreshTree(treeView, selectedNode, dataItem);
+                    			break;
+                    		default :
+                    			break;
+                		}
+                	}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_selectContextMenu"});
+				}
+			},//end fn_selectContextMenu
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_refreshTree
+			//-----------------------------------------------------------------------
+			fn_refreshTree : function(treeView, selectedNode, dataItem) {
+				try {
+					//-----------------------------------------------------------------------
+					// collapse
+					//-----------------------------------------------------------------------
+					treeView.collapse(selectedNode);
+
+					//-----------------------------------------------------------------------
+					// remove
+					//-----------------------------------------------------------------------
+					if ( dataItem.hasChildren ) {
+						var items = dataItem.items;
+						var length = items.length;
+						for( var i = 0; i < length; i++ ) {
+							var item = items[0];
+							treeView.remove( treeView.findByUid(item.uid) );
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// add
+					//-----------------------------------------------------------------------
+					$.main.fn_requireTreeItems(selectedNode, dataItem);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_refreshTree"});
+				}
+			},//end fn_refreshTree
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireTreeItems
+			//-----------------------------------------------------------------------
+			fn_requireTreeItems : function(selectedNode, dataItem) {
+				try {
+
+					var objType = dataItem.objType;
+					if( !mint.common.isEmpty(objType) ) {
+
+						if( objType === 'SYSTEM' ) {
+							$.main.fn_requireServerList(selectedNode, dataItem);
+						}
+						if( objType === 'SERVER' ) {
+							$.main.fn_requireQmgrList(selectedNode, dataItem);
+						}
+						if( objType === 'QMGR' ) {
+							//-----------------------------------------------------------------------
+							// TODO
+							//-----------------------------------------------------------------------
+							//$.main.fn_requireObjectGroup(selectedNode, dataItem);
+							//-----------------------------------------------------------------------
+							$.main.fn_requireQueueGroup(selectedNode, dataItem);
+						}
+						if( objType === 'QUEUE-GROUP' ) {
+							$.main.fn_requireQueueGroup(selectedNode, dataItem);
+						}
+						if( objType === 'LOCAL-QUEUE-GROUP' ) {
+							$.main.fn_requireLocalQueueList(selectedNode, dataItem);
+						}
+						if( objType === 'CHANNEL-GROUP' ) {
+
+						}
+					}
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireTreeItems"});
+				}
+			},//end fn_requireTreeItems
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireSystemList
+			//-----------------------------------------------------------------------
+			fn_requireSystemList : function() {
+				try {
+					var restId = 'REST-R99-CO-99-06';
+					mint.callService(null, screenName, restId, function(jsonData) {
+
+						//-----------------------------------------------------------------------
+						// SAMPLE DATA
+						//-----------------------------------------------------------------------
+						if( $.main.isTest ) {
+							var idx = 10;
+							var itemList = [];
+							for( var i = 0 ; i < idx; i++ ) {
+								var objType = 'SYSTEM';
+								var objInfo = objType + i;
+
+								itemList.push({
+									id: objInfo,
+									idx: i,
+									root:true,
+									group:true,
+									hasChild:true,
+									parent:null,
+									objType: objType,
+									objCd: objInfo,
+									objNm: objInfo,
+									items:[],
+									systemId: objInfo,
+									serverId: '',
+									agentId: '',
+									agentNm: '',
+									qmgrId: '',
+									qmgrNm: ''
+								});
+							}
+
+							jsonData = {
+									roots: itemList
+							};
+						}
+
+						if( ! mint.common.isEmpty(jsonData) ) {
+							var dataSource  = new kendo.data.HierarchicalDataSource({
+								data:jsonData,
+								schema: {
+									data: "roots",
+									model: {
+										id: "id",
+										children: "items",
+										hasChildren: function (node) {
+											return mint.ui.treeViewHasChildren(node);
+										},
+									}
+								}
+							});
+
+							$(".systemTree").hide();
+							var treeView = $(".systemTree").data("kendoTreeView");
+						    treeView.setDataSource(dataSource);
+						    treeView.expand('.k-item');
+				            setTimeout(function () {
+				            	$(".systemTree").fadeIn(1000);
+				            },200);
+
+						}
+					}, { errorCall : true, notificationView : false } );
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireSystemList"});
+				}
+			},//end fn_requireSystemList
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireServerList
+			//-----------------------------------------------------------------------
+			fn_requireServerList : function(selectedNode, dataItem) {
+				try {
+
+					//if( dataItem.hasChildren && dataItem.items.length == 0 ) {
+					if( dataItem.items.length == 0 ) {
+
+						var restId = 'REST-R99-CO-99-07';
+						var requestObject = {systemId: dataItem.id};
+						mint.callService(requestObject, screenName, restId, function(jsonData) {
+							//-----------------------------------------------------------------------
+							// SAMPLE DATA
+							//-----------------------------------------------------------------------
+							if( $.main.isTest ) {
+								var idx = 2;
+								var itemList = [];
+
+								var preIdx = dataItem.idx;
+								for( var i = 0 ; i < idx; i++ ) {
+									var objType = 'SERVER';
+									var objInfo = objType + preIdx + i;
+									itemList.push({
+										id: objInfo,
+										idx: '' + preIdx + i,
+										root:true,
+										group:true,
+										hasChild:true,
+										parent:null,
+										objType: objType,
+										objCd: objInfo,
+										objNm: objInfo,
+										items:[],
+										systemId: dataItem.systemId,
+										serverId: objInfo,
+										agentId: objInfo,
+										agentNm: objInfo,
+										qmgrId: '',
+										qmgrNm: ''
+									});
+								}
+
+								jsonData = {
+										roots: itemList
+								};
+							}
+
+							if( !mint.common.isEmpty(jsonData) ) {
+								if( !mint.common.isEmpty(jsonData.roots) && jsonData.roots.length > 0 ) {
+									var treeView = $(".systemTree").data("kendoTreeView");
+								    treeView.append(jsonData.roots, selectedNode);
+								    treeView.expand(selectedNode);
+								}
+							}
+
+						}, { errorCall : true, notificationView : false } );
+
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireServerList"});
+				}
+			},//end fn_requireServerList
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireQmgrList ( WebSocket )
+			//-----------------------------------------------------------------------
+			fn_requireQmgrList : function(selectedNode, dataItem) {
+				try {
+
+					//if( dataItem.hasChildren && dataItem.items.length == 0 ) {
+					if( dataItem.items.length == 0 ) {
+
+						var serviceCd = 'WS0051';
+						var reqKey = dataItem.systemId + dataItem.serverId + dataItem.agentId;
+						var options = { serviceCd: serviceCd, asyncCall: false, includeRequest: true, timeout: $.main.wsTimeout };
+						var requestObject = {reqKey: reqKey, agentNm: dataItem.agentNm};
+
+						mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.REQ, function(resultCd, msg, options){
+							if( resultCd === 0 ) {
+								options.includeRequest = true;
+								mint.wsReceive(function(requestObject, responseObject, time){
+									var resKey = requestObject.reqKey;
+									var itemList = [];
+									//-----------------------------------------------------------------------
+									// SAMPLE DATA
+									//-----------------------------------------------------------------------
+									if( $.main.isTest ) {
+										var idx = 2;
+										var preIdx = dataItem.idx;
+										for( var i = 0 ; i < idx; i++ ) {
+											var objType = 'QMGR';
+											var objInfo = objType + preIdx + i;
+											itemList.push({
+												id: objInfo,
+												idx: '' + preIdx + i,
+												root:true,
+												group:true,
+												hasChild:true,
+												parent:null,
+												objType: objType,
+												objCd: objInfo,
+												objNm: objInfo,
+												items:[],
+												systemId: dataItem.systemId,
+												serverId: dataItem.serverId,
+												agentId: dataItem.agentId,
+												agentNm: dataItem.agentNm,
+												qmgrId: objInfo,
+												qmgrNm: objInfo
+											});
+										}
+									} else {
+										if( !mint.common.isEmpty(responseObject) && responseObject.length ) {
+											var length = responseObject.length;
+											for( var i = 0; i < length; i++ ) {
+
+												var result = $.grep( dataItem.items, function(e){ return e.id === responseObject[i].name; } );
+												if( mint.common.isEmpty(result) || result.length == 0 ) {
+
+													var objType = 'QMGR';
+													itemList.push({
+														id: responseObject[i].name,
+														root:false,
+														group:true,
+														hasChild:true,
+														parent:dataItem.agentId,
+														objType: objType,
+														objCd: responseObject[i].name,
+														objNm: mint.common.isEmpty(responseObject[i].name) ? '' : responseObject[i].name.trim(),
+														items:[],
+														systemId: dataItem.systemId,
+														serverId: dataItem.serverId,
+														agentId: dataItem.agentId,
+														agentNm: dataItem.agentNm,
+														qmgrId: responseObject[i].name,
+														qmgrNm: responseObject[i].name
+													});
+												}
+											}
+										}
+
+									}
+									if( !mint.common.isEmpty(itemList) && itemList.length > 0 ) {
+										if( reqKey === resKey ) {
+											var treeView = $(".systemTree").data("kendoTreeView");
+											treeView.append(itemList, selectedNode);
+											treeView.expand(selectedNode);
+										}
+									}
+
+								}, options);
+							} else {
+								//doSometing()
+							}
+						}, options);
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireQmgrList"});
+				}
+			},//end fn_requireQmgrList
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireObjectGroup
+			//-----------------------------------------------------------------------
+			fn_requireObjectGroup : function(selectedNode, dataItem) {
+				try {
+
+					//if( dataItem.hasChildren && dataItem.items.length == 0 ) {
+					if( dataItem.items.length == 0 ) {
+						//-----------------------------------------------------------------------
+						// SAMPLE DATA
+						//-----------------------------------------------------------------------
+						var idx = 2;
+						var itemList = [];
+
+						var preIdx = dataItem.idx;
+						var objType = 'QUEUE-GROUP';
+						var objInfo = objType + preIdx + 0;
+						itemList.push({
+							id: objType,
+							idx: '' + preIdx + 0,
+							root:false,
+							group:true,
+							hasChild:true,
+							parent:null,
+							objType: objType,
+							objCd: objInfo,
+							objNm: mint.label.getLabel('lb-267'), //'큐'
+							items:[],
+							systemId: dataItem.systemId,
+							serverId: dataItem.serverId,
+							agentId: dataItem.agentId,
+							agentNm: dataItem.agentNm,
+							qmgrId: dataItem.qmgrId,
+							qmgrNm: dataItem.qmgrNm
+						});
+
+						/*
+						var preIdx = dataItem.idx;
+						var objType = 'CHANNEL-GROUP';
+						var objInfo = objType + preIdx + 1;
+						itemList.push({
+							id: objType,
+							idx: '' + preIdx + 1,
+							root:false,
+							group:true,
+							hasChild:true,
+							parent:null,
+							objType: objType,
+							objCd: objInfo,
+							objNm: mint.label.getLabel('lb-265'), //'채널'
+							items:[],
+							systemId: dataItem.systemId,
+							serverId: dataItem.serverId,
+							agentId: dataItem.agentId,
+							agentNm: dataItem.agentNm,
+							qmgrId: dataItem.qmgrId,
+							qmgrNm: dataItem.qmgrNm
+						});
+						*/
+
+						var treeView = $(".systemTree").data("kendoTreeView");
+					    treeView.append(itemList, selectedNode);
+					    treeView.expand(selectedNode);
+
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireObjectGroup"});
+				}
+			},//end fn_requireObjectGroup
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireQueueGroup
+			//-----------------------------------------------------------------------
+			fn_requireQueueGroup : function(selectedNode, dataItem) {
+				try {
+
+					//if( dataItem.hasChildren && dataItem.items.length == 0 ) {
+					if( dataItem.items.length == 0 ) {
+						var itemList = [];
+						//-----------------------------------------------------------------------
+						// SAMPLE DATA
+						//-----------------------------------------------------------------------
+						if( $.main.isTest ) {
+							var idx = 2;
+							var preIdx = dataItem.idx;
+							var objType = 'LOCAL-QUEUE-GROUP';
+							var objInfo = objType + preIdx + 0;
+							itemList.push({
+								id: objType,
+								idx: '' +
+								preIdx + 0,
+								root:false,
+								group:true,
+								hasChild:true,
+								parent:null,
+								objType: objType,
+								objCd: objInfo,
+								objNm: mint.label.getLabel('lb-678'), //'로컬큐'
+								items:[],
+								systemId: dataItem.systemId,
+								serverId: dataItem.serverId,
+								agentId: dataItem.agentId,
+								agentNm: dataItem.agentNm,
+								qmgrId: dataItem.qmgrId,
+								qmgrNm: dataItem.qmgrNm
+							});
+						} else {
+							var objType = 'LOCAL-QUEUE-GROUP';
+							var objInfo = objType + preIdx + 0;
+							itemList.push({
+								id: objType,
+								root:false,
+								group:true,
+								hasChild:true,
+								parent:null,
+								objType: objType,
+								objCd: '',
+								objNm: mint.label.getLabel('lb-678'), //'로컬큐'
+								items:[],
+								systemId: dataItem.systemId,
+								serverId: dataItem.serverId,
+								agentId: dataItem.agentId,
+								agentNm: dataItem.agentNm,
+								qmgrId: dataItem.qmgrId,
+								qmgrNm: dataItem.qmgrNm
+							});
+						}
+
+						var treeView = $(".systemTree").data("kendoTreeView");
+					    treeView.append(itemList, selectedNode);
+					    treeView.expand(selectedNode);
+
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireObjectGroup"});
+				}
+			},//end fn_requireQueueGroup
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requireLocalQueueList ( WebSocket )
+			//-----------------------------------------------------------------------
+			fn_requireLocalQueueList : function(selectedNode, dataItem) {
+				try {
+
+					//if( dataItem.hasChildren && dataItem.items.length == 0 ) {
+					if( dataItem.items.length == 0 ) {
+
+						var serviceCd = 'WS0052';
+						var reqKey = dataItem.systemId + dataItem.serverId + dataItem.agentId + dataItem.qmgrId;
+						var options = { serviceCd: serviceCd, asyncCall: false, includeRequest: true, timeout: $.main.wsTimeout };
+						var requestObject = {reqKey: reqKey, agentNm: dataItem.agentNm, qmgrNm: dataItem.qmgrNm, isSysObj: $.main.isSystemObjectView == true ? '1' : '0'};
+
+						mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.REQ, function(resultCd, msg, options){
+							if( resultCd === 0 ) {
+								options.includeRequest = true;
+								mint.wsReceive(function(requestObject, responseObject, time){
+									var resKey = requestObject.reqKey;
+									var itemList = [];
+									if( $.main.isTest ) {
+										//-----------------------------------------------------------------------
+										// SAMPLE DATA
+										//-----------------------------------------------------------------------
+										var idx = 20;
+										var preIdx = dataItem.idx;
+										for( var i = 0 ; i < idx; i++ ) {
+											var objType = 'LOCAL-QUEUE';
+											var objInfo = objType + preIdx + i + '.LQ';
+											itemList.push({
+												id: 'LOCALQUEUE' + preIdx + i + '.LQ',
+												idx: '' + preIdx + i,
+												root:false,
+												group:false,
+												hasChild:false,
+												draggable:true,
+												parent:null,
+												objType: objType,
+												objCd: 'LOCALQUEUE' + preIdx + i + '.LQ',
+												objNm: 'LOCALQUEUE' + preIdx + i + '.LQ',
+												items:[],
+												systemId: dataItem.systemId,
+												serverId: dataItem.serverId,
+												agentId: dataItem.agentId,
+												agentNm: dataItem.agentNm,
+												qmgrId: dataItem.qmgrId,
+												qmgrNm: dataItem.qmgrNm
+											})
+										}
+									} else {
+										if( !mint.common.isEmpty(responseObject) && responseObject.length > 0 ) {
+											var length = responseObject.length;
+											for( var i = 0 ; i < length; i++ ) {
+
+												var result = $.grep( dataItem.items, function(e){ return e.id === responseObject[i].name; } );
+												if( mint.common.isEmpty(result) || result.length == 0 ) {
+													var objType = 'LOCAL-QUEUE';
+													itemList.push({
+														id: responseObject[i].name,
+														root:false,
+														group:false,
+														hasChild:false,
+														draggable:true,
+														parent:null,
+														objType: objType,
+														objCd: responseObject[i].name,
+														objNm: mint.common.isEmpty(responseObject[i].name) ? '' : responseObject[i].name.trim(),
+														items:[],
+														systemId: dataItem.systemId,
+														serverId: dataItem.serverId,
+														agentId: dataItem.agentId,
+														agentNm: dataItem.agentNm,
+														qmgrId: dataItem.qmgrId,
+														qmgrNm: dataItem.qmgrNm
+													});//end push
+												}//end if
+											}//end for
+										}//end if
+									}//end else
+
+									if( !mint.common.isEmpty(itemList) && itemList.length > 0 ) {
+										if( reqKey === resKey ) {
+											var treeView = $(".systemTree").data("kendoTreeView");
+										    treeView.append(itemList, selectedNode);
+										    treeView.expand(selectedNode);
+										}
+									}
+
+								}, options);
+							} else {
+								//doSometing()
+							}
+						}, options);
+					}
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_requireLocalQueueList"});
+				}
+			},//end fn_requireLocalQueueList
+
+			//=======================================================================
+			// ▶ 그리드 구성
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initGrid
+			//-----------------------------------------------------------------------
+			fn_initGrid : function(source, target) {
+				try {
+					$.main.fn_getGrid('grid-personalization-owner');
+					$.main.fn_getGrid('grid-personalization-shared');
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initGrid"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_destroyGrid
+			//-----------------------------------------------------------------------
+			fn_destroyGrid : function(source, target) {
+				try {
+					$('#grid-personalization-owner').data('kendoGrid').destroy();
+					$('#grid-personalization-shared').data('kendoGrid').destroy();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_destroyGrid"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getGrid
+			//-----------------------------------------------------------------------
+			fn_getGrid : function(gridId) {
+				try {
+					var grid = $('#' + gridId).kendoGrid({
+						dataSource : $.main.fn_getGridDataSource(gridId, '')
+						//, height: 150
+						, filterable: false
+						, scrollable: true
+						, resizable: true
+					    , sortable : true
+						, selectable: true
+						, editable: 'inline'
+						, pageable : {
+							  refresh 		: false
+					    	, buttonCount 	: 5
+						}
+						, columns : $.main.fn_getGridColumns(gridId)
+						, save: function(e) {
+							var dataItem = e.model;
+							$.main.fn_updatePersonalization(dataItem);
+						}
+						, dataBound: function (e) {
+							if(0 == $('#' + gridId).data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+								$('#' + gridId).children(".k-grid-content").height(gridHeight /3.5);
+							} else {
+								$('#' + gridId).children(".k-grid-content").height('auto');
+							}
+
+							//-----------------------------------------------------------------------
+							// ROW / COL CSS 처리
+							//-----------------------------------------------------------------------
+							var items = e.sender.dataItems();
+							if( items.length > 0 ) {
+								for(var i = 0; i < items.length; i++ ) {
+									var tr = e.sender.wrapper.find("tr[data-uid='" + items[i].uid + "']");
+									tr.removeClass('k-alt');
+								}
+							}
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGrid"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getGridColumns
+			//-----------------------------------------------------------------------
+			fn_getGridColumns : function(gridId) {
+				try {
+					var columns =
+					[
+						{
+							title: mint.label.getLabel('lb-68'), //'제목'
+							field: 'subject',
+							width: '150px',
+							template: '#= $.main.fn_attachTitle(subject) #',
+							headerAttributes: {
+								style: 'text-align: center; vertical-align:middle;'
+							},
+							attributes: {
+								style: 'text-align: center; white-space: nowrap;'
+							}
+						},
+						{
+							title: mint.label.getLabel('lb-40'), //'공유'
+							field: 'shared',
+							width: '50px',
+							template: '#= $.main.fn_attachTitle(shared) #',
+							headerAttributes: {
+								style: 'text-align: center; vertical-align:middle;'
+							},
+							attributes: {
+								style: 'text-align: center; white-space: nowrap;'
+							},
+							editor: mint.ui.gridEditorYesOrNoComboBox
+						},
+						{
+							title: mint.label.getLabel('lb-398'), //'설명'
+							field: 'comments',
+							width: '160px',
+							template: '#= $.main.fn_attachTitle(comments) #',
+							headerAttributes: {
+								style: 'text-align: center; vertical-align:middle;'
+							},
+							attributes: {
+								style: 'text-align: left; white-space: nowrap;'
+							}
+						},
+						{
+							title: mint.label.getLabel('lb-582'), //'최종수정일'
+							field: 'modDate',
+							width: '60px',
+							template: '#= $.main.fn_attachTitle(kendo.toString(kendo.parseDate(modDate, "yyyyMMdd"), "yyyy/MM/dd")) #',
+							headerAttributes: {
+								style: 'text-align: center; vertical-align:middle;'
+							},
+							attributes: {
+								style: 'text-align: center; white-space: nowrap;'
+							}
+						},
+						{
+							title: mint.label.getLabel('lb-535'), //'등록자'
+							field: 'regUser',
+							width: '40px',
+							template: '#= $.main.fn_attachTitle(regUser) #',
+							headerAttributes: {
+								style: 'text-align: center; vertical-align:middle;'
+							},
+							attributes: {
+								style: 'text-align: center; white-space: nowrap;'
+							}
+						},
+						{ field: 'saveId', hidden: true},
+						{ field: 'boardId', hidden: true},
+						{ field: 'delYn', hidden: true},
+						{ field: 'regDate', hidden: true},
+						{ field: 'modUser', hidden: true},
+					];
+
+					if( gridId == 'grid-personalization-owner' ) {
+						var editColumn = {
+							width: '100px',
+							attributes: {
+								style: 'text-align: center; white-space: nowrap;'
+							},
+							command: [
+								{
+									name: 'edit',
+									text: {
+										edit: mint.label.getLabel('lb-342'),
+										update: mint.label.getLabel('lb-310'),
+										cancel: mint.label.getLabel('lb-143')
+									},
+									click: function(e) {
+										var row = this.tbody.find("tr[data-role='editable']");
+										this.select(row);
+									}
+								},
+								{
+									name: 'deletes',
+									text: '<span class="k-icon k-i-delete"></span>' + mint.label.getLabel('lb-343'),
+									click: function(e) {
+										var row = $(e.target).closest('tr');
+										var dataItem = this.dataItem(row);
+										this.select(row);
+
+										$.main.fn_deletePersonalization(dataItem);
+									}
+								}
+							]
+						}
+
+						columns.push(editColumn);
+					}
+
+					return columns;
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridColumns"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getGridDataSource
+			//-----------------------------------------------------------------------
+			fn_getGridDataSource : function(gridId, responseObject) {
+				try {
+					var dataSource =  new kendo.data.DataSource({
+						data: responseObject,
+						page:1,
+						schema: {
+							model: $.main.fn_getGridModel()
+						}
+					});
+
+					return dataSource;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridDataSource"});
+				}
+			}, //end fn_getGridDataSource()
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getGridModel
+			//-----------------------------------------------------------------------
+			fn_getGridModel : function() {
+				try {
+					var gridModel = new kendo.data.Model.define({
+	            		id: "saveId",
+	            		fields: {
+	            			saveId	: {editable: false, nullable: false, defaultValue: "",  validation: {required: false}},
+	            			boardId	: {editable: false, nullable: false, defaultValue: "",  validation: {required: false}},
+	            			subject	: {editable: true,  nullable: false, defaultValue: "",  validation: {required: true}},
+	            			shared	: {editable: true,  nullable: false, defaultValue: "N", validation: {required: false}},
+	            			comments: {editable: true,  nullable: false, defaultValue: "",  validation: {required: false}},
+	            			delYn	: {editable: true,  nullable: true,  defaultValue: "N", validation: {required: false}},
+	            			regDate	: {editable: false, nullable: true,  defaultValue: "",  validation: {required: false}},
+	            			regUser	: {editable: false, nullable: false, defaultValue: "",  validation: {required: false}},
+	            			modDate	: {editable: false, nullable: true,  defaultValue: "",  validation: {required: false}},
+	            			modUser : {editable: false, nullable: false, defaultValue: "",  validation: {required: false}},
+	            		}
+					});
+
+					return gridModel;
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getGridModel"});
+				}
+			}, //end fn_getGridModel()
+
+
+
+
+			//=======================================================================
+			// ▶ 위젯 구성 및 이벤트 설정
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_addQueueInOutPanel
+			//-----------------------------------------------------------------------
+			fn_addQueueInOutPanel : function(e) {
+				try {
+					//-----------------------------------------------------------------------
+					// TODO: 성능검증 해결전까진 제한을 걸어둔다.
+					//-----------------------------------------------------------------------
+					var panelLimit = 16;
+					var widgets = $('.mint-widget-div');
+					if( !mint.common.isEmpty(widgets) && widgets.size() < panelLimit ) {
+
+						if( widgets.size() === 0 ) {
+							$.main.loadInfo.isLoaded = false;
+						}
+
+						var htmlTemplate = kendo.template($('#template-mint-widget-queue-inout-chart').html());
+						var widget = htmlTemplate({});
+						$('.mint-widget-view').append(widget);
+						$('.close-link').panelCloseEvent(function(e, options){
+							var self = this;
+							$.main.fn_panelCloseEvent.apply(self, [e, options]);
+						});
+						$('.control-link').panelPlayEvent(function(e, options){
+							var self = this;
+							$.main.fn_panelPlayEvent.apply(self, [e, options]);
+						});
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_addQueueInOutPanel"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_panelCloseEvent
+			//-----------------------------------------------------------------------
+			fn_panelCloseEvent : function(e, options) {
+				try {
+					var content = $(this).find('.mint-widget-chart');
+					var chartData = content.data('chartData');
+					$.main.fn_runningServiceCheck(chartData);
+
+					$(this).remove();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_panelCloseEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_panelPlayEvent
+			//-----------------------------------------------------------------------
+			fn_panelPlayEvent : function(e, options) {
+				try {
+					var self = this;
+					var content   = $(self).find('.mint-widget-chart');
+					var chartData = content.data('chartData');
+
+					if( !mint.common.isEmpty(chartData) ) {
+						var chartClass  = $.main.fn_replaceString(chartData.qmgrNm + chartData.objNm);
+						var chartObject = $('.' + chartClass);
+						var chartType   = chartData.chartType;
+						var serviceCd   = $.main.chartType[chartType].serviceCd;
+
+						var btnCssStop  = 'fa-pause';
+						var btnCssStart = 'fa-play';
+						var btnCss      = btnCssStart;
+
+						if( $(self).is('.start') ) {
+							$.main.fn_serviceOn(chartType, chartData);
+							btnCss = btnCssStop;
+						} else {
+							$.main.fn_serviceOff(chartType, chartData);
+							btnCss = btnCssStart;
+						}
+
+						chartObject.each(function() {
+							var widget = $(this).closest('div.mint-widget-div');
+							if( $(self)[0] != widget[0] ) {
+								widget.removeClass('stop').removeClass('start').addClass( $(self).is('.start') ? 'start' : 'stop');
+	 							var button = $(widget).find('i');
+	 							if( $(button).is('.fa-play') || $(button).is('.fa-pause') ) {
+	 								var btn = button.filter($('.fa-play, .fa-pause'));
+	 								btn.removeClass('fa-play').removeClass('fa-pause').addClass(btnCss);
+	 							}
+							}
+
+						});
+
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_panelPlayEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_runningServiceCheck
+			//-----------------------------------------------------------------------
+			fn_runningServiceCheck : function(chartData) {
+				try {
+					if( !mint.common.isEmpty(chartData) ) {
+						var chartClass = $.main.fn_replaceString(chartData.qmgrNm + chartData.objNm);
+						var chartObject = $('.' + chartClass);
+						if( !mint.common.isEmpty(chartObject) && chartObject.size() <= 1 ) {
+							var chartType = chartData.chartType;
+							$.main.fn_serviceOff(chartType, chartData);
+						}
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_runningServiceCheck"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_removeAllPanel
+			//-----------------------------------------------------------------------
+			fn_removeAllPanel : function(e) {
+				try {
+					mint.common.debugLog('fn_removeAllPanel');
+					var widgets = $('.mint-widget-div');
+					if( !mint.common.isEmpty(widgets) && widgets.size() > 0 ) {
+						widgets.each( function() {
+							$(this).remove();
+						});
+					}
+					$.main.fn_serviceOff();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_removeAllPanel"});
+				}
+			},
+
+
+
+			//=======================================================================
+			// ▶ 윈도우 설정 저장/수정/삭제/불러오기
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_savePersonalization
+			//-----------------------------------------------------------------------
+			fn_savePersonalization : function(e, isOverwrite) {
+				try {
+
+					var saveData = [];
+					var widgets = $('.mint-widget-div');
+
+					if( !mint.common.isEmpty(widgets) && widgets.size() > 0 ) {
+						widgets.each( function() {
+							var chartObject = $(this).find('.mint-widget-chart');
+							var chartType = chartObject.data('chartType');
+							var chartData = chartObject.data('chartData');
+
+							saveData.push({chartType: chartType, chartData: mint.common.isEmpty(chartData) ? '' : chartData});
+						});
+
+						if( mint.common.isEmpty(isOverwrite) || isOverwrite === false ) {
+
+							//-----------------------------------------------------------------------
+							// 신규 저장
+							//-----------------------------------------------------------------------
+							if( mint.common.isEmpty($('#sub-popup-subject').val()) ) {
+								//mint.common.alert('CW00001', mint.label.getLabel('lb-68'));
+								$('#sub-popup-subject').addClass('mint-form-required');
+								mint.common.focus($('#sub-popup-subject'));
+								return;
+							}
+
+							var restId = 'REST-R99-CO-99-08';
+							var requestObject = {};
+							requestObject.boardId  = 'OP-01-02-001';
+							requestObject.subject  = $('#sub-popup-subject').val();
+							requestObject.contents = JSON.stringify(saveData);
+							requestObject.shared   = $('input[type=radio][name="sub-popup-shared"]:checked').val();
+							requestObject.comments = $('#sub-popup-comments').val();
+
+							mint.callService(requestObject, screenName, restId, function(responseObject, errorCd, errorMsg) {
+								if( !mint.common.isEmpty(errorCd) && errorCd === "0") {
+									mint.common.notification(mint.message.getMessage('CI00101'));
+									e.sender.close();
+								}
+							}, { errorCall : true, notificationView : false } );
+						} else {
+							//-----------------------------------------------------------------------
+							// 업데이트
+							//-----------------------------------------------------------------------
+							var confirm = mint.common.confirm('CI00001');
+							if( confirm ) {
+								var restId = 'REST-R99-CO-99-09';
+								var requestObject = $.main.loadInfo.loadData;
+								requestObject.contents = JSON.stringify(saveData);
+
+								mint.callService(requestObject, screenName, restId, function(responseObject, errorCd, errorMsg) {
+									if( !mint.common.isEmpty(errorCd) && errorCd === "0") {
+										mint.common.notification(mint.message.getMessage('CI00101'));
+									}
+								}, { errorCall : true, notificationView : false } );
+							}
+						}
+					} else {
+						mint.common.alert('CW00018');
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_savePersonalization"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_updatePersonalization
+			//-----------------------------------------------------------------------
+			fn_updatePersonalization : function(dataItem) {
+				try {
+					if( !mint.common.isEmpty(dataItem) ) {
+
+						var restId = 'REST-R99-CO-99-09';
+						var requestObject = {};
+						requestObject.saveId   = dataItem.saveId;
+						requestObject.boardId  = dataItem.boardId;
+						requestObject.regId    = dataItem.regId;
+						requestObject.subject  = dataItem.subject;
+						requestObject.shared   = dataItem.shared;
+						requestObject.comments = dataItem.comments;
+
+						mint.callService(requestObject, screenName, restId, function(responseObject, errorCd, errorMsg) {
+							if( !mint.common.isEmpty(errorCd) && errorCd === "0") {
+								$.main.fn_requirePersonalizationList();
+								mint.common.notification(mint.message.getMessage('CI00101'));
+							}
+						}, { errorCall : true, notificationView : false } );
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_updatePersonalization"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_deletePersonalization
+			//-----------------------------------------------------------------------
+			fn_deletePersonalization : function(dataItem) {
+				try {
+
+					var confirm = mint.common.confirm('CI00003');
+					if( confirm && !mint.common.isEmpty(dataItem)) {
+						var restId = 'REST-R99-CO-99-10';
+						var requestObject = {};
+						requestObject.saveId   = dataItem.saveId;
+						requestObject.boardId  = dataItem.boardId;
+						requestObject.regId    = dataItem.regId;
+
+						mint.callService(requestObject, screenName, restId, function(responseObject, errorCd, errorMsg) {
+							if( !mint.common.isEmpty(errorCd) && errorCd === "0") {
+								$.main.fn_requirePersonalizationList();
+								mint.common.notification(mint.message.getMessage('CI00103'));
+							}
+						}, { errorCall : true, notificationView : false } );
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_deletePersonalization"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadPersonalization
+			//-----------------------------------------------------------------------
+			fn_loadPersonalization : function(e) {
+				try {
+
+					//-----------------------------------------------------------------------
+					// 현재 활성화된 탭의 그리드 정보를 얻어온다
+					//-----------------------------------------------------------------------
+					var activeTab = $('.k-dialog .tab-pane.active div.k-grid');
+					var gridId = activeTab[0].id;
+					//-----------------------------------------------------------------------
+					// 그리드의 선택된 아이템 정보를 얻어온다
+					//-----------------------------------------------------------------------
+					var entityGrid = $('#' + gridId).data("kendoGrid");
+			        var selectedItem = entityGrid.dataItem(entityGrid.select());
+
+			        if( mint.common.isEmpty(selectedItem) ) {
+			        	return;
+			        }
+					//-----------------------------------------------------------------------
+					// 기존 위젯을 모두 삭제한다
+					//-----------------------------------------------------------------------
+					$.main.fn_removeAllPanel();
+
+					//-----------------------------------------------------------------------
+					// 환경설정 불러오기 서비스를 호출한다
+					//-----------------------------------------------------------------------
+					var restId = 'REST-R99-CO-99-13';
+					var requestObject = {};
+					requestObject.saveId  = selectedItem.saveId;
+					mint.callService(requestObject, screenName, restId, function(responseObject) {
+
+						if( !mint.common.isEmpty(responseObject) ) {
+							var contents = JSON.parse(responseObject.contents);
+
+							if( !mint.common.isEmpty(contents) && contents.length > 0 ) {
+								var length = contents.length;
+								for( var i = 0; i < length; i++ ) {
+									$.main.fn_addQueueInOutPanel();
+									var chartList = $('.mint-widget-div');
+									var target = $(chartList.get(i));
+									$.main.fn_initChart(contents[i].chartData, target);
+								}//end for
+							}//end if
+
+							//-----------------------------------------------------------------------
+							// Loading 여부 설정
+							//-----------------------------------------------------------------------
+							{
+								$.main.loadInfo.isLoaded = true;
+								$.main.loadInfo.loadData = responseObject;
+							}
+
+						}//end if
+					}, { errorCall : true, notificationView : false } );
+
+					//-----------------------------------------------------------------------
+					// Window Close
+					//-----------------------------------------------------------------------
+					if( !mint.common.isEmpty(e) ) {
+						e.sender.close();
+					}
+
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_loadPersonalization"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_requirePersonalizationList
+			//-----------------------------------------------------------------------
+			fn_requirePersonalizationList : function(dataItem) {
+				try {
+					//-----------------------------------------------------------------------
+					// My-List
+					//-----------------------------------------------------------------------
+					{
+						var restId = 'REST-R99-CO-99-11';
+						var requestObject = {};
+						requestObject.boardId  = 'OP-01-02-001';
+
+						mint.callService(requestObject, screenName, restId, function(responseObject, errorCd, errorMsg) {
+
+							if( !mint.common.isEmpty(responseObject) ) {
+								var gridId = 'grid-personalization-owner';
+								var dataSource = $.main.fn_getGridDataSource(gridId, responseObject);
+								var grid = $('#' + gridId).data("kendoGrid");
+								grid.setDataSource(dataSource);
+
+							}
+						}, { errorCall : true, notificationView : false } );
+					}
+
+					//-----------------------------------------------------------------------
+					// Shared-List
+					//-----------------------------------------------------------------------
+					{
+						var restId = 'REST-R99-CO-99-12';
+						var requestObject = {};
+						requestObject.boardId  = screenName;
+
+						mint.callService(requestObject, screenName, restId, function(responseObject, errorCd, errorMsg) {
+							if( !mint.common.isEmpty(responseObject) ) {
+								var gridId = 'grid-personalization-shared';
+								var dataSource = $.main.fn_getGridDataSource(gridId, responseObject);
+								var grid = $('#' + gridId).data("kendoGrid");
+								grid.setDataSource(dataSource);
+
+							}
+						}, { errorCall : true, notificationView : false } );
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_requirePersonalizationList"});
+				}
+			},
+
+
+
+			//=======================================================================
+			// ▶ 윈도우 툴바 설정
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initToolbar
+			//-----------------------------------------------------------------------
+			fn_initToolbar : function(color, options) {
+				try {
+					$('#mint-toolbar').kendoToolBar({
+						items: [
+							{ type: "button", text: "<span class='glyphicon glyphicon-th' aria-hidden='true'></span>", overflow: "never" },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-area-chart'></i> <span><lb class='lb-679'>큐성능그래프</lb></span>", overflow: "never", click : function(e) {
+								$.main.fn_addQueueInOutPanel(e);
+							} },
+							//{ type: "button", text: "+ 큐깊이그래프", overflow: "never" },
+                            { type: "separator" },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-save'></i> <span><lb class='lb-310'>저장</lb></span>", overflow: "never", click : function(e) {
+								$.main.fn_toolbarSaveEvent(e);
+							} },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-files-o'></i> <span><lb class='lb-309'>다른이름으로 저장</lb></span>", overflow: "never", click : function(e) {
+								$.main.fn_toolbarSaveAsEvent(e);
+							} },
+							{ type: "button", text: "<i class='mint-toolbar-icon fa fa-lgs fa-folder-open-o'></i> <span><lb class='lb-308'>불러오기</lb></span>", overflow: "never", click : function(e) {
+								$.main.fn_loadWindowOpen(e);
+							} },
+						]
+					});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initToolbar"});
+				}
+			},
+
+			//=======================================================================
+			// ▶ 윈도우 툴바 버튼 이벤트
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_toolbarSaveEvent
+			//-----------------------------------------------------------------------
+			fn_toolbarSaveEvent : function(e) {
+				try {
+					if( $.main.loadInfo.isLoaded ) {
+						$.main.fn_savePersonalization(e, true);
+					} else {
+						$.main.fn_saveWindowOpen(e);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_toolbarSaveEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_toolbarSaveAsEvent
+			//-----------------------------------------------------------------------
+			fn_toolbarSaveAsEvent : function(e) {
+				try {
+					$.main.fn_saveWindowOpen(e);
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_toolbarSaveAsEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_toolbarLoadEvent
+			//-----------------------------------------------------------------------
+			fn_toolbarLoadEvent : function(e) {
+				try {
+					$.main.fn_loadWindowOpen(e);
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_toolbarLoadEvent"});
+				}
+			},
+
+
+			//=======================================================================
+			// ▶ 윈도우 구성/오픈/종료
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_saveWindowOpen
+			//-----------------------------------------------------------------------
+			fn_saveWindowOpen : function(windowType, options) {
+				try {
+					var widgets = $('.mint-widget-div');
+					if( mint.common.isEmpty(widgets) || widgets.size() == 0 ) {
+						mint.common.alert('CW00018');
+						return;
+					}
+
+					//-----------------------------------------------------------------------
+					// sub window 를 attach 할 division select
+					//-----------------------------------------------------------------------
+					var subWindow = $('.mint-sub-window');
+					if( mint.common.isEmpty(subWindow) || subWindow.size() == 0 ) {
+						$('body').append($('<div class="mint-sub-window"></div>'));
+					}
+					//-----------------------------------------------------------------------
+					// 선택된 디비전에 컨텐츠를 붙인다
+					//-----------------------------------------------------------------------
+					//var htmlTemplate = kendo.template($('#template-mint-widget-savewindow').html());
+
+					$('.mint-sub-window').append($('.mint-widget-savewindow'));
+					//$('.mint-sub-window').append(htmlTemplate({}));
+					$('.mint-widget-savewindow').show();
+
+					//-----------------------------------------------------------------------
+					// subWindow Open
+					//-----------------------------------------------------------------------
+					$('.mint-sub-window').kendoDialog({
+						title: mint.label.getLabel('lb-306'), //'윈도우 설정 저장'
+			            buttonLayout: 'normal',
+			            closable: true,
+			            modal: true,
+			            width: '500px',
+			            actions: [
+			                {
+			                	text: mint.label.getLabel('lb-310'),
+			                	primary: true,
+			                	action: function(e) {
+			                		$.main.fn_savePersonalization(e);
+			                		return false;
+			                	}
+			                },
+			                { text: mint.label.getLabel('lb-143') },
+			            ],
+			            close: function(e) {
+							$('#mint-attachDiv').append($('.mint-widget-savewindow'));
+							$('.mint-widget-savewindow').hide();
+							{
+								$('#sub-popup-subject').val('');
+								$('input[type=radio][name="sub-popup-shared"][value="N"]').prop('checked', true);
+								$('#sub-popup-comments').val('');
+							}
+			            	this.destroy();
+			            }
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_saveWindowOpen"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_loadWindowOpen
+			//-----------------------------------------------------------------------
+			fn_loadWindowOpen : function(windowType, options) {
+				try {
+					//-----------------------------------------------------------------------
+					// sub window 를 attach 할 division select
+					//-----------------------------------------------------------------------
+					var subWindow = $('.mint-sub-window');
+					if( mint.common.isEmpty(subWindow) || subWindow.size() == 0 ) {
+						$('body').append($('<div class="mint-sub-window"></div>'));
+					}
+					//-----------------------------------------------------------------------
+					// 선택된 디비전에 컨텐츠를 붙인다
+					//-----------------------------------------------------------------------
+					$('.mint-sub-window').append($('.mint-widget-loadwindow'));
+					$('.mint-widget-loadwindow').show();
+					$.main.fn_initGrid();
+					$.main.fn_requirePersonalizationList();
+
+					//-----------------------------------------------------------------------
+					// subWindow Open
+					//-----------------------------------------------------------------------
+					$('.mint-sub-window').kendoDialog({
+						title: mint.label.getLabel('lb-307'), //'윈도우 설정 가져오기'
+			            buttonLayout: 'normal',
+			            closable: true,
+			            modal: true,
+			            width: '900px',
+			            actions: [
+			                {
+			                	text: mint.label.getLabel('lb-308'), //'불러오기'
+			                	primary: true,
+			                	action: function(e) {
+			                		$.main.fn_loadPersonalization(e);
+			                		return false;
+			                	}
+			                },
+			                { text: mint.label.getLabel('lb-143') },
+			            ],
+			            close: function(e) {
+							$('#mint-attachDiv').append($('.mint-widget-loadwindow'));
+							$('.mint-widget-loadwindow').hide();
+							$.main.fn_destroyGrid();
+			            	this.destroy();
+			            }
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_loadWindowOpen"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_mainWindowOpen
+			//-----------------------------------------------------------------------
+			fn_mainWindowOpen : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 템플릿을 읽어 드린다
+					//-----------------------------------------------------------------------
+					var layout = kendo.template($('#template-mint-window').html());
+					var title  = kendo.template($('#template-mint-title').html());
+
+					//-----------------------------------------------------------------------
+					// DIV 에 템플릿에서 불러온 레이아웃을 붙인다
+					//-----------------------------------------------------------------------
+					var attachDiv = $('#mint-attachDiv').prepend( layout );
+					var windowDiv = $('#mint-window');
+
+					//-----------------------------------------------------------------------
+					// 윈도우를 오픈한다
+					//-----------------------------------------------------------------------
+					mint.ui.windowOpen(attachDiv, windowDiv, title, function(evt) {
+						//-----------------------------------------------------------------------
+						// DIV Resize
+						//-----------------------------------------------------------------------
+						var footerHeight = 40;
+						var pHeight = $(window).height() - $('.navbar-static-top')[0].clientHeight - $('.footer.fixed')[0].clientHeight - footerHeight;
+						//$('.mint-content-item').height(pHeight);
+						$('.mint-content-item').hide();
+
+						//-----------------------------------------------------------------------
+						// 윈도우가 Close 되면 대시보드 컨텐츠를 원래 DIV 에 붙인다
+						//-----------------------------------------------------------------------
+						attachDiv.html( $('.mint-content-item') );
+						//-----------------------------------------------------------------------
+						// 윈도우가 Close 되면 모니터링 서비스 종료 요청을 한다
+						//-----------------------------------------------------------------------
+						$.main.fn_mainWindowClose();
+
+					}, {windowScroll:false});
+
+					//-----------------------------------------------------------------------
+					// 레이아웃에 대시보드 컨텐츠를 붙인다.( 순서주의-윈도우 오픈후 컨텐츠 붙임 )
+					// TODO: 절차 정리가 필요할듯 합니다...
+					//-----------------------------------------------------------------------
+					{
+						$('#mint-toolbar').html('');
+						$('#mint-content').html( $('.mint-content-item') );
+						$.main.fn_initToolbar();
+						$('.mint-content-item').show();
+
+						//-----------------------------------------------------------------------
+						// DIV Resize
+						//-----------------------------------------------------------------------
+						var footerHeight = 5;
+						var pHeight = $(window).height() - $('.k-window-titlebar')[0].clientHeight - $('#mint-toolbar')[0].clientHeight - footerHeight;
+						$('.mint-menu-viewpot').height(pHeight - $('.mint-menu-logo')[0].clientHeight - $("#searchText")[0].clientHeight);
+						$('.mint-content-item-center').height(pHeight);
+
+						//-----------------------------------------------------------------------
+						// restrict key event
+						//-----------------------------------------------------------------------
+						windowDiv.attr("tabindex", "");
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_mainWindowOpen"});
+				}
+
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_mainWindowClose
+			//-----------------------------------------------------------------------
+			fn_mainWindowClose : function(e, options) {
+				try {
+					//-----------------------------------------------------------------------
+					// TODO: 절차 정리가 필요할듯 합니다...
+					//-----------------------------------------------------------------------
+					//-----------------------------------------------------------------------
+					// 윈도우가 Close 되면 모니터링 서비스 종료 요청을 한다
+					//-----------------------------------------------------------------------
+					$.main.fn_serviceOff();
+					//-----------------------------------------------------------------------
+					// 리스너를 정리한다.
+					//-----------------------------------------------------------------------
+					mint.ws.removeListenerAll();
+					//-----------------------------------------------------------------------
+					// Sync call 에 대한 key clear
+					//-----------------------------------------------------------------------
+					mint.wsReqKeyStoreClear();
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_mainWindowClose"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_resize
+			//-----------------------------------------------------------------------
+			fn_resize : function(time) {
+				try {
+					//-----------------------------------------------------------------------
+					// DIV Resize
+					//-----------------------------------------------------------------------
+					var windowTitleBar = $('.k-window-titlebar');
+					if( !mint.common.isEmpty(windowTitleBar) && windowTitleBar.length > 0 ) {
+						var footerHeight = 5;
+						var pHeight = $(window).height() - windowTitleBar[0].clientHeight - $('#mint-toolbar')[0].clientHeight - footerHeight;
+						$('.mint-menu-viewpot').height(pHeight - $('.mint-menu-logo')[0].clientHeight);
+						$('.mint-content-item-center').height(pHeight);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_resize"});
+				}
+			},
+
+		}// end main
+
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: System filer 조회
+	//-----------------------------------------------------------------------
+    $("#searchText").on("keyup", function() {
+        var query = $(this).val().toLowerCase();
+        if( mint.common.isEmpty(query) ) {
+        	mint.ui.treeViewFilter('systemTree', query);
+        } else {
+            setTimeout(function () {
+            	mint.ui.treeViewFilter('systemTree', query);
+            }, 200);
+        }
+    });
+
+	//-----------------------------------------------------------------------
+	// Description :: 윈도우 리사이즈 이벤트
+	//-----------------------------------------------------------------------
+	$(window).on('resize', function(e) {
+		try {
+        	$.main.fn_resize();
+		} catch( e ) {
+		}
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	//mint.ui.draggablePannels();
+
+});//end document.ready()
+</script>

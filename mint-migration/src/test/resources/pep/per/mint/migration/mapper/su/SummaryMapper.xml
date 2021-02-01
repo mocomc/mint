@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.migration.mapper.su.SummaryMapper">
+  	<!--
+  	<cache/>
+  	-->
+  	<delete id="deleteTSU0804">
+  		<![CDATA[
+  		delete from TSU0804 where TR_DAY = #{year}||#{month}||#{day}
+  		]]>
+  	</delete>
+
+	<insert id="insertTSU0804">
+		insert into TSU0804 (
+			 INTERFACE_ID
+			,TR_DAY
+			,DATA_SIZE
+			,SUCCESS_CNT
+			,ERROR_CNT
+			,PROCESS_CNT
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{INTERFACE_ID}
+			,#{TR_DAY}
+			,#{DATA_SIZE}
+			,#{SUCCESS_CNT}
+			,#{ERROR_CNT}
+			,#{PROCESS_CNT}
+			,to_char(sysdate,'yyyymmddHH24missSSS')
+			,"IIPBATCH"
+		)
+	</insert>
+
+	<delete id="deleteTSU0805">
+  		<![CDATA[
+  		delete from TSU0805 where TR_MONTH = #{year}||#{month}
+  		]]>
+  	</delete>
+	<insert id="insertTSU0805">
+
+		insert into TSU0805 (
+			 INTERFACE_ID
+			,TR_MONTH
+			,DATA_SIZE
+			,SUCCESS_CNT
+			,ERROR_CNT
+			,PROCESS_CNT
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{INTERFACE_ID}
+			,#{TR_MONTH}
+			,#{DATA_SIZE}
+			,#{SUCCESS_CNT}
+			,#{ERROR_CNT}
+			,#{PROCESS_CNT}
+			,to_char(sysdate,'yyyymmddHH24missSSS')
+			,"IIPBATCH"
+		)
+
+	</insert>
+
+</mapper>

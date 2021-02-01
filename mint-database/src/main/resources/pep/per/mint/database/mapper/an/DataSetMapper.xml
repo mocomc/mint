@@ -1,0 +1,1922 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.an.DataSetMapper">
+	<!--
+      <cache/>
+      -->
+
+	<select id="getSimpleDataSetList" resultMap="dataSetResultMap">
+		SELECT
+			 TAN0501.DATASET_ID
+			,TAN0501.NM1
+			,TAN0501.NM2
+			,TAN0501.CD
+			,TAN0501.DATA_FORMAT
+			,AN07.NM AS DATA_FORMAT_NM
+			,TAN0501.DATA_LEN
+			,TAN0501.ENCRYPT_TYPE
+			,AN08.NM AS ENCRPYT_TYPE_NM
+			,TAN0501.IS_STANDARD
+			,TAN0501.USE
+			,TAN0501.IS_MAPPED
+			,TAN0501.IS_ROOT
+			,TAN0501.COMMENTS
+			,TAN0501.DEL_YN
+			,TAN0501.REG_DATE
+			,TAN0501.REG_USER
+			,TAN0501.MOD_DATE
+			,TAN0501.MOD_USER
+			,TSU0101.USER_NM AS REG_USER_NM
+		FROM
+			TAN0501 TAN0501
+			LEFT OUTER JOIN TSU0101 TSU0101 ON
+				TSU0101.USER_ID = TAN0501.REG_USER
+			LEFT OUTER JOIN TSU0301 AN07 ON
+				AN07.LEVEL1 = 'AN' AND AN07.LEVEL2 = '07' AND AN07.CD = TAN0501.DATA_FORMAT
+			LEFT OUTER JOIN TSU0301 AN08 ON
+				AN08.LEVEL1 = 'AN' AND AN08.LEVEL2 = '08' AND AN08.CD = TAN0501.ENCRYPT_TYPE
+		WHERE
+			1 = 1
+		<if test="dataSetName1!=null or dataSetName1!=''">
+			AND (TAN0501.NM1 LIKE '%'||#{dataSetName1}||'%')
+		</if>
+		<if test="dataSetName2!=null or dataSetName2!=''">
+			AND (TAN0501.NM2 LIKE '%'||#{dataSetName2}||'%')
+		</if>
+		<if test="dataFormat!=null and dataFormat!=''">
+			AND TAN0501.DATA_FORMAT = #{dataFormat}
+		</if>
+		<if test="encryptType!=null and encryptType!=''">
+			AND TAN0501.ENCRYPT_TYPE = #{encryptType}
+		</if>
+		<if test="use!=null">
+			AND TAN0501.USE = #{use}
+		</if>
+		<if test="isStandard!=null">
+			AND TAN0501.IS_STANDARD = #{isStandard}
+		</if>
+		<if test="isMapped!=null and isMapped!=''">
+			AND TAN0501.IS_MAPPED = #{isMapped}
+		</if>
+		<if test="isRoot!=null and isRoot!=''">
+			AND TAN0501.IS_ROOT = #{isRoot}
+		</if>
+		<if test="delYn!=null and delYn!=''">
+			AND TAN0501.DEL_YN = #{delYn}
+		</if>
+		<if test="dataSetCd!=null and dataSetCd!=''">
+			AND TAN0501.CD LIKE '%'||#{dataSetCd}||'%'
+		</if>
+		<if test="fromDate!=null and toDate!=null">
+			AND TAN0501.REG_DATE BETWEEN #{fromDate}||'000000000' AND #{toDate}||'235959999'
+	    </if>
+	    <if test="regUserNm!=null and regUserNm!=''">
+	    	AND TSU0101.USER_NM LIKE '%'||#{regUserNm}||'%'
+	    </if>
+		ORDER BY TAN0501.REG_DATE DESC
+	</select>
+
+	<select id="getSimpleDataSetListCount" resultType="int">
+		SELECT
+			COUNT(DATASET_ID) AS TOTAL_CNT
+		FROM
+			(
+				SELECT
+					TAN0501.*
+				FROM
+					(
+						SELECT TAN0501.*, TSU0101.USER_NM
+						FROM
+							TAN0501
+							INNER JOIN TSU0101 TSU0101 ON
+								TSU0101.USER_ID = TAN0501.REG_USER
+						WHERE
+							1 = 1
+						<if test="dataSetName1!=null or dataSetName1!=''">
+							AND (TAN0501.NM1 LIKE '%'||#{dataSetName1}||'%')
+						</if>
+						<if test="dataSetName2!=null or dataSetName2!=''">
+							AND (TAN0501.NM2 LIKE '%'||#{dataSetName2}||'%')
+						</if>
+						<if test="dataFormat!=null and dataFormat!=''">
+							AND TAN0501.DATA_FORMAT = #{dataFormat}
+						</if>
+						<if test="encryptType!=null and encryptType!=''">
+							AND TAN0501.ENCRYPT_TYPE = #{encryptType}
+						</if>
+						<if test="use!=null">
+							AND TAN0501.USE = #{use}
+						</if>
+						<if test="isStandard!=null">
+							AND TAN0501.IS_STANDARD = #{isStandard}
+						</if>
+						<if test="isMapped!=null and isMapped!=''">
+							AND TAN0501.IS_MAPPED = #{isMapped}
+						</if>
+						<if test="isRoot!=null and isRoot!=''">
+							AND TAN0501.IS_ROOT = #{isRoot}
+						</if>
+						<if test="delYn!=null and delYn!=''">
+							AND TAN0501.DEL_YN = #{delYn}
+						</if>
+						<if test="dataSetCd!=null and dataSetCd!=''">
+							AND TAN0501.CD LIKE '%'||#{dataSetCd}||'%'
+						</if>
+						<if test="fromDate!=null and toDate!=null">
+							AND TAN0501.REG_DATE BETWEEN #{fromDate}||'000000000' AND #{toDate}||'235959999'
+						</if>
+					    <if test="regUserNm!=null and regUserNm!=''">
+					    	AND TSU0101.USER_NM LIKE '%'||#{regUserNm}||'%'
+					    </if>
+					    <if test="modUserNm!=null and modUserNm!=''">
+					    	AND TSU0101.USER_NM LIKE '%'||#{modUserNm}||'%'
+					    </if>
+					) TAN0501
+			) TAN0501
+	</select>
+
+	<select id="getSimpleDataSetListByPage" resultMap="dataSetResultMap">
+		SELECT
+			 TAN0501.DATASET_ID
+			,TAN0501.NM1
+			,TAN0501.NM2
+			,TAN0501.CD
+			,TAN0501.DATA_FORMAT
+			,AN07.NM AS DATA_FORMAT_NM
+			,TAN0501.DATA_LEN
+			,TAN0501.ENCRYPT_TYPE
+			,AN08.NM AS ENCRPYT_TYPE_NM
+			,TAN0501.IS_STANDARD
+			,TAN0501.USE
+			,TAN0501.IS_MAPPED
+			,TAN0501.IS_ROOT
+			,TAN0501.COMMENTS
+			,TAN0501.DEL_YN
+			,TAN0501.REG_DATE
+			,TAN0501.REG_USER
+			,TAN0501.MOD_DATE
+			,TAN0501.MOD_USER
+			,TAN0501.USER_NM AS REG_USER_NM
+		FROM
+			(
+				SELECT
+					ROWNUM AS IDX,
+					TAN0501.*
+				FROM
+					(
+						SELECT TAN0501.*, TSU0101.USER_NM
+						FROM
+							TAN0501
+							INNER JOIN TSU0101 TSU0101 ON
+								TSU0101.USER_ID = TAN0501.REG_USER
+						WHERE
+							1 = 1
+						<if test="dataSetName1!=null or dataSetName1!=''">
+							AND (TAN0501.NM1 LIKE '%'||#{dataSetName1}||'%')
+						</if>
+						<if test="dataSetName2!=null or dataSetName2!=''">
+							AND (TAN0501.NM2 LIKE '%'||#{dataSetName2}||'%')
+						</if>
+						<if test="dataFormat!=null and dataFormat!=''">
+							AND TAN0501.DATA_FORMAT = #{dataFormat}
+						</if>
+						<if test="encryptType!=null and encryptType!=''">
+							AND TAN0501.ENCRYPT_TYPE = #{encryptType}
+						</if>
+						<if test="use!=null">
+							AND TAN0501.USE = #{use}
+						</if>
+						<if test="isStandard!=null">
+							AND TAN0501.IS_STANDARD = #{isStandard}
+						</if>
+						<if test="isMapped!=null and isMapped!=''">
+							AND TAN0501.IS_MAPPED = #{isMapped}
+						</if>
+						<if test="isRoot!=null and isRoot!=''">
+							AND TAN0501.IS_ROOT = #{isRoot}
+						</if>
+						<if test="delYn!=null and delYn!=''">
+							AND TAN0501.DEL_YN = #{delYn}
+						</if>
+						<if test="dataSetCd!=null and dataSetCd!=''">
+							AND TAN0501.CD LIKE '%'||#{dataSetCd}||'%'
+						</if>
+						<if test="fromDate!=null and toDate!=null">
+							AND TAN0501.REG_DATE BETWEEN #{fromDate}||'000000000' AND #{toDate}||'235959999'
+						</if>
+					    <if test="regUserNm!=null and regUserNm!=''">
+					    	AND TSU0101.USER_NM LIKE '%'||#{regUserNm}||'%'
+					    </if>
+					    <if test="modUserNm!=null and modUserNm!=''">
+					    	AND TSU0101.USER_NM LIKE '%'||#{modUserNm}||'%'
+					    </if>
+						ORDER BY TAN0501.DATASET_ID DESC
+					) TAN0501
+			) TAN0501
+			LEFT OUTER JOIN TSU0301 AN07 ON
+				AN07.LEVEL1 = 'AN' AND AN07.LEVEL2 = '07' AND AN07.CD = TAN0501.DATA_FORMAT
+			LEFT OUTER JOIN TSU0301 AN08 ON
+				AN08.LEVEL1 = 'AN' AND AN08.LEVEL2 = '08' AND AN08.CD = TAN0501.ENCRYPT_TYPE
+		WHERE
+			1 = 1
+			AND IDX <![CDATA[>]]>= #{startIndex}
+			AND IDX <![CDATA[<]]>= #{endIndex}
+
+	</select>
+
+	<select id="getSimpleDataSet" resultMap="dataSetResultMap">
+		SELECT
+			---------------------
+			-- DATASET INFO
+			---------------------
+			 TAN0501.DATASET_ID
+			,TAN0501.NM1
+			,TAN0501.NM2
+			,TAN0501.CD
+			,TAN0501.DATA_FORMAT
+			,AN07.NM AS DATA_FORMAT_NM
+			,TAN0501.DATA_LEN
+			,TAN0501.ENCRYPT_TYPE
+			,AN0801.NM AS ENCRPYT_TYPE_NM
+			,TAN0501.IS_STANDARD
+			,TAN0501.USE
+			,TAN0501.IS_MAPPED
+			,TAN0501.IS_ROOT
+			,TAN0501.COMMENTS
+			,TAN0501.DEL_YN
+			,TAN0501.RECORD_DELIMITER
+			,TAN0501.FIELD_DELIMITER
+			,TAN0501.REG_DATE
+			,TAN0501.REG_USER
+			,TAN0501.MOD_DATE
+			,TAN0501.MOD_USER
+			,REGUSER.USER_NM AS REG_USER_NM
+			,MODUSER.USER_NM AS MOD_USER_NM
+			 ---------------------
+			 -- DATAFIELD INFO
+			 ---------------------
+			,TAN0502.DATAFIELD_ID
+			,TAN0502.PARENT_ID
+			,TAN0502.SEQ
+			,TAN0502.NM1 AS FIELD_NM1
+			,TAN0502.NM2 AS FIELD_NM2
+			,TAN0502.CD  AS FIELD_CD
+			,TAN0502.TYPE
+			,AN09.NM AS TYPE_NM
+			,TAN0502.LEN
+			,TAN0502.OFFSET
+			,TAN0502.ENCRYPT_TYPE
+			,AN0802.NM AS FIELD_ENCRYPT_TYPE_NM
+			,TAN0502.IS_LENGTH_FIELD
+			,TAN0502.REPEAT_CNT
+			,TAN0502.HAS_REPEAT_CNT_FIELD
+			,TAN0502.REPEAT_DATAFIELD_ID
+			,TAN0502.REPEAT_DATASET_ID
+			,TAN0502.DEFAULT_VALUE
+			,TAN0502.JUSTIFY
+			,AN13.NM AS JUSTIFY_NM
+			,TAN0502.PADDING
+			,TAN0502.FIELDSET_ID
+			,TAN0502.DEL_YN AS FIELD_DEL_YN
+			,TAN0502.REF_DATASET_ID
+			,TAN0502.REF_DATAFIELD_ID
+			,TAN0502.PARENT_KO_NM
+			,TAN0502.PARENT_EN_NM
+			,TAN0502.REQUIRED_YN
+			,TAN0502.SCALE_VALUE
+			,TAN0502.KOR_YN
+			,TAN0502.META_YN
+			,TAN0502.DPOINT_YN
+			,TAN0502.MASKING_YN
+			,TAN0502.MASKING_PATTERN_CD
+			,TAN0502.COMMENTS AS FIELD_COMMENTS
+
+		FROM
+			TAN0501 TAN0501
+			INNER JOIN TAN0502 TAN0502 ON TAN0502.DATASET_ID = TAN0501.DATASET_ID
+			LEFT OUTER JOIN TSU0101 REGUSER ON
+				REGUSER.USER_ID = TAN0501.REG_USER
+			LEFT OUTER JOIN TSU0101 MODUSER ON
+				MODUSER.USER_ID = TAN0501.MOD_USER
+			LEFT OUTER JOIN TSU0301 AN07 ON
+				AN07.LEVEL1 = 'AN' AND AN07.LEVEL2 = '07' AND AN07.CD = TAN0501.DATA_FORMAT
+			LEFT OUTER JOIN TSU0301 AN0801 ON
+				AN0801.LEVEL1 = 'AN' AND AN0801.LEVEL2 = '08' AND AN0801.CD = TAN0501.ENCRYPT_TYPE
+			LEFT OUTER JOIN TSU0301 AN09 ON
+				AN09.LEVEL1 = 'AN' AND AN09.LEVEL2 = '09' AND AN09.CD = TAN0502.TYPE
+			LEFT OUTER JOIN TSU0301 AN13 ON
+				AN13.LEVEL1 = 'AN' AND AN13.LEVEL2 = '13' AND AN13.CD = TAN0502.JUSTIFY
+			LEFT OUTER JOIN TSU0301 AN0802 ON
+				AN0802.LEVEL1 = 'AN' AND AN0802.LEVEL2 = '08' AND AN0802.CD = TAN0502.ENCRYPT_TYPE
+		WHERE
+			1 = 1
+			AND TAN0501.DATASET_ID = #{dataSetId, jdbcType=VARCHAR}
+			<if test="delYn!=null">
+			AND TAN0501.DEL_YN = #{delYn, jdbcType=VARCHAR}
+			AND TAN0502.DEL_YN = #{delYn, jdbcType=VARCHAR}
+			</if>
+		ORDER BY TO_NUMBER(TAN0502.SEQ)
+	</select>
+
+	<select id="getSimpleDataSetInterfaceMap" resultMap="dataSetResultMap">
+		SELECT
+			---------------------
+			-- DATASET INFO
+			---------------------
+			 TAN0501.DATASET_ID
+			,TAN0501.NM1
+			,TAN0501.NM2
+			,TAN0501.CD
+			,TAN0501.DATA_FORMAT
+			,AN07.NM AS DATA_FORMAT_NM
+			,TAN0501.DATA_LEN
+			,TAN0501.ENCRYPT_TYPE
+			,AN0801.NM AS ENCRPYT_TYPE_NM
+			,TAN0501.IS_STANDARD
+			,TAN0501.USE
+			,TAN0501.IS_MAPPED
+			,TAN0501.IS_ROOT
+			,TAN0501.COMMENTS
+			,TAN0501.DEL_YN
+			,TAN0501.REG_DATE
+			,TAN0501.REG_USER
+			,TAN0501.MOD_DATE
+			,TAN0501.MOD_USER
+			,REGUSER.USER_NM AS REG_USER_NM
+			,MODUSER.USER_NM AS MOD_USER_NM
+			 ---------------------
+			 -- DATAFIELD INFO
+			 ---------------------
+			,TAN0502.DATAFIELD_ID
+			,TAN0502.PARENT_ID
+			,TAN0502.SEQ
+			,TAN0502.NM1 AS FIELD_NM1
+			,TAN0502.NM2 AS FIELD_NM2
+			,TAN0502.CD  AS FIELD_CD
+			,TAN0502.TYPE
+			,AN09.NM AS TYPE_NM
+			,TAN0502.LEN
+			,TAN0502.OFFSET
+			,TAN0502.ENCRYPT_TYPE
+			,AN0802.NM AS FIELD_ENCRYPT_TYPE_NM
+			,TAN0502.IS_LENGTH_FIELD
+			,TAN0502.REPEAT_CNT
+			,TAN0502.HAS_REPEAT_CNT_FIELD
+			,TAN0502.REPEAT_DATAFIELD_ID
+			,TAN0502.REPEAT_DATASET_ID
+			,TAN0502.DEFAULT_VALUE
+			,TAN0502.JUSTIFY
+			,AN13.NM AS JUSTIFY_NM
+			,TAN0502.PADDING
+			,TAN0502.FIELDSET_ID
+			,TAN0502.DEL_YN AS FIELD_DEL_YN
+			 ---------------------
+			 -- MAPPING INFO
+			 ---------------------
+			,TAN0508.INTERFACE_ID
+			,TAN0508.SYSTEM_ID
+			,TAN0508.SEQ AS MAP_SEQ
+			,TAN0508.IO_TYPE
+		FROM
+			TAN0508
+			INNER JOIN TAN0501 ON
+				TAN0501.DATASET_ID = TAN0508.DATASET_ID
+			INNER JOIN TAN0502 TAN0502 ON TAN0502.DATASET_ID = TAN0501.DATASET_ID
+			LEFT OUTER JOIN TSU0101 REGUSER ON
+				REGUSER.USER_ID = TAN0501.REG_USER
+			LEFT OUTER JOIN TSU0101 MODUSER ON
+				MODUSER.USER_ID = TAN0501.MOD_USER
+			LEFT OUTER JOIN TSU0301 AN07 ON
+				AN07.LEVEL1 = 'AN' AND AN07.LEVEL2 = '07' AND AN07.CD = TAN0501.DATA_FORMAT
+			LEFT OUTER JOIN TSU0301 AN0801 ON
+				AN0801.LEVEL1 = 'AN' AND AN0801.LEVEL2 = '08' AND AN0801.CD = TAN0501.ENCRYPT_TYPE
+			LEFT OUTER JOIN TSU0301 AN09 ON
+				AN09.LEVEL1 = 'AN' AND AN09.LEVEL2 = '09' AND AN09.CD = TAN0502.TYPE
+			LEFT OUTER JOIN TSU0301 AN13 ON
+				AN13.LEVEL1 = 'AN' AND AN13.LEVEL2 = '13' AND AN13.CD = TAN0502.JUSTIFY
+			LEFT OUTER JOIN TSU0301 AN0802 ON
+				AN0802.LEVEL1 = 'AN' AND AN0802.LEVEL2 = '08' AND AN0802.CD = TAN0502.ENCRYPT_TYPE
+		WHERE
+			1 = 1
+			AND TAN0508.SYSTEM_ID    = #{systemId}
+			AND TAN0508.INTERFACE_ID = #{interfaceId}
+			AND TAN0508.IO_TYPE      = #{ioType}
+			AND TAN0501.DEL_YN = 'N'
+			AND TAN0502.DEL_YN = 'N'
+		ORDER BY TO_NUMBER(TAN0502.SEQ)
+	</select>
+
+	<sql id="selectDataSet">
+
+		select
+		   ---------------------
+		   -- DATASET INFO
+		   ---------------------
+		   a.DATASET_ID
+		  ,a.NM1
+		  ,a.NM2
+		  ,a.CD
+		  ,a.DATA_FORMAT
+		  ,an07.NM as DATA_FORMAT_NM
+		  ,a.DATA_LEN
+		  ,a.ENCRYPT_TYPE
+		  ,an0801.NM as ENCRPYT_TYPE_NM
+		  ,a.IS_STANDARD
+		  ,a.USE
+		  ,a.IS_MAPPED
+		  ,a.IS_ROOT
+		  ,a.COMMENTS
+		  ,a.DEL_YN
+		  ,a.REG_DATE
+		  ,a.REG_USER
+		  ,a.MOD_DATE
+		  ,a.MOD_USER
+		   ---------------------
+		   -- DATAFIELD INFO
+		   ---------------------
+		  ,b.DATAFIELD_ID
+		  ,b.SEQ
+		  ,b.NM1 as FIELD_NM1
+		  ,b.NM2 as FIELD_NM2
+		  ,b.CD  as FIELD_CD
+		  ,b.TYPE
+		  ,an09.NM as TYPE_NM
+		  ,b.LEN
+		  ,b.OFFSET
+		  ,b.ENCRYPT_TYPE
+		  ,an0802.NM as FIELD_ENCRYPT_TYPE_NM
+		  ,b.IS_LENGTH_FIELD
+		  ,b.REPEAT_CNT
+		  ,b.HAS_REPEAT_CNT_FIELD
+		  ,b.REPEAT_DATAFIELD_ID
+		  ,b.REPEAT_DATASET_ID
+		  ,b.DEFAULT_VALUE
+		  ,b.JUSTIFY
+		  ,an13.NM as JUSTIFY_NM
+		  ,b.PADDING
+		  ,b.FIELDSET_ID
+		  ,b.DEL_YN 	as FIELD_DEL_YN
+		  ,b.REG_DATE	as FIELD_REG_DATE
+		  ,b.REG_USER	as FIELD_REG_USER
+		  ,b.MOD_DATE   as FIELD_MOD_DATE
+		  ,b.MOD_USER	as FIELD_MOD_USER
+		  ,regUser.USER_NM		 as REG_USER_NM
+		  ,regUser.CELL_PHONE	 as REG_CELL_PHONE
+		  ,regUser.PHONE		 as REG_PHONE
+		  ,regUser.EMAIL		 as REG_EMAIL
+		  ,regUser.COMPANY_NM	 as REG_COMPANY_NM
+		  ,regUser.DEPARTMENT_NM as REG_DEPARTMENT_NM
+		  ,regUser.POSITION_NM	 as REG_POSITION_NM
+		  ,modUser.USER_NM		 as MOD_USER_NM
+		  ,modUser.CELL_PHONE	 as MOD_CELL_PHONE
+		  ,modUser.PHONE		 as MOD_PHONE
+		  ,modUser.EMAIL		 as MOD_EMAIL
+		  ,modUser.COMPANY_NM	 as MOD_COMPANY_NM
+		  ,modUser.DEPARTMENT_NM as MOD_DEPARTMENT_NM
+		  ,modUser.POSITION_NM	 as MOD_POSITION_NM
+		  ,c.IO_TYPE
+		  ,d.INTERFACE_ID
+		  ,d.INTERFACE_NM
+		  ,d.INTEGRATION_ID
+		  from TAN0501 a
+		inner join TAN0502 b on a.DATASET_ID = b.DATASET_ID
+		inner join TSU0101 regUser on a.REG_USER = regUser.USER_ID
+		left outer join TSU0101 modUser on a.MOD_USER = modUser.USER_ID
+		left outer join TSU0301 an07 on a.DATA_FORMAT = an07.CD and an07.LEVEL1 = 'AN' and an07.LEVEL2 = '07'
+		left outer join TSU0301 an0801 on a.ENCRYPT_TYPE = an0801.CD and an0801.LEVEL1 = 'AN' and an0801.LEVEL2 = '08'
+		left outer join TSU0301 an09 on b.TYPE = an09.CD and an09.LEVEL1 = 'AN' and an09.LEVEL2 = '09'
+		left outer join TSU0301 an0802 on b.ENCRYPT_TYPE = an0802.CD and an0802.LEVEL1 = 'AN' and an0802.LEVEL2 = '08'
+		left outer join TSU0301 an13 on b.JUSTIFY = an13.CD and an13.LEVEL1 = 'AN' and an13.LEVEL2 = '13'
+		left outer join TAN0508 c on c.DATASET_ID = a.DATASET_ID and c.DEL_YN = 'N'
+		left outer join TAN0201 d on d.INTERFACE_ID = c.INTERFACE_ID and d.DEL_YN = 'N'
+
+	</sql>
+
+
+	<select id="getDataSetList" resultMap="dataSetResultMap">
+		<include refid="selectDataSet"/>
+		where 1 = 1
+		<if test="dataSetName!=null">
+		  and (a.NM1 like '%'||#{dataSetName}||'%' or
+		       a.NM2 like '%'||#{dataSetName}||'%')
+		</if>
+		<if test="dataFormat!=null">
+			and a.DATA_FORMAT = #{dataFormat}
+		</if>
+		<if test="encryptType!=null">
+			and a.ENCRYPT_TYPE = #{encryptType}
+		</if>
+		<if test="use!=null">
+			and a.USE = #{use}
+		</if>
+		<if test="isStandard!=null">
+			and a.IS_STANDARD = #{isStandard}
+		</if>
+		<if test="isMapped!=null">
+			and a.IS_MAPPED = #{isMapped}
+		</if>
+		<if test="isRoot!=null">
+			and a.IS_ROOT = #{isRoot}
+		</if>
+		<if test="fieldName!=null">
+			and (b.NM1 like '%'||#{fieldName}||'%' or
+		         b.NM2 like '%'||#{fieldName}||'%')
+		</if>
+		<if test="delYn!=null">
+			and a.DEL_YN = #{delYn}
+			and b.DEL_YN = #{delYn}
+		</if>
+		<if test="delYn==null">
+			and a.DEL_YN = 'N'
+			and b.DEL_YN = 'N'
+		</if>
+
+		<if test="dataSetCd!=null">
+		  and a.CD like '%'||#{dataSetCd}||'%'
+		</if>
+		<if test="fromDate!=null and toDate!=null">
+	      and  a.REG_DATE BETWEEN #{fromDate}||'000000000' and #{toDate}||'235959999'
+	    </if>
+	    <if test="regUserNm!=null">
+	       and regUser.USER_NM like '%'||#{regUserNm}||'%'
+	    </if>
+	   	<if test="intergrationId!=null">
+	       and d.INTEGRATION_ID like '%'||#{integrationId}||'%'
+	    </if>
+	   	<if test="interfaceNm!=null">
+	       and d.INTERFACE_NM like '%'||#{interfaceNm}||'%'
+	    </if>
+
+		order by a.REG_DATE DESC
+	</select>
+
+	<select id="getDataSet" resultMap="dataSetResultMap">
+		<include refid="selectDataSet"/>
+		where a.DATASET_ID = #{dataSetId}
+		<if test="delYn!=null">
+		  and a.DEL_YN = #{delYn}
+		  and b.DEL_YN = #{delYn}
+		</if>
+		order by b.seq
+	</select>
+
+	<resultMap id="dataSetResultMap" type="DataSet">
+		<id property="dataSetId"			column="DATASET_ID"/>
+		<result property="name1"			column="NM1"/>
+		<result property="name2"			column="NM2"/>
+		<result property="cd"				column="CD"/>
+		<result property="dataFormat"		column="DATA_FORMAT"/>
+		<result property="dataFormatNm"		column="DATA_FORMAT_NM"/>
+		<result property="length"			column="DATA_LEN"/>
+		<result property="encryptType"		column="ENCRYPT_TYPE"/>
+		<result property="encryptTypeNm"	column="ENCRPYT_TYPE_NM"/>
+		<result property="isStandard"		column="IS_STANDARD"/>
+		<result property="use"				column="USE"/>
+		<result property="isMapped"			column="IS_MAPPED"/>
+		<result property="isRoot"			column="IS_ROOT"/>
+		<result property="comments"			column="COMMENTS"/>
+		<result property="delYn"			column="DEL_YN"/>
+		<result property="recordDelimiter"	column="RECORD_DELIMITER"/>
+		<result property="fieldDelimiter"	column="FIELD_DELIMITER"/>
+		<result property="regDate"			column="REG_DATE"/>
+		<result property="regId"			column="REG_USER"/>
+		<result property="modDate"			column="MOD_DATE"/>
+		<result property="modId"			column="MOD_USER"/>
+
+		<association property="regUser" javaType="User">
+			<id property="userId"			column="REG_USER"/>
+			<result property="userNm"		column="REG_USER_NM"/>
+			<result property="cellPhone"	column="REG_CELL_PHONE"/>
+			<result property="phone"		column="REG_PHONE"/>
+			<result property="email"		column="REG_EMAIL"/>
+			<result property="companyNm"	column="REG_COMPANY_NM"/>
+			<result property="departmentNm"	column="REG_DEPARTMENT_NM"/>
+			<result property="positionNm"	column="REG_POSITION_NM"/>
+		</association>
+
+		<association property="modUser" javaType="User">
+			<id property="userId"			column="MOD_USER"/>
+			<result property="userNm"		column="MOD_USER_NM"/>
+			<result property="cellPhone"	column="MOD_CELL_PHONE"/>
+			<result property="phone"		column="MOD_PHONE"/>
+			<result property="email"		column="MOD_EMAIL"/>
+			<result property="companyNm"	column="MOD_COMPANY_NM"/>
+			<result property="departmentNm"	column="MOD_DEPARTMENT_NM"/>
+			<result property="positionNm"	column="MOD_POSITION_NM"/>
+		</association>
+		<!--
+		<association property="dataSetInterfaceMap" javaType="DataSetInterfaceMap">
+			<id property="dataSetId"			column="DATASET_ID"/>
+			<id property="interfaceId"			column="INTERFACE_ID"/>
+			<id property="systemId"				column="SYSTEM_ID"/>
+			<id property="seq"					column="MAP_SEQ"/>
+			<id property="ioType"				column="IO_TYPE"/>
+			<result property="integrationId"	column="INTEGRATION_ID"/>
+			<result property="interfaceNm"		column="INTERFACE_NM"/>
+		</association>
+  		-->
+
+		<collection property="dataFieldList" ofType="DataField">
+			<id property="dataSetId"			   column="DATASET_ID"/>
+			<id property="id"			   		   column="DATAFIELD_ID"/>
+			<id property="dataFieldId"		  	   column="DATAFIELD_ID"/>
+			<result property="parentId"			   column="PARENT_ID"/>
+			<result property="seq"				   column="SEQ"/>
+			<result property="name1"			   column="FIELD_NM1"/>
+			<result property="name2"			   column="FIELD_NM2"/>
+			<result property="cd"				   column="FIELD_CD"/>
+			<result property="type"				   column="TYPE"/>
+			<result property="typeNm"			   column="TYPE_NM"/>
+			<result property="length"			   column="LEN"/>
+			<result property="offset"			   column="OFFSET"/>
+			<result property="encryptType"		   column="FIELD_ENCRYPT_TYPE"/>
+			<result property="encryptTypeNm"	   column="FIELD_ENCRYPT_TYPE_NM"/>
+			<result property="isLengthField"	   column="IS_LENGTH_FIELD"/>
+			<result property="repeatCount"		   column="REPEAT_CNT"/>
+			<result property="hasRepeatCountField" column="HAS_REPEAT_CNT_FIELD"/>
+			<result property="repeatFieldId" 	   column="REPEAT_DATAFIELD_ID"/>
+			<result property="repeatDataSetId" 	   column="REPEAT_DATASET_ID"/>
+			<result property="defaultValue"		   column="DEFAULT_VALUE"/>
+			<result property="justify"			   column="JUSTIFY"/>
+			<result property="justifyNm"		   column="JUSTIFY_NM"/>
+			<result property="padding"			   column="PADDING"/>
+			<result property="fieldSetId"		   column="FIELDSET_ID"/>
+			<result property="delYn"			   column="FIELD_DEL_YN"/>
+
+			<result property="refDataSetId"		   column="REF_DATASET_ID"/>
+			<result property="refDataFieldId"	   column="REF_DATAFIELD_ID"/>
+			<result property="parentNmKo"		   column="PARENT_KO_NM"/>
+			<result property="parentNmEn"		   column="PARENT_EN_NM"/>
+			<result property="requiredYn"		   column="REQUIRED_YN"/>
+			<result property="scale"			   column="SCALE_VALUE"/>
+			<result property="koreanYn"			   column="KOR_YN"/>
+			<result property="metaYn"			   column="META_YN"/>
+			<result property="decimalPointYn"	   column="DPOINT_YN"/>
+			<result property="maskingYn"	   	   column="MASKING_YN"/>
+			<result property="maskingPatternCd"	   column="MASKING_PATTERN_CD"/>
+			<result property="comments"	   		   column="FIELD_COMMENTS"/>
+
+			<result property="regDate"			   column="FIELD_REG_DATE"/>
+			<result property="regId"			   column="FIELD_REG_USER"/>
+			<result property="modDate"			   column="FIELD_MOD_DATE"/>
+			<result property="modId"			   column="FIELD_MOD_USER"/>
+		</collection>
+
+	</resultMap>
+
+
+	<select id="getMetaFieldList" resultType="MetaField">
+		select
+			   a.FIELD_ID
+		      ,a.NM1        AS name1
+		      ,a.NM2		AS name2
+		      ,a.CD			AS cd
+		      ,a.TYPE		AS type
+		      ,an09.NM as typeNm
+		      ,a.LEN		AS length
+		      ,a.ENCRYPT_TYPE	AS encryptType
+		      ,an0802.NM as encryptTypeNm
+		      ,a.DEFAULT_VALUE AS defaultValue
+		      ,a.JUSTIFY	   AS justify
+		      ,an13.NM as justifyNm
+		      ,a.PADDING	   AS padding
+		      ,a.DEL_YN
+		      ,a.REG_DATE
+		      ,a.REG_USER
+		      ,a.MOD_DATE
+		      ,a.MOD_USER
+		  from TAN0516 a
+		  left outer join TSU0301 an09 on a.TYPE = an09.CD and an09.LEVEL1 = 'AN' and an09.LEVEL2 = '09'
+		  left outer join TSU0301 an0802 on a.ENCRYPT_TYPE = an0802.CD and an0802.LEVEL1 = 'AN' and an0802.LEVEL2 = '08'
+		  left outer join TSU0301 an13 on a.JUSTIFY = an13.CD and an13.LEVEL1 = 'AN' and an13.LEVEL2 = '13'
+	     where 1 = 1
+		<if test="dataSetName!=null">
+		  and (a.NM1 like '%'||#{name1}||'%' or
+		       a.NM2 like '%'||#{name2}||'%')
+		</if>
+		<if test="type!=null">
+			and a.TYPE = #{type}
+		</if>
+		<if test="delYn!=null">
+			and a.DEL_YN = #{delYn}
+		</if>
+		order by a.NM1, a.NM2
+	</select>
+
+	<select id="getDataSetVersionList" resultType="string">
+		select VERSION from TAN0510 where DATASET_ID = #{dataSetId}
+	</select>
+
+	<select id="getDataSetHistory" resultType="DataSetHistory">
+		select
+			  DATASET_ID as "dataSetId"
+			 ,VERSION    as "version"
+			 ,CONTENTS   as "contents"
+			 ,DEL_YN     as "delYn"
+			 ,REG_DATE   as "regDate"
+			 ,REG_USER   as "regId"
+			 ,MOD_DATE   as "modDate"
+			 ,MOD_USER   as "modId"
+		 from TAN0510
+	    where DATASET_ID = #{dataSetId}
+	      and VERSION    = #{version}
+	</select>
+
+	<select id="getLastVersionDataSetHistory" resultType="DataSetHistory">
+		select
+			  DATASET_ID as "dataSetId"
+			 ,VERSION    as "version"
+			 ,CONTENTS   as "contents"
+			 ,DEL_YN     as "delYn"
+			 ,REG_DATE   as "regDate"
+			 ,REG_USER   as "regId"
+			 ,MOD_DATE   as "modDate"
+			 ,MOD_USER   as "modId"
+		 from TAN0510
+	    where DATASET_ID = #{dataSetId}
+	      and VERSION    = (select max(VERSION) from TAN0510 where DATASET_ID = #{dataSetId})
+	      and DEL_YN     = 'N'
+	</select>
+
+
+
+	<select id="getDataSetHistoryList" resultType="DataSetHistory">
+		select
+			  DATASET_ID as "dataSetId"
+			 ,VERSION    as "version"
+			 ,CONTENTS   as "contents"
+			 ,DEL_YN     as "delYn"
+			 ,REG_DATE   as "regDate"
+			 ,REG_USER   as "regId"
+			 ,MOD_DATE   as "modDate"
+			 ,MOD_USER   as "modId"
+		 from TAN0510
+	    where DATASET_ID = #{dataSetId}
+	      and DEL_YN     = 'N'
+	</select>
+
+	<select id="getLastTempSavedDataSet" resultType="DataSetTemp">
+		select
+			 USER_ID   as "userId"
+			,SEQ       as "seq"
+			,CONTENTS  as "contents"
+			,APPLY_YN  as "applyYn"
+			,DEL_YN    as "delYn"
+			,REG_DATE  as "regDate"
+			,REG_USER  as "regId"
+			,MOD_DATE  as "modDate"
+			,MOD_USER  as "modId"
+		 from TAN0512
+		where USER_ID = #{userId}
+		  and SEQ = (select max(SEQ) from TAN0512 where USER_ID = #{userId})
+		  and DEL_YN = 'N'
+	</select>
+
+
+	<select id="getTemporarySavedDataSetList" resultType="DataSetTemp">
+	    select
+			 USER_ID   as "userId"
+			,SEQ       as "seq"
+			,CONTENTS  as "contents"
+			,APPLY_YN  as "applyYn"
+			,DEL_YN    as "delYn"
+			,REG_DATE  as "regDate"
+			,REG_USER  as "regId"
+			,MOD_DATE  as "modDate"
+			,MOD_USER  as "modId"
+		 from TAN0512
+	    where DEL_YN = 'N'
+	    <if test="userId!=null">
+	      and USER_ID = #{userId}
+	    </if>
+	    <if test="seq!=null">
+	      and SEQ = #{seq}
+	    </if>
+	    <if test="fromDate!=null and toDate!=null">
+	      and REG_DATE BETWEEN #{fromDate} and #{toDate}
+	    </if>
+		order by SEQ desc
+	</select>
+
+
+
+	<update id="approvalDataSet">
+		update TAN0501
+		   set  USE = 'Y'
+		       ,MOD_DATE = #{requestDate, jdbcType=VARCHAR}
+		       ,MOD_USER = #{requestUserId, jdbcType=VARCHAR}
+		 where DATASET_ID = #{dataSetId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateDataSet" parameterType="DataSet">
+		update TAN0501
+		   set NM1			= #{name1, 		jdbcType=VARCHAR}
+			  ,NM2          = #{name2, 		jdbcType=VARCHAR}
+			  ,CD           = #{cd, 		jdbcType=VARCHAR}
+			  ,DATA_FORMAT  = #{dataFormat, jdbcType=VARCHAR}
+			  ,DATA_LEN     = #{length,		jdbcType=NUMERIC}
+			  ,ENCRYPT_TYPE = #{encryptType,jdbcType=VARCHAR}
+			  ,IS_STANDARD  = #{isStandard, jdbcType=VARCHAR}
+			  ,USE          = #{use,		jdbcType=VARCHAR}
+			  ,IS_MAPPED    = #{isMapped,	jdbcType=VARCHAR}
+			  ,IS_ROOT      = #{isRoot,		jdbcType=VARCHAR}
+			  ,COMMENTS     = #{comments,	jdbcType=VARCHAR}
+			  ,MOD_DATE     = #{modDate,	jdbcType=VARCHAR}
+			  ,MOD_USER     = #{modId,		jdbcType=VARCHAR}
+		 where DATASET_ID = #{dataSetId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateDataField" parameterType="DataField">
+		update TAN0502
+		   set SEQ					= #{seq,				jdbcType=NUMERIC}
+		      ,NM1					= #{name1, 				jdbcType=VARCHAR}
+		      ,NM2					= #{name2, 				jdbcType=VARCHAR}
+		      ,CD					= #{cd, 				jdbcType=VARCHAR}
+		      ,TYPE					= #{type, 				jdbcType=VARCHAR}
+		      ,LEN					= #{length,				jdbcType=NUMERIC}
+		      ,OFFSET				= #{offset,				jdbcType=NUMERIC}
+		      ,ENCRYPT_TYPE			= #{encryptType,		jdbcType=VARCHAR}
+		      ,IS_LENGTH_FIELD		= #{isLengthField, 		jdbcType=VARCHAR}
+		      ,REPEAT_CNT           = #{repeatCount,		jdbcType=NUMERIC}
+		      ,HAS_REPEAT_CNT_FIELD = #{hasRepeatCountField,jdbcType=VARCHAR}
+		      ,REPEAT_DATAFIELD_ID  = #{repeatFieldId,		jdbcType=VARCHAR}
+		      ,REPEAT_DATASET_ID 	= #{repeatDataSetId,	jdbcType=VARCHAR}
+		      ,DEFAULT_VALUE		= #{defaultValue,		jdbcType=VARCHAR}
+		      ,JUSTIFY				= #{justify,			jdbcType=VARCHAR}
+		      ,PADDING				= #{padding,			jdbcType=VARCHAR}
+		      ,FIELDSET_ID			= #{fieldSetId,			jdbcType=VARCHAR}
+			  ,MOD_DATE     		= #{modDate,			jdbcType=VARCHAR}
+			  ,MOD_USER     		= #{modId,				jdbcType=VARCHAR}
+		 where DATASET_ID   = #{dataSetId, jdbcType=VARCHAR}
+		   and DATAFIELD_ID = #{dataFieldId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteDataSet">
+		update TAN0501
+		   set DEL_YN     = 'Y'
+			  ,MOD_DATE   = #{modDate,	 jdbcType=VARCHAR}
+			  ,MOD_USER   = #{modId,	 jdbcType=VARCHAR}
+		 where DATASET_ID = #{dataSetId, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deletePhysicalDataSet">
+		DELETE FROM TAN0501 WHERE DATASET_ID   = #{dataSetId, jdbcType=VARCHAR}
+	</delete>
+
+	<update id="deleteDataField">
+		update TAN0502
+		   set DEL_YN     = 'Y'
+			  ,MOD_DATE     = #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER     = #{modId, jdbcType=VARCHAR}
+		 where DATASET_ID   = #{dataSetId, jdbcType=VARCHAR}
+		   and DATAFIELD_ID = #{dataFieldId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteAllDataField">
+		update TAN0502
+		   set DEL_YN     = 'Y'
+			  ,MOD_DATE     = #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER     = #{modId, jdbcType=VARCHAR}
+		 where DATASET_ID   = #{dataSetId, jdbcType=VARCHAR}
+	</update>
+
+
+	<delete id="deletePhysicalAllDataField">
+		delete from TAN0502 where DATASET_ID   = #{dataSetId, jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="saveTemporary" parameterType="DataSetTemp">
+
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select nvl(max(SEQ), 0) + 1 as seq
+			from TAN0512
+			where USER_ID = #{userId, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TAN0512 (
+			 USER_ID
+			,SEQ
+			,CONTENTS
+			,APPLY_YN
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{userId}
+			,#{seq}
+			,#{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,'N'
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+	<insert id="insertDataSet" parameterType="DataSet">
+
+		<selectKey keyProperty="dataSetId" resultType="string" order="BEFORE" >
+			select to_char(nvl(max(to_number(DATASET_ID)),0) + 1) from TAN0501
+		</selectKey>
+
+		 INSERT INTO TAN0501 (
+		   DATASET_ID
+		  ,NM1
+		  ,NM2
+		  ,CD
+		  ,DATA_FORMAT
+		  ,DATA_LEN
+		  ,ENCRYPT_TYPE
+		  ,IS_STANDARD
+		  ,USE
+		  ,IS_MAPPED
+		  ,IS_ROOT
+		  ,COMMENTS
+		  ,DEL_YN
+		  ,RECORD_DELIMITER
+		  ,FIELD_DELIMITER
+		  ,REG_DATE
+		  ,REG_USER
+		  ,MOD_DATE
+		  ,MOD_USER
+		) VALUES (
+		   #{dataSetId,  jdbcType=VARCHAR}
+		  ,#{name1,		 jdbcType=VARCHAR}
+		  ,#{name2,		 jdbcType=VARCHAR}
+		  ,#{cd,		 jdbcType=VARCHAR}
+		  ,#{dataFormat, jdbcType=VARCHAR}
+		  ,#{length,	 jdbcType=NUMERIC}
+		  ,#{encryptType,jdbcType=VARCHAR}
+		  ,#{isStandard, jdbcType=VARCHAR}
+		  ,#{use, 		 jdbcType=VARCHAR}
+		  ,#{isMapped, 	 jdbcType=VARCHAR}
+		  ,#{isRoot, 	 jdbcType=VARCHAR}
+		  ,#{comments, 	 jdbcType=VARCHAR}
+		  ,'N'
+		  ,#{recordDelimiter, 	 jdbcType=VARCHAR}
+		  ,#{fieldDelimiter, 	 jdbcType=VARCHAR}
+		  ,#{regDate,	 jdbcType=VARCHAR}
+		  ,#{regId,		 jdbcType=VARCHAR}
+		  ,#{regDate,	 jdbcType=VARCHAR}
+		  ,#{regId,		 jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<insert id="insertDataField" parameterType="DataField">
+		<!--
+		<selectKey keyProperty="dataFieldId" resultType="string" order="BEFORE" >
+			select to_char(nvl(max(to_number(DATAFIELD_ID)),0) + 1) from TAN0502 where DATASET_ID = #{dataSetId, jdbcType=VARCHAR}
+		</selectKey>
+  		-->
+		 INSERT INTO TAN0502 (
+		 	 DATASET_ID
+			,DATAFIELD_ID
+			,PARENT_ID
+			,SEQ
+			,NM1
+			,NM2
+			,CD
+			,TYPE
+			,LEN
+			,OFFSET
+			,ENCRYPT_TYPE
+			,IS_LENGTH_FIELD
+			,REPEAT_CNT
+			,HAS_REPEAT_CNT_FIELD
+			,REPEAT_DATAFIELD_ID
+			,REPEAT_DATASET_ID
+			,DEFAULT_VALUE
+			,JUSTIFY
+			,PADDING
+			,FIELDSET_ID
+			,DEL_YN
+			,REF_DATASET_ID
+			,REF_DATAFIELD_ID
+			,PARENT_KO_NM
+			,PARENT_EN_NM
+			,REQUIRED_YN
+			,SCALE_VALUE
+			,KOR_YN
+			,META_YN
+			,DPOINT_YN
+			,MASKING_YN
+			,MASKING_PATTERN_CD
+			,COMMENTS
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+		   #{dataSetId,		 	 jdbcType=VARCHAR}
+		  ,#{dataFieldId,		 jdbcType=VARCHAR}
+		  ,#{parentId,           jdbcType=VARCHAR}
+		  ,#{seq,	 	 		 jdbcType=NUMERIC}
+		  ,#{name1,		 		 jdbcType=VARCHAR}
+		  ,#{name2,		 		 jdbcType=VARCHAR}
+		  ,#{cd,		 		 jdbcType=VARCHAR}
+		  ,#{type, 		 		 jdbcType=VARCHAR}
+		  ,#{length,	 		 jdbcType=NUMERIC}
+		  ,#{offset,	 		 jdbcType=NUMERIC}
+		  ,#{encryptType,		 jdbcType=VARCHAR}
+		  ,#{isLengthField, 	 jdbcType=VARCHAR}
+		  ,#{repeatCount,		 jdbcType=NUMERIC}
+		  ,#{hasRepeatCountField,jdbcType=VARCHAR}
+		  ,#{repeatFieldId, 	 jdbcType=VARCHAR}
+		  ,#{repeatDataSetId, 	 jdbcType=VARCHAR}
+		  ,#{defaultValue, 	 	 jdbcType=VARCHAR}
+		  ,#{justify, 			 jdbcType=VARCHAR}
+		  ,#{padding, 	 	 	 jdbcType=VARCHAR}
+		  ,#{fieldSetId, 	 	 jdbcType=VARCHAR}
+		  ,'N'
+
+		  ,#{refDataSetId, 	 	 jdbcType=VARCHAR}
+		  ,#{refDataFieldId, 	 jdbcType=VARCHAR}
+		  ,#{parentNmKo, 	 	 jdbcType=VARCHAR}
+		  ,#{parentNmEn, 	 	 jdbcType=VARCHAR}
+		  ,#{requiredYn, 	 	 jdbcType=VARCHAR}
+		  ,#{scale,				 jdbcType=VARCHAR}
+		  ,#{koreanYn, 	 	 	 jdbcType=VARCHAR}
+		  ,#{metaYn, 	 	 	 jdbcType=VARCHAR}
+		  ,#{decimalPointYn, 	 jdbcType=VARCHAR}
+
+		  ,#{maskingYn, 	 	 jdbcType=VARCHAR}
+		  ,#{maskingPatternCd, 	 jdbcType=VARCHAR}
+		  ,#{comments, 	         jdbcType=VARCHAR}
+
+		  ,#{regDate,	 		 jdbcType=VARCHAR}
+		  ,#{regId,		 		 jdbcType=VARCHAR}
+		  ,#{regDate,	 		 jdbcType=VARCHAR}
+		  ,#{regId,		 		 jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<insert id="addDataSetHistory" parameterType="DataSetHistory">
+
+		<selectKey keyProperty="version" resultType="string" order="BEFORE" >
+			select to_char(nvl(max(to_number(VERSION)),0) + 1) as version
+			from TAN0510
+			where DATASET_ID = #{dataSetId, jdbcType=VARCHAR}
+		</selectKey>
+
+		insert into TAN0510 (
+			 DATASET_ID
+			,VERSION
+			,CONTENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{dataSetId}
+			,#{version}
+			,#{contents, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,'N'
+			,#{regDate}
+			,#{regId}
+		)
+	</insert>
+
+ 	<select id="getDataSetNameList" resultType="Map">
+ 		select
+		    distinct
+		    DATASET_ID as "id",
+		    NM1 as "nm1",
+		    NM2 as "nm2",
+		    CD as "cd"
+		  from TAN0501
+		 where DEL_YN = 'N'
+		<if test="isRoot!=null">
+		   and IS_ROOT = #{isRoot}
+		 </if>
+		 order by DATASET_ID, NM1, CD
+ 	</select>
+
+ 	<select id="getInterfaceList" resultType="Map">
+ 		select
+ 		   distinct
+ 		   b.INTEGRATION_ID,
+ 		   b.INTERFACE_ID,
+ 		   b.INTERFACE_NM
+ 		  from TAN0508 a
+ 	inner join TAN0201 b
+ 		    on a.INTERFACE_ID = b.INTERFACE_ID
+ 		   and a.DEL_YN = 'N'
+ 		   and b.DEL_YN = 'N'
+ 	</select>
+
+	<select id="getRegUserList" resultType="Map">
+		select
+		    distinct
+		    a.REG_USER as "id",
+		    b.USER_NM as "nm"
+		  from TAN0501 a
+	inner join TSU0101 b
+			on a.REG_USER = b.USER_ID
+		   and a.DEL_YN = 'N'
+		   and b.DEL_YN = 'N'
+      order by b.USER_NM
+	</select>
+
+
+	<delete id="deleteDataSetInterfaceMap" parameterType="DataSetInterfaceMap">
+		DELETE FROM TAN0508 WHERE INTERFACE_ID = #{interfaceId}
+	</delete>
+
+	<insert id="insertDataSetInterfaceMap" parameterType="DataSetInterfaceMap">
+	   <!--
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select to_char(nvl(max(SEQ),0) + 1) from TAN0508 where DATASET_ID = #{dataSetId}
+		</selectKey>
+  		-->
+		INSERT INTO TAN0508 (
+			 SYSTEM_ID
+			,INTERFACE_ID
+			,SEQ
+			,DATASET_ID
+			,IO_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{systemId, 	    jdbcType=VARCHAR}
+			,#{interfaceId, 	jdbcType=VARCHAR}
+			,#{seq,			 	jdbcType=NUMERIC}
+			,#{dataSetId, 		jdbcType=VARCHAR}
+			,#{ioType,		 	jdbcType=VARCHAR}
+		  	,'N'
+		  	,#{regDate,			jdbcType=VARCHAR}
+		  	,#{regId,			jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getDataSetInterfaceMap" resultMap="dataSetInterfaceMapResult">
+		select
+			a.DATASET_ID
+		   ,a.SEQ
+		   ,a.INTERFACE_ID
+		   ,a.IO_TYPE
+		   ,b.NM1
+		  from TAN0508 a
+    inner join TAN0501 b
+	        ON a.DATASET_ID = b.DATASET_ID
+		   and a.INTERFACE_ID = #{interfaceId}
+		   and a.seq = (
+		   	select max(c.seq)
+		   	  from TAN0508 c
+		   	 where c.INTERFACE_ID = a.INTERFACE_ID
+		   	   and c.DATASET_ID = a.DATASET_ID
+		   	)
+		   	and a.DEL_YN = 'N'
+		   	and b.DEL_YN = 'N'
+	  ORDER BY a.IO_TYPE, a.SEQ, a.DATASET_ID
+
+	</select>
+
+
+	<delete id="deleteDataMapInterfaceMap" parameterType="DataSetInterfaceMap">
+		DELETE FROM TAN0509 WHERE INTERFACE_ID = #{interfaceId}
+	</delete>
+
+	<insert id="insertDataMapInterfaceMap" parameterType="DataSetInterfaceMap">
+	   <!--
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE" >
+			select to_char(nvl(max(SEQ),0) + 1) from TAN0509 where DATASET_ID = #{dataSetId}
+		</selectKey>
+  		-->
+		INSERT INTO TAN0509 (
+			 SYSTEM_ID
+			,INTERFACE_ID
+			,SEQ
+			,MAP_ID
+			,IO_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) VALUES (
+			 #{systemId, 	    jdbcType=VARCHAR}
+			,#{interfaceId, 	jdbcType=VARCHAR}
+			,#{seq,			 	jdbcType=NUMERIC}
+			,#{mapId, 			jdbcType=VARCHAR}
+			,#{ioType,		 	jdbcType=VARCHAR}
+		  	,'N'
+		  	,#{regDate,			jdbcType=VARCHAR}
+		  	,#{regId,			jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getDataMapInterfaceMap" resultMap="dataSetInterfaceMapResult">
+		select
+			a.DATASET_ID
+		   ,a.SEQ
+		   ,a.INTERFACE_ID
+		   ,a.IO_TYPE
+		   ,b.NM1
+		  from TAN0508 a
+    inner join TAN0501 b
+	        ON a.DATASET_ID = b.DATASET_ID
+		   and a.INTERFACE_ID = #{interfaceId}
+		   and a.seq = (
+		   	select max(c.seq)
+		   	  from TAN0508 c
+		   	 where c.INTERFACE_ID = a.INTERFACE_ID
+		   	   and c.DATASET_ID = a.DATASET_ID
+		   	)
+		   	and a.DEL_YN = 'N'
+		   	and b.DEL_YN = 'N'
+	  ORDER BY a.IO_TYPE, a.SEQ, a.DATASET_ID
+
+	</select>
+
+
+	<resultMap id="dataSetInterfaceMapResult" type="DataSetInterfaceMap">
+		<id property="dataSetId"			column="DATASET_ID"/>
+		<id property="interfaceId"			column="INTERFACE_ID"/>
+		<id property="seq"					column="SEQ"/>
+		<result property="dataSetNm"		column="NM1"/>
+		<result property="ioType"			column="IO_TYPE"/>
+	</resultMap>
+
+
+
+
+	<select id="getSimpleDataMapList" resultMap="dataMapResultMap">
+		SELECT
+			 TAN0503.MAP_ID
+			,TAN0503.NM
+			,TAN0503.CD
+			,TAN0503.SRC_DATASET_ID
+			,TAN0501SRC.NM1 AS SRC_DATASET_NM1
+			,TAN0501SRC.NM2 AS SRC_DATASET_NM2
+			,TAN0501SRC.CD AS SRC_DATASET_CD
+			,TAN0503.TAG_DATASET_ID
+			,TAN0501TAG.NM1 AS TAG_DATASET_NM1
+			,TAN0501TAG.NM2 AS TAG_DATASET_NM2
+			,TAN0501TAG.CD AS TAG_DATASET_CD
+			,TAN0503.DEL_YN
+			,TAN0503.REG_DATE
+			,TAN0503.REG_USER
+			,TAN0503.MOD_DATE
+			,TAN0503.MOD_USER
+			,TSU0101.USER_NM AS REG_USER_NM
+			,CASE WHEN TAN0509.MAP_ID IS NULL THEN 'N' ELSE 'Y' END AS IS_INTERFACE_MAPPED
+		FROM
+			TAN0503 TAN0503
+			INNER JOIN TAN0501 TAN0501SRC ON
+				TAN0501SRC.DATASET_ID = TAN0503.SRC_DATASET_ID
+			INNER JOIN TAN0501 TAN0501TAG ON
+				TAN0501TAG.DATASET_ID = TAN0503.TAG_DATASET_ID
+			LEFT OUTER JOIN TSU0101 TSU0101 ON
+				TSU0101.USER_ID = TAN0503.REG_USER
+			LEFT OUTER JOIN TAN0509 ON
+				TAN0509.MAP_ID = TAN0503.MAP_ID
+
+		WHERE
+			1 = 1
+		<if test="mapName != null and mapName != '' ">
+			AND TAN0503.NM LIKE '%'||#{mapName}||'%'
+		</if>
+		<if test="mapCd != null and mapCd != '' ">
+			AND TAN0503.cd = #{mapCd}
+		</if>
+		<if test="srcDataSetId != null and srcDataSetId != '' ">
+			AND TAN0503.SRC_DATASET_ID = #{srcDataSetId}
+		</if>
+		<if test="tagDataSetId != null and tagDataSetId != '' ">
+			AND TAN0503.TAG_DATASET_ID = #{tagDataSetId}
+		</if>
+		<if test="delYn != null and delYn != '' ">
+			AND TAN0503.DEL_YN = #{delYn}
+		</if>
+
+		ORDER BY TAN0503.REG_DATE DESC
+	</select>
+
+	<select id="getSimpleDataMap" resultMap="dataMapResultMap">
+		SELECT
+			 TAN0503.MAP_ID
+			,TAN0503.NM
+			,TAN0503.CD
+			,TAN0503.SRC_DATASET_ID
+			,TAN0501SRC.NM1 AS SRC_DATASET_NM1
+			,TAN0501SRC.NM2 AS SRC_DATASET_NM2
+			,TAN0501SRC.CD AS SRC_DATASET_CD
+			,TAN0503.TAG_DATASET_ID
+			,TAN0501TAG.NM1 AS TAG_DATASET_NM1
+			,TAN0501TAG.NM2 AS TAG_DATASET_NM2
+			,TAN0501TAG.CD AS TAG_DATASET_CD
+			,TAN0503.DEL_YN
+			,TAN0503.REG_DATE
+			,TAN0503.REG_USER
+			,TAN0503.MOD_DATE
+			,TAN0503.MOD_USER
+			,TAN0504.MAP_ITEM_ID
+			--,TAN0504.MAP_ITEM_SEQ
+			,TAN0504.MAP_CTRL_TYPE
+			,TAN0505.DATASET_ID
+			,TAN0505.DATAFIELD_ID
+			,TAN0505.DATAFIELD_SEQ
+			--,TAN0505.MAP_ID
+			--,TAN0505.MAP_ITEM_ID
+			--,TAN0505.MAP_ITEM_SEQ
+			,TAN0505.IO_TYPE
+			,TSU0101.USER_NM AS REG_USER_NM
+			,CASE WHEN IO_TYPE = '0' THEN DATAFIELD_ID ELSE '' END AS SRC
+      		,CASE WHEN IO_TYPE = '1' THEN DATAFIELD_ID ELSE '' END AS TAG
+		FROM
+			TAN0503 TAN0503
+			INNER JOIN TAN0501 TAN0501SRC ON
+				TAN0501SRC.DATASET_ID = TAN0503.SRC_DATASET_ID
+			INNER JOIN TAN0501 TAN0501TAG ON
+				TAN0501TAG.DATASET_ID = TAN0503.TAG_DATASET_ID
+			INNER JOIN TAN0504 ON
+				TAN0504.MAP_ID = TAN0503.MAP_ID
+			INNER JOIN TAN0505 ON
+				TAN0505.MAP_ID = TAN0504.MAP_ID
+				AND TAN0505.MAP_ITEM_ID = TAN0504.MAP_ITEM_ID
+				--AND TAN0505.MAP_ITEM_SEQ = TAN0504.MAP_ITEM_SEQ
+			LEFT OUTER JOIN TSU0101 TSU0101 ON
+				TSU0101.USER_ID = TAN0503.REG_USER
+		WHERE
+			1 = 1
+			AND TAN0503.MAP_ID = #{mapId, jdbcType=VARCHAR}
+		--ORDER BY TO_NUMBER(TAN0504.MAP_ITEM_SEQ)
+	</select>
+
+
+	<select id="getSimpleDataMapOfInterface-OLD" resultMap="dataMapResultMap">
+		SELECT
+			 DATAMAP.MAP_ID
+			,DATAMAP.NM
+			,DATAMAP.CD
+			,DATAMAP.SRC_DATASET_ID
+			,DATAMAP.SRC_DATASET_NM1
+			,DATAMAP.SRC_DATASET_NM2
+			,DATAMAP.SRC_DATASET_CD
+			,DATAMAP.TAG_DATASET_ID
+			,DATAMAP.TAG_DATASET_NM1
+			,DATAMAP.TAG_DATASET_NM2
+			,DATAMAP.TAG_DATASET_CD
+			,DATAMAP.DEL_YN
+			,DATAMAP.REG_DATE
+			,DATAMAP.REG_USER
+			,DATAMAP.MOD_DATE
+			,DATAMAP.MOD_USER
+			,DATAMAP.MAP_ITEM_ID
+			--,DATAMAP.MAP_ITEM_SEQ
+			,DATAMAP.MAP_CTRL_TYPE
+			,DATAMAP.DATASET_ID
+			,DATAMAP.DATAFIELD_ID
+			,DATAMAP.DATAFIELD_SEQ
+			,DATAMAP.IO_TYPE
+			,DATAMAP.SRC
+      		,DATAMAP.TAG
+		FROM
+			TAN0201
+			INNER JOIN TAN0213 ON
+				TAN0213.INTERFACE_ID = TAN0201.INTERFACE_ID
+			LEFT OUTER JOIN TAN0509 ON
+				TAN0509.SYSTEM_ID = TAN0213.SYSTEM_ID
+				AND TAN0509.INTERFACE_ID = TAN0213.INTERFACE_ID
+				AND TAN0509.SEQ = TAN0213.SEQ
+			LEFT OUTER JOIN
+			(
+				SELECT
+					 TAN0503.MAP_ID
+					,TAN0503.NM
+					,TAN0503.CD
+					,TAN0503.SRC_DATASET_ID
+					,TAN0501SRC.NM1 AS SRC_DATASET_NM1
+					,TAN0501SRC.NM2 AS SRC_DATASET_NM2
+					,TAN0501SRC.CD AS SRC_DATASET_CD
+					,TAN0503.TAG_DATASET_ID
+					,TAN0501TAG.NM1 AS TAG_DATASET_NM1
+					,TAN0501TAG.NM2 AS TAG_DATASET_NM2
+					,TAN0501TAG.CD AS TAG_DATASET_CD
+					,TAN0503.DEL_YN
+					,TAN0503.REG_DATE
+					,TAN0503.REG_USER
+					,TAN0503.MOD_DATE
+					,TAN0503.MOD_USER
+					,TAN0504.MAP_ITEM_ID
+					--,TAN0504.MAP_ITEM_SEQ
+					,TAN0504.MAP_CTRL_TYPE
+					,TAN0505.DATASET_ID
+					,TAN0505.DATAFIELD_ID
+					,TAN0505.DATAFIELD_SEQ
+					,TAN0505.IO_TYPE
+					,CASE WHEN TAN0505.IO_TYPE = '0' THEN DATAFIELD_ID ELSE '' END AS SRC
+		      		,CASE WHEN TAN0505.IO_TYPE = '1' THEN DATAFIELD_ID ELSE '' END AS TAG
+				FROM
+					TAN0503 TAN0503
+					INNER JOIN TAN0501 TAN0501SRC ON
+						TAN0501SRC.DATASET_ID = TAN0503.SRC_DATASET_ID
+					INNER JOIN TAN0501 TAN0501TAG ON
+						TAN0501TAG.DATASET_ID = TAN0503.TAG_DATASET_ID
+					INNER JOIN TAN0504 ON
+						TAN0504.MAP_ID = TAN0503.MAP_ID
+					INNER JOIN TAN0505 ON
+						TAN0505.MAP_ID = TAN0504.MAP_ID
+						AND TAN0505.MAP_ITEM_ID = TAN0504.MAP_ITEM_ID
+						--AND TAN0505.MAP_ITEM_SEQ = TAN0504.MAP_ITEM_SEQ
+				WHERE
+					1 = 1
+					--AND TAN0503.SRC_DATASET_ID = #{srcDataSet}
+			) DATAMAP ON
+			  DATAMAP.MAP_ID = TAN0509.MAP_ID
+			  --AND DATAMAP.IO_TYPE = TAN0509.IO_TYPE
+		WHERE
+			1 = 1
+			AND TAN0201.INTERFACE_ID = #{interfaceId}
+			AND TAN0509.IO_TYPE = #{ioType}
+			AND TAN0509.SYSTEM_ID IN
+			<foreach item="item" index="index" collection="systemId" open="(" separator="," close=")">
+			    #{item}
+			</foreach>
+		ORDER BY TO_NUMBER(DATAMAP.IO_TYPE)--, TO_NUMBER(DATAMAP.MAP_ITEM_SEQ)
+	</select>
+
+	<select id="getSimpleDataMapInterfaceMap" resultMap="dataMapResultMap">
+		SELECT
+			 DATAMAP.MAP_ID
+			,DATAMAP.NM
+			,DATAMAP.CD
+			,DATAMAP.SRC_DATASET_ID
+			,DATAMAP.SRC_DATASET_NM1
+			,DATAMAP.SRC_DATASET_NM2
+			,DATAMAP.SRC_DATASET_CD
+			,DATAMAP.TAG_DATASET_ID
+			,DATAMAP.TAG_DATASET_NM1
+			,DATAMAP.TAG_DATASET_NM2
+			,DATAMAP.TAG_DATASET_CD
+			,DATAMAP.DEL_YN
+			,DATAMAP.REG_DATE
+			,DATAMAP.REG_USER
+			,DATAMAP.MOD_DATE
+			,DATAMAP.MOD_USER
+			,DATAMAP.MAP_ITEM_ID
+			--,DATAMAP.MAP_ITEM_SEQ
+			,DATAMAP.MAP_CTRL_TYPE
+			,DATAMAP.DATASET_ID
+			,DATAMAP.DATAFIELD_ID
+			,DATAMAP.DATAFIELD_SEQ
+			,DATAMAP.IO_TYPE
+			,DATAMAP.SRC
+      		,DATAMAP.TAG
+      		,TAN0509.INTERFACE_ID
+      		,TAN0509.SRC_SYSTEM_ID
+      		,TAN0509.TAG_SYSTEM_ID
+		FROM
+			(
+				SELECT
+				   SRC.MAP_ID
+				  ,SRC.IO_TYPE
+				  ,SRC.INTERFACE_ID
+				  ,SRC.SYSTEM_ID AS SRC_SYSTEM_ID
+				  ,TAG.SYSTEM_ID AS TAG_SYSTEM_ID
+				  ,SRC.SEQ AS SRC_SYSTEM_SEQ
+				  ,TAG.SEQ AS TAG_SYSTEM_SEQ
+				FROM
+				  ( SELECT * FROM TAN0509 WHERE SYSTEM_ID = #{srcSystemId} AND INTERFACE_ID = #{interfaceId} AND IO_TYPE= #{ioType} ) SRC,
+				  ( SELECT * FROM TAN0509 WHERE SYSTEM_ID = #{tagSystemId} AND INTERFACE_ID = #{interfaceId} AND IO_TYPE= #{ioType} ) TAG
+				WHERE
+				  1 = 1
+				  AND SRC.INTERFACE_ID = TAG.INTERFACE_ID
+				  AND SRC.MAP_ID = TAG.MAP_ID
+				  AND SRC.IO_TYPE = TAG.IO_TYPE
+			) TAN0509
+			LEFT OUTER JOIN
+			(
+				SELECT
+					 TAN0503.MAP_ID
+					,TAN0503.NM
+					,TAN0503.CD
+					,TAN0503.SRC_DATASET_ID
+					,TAN0501SRC.NM1 AS SRC_DATASET_NM1
+					,TAN0501SRC.NM2 AS SRC_DATASET_NM2
+					,TAN0501SRC.CD AS SRC_DATASET_CD
+					,TAN0503.TAG_DATASET_ID
+					,TAN0501TAG.NM1 AS TAG_DATASET_NM1
+					,TAN0501TAG.NM2 AS TAG_DATASET_NM2
+					,TAN0501TAG.CD AS TAG_DATASET_CD
+					,TAN0503.DEL_YN
+					,TAN0503.REG_DATE
+					,TAN0503.REG_USER
+					,TAN0503.MOD_DATE
+					,TAN0503.MOD_USER
+					,TAN0504.MAP_ITEM_ID
+					--,TAN0504.MAP_ITEM_SEQ
+					,TAN0504.MAP_CTRL_TYPE
+					,TAN0505.DATASET_ID
+					,TAN0505.DATAFIELD_ID
+					,TAN0505.DATAFIELD_SEQ
+					,TAN0505.IO_TYPE
+					,CASE WHEN TAN0505.IO_TYPE = '0' THEN DATAFIELD_ID ELSE '' END AS SRC
+					,CASE WHEN TAN0505.IO_TYPE = '1' THEN DATAFIELD_ID ELSE '' END AS TAG
+				FROM
+					TAN0503 TAN0503
+					INNER JOIN TAN0501 TAN0501SRC ON
+						TAN0501SRC.DATASET_ID = TAN0503.SRC_DATASET_ID
+					INNER JOIN TAN0501 TAN0501TAG ON
+						TAN0501TAG.DATASET_ID = TAN0503.TAG_DATASET_ID
+					INNER JOIN TAN0504 ON
+						TAN0504.MAP_ID = TAN0503.MAP_ID
+					INNER JOIN TAN0505 ON
+						TAN0505.MAP_ID = TAN0504.MAP_ID
+						AND TAN0505.MAP_ITEM_ID = TAN0504.MAP_ITEM_ID
+						--AND TAN0505.MAP_ITEM_SEQ = TAN0504.MAP_ITEM_SEQ
+			) DATAMAP ON
+			  DATAMAP.MAP_ID = TAN0509.MAP_ID
+		ORDER BY TO_NUMBER(DATAMAP.IO_TYPE)--, TO_NUMBER(DATAMAP.MAP_ITEM_SEQ)
+	</select>
+
+
+	<resultMap id="dataMapResultMap" type="DataMAP">
+		<id property="mapId"					column="MAP_ID"/>
+		<result property="name"					column="NM"/>
+		<result property="cd"					column="CD"/>
+		<result property="srcDataSetId"			column="SRC_DATASET_ID"/>
+		<result property="srcDataSetCd"			column="SRC_DATASET_CD"/>
+		<result property="srcDataSetNm1"		column="SRC_DATASET_NM1"/>
+		<result property="srcDataSetNm2"		column="SRC_DATASET_NM2"/>
+
+		<result property="srcSystemId"		column="SRC_SYSTEM_ID"/>
+		<result property="srcSystemCd"		column="SRC_SYSTEM_CD"/>
+		<result property="srcSystemNm1"		column="SRC_SYSTEM_NM1"/>
+		<result property="srcSystemNm2"		column="SRC_SYSTEM_NM2"/>
+
+		<result property="tagDataSetId"			column="TAG_DATASET_ID"/>
+		<result property="tagDataSetCd"			column="TAG_DATASET_CD"/>
+		<result property="tagDataSetNm1"		column="TAG_DATASET_NM1"/>
+		<result property="tagDataSetNm2"		column="TAG_DATASET_NM2"/>
+
+		<result property="tagSystemId"		column="TAG_SYSTEM_ID"/>
+		<result property="tagSystemCd"		column="TAG_SYSTEM_CD"/>
+		<result property="tagSystemNm1"		column="TAG_SYSTEM_NM1"/>
+		<result property="tagSystemNm2"		column="TAG_SYSTEM_NM2"/>
+
+		<result property="interfaceId"			column="INTERFACE_ID"/>
+		<result property="isInterfaceMapped"	column="IS_INTERFACE_MAPPED"/>
+		<result property="delYn"				column="DEL_YN"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+
+		<association property="regUser" javaType="User">
+			<id property="userId"			column="REG_USER"/>
+			<result property="userNm"		column="REG_USER_NM"/>
+			<result property="cellPhone"	column="REG_CELL_PHONE"/>
+			<result property="phone"		column="REG_PHONE"/>
+			<result property="email"		column="REG_EMAIL"/>
+			<result property="companyNm"	column="REG_COMPANY_NM"/>
+			<result property="departmentNm"	column="REG_DEPARTMENT_NM"/>
+			<result property="positionNm"	column="REG_POSITION_NM"/>
+		</association>
+
+		<association property="modUser" javaType="User">
+			<id property="userId"			column="MOD_USER"/>
+			<result property="userNm"		column="MOD_USER_NM"/>
+			<result property="cellPhone"	column="MOD_CELL_PHONE"/>
+			<result property="phone"		column="MOD_PHONE"/>
+			<result property="email"		column="MOD_EMAIL"/>
+			<result property="companyNm"	column="MOD_COMPANY_NM"/>
+			<result property="departmentNm"	column="MOD_DEPARTMENT_NM"/>
+			<result property="positionNm"	column="MOD_POSITION_NM"/>
+		</association>
+
+		<collection property="dataMapItemList" ofType="DataMapItem">
+			<id property="mapId"				column="MAP_ID"/>
+			<id property="mapItemId"			column="MAP_ITEM_ID"/>
+			<!--<id property="seq"		  	   		column="MAP_ITEM_SEQ"/>-->
+			<result property="mapCtrlType"		column="MAP_CTRL_TYPE"/>
+			<collection property="items" ofType="DataMapItemField">
+				<id property="dataSetId"		column="DATASET_ID"/>
+				<id property="dataFieldId"		column="DATAFIELD_ID"/>
+				<id property="dataFieldSeq"		column="DATAFIELD_SEQ"/>
+				<id property="mapId"		  	column="MAP_ID"/>
+				<id property="mapItemId"		column="MAP_ITEM_ID"/>
+				<!--<id property="seq"		  	   	column="MAP_ITEM_SEQ"/>-->
+				<id property="ioType"		column="IO_TYPE"/>
+			</collection>
+		</collection>
+	</resultMap>
+
+	<insert id="insertDataMap" parameterType="DataMap">
+		<selectKey keyProperty="mapId" resultType="string" order="BEFORE" >
+			SELECT TO_CHAR(NVL(MAX(TO_NUMBER(MAP_ID)),0) + 1) from TAN0503
+		</selectKey>
+		 INSERT INTO TAN0503 (
+		   MAP_ID
+		  ,NM
+		  ,CD
+		  ,SRC_DATASET_ID
+		  ,TAG_DATASET_ID
+		  ,DEL_YN
+		  ,REG_DATE
+		  ,REG_USER
+		  ,MOD_DATE
+		  ,MOD_USER
+		) VALUES (
+		   #{mapId,        jdbcType=VARCHAR}
+		  ,#{name,		   jdbcType=VARCHAR}
+		  ,#{cd,		   jdbcType=VARCHAR}
+		  ,#{srcDataSetId, jdbcType=VARCHAR}
+		  ,#{tagDataSetId, jdbcType=NUMERIC}
+		  ,'N'
+		  ,#{regDate,	   jdbcType=VARCHAR}
+		  ,#{regId,		   jdbcType=VARCHAR}
+		  ,#{modDate,	   jdbcType=VARCHAR}
+		  ,#{modId,		   jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertDataMapItem" parameterType="DataMapItem">
+		<selectKey keyProperty="mapItemId" resultType="string" order="BEFORE" >
+			SELECT TO_CHAR(NVL(MAX(TO_NUMBER(MAP_ITEM_ID)),0) + 1) from TAN0504 where MAP_ID = #{mapId, jdbcType=VARCHAR}
+		</selectKey>
+
+		 INSERT INTO TAN0504 (
+			 MAP_ID
+			,MAP_ITEM_ID
+
+			,MAP_CTRL_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+		   #{mapId,		  jdbcType=VARCHAR}
+		  ,#{mapItemId,	  jdbcType=VARCHAR}
+
+		  ,#{mapCtrlType, jdbcType=VARCHAR}
+		  ,'N'
+		  ,#{regDate,	  jdbcType=VARCHAR}
+		  ,#{regId,		  jdbcType=VARCHAR}
+		  ,#{modDate,	  jdbcType=VARCHAR}
+		  ,#{modId,		  jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="insertDataMapItemField" parameterType="DataMapItemField">
+		 INSERT INTO TAN0505 (
+			 DATASET_ID
+			,DATAFIELD_ID
+			,DATAFIELD_SEQ
+			,MAP_ID
+			,MAP_ITEM_ID
+
+			,IO_TYPE
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+			,MOD_DATE
+			,MOD_USER
+		) VALUES (
+		   #{dataSetId,	  jdbcType=VARCHAR}
+		  ,#{dataFieldId, jdbcType=VARCHAR}
+		  ,#{dataFieldSeq,jdbcType=NUMERIC}
+		  ,#{mapId,	      jdbcType=VARCHAR}
+		  ,#{mapItemId,	  jdbcType=VARCHAR}
+
+		  ,#{ioType,      jdbcType=VARCHAR}
+		  ,'N'
+		  ,#{regDate,	  jdbcType=VARCHAR}
+		  ,#{regId,		  jdbcType=VARCHAR}
+		  ,#{modDate,	  jdbcType=VARCHAR}
+		  ,#{modId,		  jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateDataMap" parameterType="DataMap">
+		UPDATE TAN0503
+		SET
+			 NM				= #{name,			jdbcType=VARCHAR}
+			,CD 			= #{cd,				jdbcType=VARCHAR}
+			,SRC_DATASET_ID = #{srcDataSetId,	jdbcType=VARCHAR}
+			,TAG_DATASET_ID = #{tagDataSetId,	jdbcType=NUMERIC}
+			,MOD_DATE 		= #{modDate,		jdbcType=VARCHAR}
+			,MOD_USER 		= #{modId,			jdbcType=VARCHAR}
+		WHERE MAP_ID 		= #{mapId,			jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteDataMap">
+		UPDATE TAN0503
+		SET
+			 DEL_YN     = 'Y'
+			,MOD_DATE   = #{modDate,	 jdbcType=VARCHAR}
+			,MOD_USER   = #{modId,	 jdbcType=VARCHAR}
+		WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteDataMapItem">
+		UPDATE TAN0504
+		SET
+			 DEL_YN     = 'Y'
+			,MOD_DATE   = #{modDate,	 jdbcType=VARCHAR}
+			,MOD_USER   = #{modId,	 jdbcType=VARCHAR}
+		WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteDataMapItemField">
+		UPDATE TAN0505
+		SET
+			 DEL_YN     = 'Y'
+			,MOD_DATE   = #{modDate,	 jdbcType=VARCHAR}
+			,MOD_USER   = #{modId,	 jdbcType=VARCHAR}
+		WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</update>
+
+	<update id="deleteEndpointDataMapModel">
+		UPDATE TRT0501
+		SET
+			 DEL_YN     = 'Y'
+			,MOD_DATE   = #{modDate,	 jdbcType=VARCHAR}
+			,MOD_USER   = #{modId,	 jdbcType=VARCHAR}
+		WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deletePhysicalAllDataMap">
+		DELETE FROM TAN0503 WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deletePhysicalAllDataMapItem">
+		DELETE FROM TAN0504 WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deletePhysicalAllDataMapItemField">
+		DELETE FROM TAN0505 WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deletePhysicalAllEndpointDataMapModel">
+		DELETE FROM TRT0501 WHERE MAP_ID = #{mapId, jdbcType=VARCHAR}
+	</delete>
+
+ 	<select id="getDataMapNameList" resultType="Map">
+		SELECT
+		   DISTINCT
+		   MAP_ID AS "id",
+		   NM AS "nm",
+		   CD AS "cd"
+		FROM TAN0503
+		WHERE DEL_YN = 'N'
+		ORDER BY MAP_ID, NM, CD
+ 	</select>
+
+ 	<select id="getDataSetSrcList" resultType="Map">
+		SELECT
+		   DISTINCT
+		   TAN0501.DATASET_ID AS "id",
+		   TAN0501.NM1 AS "nm1",
+		   TAN0501.NM2 AS "nm2",
+		   TAN0501.CD AS "cd"
+		FROM
+			TAN0503
+			INNER JOIN TAN0501 ON
+				TAN0501.DATASET_ID = TAN0503.SRC_DATASET_ID
+		WHERE TAN0503.DEL_YN = 'N'
+		ORDER BY TAN0501.DATASET_ID, TAN0501.NM1, TAN0501.NM2, TAN0501.CD
+ 	</select>
+
+ 	<select id="getDataSetTagList" resultType="Map">
+		SELECT
+		   DISTINCT
+		   TAN0501.DATASET_ID AS "id",
+		   TAN0501.NM1 AS "nm1",
+		   TAN0501.NM2 AS "nm2",
+		   TAN0501.CD AS "cd"
+		FROM
+			TAN0503
+			INNER JOIN TAN0501 ON
+				TAN0501.DATASET_ID = TAN0503.TAG_DATASET_ID
+		WHERE TAN0503.DEL_YN = 'N'
+		ORDER BY TAN0501.DATASET_ID, TAN0501.NM1, TAN0501.NM2, TAN0501.CD
+ 	</select>
+
+	<select id="getSimpleMetaDataList" resultMap="simpleMetaDataListResultMap">
+		SELECT
+			NM1 AS KOR,
+			NM2 AS ENG
+		FROM TAN0516
+		WHERE
+			1 = 1
+		<if test="nm!=null">
+			AND (NM1 LIKE '%'||#{nm}||'%' OR NM2 LIKE '%'||#{nm}||'%')
+		</if>
+		<if test="delYn!=null">
+			AND DEL_YN = #{delYn}
+		</if>
+		<if test="modDate!=null">
+			AND MOD_DATE > #{modDate}
+		</if>
+			ORDER BY NM1, NM2
+	</select>
+
+	<resultMap id="simpleMetaDataListResultMap" type="java.util.HashMap">
+		<id property="KOR"					column="KOR"/>
+		<result property="ENG"					column="ENG"/>
+	</resultMap>
+
+	<select id="getSimpleMetaDataCheck" resultMap="simpleMetaDataCheckResultMap">
+		SELECT
+			TAN0516.NM1,
+			TAN0516.NM2,
+			TAN0516.CD,
+			TAN0516.TYPE,
+			AN09.CD AS TYPE_CD,
+			TAN0516.LEN,
+			TAN0516.ENCRYPT_TYPE,
+			AN08.CD AS ENCRYPT_TYPE_CD,
+			TAN0516.DEFAULT_VALUE,
+			TAN0516.JUSTIFY,
+			AN13.CD AS JUSTIFY_CD,
+			TAN0516.PADDING,
+			TAN0516.SCALE_VALUE,
+			TAN0516.MASKING_YN,
+			TAN0516.MASKING_PATTERN_CD
+		FROM
+			TAN0516
+			LEFT OUTER JOIN (SELECT * FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '09' AND DEL_YN = 'N') AN09 ON AN09.NM = TAN0516.TYPE
+			LEFT OUTER JOIN (SELECT * FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '08' AND DEL_YN = 'N') AN08 ON AN08.NM = TAN0516.ENCRYPT_TYPE
+			LEFT OUTER JOIN (SELECT * FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '13' AND DEL_YN = 'N') AN13 ON AN08.NM = TAN0516.JUSTIFY
+		WHERE
+			1 = 1
+			AND TAN0516.NM1 IN
+			<foreach item="item" index="index" collection="names" open="(" separator="," close=")">
+			#{item}
+			</foreach>
+			AND TAN0516.DEL_YN = 'N'
+	</select>
+
+	<resultMap id="simpleMetaDataCheckResultMap" type="DataField">
+		<result property="name1"			   column="NM1"/>
+		<result property="name2"			   column="NM2"/>
+		<result property="cd"				   column="CD"/>
+		<result property="type"				   column="TYPE_CD"/>
+		<result property="typeNm"			   column="TYPE"/>
+		<result property="length"			   column="LEN"/>
+		<result property="scale"			   column="SCALE_VALUE"/>
+		<result property="encryptType"		   column="ENCRYPT_TYPE_CD"/>
+		<result property="encryptTypeNm"	   column="ENCRYPT_TYPE"/>
+		<result property="defaultValue"		   column="DEFAULT_VALUE"/>
+		<result property="justify"			   column="JUSTIFY_CD"/>
+		<result property="justifyNm"		   column="JUSTIFY"/>
+		<result property="padding"			   column="PADDING"/>
+		<result property="maskingYn"		   column="MASKING_YN"/>
+		<result property="maskingPatternCd"	   column="MASKING_PATTERN_CD"/>
+
+	</resultMap>
+
+	<select id="getExistDataSetCd" resultType="int">
+		SELECT
+			COUNT(DATASET_ID)
+		FROM
+			TAN0501
+		WHERE
+			1 = 1
+			AND CD = #{dataSetCd}
+			AND DEL_YN = 'N'
+	</select>
+
+	<select id="getExistMapCd" resultType="int">
+		SELECT
+			COUNT(MAP_ID)
+		FROM
+			TAN0503
+		WHERE
+			1 = 1
+			AND CD = #{mapCd}
+			AND DEL_YN = 'N'
+	</select>
+
+	<select id="getUsedDataSet" resultType="int">
+		SELECT
+		  COUNT(TAN0501.DATASET_ID) AS CNT
+		FROM
+		  TAN0501 TAN0501
+		  INNER JOIN TRT0401 TRT0401 ON
+		    TRT0401.DATASET_ID  = TAN0501.DATASET_ID
+		WHERE
+		  1 = 1
+		  AND TAN0501.DEL_YN = 'N'
+		  AND TRT0401.DEL_YN = 'N'
+		  AND TAN0501.DATASET_ID = #{dataSetId}
+	</select>
+
+	<select id="getUsedDataMap" resultType="int">
+		SELECT
+		  COUNT(TAN0503.MAP_ID) AS CNT
+		FROM
+		  TAN0503 TAN0503
+		  INNER JOIN TRT0501 TRT0501 ON
+		    TRT0501.MAP_ID  = TAN0503.MAP_ID
+		WHERE
+		  1 = 1
+		  AND TAN0503.DEL_YN = 'N'
+		  AND TRT0501.DEL_YN = 'N'
+		  AND TAN0503.MAP_ID = #{mapId}
+	</select>
+
+</mapper>

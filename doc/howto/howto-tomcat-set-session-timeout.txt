@@ -1,0 +1,30 @@
+
+
+모든 애플리케이션 공통 적용 :
+	{CATALINA_HOME}/conf/web.xml
+
+	[참고]
+	  <!-- ======================== Introduction ============================== -->
+	  <!-- This document defines default values for *all* web applications      -->
+	  <!-- loaded into this instance of Tomcat.  As each application is         -->
+	  <!-- deployed, this file is processed, followed by the                    -->
+	  <!-- "/WEB-INF/web.xml" deployment descriptor from your own               -->
+	  <!-- applications.                                                        -->
+	  <!--                                                                      -->
+	  <!-- WARNING:  Do not configure application-specific resources here!      -->
+	  <!-- They should go in the "/WEB-INF/web.xml" file in your application.   -->
+
+
+개별 애플리케이션 적용 : 우리는 여기다 하지 않는다.
+	{CATALINA_HOME}/webapps/mint/WEB-INF/web.xml
+
+web.xml 내에 session-config 값 설정(기본값 30분)
+  <!-- ==================== Default Session Configuration ================= -->
+  <!-- You can set the default session timeout (in minutes) for all newly   -->
+  <!-- created sessions by modifying the value below.                       -->
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+

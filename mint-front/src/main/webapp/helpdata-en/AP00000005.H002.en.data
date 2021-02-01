@@ -1,0 +1,28 @@
+AP00000005$$$H002$$$en$$$조회조건$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Search conditions<br></font><font size="2">
+&nbsp; It provides a function of Interface detail information through various search
+conditions (modification is not allowed)<br>
+&nbsp; 1. All search is conducted by '%Like%', so you don't have to enter full name<br>
+&nbsp; 2. Related search<br>
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">a. "whole company solution" +
+"ARIS process" + "system" + "interface name" are
+reflected to mutual search result.<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></span><font size="2">example) 1) check "whole company
+solution" as an IIB<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </font></span><font size="2">2) if you choose ComboBox of
+"system", lists only related to IIB will be shown</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">&gt; check<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">3) if you choose ComboBox of
+"infertace name", interfaces only related to "whole company
+solution + system" will be shown<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">b. sequence of 4 items of related
+search is not important, but if it has selected, change is impossible<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. change of already selected content
+could be done by "initialization " button<br></font><font size="2">
+&nbsp; 3</font><b style="mso-bidi-font-weight: normal;"><font size="2">. Search range<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">a.&nbsp;Total : search all registered
+result at life cycle management<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b.&nbsp;Only user&nbsp;: search only
+user's interfaces in charge of</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

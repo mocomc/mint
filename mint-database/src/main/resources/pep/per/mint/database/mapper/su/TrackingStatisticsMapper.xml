@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.TrackingStatisticsMapper">
+	<!--
+  	<cache/>
+  	-->
+
+	<select id="getRecordCount" resultType="java.util.Map">
+		<choose>
+			<when test="scCriteriaType != null and scCriteriaType eq 'daily'.toString()">
+				<!-- 일별(TSU0811)조회 -->
+				SELECT
+				  B.INTEGRATION_ID,
+				  B.INTERFACE_NM,
+				  GUBUN,
+				  DAY1,DAY2,DAY3,DAY4,DAY5,DAY6, DAY7,DAY8,DAY9,DAY10,
+				  DAY11,DAY12,DAY13,DAY14,DAY15,DAY16, DAY17,DAY18,DAY19,DAY20,
+				  DAY21,DAY22,DAY23,DAY24,DAY25,DAY26, DAY27,DAY28,DAY29,DAY30,DAY31,
+				  YEAR_SUM AS TOTAL_SUM
+				FROM (
+
+				    SELECT
+				         INTERFACE_ID
+				         , '1' AS SEQ
+				         , 'FINISHED' AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'01', TOTAL_CNT,0)) AS DAY1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'02', TOTAL_CNT,0)) AS DAY2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'03', TOTAL_CNT,0)) AS DAY3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'04', TOTAL_CNT,0)) AS DAY4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'05', TOTAL_CNT,0)) AS DAY5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'06', TOTAL_CNT,0)) AS DAY6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'07', TOTAL_CNT,0)) AS DAY7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'08', TOTAL_CNT,0)) AS DAY8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'09', TOTAL_CNT,0)) AS DAY9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'10', TOTAL_CNT,0)) AS DAY10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'11', TOTAL_CNT,0)) AS DAY11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'12', TOTAL_CNT,0)) AS DAY12
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'13', TOTAL_CNT,0)) AS DAY13
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'14', TOTAL_CNT,0)) AS DAY14
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'15', TOTAL_CNT,0)) AS DAY15
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'16', TOTAL_CNT,0)) AS DAY16
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'17', TOTAL_CNT,0)) AS DAY17
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'18', TOTAL_CNT,0)) AS DAY18
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'19', TOTAL_CNT,0)) AS DAY19
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'20', TOTAL_CNT,0)) AS DAY20
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'21', TOTAL_CNT,0)) AS DAY21
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'22', TOTAL_CNT,0)) AS DAY22
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'23', TOTAL_CNT,0)) AS DAY23
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'24', TOTAL_CNT,0)) AS DAY24
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'25', TOTAL_CNT,0)) AS DAY25
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'26', TOTAL_CNT,0)) AS DAY26
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'27', TOTAL_CNT,0)) AS DAY27
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'28', TOTAL_CNT,0)) AS DAY28
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'29', TOTAL_CNT,0)) AS DAY29
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'30', TOTAL_CNT,0)) AS DAY30
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'31', TOTAL_CNT,0)) AS DAY31
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_DAY AS RANGE1
+				          , SUM(NVL(SUCCESS_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0811
+				          WHERE
+				           TR_DAY BETWEEN #{scPeriodFrom}||'01' AND #{scPeriodFrom}||'31'
+				           GROUP BY INTERFACE_ID, TR_DAY
+				        )
+				      GROUP BY  INTERFACE_ID
+				        UNION ALL
+				       SELECT
+				         INTERFACE_ID
+				         , '3' AS SEQ
+				         , 'ERROR'  AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'01', TOTAL_CNT,0)) AS DAY1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'02', TOTAL_CNT,0)) AS DAY2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'03', TOTAL_CNT,0)) AS DAY3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'04', TOTAL_CNT,0)) AS DAY4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'05', TOTAL_CNT,0)) AS DAY5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'06', TOTAL_CNT,0)) AS DAY6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'07', TOTAL_CNT,0)) AS DAY7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'08', TOTAL_CNT,0)) AS DAY8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'09', TOTAL_CNT,0)) AS DAY9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'10', TOTAL_CNT,0)) AS DAY10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'11', TOTAL_CNT,0)) AS DAY11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'12', TOTAL_CNT,0)) AS DAY12
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'13', TOTAL_CNT,0)) AS DAY13
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'14', TOTAL_CNT,0)) AS DAY14
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'15', TOTAL_CNT,0)) AS DAY15
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'16', TOTAL_CNT,0)) AS DAY16
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'17', TOTAL_CNT,0)) AS DAY17
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'18', TOTAL_CNT,0)) AS DAY18
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'19', TOTAL_CNT,0)) AS DAY19
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'20', TOTAL_CNT,0)) AS DAY20
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'21', TOTAL_CNT,0)) AS DAY21
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'22', TOTAL_CNT,0)) AS DAY22
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'23', TOTAL_CNT,0)) AS DAY23
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'24', TOTAL_CNT,0)) AS DAY24
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'25', TOTAL_CNT,0)) AS DAY25
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'26', TOTAL_CNT,0)) AS DAY26
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'27', TOTAL_CNT,0)) AS DAY27
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'28', TOTAL_CNT,0)) AS DAY28
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'29', TOTAL_CNT,0)) AS DAY29
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'30', TOTAL_CNT,0)) AS DAY30
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'31', TOTAL_CNT,0)) AS DAY31
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_DAY AS RANGE1
+				          , SUM(NVL(ERROR_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0811
+				          WHERE
+				          TR_DAY BETWEEN #{scPeriodFrom}||'01' AND #{scPeriodFrom}||'31'
+				           GROUP BY INTERFACE_ID, TR_DAY
+				        )
+				      GROUP BY  INTERFACE_ID
+				    UNION ALL
+				    SELECT
+				         INTERFACE_ID
+				         , '2' AS SEQ
+				         ,'PROCESSING'  AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'01', TOTAL_CNT,0)) AS DAY1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'02', TOTAL_CNT,0)) AS DAY2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'03', TOTAL_CNT,0)) AS DAY3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'04', TOTAL_CNT,0)) AS DAY4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'05', TOTAL_CNT,0)) AS DAY5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'06', TOTAL_CNT,0)) AS DAY6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'07', TOTAL_CNT,0)) AS DAY7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'08', TOTAL_CNT,0)) AS DAY8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'09', TOTAL_CNT,0)) AS DAY9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'10', TOTAL_CNT,0)) AS DAY10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'11', TOTAL_CNT,0)) AS DAY11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'12', TOTAL_CNT,0)) AS DAY12
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'13', TOTAL_CNT,0)) AS DAY13
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'14', TOTAL_CNT,0)) AS DAY14
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'15', TOTAL_CNT,0)) AS DAY15
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'16', TOTAL_CNT,0)) AS DAY16
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'17', TOTAL_CNT,0)) AS DAY17
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'18', TOTAL_CNT,0)) AS DAY18
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'19', TOTAL_CNT,0)) AS DAY19
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'20', TOTAL_CNT,0)) AS DAY20
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'21', TOTAL_CNT,0)) AS DAY21
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'22', TOTAL_CNT,0)) AS DAY22
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'23', TOTAL_CNT,0)) AS DAY23
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'24', TOTAL_CNT,0)) AS DAY24
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'25', TOTAL_CNT,0)) AS DAY25
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'26', TOTAL_CNT,0)) AS DAY26
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'27', TOTAL_CNT,0)) AS DAY27
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'28', TOTAL_CNT,0)) AS DAY28
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'29', TOTAL_CNT,0)) AS DAY29
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'30', TOTAL_CNT,0)) AS DAY30
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(6))||'31', TOTAL_CNT,0)) AS DAY31
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_DAY AS RANGE1
+				          , SUM(NVL(PROCESS_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0811
+				          WHERE
+				           TR_DAY BETWEEN #{scPeriodFrom}||'01' AND #{scPeriodFrom}||'31'
+				           GROUP BY INTERFACE_ID, TR_DAY
+				        )
+				      GROUP BY  INTERFACE_ID
+
+				      ) A
+
+			</when>
+			<when test="scCriteriaType != null and scCriteriaType eq 'monthly'.toString()">
+				<!-- 월별(TSU0812)조회 -->
+				SELECT
+				  B.INTEGRATION_ID,
+				  B.INTERFACE_NM,
+				  GUBUN,
+				  MONTH1,MONTH2,MONTH3,MONTH4,MONTH5,MONTH6,MONTH7,MONTH8,MONTH9,MONTH10,MONTH11,MONTH12,
+				  YEAR_SUM AS TOTAL_SUM
+				FROM (
+
+				    SELECT
+				         INTERFACE_ID
+				         , '1' AS SEQ
+				         , 'FINISHED' AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'01', TOTAL_CNT,0)) AS MONTH1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'02', TOTAL_CNT,0)) AS MONTH2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'03', TOTAL_CNT,0)) AS MONTH3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'04', TOTAL_CNT,0)) AS MONTH4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'05', TOTAL_CNT,0)) AS MONTH5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'06', TOTAL_CNT,0)) AS MONTH6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'07', TOTAL_CNT,0)) AS MONTH7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'08', TOTAL_CNT,0)) AS MONTH8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'09', TOTAL_CNT,0)) AS MONTH9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'10', TOTAL_CNT,0)) AS MONTH10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'11', TOTAL_CNT,0)) AS MONTH11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'12', TOTAL_CNT,0)) AS MONTH12
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_MONTH AS RANGE1
+				          , SUM(NVL(SUCCESS_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0812
+				          WHERE
+				           TR_MONTH BETWEEN #{scPeriodFrom}||'01' AND #{scPeriodFrom}||'12'
+				           GROUP BY INTERFACE_ID, TR_MONTH
+				        )
+				      GROUP BY  INTERFACE_ID
+				        UNION ALL
+				       SELECT
+				         INTERFACE_ID
+				         , '3' AS SEQ
+				         , 'ERROR'  AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'01', TOTAL_CNT,0)) AS MONTH1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'02', TOTAL_CNT,0)) AS MONTH2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'03', TOTAL_CNT,0)) AS MONTH3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'04', TOTAL_CNT,0)) AS MONTH4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'05', TOTAL_CNT,0)) AS MONTH5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'06', TOTAL_CNT,0)) AS MONTH6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'07', TOTAL_CNT,0)) AS MONTH7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'08', TOTAL_CNT,0)) AS MONTH8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'09', TOTAL_CNT,0)) AS MONTH9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'10', TOTAL_CNT,0)) AS MONTH10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'11', TOTAL_CNT,0)) AS MONTH11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'12', TOTAL_CNT,0)) AS MONTH12
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_MONTH AS RANGE1
+				          , SUM(NVL(ERROR_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0812
+				          WHERE
+				          TR_MONTH BETWEEN #{scPeriodFrom}||'01' AND #{scPeriodFrom}||'12'
+				           GROUP BY INTERFACE_ID, TR_MONTH
+				        )
+				      GROUP BY  INTERFACE_ID
+				    UNION ALL
+				    SELECT
+				         INTERFACE_ID
+				         , '2' AS SEQ
+				         ,'PROCESSING'  AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'01', TOTAL_CNT,0)) AS MONTH1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'02', TOTAL_CNT,0)) AS MONTH2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'03', TOTAL_CNT,0)) AS MONTH3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'04', TOTAL_CNT,0)) AS MONTH4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'05', TOTAL_CNT,0)) AS MONTH5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'06', TOTAL_CNT,0)) AS MONTH6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'07', TOTAL_CNT,0)) AS MONTH7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'08', TOTAL_CNT,0)) AS MONTH8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'09', TOTAL_CNT,0)) AS MONTH9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'10', TOTAL_CNT,0)) AS MONTH10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'11', TOTAL_CNT,0)) AS MONTH11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(4))||'12', TOTAL_CNT,0)) AS MONTH12
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_MONTH AS RANGE1
+				          , SUM(NVL(PROCESS_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0812
+				          WHERE
+				           TR_MONTH BETWEEN #{scPeriodFrom}||'01' AND #{scPeriodFrom}||'12'
+				           GROUP BY INTERFACE_ID, TR_MONTH
+				        )
+				      GROUP BY  INTERFACE_ID
+
+				      ) A
+
+			</when>
+			<otherwise>
+				<!-- 시간별(TSU0810)조회 -->
+				SELECT
+				  B.INTEGRATION_ID,
+				  B.INTERFACE_NM,
+				  GUBUN,
+				  HOUR1,HOUR2,HOUR3,HOUR4,HOUR5,HOUR6,HOUR7,HOUR8,HOUR9,HOUR10,HOUR11,HOUR12,HOUR13,HOUR14,HOUR15,HOUR16,HOUR17,HOUR18,HOUR19,HOUR20,HOUR21,HOUR22,HOUR23,HOUR24,
+				  YEAR_SUM AS TOTAL_SUM
+				FROM (
+
+				    SELECT
+				         INTERFACE_ID
+				         , '1' AS SEQ
+				         , 'FINISHED' AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'00', TOTAL_CNT,0)) AS HOUR1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'01', TOTAL_CNT,0)) AS HOUR2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'02', TOTAL_CNT,0)) AS HOUR3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'03', TOTAL_CNT,0)) AS HOUR4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'04', TOTAL_CNT,0)) AS HOUR5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'05', TOTAL_CNT,0)) AS HOUR6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'06', TOTAL_CNT,0)) AS HOUR7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'07', TOTAL_CNT,0)) AS HOUR8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'08', TOTAL_CNT,0)) AS HOUR9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'09', TOTAL_CNT,0)) AS HOUR10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'10', TOTAL_CNT,0)) AS HOUR11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'11', TOTAL_CNT,0)) AS HOUR12
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'12', TOTAL_CNT,0)) AS HOUR13
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'13', TOTAL_CNT,0)) AS HOUR14
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'14', TOTAL_CNT,0)) AS HOUR15
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'15', TOTAL_CNT,0)) AS HOUR16
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'16', TOTAL_CNT,0)) AS HOUR17
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'17', TOTAL_CNT,0)) AS HOUR18
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'18', TOTAL_CNT,0)) AS HOUR19
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'19', TOTAL_CNT,0)) AS HOUR20
+						 , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'20', TOTAL_CNT,0)) AS HOUR21
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'21', TOTAL_CNT,0)) AS HOUR22
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'22', TOTAL_CNT,0)) AS HOUR23
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'23', TOTAL_CNT,0)) AS HOUR24
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_DATE AS RANGE1
+				          , SUM(NVL(SUCCESS_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0810
+				          WHERE
+				           TR_DATE BETWEEN #{scPeriodFrom}||'00' AND #{scPeriodFrom}||'23'
+				           GROUP BY INTERFACE_ID, TR_DATE
+				        )
+				      GROUP BY INTERFACE_ID
+					UNION ALL
+					SELECT
+				         INTERFACE_ID
+				         , '3' AS SEQ
+				         , 'ERROR'  AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'00', TOTAL_CNT,0)) AS HOUR1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'01', TOTAL_CNT,0)) AS HOUR2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'02', TOTAL_CNT,0)) AS HOUR3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'03', TOTAL_CNT,0)) AS HOUR4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'04', TOTAL_CNT,0)) AS HOUR5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'05', TOTAL_CNT,0)) AS HOUR6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'06', TOTAL_CNT,0)) AS HOUR7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'07', TOTAL_CNT,0)) AS HOUR8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'08', TOTAL_CNT,0)) AS HOUR9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'09', TOTAL_CNT,0)) AS HOUR10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'10', TOTAL_CNT,0)) AS HOUR11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'11', TOTAL_CNT,0)) AS HOUR12
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'12', TOTAL_CNT,0)) AS HOUR13
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'13', TOTAL_CNT,0)) AS HOUR14
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'14', TOTAL_CNT,0)) AS HOUR15
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'15', TOTAL_CNT,0)) AS HOUR16
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'16', TOTAL_CNT,0)) AS HOUR17
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'17', TOTAL_CNT,0)) AS HOUR18
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'18', TOTAL_CNT,0)) AS HOUR19
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'19', TOTAL_CNT,0)) AS HOUR20
+						 , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'20', TOTAL_CNT,0)) AS HOUR21
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'21', TOTAL_CNT,0)) AS HOUR22
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'22', TOTAL_CNT,0)) AS HOUR23
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'23', TOTAL_CNT,0)) AS HOUR24
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_DATE AS RANGE1
+				          , SUM(NVL(ERROR_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0810
+				          WHERE
+				          TR_DATE BETWEEN #{scPeriodFrom}||'00' AND #{scPeriodFrom}||'23'
+				           GROUP BY INTERFACE_ID, TR_DATE
+				        )
+				      GROUP BY INTERFACE_ID
+				    UNION ALL
+				    SELECT
+				         INTERFACE_ID
+				         , '2' AS SEQ
+				         ,'PROCESSING'  AS GUBUN
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'00', TOTAL_CNT,0)) AS HOUR1
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'01', TOTAL_CNT,0)) AS HOUR2
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'02', TOTAL_CNT,0)) AS HOUR3
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'03', TOTAL_CNT,0)) AS HOUR4
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'04', TOTAL_CNT,0)) AS HOUR5
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'05', TOTAL_CNT,0)) AS HOUR6
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'06', TOTAL_CNT,0)) AS HOUR7
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'07', TOTAL_CNT,0)) AS HOUR8
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'08', TOTAL_CNT,0)) AS HOUR9
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'09', TOTAL_CNT,0)) AS HOUR10
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'10', TOTAL_CNT,0)) AS HOUR11
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'11', TOTAL_CNT,0)) AS HOUR12
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'12', TOTAL_CNT,0)) AS HOUR13
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'13', TOTAL_CNT,0)) AS HOUR14
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'14', TOTAL_CNT,0)) AS HOUR15
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'15', TOTAL_CNT,0)) AS HOUR16
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'16', TOTAL_CNT,0)) AS HOUR17
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'17', TOTAL_CNT,0)) AS HOUR18
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'18', TOTAL_CNT,0)) AS HOUR19
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'19', TOTAL_CNT,0)) AS HOUR20
+						 , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'20', TOTAL_CNT,0)) AS HOUR21
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'21', TOTAL_CNT,0)) AS HOUR22
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'22', TOTAL_CNT,0)) AS HOUR23
+				         , SUM(DECODE(RANGE1,CAST(#{scPeriodFrom} AS VARCHAR2(8))||'23', TOTAL_CNT,0)) AS HOUR24
+				         , SUM(TOTAL_CNT) AS YEAR_SUM
+				      FROM(
+				        	SELECT
+				            INTERFACE_ID
+				          , TR_DATE AS RANGE1
+				          , SUM(NVL(PROCESS_R_CNT, 0)) AS TOTAL_CNT
+				          FROM  TSU0810
+				          WHERE
+				           TR_DATE BETWEEN #{scPeriodFrom}||'00' AND #{scPeriodFrom}||'23'
+				           GROUP BY INTERFACE_ID, TR_DATE
+				        )
+				      GROUP BY  INTERFACE_ID
+
+				      ) A
+			</otherwise>
+		</choose>
+					<include refid="pep.per.mint.database.mapper.su.TrackingStatisticsMapper.checkAccessRoleSql"/>
+			  		ORDER BY B.INTERFACE_ID, B.INTERFACE_NM, A.SEQ
+	</select>
+
+	<select id="getStatisticsTimePeriod" resultMap="statisticsTimePeriodResultMap">
+		SELECT A.TR_DATE       AS TR_DATE,
+		  NVL(B.SUCCESS_CNT,0) AS SUCCESS_CNT,
+		  NVL(B.ERROR_CNT,0)   AS ERROR_CNT,
+		  NVL(B.PROCESS_CNT,0) AS PROCESS_CNT,
+		  NVL(B.TOTAL_CNT,0)   AS TOTAL_CNT,
+		  NVL(B.DATA_SIZE,0)   AS DATA_SIZE
+		FROM
+		  (SELECT TR_DATE
+			FROM
+		<choose>
+			<when test="searchType != null and searchType eq 'hourly'.toString()">
+			<!-- 시간별(TSU0803)조회 -->
+		    (SELECT TO_CHAR(TO_DATE (#{startDate}, 'yyyyMMDDHH24') + (LEVEL * 1 / 24) - 1 / 24, 'yyyyMMDDHH24') AS TR_DATE
+		    FROM DUAL
+		      CONNECT BY LEVEL * 1 / 24 <![CDATA[<=]]> TO_DATE (#{endDate}, 'yyyyMMDDHH24') - TO_DATE (#{startDate}, 'yyyyMMDDHH24') + 1 / 24
+		    )
+		  ) A
+		LEFT OUTER JOIN
+		  (SELECT TR_DATE    AS TR_DATE,
+		    SUM(SUCCESS_CNT) AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)   AS ERROR_CNT,
+		    SUM(PROCESS_CNT) AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)   AS DATA_SIZE
+		  FROM TSU0803
+		  WHERE TR_DATE BETWEEN #{startDate} AND #{endDate}
+		  GROUP BY TR_DATE
+			</when>
+			<when test="searchType != null and searchType eq 'daily'.toString()">
+			<!-- 일별(TSU0804)조회 -->
+		    (SELECT TO_CHAR(TO_DATE (#{startDate}, 'yyyyMMDD') + (LEVEL * 1) - 1, 'yyyyMMDD') AS TR_DATE
+		    FROM DUAL
+		      CONNECT BY LEVEL * 1 <![CDATA[<=]]> TO_DATE (#{endDate}, 'yyyyMMDD') - TO_DATE (#{startDate}, 'yyyyMMDD') + 1
+		    )
+		  ) A
+		LEFT OUTER JOIN
+		  (SELECT TR_DAY     AS TR_DATE,
+		    SUM(SUCCESS_CNT) AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)   AS ERROR_CNT,
+		    SUM(PROCESS_CNT) AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)   AS DATA_SIZE
+		  FROM TSU0804
+		  WHERE TR_DAY BETWEEN #{startDate} AND #{endDate}
+		  GROUP BY TR_DAY
+			</when>
+			<when test="searchType != null and searchType eq 'monthly'.toString()">
+			<!-- 월별(TSU0805)조회 -->
+		    (SELECT TO_CHAR(ADD_MONTHS( TO_DATE(#{startDate}, 'YYYYMM '),( LEVEL - 1 ) ), 'YYYYMM') AS TR_DATE
+		    FROM DUAL
+		      CONNECT BY ADD_MONTHS( TO_DATE( #{startDate}, 'YYYYMM' ),( LEVEL - 1 ) ) <![CDATA[<=]]> ADD_MONTHS( TO_DATE(#{endDate}, 'YYYYMM' ), + 0 )
+		    )
+		  ) A
+		LEFT OUTER JOIN
+		  (SELECT TR_MONTH   AS TR_DATE,
+		    SUM(SUCCESS_CNT) AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)   AS ERROR_CNT,
+		    SUM(PROCESS_CNT) AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)   AS DATA_SIZE
+		  FROM TSU0805
+		  WHERE TR_MONTH BETWEEN #{startDate} AND #{endDate}
+		  GROUP BY TR_MONTH
+			</when>
+			<otherwise>
+			<!-- 연도별(TSU0805)조회 -->
+		    (SELECT TO_CHAR(ADD_MONTHS( TO_DATE( #{startDate}, 'YYYY '),( LEVEL*12 - 12 ) ), 'YYYY') AS TR_DATE
+		    FROM DUAL
+		      CONNECT BY ADD_MONTHS( TO_DATE( #{startDate}, 'YYYY' ),( LEVEL*12 - 12 ) ) <![CDATA[<=]]> ADD_MONTHS( TO_DATE( #{endDate}, 'YYYY' ), + 0 )
+		    )
+		  ) A
+		LEFT OUTER JOIN
+		  (SELECT SUBSTR(TR_MONTH,1,4) AS TR_DATE,
+		    SUM(SUCCESS_CNT)           AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)             AS ERROR_CNT,
+		    SUM(PROCESS_CNT)           AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)             AS DATA_SIZE
+		  FROM TSU0805
+		  WHERE SUBSTR(TR_MONTH,1,4) BETWEEN #{startDate} AND #{endDate}
+		  GROUP BY SUBSTR(TR_MONTH,1,4)
+			</otherwise>
+		</choose>
+				  ) B
+				ON A.TR_DATE = B.TR_DATE
+				ORDER BY A.TR_DATE
+	</select>
+
+	<resultMap id="statisticsTimePeriodResultMap" type="java.util.LinkedHashMap">
+		<result property="trDate" column="TR_DATE" />
+		<result property="successCnt" column="SUCCESS_CNT" />
+		<result property="errorCnt" column="ERROR_CNT" />
+		<result property="processCnt" column="PROCESS_CNT" />
+		<result property="totalCnt" column="TOTAL_CNT" />
+		<result property="dataSize" column="DATA_SIZE" />
+	</resultMap>
+
+	<select id="getStatisticsTimePeriodDetail" resultMap="statisticsTimePeriodDetailResultMap">
+		SELECT DISTINCT A.INTERFACE_ID AS INTERFACE_ID,
+		  A.INTERFACE_NM               AS INTERFACE_NM,
+		  A.INTEGRATION_ID             AS INTEGRATION_ID,
+		  NVL(B.TR_DATE,#{trDate})  AS TR_DATE,
+		  NVL(B.SUCCESS_CNT,0)         AS SUCCESS_CNT,
+		  NVL(B.ERROR_CNT,0)           AS ERROR_CNT,
+		  NVL(B.PROCESS_CNT,0)         AS PROCESS_CNT,
+		  NVL(B.TOTAL_CNT,0)           AS TOTAL_CNT,
+		  NVL(DATA_SIZE,0)             AS DATA_SIZE
+		FROM TAN0201 A
+		<choose>
+			<when test="searchType != null and searchType eq 'hourly'.toString()">
+			<!-- 시간별(TSU0803)조회 -->
+		LEFT OUTER JOIN
+		  (SELECT INTERFACE_ID                     AS INTERFACE_ID,
+		    TR_DATE                                AS TR_DATE,
+		    SUM(SUCCESS_CNT)                       AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)                         AS ERROR_CNT,
+		    SUM(PROCESS_CNT)                       AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)                         AS DATA_SIZE
+		  FROM TSU0803
+		  WHERE TSU0803.TR_DATE = #{trDate}
+		  GROUP BY INTERFACE_ID,
+		    TR_DATE
+		  ) B
+		ON B.INTERFACE_ID = A.INTERFACE_ID
+			</when>
+			<when test="searchType != null and searchType eq 'daily'.toString()">
+			<!-- 일별(TSU0804)조회 -->
+		LEFT OUTER JOIN
+		  (SELECT INTERFACE_ID                     AS INTERFACE_ID,
+		    TR_DAY                                 AS TR_DATE,
+		    SUM(SUCCESS_CNT)                       AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)                         AS ERROR_CNT,
+		    SUM(PROCESS_CNT)                       AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)                         AS DATA_SIZE
+		  FROM TSU0804
+		  WHERE TSU0804.TR_DAY = #{trDate}
+		  GROUP BY INTERFACE_ID,
+		    TR_DAY
+		  ) B
+		ON B.INTERFACE_ID = A.INTERFACE_ID
+			</when>
+			<when test="searchType != null and searchType eq 'monthly'.toString()">
+			<!-- 월별(TSU0805)조회 -->
+		LEFT OUTER JOIN
+		  (SELECT INTERFACE_ID                     AS INTERFACE_ID,
+		    TR_MONTH                               AS TR_DATE,
+		    SUM(SUCCESS_CNT)                       AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)                         AS ERROR_CNT,
+		    SUM(PROCESS_CNT)                       AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)                         AS DATA_SIZE
+		  FROM TSU0805
+		  WHERE TSU0805.TR_MONTH = #{trDate}
+		  GROUP BY INTERFACE_ID,
+		    TR_MONTH
+		  ) B
+		ON B.INTERFACE_ID = A.INTERFACE_ID
+			</when>
+			<otherwise>
+			<!-- 연도별(TSU0805)조회 -->
+		LEFT OUTER JOIN
+		  (SELECT INTERFACE_ID                     AS INTERFACE_ID,
+		    SUBSTR(TR_MONTH,1,4)                   AS TR_DATE,
+		    SUM(SUCCESS_CNT)                       AS SUCCESS_CNT,
+		    SUM(ERROR_CNT)                         AS ERROR_CNT,
+		    SUM(PROCESS_CNT)                       AS PROCESS_CNT,
+		    SUM(SUCCESS_CNT+ERROR_CNT+PROCESS_CNT) AS TOTAL_CNT,
+		    SUM(DATA_SIZE)                         AS DATA_SIZE
+		  FROM TSU0805
+		  WHERE SUBSTR(TSU0805.TR_MONTH,1,4) = #{trDate}
+		  GROUP BY INTERFACE_ID,
+		    SUBSTR(TR_MONTH,1,4)
+		  ) B
+		ON B.INTERFACE_ID = A.INTERFACE_ID
+			</otherwise>
+		</choose>
+
+		INNER JOIN TAN0101
+		ON TAN0101.INTERFACE_ID = A.INTERFACE_ID
+		<if test="systemId != null and systemId != ''">
+		INNER JOIN (
+        	SELECT DISTINCT TAN0213.INTERFACE_ID
+        	FROM TAN0213
+        	INNER JOIN TIM0102
+        	ON TAN0213.SYSTEM_ID = TIM0102.C_SYS_ID
+        	AND TIM0102.P_SYS_ID = #{systemId}
+        ) T03
+        ON A.INTERFACE_ID = T03.INTERFACE_ID
+		</if>
+		<if test="organizationId != null and organizationId != ''">
+		INNER JOIN (
+        	SELECT DISTINCT TAN0213.INTERFACE_ID
+        	FROM TIM0403
+        	INNER JOIN TIM0402
+        	ON TIM0402.C_ORG_ID = TIM0403.ORG_ID
+        	AND TIM0402.P_ORG_ID = #{organizationId}
+        	INNER JOIN TIM0102
+        	ON TIM0102.P_SYS_ID = TIM0403.SYSTEM_ID
+        	INNER JOIN TAN0213
+        	ON TAN0213.SYSTEM_ID = TIM0102.C_SYS_ID
+        ) T05
+        ON A.INTERFACE_ID = T05.INTERFACE_ID
+		</if>
+		WHERE 1 = 1
+		<if test="channelId != null and channelId != ''">
+		AND A.CHANNEL_ID = #{channelId}
+		</if>
+
+		<if test="interfaceNm != null and interfaceNm != ''">
+		AND A.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+		</if>
+
+		<if test="integrationId != null and integrationId != ''">
+		AND A.INTEGRATION_ID LIKE '%'||#{integrationId}||'%'
+		</if>
+
+		<if test="businessId != null and businessId != ''">
+		AND TAN0101.BUSINESS_ID = #{businessId}
+		</if>
+	</select>
+
+	<resultMap id="statisticsTimePeriodDetailResultMap" type="java.util.LinkedHashMap">
+		<result property="interfaceId" column="INTERFACE_ID" />
+		<result property="interfaceNm" column="INTERFACE_NM" />
+		<result property="integrationId" column="INTEGRATION_ID" />
+		<result property="trDate" column="TR_DATE" />
+		<result property="successCnt" column="SUCCESS_CNT" />
+		<result property="errorCnt" column="ERROR_CNT" />
+		<result property="processCnt" column="PROCESS_CNT" />
+		<result property="totalCnt" column="TOTAL_CNT" />
+		<result property="dataSize" column="DATA_SIZE" />
+	</resultMap>
+
+
+  	<sql id="checkAccessRoleSql">
+		INNER JOIN
+		(
+			SELECT
+				  A.INTEGRATION_ID
+				, A.INTERFACE_NM
+				, A.INTERFACE_ID
+			FROM TAN0201 A
+			<choose>
+			<when test="isInterfaceAdmin != null and isInterfaceAdmin eq 'Y'.toString()">
+			</when>
+			<otherwise>
+				INNER JOIN
+				(
+					SELECT
+						DISTINCT
+						TSU0220.INTERFACE_ID
+					FROM
+						(
+							SELECT
+								DISTINCT
+								TSU0219.USER_ID   AS USER_ID,
+								TSU0221.C_ROLE_ID AS ROLE_ID,
+								TSU0221.DEPTH     AS DEPTH
+							FROM
+								(
+									SELECT
+										TSU0101.USER_ID,
+										TSU0219.ROLE_ID
+									FROM
+										TSU0101 TSU0101
+										INNER JOIN TSU0219 TSU0219 ON
+											TSU0101.USER_ID = TSU0219.USER_ID
+									WHERE
+										1 = 1
+										AND TSU0101.DEL_YN = 'N'
+										AND TSU0101.USER_ID = #{userId}
+								) TSU0219
+									INNER JOIN TSU0221 TSU0221 ON
+									TSU0219.ROLE_ID = TSU0221.P_ROLE_ID
+							ORDER BY USER_ID, C_ROLE_ID
+						) ACCESS_ROLE
+						INNER JOIN TSU0220 TSU0220 ON ACCESS_ROLE.ROLE_ID = TSU0220.ROLE_ID
+					UNION
+					SELECT
+						INTERFACE_ID
+					FROM
+						TAN0201
+					WHERE REG_USER = #{userId}
+				) ACCESS_ROLE_INTF ON
+					A.INTERFACE_ID = ACCESS_ROLE_INTF.INTERFACE_ID
+			</otherwise>
+			</choose>
+			WHERE
+				A.DEL_YN = 'N'
+			<if test="scCategoryDetailNm != null and scCategoryDetailNm != ''">
+				AND A.INTERFACE_NM like '%'||#{scCategoryDetailNm}||'%'
+			</if>
+			<if test="scCategoryDetailId != null and scCategoryDetailId != ''">
+				AND A.INTEGRATION_ID like '%'||#{scCategoryDetailId}||'%'
+			</if>
+			AND EXISTS (
+            		SELECT 1
+            		FROM TAN0213 B
+            		WHERE B.INTERFACE_ID = A.INTERFACE_ID
+            		<if test="scSystemId != null and scSystemId != ''">
+            		AND B.SYSTEM_ID = #{scSystemId}
+            		</if>
+            		<if test="scNodeType != null and scNodeType != ''">
+            		AND B.NODE_TYPE = #{scNodeType}
+            		</if>
+                 )
+		) B
+		ON A.INTERFACE_ID = B.INTERFACE_ID
+	</sql>
+
+</mapper>
+
+

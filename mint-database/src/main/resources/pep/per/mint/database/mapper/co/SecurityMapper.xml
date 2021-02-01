@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.co.SecurityMapper">
+
+	<select id="getLoginHistory" parameterType="string" resultMap="loginHistoryResultMap">
+		SELECT
+			 USER_ID
+			,SESSION_ID
+			,LOGIN_DATE
+			,LOGOUT_DATE
+			,IP
+		FROM
+			(SELECT
+				USER_ID
+				,SESSION_ID
+				,LOGIN_DATE
+				,LOGOUT_DATE
+				,IP
+			FROM
+				TOP0204
+			WHERE
+				1 = 1
+				AND USER_ID=#{userId}
+			ORDER BY
+				LOGIN_DATE DESC)
+		WHERE ROWNUM=1
+	</select>
+
+	<resultMap type="LoginHistory" id="loginHistoryResultMap">
+		<id property="userId" column="USER_ID"/>
+		<id property="sessionId" column="SESSION_ID"/>
+		<id property="loginDate" column="LOGIN_DATE"/>
+		<result property="logoutDate" column="LOGOUT_DATE"/>
+		<result property="ip" column="IP"/>
+	</resultMap>
+
+
+	<insert id="insertLoginHistory">
+		INSERT INTO TOP0204 (USER_ID, SESSION_ID, LOGIN_DATE, LOGOUT_DATE, IP) values (
+			 #{userId}
+			,#{sessionId}
+			,#{loginDate, jdbcType=VARCHAR}
+			,null
+			,#{ip}
+		)
+	</insert>
+
+<!--
+ 	<update id="updateLoginHistory">
+		UPDATE
+			TOP0204
+		SET
+			LOGOUT_DATE=#{logoutDate , jdbcType=VARCHAR}
+		WHERE
+			USER_ID=#{userId}
+			AND SESSION_ID=#{sessionId}
+			AND LOGIN_DATE=#{loginDate}
+	</update>
+ -->
+
+ 	<update id="updateLoginHistory">
+		UPDATE
+			TOP0204
+		SET
+			LOGOUT_DATE=#{logoutDate}
+		WHERE
+			USER_ID=#{userId}
+			AND SESSION_ID=#{sessionId}
+	</update>
+
+	<update id="changePassword">
+		UPDATE
+			TSU0101
+		SET
+			PASSWORD=#{newValue}
+		WHERE
+			USER_ID=#{userId}
+			AND PASSWORD=#{value}
+	</update>
+
+	<insert id="insertPasswordHistory">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+			SELECT (MAX(SEQ)+1) as seq FROM TOP0203 WHERE USER_ID=#{userId}
+		</selectKey>
+		INSERT INTO TOP0203 (USER_ID, MOD_DATE, SEQ, PASSWORD) values (
+			 #{userId}
+			,TO_CHAR(SYSDATE, 'YYYYMMDD')
+			,NVL(#{seq, jdbcType=NUMERIC},0)
+			,#{newValue}
+		)
+	</insert>
+
+	<select id="checkChangePassword" parameterType="string" resultMap="checkChangePasswordResultMap">
+		SELECT
+			USER_ID,
+			MOD_DATE,
+			SEQ,
+			PASSWORD
+		FROM
+			TOP0203
+		WHERE
+			1=1
+			AND USER_ID = #{userId}
+		ORDER BY
+			MOD_DATE DESC, SEQ DESC
+	</select>
+
+	<resultMap type="HashMap" id="checkChangePasswordResultMap">
+		<id property="userId" column="USER_ID"/>
+		<id property="modDate" column="MOD_DATE"/>
+		<id property="seq" column="SEQ"/>
+		<result property="password" column="password"/>
+	</resultMap>
+
+	<select id="getUserSecurity" parameterType="string" resultMap="userSecurityPropertyResultMap">
+		SELECT
+			USER_ID
+			,IP_LIST
+			,IS_LOCK
+			,PS_FAIL_CNT
+			,LAST_LOGIN_DATE
+			,LAST_LOGIN_IP
+		FROM
+			TOP0205
+		WHERE
+			1=1
+			AND USER_ID=#{userId}
+	</select>
+
+	<resultMap type="UserSecurityProperty" id="userSecurityPropertyResultMap">
+		<id property="userId" column="USER_ID"/>
+		<result property="ipList" column="IP_LIST"/>
+		<result property="isAccountLock" column="IS_LOCK"/>
+		<result property="psFailCount" column="PS_FAIL_CNT"/>
+		<result property="lastLoginDate" column="LAST_LOGIN_DATE"/>
+		<result property="lastLoginIp" column="LAST_LOGIN_IP"/>
+	</resultMap>
+
+	<insert id="insertUserSecurity" parameterType="UserSecurityProperty">
+		INSERT INTO TOP0205 (USER_ID, IP_LIST, IS_LOCK, PS_FAIL_CNT, LAST_LOGIN_DATE, LAST_LOGIN_IP) values (
+			 #{userId}
+			,#{ipList}
+			,#{isAccountLock}
+			,#{psFailCount}
+			,#{lastLoginDate, jdbcType=VARCHAR}
+			,#{lastLoginIp}
+		)
+	</insert>
+
+	<update id="updateUserSecurity" parameterType="UserSecurityProperty">
+		UPDATE
+			TOP0205
+		SET
+			 IP_LIST=#{ipList}
+			,IS_LOCK=#{isAccountLock}
+			,PS_FAIL_CNT=#{psFailCount}
+			,LAST_LOGIN_DATE=#{lastLoginDate}
+			,LAST_LOGIN_IP=#{lastLoginIp}
+		WHERE
+			USER_ID=#{userId}
+	</update>
+
+	<delete id="deleteUserSecurity" parameterType="string">
+		DELETE FROM
+			TOP0205
+		WHERE
+			USER_ID=#{userId}
+	</delete>
+
+</mapper>

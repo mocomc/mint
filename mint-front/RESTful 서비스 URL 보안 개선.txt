@@ -1,0 +1,73 @@
+[웹서비스 보안 개선-TODO]
+
+1 RESTful 서비스 URL 보안 개선
+	1.1 개선할 점 
+		js/common/mint.rest.js 내에 아래와 같이 정의된 서비스 호출 URL 값이 브라우저 상에 노출되어 보안 상 문제가 될 수 있어 개선이 요구 됨.
+		mint_rest.services = {
+		 	'REST-S01-CO-00-00-003'  : '/co/login?method=POST&isXY=true'	//로그인
+			,'REST-S02-CO-00-00-003' : '/co/logout?method=POST&isXY=true'   //로그아웃
+			,'REST-R01-CO-01-00-000' : '/co/healthcheck?method=POST'		//HealthCheck
+		...
+		...   
+	1.2 개선 방법 
+		라우터 서비스를 작성하고 모든 RESTful 서비스는 라우터 서비스를 통해 처리 될 수 있도록 한다.
+		라우터 서비스 URL
+			/routers/{serviceId}?pathParams=a,b,c
+			* {serviceId} 값은 "1.3 참고 자료" 로 정리함.
+		
+		프론트 소스 수정
+			mint.callService 함수 내에 서비스 URL을 라우터 서비스 URL 로 수정 변경한다. 
+			기존에 URL 패스 값으로 전달하던 데이터들은 ComMessage를 통해 전달하도록 변경해 주어야 한다. 
+			
+		서비스 소스 변경 
+			RoutingController 작성(라우터 서비스 URL 매핑)
+			아래와 같이 PathVariable 을 사용하여 RequestMapping 된 기작성 서비스는 PathVariable들을 제거하는 변경이 필요함.    
+			
+				@RequestMapping(value = "/channels/{channelId}", params = "method=DELETE", method = RequestMethod.POST, headers = "content-type=application/json")
+				public @ResponseBody ComMessage<?, ?> deleteChannel(
+					HttpSession httpSession,
+					@PathVariable("channelId") String channelId,
+					...				
+				함수에서 channelId 값을 제거하고 
+				comMessage.getRequestObject 통해 "channelId" 값을 얻어 올 수 있도록 한다.
+				물론 프론트의 서비스 호출 부에서도  기존의 패스 값으로 channelId를 넘겨주던 부분을 ComMessage를 통해 전달하도록 변경해 주어야 한다. 
+				
+
+	1.3 참고 자료 
+		mint-front/서비스리스트정리-20201012.xlsx
+		
+		라우터 서비스 호출 예
+			로그인 서비스 :
+				URL:
+					http://127.0.0.1:8080/mint/routers/REST-S01-CO-00-00-003
+					(기존: http://127.0.0.1:8080/mint/co/login?method=POST&isXY=true)
+				Body:
+					{
+					  "objectType": "ComMessage",
+					  "requestObject":{"objectType":"LoginInfo", "userId":"iip", "password":"iip"},
+					  "startTime": "20190416105001001",
+					  "endTime": null,
+					  "errorCd":"0",
+					  "errorMsg":"",
+					  "userId": "iip",
+					  "appId": "",
+					  "checkSession":true
+					}
+					
+			시스템 조회(공통팝업) :
+				URL:
+					http://127.0.0.1:8080/mint/routers/REST-R01-CO-01-00-001
+					(기존: http://127.0.0.1:8080/mint/co/systems?method=GET)
+				Body:
+					{
+					  "objectType": "ComMessage",
+					  "requestObject":{},
+					  "startTime": "20190416105001001",
+					  "endTime": null,
+					  "errorCd":"0",
+					  "errorMsg":"",
+					  "userId": "iip",
+					  "appId": ""
+					}
+			
+			

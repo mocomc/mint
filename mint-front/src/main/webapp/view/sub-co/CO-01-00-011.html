@@ -1,0 +1,333 @@
+﻿<!--
+	Screen ID : CO-01-00-001
+	Screen NM : 오류/장애 유형 팝업.
+-->
+<div class="modal inmodal-original" id="pop_problem" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog-original">
+		<div class="modal-content-original animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>	
+				<div>
+					<h2><lb class="lb-467"></lb><lb class="lb-478"></lb> <lb class="lb-351"></lb></h2>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<div style="padding-bottom: 5px; border-right: 0px;">
+							<span class="lable_tag"><i class="fa fa-plus-square"></i>    <lb class="lb-364"></lb> 1</span>
+							<span class="k-widget k-combobox k-header input-width" style="width: 60%">
+								<span tabindex="-1" unselectable="on" class="k-state-default">
+									<input id="problemLv1" type="text"  placeholder="Search..."  style="width: 100%;">
+								</span>
+							</span>
+						</div>
+						<div style="padding-bottom: 5px;">
+							<span class="lable_tag"><i class="fa fa-plus-square"></i>    <lb class="lb-364"></lb> 2</span>
+							<span class="k-widget k-combobox k-header input-width" style="width: 60%">
+								<span tabindex="-1" unselectable="on" class="k-state-default">
+									<input id="problemLv2" type="text"  placeholder="Search..."  style="width: 100%;">						
+								</span>
+							</span>
+						</div>
+						<div style="padding-bottom: 5px;">
+							<span class="lable_tag"><i class="fa fa-plus-square"></i>    <lb class="lb-364"></lb> 3</span>
+							<span class="k-widget k-combobox k-header input-width" style="width: 60%">
+								<span tabindex="-1" unselectable="on" class="k-state-default">
+									<span tabindex="-1" unselectable="on" class="k-state-default">
+										<input id="problemLv3" type="text"  placeholder="Search..."  style="width: 100%;">						
+									</span>						
+								</span>
+							</span>
+						</div>													
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+            <div class="modal-footer-original">
+                <button id="btnApply" type="button" class="btn btn-primary" ><i class="fa fa-check"></i>  <lb class="lb-358"></lb></button>
+                <button id="btnClose" type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+            </div>			
+		</div>
+		<!--modal-content animated fadeIn END--> 
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "CO-01-00-011";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			checkBizId : '',
+			checkBizCount : 1,
+			
+			/* searchLevel : 1,
+			lv1Cd : "",
+			lv2Cd : "",
+			lv3Cd : "", */
+			
+			depth : "1",
+			parentCd : "",
+			returnCd : "",
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+				
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					
+					$.sub.fn_setComboBoxBizPop('problemLv1', "", 'problemNm', 'problemCd');
+					$.sub.fn_setComboBoxBizPop('problemLv2', "", 'problemNm', 'problemCd');
+					$.sub.fn_setComboBoxBizPop('problemLv3', "", 'problemNm', 'problemCd');
+					
+					/* $('#problemLv2').data("kendoComboBox").enable(false);
+					$('#problemLv3').data("kendoComboBox").enable(false); */
+					
+					$.sub.fn_getNodeData();
+					
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//TODO
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+			
+			fn_getNodeData : function() {
+				try {
+                    mint.callService($.sub.fn_requestObject(), screenName, 'REST-R01-CO-02-00-011', '$.sub.fn_setNode', {errorCall : true });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getRootNode"});
+                }
+			},
+			
+		    fn_setNode : function(data) {
+		    	
+		    	//console.log(data);
+                
+                /* if(data != null) {
+                    var dataSource = new kendo.data.DataSource({
+                        data : data
+                    });
+                    
+                    $("#problemLv" + $.sub.searchLevel).data('kendoComboBox').value("");
+                    $("#problemLv" + $.sub.searchLevel).data('kendoComboBox').setDataSource(dataSource);
+                    $("#problemLv" + $.sub.searchLevel).data("kendoComboBox").enable(true);
+                    
+                    for(var i = $.sub.searchLevel + 1; i < 4; i++) {
+                        $('#problemLv' + i).data("kendoComboBox").value('');
+                        $('#problemLv' + i).data("kendoComboBox").setDataSource(null);
+                        $('#problemLv' + i).data("kendoComboBox").enable(false);
+                    }
+                } */
+                
+                for(var i = $.sub.depth; i < 4; i++) {
+                    $('#problemLv' + i).data("kendoComboBox").value('');
+                    $('#problemLv' + i).data("kendoComboBox").setDataSource(null);
+                    //$('#problemLv' + i).data("kendoComboBox").enable(false);
+                }
+                
+                if(data != null) {
+                    var dataSource = new kendo.data.DataSource({
+                        data : data
+                    });
+                    
+                    $("#problemLv" + $.sub.depth).data('kendoComboBox').value("");
+                    $("#problemLv" + $.sub.depth).data('kendoComboBox').setDataSource(dataSource);
+                }
+            },
+			
+            fn_requestObject : function() {
+                var searchObject = new Object();
+                
+                /* searchObject.searchLevel = $.sub.searchLevel;
+                searchObject.lv1Cd = $.sub.lv1Cd;
+                searchObject.lv2Cd = $.sub.lv2Cd; */
+                
+                searchObject.depth = parseInt($.sub.depth) - 1;
+                
+                if($.sub.parentCd != "") {
+                	searchObject.parentCd = $.sub.parentCd
+                }
+                
+                //console.log("searchObject : " + searchObject);
+                
+                return searchObject;
+            },
+            
+
+            fn_onSelect : function(e) {
+            	var dataItem = this.dataItem(e.item.index());
+                var currentDepth = e.sender.element[0].id.substring(e.sender.element[0].id.length - 1, e.sender.element[0].id.length);
+                
+                /* if(currentDepth == "1") {
+                	$.sub.lv1Cd = dataItem.problemCd;
+                } else if(currentDepth == "2") {
+                	$.sub.lv2Cd = dataItem.problemCd;
+                } else {
+                	$.sub.lv3Cd = dataItem.problemCd;
+                }
+                
+                $.sub.searchLevel = parseInt(currentDepth) + 1; */
+                
+                $.sub.depth = parseInt(currentDepth) + 1;
+                $.sub.parentCd = dataItem.problemCd;
+                $.sub.returnCd = dataItem.problemCd;
+                
+                if($.sub.depth < 4) {
+                	//mint.callService($.sub.fn_requestObject(currentDepth, $.sub.lv1Cd, $.sub.lv2Cd), screenName, 'REST-R01-CO-02-00-011', '$.sub.fn_setNode', {errorCall : true });
+                	$.sub.fn_getNodeData();
+                }
+            },
+			
+			//-----------------------------------------------------------------------
+			// Description :: ComboBox Setting
+			//-----------------------------------------------------------------------			
+			fn_setComboBoxBizPop : function (comboBoxId, jsonData, dataTextField, dataValueField) {
+				try {
+					$('#' + comboBoxId).kendoComboBox({
+						dataTextField: dataTextField,
+						dataValueField: dataValueField,
+						autoBind: false,
+						select: $.sub.fn_onSelect,
+						dataSource: {data : jsonData},
+						filter: "contains",
+						suggest: false,
+						index: ''
+					});
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setComboBoxBizPop"});
+				}
+			}//end fn_setComboBoxBizPop()
+			
+		}// end main
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================		
+	
+	//-----------------------------------------------------------------------
+	// Description :: Login 버튼에 Click 이벤트 설정
+	//-----------------------------------------------------------------------	
+	$('#btnApply').click(function(e) {
+		try {
+			//Level5가 정확히 선택되었는지 확인
+			/* var selectedItem = null;			
+			if('undefined' != typeof $('#problemLv3').data("kendoComboBox").dataItem()) {
+				selectedItem = $('#problemLv3').data("kendoComboBox").dataItem();
+			} else if('undefined' != typeof $('#problemLv2').data("kendoComboBox").dataItem()) {
+				selectedItem = $('#problemLv2').data("kendoComboBox").dataItem();
+			} else if('undefined' != typeof $('#problemLv1').data("kendoComboBox").dataItem()) {
+				selectedItem = $('#problemLv1').data("kendoComboBox").dataItem();
+			} else {
+				selectedItem = null;
+			} */
+			
+			
+			var lv1 = $('#problemLv1').data("kendoComboBox").dataItem();
+			var lv2 = $('#problemLv2').data("kendoComboBox").dataItem();
+			var lv3 = $('#problemLv3').data("kendoComboBox").dataItem();
+			var problemNm = "";
+			
+			if('undefined' == typeof lv1 || lv1 == null) {
+				lv1 = "";
+			} else {
+				problemNm = lv1.problemNm;
+			}
+			
+			if('undefined' == typeof lv2 || lv2 == null) {
+                lv2 = "";
+            } else {
+            	problemNm += " > " + lv2.problemNm;
+            }
+			
+			if('undefined' == typeof lv3 || lv3 == null) {
+                lv3 = "";
+            } else {
+            	problemNm += " > " + lv3.problemNm;
+            }
+			
+			
+			var caller = mint.common.getScreenParam("caller");
+			
+			if(caller == "OP-03-02-002") {
+				if(lv3 == "") {
+                    mint.common.alert('BW00025', null);
+                    return false;
+                }
+			}
+			
+            if( $('#main_contents').css('display') === 'none' ) {
+    			if( ! mint.common.isEmpty($.main_detail) && $.isFunction( eval( $.main_detail.fn_returnProblemPopupData ) ) ) {
+                    $.main_detail.fn_returnProblemPopupData(problemNm, $.sub.returnCd);
+                }              	
+            } else if( $('#main_contents_detail').css('display') === 'none' ) {
+    			if( ! mint.common.isEmpty($.main) && $.isFunction( eval( $.main.fn_returnProblemPopupData ) ) ) {
+                    $.main.fn_returnProblemPopupData(problemNm, $.sub.returnCd);
+                }            	
+            }
+
+            
+            $('#pop_problem').modal('hide');
+			
+			
+			/* if('undefined' == typeof lv1) {
+				alert("Level1을 선택해 주시기 바랍니다.");
+				$('#problemLv1').data("kendoComboBox").input.focus()
+				return;
+			} else if('undefined' == typeof lv2) {
+				alert("Level2를 선택해 주시기 바랍니다.");
+                $('#problemLv2').data("kendoComboBox").input.focus()
+                return;
+			} else if('undefined' == typeof lv3) {
+				alert("Level3을 선택해 주시기 바랍니다.");
+                $('#problemLv3').data("kendoComboBox").input.focus()
+                return;
+			} else {
+				if( ! mint.common.isEmpty($.main) && $.isFunction( eval( $.main.fn_returnProblemPopupData ) ) ) {
+                    $.main.fn_returnProblemPopupData(lv1, lv2, lv3);
+                }
+                
+                $('#pop_problem').modal('hide');
+			} */
+		} catch( e ) {
+			mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "btnApply.click"});
+		}
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================		
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+	
+});//end document.ready()
+
+
+</script>

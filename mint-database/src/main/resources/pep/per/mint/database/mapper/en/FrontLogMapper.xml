@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.en.FrontLogMapper">
+  	<!--
+  	<cache/>
+  	-->
+ 
+	<!-- 
+	프론트로그 목록을 가져온다.
+		
+	public List<FrontLog> getFrontLogList(Map params) throws Exception;
+	 -->
+  	<select id="getFrontLogList" resultMap="frontLogResultMap">
+		select
+			 REQ_DATE
+			,LOG_KEY
+			,USER_ID
+			,APP_ID
+			,SERVICE_ID
+			,RES_DATE
+			,ERR_CD
+			,ERR_MSG
+			,REQ_LOG
+			,RES_LOG
+			,HTTP_CHARACTER_ENCODING
+			,HTTP_CONTENT_TYPE
+			,HTTP_CONTEXT_PATH
+			,HTTP_LOCAL_ADDR
+			,HTTP_LOCAL_PORT
+			,HTTP_METHOD
+			,HTTP_QUERY_STRING
+			,HTTP_REMOTE_ADDR
+			,HTTP_REMOTE_PORT
+			,HTTP_REQUEST_URI
+			,HTTP_SERVER_NAME
+			,HTTP_SERVER_PORT
+			,HTTP_SERVLET_PATH
+		from TOP0199
+		where 1 = 1
+		<choose>
+			<when test="fromDate != null and toDate != null">
+				<![CDATA[
+				  and REQ_DATE >= #{fromDate}
+				  and REQ_DATE <= #{toDate}
+				]]>
+			</when>
+			<when test="fromMin != null">
+				<![CDATA[
+					and REQ_DATE >= to_char(sysdate - #{fromMin}*(1/24/60),'YYYYMMDDHH24MISS') || '000'
+				]]>
+				-----------------------
+				-- 입력된 분전 이후 데이터 조회
+				-----------------------
+			</when>
+			<otherwise>
+				<![CDATA[
+					and REQ_DATE >= to_char(sysdate - 1/24/60*10,'YYYYMMDDHH24MISS') || '000'
+				]]>
+				-----------------------
+				-- 10 분전이후 데이터 조회
+				-----------------------
+			</otherwise>
+		</choose>
+
+		<if test="errorOnly != null and errorOnly eq 'Y'.toString()">
+			and ERR_CD not in ('0','1002')
+		</if>
+
+		<if test="appId != null">
+			and APP_ID like '%'||#{appId}||'%'
+		</if>
+
+		<if test="userId != null">
+			and USER_ID like '%'||#{userId}||'%'
+		</if>
+
+
+
+		order by
+			 REQ_DATE DESC
+			,LOG_KEY DESC
+			,USER_ID
+			,APP_ID
+			,SERVICE_ID
+  	</select>
+  	
+  	<resultMap id="frontLogResultMap" type="FrontLog">
+  		<id property="reqDate" 						column="REQ_DATE"/>
+  		<id property="logKey" 						column="LOG_KEY"/>
+  		<result property="userId"					column="USER_ID"/>
+		<result property="appId" 					column="APP_ID"/>
+		<result property="serviceId"   				column="SERVICE_ID" javaType="String" jdbcType="VARCHAR"/>
+		<result property="errCd" 					column="ERR_CD"/>
+		<result property="errMsg"					column="ERR_MSG"/>		
+		<result property="httpCharacterEncoding"	column="HTTP_CHARACTER_ENCODING"/>
+		<result property="httpContentType"			column="HTTP_CONTENT_TYPE"/>
+		<result property="httpContextPath"			column="HTTP_CONTEXT_PATH"/>
+		<result property="httpLocalAddr"			column="HTTP_LOCAL_ADDR"/>
+		<result property="httpLocalPort"			column="HTTP_LOCAL_PORT"/>
+		<result property="httpMethod"				column="HTTP_METHOD"/>
+		<result property="httpQueryString"			column="HTTP_QUERY_STRING"/>
+		<result property="httpRemoteAddr"			column="HTTP_REMOTE_ADDR"/>
+		<result property="httpRemotePort"			column="HTTP_REMOTE_PORT"/>
+		<result property="httpRequestURI"			column="HTTP_REQUEST_URI"/>
+		<result property="httpServerName"			column="HTTP_SERVER_NAME"/>
+		<result property="httpServerPort"			column="HTTP_SERVER_PORT"/>	
+		<result property="httpServletPath"			column="HTTP_SERVLET_PATH"/>
+		<result property="reqLog"					column="REQ_LOG" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+		<result property="resDate"					column="RES_DATE"/>
+		<result property="resLog"					column="RES_LOG" typeHandler="org.apache.ibatis.type.ClobTypeHandler" javaType="String" jdbcType="CLOB"/>
+	</resultMap>
+	
+  	 
+	<!--
+	public int insertFrontLog(FrontLog frontLog) throws Exception ;
+	 -->
+	<insert id="insertFrontLog" parameterType="FrontLog">
+	 	<!--
+		<selectKey keyProperty="logKey" resultType="string" order="BEFORE" >  
+			select max(to_number(nvl(LOG_KEY,'0'))) + 1 from TOP0199 where REQ_DATE = #{reqDate, jdbcType=VARCHAR}
+		</selectKey>
+	 	-->
+		insert into TOP0199 (
+			  REQ_DATE
+			, LOG_KEY
+			, USER_ID
+			, APP_ID
+			, SERVICE_ID
+			, RES_DATE
+			, ERR_CD
+			, ERR_MSG
+			, REQ_LOG
+			, RES_LOG
+			, HTTP_CHARACTER_ENCODING
+			, HTTP_CONTENT_TYPE
+			, HTTP_CONTEXT_PATH
+			, HTTP_LOCAL_ADDR
+			, HTTP_LOCAL_PORT
+			, HTTP_METHOD
+			, HTTP_QUERY_STRING
+			, HTTP_REMOTE_ADDR
+			, HTTP_REMOTE_PORT
+			, HTTP_REQUEST_URI
+			, HTTP_SERVER_NAME
+			, HTTP_SERVER_PORT
+			, HTTP_SERVLET_PATH
+		) values (
+			 #{reqDate				, jdbcType=VARCHAR}
+			,#{logKey				, jdbcType=VARCHAR}
+			,#{userId				, jdbcType=VARCHAR}
+			,#{appId				, jdbcType=VARCHAR}
+			,#{serviceId			, jdbcType=VARCHAR}
+			,#{resDate				, jdbcType=VARCHAR}
+			,#{errCd				, jdbcType=VARCHAR}
+			,#{errMsg				, jdbcType=VARCHAR}
+			,#{reqLog				, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{resLog				, jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{httpCharacterEncoding, jdbcType=VARCHAR}
+			,#{httpContentType		, jdbcType=VARCHAR}			
+			,#{httpContextPath		, jdbcType=VARCHAR}			
+			,#{httpLocalAddr		, jdbcType=VARCHAR}				
+			,#{httpLocalPort		, jdbcType=VARCHAR}				
+			,#{httpMethod			, jdbcType=VARCHAR}						
+			,#{httpQueryString		, jdbcType=VARCHAR}			
+			,#{httpRemoteAddr		, jdbcType=VARCHAR}				
+			,#{httpRemotePort		, jdbcType=VARCHAR}				
+			,#{httpRequestURI		, jdbcType=VARCHAR}				
+			,#{httpServerName		, jdbcType=VARCHAR}				
+			,#{httpServerPort		, jdbcType=VARCHAR}				
+			,#{httpServletPath		, jdbcType=VARCHAR}			
+		)
+		
+	</insert>
+	
+	 
+	 
+</mapper>

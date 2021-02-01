@@ -1,0 +1,26 @@
+#=====================================================
+#IIP AGENT PROPERTIES DEFINITION
+#----------------------------------------------------
+iip.agent.cd=IIP2
+iip.agent.nm=IIP2
+iip.agent.home=/Users/whoana/DEV/iipagent
+iip.agent.repository.path=${iip.agent.home}/repository
+iip.agent.console.ip=127.0.0.1
+iip.agent.console.port=4885
+iip.agent.charset=UTF-8
+iip.server.protocol=http
+#------------------------------
+#for local test
+#------------------------------
+iip.server.ip=idc.mocomsys.com
+iip.server.port=38080
+#------------------------------
+#for server test
+#------------------------------
+#iip.server.ip=idc.mocomsys.com
+#iip.server.port=38080
+iip.server.contextroot=mint
+iip.server.agentpath=agent
+iip.server.agent.service.add.log.url=/op/agents/services/log/add/{agentId}?method=POST
+iip.server.agent.service.login.url=/im/agents/{agentNm}?method=GET
+iip.server.agent.service.send.cmd.result.url=/op/agents/services/cmds/result/{agentId}?method=PUT

@@ -1,0 +1,42 @@
+======================================================================================================
+- IIP 서버 로그 설정 가이드
+------------------------------------------------------------------------------------------------------
+- SVN:/trunk/mint/mint-install/iip-log-setting-guide.txt
+- subject : 로그 설정 가이드
+- author  : kesowgaq@mocomsys.com
+- begin   : 2019.01
+------------------------------------------------------------------------------------------------------
+1.빌드 소스에서 logback.xml 파일을 IIP 배포 서버의 원하는 로그 설정 위치에 copy 해 주세요.
+    빌드 소스내의 logback.xml 위치 :
+        mint/mint-front/target-version-3.0.0/logback.xml
+    copy 위치 예 :
+         {설치서버}/D:/iip/config/logback.xml
+
+2.copy 된 logback.xml 을 열어서 다음 내용들을 편집해 주세요.
+    2.1.아래 로그 레벨 프로퍼티를 서버 스테이지에 맞게 설정해 주세요.
+     <property name="APP_LOG_LEVEL" value="debug" />
+     <property name="3RD_LOG_LEVEL" value="debug" />
+        개발일 경우 "debug"
+        운영일 경우  "error" 또는 "info" 로 변경해  주세요.
+
+    2.2.파일 appender FILE 및 FILE-WEBSOCKET 설정을 사이트 디스크 허용치에 맞게 아래 1), 2), 3) 부분을 수정해 주세요.
+    <appender name="FILE" ...
+        ...
+        <rollingPolicy ....
+            <minIndex>1</minIndex>              <------1) 교체 파일 최소 개수
+            <maxIndex>30</maxIndex>             <------2) 교체 파일 최고 개수
+        </rollingPolicy>
+        <triggeringPolicy  ...
+            <maxFileSize>20MB</maxFileSize>     <------3) 1개의 로그파일 사이즈
+        </triggeringPolicy>
+        ...
+     </appender>
+
+3.JAVA_OPTS에 아래 옵션을 추가해 주세요.
+    -Dlogback.configurationFile={YOUR_LOGBACK_PATH}/logback.xml
+       예)
+        SET "JAVA_OPTS=-Dlogback.configurationFile=D:/iip/config/logback.xml -DIIP_LOG_HOME=D:/scmp/logs/iip"
+
+4.WAS를 재기동하고 로그를 확인해 주세요.
+    로그생성 위치 :
+        {DIIP_LOG_HOME}

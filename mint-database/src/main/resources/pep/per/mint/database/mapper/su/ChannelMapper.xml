@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.ChannelMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertChannel">
+		<selectKey keyProperty="channelId" resultType="string" order="BEFORE" >
+			  select 'CN' || lpad(to_char(to_number(nvl(max(substr(CHANNEL_ID,3)),'0')) + 1),8,'0')
+			  from TIM0002
+		</selectKey>
+		INSERT INTO TIM0002
+			(
+				  CHANNEL_ID
+				, CHANNEL_NM
+				, CHANNEL_CD
+				, EXTERNAL_YN
+				, MAP_RULE
+				, COMMENTS
+				, DEL_YN
+				, REG_DATE
+				, REG_USER
+				, MOD_DATE
+				, MOD_USER
+			)
+		VALUES
+			(
+				  #{channelId , jdbcType=VARCHAR}
+				, #{channelNm , jdbcType=VARCHAR}
+				, #{channelCd , jdbcType=VARCHAR}
+				, #{externalYn, jdbcType=VARCHAR}
+				, #{mapRule   , jdbcType=VARCHAR}
+				, #{comments  , jdbcType=VARCHAR}
+				, 'N'
+				, #{regDate   , jdbcType=VARCHAR}
+				, #{regId     , jdbcType=VARCHAR}
+				, #{modDate   , jdbcType=VARCHAR}
+				, #{modId     , jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getChannelList" parameterType="Map" resultMap="channelResultMap">
+		SELECT
+			  CHANNEL_ID
+			, CHANNEL_NM
+			, CHANNEL_CD
+			, EXTERNAL_YN
+			, MAP_RULE
+			, COMMENTS
+			, DEL_YN
+			, REG_DATE
+			, REG_USER
+			, MOD_DATE
+			, MOD_USER
+		FROM
+			TIM0002
+  		WHERE
+  			1=1
+  			AND DEL_YN= 'N'
+
+		<if test="channelNm != null">
+			AND CHANNEL_NM like '%'||#{channelNm}||'%'
+		</if>
+		ORDER BY
+			CHANNEL_CD ASC
+	</select>
+
+	<resultMap type="Channel" id="channelResultMap">
+		<id property="channelId" 				column="CHANNEL_ID"/>
+		<result property="channelNm"			column="CHANNEL_NM"/>
+		<result property="channelCd"			column="CHANNEL_CD"/>
+		<result property="externalYn"			column="EXTERNAL_YN"/>
+		<result property="mapRule"				column="MAP_RULE"/>		
+		<result property="comments"				column="COMMENTS"/>		
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+	</resultMap>
+
+	<update id="updateChannel">
+		UPDATE TIM0002
+			SET
+				  CHANNEL_ID  = #{channelId , jdbcType=VARCHAR}
+				, CHANNEL_NM  = #{channelNm , jdbcType=VARCHAR}
+				, CHANNEL_CD  = #{channelCd , jdbcType=VARCHAR}
+				, EXTERNAL_YN = #{externalYn, jdbcType=VARCHAR}
+				, MAP_RULE    = #{mapRule   , jdbcType=VARCHAR}
+				, COMMENTS    = #{comments  , jdbcType=VARCHAR}
+				, MOD_DATE    = #{modDate   , jdbcType=VARCHAR}
+				, MOD_USER    = #{modId     , jdbcType=VARCHAR}
+		WHERE
+			  CHANNEL_ID = #{channelId}
+	</update>
+
+	<delete id="deleteChannel">
+		UPDATE TIM0002
+			SET
+				  DEL_YN = 'Y'
+				, MOD_DATE = #{modDate}
+				, MOD_USER = #{modId}
+		WHERE
+			CHANNEL_ID = #{channelId}
+	</delete>
+
+	<select id="existChannel" parameterType="Map" resultMap="channelResultMap">
+		SELECT
+			  CHANNEL_ID
+			, CHANNEL_NM
+  		FROM
+  			TIM0002
+  		WHERE
+  			1=1
+  			AND DEL_YN= 'N'
+			AND CHANNEL_CD = #{channelCd}
+		<if test="channelId != null">
+			AND CHANNEL_ID &lt;&gt; #{channelId}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,282 @@
+﻿<!--
+	Screen ID : OP-04-01-002
+	Screen NM : 선택된 인터페이스 배포 화면.
+-->
+
+<!-- 팝업-->
+<div class="modal inmodal-original" id="OP-04-01-002" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog-original">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+					<span aria-hidden="true">&times;</span> <span class="sr-only"><lb class="lb-298"></lb></span>
+				</button>
+				<div>
+					<h2 id="pop-person-title"></h2>
+				</div>
+			</div>
+
+			<!--modal-body-->
+			<div class="modal-body">
+				<div class="ibox-content4">
+					<div class="panel blank-panel">
+						<div class="panel-body">
+							<div class="client-detail">
+								<div class="full-height-scroll">
+									<div class="col-sm-11">
+										<div class="form-horizontal">
+											<div class="form-group">
+												<span class="lable_tag" style="width:30%"><lb class="lb-841">대상환경</lb></span>
+												<span class="k-widget k-autocomplete k-header k-state-default input-width" style="width:50%">
+													<input id="popup-cb-target" type="text" style="width: 100%;" onKeyDown="$.sub.fn_onKeyDownCO0100004();">
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-12">
+										<div class="ibox-content3">
+											<div>
+												<div id="popup-gd-interface"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--panel-body-->
+					</div>
+					<!--panel blank-panel-->
+				</div>
+				<!--ibox-content4-->
+			</div>
+
+			<!--modal-body END-->
+
+			<!--modal-footer-->
+			<div class="modal-footer-original" style="clear: both">
+				<button id="popup-btn-apply"                type="button" class="btn btn-primary" style="display: none;"><i class="fa fa-check"></i> <lb class="lb-358"></lb></button>
+				<button id="popup-btn-close"                type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i> <lb class="lb-298"></lb></button>
+			</div>
+			<!--modal-footer END-->
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<!-- modal inmodal END-->
+
+<!-- 팝업-->
+
+<script>
+
+	$(document).ready(function() {
+		//=======================================================================
+		//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+		//=======================================================================
+		screenName = "OP-04-01-002";
+		$.extend({
+			sub : {
+				//=======================================================================
+				// (2) Screen 에서 사용할 variable 정의
+				//=======================================================================
+
+				//=======================================================================
+				// (3) Screen 에서 사용할 function 정의
+				//=======================================================================
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화
+				//-----------------------------------------------------------------------
+				fn_init : function() {
+					try {
+						mint.init('$.sub.fn_initCallback');
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+					}
+				},//end fn_init()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기화 콜백
+				//-----------------------------------------------------------------------
+				fn_initCallback : function() {
+					try {
+						$.sub.fn_initComponent();
+						$.sub.fn_setGridData();
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+					}
+				},//end fn_initCallback()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기 설정
+				//-----------------------------------------------------------------------
+				fn_initComponent : function() {
+					try {
+
+						mint.ui.setDropDownList('popup-cb-target', mint.common.commonCodeMap.get("cds").IM10   , 0, 'nm'       , 'cd'       );
+
+						var caller = mint.common.getScreenParam("caller");
+						$('#pop-person-title').text(mint.label.getLabel("lb-838"));
+						$('#popup-btn-apply').show();
+						var fixLeftGridWidth = ($('#grid')[0].clientWidth / 10) * 7;
+						var fixLeftCoulmnWidth = fixLeftGridWidth / 4;
+
+
+						// 사용자 그리드
+						var columnList =  [
+						     {
+								  title 	: mint.label.getLabel('lb-153')
+											, field 	: "interface.interfaceNm"
+											, width 	: fixLeftCoulmnWidth / 1.25
+											, template	: "<span title='${interface.interfaceNm}'>${interface.interfaceNm}</span>"
+											, headerAttributes: {
+												 style: "text-align: center; vertical-align:middle;"
+											}
+											, attributes: {
+									              style: 'white-space: nowrap;'
+								            }
+											//, filterable: { multi: true, search: true }
+										}
+										, {
+											  title 	: mint.label.getLabel('lb-154')
+											, field 	: "interface.integrationId"
+					 						, width 	: fixLeftCoulmnWidth / 1.5
+					 						, template	: "<span title='${interface.integrationId}'>${interface.integrationId}</span>"
+											, headerAttributes: {
+												 style: "text-align: center; vertical-align:middle;"
+											}
+											, attributes: {
+									              style: 'white-space: nowrap;  text-align: center;'
+								            }
+											, filterable: { multi: true, search: true }
+										}
+						];
+
+						$("#popup-gd-interface").kendoGrid({
+				          	dataSource : {
+				 				  data : ""
+				 				, page : 1
+				 				, pageSize : mint.ui.getPageSizesXS({'currentPage' : true})
+							}
+				            , sortable: true
+				            , resizable: true
+				            , selectable: true
+				            , pageable : {
+								  refresh 		: false
+						    	, buttonCount 	: 5
+							}
+							, columns: columnList
+							, dataBound: function (e) {
+								if('undefined' != typeof $("#popup-gd-interface").data()) {
+									if(0 == $("#popup-gd-interface").data().kendoGrid.dataSource.view().length) {
+							    		$("#popup-gd-interface").children(".k-grid-content").height('200');
+							    	} else {
+							    		$("#popup-gd-interface").children(".k-grid-content").height('auto');
+							    	}
+								}
+						    }
+				        });
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initComponent"});
+					}
+				},//end fn_initComponent()
+
+				//-----------------------------------------------------------------------
+				// Description :: 화면 초기 설정
+				//-----------------------------------------------------------------------
+				fn_setGridData : function() {
+					try {
+
+						var caller = mint.common.getScreenParam("caller");
+						var dataSource = new kendo.data.DataSource({
+						      data: mint.common.getScreenParam('interfaceList')
+						    , page:1
+						    , pageSize: mint.ui.getPageSizesXS({'currentPage' : true})
+						});
+						$('#popup-gd-interface').data('kendoGrid').setDataSource(dataSource);
+
+					} catch( e ) {
+						mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setGridData"});
+					}
+				},//end fn_setGridData()
+
+			}// end sub
+		});// end extends
+
+		//=======================================================================
+		// (4) 이벤트 핸들러 정의
+		//=======================================================================
+
+		//-----------------------------------------------------------------------
+		// Description :: 적용 버튼 클릭 이벤트
+		//-----------------------------------------------------------------------
+	    $('#popup-btn-apply').click(function(e) {
+			if($("#popup-cb-target").data("kendoDropDownList").value()>=2
+					&& !(mint.session.getRoleId() == "UR00000001" || mint.session.isChannelAdmin() === 'Y' )){
+				mint.common.alert("CW00007");
+				return;
+			}
+
+			var tmpGridView = $("#popup-gd-interface").data().kendoGrid.dataSource.data();
+
+			var checkCnt = 0;
+			var deployFail = [];
+			for(var k=0; k < tmpGridView.length; k++) {
+				var interface = new Object();
+				interface.userId=mint.session.getUserId();
+				interface.targetType=$("#popup-cb-target").data("kendoDropDownList").value();
+				interface.interfaceId=tmpGridView[k].interface.interfaceId;
+	      		mint.callService(
+	      			interface
+	       			, screenName
+	       			, 'REST-C01-OP-04-01'
+	       			, function(jsonData) {
+	      				if( !mint.common.isEmpty(jsonData) ) {
+	      					if( jsonData.resultCd == 0 ) {
+	      						checkCnt++;
+	      					} else {
+	      						deployFail.push(tmpGridView[k].interface.integrationId);
+	      					}
+	      				}
+	      			}
+	       			, {
+	       				errorCall : true,
+	       				asyncCall : false
+	  				}
+	        	);
+			}
+
+
+			if( checkCnt == tmpGridView.length ) {
+				mint.common.alert('BI00019');
+			} else if( checkCnt > 0 ) {
+				var failInterface = '';
+				for( var i = 0; i < deployFail.length; i++ ) {
+					failInterface = failInterface + '\n' + deployFail[i];
+				}
+				mint.common.alert('BW00049', failInterface);
+			} else {
+				mint.common.alert('BW00048');
+			}
+
+			$('#OP-04-01-002').modal('hide');
+
+		});
+
+
+
+		//=======================================================================
+		// (5) 기타 Function 정의
+		//=======================================================================
+
+		//=======================================================================
+		// (6) 화면 로딩시 실행할 항목 기술
+		//=======================================================================
+		$.sub.fn_init();
+		mint.label.attachLabel(null);
+
+	});
+
+
+</script>
+

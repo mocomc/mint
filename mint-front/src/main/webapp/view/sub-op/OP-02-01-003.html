@@ -1,0 +1,2179 @@
+<!--
+	Screen ID : OP-02-01-003
+	Screen NM : 대시보드 - MOCOMSYS MI EAI Product
+	Reference : IIP 3.0 Version 표준
+-->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2 class="default-title"><lb class="lb-31"></lb></h2>
+	</div>
+	<div class="col-lg-7">
+		<div class="mint-page-top-group" >
+            <a class="btn btn-white btn-page-expand"><i class="fa fa-window-maximize"></i> <lb class="lb-999">전체화면</lb></a>
+		</div>
+	</div>
+</div>
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" id="dashboard-attachDiv">
+	<div class="dashboard-item dashboard-layout-default">
+
+		<div class="row">
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0001" name="WS0001" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-270">처리건수(인터페이스)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div id="chart-throughput-daily" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                        	<th></th>
+			                            <th class="mint-th-m-right">건수</th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button><lb class="lb-89">전체</lb></td>
+			                            <td class="mint-td-m-right">0</td>
+			                        </tr>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button><lb class="lb-412">완료</lb></td>
+			                            <td class="mint-td-m-right mint-success">0</td>
+			                        </tr>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-warning m-r-sm mint-td-i-badge"></button><lb class="lb-511">처리중</lb></td>
+			                            <td class="mint-td-m-right mint-warning">0</td>
+			                        </tr>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button><lb class="lb-32">오류</lb></td>
+			                           	<td class="mint-td-m-right mint-danger">0</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0002" name="WS0002" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-271">오류 인터페이스</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="cursor:pointer; display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div id="chart-error-count-top" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                            <th class="mint-th-m-right"><lb class="lb-153">인터페이스명</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-154">인터페이스ID</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-240">오류건수</lb></th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0003" name="WS0003" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-272">지연 인터페이스</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="cursor:pointer; display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" >
+						<div id="chart-delay-count-top" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                            <th class="mint-th-m-right"><lb class="lb-153">인터페이스명</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-154">인터페이스ID</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-473">상태</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-241">시작시간</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-243">지연시간</lb></th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+
+		<div class="row">
+			<div class="col-lg-6 mint-col-default">
+				<div id="WS0004" name="WS0004" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-273">실시간 - 처리현황(전체)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:200px;">
+						<div class="col-lg-66" id="chart-realTime-total-count" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 mint-col-default">
+				<div id="WS0005" name="WS0005" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-274">실시간 - 처리현황(관심)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="chart-realTime-favorite-count-config"><i class="fa fa-cog"></i></a>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:200px;">
+						<div class="col-lg-66" id="chart-realTime-favorite-count" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+
+		<div class="row">
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0006" name="WS0006" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-275">처리량 추이(전일/금일)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:150px;">
+						<div id="chart-count-stats-daily" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0007" name="WS0007" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-276">처리량 추이(최근4개월)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:150px;">
+						<div id="chart-count-stats-monthly" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 mint-col-default">
+				<div id="WS0008" name="WS0008" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-277">처리량 추이(최근4년)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+							<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:150px;">
+						<div id="chart-count-stats-yearly" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12 mint-col-default">
+				<div id="WS0009" name="WS0009" class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-278">알림 이벤트</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label interval-label" style="display: none"></label>
+                        	<label class="label mint-panel-label time-label" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<ul>
+							<li>
+								<button class="mint-chart-square-large btn btn-outline btn-success dim btn-state-cpu" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-448">CPU</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-memory" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-451">MEMORY</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-disk" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-294">DISK</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-process" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-472">PROCESS</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-agent" type="button" style="display:none;">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-260">AGENT</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-runner" type="button" style="display:none;">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-261">RUNNER</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-qmgr" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-263">큐매니져</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-channel" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-265">채널</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-qdepth" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-266">큐깊이</lb></h3></span>
+								</button>
+							</li>
+							<li>
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-iipagent" type="button">
+									<span><h2>0</h2></span>
+									<span><h3>IIP <lb class="lb-260">AGENT</lb></h3></span>
+								</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+	</div><!-- dashboard-layout -->
+</div><!-- wrapper wrapper-content -->
+<div class='wsNotification' style='display:none;'></div>
+
+
+
+<script type="text/x-kendo-template" id="template-chart-throughput-daily">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+		# for ( var i = 0; i < data.length; i++ ) { #
+			<th class="mint-th-m-right">#= data[i].roleNm #</th>
+		# } #
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-89') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right" onclick="$.main.fn_moveTracking({status: '', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].totalCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-412') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-success" onclick="$.main.fn_moveTracking({status: '00', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].successCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-warning m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-511') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-warning" onclick="$.main.fn_moveTracking({status: '01', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].processCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button>#= mint.label.getLabel('lb-32') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-danger" onclick="$.main.fn_moveTracking({status: '99', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].errorCnt) #</td>
+        # } #
+		</tr>
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-error-count-top">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-153') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-154') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-240') #</th>
+		</tr>
+	</thead>
+	<tbody>
+	# for ( var i = 0; i < data.length; i++ ) { #
+		<tr onclick="$.main.fn_moveTracking({status: '99', accRoleId:'', interfaceId: '#= data[i].interfaceId #', integrationId: '#= data[i].integrationId #' });">
+			<td class="mint-td-m-right">#= data[i].interfaceNm #</td>
+			<td class="mint-td-m-right">#= data[i].integrationId #</td>
+			<td class="mint-td-m-right">#= mint.common.addComma(data[i].errorCnt) #</td>
+		</tr>
+	# } #
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-delay-count-top">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-153') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-154') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-473') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-241') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-243') #</th>
+		</tr>
+	</thead>
+	<tbody>
+	# for ( var i = 0; i < data.length; i++ ) { #
+		<tr onclick="$.main.fn_moveTracking({accRoleId:'', interfaceId: '#= data[i].interfaceId #', integrationId: '#= data[i].integrationId #', msgDateTime: '#= data[i].msgDateTime #' });">
+			<td class="mint-td-m-right">#= data[i].interfaceNm #</td>
+			<td class="mint-td-m-right">#= data[i].integrationId #</td>
+			<td class="mint-td-m-right">#= data[i].statusNm #</td>
+			<td class="mint-td-m-right">#= mint.common.isEmpty(data[i].msgDateTime) ? '' : mint.common.formatDateTime(data[i].msgDateTime) #</td>
+			<td class="mint-td-m-right">#= data[i].elapsedTime #</td>
+		</tr>
+	# } #
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-window">
+<div id="dashboard-window">
+	<div id="dashboard-toolbar"></div>
+	<div id="dashboard-content" class="col-lg-12" style="box-sizing: border-box;"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-title">
+<h6 style="float:none; display:inline; padding-bottom:2px;">
+	<span><i class="fa fa-circle text-success"></i> </span>
+	<span><i class="fa fa-circle text-warning"></i> </span>
+	<span><i class="fa fa-circle text-danger"></i> </span>
+	<span style="font-size:14px;">#= mint.label.getLabel('lb-31') #</span>
+</h6>
+</script>
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "OP-02-01-003";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+
+					{
+						var env = mint.common.getEnvorinment();
+						var isUseMiManager = env['solution.mi.manager.used'];
+						if(!mint.common.isEmpty(isUseMiManager)) {
+							if(isUseMiManager[0] === 'TRUE') {
+								$('.btn-state-agent').show();
+								$('.btn-state-runner').show();
+							}
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: 패널 초기화
+					//-----------------------------------------------------------------------
+					{
+						$.main.fn_getWidgetConfig();
+						$.main.fn_initChartRealTimeTotalCount();
+						$.main.fn_initChartRealTimeFavoriteCount();
+						$.main.fn_initChartCountStatsDaily();
+						$.main.fn_initChartCountStatsMonthly();
+						$.main.fn_initChartCountStatsYearly();
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: 웹소켓 서비스 호출
+					//-----------------------------------------------------------------------
+					if( mint.wsSupported() ) {
+
+						$.main.fn_getDailyThroughput();
+						$.main.fn_getErrorCountTop();
+						$.main.fn_getDelayCountTop();
+						$.main.fn_getRealTimeTotalCount();
+						$.main.fn_getAlarmEvent();
+						$.main.fn_getRealTimeTotalCount();
+						$.main.fn_getRealTimeFavoriteCount();
+						$.main.fn_getCountStatsDaily();
+						$.main.fn_getCountStatsMonthly();
+						$.main.fn_getCountStatsYearly();
+					}
+
+					//-----------------------------------------------------------------------
+					// Description :: 알림 이벤트 RollOver
+					//-----------------------------------------------------------------------
+					var intervalObj = mint.common.addInterval( function(){
+						$('button.btn-success.dim').removeClass('active');
+						$('button.btn-danger.dim').toggleClass('active');
+					}, (1000 * 1) );
+
+					//-----------------------------------------------------------------------
+					// Description :: Scroll Attach
+					//-----------------------------------------------------------------------
+					mint.ui.attachScrollX($('#chart-throughput-daily'));
+					mint.ui.attachScrollX($('#chart-error-count-top'));
+					mint.ui.attachScrollX($('#chart-delay-count-top'));
+
+					//-----------------------------------------------------------------------
+					// Description :: HealthCheck
+					//-----------------------------------------------------------------------
+					mint.healthCheck();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+
+
+
+			}, // end fn_initCallback
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getWidgetConfig
+			//-----------------------------------------------------------------------
+			fn_getWidgetConfig : function() {
+				try {
+					var requestObject = new Object();
+					requestObject.serviceCd = ['WS0001','WS0002','WS0003','WS0004','WS0005','WS0006','WS0007','WS0008','WS0009'];
+
+				    mint.callService(requestObject, screenName, 'REST-R99-CO-99-00',
+				   	function(jsonData, errorCd) {
+
+						if( !mint.common.isEmpty(jsonData) && jsonData.length > 0 ) {
+							//-----------------------------------------------------------------------
+							// intervalTime Display
+							//-----------------------------------------------------------------------
+							{
+								var length = jsonData.length
+								for( var i = 0; i < length; i++ ) {
+									var intervalLabel = $('div[name=' + jsonData[i].serviceCd+']').find('.interval-label');
+									intervalLabel.html($.main.fn_intervalTimeDisplay(jsonData[i].schedule));
+									intervalLabel.show();
+								}
+							}
+						}
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getWidgetConfig"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDailyThroughput
+			//-----------------------------------------------------------------------
+			fn_getDailyThroughput : function() {
+				try {
+					var serviceCd = 'WS0001';
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+
+						    	var firstData = {roleId:'', roleNm:'', totalCnt:0, successCnt:0, processCnt:0, errorCnt:0};
+						    	if( !mint.common.isEmpty(msg) ) {
+
+						    		if( msg.length > 1 ) {
+										for( var i = 0; i < msg.length; i++ ) {
+											if( msg[i].depth == 0 ) {
+												msg[i].roleNm = mint.label.getLabel('lb-89'); //전체
+												break;
+											}
+										}
+
+
+						    		} else {
+						    			msg[0].categoryNm = mint.label.getLabel('lb-349'); //'건수'
+						    		}
+
+						    	} else {
+						    		msg = [];
+						    		var emptyObject = new Object();
+						    		emptyObject.totalCnt   = 0;
+						    		emptyObject.successCnt = 0;
+						    		emptyObject.processCnt = 0;
+						    		emptyObject.errorCnt   = 0;
+						    		emptyObject.categoryId = '';
+						    		emptyObject.categoryNm = mint.label.getLabel('lb-349'); //'건수'
+						    		msg.push(emptyObject);
+						    	}
+						    	//-----------------------------------------------------------------------
+						    	// 그리드 첫번째 데이터에 라벨정보를 추가한다.( 그리드 맨 첫번째 TD )
+						    	//-----------------------------------------------------------------------
+					    		msg.unshift(firstData);
+						    	//-----------------------------------------------------------------------
+						    	// 그리드에 데이터를 바인딩 한다.
+						    	//-----------------------------------------------------------------------
+					    		var htmlTemplate = kendo.template($('#template-chart-throughput-daily').html());
+								$('#chart-throughput-daily').html( htmlTemplate(msg) );
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#' + serviceCd).find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDailyThroughput"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getErrorCountTop
+			//-----------------------------------------------------------------------
+			fn_getErrorCountTop : function() {
+				try {
+					var serviceCd = 'WS0002';
+					var requestObject = new Object();
+					requestObject.max = 4;
+
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+						    	if( mint.common.isEmpty(msg) ) {
+							    	jsonData = [];
+						    		for( var i = 0; i < requestObject.max; i++ ) {
+						    			//msg.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',errorCnt:'&nbsp;'});
+						    			msg.push({interfaceNm:'',integrationId:'',errorCnt:'', sndSystemNm:'', rcvSystemNm:''});
+						    		}
+							    } else {
+
+							    	if( msg.length > 0) {
+								    	var intervalLabel = $('#' + serviceCd).find('.interval-label');
+										intervalLabel.data("fromDate",msg[0].fDate);
+										intervalLabel.data("toDate",msg[0].tDate);
+							    	}
+
+							    	if( msg.length < requestObject.max ) {
+							    		var pushCnt = requestObject.max - msg.length;
+							    		for( var i = 0; i < pushCnt; i++ ) {
+							    			msg.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',errorCnt:'&nbsp;'});
+							    			//msg.push({interfaceNm:'',integrationId:'',errorCnt:'', sndSystemNm:'', rcvSystemNm:''});
+							    		}
+							    	}
+							    }
+
+						    	//-----------------------------------------------------------------------
+						    	// 그리드에 데이터를 바인딩 한다.
+						    	//-----------------------------------------------------------------------
+					    		var htmlTemplate = kendo.template($('#template-chart-error-count-top').html());
+								$('#chart-error-count-top').html( htmlTemplate(msg) );
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#' + serviceCd).find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getErrorCountTop"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDelayCountTop
+			//-----------------------------------------------------------------------
+			fn_getDelayCountTop : function() {
+				try {
+					var serviceCd = 'WS0003';
+					var env = mint.common.getEnvorinment();
+					var checkTime = env['dashboard.item.delaylist.checktime'];
+					var requestObject = new Object();
+					requestObject.max = 4;
+					requestObject.checkTime = ( !mint.common.isEmpty(checkTime) && checkTime.length > 0 ) ? checkTime[0] : 10;
+
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+						    	if( mint.common.isEmpty(msg) ) {
+							    	jsonData = [];
+						    		for( var i = 0; i < requestObject.max; i++ ) {
+						    			msg.push({interfaceNm:'',integrationId:'',statusNm:'', minPrDt:'', maxPrDt:'', elapsedTime:''});
+						    		}
+							    } else {
+
+							    	if( msg.length > 0) {
+								    	var intervalLabel = $('#' + serviceCd).find('.interval-label');
+										intervalLabel.data("fromDate",msg[0].fDate);
+										intervalLabel.data("toDate",msg[0].tDate);
+							    	}
+
+							    	if( msg.length < requestObject.max ) {
+							    		var pushCnt = requestObject.max - msg.length;
+							    		for( var i = 0; i < pushCnt; i++ ) {
+							    			msg.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',statusNm:'&nbsp;',minPrDt:'&nbsp;',maxPrDt:'&nbsp;',elapsedTime:'&nbsp;' });
+							    		}
+							    	}
+							    }
+
+						    	//-----------------------------------------------------------------------
+						    	// 그리드에 데이터를 바인딩 한다.
+						    	//-----------------------------------------------------------------------
+					    		var htmlTemplate = kendo.template($('#template-chart-delay-count-top').html());
+					    		$('#chart-delay-count-top').html( htmlTemplate(msg) );
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#' + serviceCd).find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getErrorCountTop"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartRealTimeTotalCount
+			//-----------------------------------------------------------------------
+			fn_initChartRealTimeTotalCount : function() {
+				try {
+
+                    $("#chart-realTime-total-count").kendoChart({
+                        //renderAs: "canvas",
+                        theme: "default",
+                        transitions: false,
+                        zoomable: false,
+                        title: {
+                            //text: ""
+                        },
+                        dataSource: {
+                        	data: []
+                        },
+                        seriesDefaults: {
+                        	type: "line",
+                        	style: "normal", //normal/step/smooth
+   							markers: {
+   				                size: 3
+   				            },
+			                line: {
+			                    width: 1
+			                },
+			                labels: {
+			                	visible: false,
+			                	background: "transparent"
+			                }
+                        },
+                        tooltip: {
+                        	visible: true,
+                        	shared: true,
+                        	template: "#= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: true,
+                            position: "top",
+                            orientation: "horizontal",
+                        },
+                        series: [],
+                        // Y축
+                        valueAxis: [
+   	                        {
+   	                        	name: "totalCount",
+   	                            labels: {
+   	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+   	                                template: '#= $.main.fn_valueAxisTemplate(value) #'
+   	                            },
+   	                            line: {
+   	                                visible: true
+   	                            },
+	                            majorGridLines: {
+	                            	visible: true,
+	                            	//step:2,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+   	                            visible: true,
+   	                            max: 10,
+   	                            //color: "#2080D0"
+   	                        },
+	                        {
+	                        	name: "count",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.main.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            majorGridLines: {
+	                            	visible: true,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+	                            crosshair: {
+	                            	visible: false,
+	                            	width: 0.8,
+	                            	opacity: 0.7,
+	                            },
+	                            visible: false,
+	                            max: 10,
+	                        },
+
+
+                        ],
+                        // X축
+                        categoryAxis: {
+                        	justified: false,
+                        	labels: {
+                        		rotation: "auto"
+                        	},
+                            categories: [],
+                            majorGridLines: {
+                                visible: false
+                            },
+                            crosshair: {
+                            	visible: false
+                            }
+                        },
+                        seriesHover: function(e) {
+                        	$.main.seriesHoverChartId = e.sender.wrapper.context.id;
+                        },
+                    });
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartRealTimeTotalCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getRealTimeTotalCount
+			//-----------------------------------------------------------------------
+			fn_getRealTimeTotalCount : function() {
+				try {
+
+					var serviceCd = 'WS0004';
+
+					if( $('.k-tooltip.k-chart-tooltip.k-chart-shared-tooltip').size() > 0 && $.main.seriesHoverChartId == 'chart-realTime-total-count' ) {
+						return;
+					}
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0) {
+							mint.wsReceive(function(msg, time){
+								if( !mint.common.isEmpty(msg) && msg.length > 0 ) {
+									var totalObject = new Object();
+									totalObject.roleId = '';
+									totalObject.roleNm = mint.label.getLabel('lb-89'); //전체
+									totalObject.cnt = 0;
+									totalObject.flag = 'totalCount';
+
+									for( var i=0; i<msg.length; i++ ) {
+										totalObject.cnt += msg[i].cnt;
+									}
+
+									var jsonData = [];
+									jsonData.push(totalObject);
+									$.main.fn_setRealTimeTotalCount(jsonData);
+
+									//-----------------------------------------------------------------------
+									// pushTime Display
+									//-----------------------------------------------------------------------
+									{
+										var timeLabel = $('div[name=' + serviceCd+']').find('.time-label');
+										timeLabel.html($.main.fn_checkTimeDisplay(time));
+										timeLabel.show();
+									}
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getRealTimeTotalCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setRealTimeTotalCount
+			//-----------------------------------------------------------------------
+			fn_setRealTimeTotalCount : function(jsonData) {
+				try {
+					//-----------------------------------------------------------------------
+					// Chart Configuration
+					//-----------------------------------------------------------------------
+					var POINTS = 20;
+
+					var chart = $("#chart-realTime-total-count").data("kendoChart");
+					var categoryAxis = chart.options.categoryAxis;
+					var categories   = categoryAxis.categories;
+					var valueAxis    = chart.options.valueAxis;
+					var series       = chart.options.series;
+
+					if( mint.common.isEmpty(categories) ) {
+						categories = [];
+					}
+
+					if( mint.common.isEmpty(series) ) {
+						series = [];
+					}
+
+					//-----------------------------------------------------------------------
+					// categories
+					//-----------------------------------------------------------------------
+					var checkDate = new Date();
+
+					categories.push( mint.common.formatDateTime(checkDate, "ss") );
+					if (categories.length > POINTS) {
+						categories.shift();
+					}
+
+					//-----------------------------------------------------------------------
+					// series
+					//-----------------------------------------------------------------------
+
+					var chartColors = ["#ffba00", "#FF8000", "#808000", "#2080D0", "#795CF3", "#DCC414", "#800080", "#604800", "#8D414E", "#48452D", "#92BAFD", "#99A9B7", "#B68EED", "#565656"];
+					for (var i = 0; i < jsonData.length; i++) {
+
+						var isExistSeries = false;
+						for(var j = 0; j < series.length; j++) {
+							if(jsonData[i].roleNm == series[j].name) {
+								series[j].data.push(jsonData[i].cnt);
+								if (series[j].data.length > POINTS) {
+									series[j].data.shift();
+								}
+								isExistSeries = true;
+
+								break;
+							}
+						}
+
+						if( ! isExistSeries ) {
+							var seriesItem = new Object();
+							seriesItem.type  = 'line';
+							seriesItem.name  = jsonData[i].roleNm;
+							seriesItem.color = chartColors[i];
+							seriesItem.data  = [jsonData[i].cnt];
+
+							if( !mint.common.isEmpty(jsonData[i].flag) && jsonData[i].flag == 'totalCount' ) {
+								seriesItem.type    = "area";
+								seriesItem.opacity = 0.3;
+								seriesItem.color   = "#2080D0";
+								seriesItem.line    = {opacity: 0.2};
+								seriesItem.axis    = 'totalCount';
+								for(var j = 0; j < valueAxis.length; j++) {
+									if(jsonData[i].flag == valueAxis[j].name) {
+										valueAxis[j].visible = true;
+									}
+								}
+							} else {
+								seriesItem.axis = 'count';
+							}
+							series.push(seriesItem);
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 구한다.
+					//-----------------------------------------------------------------------
+					var seriesMaxValue = new Object();
+					for( var i = 0 ; i < series.length; i++ ) {
+						var maxValue = Math.max.apply(null,series[i].data);
+						if( mint.common.isEmpty(seriesMaxValue[series[i].axis]) || seriesMaxValue[series[i].axis] < maxValue) {
+							seriesMaxValue[series[i].axis] = maxValue;
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 판단하여 valuAxis max 를 설정한다.
+					//-----------------------------------------------------------------------
+					for( var i = 0; i < valueAxis.length; i++ ) {
+						if( mint.common.isEmpty(seriesMaxValue[valueAxis[i].name]) || seriesMaxValue[valueAxis[i].name] <= 10) {
+							valueAxis[i].max = 10;
+						} else {
+							valueAxis[i].max = undefined;
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Chart Refresh
+					//-----------------------------------------------------------------------
+					{
+						chart.options.valueAxis = valueAxis;
+						chart.options.categoryAxis.categories = categories;
+						chart.options.categoryAxis.title.text = mint.common.formatDateTime(checkDate, "HH:mm");
+						chart.options.categoryAxis.title.font = '12px Arial';
+						chart.options.categoryAxis.title.margin = {top: 2, bottom:0};
+						chart.options.categoryAxis.title.padding = {bottom:0};
+						chart.options.categoryAxis.axisCrossingValues = [0, 59];
+						chart.options.series = series;
+
+						chart.refresh();
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRealTimeTotalCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartRealTimeFavoriteCount
+			//-----------------------------------------------------------------------
+			fn_initChartRealTimeFavoriteCount : function() {
+				try {
+
+                    $("#chart-realTime-favorite-count").kendoChart({
+                        //renderAs: "canvas",
+                        theme: "default",
+                        transitions: false,
+                        zoomable: false,
+                        title: {
+                            //text: ""
+                        },
+                        dataSource: {
+                        	data: []
+                        },
+                        seriesDefaults: {
+                        	type: "line",
+                        	style: "normal", //normal/step/smooth
+   							markers: {
+   				                size: 3
+   				            },
+			                line: {
+			                    width: 1
+			                },
+			                labels: {
+			                	visible: false,
+			                	background: "transparent"
+			                }
+                        },
+                        tooltip: {
+                        	visible: true,
+                        	shared: true,
+                        	template: "#= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: true,
+                            position: "top",
+                            orientation: "horizontal",
+                        },
+                        series: [],
+                        // Y축
+                        valueAxis: [
+	                        {
+	                        	name: "count",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.main.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            minorGridLines: {
+	                            	visible: false
+	                            },
+	                            crosshair: {
+	                            	visible: false,
+	                            	width: 0.8,
+	                            	opacity: 0.7,
+	                            },
+	                            max: 10
+	                        },
+	                        {
+	                        	name: "totalCount",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.main.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            max: 10,
+	                            visible: false,
+	                            color: "#2080D0"
+	                        },
+
+                        ],
+                        // X축
+                        categoryAxis: {
+                        	justified: false,
+                        	labels: {
+                        		rotation: "auto"
+                        	},
+                            categories: [],
+                            majorGridLines: {
+                                visible: false
+                            },
+                            crosshair: {
+                            	visible: false
+                            }
+                        },
+                        seriesHover: function(e) {
+                        	$.main.seriesHoverChartId = e.sender.wrapper.context.id;
+                        }
+                    });
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartRealTimeFavoriteCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getRealTimeFavoriteCount
+			//-----------------------------------------------------------------------
+			fn_getRealTimeFavoriteCount : function(resetFlag) {
+				try {
+
+					var serviceCd = 'WS0005';
+
+					if( $('.k-tooltip.k-chart-tooltip.k-chart-shared-tooltip').size() > 0 && $.main.seriesHoverChartId == 'chart-realTime-favorite-count' ) {
+						return;
+					}
+					var isTest = false;
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0) {
+							mint.wsReceive(function(msg, time){
+								if( !mint.common.isEmpty(msg) && msg.length > 0 ) {
+
+									//jsonData.push(totalObject);
+									$.main.fn_setRealTimeFavoriteCount(resetFlag, msg);
+									resetFlag = false;
+
+									//-----------------------------------------------------------------------
+									// pushTime Display
+									//-----------------------------------------------------------------------
+									{
+										var timeLabel = $('div[name=' + serviceCd+']').find('.time-label');
+										timeLabel.html($.main.fn_checkTimeDisplay(time));
+										timeLabel.show();
+									}
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getRealTimeFavoriteCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setRealTimeFavoriteCount
+			//-----------------------------------------------------------------------
+			fn_setRealTimeFavoriteCount : function(resetFlag, jsonData) {
+				try {
+
+					//-----------------------------------------------------------------------
+					// Chart Configuration
+					//-----------------------------------------------------------------------
+					var POINTS = 20;
+
+					var chart = $("#chart-realTime-favorite-count").data("kendoChart");
+					var categoryAxis = chart.options.categoryAxis;
+					var categories   = categoryAxis.categories;
+					var valueAxis    = chart.options.valueAxis;
+					var series       = chart.options.series;
+
+					if( mint.common.isEmpty(categories) || resetFlag) {
+						categories = [];
+					}
+
+					if( mint.common.isEmpty(series) || resetFlag) {
+						series = [];
+					}
+
+					//-----------------------------------------------------------------------
+					// categories
+					//-----------------------------------------------------------------------
+					var checkDate = new Date();
+
+					categories.push( mint.common.formatDateTime(checkDate, "ss") );
+					if (categories.length > POINTS) {
+						categories.shift();
+					}
+
+					//-----------------------------------------------------------------------
+					// series
+					//-----------------------------------------------------------------------
+
+					var chartColors = ["#ffba00", "#795CF3","#92BAFD", "#2080D0", "#808000", "#FF8000", "#DCC414", "#800080", "#604800", "#8D414E", "#48452D",  "#99A9B7", "#B68EED", "#565656"];
+					for (var i = 0; i < jsonData.length; i++) {
+
+						var isExistSeries = false;
+						for(var j = 0; j < series.length; j++) {
+							if(jsonData[i].interfaceNm == series[j].name) {
+								series[j].data.push(jsonData[i].cnt);
+								if (series[j].data.length > POINTS) {
+									series[j].data.shift();
+								}
+								isExistSeries = true;
+
+								break;
+							}
+						}
+
+						if( ! isExistSeries ) {
+							var seriesItem = new Object();
+							seriesItem.type  = 'line';
+							seriesItem.name  = jsonData[i].interfaceNm;
+							seriesItem.color = chartColors[i];
+							seriesItem.data  = [jsonData[i].cnt];
+
+							if( !mint.common.isEmpty(jsonData[i].flag) && jsonData[i].flag == 'totalCount' ) {
+								seriesItem.type    = "area";
+								seriesItem.opacity = 0.3;
+								seriesItem.color   = "#2080D0";
+								seriesItem.line    = {opacity: 0.2};
+								seriesItem.axis    = 'totalCount';
+								for(var j = 0; j < valueAxis.length; j++) {
+									if(jsonData[i].flag == valueAxis[j].name) {
+										valueAxis[j].visible = true;
+									}
+								}
+							} else {
+								seriesItem.axis = 'count';
+							}
+							series.push(seriesItem);
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 구한다.
+					//-----------------------------------------------------------------------
+					var seriesMaxValue = new Object();
+					for( var i = 0 ; i < series.length; i++ ) {
+						var maxValue = Math.max.apply(null,series[i].data);
+						if( mint.common.isEmpty(seriesMaxValue[series[i].axis]) || seriesMaxValue[series[i].axis] < maxValue) {
+							seriesMaxValue[series[i].axis] = maxValue;
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 판단하여 valuAxis max 를 설정한다.
+					//-----------------------------------------------------------------------
+					for( var i = 0; i < valueAxis.length; i++ ) {
+						if( mint.common.isEmpty(seriesMaxValue[valueAxis[i].name]) || seriesMaxValue[valueAxis[i].name] <= 10) {
+							valueAxis[i].max = 10;
+						} else {
+							valueAxis[i].max = undefined;
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Chart Refresh
+					//-----------------------------------------------------------------------
+					{
+						chart.options.valueAxis = valueAxis;
+						chart.options.categoryAxis.categories = categories;
+						chart.options.categoryAxis.title.text = mint.common.formatDateTime(checkDate, "HH:mm");
+						chart.options.categoryAxis.title.font = '12px Arial';
+						chart.options.categoryAxis.title.margin = {top: 2, bottom:0};
+						chart.options.categoryAxis.title.padding = {bottom:0};
+						chart.options.categoryAxis.axisCrossingValues = [0, 59];
+						chart.options.series = series;
+
+						chart.refresh();
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRealTimeFavoriteCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartCountStatsDaily
+			//-----------------------------------------------------------------------
+			fn_initChartCountStatsDaily : function() {
+				try {
+			        $("#chart-count-stats-daily").kendoChart({
+			        		transitions: true,
+			                dataSource: {
+			                    data: []
+			                },
+			                legend : {
+			                    position : "top",
+			                    visible : true
+			                },
+
+			                seriesDefaults: {
+			                    type: "column",
+			                    area: {
+			                        line: {
+			                            style: "smooth"
+			                        }
+			                    },
+			                },
+			                series : [
+			                	{
+				                	field: "D1",
+				                    name : mint.label.getLabel('lb-456'),
+				                    color : "#565656" //"#aeb231" //"#7BBAE7" //"#76b9fc"
+			                	},
+			                	{
+				                	field : "D0",
+				                    name : mint.label.getLabel('lb-4'),
+				                    color : "#ffba00" //"#2c77c1" //"#ffba00"
+			                	},
+			                ],
+			                valueAxis : {
+			                    labels : {
+			                        template: '#= $.main.fn_valueAxisTemplate(value) #',
+			                        step : 2
+			                    },
+			                    line : {
+			                        visible : true
+			                    },
+			                    crosshair: {
+			                    	visible : false,
+			                    	color : "#7BBAE7",
+			                    	width: 0.5
+			                    }
+			                },
+			                categoryAxis : {
+			                	field: "HOURS",
+			                    majorGridLines : {
+			                        visible : false
+			                    },
+			                    crosshair: {
+			                    	visible : false,
+			                    	color : "#7BBAE7",
+			                    	width: 0.5
+			                    }
+			                },
+			                tooltip : {
+			                    visible  : true,
+			                    shared   : true,
+			                    template : "#= kendo.format('{0:n0}', value) #"
+			                },
+			                seriesClick : function(e) {
+
+
+			                }
+
+			         });
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartCountStatsDaily"});
+				}
+			}, //end fn_initChartCountStatsDaily
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCountStatsDaily
+			//-----------------------------------------------------------------------
+
+			fn_getCountStatsDaily : function() {
+				try {
+					var isTest = false;
+					var serviceCd = 'WS0006';
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg, time){
+								if( !mint.common.isEmpty(msg) && msg.length > 0 ) {
+
+									var chart = $("#chart-count-stats-daily").data("kendoChart");
+
+									if( isTest ) {
+								        var items = [];
+								        for( var i = 0; i < 24; i++ ) {
+								        	items.push( { HOURS : i < 10 ? ('0'+i) : i, D0 : Math.random() * 100, D1 : Math.random() * 200 } );
+								        }
+								        msg = items;
+									}
+
+									var dataSource = new kendo.data.DataSource( {
+										  data: msg
+										});
+									chart.setDataSource(dataSource);
+
+									//-----------------------------------------------------------------------
+									// pushTime Display
+									//-----------------------------------------------------------------------
+									{
+										var timeLabel = $('div[name=' + serviceCd+']').find('.time-label');
+										timeLabel.html($.main.fn_checkTimeDisplay(time));
+										timeLabel.show();
+									}
+
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getCountStatsDaily"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartCountStatsMonthly
+			//-----------------------------------------------------------------------
+			fn_initChartCountStatsMonthly : function() {
+				try {
+			        $("#chart-count-stats-monthly").kendoChart({
+		                dataSource: {
+		                    data: []
+		                },
+			                legend : {
+			                    position : "top",
+			                    visible : true
+			                },
+
+			                seriesDefaults: {
+			                    type: "column",
+			                    area: {
+			                        line: {
+			                            style: "smooth"
+			                        }
+			                    }
+			                },
+			                series : [ {
+			                	field : "value",
+			                    name  : "",
+			                    color : "#7977C2"
+			                }, {
+			                	type  : "line",
+			                	field : "value",
+			                    name  : "",
+			                    color : "#7977C2" //"#7BBAE7"
+			                } ],
+			                valueAxis : {
+			                    labels : {
+			                    	template: '#= $.main.fn_valueAxisTemplate(value) #',
+			                        step : 2
+			                    },
+			                    line : {
+			                        visible : true
+			                    }
+			                },
+			                categoryAxis : {
+			                	field: "month",
+			                    majorGridLines : {
+			                        visible : false
+			                    }
+			                },
+			                tooltip : {
+			                    visible : true,
+			                    template : "#= kendo.format('{0:n0}', value) #"
+			                    //template : "#= series.name #: #=commify(value)#" + mint.label.getLabel('lb-64')
+			                },
+			                seriesClick : function(e) {
+			                }
+
+			            });
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartCountStatsMonthly"});
+				}
+			}, //end fn_initChartCountStatsMonthly
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCountStatsMonthly
+			//-----------------------------------------------------------------------
+			fn_getCountStatsMonthly : function() {
+				try {
+					var isTest = false;
+					var serviceCd = 'WS0007';
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0) {
+							mint.wsReceive(function(msg, time){
+								if( !mint.common.isEmpty(msg) ) {
+									var chart = $("#chart-count-stats-monthly").data("kendoChart");
+
+									var items = [];
+									var keys = Object.keys( msg );
+
+									for( var i = 0; i < keys.length; i++ ) {
+										var item = { month : keys[i], value : msg[keys[i]] };
+										items.push(item);
+									}
+
+									if( isTest ) {
+										items = [];
+										items.push({ month : 'M-3', value : Math.random() * 1000000 });
+										items.push({ month : 'M-2', value : Math.random() * 1000000 });
+										items.push({ month : 'M-1', value : Math.random() * 1000000 });
+										items.push({ month : 'T', value : Math.random() * 100000 });
+									}
+
+									var dataSource = new kendo.data.DataSource( {
+										  data: items
+										});
+
+									chart.setDataSource(dataSource);
+
+									//-----------------------------------------------------------------------
+									// pushTime Display
+									//-----------------------------------------------------------------------
+									{
+										var timeLabel = $('div[name=' + serviceCd+']').find('.time-label');
+										timeLabel.html($.main.fn_checkTimeDisplay(time));
+										timeLabel.show();
+									}
+								} else {
+									items.push({ month : 'M-3', value : 0 });
+									items.push({ month : 'M-2', value : 0 });
+									items.push({ month : 'M-1', value : 0 });
+									items.push({ month : 'T', value : 0 });
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getCountStatsMonthly"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartCountStatsYearly
+			//-----------------------------------------------------------------------
+			fn_initChartCountStatsYearly : function() {
+				try {
+			        $("#chart-count-stats-yearly").kendoChart({
+		                dataSource: {
+		                    data: []
+		                },
+			                legend : {
+			                    position : "top",
+			                    visible : true
+			                },
+
+			                seriesDefaults: {
+			                    type: "column",
+			                    area: {
+			                        line: {
+			                            style: "smooth"
+			                        }
+			                    }
+			                },
+			                series : [ {
+			                	field : "value",
+			                    name  : "",
+			                    color : "#87BB66"
+			                }, {
+			                	type  : "line",
+			                	field : "value",
+			                    name  : "",
+			                    color : "#87BB66"
+			                } ],
+			                valueAxis : {
+			                    labels : {
+			                    	template: '#= $.main.fn_valueAxisTemplate(value) #',
+			                        step : 2
+			                    },
+			                    line : {
+			                        visible : true
+			                    },
+			                },
+			                categoryAxis : {
+			                	field: "year",
+			                    majorGridLines : {
+			                        visible : false
+			                    }
+			                },
+			                tooltip : {
+			                    visible : true,
+			                    template : "#= kendo.format('{0:n0}', value) #"
+			                },
+			                seriesClick : function(e) {
+
+
+			                }
+
+			            });
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartCountStatsYearly"});
+				}
+			}, //end fn_initChartCountStatsYearly
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getCountStatsYearly
+			//-----------------------------------------------------------------------
+			fn_getCountStatsYearly : function() {
+				try {
+					var isTest = false;
+					var serviceCd = 'WS0008';
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+
+					mint.wsSend(requestObject, screenName, serviceCd, mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0) {
+							mint.wsReceive(function(msg, time){
+								if( !mint.common.isEmpty(msg) ) {
+									var chart = $("#chart-count-stats-yearly").data("kendoChart");
+
+									var items = [];
+									var keys = Object.keys( msg );
+
+									for( var i = 0; i < keys.length; i++ ) {
+										var item = { year : keys[i], value : msg[keys[i]] };
+										items.push(item);
+									}
+
+									if( isTest ) {
+										items = [];
+										items.push({ year : 'Y-3', value : Math.random() * 9000000 });
+										items.push({ year : 'Y-2', value : Math.random() * 9000000 });
+										items.push({ year : 'Y-1', value : Math.random() * 9000000 });
+										items.push({ year : 'T', value : Math.random() * 900000 });
+									}
+
+									var dataSource = new kendo.data.DataSource( {
+										  data: items
+										});
+
+									chart.setDataSource(dataSource);
+
+									//-----------------------------------------------------------------------
+									// pushTime Display
+									//-----------------------------------------------------------------------
+									{
+										var timeLabel = $('div[name=' + serviceCd+']').find('.time-label');
+										timeLabel.html($.main.fn_checkTimeDisplay(time));
+										timeLabel.show();
+									}
+								} else {
+									items.push({ year : 'Y-3', value : 0 });
+									items.push({ year : 'Y-2', value : 0 });
+									items.push({ year : 'Y-1', value : 0 });
+									items.push({ year : 'T', value : 0 });
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getCountStatsYearly"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getAlarmEvent
+			//-----------------------------------------------------------------------
+			fn_getAlarmEvent : function() {
+				try {
+					var requestObject = new Object();
+					mint.wsSend(requestObject, screenName, 'WS0009', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg,time){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-cpu', msg);
+								}
+
+								//-----------------------------------------------------------------------
+								// pushTime Display
+								//-----------------------------------------------------------------------
+								{
+									var timeLabel = $('#WS0009').find('.time-label');
+									timeLabel.html($.main.fn_checkTimeDisplay(time));
+									timeLabel.show();
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0010', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-memory', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0011', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-disk', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0012', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-process', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0013', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-agent', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0014', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-runner', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0015', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-qmgr', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0016', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-channel', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0017', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-qdepth', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+					mint.wsSend(requestObject, screenName, 'WS0019', mint.ws.msgType.ON, function(resultCd, msg, option){
+						if( resultCd === 0 ) {
+							mint.wsReceive(function(msg){
+								if(!mint.common.isEmpty(msg)) {
+									$.main.fn_setAlarmEvent('btn-state-iipagent', msg);
+								}
+							}, option);
+						} else {
+							//doSometing()
+						}
+					});
+
+
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getCountBySystem"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setAlarmEvent
+			//-----------------------------------------------------------------------
+			fn_setAlarmEvent : function(chartId, count) {
+				try {
+
+					var cssSuccess = 'btn-success';
+					var cssWarning = 'btn-warning';
+					var cssDanger  = 'btn-danger';
+					var cssRemove  = 'btn-success btn-warning btn-danger';
+
+
+					$('.' + chartId + ' > span > h2').html(count);
+					$('.' + chartId).removeClass(cssRemove);
+					if(count > 0) {
+						$('.' + chartId).addClass(cssDanger);
+					} else {
+						$('.' + chartId).addClass(cssSuccess);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setAlarmEvent"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setRealTimeFavoriteCountConfig
+			//-----------------------------------------------------------------------
+			fn_setRealTimeFavoriteCountConfig : function(selectedItem) {
+				try {
+					if( !mint.common.isEmpty(selectedItem) ) {
+						var interfaceList = [];
+						for( var i = 0 ; i < selectedItem.length; i++ ) {
+							interfaceList.push(selectedItem[i].INTERFACE_ID);
+						}
+
+						var requestObject = new Object();
+						requestObject.interfaceList = interfaceList;
+						requestObject.monitorYn     = 'Y';
+
+					    mint.callService(requestObject, screenName, 'REST-U02-AN-02-01',
+						   	function(jsonData, errorCd) {
+
+						    	// Session 이 종료되면 Terminate
+						    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+						    		mint.common.terminateInterval(screenName);
+						    		return;
+						    	}
+
+					    		$.main.fn_getRealTimeFavoriteCount(true);
+						    },
+						    {errorCall: true, notificationView: true, waitingView: false, params:{typeCd: '0'}}
+					    );
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRealTimeFavoriteCountConfig"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_valueAxisTemplate
+			//-----------------------------------------------------------------------
+			fn_valueAxisTemplate : function(value) {
+				try {
+					var returnValue = '';
+					if (value % 1 !== 0) {
+						returnValue = '';
+					} else {
+						returnValue = kendo.format('{0:n0}', value);
+					}
+					return returnValue;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_valueAxisTemplate"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dashboardWindowOpen
+			//-----------------------------------------------------------------------
+			fn_dashboardWindowOpen : function() {
+				try {
+					//-----------------------------------------------------------------------
+					// 템플릿을 읽어 드린다
+					//-----------------------------------------------------------------------
+					var layout = kendo.template($('#template-dashboard-window').html());
+					var title  = kendo.template($('#template-dashboard-title').html());
+
+					//-----------------------------------------------------------------------
+					// DIV 에 템플릿에서 불러온 레이아웃을 붙인다
+					//-----------------------------------------------------------------------
+					var attachDiv = $('#dashboard-attachDiv').prepend( layout );
+					var windowDiv = $('#dashboard-window');
+
+					//-----------------------------------------------------------------------
+					// 윈도우를 오픈한다
+					//-----------------------------------------------------------------------
+					mint.ui.windowOpen(attachDiv, windowDiv, title, function(evt) {
+						//-----------------------------------------------------------------------
+						// 윈도우가 Close 되면 대시보드 컨텐츠를 원래 DIV 에 붙인다
+						//-----------------------------------------------------------------------
+						attachDiv.html( $('.dashboard-item') );
+					}, null);
+
+					//-----------------------------------------------------------------------
+					// 레이아웃에 대시보드 컨텐츠를 붙인다.( 순서주의-윈도우 오픈후 컨텐츠 붙임 )
+					//-----------------------------------------------------------------------
+					{
+						$('#dashboard-toolbar').html('');
+						$('#dashboard-content').html( $('.dashboard-item') );
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dashboardWindowOpen"});
+				}
+
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_moveTracking
+			//-----------------------------------------------------------------------
+			fn_moveTracking : function(options) {
+				try {
+					var trackingUrl = '../sub-op/OP-01-01-001';
+					var env = mint.common.getEnvorinment();
+            		var trackingUrlEnv = env['tracking.screen.url'];
+            		if( !mint.common.isEmpty(trackingUrlEnv) && !mint.common.isEmpty(trackingUrlEnv[0])  ) {
+            			trackingUrl=trackingUrlEnv[0];
+            		}
+
+					if( !mint.common.isEmpty(options) ) {
+						mint.common.setScreenParam('caller', 'dashboard');
+						mint.common.setScreenParam('callerUrl','../sub-op/OP-02-01-003');
+						mint.common.setScreenParam('options', options);
+						mint.move(trackingUrl);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_moveTracking"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_intervalTimeDisplay
+			//-----------------------------------------------------------------------
+			fn_intervalTimeDisplay : function(time) {
+				try {
+					if(time < 60) {
+						return '<i class="fa fa-bell-o"> ' + time + mint.label.getLabel('lb-169') + '</i>';
+					} else if(time < 3600){
+						return '<i class="fa fa-bell-o"> ' + Math.floor(time%3600/60) + mint.label.getLabel('lb-168') + ' ' + time%60 + mint.label.getLabel('lb-169') +'</i>';
+					} else {
+						return '<i class="fa fa-bell-o"> ' + Math.floor(time/3600) + mint.label.getLabel('lb-167') + ' ' + Math.floor(time%3600/60) + mint.label.getLabel('lb-168') + ' ' + time%60 + mint.label.getLabel('lb-169') +'</i>';
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_intervalTimeDisplay"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_checkTimeDisplay
+			//-----------------------------------------------------------------------
+			fn_checkTimeDisplay : function(time) {
+				try {
+					return '<i class="fa fa-clock-o"> ' + kendo.toString(kendo.parseDate(time, 'yyyyMMddHHmmsssss'), 'HH:mm:ss') + ' ' + mint.label.getLabel('lb-998') + '</i>';
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkTimeDisplay"});
+				}
+			}
+		}// end main
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - cpu
+	//-----------------------------------------------------------------------
+	$('.btn-state-cpu').on('click', function () {
+		mint.common.setScreenParam('state-item', 'cpu');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - memory
+	//-----------------------------------------------------------------------
+	$('.btn-state-memory').on('click', function () {
+		mint.common.setScreenParam('state-item', 'memory');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - disk
+	//-----------------------------------------------------------------------
+	$('.btn-state-disk').on('click', function () {
+		mint.common.setScreenParam('state-item', 'disk');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - disk
+	//-----------------------------------------------------------------------
+	$('.btn-state-process').on('click', function () {
+		mint.common.setScreenParam('state-item', 'process');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - agent
+	//-----------------------------------------------------------------------
+	$('.btn-state-agent').on('click', function () {
+		mint.common.setScreenParam('state-item', 'agent');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - runner
+	//-----------------------------------------------------------------------
+	$('.btn-state-runner').on('click', function () {
+		mint.common.setScreenParam('state-item', 'runner');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - qmgr
+	//-----------------------------------------------------------------------
+	$('.btn-state-qmgr').on('click', function () {
+		mint.common.setScreenParam('state-item', 'qmgr');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - channel
+	//-----------------------------------------------------------------------
+	$('.btn-state-channel').on('click', function () {
+		mint.common.setScreenParam('state-item', 'channel');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - qdepth
+	//-----------------------------------------------------------------------
+	$('.btn-state-qdepth').on('click', function () {
+		mint.common.setScreenParam('state-item', 'qdepth');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - iipAgent
+	//-----------------------------------------------------------------------
+	$('.btn-state-iipagent').on('click', function () {
+		mint.common.setScreenParam('state-item', 'iipagent');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: (팝업) 실시간 관심인터페이스 설정 팝업
+	//-----------------------------------------------------------------------
+	$('.chart-realTime-favorite-count-config').on('click', function () {
+		mint.common.setScreenParam('callback', '$.main.fn_setRealTimeFavoriteCountConfig');
+		mint.common.searchPopup('../sub-op/OP-02-00-501.html','OP-02-00-501');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 대시보드 전체 화면
+	//-----------------------------------------------------------------------
+	$('.btn-page-expand').on('click', function () {
+		$.main.fn_dashboardWindowOpen();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 윈도우 리사이즈 이벤트
+	//-----------------------------------------------------------------------
+	$(window).on('resize', function(e) {
+        mint.ui.resize();
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	//mint.ui.draggablePannels();
+
+});//end document.ready()
+</script>
+<style>
+.dashboard-title {
+	border-radius: 10px 10px 10px 10px;
+	height: 21px;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 19px;
+	background-color: #547a9a;
+	color: #ffffff;
+	padding: 0 10px 0 10px;
+	font-weight: 900;
+}
+.mint-panel-content ul {
+	display: table;
+	width: 100%;
+	padding: 0px;
+}
+.mint-panel-content li {
+ 	display: table-cell;
+}
+</style>

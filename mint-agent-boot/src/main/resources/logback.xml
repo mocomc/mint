@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds" >
+
+    <property name="APP_LOG_LEVEL" value="debug" />
+    <property name="3RD_LOG_LEVEL" value="debug" />
+    <property name="MSG_LOG_LEVEL" value="debug" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%-12.12d %5p  ${PID:- } [%20.20thread] %30.30C{3}:%4.4L  - %m%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="daily-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${IIPAGENT_HOME}//log//iipagent.log</file>
+         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+          <level>DEBUG</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${IIPAGENT_HOME}//log//iipagent.%i.log</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>30</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>20MB</maxFileSize>
+		</triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p  ${PID:- } [%20.20thread] %30.30C{3}:%4.4L - %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+	<appender name="MSG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${IIPAGENT_HOME}//log//iipagent_msg.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+
+		<rollingPolicy	class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${IIPAGENT_HOME}//log//iipagent_msg.%i.log</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>30</maxIndex>
+		</rollingPolicy>
+        <triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>20MB</maxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%20.20thread]%30.30C{3}:%4.4L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+    <appender name="error-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${IIPAGENT_HOME}//log//iipagent_err.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${IIPAGENT_HOME}//log//iipagent_err.%i.log</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>30</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy  class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>20MB</maxFileSize>
+		</triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+	<!-- Application Loggers -->
+	<logger name="pep.per.mint">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="pep.per.mint.agent">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="pep.per.mint.common">
+		<level value="${APP_LOG_LEVEL}" />
+	</logger>
+
+
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="org.springframework.beans">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="org.springframework.context">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+
+	<logger name="org.mybatis">
+		<level value="${3RD_LOG_LEVEL}"/>
+	</logger>
+
+	<logger name="jdbc.connection">
+    	<level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="jdbc.sqltiming">
+	    <level value="error" />
+	</logger>
+
+	<logger name="java.sql.ResultSet">
+	    <level value="error" />
+	</logger>
+	<logger name="jdbc.resultset">
+	    <level value="error" />
+	</logger>
+
+	<logger name="jdbc.resultsettable">
+	    <level value="${3RD_LOG_LEVEL}" />
+	</logger>
+
+	<logger name="pep.per.mint.agent.ws.client.handler" additivity="false">
+		<level value="${MSG_LOG_LEVEL}"/>
+		<appender-ref ref="MSG" />
+	</logger>
+    <root level="${APP_LOG_LEVEL}">
+        <appender-ref ref="daily-file" />
+        <appender-ref ref="error-log" />
+<!--         <appender-ref ref="STDOUT" /> -->
+    </root>
+</configuration>

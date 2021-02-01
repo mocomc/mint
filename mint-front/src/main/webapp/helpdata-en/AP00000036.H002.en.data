@@ -1,0 +1,21 @@
+AP00000036$$$H002$$$en$$$조회 결과$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Search Interface registration ratio<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">&nbsp; It is used to manage life cycle by tracking
+unregistered interfaces in IIP<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 1. formula<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">[ the number of
+running I/F ]<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">-------------------------------------------------------------------------------------</font><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">X 100<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">[ the number of running I/F + the number
+of unregistered I/F ]<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span></span><span style="color: black; font-family: 굴림; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-bidi-font-family: 굴림;"><font size="2">※</font></span><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2"> the number of unregistered I/F = [ (accumulated number of I/F for recent
+3 months) - (the number of running I/F) ]<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 2. Extraction cycle<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp; &nbsp;</font></span><font size="2">Once in a day(batch)<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><font size="2">&nbsp; 3. Detail screen view<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Click the number of unregistered I/F
+&gt; Move to detail list of Interface registeration rate &gt; <br>&nbsp;&nbsp;&nbsp;&nbsp; Click the number
+of unregistered I/F (red) &gt; Move to detail results of unregistered I/F</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

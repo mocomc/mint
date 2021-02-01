@@ -1,0 +1,80 @@
+﻿<!-- simple dialog -->
+<div class="modal inmodal-original" id="approvalComments" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog-original">
+		<div class="animated fadeIn">
+			<div class="panel panel-warning">
+			    <div class="panel-heading" style="padding: 10px 10px 0px 15px;">
+			    	<div>
+			        	<h3 id="popupTitle">title</h3>
+			        </div>
+			    </div>
+			    <div class="panel-body">
+					<div id="popupContent" style="padding-left: 20px; padding-bottom: 30px;">
+						<h3><strong>contents</strong></h3>
+						<br>
+						<small></small>
+					</div>
+			    </div>
+			    <div class="panel-footer" style="text-align: right;">
+			        <button type="button" class="btn btn-warning btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+			    </div>
+			</div>		
+		</div>
+	</div>
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "CO-01-00-105";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================			
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.ui.initScreen();
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+			
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					//TODO
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			}//end fn_initCallback()
+		}// end sub
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================		
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================		
+	
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================		
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+	
+});//end document.ready()
+</script>

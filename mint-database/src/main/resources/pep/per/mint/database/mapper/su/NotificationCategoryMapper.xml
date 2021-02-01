@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.NotificationCategoryMapper">
+	<!--
+  	<cache/>
+  	-->
+
+  	<!--
+  	공지FAQ카테고리 등록 
+  	 -->
+  	<insert id="insertNotificationCategory" parameterType="NotificationCategory">
+  		<selectKey keyProperty="categoryId" resultType="string" order="BEFORE" >
+			select nvl(max(to_number(nvl(CATEGORY_ID,'0'))) + 1, 0) from TSU0401
+		</selectKey>
+  		insert into TSU0401 (
+			 CATEGORY_ID
+			,CATEGORY_NM
+			,TYPE
+			,COMMENTS
+			,DEL_YN
+			,REG_DATE
+			,REG_USER
+		) values (
+			 #{categoryId 	, jdbcType=VARCHAR}
+			,#{categoryNm 	, jdbcType=VARCHAR}
+			,#{type 	 	, jdbcType=VARCHAR}
+			,#{comments		, jdbcType=VARCHAR}
+			,'N'
+			,#{regDate 		, jdbcType=VARCHAR}
+			,#{regUser 		, jdbcType=VARCHAR}
+		)	
+  	</insert>
+  	
+  	<update id="updateNotificationCategory" parameterType="NotificationCategory">
+  		update TSU0402
+		   set
+			   CATEGORY_ID 	= #{categoryId 	, jdbcType=VARCHAR}
+			  ,CATEGORY_NM 	= #{categoryNm 	, jdbcType=VARCHAR}
+			  ,TYPE 		= #{type 		, jdbcType=VARCHAR}
+			  ,COMMENTS 	= #{comments 	, jdbcType=VARCHAR}
+			  ,DEL_YN 		= #{delYn 		, jdbcType=VARCHAR}
+			  ,MOD_DATE 	= #{modDate 	, jdbcType=VARCHAR}
+			  ,MOD_USER 	= #{modId 		, jdbcType=VARCHAR}
+		where
+			 CATEGORY_ID = #{categoryId 	, jdbcType=VARCHAR}
+  	</update>
+  	
+  	<select id="getNotificationCategoryList" resultMap="NotificationCategoryResultMapForList">
+  		select 
+  				 a.CATEGORY_ID 
+  				,a.CATEGORY_NM
+  				,a.TYPE 
+  				,a.COMMENTS 
+  				,a.DEL_YN
+  				,a.REG_DATE 
+  				,a.REG_USER 
+  				,a.MOD_DATE 
+  				,a.MOD_USER 
+  		from 
+  				 TSU0401 a
+  		where 	a.DEL_YN = 'N'
+  			and a.TYPE = #{categoryType}
+  		
+  		order by 
+  				a.CATEGORY_NM asc
+  	</select>
+  	
+  	<resultMap id="NotificationCategoryResultMapForList" type="NotificationCategory">
+  		<id property="categoryId" 		column="CATEGORY_ID"/>
+		<result property="categoryNm"	column="CATEGORY_NM"/>
+		<result property="type" 		column="TYPE"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regUser" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modUser" 		column="MOD_USER"/>
+  	</resultMap>
+  	
+  	<select id="getNotificationCategoryDetail" parameterType="string" resultMap="getNotificationCategoryDetailResult">
+  		select
+  				 a.CATEGORY_ID 
+  				,a.CATEGORY_NM
+  				,a.TYPE 
+  				,a.COMMENTS 
+  				,a.DEL_YN
+  				,a.REG_DATE 
+  				,a.REG_USER 
+  				,a.MOD_DATE 
+  				,a.MOD_USER 
+  		from 
+  				TSU0401 a
+  		where
+  				a.CATEGORY_ID = #{categoryId , jdbcType=VARCHAR}
+  	</select>
+  	
+  	<resultMap id="getNotificationCategoryDetailResult" type="NotificationCategory">
+  		<id property="categoryId" 		column="CATEGORY_ID"/>
+		<result property="categoryNm"	column="CATEGORY_NM"/>
+		<result property="type" 		column="TYPE"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regUser" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modUser" 		column="MOD_USER"/>
+  	</resultMap>
+  	
+  	<delete id="deleteNotificationCategory">
+  		update TSU0401
+		   set 
+		   		 DEL_YN   = 'Y' 
+		   		,MOD_DATE = #{modDate, jdbcType=VARCHAR}
+		   		,MOD_USER = #{modId, jdbcType=VARCHAR}
+		where CATEGORY_ID = #{categoryId, jdbcType=VARCHAR}
+  	</delete>
+</mapper>

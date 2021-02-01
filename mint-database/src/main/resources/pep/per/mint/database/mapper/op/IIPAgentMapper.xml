@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.IIPAgentMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+
+	<insert id="insertResourceUsageLog">
+
+		insert into TOP0801 (
+			 RESOURCE_ID
+			,GET_DATE
+			,TOTAL_AMOUNT
+			,USED_AMOUNT
+			,USED_PER
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{resourceInfo.resourceId,jdbcType=VARCHAR}
+			,#{getDate,jdbcType=VARCHAR}
+			,#{totalAmt,jdbcType=VARCHAR}
+			,#{usedAmt,jdbcType=VARCHAR}
+			,#{usedPer,jdbcType=VARCHAR}
+			,#{msg,jdbcType=VARCHAR}
+			,#{regDate,jdbcType=VARCHAR}
+			,#{regApp,jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+	<update id="updateResourceUsageLog">
+		update TOP0801
+           set GET_DATE		= #{getDate,jdbcType=VARCHAR}
+			  ,TOTAL_AMOUNT = #{totalAmt,jdbcType=VARCHAR}
+			  ,USED_AMOUNT  = #{usedAmt,jdbcType=VARCHAR}
+			  ,USED_PER     = #{usedPer,jdbcType=VARCHAR}
+			  ,MSG          = #{msg,jdbcType=VARCHAR}
+			  ,REG_DATE     = #{regDate,jdbcType=VARCHAR}
+			  ,REG_APP      = #{regApp,jdbcType=VARCHAR}
+		 where RESOURCE_ID  = #{resourceInfo.resourceId}
+           and GET_DATE     = (SELECT max(GET_DATE) FROM TOP0801 WHERE RESOURCE_ID  = #{resourceInfo.resourceId})
+	</update>
+
+	<update id="updateLastResourceStatus">
+		update TIM0204
+		   set STATUS 	= #{status, jdbcType=VARCHAR}
+		      ,MOD_DATE	= #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER	= #{modId, jdbcType=VARCHAR}
+		 where RESOURCE_ID = #{resourceId, jdbcType=VARCHAR}
+	</update>
+
+	<insert id="insertProcessLog">
+		insert into TOP0802 (
+			 PROCESS_ID
+			,GET_DATE
+			,CNT
+			,PROCESS_NO
+			,STATUS
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{processId,jdbcType=VARCHAR}
+			,#{getDate,jdbcType=VARCHAR}
+			,#{cnt,jdbcType=NUMERIC}
+			,#{processNo,jdbcType=VARCHAR}
+			,#{status,jdbcType=VARCHAR}
+			,#{msg,jdbcType=VARCHAR}
+			,#{regDate,jdbcType=VARCHAR}
+			,#{regApp,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateProcessLog">
+		update TOP0802
+		   set
+			 GET_DATE   = #{getDate,jdbcType=VARCHAR}
+			,CNT        = #{cnt,jdbcType=NUMERIC}
+			,PROCESS_NO = #{processNo,jdbcType=VARCHAR}
+			,STATUS     = #{status,jdbcType=VARCHAR}
+			,MSG        = #{msg,jdbcType=VARCHAR}
+			,REG_DATE   = #{regDate,jdbcType=VARCHAR}
+			,REG_APP    = #{regApp,jdbcType=VARCHAR}
+		 where PROCESS_ID = #{processId}
+           and GET_DATE   = (SELECT max(GET_DATE) FROM TOP0802 WHERE PROCESS_ID  = #{processId})
+	</update>
+
+	<update id="updateLastProcessStatus">
+		update TIM0205
+		   set STATUS 	= #{status, jdbcType=VARCHAR}
+		      ,MOD_DATE	= #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER	= #{modId, jdbcType=VARCHAR}
+		where PROCESS_ID = #{processId, jdbcType=VARCHAR}
+	</update>
+
+
+	<insert id="insertQmgrStatusLog">
+		insert into TOP0805 (
+			 QMGR_ID
+			,GET_DATE
+			,STATUS
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{qmgrId,jdbcType=VARCHAR}
+			,#{getDate,jdbcType=VARCHAR}
+			,#{status,jdbcType=VARCHAR}
+			,#{msg,jdbcType=VARCHAR}
+			,#{regDate,jdbcType=VARCHAR}
+			,#{regApp,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateQmgrStatusLog">
+		update TOP0805
+		   set
+			 GET_DATE = #{getDate,jdbcType=VARCHAR}
+			,STATUS   = #{status,jdbcType=VARCHAR}
+			,MSG      = #{msg,jdbcType=VARCHAR}
+			,REG_DATE = #{regDate,jdbcType=VARCHAR}
+			,REG_APP  = #{regApp,jdbcType=VARCHAR}
+		 where QMGR_ID  = #{qmgrId}
+           and GET_DATE = (SELECT max(GET_DATE) FROM TOP0805 WHERE QMGR_ID  = #{qmgrId})
+	</update>
+
+	<update id="updateLastQmgrStatus">
+		update TIM0206
+		   set STATUS 	= #{status, jdbcType=VARCHAR}
+		      ,MOD_DATE	= #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER	= #{modId, jdbcType=VARCHAR}
+		where QMGR_ID = #{qmgrId, jdbcType=VARCHAR}
+	</update>
+
+	<insert id="insertChannelStatusLog">
+		insert into TOP0806 (
+			 QMGR_ID
+			,CHANNEL_ID
+			,GET_DATE
+			,STATUS
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{qmgrId,jdbcType=VARCHAR}
+			,#{channelId,jdbcType=VARCHAR}
+			,#{getDate,jdbcType=VARCHAR}
+			,#{status,jdbcType=VARCHAR}
+			,#{msg,jdbcType=VARCHAR}
+			,#{regDate,jdbcType=VARCHAR}
+			,#{regApp,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateChannelStatusLog">
+		update TOP0806
+		   set
+			 GET_DATE = #{getDate,jdbcType=VARCHAR}
+			,STATUS   = #{status,jdbcType=VARCHAR}
+			,MSG      = #{msg,jdbcType=VARCHAR}
+			,REG_DATE = #{regDate,jdbcType=VARCHAR}
+			,REG_APP  = #{regApp,jdbcType=VARCHAR}
+		 where QMGR_ID    = #{qmgrId}
+		   and CHANNEL_ID = #{channelId}
+           and GET_DATE = (SELECT max(GET_DATE) FROM TOP0806 WHERE QMGR_ID  = #{qmgrId} and CHANNEL_ID = #{channelId})
+	</update>
+
+	<update id="updateLastChannelStatus">
+		update TIM0207
+		   set STATUS 	= #{status, jdbcType=VARCHAR}
+		      ,MOD_DATE	= #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER	= #{modId, jdbcType=VARCHAR}
+		where QMGR_ID = #{qmgrId, jdbcType=VARCHAR}
+		  and CHANNEL_ID = #{channelId, jdbcType=VARCHAR}
+	</update>
+
+	<insert id="insertQueueStatusLog">
+		insert into TOP0807 (
+			 QMGR_ID
+			,QUEUE_ID
+			,GET_DATE
+			,DEPTH
+			,PER_DEPTH
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{qmgrId,jdbcType=VARCHAR}
+			,#{queueId,jdbcType=VARCHAR}
+			,#{getDate,jdbcType=VARCHAR}
+			,#{depth,jdbcType=NUMERIC}
+			,#{relativeDepth,jdbcType=NUMERIC}
+			,#{msg,jdbcType=VARCHAR}
+			,#{regDate,jdbcType=VARCHAR}
+			,#{regApp,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateQueueStatusLog">
+		update TOP0807
+		   set
+			 GET_DATE  = #{getDate,jdbcType=VARCHAR}
+			,DEPTH     = #{depth,jdbcType=NUMERIC}
+			,PER_DEPTH = #{relativeDepth,jdbcType=NUMERIC}
+			,MSG       = #{msg,jdbcType=VARCHAR}
+			,REG_DATE  = #{regDate,jdbcType=VARCHAR}
+			,REG_APP   = #{regApp,jdbcType=VARCHAR}
+		 where QMGR_ID  = #{qmgrId}
+		   and QUEUE_ID = #{queueId}
+           and GET_DATE = (SELECT max(GET_DATE) FROM TOP0807 WHERE QMGR_ID  = #{qmgrId} and QUEUE_ID = #{queueId})
+	</update>
+
+
+	<update id="updateLastQueueStatus">
+		update TIM0208
+		   set STATUS 	= #{status, jdbcType=VARCHAR}
+		      ,MOD_DATE	= #{modDate, jdbcType=VARCHAR}
+			  ,MOD_USER	= #{modId, jdbcType=VARCHAR}
+		where QMGR_ID = #{qmgrId, jdbcType=VARCHAR}
+		  and QUEUE_ID = #{queueId, jdbcType=VARCHAR}
+	</update>
+
+	<sql id="sqlAgentCommandConsole">
+		<![CDATA[
+			select
+			   a.AGENT_ID
+			  ,a.CMD_ID
+			  ,a.SEQ
+			  ,a.CMD_DATE
+			  ,a.EXE_DATE
+			  ,a.PARAM_VALUE
+			  ,a.REG_USER as CONSOLE_REG_USER
+			  ,a.RS_CD
+			  ,a.RS_DATE
+			  ,a.RS_MSG
+			  ,b.CMD_NM
+			  ,b.CMD_CD
+			  ,b.MOD_DATE
+			  ,b.MOD_USER
+			  ,b.PARAMS
+			  ,b.COMMENTS
+			  ,b.REG_DATE
+			  ,b.REG_USER
+			  from TIM0213 a
+			inner join TIM0214 b on a.CMD_ID = b.CMD_ID
+		]]>
+	</sql>
+
+	<select id="getAgentNotExecuteCommands" resultMap="commandConsoleResultMap">
+		<include refid="sqlAgentCommandConsole"/>
+		<![CDATA[
+			  and a.AGENT_ID = #{agentId}
+			  and b.CMD_CD = #{commandCd}
+			  and a.SEQ = (select max(SEQ) from TIM0213 where AGENT_ID = a.AGENT_ID and CMD_ID = a.CMD_ID and CMD_DATE = a.CMD_DATE)
+			  and a.RS_CD = '0'
+			  and substr(a.CMD_DATE,0,8) = to_char(sysdate,'yyyymmdd')
+		]]>
+	</select>
+
+	<resultMap type="CommandConsole" id="commandConsoleResultMap">
+		<id property="agentId" 			column="AGENT_ID"/>
+		<id property="commandId"		column="CMD_ID"/>
+		<id property="commandDate"		column="CMD_DATE"/>
+		<id property="seq"				column="SEQ"/>
+		<result property="executeDate"	column="EXE_DATE"/>
+		<result property="paramValue" 	column="PARAM_VALUE"/>
+		<result property="regUser"		column="CONSOLE_REG_USER"/>
+		<result property="resultCd"		column="RS_CD"/>
+		<result property="resultDate"	column="RS_DATE"/>
+		<result property="resultMsg"	column="RS_MSG"/>
+		<association property="command" javaType="Command">
+			<id property="commandId"		column="CMD_ID"/>
+			<result property="commandCd"	column="CMD_CD"/>
+			<result property="commandNm"	column="CMD_NM"/>
+			<result property="params"		column="PARAMS"/>
+			<result property="comments"		column="COMMENTS"/>
+			<result property="modDate"		column="MOD_DATE"/>
+			<result property="modUser"		column="MOD_USER"/>
+			<result property="regDate"		column="REG_DATE"/>
+			<result property="regUser"		column="REG_USER"/>
+		</association>
+
+	</resultMap>
+
+	<!-- 에이전트 지시등록  -->
+	<insert id="insertAgentCommand">
+		insert into TIM0213 (
+			 AGENT_ID
+			,CMD_ID
+			,CMD_DATE
+			,SEQ
+			,EXE_DATE
+			,PARAM_VALUE
+			,REG_USER
+			,RS_CD
+		) values (
+			 #{agentId}
+			,(select max(CMD_ID) from TIM0214 where CMD_CD = #{command.commandCd})
+		    ,#{commandDate}
+			,(select coalesce(max(SEQ),0) + 1 from TIM0213 where AGENT_ID = #{agentId} and CMD_ID = (select max(CMD_ID) from TIM0214 where CMD_CD = #{command.commandCd}) and CMD_DATE = #{commandDate})
+			,#{executeDate}
+			,#{paramValue}
+			,#{regUser}
+			,'0'
+		)
+	</insert>
+
+	<update id="updateAgentCommandResult">
+		update TIM0213
+		   set  RS_CD  = #{resultCd}
+		   	   ,RS_MSG  = #{resultMsg}
+		   	   ,RS_DATE = #{resultDate}
+		 where AGENT_ID = #{agentId}
+		   and CMD_ID = #{commandId}
+		   --and SEQ = #{seq}
+	</update>
+<!--
+	public int applyAgentCommandResult(@Param("agentId") String agentId, @Param("cmdCd")String cmdCd, @Param("rsCd")String rsCd, @Param("rsMsg")String rsMsg, @Param("rsDate")String rsDate)throws Exception;
+ -->
+	<update id="applyAgentCommandResult">
+		update TIM0213
+		   set  RS_CD   = #{rsCd}
+		   	   ,RS_MSG  = #{rsMsg}
+		   	   ,RS_DATE = #{rsDate}
+		 where AGENT_ID = #{agentId}
+		   and CMD_ID   = (select max(CMD_ID) from TIM0214 where CMD_CD = #{cmdCd})
+	</update>
+
+	<!-- 모든에이전트동일 명령 지시등록  -->
+	<insert id="insertAllAgentCommand">
+		insert into TIM0213 (
+			 AGENT_ID
+			,CMD_ID
+			,CMD_DATE
+			,SEQ
+			,EXE_DATE
+			,PARAM_VALUE
+			,REG_USER
+			,RS_CD
+		)
+		select
+			  a.AGENT_ID
+			 ,(select max(CMD_ID) from TIM0214 where CMD_CD = #{command.commandCd})
+			 ,#{commandDate}
+			 ,(select coalesce(max(SEQ),0) + 1 from TIM0213 where AGENT_ID = a.AGENT_ID and CMD_ID = (select max(CMD_ID) from TIM0214 where CMD_CD = #{command.commandCd}) and CMD_DATE = #{commandDate})
+			 ,#{executeDate}
+			 ,#{paramValue}
+			 ,#{regUser}
+			 ,'0'
+		  from TIM0211 a where a.DEL_YN = 'N'
+
+	</insert>
+
+	<select id="getExecuteCommandCount" resultType="int">
+		     select count (a.CMD_ID) as cnt
+		       from TIM0213 a
+		 inner join TIM0211 b
+		         on a.AGENT_ID = b.AGENT_ID
+		        and b.AGENT_NM = #{agentNm}
+		        and b.DEL_YN = 'N'
+		        and a.CMD_DATE >= to_char(sysdate - 1,'yyyymmddhh24') || '0000'
+		        and a.RS_CD = '0'
+		 inner join TIM0214 c
+		         on a.CMD_ID = c.CMD_ID
+		        and c.CMD_CD = #{cmdCd}
+	</select>
+
+
+	<!-- 에이전트명령처리결과조회 -->
+	<select id="getAgentCommandResults" resultMap="commandConsoleResultMap">
+		<include refid="sqlAgentCommandConsole"/>
+		<![CDATA[
+			  and a.CMD_DATE >= #{fromDate}
+			  and a.CMD_DATE <= #{toDate}
+		]]>
+		<if test="commandCd != null">
+			  and b.CMD_CD = #{commandCd}
+		</if>
+		<if test="resultCd != null">
+			  and a.RS_CD = #{resultCd}
+		</if>
+	</select>
+
+
+
+	<!-- IIP에이전트최종상태업데이트 -->
+	<insert id="updateIIPAgentState">
+		update TIM0211
+		   set
+			 STATUS     = #{status}
+			,MOD_DATE   = #{getDate}
+			,MOD_USER   = #{regApp}
+		 where AGENT_ID = #{agentId}
+	</insert>
+
+	<!-- IIP에이전트 상태 초기화 -->
+	<insert id="updateIIPAgentStateInit">
+		update TIM0211
+		   set
+			 STATUS     = #{status}
+			,MOD_DATE   = #{getDate}
+		where STATUS !='0'
+	</insert>
+
+	<!-- IIP에이전트상태등록 -->
+	<insert id="insertIIPAgentLog">
+		insert into TOP0810(
+			 AGENT_ID
+			,GET_DATE
+			,SEQ
+			,STATUS
+			,MSG
+			,REG_DATE
+			,REG_APP
+		) values (
+			 #{agentId}
+			,#{getDate}
+			,(select coalesce(max(SEQ),0) + 1 from TOP0810 where AGENT_ID = #{agentId} and GET_DATE = #{getDate})
+			,#{status}
+			,#{msg}
+			,#{regDate}
+			,#{regApp}
+		)
+	</insert>
+
+	<update id="updateIIPAgentLog">
+		update TOP0810
+           set
+			 GET_DATE = #{getDate,jdbcType=VARCHAR}
+			,STATUS   = #{status,jdbcType=VARCHAR}
+			,MSG      = #{msg,jdbcType=VARCHAR}
+			,REG_DATE = #{regDate,jdbcType=VARCHAR}
+			,REG_APP  = #{regApp,jdbcType=VARCHAR}
+		 where AGENT_ID = #{agentId}
+		   and (GET_DATE, SEQ) IN (SELECT max(GET_DATE), max(SEQ) FROM TOP0810 WHERE AGENT_ID  = #{agentId})
+	</update>
+
+
+	<!-- IIP에이전트상태조회 -->
+	<select id="getIIPAgentLogs" resultType="IIPAgentLog">
+		<![CDATA[
+		select
+			 a.AGENT_ID as "agentId"
+			,a.GET_DATE as "getDate"
+			,a.SEQ		as "seq"
+			,a.STATUS   as "status"
+			,a.MSG      as "msg"
+			,a.REG_DATE as "regDate"
+			,a.REG_APP  as "regApp"
+		  from TOP0810 a
+	inner join TIM0211 b on a.AGENT_ID = b.AGENT_ID
+	       and a.GET_DATE >= #{fromDate}
+	       and a.GET_DATE <= #{toDate}
+	     ]]>
+	     <if test="agentNm != null">
+	       and b.AGENT_NM LIKE #{agentNm}
+	     </if>
+	     <if test="status != null">
+	       and a.STATUS = #{status}
+	     </if>
+	     order by a.AGENT_ID, a.GET_DATE desc, a.SEQ desc
+	</select>
+
+
+	<update id="updateServerAddress">
+		update TIM0201 set IP = #{serverIp} , MOD_DATE = #{modDate}, MOD_USER = #{modId} where SERVER_ID =  (SELECT SERVER_ID FROM TIM0211 WHERE AGENT_ID = #{agentId})
+	</update>
+
+</mapper>

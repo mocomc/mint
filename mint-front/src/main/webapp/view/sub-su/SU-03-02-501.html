@@ -1,0 +1,359 @@
+﻿<!--
+	Screen ID : SU-03-02-501
+	Screen NM : 인터페이스 통계
+	[변경 이력]
+	* 20181030-001
+	  - 신규작성
+
+aria-hidden="true"
+-->
+
+<div class="modal" id="SU-03-02-501" tabindex="-1" role="dialog" >
+	<div class="modal-dialog">
+		<div class="modal-content animated fadeIn">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="padding:15px;">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<div>
+<!-- 					<h2><lb class="lb">현황통계그래프</lb></h2> -->
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="ibox-content4">  <!-- panel-body -->
+					<div class="col-sm-12" >
+<!-- 						<div id="grid-favorite-interface"></div> -->
+						<div class="col-lg-12" id="chart-statistics-count" style="width:100%; height: 430px;"></div>
+					</div>
+				</div>
+			</div>
+			<hr class="hr-space">
+			<hr class="hr-space">
+            <div class="modal-footer-original">
+                <button id="popup-btn-close" type="button" class="btn btn-danger btn-outline" data-dismiss="modal"><i class="fa fa-ban"></i>  <lb class="lb-298"></lb></button>
+            </div>
+		</div>
+		<!--modal-content animated fadeIn END-->
+	</div>
+	<!-- modal-dialog END-->
+</div>
+<script>
+$(document).ready(function() {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "SU-03-02-501";
+	$.extend({
+		sub : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.sub.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+				}
+			},//end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+					var jsonData = mint.common.getScreenParam("jsonData");
+					var searchType  = mint.common.getScreenParam("searchType");
+					$.sub.fn_initChartStatisticsCount();
+					$.sub.fn_getStatisticsCount(jsonData, searchType);
+
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+				}
+			},//end fn_initCallback()
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartStatisticsCount
+			//-----------------------------------------------------------------------
+			fn_initChartStatisticsCount : function() {
+				try {
+
+                    $("#chart-statistics-count").kendoChart({
+                        //renderAs: "canvas",
+                        theme: "default",
+                        transitions: false,
+                        zoomable: false,
+                        title: {
+                            //text: ""
+                        },
+                        dataSource: {
+                        	data: []
+                        },
+                        seriesDefaults: {
+                        	type: "line",
+                        	style: "normal", //normal/step/smooth
+   							markers: {
+   				                size: 3
+   				            },
+			                line: {
+			                    width: 1
+			                },
+			                labels: {
+			                	visible: false,
+			                	background: "transparent"
+			                }
+                        },
+                        tooltip: {
+                        	visible: true,
+                        	shared: true,
+                        	template: "#= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: true,
+                            position: "top",
+                            orientation: "horizontal",
+                        },
+                        series: [],
+                        // Y축
+                        valueAxis: [
+	                        {
+	                        	name: "count",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.sub.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            majorGridLines: {
+	                            	visible: true,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+	                            crosshair: {
+	                            	visible: false,
+	                            	width: 0.8,
+	                            	opacity: 0.7,
+	                            },
+	                            visible: true,
+	                        },
+
+                        ],
+                        // X축
+                        categoryAxis: {
+                        	justified: false,
+                        	labels: {
+                        		rotation: "auto"
+                        	},
+                            categories: [],
+                            majorGridLines: {
+                                visible: false
+                            },
+                            crosshair: {
+                            	visible: false
+                            }
+                        },
+                        seriesHover: function(e) {
+                        	//$.main.seriesHoverChartId = e.sender.wrapper.context.id;
+                        },
+                         chartArea: { width: 700, height: 500 }
+
+                    });
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartStatisticsCount"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getStatisticsCount
+			//-----------------------------------------------------------------------
+			fn_getStatisticsCount : function(jsonData, searchType) {
+				try {
+
+					if( $('.k-tooltip.k-chart-tooltip.k-chart-shared-tooltip').size() > 0 && $.sub.seriesHoverChartId == 'chart-statistics-count' ) {
+						return;
+					}
+
+					$.sub.fn_setStatisticsCount(jsonData, searchType);
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getStatisticsCount"});
+				}
+			},
+			//-----------------------------------------------------------------------
+			// Description :: fn_setStatisticsCount
+			//-----------------------------------------------------------------------
+			fn_setStatisticsCount : function(jsonData, searchType) {
+				try {
+					//-----------------------------------------------------------------------
+					// Chart Configuration
+					//-----------------------------------------------------------------------
+					var chart = $("#chart-statistics-count").data("kendoChart");
+					var categoryAxis = chart.options.categoryAxis;
+					var categories   = categoryAxis.categories;
+					var valueAxis    = chart.options.valueAxis;
+					var series       = chart.options.series;
+
+					if( mint.common.isEmpty(categories) ) {
+						categories = [];
+					}
+
+					if( mint.common.isEmpty(series) ) {
+						series = [];
+					}
+
+					//-----------------------------------------------------------------------
+					// categories
+					//-----------------------------------------------------------------------
+					var checkDate = new Date();
+					categories = [];
+					//-----------------------------------------------------------------------
+					// series
+					//-----------------------------------------------------------------------
+
+					for (var k = 0; k < jsonData.length; k++) {
+
+						var seriesItem = new Object();
+						seriesItem.type  = 'line';
+						seriesItem.name  =  jsonData[k].INTEGRATION_ID +"(" +jsonData[k].GUBUN_DS +")";
+						seriesItem.color = $.sub.fn_getRandomColor();
+						seriesItem.axis = 'count';
+						var seriesItemData = new Object();
+						seriesItemData =[];
+						if (searchType == "hourly") {
+							for(var i=1;i<=24;i++){
+								var hourTmep = "HOUR"+i
+								seriesItemData.push(jsonData[k][hourTmep]);
+							}
+						} else if (searchType === "daily") {
+							for(var i=1;i<=31;i++){
+								var hourTmep = "DAY"+i
+								seriesItemData.push(jsonData[k][hourTmep]);
+							}
+						} else if (searchType === "monthly") {
+							for(var i=1;i<=12;i++){
+								var hourTmep = "MONTH"+i
+								seriesItemData.push(jsonData[k][hourTmep]);
+							}
+						} else if (searchType === "yearly") {
+							for(var i=2010;i<2031;i++){
+								var hourTmep = "YEAR"+i
+								seriesItemData.push(jsonData[k][hourTmep]);
+							}
+						}
+						seriesItem.data  = seriesItemData;
+						series.push(seriesItem);
+					}
+
+
+					if (searchType == "hourly") {
+						for(var i=1;i<=24;i++){
+							categories.push((i-1) + mint.label.getLabel('lb-167'));
+						}
+					} else if (searchType === "daily") {
+						for(var i=1;i<=31;i++){
+							categories.push((i) + mint.label.getLabel('lb-170'));
+						}
+					} else if (searchType === "monthly") {
+						for(var i=1;i<=12;i++){
+							categories.push((i) + mint.label.getLabel('lb-171'));
+						}
+					} else if (searchType === "yearly") {
+						for(var i=2010;i<2031;i++){
+							categories.push((i) + mint.label.getLabel('lb-888'));
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Chart Refresh
+					//-----------------------------------------------------------------------
+					{
+						chart.options.valueAxis = valueAxis;
+						chart.options.categoryAxis.categories = categories;
+						//chart.options.categoryAxis.title.text = "시간별 통계";  // main.type 값 체크
+						chart.options.categoryAxis.title.font = '12px Arial';
+						chart.options.categoryAxis.title.margin = {top: 2, bottom:0};
+						chart.options.categoryAxis.title.padding = {bottom:0};
+						chart.options.categoryAxis.axisCrossingValues = [0, 59];
+						chart.options.series = series;
+
+						chart.refresh();
+						chart.redraw();
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setStatisticsCount"});
+				}
+			},
+			//-----------------------------------------------------------------------
+			// Description :: fn_valueAxisTemplate
+			//-----------------------------------------------------------------------
+			fn_valueAxisTemplate : function(value) {
+				try {
+					var returnValue = '';
+					if (value % 1 !== 0) {
+						returnValue = '';
+					} else {
+						returnValue = kendo.format('{0:n0}', value);
+					}
+					return returnValue;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_valueAxisTemplate"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getRandomColor
+			//-----------------------------------------------------------------------
+			fn_getRandomColor : function() {
+				try {
+					var letters = '0123456789ABCDEF';
+					var color = '#';
+					for (var i = 0; i < 6; i++) {
+					    color += letters[Math.floor(Math.random() * 16)];
+					}
+					return color;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getRandomColor"});
+				}
+			},
+		}// end sub
+
+	});// end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.sub.fn_init();
+	mint.label.attachLabel(null);
+
+});//end document.ready()
+</script>
+<style>
+.k-grid {
+	font-size:12px;
+}
+.k-grid td {
+	padding: 0.2em 0.6em;
+}
+</style>

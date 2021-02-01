@@ -1,0 +1,3037 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.co.CommonMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<!-- 접근제한 프로그램목록(중간버전으로 메뉴로 체크)  -->
+	<select id="getRestrictAccessAppList" resultMap="resultAppAuthRejectList">
+		SELECT
+			DISTINCT
+			TSU0207.MENU_ID,
+			TSU0207.MENU_NM,
+			TSU0204.APP_ID,
+			TSU0204.APP_NM,
+			TSU0204.APP_URI
+		FROM TSU0101
+		INNER JOIN TSU0201
+		ON TSU0201.ROLE_ID = TSU0101.ROLE_ID
+		AND TSU0201.DEL_YN = 'N'
+		INNER JOIN TSU0203
+		ON TSU0203.ROLE_ID = TSU0201.ROLE_ID
+		AND TSU0203.DEL_YN = 'N'
+		INNER JOIN TSU0207
+		ON TSU0207.MENU_ID = TSU0203.MENU_ID
+		AND TSU0207.DEL_YN = 'N'
+		INNER JOIN TSU0214
+		ON TSU0214.MENU_ID = TSU0207.MENU_ID
+		AND TSU0214.DEL_YN = 'N'
+		INNER JOIN TSU0204
+		ON TSU0204.APP_ID = TSU0214.APP_ID
+		AND TSU0204.DEL_YN = 'N'
+
+		<choose>
+       		<when test="_databaseId == 'postgres'">
+		EXCEPT
+       		</when>
+       		<otherwise>
+		MINUS
+       		</otherwise>
+       	</choose>
+
+		SELECT
+			TSU0207.MENU_ID,
+			TSU0207.MENU_NM,
+			TSU0204.APP_ID,
+			TSU0204.APP_NM,
+			TSU0204.APP_URI
+		FROM TSU0101
+		INNER JOIN TSU0201
+		ON TSU0201.ROLE_ID = TSU0101.ROLE_ID
+		AND TSU0201.DEL_YN = 'N'
+		INNER JOIN TSU0203
+		ON TSU0203.ROLE_ID = TSU0201.ROLE_ID
+		AND TSU0203.HAS_YN = 'Y'
+		AND TSU0203.DEL_YN = 'N'
+		INNER JOIN TSU0207
+		ON TSU0207.MENU_ID = TSU0203.MENU_ID
+		AND TSU0207.DEL_YN = 'N'
+		INNER JOIN TSU0214
+		ON TSU0214.MENU_ID = TSU0207.MENU_ID
+		AND TSU0214.DEL_YN = 'N'
+		INNER JOIN TSU0204
+		ON TSU0204.APP_ID = TSU0214.APP_ID
+		AND TSU0204.DEL_YN = 'N'
+		WHERE TSU0101.USER_ID = #{userId}
+	</select>
+
+	<resultMap id="resultAppAuthRejectList" type="java.util.LinkedHashMap" >
+		<id property="menuId" 		column="MENU_ID" />
+		<id property="appId" 		column="APP_ID" />
+		<result property="menuNm" 	column="MENU_NM" />
+		<result property="appNm" 	column="APP_NM" />
+		<result property="appURI"   column="APP_URI" />
+	</resultMap>
+
+	<!-- 사이트별 특성( 인터페이스 추가 속성 )  -->
+	<select id="getInterfaceAdditionalAttributeList" resultMap="interfaceAdditionalAttributeListResultMap">
+		SELECT
+			ATTRIBUTE_ID,
+			ATTRIBUTE_CD,
+			ATTRIBUTE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER,
+			MOD_DATE,
+			MOD_USER
+		FROM TAN0202
+		WHERE DEL_YN = 'N'
+		ORDER BY ATTRIBUTE_ID
+	</select>
+
+	<resultMap id="interfaceAdditionalAttributeListResultMap" type="InterfaceAdditionalAttribute" >
+		<id property="attrId" 		column="ATTRIBUTE_ID" />
+		<result property="attrCd" 	column="ATTRIBUTE_CD" />
+		<result property="attrNm" 	column="ATTRIBUTE_NM" />
+		<result property="comments" column="COMMENTS" />
+		<result property="delYn" 	column="DEL_YN" />
+		<result property="regDate" 	column="REG_DATE" />
+		<result property="regId" 	column="REG_USER" />
+		<result property="modDate" 	column="MOD_DATE" />
+		<result property="modId" 	column="MOD_USER" />
+	</resultMap>
+
+	<!--
+		REST-R01-CO-02-00-001 시스템코드검색
+	-->
+	<select id="getSystemCdList" resultMap="systemCdResultMap">
+		SELECT
+			 a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+		FROM TIM0101 a
+		WHERE a.DEL_YN = 'N'
+		AND a.GRP_YN = 'N'
+		ORDER BY a.SYSTEM_NM
+	</select>
+
+	<select id="getRootSystemCdList" resultMap="systemCdResultMap">
+		SELECT
+			 a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+		FROM TIM0101 a
+		WHERE a.ROOT_YN = 'Y'
+		AND a.DEL_YN = 'N'
+		ORDER BY a.SYSTEM_NM
+	</select>
+
+	<select id="getSystemCdListByRelation" resultMap="systemCdResultMap">
+		SELECT DISTINCT
+			a.SYSTEM_ID,
+			b.SYSTEM_NM,
+			b.SYSTEM_CD
+		FROM TAN0213 a, TIM0101 b
+		WHERE a.SYSTEM_ID = b.SYSTEM_ID
+		<if test="channelId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE CHANNEL_ID = #{channelId} AND DEL_YN = 'N')
+		</if>
+		<if test="channelNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0201 c, TIM0002 d WHERE c.CHANNEL_ID = d.CHANNEL_ID AND d.CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="businessId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+		</if>
+		<if test="businessNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="integrationId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTEGRATION_ID = #{integrationId} AND DEL_YN = 'N')
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTERFACE_NM LIKE '%'||#{interfaceNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="requirementNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="systemId != null">
+		AND a.SYSTEM_ID = #{systemId}
+		</if>
+		<if test="systemNm != null">
+		AND b.SYSTEM_NM LIKE '%'||#{systemNm}||'%'
+		</if>
+		<if test="service != null">
+		AND a.SERVICE LIKE '%'||#{service}||'%'
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND a.SERVICE_DESC LIKE '%'||#{serviceDesc}||'%'
+		</if>
+
+		AND b.ROOT_YN = 'Y'
+		AND a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		AND b.GRP_YN = 'N'
+		ORDER BY b.SYSTEM_NM
+	</select>
+
+	<select id="getChildSystemCdList" resultMap="systemCdResultMap">
+		SELECT
+			 b.SYSTEM_ID
+			,b.SYSTEM_NM
+			,b.SYSTEM_CD
+		FROM TIM0102 a
+		INNER JOIN TIM0101 b ON a.C_SYS_ID = b.SYSTEM_ID
+		WHERE a.P_SYS_ID = #{parentSystemId}
+		AND a.DEPTH = '1'
+		AND a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		ORDER BY b.SYSTEM_NM
+	</select>
+
+	<!-- REST-R02-CO-02-00-001 프로바이더코드검색 -->
+	<select id="getProviderCdList" resultMap="systemCdResultMap">
+		SELECT
+			 a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+		FROM TIM0101 a
+		INNER JOIN (SELECT SYSTEM_ID FROM TAN0213 WHERE NODE_TYPE = '2' GROUP BY SYSTEM_ID) b
+		ON a.SYSTEM_ID = b.SYSTEM_ID
+		AND a.DEL_YN = 'N'
+		AND a.GRP_YN = 'N'
+		ORDER BY a.SYSTEM_NM
+	</select>
+
+	<resultMap id="systemCdResultMap" type="System" >
+		<id property="systemId" 		column="SYSTEM_ID" />
+		<result property="systemNm" 	column="SYSTEM_NM" />
+		<result property="systemCd" 	column="SYSTEM_CD" />
+	</resultMap>
+
+
+	<!-- REST-R01-CO-02-00-002 서버코드검색 -->
+	<select id="getServerCdList" resultMap="getServerCdListResultMap">
+		SELECT
+		     a.SERVER_ID
+		    ,a.SERVER_NM
+		    ,a.SERVER_CD
+		FROM TIM0201 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.SERVER_NM
+	</select>
+
+	<resultMap id="getServerCdListResultMap" type="Server" >
+		<id property="serverId" 		column="SERVER_ID" />
+		<result property="serverNm" 		column="SERVER_NM" />
+		<result property="serverCd" 		column="SERVER_CD" />
+	</resultMap>
+
+
+	<!-- REST-R01-CO-02-00-003 업무코드검색 -->
+	<select id="getBusinessCdList" resultMap="businessCdResultMap">
+		SELECT
+		     a.BUSINESS_ID
+		    ,a.BUSINESS_NM
+		    ,a.BUSINESS_CD
+		    ,a.ROOT_YN
+		    ,a.GRP_YN
+		    ,a.COMMENTS
+		    ,a.DEL_YN
+		    ,a.REG_DATE
+		    ,a.REG_USER
+		    ,a.MOD_DATE
+		    ,a.MOD_USER
+		FROM TIM0301 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.BUSINESS_NM
+	</select>
+
+	<!--
+		REST-R02-CO-02-00-004 최상위 업무코드검색
+		public List<Business> getBusinessRootCdList()throws Exception;
+	-->
+	<select id="getBusinessRootCdList" resultMap="businessCdResultMap">
+		SELECT
+		   a.BUSINESS_ID
+		  ,a.BUSINESS_NM
+		  ,a.BUSINESS_CD
+		  ,a.ROOT_YN
+		  ,a.GRP_YN
+		  ,a.COMMENTS
+		  ,a.DEL_YN
+		  ,a.REG_DATE
+		  ,a.REG_USER
+		  ,a.MOD_DATE
+		  ,a.MOD_USER
+		FROM TIM0301 a
+		WHERE a.ROOT_YN = 'Y'
+		AND a.DEL_YN = 'N'
+		ORDER BY a.BUSINESS_NM
+	</select>
+
+	<!--
+		REST-R04-CO-02-00-004 최상위 업무코드검색
+		public List<Business> getBusinessRootCdListByRelation()throws Exception;
+	-->
+	<select id="getBusinessRootCdListByRelation" resultMap="businessCdResultMap">
+		SELECT DISTINCT
+			 a.BUSINESS_ID
+			,b.BUSINESS_CD
+			,b.BUSINESS_NM
+			,b.GRP_YN
+			,b.COMMENTS
+			,b.DEL_YN
+			,b.REG_DATE
+			,b.REG_USER
+			,b.MOD_DATE
+			,b.MOD_USER
+		FROM TAN0218 a, TIM0301 b
+		WHERE a.BUSINESS_ID = b.BUSINESS_ID
+		AND b.ROOT_YN = 'Y'
+		AND a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		<if test="channelId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE CHANNEL_ID = #{channelId} AND DEL_YN = 'N')
+		</if>
+		<if test="channelNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0201 c, TIM0002 d WHERE c.CHANNEL_ID = d.CHANNEL_ID AND d.CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="systemId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID = #{systemId} AND DEL_YN = 'N')
+		</if>
+		<if test="systemNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0213 c, TIM0101 d WHREE c.SYSTEM_ID = d.SYSTEM_ID AND d.SYSTEM_NM LIKE '%'||#{systemNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="integrationId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTEGRATION_ID = #{integrationId} AND DEL_YN = 'N')
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTERFACE_NM LIKE '%'||#{interfaceNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="requirementNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="service != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE LIKE '%'||#{service}||'%')
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE_DESC LIKE '%'||#{serviceDesc}||'%')
+		</if>
+		<if test="businessId != null">
+		AND a.BUSINESS_ID = #{businessId}
+		</if>
+		<if test="businessNm != null">
+		AND b.BUSINESS_NM LIKE '%'||#{businessNm}||'%'
+		</if>
+
+		ORDER BY b.BUSINESS_NM
+	</select>
+
+	<!--
+		REST-R03-CO-02-00-004 자식 업무코드검색
+		public List<Business> getChildBusinessCdList(String parentBusinessId)throws Exception;
+	-->
+	<select id="getChildBusinessCdList" resultMap="businessCdResultMap">
+		SELECT
+		   b.BUSINESS_ID
+		  ,b.BUSINESS_NM
+		  ,b.BUSINESS_CD
+		  ,b.ROOT_YN
+		  ,b.GRP_YN
+		  ,b.COMMENTS
+		  ,b.DEL_YN
+		  ,b.REG_DATE
+		  ,b.REG_USER
+		  ,b.MOD_DATE
+		  ,b.MOD_USER
+		FROM TIM0302 a
+		INNER JOIN TIM0301 b ON a.C_BIZ_ID = b.BUSINESS_ID
+		WHERE a.P_BIZ_ID = #{parentBusinessId}
+		AND a.DEPTH = '1'
+		AND a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		ORDER BY b.BUSINESS_NM
+	</select>
+
+	<resultMap id="businessCdResultMap" type="Business" >
+		<id property="businessId" 		column="BUSINESS_ID" />
+		<result property="businessNm" 	column="BUSINESS_NM" />
+		<result property="businessCd" 	column="BUSINESS_CD" />
+		<result property="rootYn" 		column="ROOT_YN"/>
+		<result property="grpYn" 		column="GRP_YN"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+	</resultMap>
+
+	<!--
+		REST-R01-CO-02-00-004 인터페이스 코드검색
+	 -->
+	<select id="getInterfaceCdList" resultMap="getInterfaceCdListResultMap">
+		SELECT
+		    A.INTERFACE_ID
+		  , A.INTEGRATION_ID
+		  , A.INTERFACE_NM
+		FROM TAN0201 A
+		INNER JOIN TAN0101 B
+		ON A.INTERFACE_ID = B.INTERFACE_ID
+		AND A.DEL_YN = 'N'
+		AND B.DEL_YN = 'N'
+		ORDER BY A.INTERFACE_NM
+	</select>
+
+	<!--
+		REST-R02-CO-02-00-004 인터페이스 코드검색
+	 -->
+	<resultMap id="getInterfaceCdListResultMap" type="Interface" >
+		<id property="interfaceId" 		 column="INTERFACE_ID"/>
+		<result property="integrationId" column="INTEGRATION_ID"/>
+		<result property="interfaceNm" 	 column="INTERFACE_NM"/>
+	</resultMap>
+
+	<!-- for test -->
+	<select id="getInterfaceCdListV2" resultType="map">
+		SELECT
+			 a.INTERFACE_ID 	AS "interfaceId"
+		 	,a.INTEGRATION_ID	AS "integrationId"
+			,a.INTERFACE_NM		AS "interfaceNm"
+		FROM TAN0201 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.INTERFACE_NM
+	</select>
+
+	<!-- for test -->
+	<resultMap id="getInterfaceCdResultMap" type="Map" >
+		<id property="interfaceId" 		 column="INTERFACE_ID"/>
+		<result property="integrationId" column="INTEGRATION_ID"/>
+		<result property="interfaceNm" 	 column="INTERFACE_NM"/>
+	</resultMap>
+
+	<insert id="insertCommon">
+		<selectKey keyProperty="cd" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+			SELECT (MAX(CD::numeric) + 1)::text FROM TSU0301 WHERE level1 = #{level1} AND level2 = #{level2}
+        		</when>
+        		<otherwise>
+			SELECT (TO_CHAR(MAX(TO_NUMBER(CD)) + 1)) FROM TSU0301 WHERE level1 = #{level1} AND level2 = #{level2}
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TSU0301
+		(
+		    LEVEL1,
+		    LEVEL2,
+		    CD,
+		    LEVEL1_NM,
+		    LEVEL2_NM,
+		    NM,
+		    NM2,
+		    COMMENTS,
+		    DEL_YN,
+		    REG_DATE,
+		    REG_USER
+		) VALUES (
+			#{level1, jdbcType=VARCHAR},
+			#{level2, jdbcType=VARCHAR},
+			#{cd, jdbcType=VARCHAR},
+			#{level1Nm, jdbcType=VARCHAR},
+			#{level2Nm, jdbcType=VARCHAR},
+			#{nm, jdbcType=VARCHAR},
+			#{nm2, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		  )
+	</insert>
+
+	<update id="updateCommon">
+		UPDATE TSU0301
+		SET NM = #{nm, jdbcType=VARCHAR},
+		   	NM2 = #{nm2, jdbcType=VARCHAR},
+		   	COMMENTS = #{comments, jdbcType=VARCHAR},
+		   	MOD_DATE = #{modDate, jdbcType=VARCHAR},
+		   	MOD_USER = #{modId, jdbcType=VARCHAR}
+		WHERE LEVEL1 = #{level1}
+		AND LEVEL2 = #{level2}
+		AND CD = #{cd}
+	</update>
+
+	<delete id="deleteCommon">
+		UPDATE TSU0301
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE LEVEL1 = #{level1}
+		AND LEVEL2 = #{level2}
+		AND CD = #{cd}
+	</delete>
+
+  	<select id="getCommonCodeList" parameterType="String" resultMap="commonCodeResultMap">
+		SELECT *
+	    FROM TSU0301
+	    WHERE DEL_YN = 'N'
+	    <if test="level1 != null">
+	    AND LEVEL1 = #{level1}
+	    </if>
+	    <if test="level2 != null">
+	    AND LEVEL2 = #{level2}
+	    </if>
+	    ORDER BY LEVEL1, LEVEL2, CD
+  	</select>
+
+ 	<!--
+		REST-R01-CO-02-00-005 공통코드 조회
+		레벨1, 레벨2 로 분류한 공통코드 테이블의 코드 리스트를 얻어온다.
+		public List<CommonCode> getCommonCodeList(String level1, String level2) throws Exception;
+	 -->
+  	<resultMap id="commonCodeResultMap" type="CommonCode">
+		<id property="level1" 	column="LEVEL1"/>
+		<id property="level2" 	column="LEVEL2"/>
+		<id property="cd" 		column="CD"/>
+		<result property="level1Nm" column="LEVEL1_NM"/>
+		<result property="level2Nm" column="LEVEL2_NM"/>
+		<result property="nm" 		column="NM"/>
+		<result property="nm2" 		column="NM2"/>
+		<result property="comments" column="COMMENTS"/>
+		<result property="delYn" 	column="DEL_YN"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modId" 	column="MOD_USER"/>
+	</resultMap>
+
+	<select id="getCommonCode" parameterType="String" resultMap="commonCodeResultMap">
+		SELECT *
+		FROM TSU0301
+		WHERE DEL_YN = 'N'
+		AND LEVEL1 = #{level1}
+		AND LEVEL2 = #{level2}
+		AND CD     = #{cd}
+	</select>
+
+	<select id="getChannelList" resultMap="getChannelListResultMap">
+		SELECT
+		   A.CHANNEL_ID
+		  ,A.CHANNEL_NM
+		  ,A.CHANNEL_CD
+		  ,A.EXTERNAL_YN
+		  ,A.MAP_RULE
+		  ,A.COMMENTS
+		  ,A.DEL_YN
+		  ,A.REG_DATE
+		  ,A.REG_USER
+		  ,A.MOD_DATE
+		  ,A.MOD_USER
+		  ,B.USER_ID
+		  ,B.ROLE_TYPE
+		  ,C.USER_NM
+		  ,C.CELL_PHONE
+		  ,C.PHONE
+		  ,C.EMAIL
+		  ,C.COMPANY_NM
+		  ,C.DEPARTMENT_NM
+		  ,C.POSITION_NM
+		  ,TAN0204.ATTRIBUTE_ID
+		  ,TAN0204.ATTRIBUTE_CD
+		  ,TAN0204.ATTRIBUTE_NM
+		FROM TIM0002 A
+		LEFT OUTER JOIN TIM0003 B
+		ON A.CHANNEL_ID = B.CHANNEL_ID
+		AND A.DEL_YN = 'N'
+		AND B.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0101 C
+		ON B.USER_ID = C.USER_ID
+		AND C.DEL_YN = 'N'
+		LEFT OUTER JOIN TAN0204 TAN0204
+		ON A.CHANNEL_ID = TAN0204.CHANNEL_ID
+		AND TAN0204.DEL_YN = 'N'
+		WHERE A.DEL_YN = 'N'
+		ORDER BY A.CHANNEL_NM, TAN0204.ATTRIBUTE_ID
+	</select>
+
+	<select id="getChannelListByRelation" resultMap="getChannelListResultMap">
+		SELECT DISTINCT
+			 a.CHANNEL_ID
+			,a.CHANNEL_NM
+			,a.CHANNEL_CD
+			,a.EXTERNAL_YN
+			,a.MAP_RULE
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+			,e.USER_ID
+			,e.ROLE_TYPE
+			,f.USER_NM
+			,f.CELL_PHONE
+			,f.PHONE
+			,f.EMAIL
+			,f.COMPANY_NM
+			,f.DEPARTMENT_NM
+			,f.POSITION_NM
+			,TAN0204.ATTRIBUTE_ID
+			,TAN0204.ATTRIBUTE_CD
+			,TAN0204.ATTRIBUTE_NM
+		FROM TIM0002 a
+		INNER JOIN TAN0201 b ON a.CHANNEL_ID = b.CHANNEL_ID
+		AND a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		<if test="integrationId != null">
+		AND b.INTEGRATION_ID LIKE '%' || #{integrationId} || '%'
+		</if>
+		<if test="interfaceNm != null">
+		AND b.INTERFACE_NM LIKE '%' || #{interfaceNm} || '%'
+		</if>
+		<if test="systemId != null">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID = #{systemId} AND DEL_YN = 'N')
+		</if>
+		<if test="systemNm != null">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0213 c, TIM0101 d WHERE c.SYSTEM_ID = d.SYSTEM_ID AND d.SYSTEM_NM LIKE '%'||#{systemNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="businessId != null">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+		</if>
+		<if test="businessNm != null">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="requirementNm != null">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="service != null">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE LIKE '%'||#{service}||'%')
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND b.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID from TAN0213 WHERE SERVICE_DESC LIKE '%'||#{serviceDesc}||'%')
+		</if>
+		<if test="channelId != null">
+		AND a.CHANNEL_ID = #{channelId}
+		</if>
+		<if test="channelNm != null">
+		AND a.CHANNEL_NM LIKE '%'||#{channelNm}||'%'
+		</if>
+
+		LEFT OUTER JOIN TIM0003 e ON a.CHANNEL_ID = e.CHANNEL_ID
+		AND e.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0101 f ON e.USER_ID = f.USER_ID
+		AND f.DEL_YN = 'N'
+		LEFT OUTER JOIN TAN0204 TAN0204
+		ON a.CHANNEL_ID = TAN0204.CHANNEL_ID
+		AND TAN0204.DEL_YN = 'N'
+		ORDER BY a.CHANNEL_NM
+	</select>
+
+	<!-- REST-R01-CO-02-00-006 인터페이스 채널검색 -->
+	<resultMap id="getChannelListResultMap" type="Channel" >
+		<id property="channelId" 			column="CHANNEL_ID"/>
+		<result property="channelNm" 		column="CHANNEL_NM" />
+		<result property="channelCd" 		column="CHANNEL_CD" />
+		<result property="externalYn" 		column="EXTERNAL_YN" />
+		<result property="mapRule" 			column="MAP_RULE" />
+		<result property="comments" 		column="COMMENTS" />
+		<result property="delYn" 			column="DEL_YN" />
+		<result property="regDate" 			column="REG_DATE" />
+		<result property="regId" 			column="REG_USER" />
+		<result property="modDate" 			column="MOD_DATE" />
+		<result property="modId" 			column="MOD_USER" />
+
+		<collection property="relUsers" ofType="RelUser">
+			<id property="user.userId" 		column="USER_ID"/>
+			<id property="seq"				column="SEQ"/>
+			<result property="roleType"		column="ROLE_TYPE"/>
+			<association property="user" javaType="User">
+				<id property="userId" 				column="USER_ID"/>
+				<result property="userNm" 			column="USER_NM"/>
+				<result property="cellPhone" 		column="CELL_PHONE"/>
+				<result property="phone"			column="PHONE"/>
+				<result property="email"			column="EMAIL"/>
+				<result property="companyNm" 		column="COMPANY_NM"/>
+				<result property="departmentNm"		column="DEPARTMENT_NM"/>
+				<result property="positionNm"		column="POSITION_NM"/>
+			</association>
+		</collection>
+
+		<collection property="relChlAttributes" ofType="java.util.LinkedHashMap">
+			<id property="attrId" 				column="ATTRIBUTE_ID"/>
+			<result property="attrCd" 			column="ATTRIBUTE_CD"/>
+			<result property="attrNm" 			column="ATTRIBUTE_NM"/>
+		</collection>
+	</resultMap>
+
+	<select id="getServiceList" resultType="String">
+		SELECT a.SERVICE
+		FROM TAN0213 a
+		WHERE a.DEL_YN = 'N'
+		AND a.SERVICE is not null
+		GROUP BY a.SERVICE
+		ORDER BY a.SERVICE
+	</select>
+
+	<select id="getServiceListByRelation" resultType="String">
+		SELECT a.SERVICE
+		FROM TAN0213 a
+		WHERE a.DEL_YN = 'N'
+		AND a.SERVICE is not null
+
+		<if test="channelId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE CHANNEL_ID = #{channelId} AND DEL_YN = 'N')
+		</if>
+		<if test="channelNm != null">
+		AND a.INTERFACE_ID IN (SELECT b.INTERFACE_ID FROM TAN0201 b, TIM0002 c WHERE b.CHANNEL_ID = c.CHANNEL_ID AND c.CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND b.DEL_YN = 'N' AND c.DEL_YN = 'N')
+		</if>
+		<if test="systemId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID = #{systemId} AND DEL_YN = 'N')
+		</if>
+		<if test="systemNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0213 c, TIM0101 d WHERE c.SYSTEM_ID = d.SYSTEM_ID AND d.SYSTEM_NM LIKE '%'||#{systemNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="businessId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+		</if>
+		<if test="businessNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="integrationId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTEGRATION_ID = #{integrationId})
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTERFACE_NM LIKE '%'||#{interfaceNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="requirementNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND a.SERVICE_DESC LIKE '%'||#{serviceDesc}||'%'
+		</if>
+		<if test="service != null">
+		AND a.SERVICE = #{service}
+		</if>
+		<if test="organizationId != null">
+		AND a.INTERFACE_ID IN (
+			SELECT DISTINCT b.INTERFACE_ID
+			FROM TAN0213 b
+			INNER JOIN TIM0101 a ON a.SYSTEM_ID = B.SYSTEM_ID
+      		INNER JOIN (
+      			SELECT b.SYSTEM_ID
+		      	FROM TIM0403 b
+          		INNER JOIN (
+          			SELECT C_ORG_ID FROM TIM0402 WHERE DEL_YN='N' AND P_ORG_ID = #{organizationId}
+          		) g ON b.ORG_ID = g.C_ORG_ID
+          	) k ON a.SYSTEM_ID = k.SYSTEM_ID
+			WHERE a.DEL_YN = 'N'
+		)
+		</if>
+		GROUP BY a.SERVICE
+		ORDER BY a.SERVICE
+	</select>
+
+	<select id="getServiceDescList" resultType="String">
+		SELECT SERVICE_DESC
+		FROM TAN0213
+		WHERE DEL_YN = 'N'
+		AND SERVICE_DESC IS NOT NULL
+		GROUP BY SERVICE_DESC
+		ORDER BY SERVICE_DESC
+	</select>
+
+	<select id="getServiceDescListByRelation" resultType="String">
+		SELECT a.SERVICE_DESC
+		FROM TAN0213 a
+		WHERE a.DEL_YN = 'N'
+		AND a.SERVICE_DESC is not null
+
+		<if test="channelId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE CHANNEL_ID = #{channelId} AND DEL_YN = 'N')
+		</if>
+		<if test="channelNm != null">
+		AND a.INTERFACE_ID IN (SELECT b.INTERFACE_ID FROM TAN0201 b, TIM0002 c WHERE b.CHANNEL_ID = c.CHANNEL_ID AND c.CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND b.DEL_YN = 'N' AND c.DEL_YN = 'N')
+		</if>
+		<if test="systemId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID = #{systemId} AND DEL_YN = 'N')
+		</if>
+		<if test="systemNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0213 c, TIM0101 d WHERE c.SYSTEM_ID = d.SYSTEM_ID AND d.SYSTEM_NM LIKE '%'||#{systemNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="businessId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+		</if>
+		<if test="businessNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="integrationId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTEGRATION_ID = #{integrationId})
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTERFACE_NM LIKE '%'||#{interfaceNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="requirementNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="service != null">
+		AND a.SERVICE = #{service}
+		</if>
+		<if test="organizationId != null">
+		AND a.INTERFACE_ID IN (
+			SELECT DISTINCT b.INTERFACE_ID
+			FROM TAN0213 b
+			INNER JOIN TIM0101 a ON a.SYSTEM_ID = B.SYSTEM_ID
+      		INNER JOIN (
+      			SELECT b.SYSTEM_ID
+		      	FROM TIM0403 b
+          		INNER JOIN  (
+          			SELECT C_ORG_ID FROM TIM0402 WHERE DEL_YN='N' AND P_ORG_ID=#{organizationId}
+          		) g ON b.ORG_ID = g.C_ORG_ID
+          	) k ON a.SYSTEM_ID = k.SYSTEM_ID
+			WHERE a.DEL_YN = 'N'
+		)
+		</if>
+		GROUP BY a.SERVICE_DESC
+		ORDER BY a.SERVICE_DESC
+	</select>
+
+	<!-- REST-R01-CO-02-00-007 서비스 검색 -->
+	<select id="getInterfaceCdListByRelation" resultMap="getInterfaceCdListResultMap">
+		SELECT
+		    A.INTERFACE_ID
+		  , A.INTEGRATION_ID
+		  , A.INTERFACE_NM
+		FROM TAN0201 A
+		INNER JOIN TAN0101 B
+		ON A.INTERFACE_ID = B.INTERFACE_ID
+		AND A.DEL_YN = 'N'
+		AND B.DEL_YN = 'N'
+		WHERE 1 = 1
+		<if test="channelId != null">
+		AND a.CHANNEL_ID = #{channelId}
+		</if>
+		<if test="channelNm != null">
+		AND a.CHANNEL_ID IN (SELECT CHANNEL_ID FROM TIM0002 WHERE CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="systemId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID = #{systemId} AND DEL_YN = 'N')
+		</if>
+		<if test="systemNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0213 c, TIM0101 d WHERE c.SYSTEM_ID = d.SYSTEM_ID AND d.SYSTEM_NM LIKE '%'||#{systemNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="businessId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+		</if>
+		<if test="businessNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="organizationId != null">
+		AND a.INTERFACE_ID IN (
+			SELECT DISTINCT b.INTERFACE_ID
+			FROM TAN0213 b
+			INNER JOIN TIM0101 a ON a.SYSTEM_ID = B.SYSTEM_ID
+      		INNER JOIN (
+      			SELECT b.SYSTEM_ID
+		      	FROM TIM0403 b
+          		INNER JOIN  (
+          			SELECT C_ORG_ID FROM TIM0402 WHERE DEL_YN='N' AND P_ORG_ID = #{organizationId}
+          		) g ON b.ORG_ID = g.C_ORG_ID
+          	) k ON a.SYSTEM_ID = k.SYSTEM_ID
+			WHERE a.DEL_YN = 'N'
+		)
+		</if>
+		<if test="integrationId != null">
+		AND a.INTEGRATION_ID LIKE '%' || #{integrationId} || '%'
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+		</if>
+		<if test="requirementNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0101 WHERE REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="service != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE LIKE '%'||#{service}||'%')
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE_DESC LIKE '%'||#{serviceDesc}||'%')
+		</if>
+		<if test="dataFrequency != null">
+		AND a.DATA_FREQ = #{dataFrequency}
+		</if>
+		ORDER BY a.INTERFACE_NM
+	</select>
+
+	<!-- REST-R01-CO-02-00-008 인터페이스TAG 검색 -->
+	<select id="getInterfaceTagList" resultMap="getInterfaceTagListResultMap">
+		SELECT
+			 a.INTERFACE_ID
+			,a.TAG
+			,a.SEQ
+		FROM TAN0221 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.INTERFACE_ID, a.TAG, a.SEQ
+	</select>
+
+	<resultMap id="getInterfaceTagListResultMap" type="InterfaceTag">
+		<id property="interfaceId" 		column="INTERFACE_ID"/>
+		<id property="tag" 				column="TAG"/>
+		<id property="seq"				column="SEQ"/>
+	</resultMap>
+
+	<!--
+		REST-R01-CO-02-00-009 요건검색, 요건(ID,NM) 리스트 검색
+	-->
+	<select id="getRequirementCdList" resultMap="getRequirementCdListResultMap">
+	 	SELECT
+	 		 a.REQUIREMENT_ID
+	 		,a.REQUIREMENT_NM
+	 	FROM TAN0101 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.REQUIREMENT_NM
+	</select>
+
+	<select id="getRequirementCdListByRelation" resultMap="getRequirementCdListResultMap">
+		SELECT
+			 a.REQUIREMENT_ID
+			,a.REQUIREMENT_NM
+		FROM TAN0101 a
+		WHERE a.DEL_YN = 'N'
+
+		<if test="channelId != null">
+		AND a.INTERFACE_ID IN (SELECT INTERFACE_ID FROM TAN0201 WHERE CHANNEL_ID = #{channelId} AND DEL_YN = 'N')
+		</if>
+		<if test="channelNm != null">
+		AND a.INTERFACE_ID IN (SELECT b.INTERFACE_ID FROM TAN0201 b, TIM0002 c WHERE b.CHANNEL_ID = c.CHANNEL_ID AND c.CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND b.DEL_YN = 'N' AND c.DEL_YN = 'N')
+		</if>
+		<if test="systemId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SYSTEM_ID = #{systemId} AND DEL_YN = 'N')
+		</if>
+		<if test="systemNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0213 c, TIM0101 d WHERE c.SYSTEM_ID = d.SYSTEM_ID AND d.SYSTEM_NM LIKE '%'||#{systemNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="businessId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+		</if>
+		<if test="businessNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+		</if>
+		<if test="integrationId != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTEGRATION_ID = #{integrationId})
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTERFACE_NM LIKE '%'||#{interfaceNm}||'%' AND DEL_YN = 'N')
+		</if>
+		<if test="requirementNm != null">
+		AND a.REQUIREMENT_NM LIKE '%'||#{requirementNm}||'%'
+		</if>
+		<if test="service != null">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE LIKE '%'||#{service}||'%')
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0213 WHERE SERVICE_DESC LIKE '%'||#{serviceDesc}||'%')
+		</if>
+
+		ORDER BY a.REQUIREMENT_NM
+	</select>
+
+	 <resultMap id="getRequirementCdListResultMap" type="Requirement">
+	 	<id property="requirementId" 		column="REQUIREMENT_ID"/>
+		<result property="requirementNm" 	column="REQUIREMENT_NM"/>
+	</resultMap>
+
+	<!-- REST-R01-CO-02-00-010 APP 리스트 검색 -->
+	<select id="getAppList" resultMap="appResultMap">
+		SELECT
+			 a.APP_ID
+			,a.APP_NM
+			,a.APP_CD
+			,a.COMMENTS
+		FROM TSU0204 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.APP_NM
+	</select>
+
+	<resultMap id="appResultMap" type="App">
+		<id property="appId" 		column="APP_ID"/>
+		<result property="appNm" 	column="APP_NM"/>
+		<result property="appCd" 	column="APP_CD"/>
+		<result property="comments" 	column="COMMENTS"/>
+	</resultMap>
+
+	<!-- REST-R01-CO-02-00-010 APP 리스트 검색 -->
+	<select id="getDataAccessRoleList" resultMap="dataAccessRoleResultMap">
+		SELECT
+			 a.ROLE_ID
+			,a.ROLE_CD
+			,a.ROLE_NM
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+		FROM TSU0218 a
+		WHERE a.DEL_YN = 'N'
+		ORDER BY a.ROLE_NM
+	</select>
+
+	<resultMap id="dataAccessRoleResultMap" type="DataAccessRole">
+		<id property="roleId" 		column="ROLE_ID"/>
+		<result property="roleCd" 	column="ROLE_CD"/>
+		<result property="roleNm" 	column="ROLE_NM"/>
+		<result property="comments" column="COMMENTS"/>
+		<result property="delYn" 	column="DEL_YN"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modId"	column="MOD_USER"/>
+	</resultMap>
+
+  	<!-- REST-R01-CO-01-00-001  시스템 조회 -->
+	<resultMap type="System" id="systemResultMap">
+		<id property="systemId"			column="SYSTEM_ID"/>
+		<result property="systemNm" 	column="SYSTEM_NM" />
+		<result property="systemCd" 	column="SYSTEM_CD" />
+		<result property="rootYn" 		column="ROOT_YN" />
+		<result property="grpYn" 		column="GRP_YN" />
+		<result property="externalYn" 	column="EXTERNAL_YN" />
+		<result property="areaInput" 	column="AREA_INPUT" />
+		<result property="comments" 	column="COMMENTS" />
+		<result property="delYn" 		column="DEL_YN" />
+		<result property="regDate" 		column="REG_DATE" />
+		<result property="regId" 		column="REG_USER" />
+		<result property="modDate" 		column="MOD_DATE" />
+		<result property="modId" 		column="MOD_USER" />
+
+		<association property="parent" javaType="System">
+			<id property="systemId"			column="P_SYSTEM_ID"/>
+			<result property="systemNm" 	column="P_SYSTEM_NM" />
+			<result property="systemCd" 	column="P_SYSTEM_CD" />
+			<result property="rootYn" 		column="P_ROOT_YN" />
+			<result property="grpYn" 		column="P_GRP_YN" />
+			<result property="externalYn" 	column="P_EXTERNAL_YN" />
+			<result property="areaInput" 	column="P_AREA_INPUT" />
+			<result property="comments" 	column="P_COMMENTS" />
+		</association>
+
+		<association property="zoneInfo" javaType="ZoneInfo">
+			<id property="zoneId" 					column="SYS_ZONE_ID"/>
+			<id property="countryInfo.countryId" 	column="SYS_COUNTRY_ID"/>
+			<result property="zoneId" 				column="SYS_ZONE_ID"/>
+			<result property="zoneCd" 				column="SYS_ZONE_CD"/>
+			<result property="zoneNm" 				column="SYS_ZONE_NM"/>
+			<result property="geoCd" 				column="SYS_GEO_CD"/>
+			<association property="countryInfo" javaType="CountryInfo">
+				<id property="countryId" 		column="SYS_COUNTRY_ID"/>
+				<result property="countryNm" 	column="SYS_COUNTRY_NM"/>
+				<result property="countryCd" 	column="SYS_COUNTRY_CD"/>
+				<result property="langCd" 		column="SYS_LANG_CD"/>
+			</association>
+		</association>
+
+	 	<collection property="serverList" ofType="Server">
+	 		<id property="serverId" 			column="SERVER_ID"/>
+	 		<id property="seq"					column="SV_SEQ"/>
+	 		<result property="serverNm"			column="SERVER_NM"/>
+	 		<result property="serverCd"			column="SERVER_CD"/>
+	 		<result property="hostNm"			column="HOST_NM"/>
+	 		<result property="useType"			column="USE_TYPE"/>
+	 		<result property="useTypeNm"		column="USE_TYPE_NM"/>
+	 		<result property="ip"				column="IP"/>
+	 		<result property="redundancyYn"		column="REDUNDANCY_YN"/>
+	 		<result property="hwInstPosition"	column="HW_INST_POSITION"/>
+	 		<result property="os"				column="OS"/>
+	 		<result property="firewallYn"		column="FIREWALL_YN"/>
+	 		<result property="areaInput"		column="AREA_INPUT"/>
+	 		<result property="comments"			column="SV_COMMENTS"/>
+
+	 		<association property="zoneInfo" javaType="ZoneInfo">
+				<id property="zoneId" 					column="SV_ZONE_ID"/>
+				<id property="countryInfo.countryId" 	column="SV_COUNTRY_ID"/>
+				<result property="zoneCd" 				column="SV_ZONE_CD"/>
+				<result property="zoneNm" 				column="SV_ZONE_NM"/>
+				<result property="geoCd" 				column="SV_GEO_CD"/>
+				<association property="countryInfo" javaType="CountryInfo">
+					<id property="countryId" 		column="SV_COUNTRY_ID"/>
+					<result property="countryNm" 	column="SV_COUNTRY_NM"/>
+					<result property="countryCd" 	column="SV_COUNTRY_CD"/>
+					<result property="langCd"		column="SV_LANG_CD"/>
+				</association>
+			</association>
+
+			<collection property="relUsers" ofType="RelUser">
+				<id property="user.userId" 			column="SV_USER_ID"/>
+				<id property="seq"					column="SV_SEQ"/>
+				<result property="roleType"			column="SV_ROLE_TYPE"/>
+				<result property="roleTypeNm"		column="SV_ROLE_NM"/>
+				<association property="user" javaType="User">
+					<id property="userId" 				column="SV_USER_ID"/>
+					<result property="userNm" 			column="SV_USER_NM"/>
+					<result property="cellPhone" 		column="SV_CELL_PHONE"/>
+					<result property="phone"			column="SV_PHONE"/>
+					<result property="email"			column="SV_EMAIL"/>
+				</association>
+			</collection>
+
+	 	</collection>
+
+		<collection property="relUsers" ofType="RelUser">
+			<id property="user.userId" 		column="SYS_USER_ID"/>
+			<id property="seq"				column="SYS_SEQ"/>
+			<result property="roleType"		column="SYS_ROLE_TYPE"/>
+			<result property="roleTypeNm"	column="SYS_ROLE_NM"/>
+			<association property="user" javaType="User">
+				<id property="userId" 				column="SYS_USER_ID"/>
+				<result property="userId" 			column="SYS_USER_ID"/>
+				<result property="userNm" 			column="SYS_USER_NM"/>
+				<result property="cellPhone" 		column="SYS_CELL_PHONE"/>
+				<result property="phone"			column="SYS_PHONE"/>
+				<result property="email"			column="SYS_EMAIL"/>
+			</association>
+		</collection>
+
+	</resultMap>
+
+	<select id="getServerList"  resultMap="serverResultMap">
+		SELECT
+		    ---------------------------
+		    -- 서버 리스트
+		    ---------------------------
+		     a.SERVER_ID
+		    ,a.SERVER_NM
+		    ,a.SERVER_CD
+		    ,a.HOST_NM
+		    ,a.USE_TYPE
+		    ,cdim10.NM AS USE_TYPE_NM
+		    ,a.IP
+		    ,a.REDUNDANCY_YN
+		    ,a.HW_INST_POSITION
+		    ,a.OS
+		    ,a.FIREWALL_YN
+		    ,a.AREA_INPUT
+		    ,a.COMMENTS
+		    ---------------------------
+		    -- 서버 지역정보
+		    ---------------------------
+		    ,b.ZONE_ID AS SV_ZONE_ID
+		    ,b.ZONE_NM AS SV_ZONE_NM
+		    ,b.ZONE_CD AS SV_ZONE_CD
+		    ,b.GEO_CD AS SV_GEO_CD
+		    ,b.COUNTRY_ID AS SV_COUNTRY_ID
+		    ,c.COUNTRY_NM AS SV_COUNTRY_NM
+		    ,c.COUNTRY_CD AS SV_COUNTRY_CD
+		    ---------------------------
+		    -- 서버담당자
+		    ---------------------------
+		    ,d.SEQ          AS SV_SEQ
+		    ,d.ROLE_TYPE    AS SV_ROLE_TYPE
+		    ,cdim14.NM      AS SV_ROLE_NM
+		    ,d.USER_ID      AS SV_USER_ID
+		    ,d.PASSWORD     AS SV_PASSWORD
+		    ,d.USER_NM      AS SV_USER_NM
+		    ,d.CELL_PHONE   AS SV_CELL_PHONE
+		    ,d.PHONE        AS SV_PHONE
+		    ,d.EMAIL        AS SV_EMAIL
+		    ,d.ROLE_ID      AS SV_ROLE_ID
+		FROM TIM0201 a
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '10' AND DEL_YN = 'N') cdim10 ON a.USE_TYPE = cdim10.CD
+		LEFT OUTER JOIN TSU0304 b ON a.ZONE_ID = b.ZONE_ID
+		LEFT OUTER JOIN TSU0303 c ON a.COUNTRY_ID = c.COUNTRY_ID
+		LEFT OUTER JOIN (
+			SELECT
+				 a.SEQ
+		        ,a.ROLE_TYPE
+		        ,b.USER_ID
+		        ,b.PASSWORD
+		        ,b.USER_NM
+		        ,b.CELL_PHONE
+		        ,b.PHONE
+		        ,b.EMAIL
+		        ,b.ROLE_ID
+		        ,a.SERVER_ID
+			FROM TIM0203 a
+			INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		) d ON a.SERVER_ID = d.SERVER_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '14' AND DEL_YN = 'N') cdim14 ON d.ROLE_TYPE = cdim14.CD
+		WHERE a.DEL_YN = 'N'
+		<if test="serverId != null">
+		AND a.SERVER_ID = #{serverId}
+		</if>
+		<if test="serverCd != null">
+		AND a.SERVER_CD LIKE '%'||#{serverCd}||'%'
+		</if>
+		<if test="serverNm != null">
+		AND a.SERVER_NM LIKE '%'||#{serverNm}||'%'
+		</if>
+		ORDER BY a.SERVER_NM
+	</select>
+
+	<!-- REST-R01-CO-01-00-002 서버 리스트 조회 -->
+	<resultMap type="Server" id="serverResultMap">
+		<id property="serverId" 			column="SERVER_ID"/>
+ 		<result property="seq"				column="SERVER_SEQ"/>
+ 		<result property="serverNm"			column="SERVER_NM"/>
+ 		<result property="serverCd"			column="SERVER_CD"/>
+ 		<result property="hostNm"			column="HOST_NM"/>
+ 		<result property="useType"			column="USE_TYPE"/>
+ 		<result property="useTypeNm"		column="USE_TYPE_NM"/>
+ 		<result property="ip"				column="IP"/>
+ 		<result property="redundancyYn"		column="REDUNDANCY_YN"/>
+ 		<result property="hwInstPosition"	column="HW_INST_POSITION"/>
+ 		<result property="os"				column="OS"/>
+ 		<result property="firewallYn"		column="FIREWALL_YN"/>
+ 		<result property="areaInput"		column="AREA_INPUT"/>
+ 		<result property="comments"			column="COMMENTS"/>
+ 		<association property="zoneInfo" javaType="ZoneInfo">
+			<id property="zoneId" 				 column="SV_ZONE_ID"/>
+			<id property="countryInfo.countryId" column="SV_COUNTRY_ID"/>
+			<result property="zoneCd" column="SV_ZONE_CD"/>
+			<result property="zoneNm" column="SV_ZONE_NM"/>
+			<result property="geoCd" column="SV_GEO_CD"/>
+			<association property="countryInfo" javaType="CountryInfo">
+				<id property="countryId" 	 column="SV_COUNTRY_ID"/>
+				<result property="countryNm" column="SV_COUNTRY_NM"/>
+				<result property="countryCd" column="SV_COUNTRY_CD"/>
+				<result property="langCd" column="SV_LANG_CD"/>
+			</association>
+		</association>
+
+		<collection property="relUsers" ofType="RelUser">
+			<id property="user.userId" 			column="SV_USER_ID"/>
+			<id property="seq"					column="SV_SEQ"/>
+			<result property="roleType"			column="SV_ROLE_TYPE"/>
+			<result property="roleTypeNm"		column="SV_ROLE_NM"/>
+			<association property="user" javaType="User">
+				<id property="userId" 				column="SV_USER_ID"/>
+				<result property="userNm" 			column="SV_USER_NM"/>
+				<result property="cellPhone" 		column="SV_CELL_PHONE"/>
+				<result property="phone"			column="SV_PHONE"/>
+				<result property="email"			column="SV_EMAIL"/>
+			</association>
+		</collection>
+	</resultMap>
+
+	<select id="getBusinessList" resultMap="businessResultMap">
+		SELECT
+		     a.BUSINESS_ID
+		    ,a.BUSINESS_NM
+		    ,a.BUSINESS_CD
+		    ,a.GRP_YN
+		    ,a.COMMENTS
+		    ,a.DEL_YN
+		    ,a.REG_DATE
+		    ,a.REG_USER
+		    ,a.MOD_DATE
+		    ,a.MOD_USER
+		    ,b.SEQ
+		    ,b.ROLE_TYPE
+		    ,cdim15.NM  as ROLE_NM
+		    ,b.USER_ID
+		    ,b.PASSWORD
+		    ,b.USER_NM
+		    ,b.CELL_PHONE
+		    ,b.PHONE
+		    ,b.EMAIL
+		    ,b.ROLE_ID
+		FROM TIM0301 a
+		LEFT OUTER JOIN (
+			SELECT
+				 a.SEQ
+				,a.ROLE_TYPE
+		        ,b.USER_ID
+		        ,b.PASSWORD
+		        ,b.USER_NM
+		        ,b.CELL_PHONE
+		        ,b.PHONE
+		        ,b.EMAIL
+		        ,b.ROLE_ID
+		        ,a.BUSINESS_ID
+			FROM TIM0304 a
+			INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		) b ON a.BUSINESS_ID = b.BUSINESS_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '15' AND DEL_YN = 'N') cdim15 ON b.ROLE_TYPE = cdim15.CD
+		WHERE a.DEL_YN = 'N'
+		<if test="businessId != null">
+		AND a.BUSINESS_ID = #{businessId}
+		</if>
+		<if test="businessCd != null">
+		AND a.BUSINESS_CD LIKE '%'||#{businessCd}||'%'
+		</if>
+		<if test="businessNm != null">
+		AND a.BUSINESS_NM LIKE '%'||#{businessNm}||'%'
+		</if>
+		ORDER BY a.BUSINESS_NM
+	</select>
+
+	<!-- REST-R01-CO-01-00-003 업무조회 -->
+	<resultMap type="Business" id="businessResultMap">
+		<id property="businessId" 		column="BUSINESS_ID"/>
+	    <result property="businessNm" 	column="BUSINESS_NM"/>
+		<result property="businessCd" 	column="BUSINESS_CD"/>
+		<result property="rootYn" 		column="ROOT_YN"/>
+		<result property="grpYn" 		column="GRP_YN"/>
+		<result property="comments" 	column="COMMENTS"/>
+		<result property="delYn" 		column="DEL_YN"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_USER"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_USER"/>
+
+		<collection property="relUsers" ofType="RelUser">
+			<id property="user.userId" 		column="USER_ID"/>
+			<id property="seq"				column="SEQ"/>
+			<result property="roleType"		column="ROLE_TYPE"/>
+			<result property="roleTypeNm"	column="ROLE_NM"/>
+			<association property="user" javaType="User">
+				<id property="userId" 			column="USER_ID"/>
+				<result property="userNm" 		column="USER_NM"/>
+				<result property="cellPhone" 	column="CELL_PHONE"/>
+				<result property="phone"		column="PHONE"/>
+				<result property="email"		column="EMAIL"/>
+			</association>
+		</collection>
+	</resultMap>
+
+	<select id="getUserList" parameterType="string" resultMap="userResultMap">
+		SELECT
+		     a.USER_ID
+		    --,a.PASSWORD
+		    ,a.USER_NM
+		    ,a.CELL_PHONE
+		    ,a.PHONE
+		    ,a.EMAIL
+			,a.COMPANY_NM
+			,a.DEPARTMENT_NM
+			,a.POSITION_NM
+		    ,a.DEL_YN
+		    ,a.REG_DATE
+		    ,a.REG_USER
+		    ,a.MOD_DATE
+		    ,a.MOD_USER
+		    ,a.ROLE_ID
+		    ,b.ROLE_NM
+		    ,b.COMMENTS
+			,c.IS_INTERFACE_ADMIN
+		FROM TSU0101 a
+		INNER JOIN TSU0201 b ON a.ROLE_ID = b.ROLE_ID
+		LEFT OUTER JOIN (
+			SELECT ATTRIBUTE_VALUE, 'Y' AS IS_INTERFACE_ADMIN
+			FROM TSU0302
+			WHERE PACKAGE = 'user'
+			AND ATTRIBUTE_ID = 'role.interface.admin'
+			AND DEL_YN = 'N'
+		) c ON b.ROLE_ID = c.ATTRIBUTE_VALUE
+		WHERE a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		<if test="userId != null">
+		AND a.USER_ID LIKE '%'||#{userId}||'%'
+		</if>
+		<if test="userNm != null">
+		AND a.USER_NM LIKE '%'||#{userNm}||'%'
+		</if>
+		<if test="cellPhone != null">
+		AND a.CELL_PHONE LIKE '%'||#{cellPhone}||'%'
+		</if>
+		<if test="phone != null">
+		AND a.PHONE LIKE '%'||#{phone}||'%'
+		</if>
+		<if test="email != null">
+		AND a.EMAIL LIKE '%'||#{email}||'%'
+		</if>
+		ORDER BY a.USER_NM
+	</select>
+
+	<!-- REST-R01-CO-01-00-004 사용자조회 -->
+	<select id="getUser" parameterType="String" resultMap="userResultMap">
+		SELECT
+		     a.USER_ID
+			<if test="usePassword != null and usePassword eq 'Y'.toString()">
+			,a.PASSWORD
+			</if>
+		    ,a.USER_NM
+		    ,a.CELL_PHONE
+		    ,a.PHONE
+		    ,a.EMAIL
+			,a.COMPANY_NM
+			,a.DEPARTMENT_NM
+			,a.POSITION_NM
+		    ,a.DEL_YN
+		    ,a.REG_DATE
+		    ,a.REG_USER
+		    ,a.MOD_DATE
+		    ,a.MOD_USER
+		    ,a.ROLE_ID
+		    ,b.ROLE_NM
+		    ,b.COMMENTS
+	        ,c.IS_INTERFACE_ADMIN
+	        ,d.DA_ROLE_ID
+	        ,d.DA_ROLE_CD
+	        ,d.DA_ROLE_NM
+	        ,e.IS_INTERFACE_VIEWER
+		FROM TSU0101 a
+		INNER JOIN TSU0201 b ON a.ROLE_ID = b.ROLE_ID
+		LEFT OUTER JOIN (
+			SELECT ATTRIBUTE_VALUE, 'Y' AS IS_INTERFACE_ADMIN
+	      	FROM TSU0302
+	      	WHERE PACKAGE = 'user'
+	      	AND ATTRIBUTE_ID = 'role.interface.admin'
+	      	AND DEL_YN = 'N'
+		) c ON b.ROLE_ID = c.ATTRIBUTE_VALUE
+	    LEFT OUTER JOIN (
+			SELECT
+	      	 	 k.ROLE_ID AS DA_ROLE_ID
+	      	 	,k.ROLE_CD AS DA_ROLE_CD
+	      	 	,k.ROLE_NM AS DA_ROLE_NM
+	      	 	,g.USER_ID
+         	FROM TSU0218 k
+         	INNER JOIN TSU0219 g ON g.ROLE_ID = k.ROLE_ID
+	      	WHERE k.DEL_YN = 'N'
+		) d ON d.USER_ID = a.USER_ID
+		LEFT OUTER JOIN (
+			SELECT ATTRIBUTE_VALUE, 'Y' AS IS_INTERFACE_VIEWER
+			FROM TSU0302
+	      	WHERE PACKAGE = 'user'
+	      	AND ATTRIBUTE_ID = 'role.interface.viewer'
+	      	AND DEL_YN = 'N'
+		) e ON b.ROLE_ID = e.ATTRIBUTE_VALUE
+		WHERE a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		AND a.USER_ID = #{userId}
+	</select>
+
+	<select id="getAdminChannelList" resultType="string" parameterType="string">
+		SELECT CHANNEL_ID FROM TIM0003 WHERE USER_ID = #{userId} AND DEL_YN = 'N'
+	</select>
+
+	<!-- REST-R02-CO-01-00-004 사용자조회 -->
+	<resultMap id="userResultMap" type="User">
+		<id 	property="userId" 		column="USER_ID" />
+		<result property="password" 	column="PASSWORD" />
+		<result property="userNm" 		column="USER_NM" />
+		<result property="cellPhone" 	column="CELL_PHONE" />
+		<result property="phone" 		column="PHONE" />
+		<result property="email" 		column="EMAIL" />
+		<result property="companyNm"    column="COMPANY_NM"/>
+		<result property="departmentNm" column="DEPARTMENT_NM"/>
+		<result property="positionNm"   column="POSITION_NM"/>
+		<result property="delYn" 		column="DEL_YN" />
+		<result property="regDate" 		column="REG_DATE" />
+		<result property="regId" 		column="REG_USER" />
+		<result property="modDate" 		column="MOD_DATE" />
+		<result property="modId" 		column="MOD_USER" />
+		<association property="role" javaType="UserRole">
+			<id property="id"						column="ROLE_ID" />
+			<result property="roleId"				column="ROLE_ID" />
+			<result property="roleNm" 				column="ROLE_NM" />
+			<result property="isInterfaceAdmin"		column="IS_INTERFACE_ADMIN"/>
+			<result property="isInterfaceViewer"	column="IS_INTERFACE_VIEWER"/>
+			<result property="comments" 			column="COMMENTS" />
+		</association>
+		<collection property="dataAccessRoleList" ofType="DataAccessRole">
+			<id property="roleId"				column="DA_ROLE_ID" />
+			<result property="roleCd" 			column="DA_ROLE_CD" />
+			<result property="roleNm" 			column="DA_ROLE_NM" />
+		</collection>
+	</resultMap>
+
+	<select id="getSystemList" parameterType="Map" resultMap="systemResultMap">
+		SELECT
+			---------------------------
+			-- 시스템
+			---------------------------
+			a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+			,a.ROOT_YN
+			,a.GRP_YN
+			,a.EXTERNAL_YN
+			,a.AREA_INPUT
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+			---------------------------
+			-- 시스템 지역
+			---------------------------
+			,b.ZONE_ID as SYS_ZONE_ID
+			,b.ZONE_NM as SYS_ZONE_NM
+			,b.ZONE_CD as SYS_ZONE_CD
+			,b.GEO_CD as SYS_GEO_CD
+			,c.COUNTRY_ID as SYS_COUNTRY_ID
+			,c.COUNTRY_NM as SYS_COUNTRY_NM
+			,c.COUNTRY_CD as SYS_COUNTRY_CD
+			---------------------------
+			-- 시스템 담당자
+			---------------------------
+			,h.SEQ          as SYS_SEQ
+			,h.ROLE_TYPE    as SYS_ROLE_TYPE
+			,cdim13.NM      as SYS_ROLE_NM
+			,h.USER_ID      as SYS_USER_ID
+			,h.PASSWORD     as SYS_PASSWORD
+			,h.USER_NM      as SYS_USER_NM
+			,h.CELL_PHONE   as SYS_CELL_PHONE
+			,h.PHONE        as SYS_PHONE
+			,h.EMAIL        as SYS_EMAIL
+			,h.ROLE_ID      as SYS_ROLE_ID
+			---------------------------
+			-- 서버 리스트
+			---------------------------
+			,d.SERVER_ID
+			,d.SEQ			as SV_SEQ
+			,d.SERVER_NM
+			,d.SERVER_CD
+			,d.HOST_NM
+			,d.USE_TYPE
+			,cdim10.NM as USE_TYPE_NM
+			,d.IP
+			,d.REDUNDANCY_YN
+			,d.HW_INST_POSITION
+			,d.OS
+			,d.FIREWALL_YN
+			,d.AREA_INPUT
+			,d.COMMENTS		as SV_COMMENTS
+			---------------------------
+			-- 서버 지역정보
+			---------------------------
+			,f.ZONE_ID as SV_ZONE_ID
+			,f.ZONE_NM as SV_ZONE_NM
+			,f.ZONE_CD as SV_ZONE_CD
+			,f.GEO_CD as SV_GEO_CD
+			,g.COUNTRY_ID as SV_COUNTRY_ID
+			,g.COUNTRY_NM as SV_COUNTRY_NM
+			,g.COUNTRY_CD as SV_COUNTRY_CD
+			---------------------------
+			-- 서버담당자
+			---------------------------
+			,j.SEQ          as SV_USER_SEQ
+			,j.ROLE_TYPE    as SV_ROLE_TYPE
+			,cdim14.NM      as SV_ROLE_NM
+			,j.USER_ID      as SV_USER_ID
+			,j.PASSWORD     as SV_PASSWORD
+			,j.USER_NM      as SV_USER_NM
+			,j.CELL_PHONE   as SV_CELL_PHONE
+			,j.PHONE        as SV_PHONE
+			,j.EMAIL        as SV_EMAIL
+			,j.ROLE_ID      as SV_ROLE_ID
+			--------------------------------------
+			-- 시스템 그룹
+			--------------------------------------
+			,k.P_SYSTEM_CD
+			,k.P_SYSTEM_ID
+			,k.P_SYSTEM_NM
+			,k.P_ROOT_YN
+			,k.P_GRP_YN
+			,k.P_EXTERNAL_YN
+			,k.P_AREA_INPUT
+			,k.P_COMMENTS
+		FROM TIM0101 a
+		LEFT OUTER JOIN TSU0304 b ON a.ZONE_ID = b.ZONE_ID
+		LEFT OUTER JOIN TSU0303 c ON b.COUNTRY_ID = c.COUNTRY_ID
+		LEFT OUTER JOIN (
+			SELECT
+				a.SYSTEM_ID
+				,a.SERVER_ID
+				,a.SEQ
+				,b.SERVER_NM
+				,b.SERVER_CD
+				,b.HOST_NM
+				,b.USE_TYPE
+				,b.IP
+				,b.REDUNDANCY_YN
+				,b.HW_INST_POSITION
+				,b.OS
+				,b.FIREWALL_YN
+				,b.AREA_INPUT
+				,b.COMMENTS
+				,b.ZONE_ID
+			FROM TIM0202 a
+			INNER JOIN TIM0201 b ON b.SERVER_ID = a.SERVER_ID
+		) d ON a.SYSTEM_ID = d.SYSTEM_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '10' AND DEL_YN = 'N') cdim10 ON d.USE_TYPE = cdim10.CD
+		LEFT OUTER JOIN TSU0304 f ON d.ZONE_ID = f.ZONE_ID
+		LEFT OUTER JOIN TSU0303 g ON f.COUNTRY_ID = g.COUNTRY_ID
+		LEFT OUTER JOIN (
+			SELECT
+				a.SEQ
+				,a.ROLE_TYPE
+				,b.USER_ID
+				,b.PASSWORD
+				,b.USER_NM
+				,b.CELL_PHONE
+				,b.PHONE
+				,b.EMAIL
+				,b.ROLE_ID
+				,a.SYSTEM_ID
+			FROM TIM0105 a
+			INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		) h ON a.SYSTEM_ID = h.SYSTEM_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '13' AND DEL_YN = 'N') cdim13 ON h.ROLE_TYPE = cdim13.CD
+		LEFT OUTER JOIN (
+			SELECT
+				a.SEQ
+				,a.ROLE_TYPE
+				,b.USER_ID
+				,b.PASSWORD
+				,b.USER_NM
+				,b.CELL_PHONE
+				,b.PHONE
+				,b.EMAIL
+				,b.ROLE_ID
+				,a.SERVER_ID
+			FROM TIM0203 a
+			INNER JOIN TSU0101 b ON a.USER_ID = b.USER_ID
+		) j ON d.SERVER_ID = j.SERVER_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '14' AND DEL_YN = 'N') cdim14 ON j.ROLE_TYPE = cdim14.CD
+		LEFT OUTER JOIN (
+			SELECT
+				a.C_SYS_ID
+				,b.SYSTEM_ID AS P_SYSTEM_ID
+				,b.SYSTEM_NM AS P_SYSTEM_NM
+				,b.SYSTEM_CD AS P_SYSTEM_CD
+				,b.ROOT_YN   AS P_ROOT_YN
+				,b.GRP_YN    AS P_GRP_YN
+				,b.EXTERNAL_YN AS P_EXTERNAL_YN
+				,b.AREA_INPUT AS P_AREA_INPUT
+				,b.COMMENTS AS P_COMMENTS
+			FROM TIM0102 a
+			INNER JOIN TIM0101 b ON a.P_SYS_ID = b.SYSTEM_ID
+			WHERE a.DEPTH = 1
+		) k ON a.SYSTEM_ID = k.C_SYS_ID
+
+		<!--
+		권한체크일시보류 , 20150824 , 김유식대리 요청
+		<if test="isInterfaceAdmin != null and isInterfaceAdmin eq 'N'.toString()">
+			inner join TAN0213 l
+			   on l.SYSTEM_ID = a.SYSTEM_ID
+			inner join TAN0219 m
+			on l.INTERFACE_ID = m.INTERFACE_ID
+			and m.USER_ID = #{userId}
+		</if>
+		-->
+
+		WHERE a.DEL_YN = 'N'
+		AND a.GRP_YN = 'N'
+		<choose>
+			<when test="systemId != null">
+		AND a.SYSTEM_ID = #{systemId}
+			</when>
+			<when test="systemCd != null and systemNm != null">
+		AND (a.SYSTEM_CD LIKE '%'||#{systemCd}||'%' OR a.SYSTEM_NM LIKE '%'||#{systemNm}||'%')
+			</when>
+			<when test="systemCd != null and systemNm == null">
+		AND a.SYSTEM_CD LIKE '%'||#{systemCd}||'%'
+			</when>
+			<when test="systemCd == null and systemNm != null">
+		AND a.SYSTEM_NM LIKE '%'||#{systemNm}||'%'
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+
+		ORDER BY a.SYSTEM_NM
+	</select>
+
+	<!-- REST-R02-CO-01-00-006 인터페이스패턴 조회 -->
+   	<select id="getInterfacePatternList" resultMap="interfacePatternResultMap">
+		SELECT
+		     a.PATTERN_ID
+		    ,a.PATTERN_NM
+		    ,a.PATTERN_CD
+		    ,a.PATTERN_IMG
+		    ,a.DATA_PR_DIR
+		    ,cdim01.NM as DATA_PR_DIR_NM
+		    ,a.APP_PR_METHOD
+		    ,cdim02.NM as APP_PR_METHOD_NM
+		    ,a.DATA_PR_METHOD
+		    ,cdim12.NM as DATA_PR_METHOD_NM
+		    ,a.START_RES_TYPE
+		    ,cdim0401.NM as START_RES_NM
+		    ,a.END_RES_TYPE
+		    ,cdim0402.NM as END_RES_TYPE
+		    ,a.SND_RCV_REL
+		    ,a.GUIDE_ID
+		    ,a.COMMENTS
+		    ,a.DEL_YN
+		    ,a.REG_DATE
+		    ,a.REG_USER
+		    ,a.MOD_DATE
+		    ,a.MOD_USER
+		    ,b.GUIDE_ID
+		    ,b.PAGE
+		    ,b.SUBJECT
+		    ,b.CONTENTS
+		FROM TAN0207 a
+		  	LEFT OUTER JOIN TAN0208 b ON a.GUIDE_ID = b.GUIDE_ID
+		  	LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '01' AND DEL_YN = 'N') cdim01 ON a.DATA_PR_DIR = cdim01.CD -- 데이터 흐름제어
+		 	LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '02' AND DEL_YN = 'N') cdim02 ON a.APP_PR_METHOD = cdim02.CD -- 어를처리방식(동기/비동기)
+			LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '12' AND DEL_YN = 'N') cdim12 ON a.DATA_PR_METHOD = cdim12.CD -- 데이터처리방식
+		  	LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND DEL_YN = 'N') cdim0401 ON a.START_RES_TYPE = cdim0401.CD -- 인터페이스 시작노드 리소스
+			LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND DEL_YN = 'N') cdim0402 ON a.END_RES_TYPE = cdim0402.CD -- 인터페이스 종료노드 리소스
+		WHERE a.DEL_YN = 'N'
+		<if test="patternNm != null">
+		AND a.PATTERN_NM LIKE '%'||#{patternNm}||'%'
+		</if>
+		<if test="patternCd != null">
+		AND a.PATTERN_CD LIKE '%'||#{patternCd}||'%'
+		</if>
+		<if test="sndRcvRel != null">
+		AND a.SND_RCV_REL LIKE '%'||#{sndRcvRel}||'%'
+		</if>
+		<if test="dataPrDir != null">
+		AND a.DATA_PR_DIR = #{dataPrDir}
+		</if>
+		<if test="appPrMethod != null">
+		AND a.APP_PR_METHOD = #{appPrMethod}
+		</if>
+		<if test="dataPrMethod != null">
+		AND a.DATA_PR_METHOD = #{DATA_PR_METHOD}
+		</if>
+		ORDER BY a.PATTERN_NM
+	</select>
+
+	<resultMap id="interfacePatternResultMap" type="InterfacePattern">
+		<id property="patternId" 			column="PATTERN_ID"/>
+		<result property="patternNm" 		column="PATTERN_NM"/>
+		<result property="patternCd" 		column="PATTERN_CD"/>
+		<result property="patternImg" 		column="PATTERN_IMG"/>
+		<result property="dataPrDir" 		column="DATA_PR_DIR"/>
+		<result property="dataPrDirNm" 		column="DATA_PR_DIR_NM"/>
+		<result property="appPrMethod" 		column="APP_PR_METHOD"/>
+		<result property="appPrMethodNm" 	column="APP_PR_METHOD_NM"/>
+		<result property="dataPrMethod" 	column="DATA_PR_METHOD"/>
+		<result property="dataPrMethodNm" 	column="DATA_PR_METHOD_NM"/>
+		<result property="startResType" 	column="START_RES_TYPE"/>
+		<result property="startResTypeNm" 	column="START_RES_NM"/>
+		<result property="endResType" 		column="END_RES_TYPE"/>
+		<result property="endResTypeNm" 	column="END_RES_NM"/>
+		<result property="sndRcvRel" 		column="SND_RCV_REL"/>
+		<result property="comments" 		column="COMMENTS"/>
+		<result property="delYn" 			column="DEL_YN"/>
+		<result property="regDate" 			column="REG_DATE"/>
+		<result property="regId" 			column="REG_USER"/>
+
+		<association property="guide" javaType="InterfaceGuide">
+			<id property="guideId" 			column="GUIDE_ID"/>
+			<result property="page" 		column="PAGE"/>
+			<result property="subject" 		column="SUBJECT"/>
+			<result property="contents" 	column="CONTENTS"/>
+		</association>
+	</resultMap>
+
+	<!-- REST-R01-CO-01-00-008 인터페이스리스트 조회 -->
+   	<select id="getInterfaceList" resultMap="interfaceListResultMap">
+		SELECT
+		   a.INTERFACE_ID
+		  ,a.INTEGRATION_ID
+		  ,a.INTERFACE_NM
+		  ,b.CHANNEL_ID
+		  ,b.CHANNEL_NM
+		  ,c.SYSTEM_ID
+		  ,d.SYSTEM_CD
+		  ,c.SEQ AS SYS_SEQ
+		  ,c.SERVICE
+		  ,c.NODE_TYPE AS SYS_NODE_TYPE
+		  ,cdim08.NM AS SYS_NODE_TYPE_NM
+		  ,c.RESOURCE_TYPE
+		  ,cdim04.NM AS RESOURCE_NM
+		  ,d.SYSTEM_NM
+
+		  ------------------------
+		  -- 채널 정보
+		  ------------------------
+		  ,b.CHANNEL_ID
+		  ,b.CHANNEL_NM
+		  ,b.COMMENTS
+		  ,b.EXTERNAL_YN
+		  ,b.MAP_RULE
+		FROM TAN0201 a
+		INNER JOIN TIM0002 b ON a.CHANNEL_ID = b.CHANNEL_ID
+		INNER JOIN TAN0213 c ON a.INTERFACE_ID = c.INTERFACE_ID
+		INNER JOIN TIM0101 d ON c.SYSTEM_ID = d.SYSTEM_ID
+
+		<if test="service != null or serviceDesc !=null ">
+		AND a.INTERFACE_ID IN (
+			SELECT INTERFACE_ID
+			FROM TAN0213
+			WHERE DEL_YN = 'N'
+			<if test="service != null and service != '' ">
+			AND SERVICE LIKE '%'||#{service}||'%'
+			</if>
+			<if test="serviceDesc != null and serviceDesc != '' ">
+			AND SERVICE_DESC LIKE '%'||#{serviceDesc}||'%'
+			</if>
+		)
+		</if>
+
+		<if test="systemNm != null">
+		AND a.INTERFACE_ID IN (
+			SELECT b.INTERFACE_ID
+			FROM TIM0101 a INNER JOIN TAN0213 b ON a.SYSTEM_ID = b.SYSTEM_ID AND a.DEL_YN = 'N' AND b.DEL_YN = 'N'
+			AND a.SYSTEM_NM LIKE '%'||#{systemNm}||'%'
+		)
+		</if>
+
+		<if test="isInterfaceAdmin != null and isInterfaceAdmin eq 'N'.toString()">
+		INNER JOIN TAN0219 m
+		ON a.INTERFACE_ID = m.INTERFACE_ID
+		AND m.USER_ID = #{userId}
+		</if>
+
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND DEL_YN = 'N') cdim04 ON c.RESOURCE_TYPE = cdim04.CD
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND DEL_YN = 'N') cdim08 ON c.NODE_TYPE = cdim08.CD
+		WHERE a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		AND c.DEL_YN = 'N'
+		AND d.DEL_YN = 'N'
+		<if test="channelId != null">
+		AND b.CHANNEL_ID = #{channelId}
+		</if>
+		<if test="channelNm != null">
+		AND b.CHANNEL_NM LIKE '%'||#{channelNm}||'%'
+		</if>
+		<if test="integrationId != null">
+		AND a.INTEGRATION_ID = #{integrationId}
+		</if>
+		<if test="interfaceNm != null">
+		AND a.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+		</if>
+		ORDER BY b.CHANNEL_NM, a.INTERFACE_NM, c.SEQ
+   	</select>
+
+	<resultMap id="interfaceListResultMap" type="Interface">
+		<id property="interfaceId" 			column="INTERFACE_ID" />
+		<result property="integrationId" 	column="INTEGRATION_ID" />
+		<result property="interfaceNm" 		column="INTERFACE_NM" />
+		<result property="status" 			column="STATUS" />
+		<result property="statusNm" 		column="STATUS_NM" />
+
+		<association property="channel" javaType="Channel">
+			<id property="channelId" 			column="CHANNEL_ID"/>
+			<result property="channelNm" 		column="CHANNEL_NM"/>
+			<result property="comments" 		column="COMMENTS"/>
+			<result property="externalYn" 		column="EXTERNAL_YN"/>
+			<result property="mapRule" 			column="MAP_RULE"/>
+		</association>
+
+		<collection property="systemList" ofType="System">
+			<id property="systemId"			column="SYSTEM_ID"/>
+			<id property="seq"				column="SYS_SEQ"/>
+			<result property="systemNm"		column="SYSTEM_NM"/>
+			<result property="systemCd"		column="SYSTEM_CD"/>
+			<result property="seq"			column="SYS_SEQ"/>
+			<result property="nodeType"		column="SYS_NODE_TYPE"/>
+			<result property="nodeTypeNm" 	column="SYS_NODE_TYPE_NM"/>
+			<result property="service"		column="SERVICE"/>
+			<result property="resourceCd"	column="RESOURCE_TYPE"/>
+			<result property="resourceNm"	column="RESOURCE_NM"/>
+		</collection>
+
+		<collection property="senderSystemInfoList" ofType="DisplaySystemInfo">
+			<discriminator javaType="string" column="SYS_NODE_TYPE">
+				<case value="0" resultMap="displaySystemInfoResultMap"/>
+			</discriminator>
+		</collection>
+
+		<collection property="receiverSystemInfoList" ofType="DisplaySystemInfo">
+			<discriminator javaType="string" column="SYS_NODE_TYPE">
+				<case value="2" resultMap="displaySystemInfoResultMap"/>
+			</discriminator>
+		</collection>
+
+	</resultMap>
+
+	<!--
+		REST-R02-CO-01-00-008 인터페이스상세 조회
+	-->
+	<select id="getInterfaceDetail" resultMap="interfaceResultMap">
+		SELECT
+			a.INTERFACE_ID
+			,a.INTEGRATION_ID
+			,a.INTERFACE_NM
+			,a.DATA_PR_DIR
+			,cdim0101.NM AS DATA_PR_DIR_NM
+			,a.APP_PR_METHOD
+			,cdim0201.NM AS APP_PR_METHOD_NM
+			,a.DATA_PR_METHOD
+			,cdim1201.NM AS DATA_PR_METHOD_NM
+			,a.DATA_ORDER_YN
+			,a.DATA_FREQ
+			,a.DATA_FREQ_INPUT
+			,cdim03.NM AS DATA_FREQ_NM
+			,a.SZ_PER_TRAN
+			,a.CNT_PER_FREQ
+			,a.CNT_PER_DAY
+			,a.QTT_PER_DAY
+			,a.START_RES_TYPE
+			,cdim0401.NM AS START_RES_NM
+			,a.END_RES_TYPE
+			,cdim0402.NM AS END_RES_NM
+			,a.START_NODE_CNT
+			,a.END_NODE_CNT
+			,a.HAS_DATA_MAP
+			,CDAN1401.NM AS HAS_DATA_MAP_NM
+			,a.DEL_YN   AS IF_DEL_YN
+			,a.COMMENTS AS IF_COMMENTS
+			,a.REG_USER AS IF_REG_ID
+			,a.REG_DATE AS IF_REG_DATE
+			,a.MOD_USER AS IF_MOD_ID
+			,a.MOD_DATE AS IF_MOD_DATE
+			------------------------
+			-- 채널 정보
+			------------------------
+			,b.CHANNEL_ID
+			,b.CHANNEL_NM
+			,b.CHANNEL_CD
+			,b.COMMENTS
+			,b.EXTERNAL_YN
+			,b.MAP_RULE
+			------------------------
+			-- 시스템 정보
+			------------------------
+			,c.SYSTEM_ID
+			,d.SYSTEM_CD
+			,d.SYSTEM_NM
+			,c.SEQ AS SYS_SEQ
+			,c.SERVICE
+			,c.SERVICE_DESC
+			,c.NODE_TYPE AS SYS_NODE_TYPE
+			,cdim0801.NM AS SYS_NODE_TYPE_NM
+			,c.RESOURCE_TYPE
+			,cdim0403.NM AS RESOURCE_NM
+			,TIM0403.ORG_ID
+	        ,TIM0403.ORG_CD
+	        ,TIM0403.ORG_NM
+			------------------------
+			-- 업무(프로세스)
+			------------------------
+			,g.BUSINESS_ID AS BZ_BUSINESS_ID
+			,g.BUSINESS_CD AS BZ_BUSINESS_CD
+			,g.BUSINESS_NM AS BZ_BUSINESS_NM
+			,f.SEQ AS BZ_SEQ
+			,f.NODE_TYPE AS BZ_NODE_TYPE
+			,cdim0802.NM AS BZ_NODE_NM
+			-------------------------
+			-- 인터페이스(패턴)
+			-------------------------
+			,h.PATTERN_ID
+			,h.PATTERN_NM
+			,h.PATTERN_IMG
+			,h.DATA_PR_DIR AS PTN_DATA_PR_DIR
+			,cdim0102.NM AS PTN_DATA_PR_DIR_NM
+			,h.APP_PR_METHOD AS PTN_APP_PR_METHOD
+			,cdim0202.NM as PTN_APP_PR_METHOD_NM
+			,h.DATA_PR_METHOD AS PTN_DATA_PR_METHOD
+			,cdim1202.NM AS PTN_DATA_PR_METHOD_NM
+			,h.SND_RCV_REL
+			,h.COMMENTS AS PTN_COMMENTS
+			-------------------------
+			-- 장애영향도
+			-------------------------
+			,a.IMPORTANCE
+			,a.MAX_DELAY_TIME
+			,a.MAX_DELAY_UNIT
+			,cdim05.NM AS MAX_DELAY_UNIT_NM
+			,a.MAX_ERROR_TIME
+			,a.MAX_ERROR_UNIT
+			,cdim06.NM AS MAX_ERROR_UNIT_NM
+			--------------------------
+			-- 인터페이스 맵핑
+			--------------------------
+			,j.AS_INTERFACE_ID
+			--------------------------
+			-- 인터페이스 TAG
+			--------------------------
+			,k.TAG
+			,k.SEQ
+			,COALESCE(tan0228.COMPANY_NM, '') AS COMPANY_NM
+			,COALESCE(tan0228.DOC_NM, '') AS DOC_NM
+			,COALESCE(tan0228.BIZ_NM, '') AS BIZ_NM
+			,COALESCE(tan0228.DIRECTION, '') AS DIRECTION
+			,COALESCE(tan0228.PROTOCOL, '') AS PROTOCOL
+			,COALESCE(tan0228.DEL_YN, '') AS DEL_YN
+			,CASE WHEN tan0228.INTERFACE_ID IS NULL THEN 'N' ELSE 'Y' END AS IS_MAPPING
+		FROM TAN0201 a
+		INNER JOIN TIM0002 b ON a.CHANNEL_ID = b.CHANNEL_ID
+		INNER JOIN TAN0213 c ON a.INTERFACE_ID = c.INTERFACE_ID
+		INNER JOIN TIM0101 d ON c.SYSTEM_ID = d.SYSTEM_ID
+		INNER JOIN TAN0218 f ON a.INTERFACE_ID = f.INTERFACE_ID -- 인터페이스업무맵핑
+		INNER JOIN TIM0301 g ON f.BUSINESS_ID = g.BUSINESS_ID -- 업무
+		LEFT OUTER JOIN (SELECT * FROM TAN0207 WHERE DEL_YN = 'N') h ON a.REF_PATTERN_ID = h.PATTERN_ID -- 인터페이스패턴
+		LEFT OUTER JOIN (SELECT * FROM TAN0210 WHERE DEL_YN = 'N') j ON a.INTERFACE_ID = j.INTERFACE_ID -- 인터페이스맵핑
+		LEFT OUTER JOIN (SELECT * FROM TAN0221 WHERE DEL_YN = 'N') k ON a.INTERFACE_ID = k.INTERFACE_ID -- 인터페이스TAG
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND DEL_YN = 'N') cdim0801 ON c.NODE_TYPE = cdim0801.CD -- 시스템노드유형
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '08' AND DEL_YN = 'N') cdim0802 ON f.NODE_TYPE = cdim0802.CD -- 업무노드유형
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04') cdim0403 ON c.RESOURCE_TYPE = cdim0403.CD-- 시스템리소스
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '01' AND DEL_YN = 'N') cdim0101 ON a.DATA_PR_DIR = cdim0101.CD -- 데이터 흐름제어
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '02' AND DEL_YN = 'N') cdim0201 ON a.APP_PR_METHOD = cdim0201.CD -- 어를처리방식(동기/비동기)
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '12' AND DEL_YN = 'N') cdim1201 ON a.DATA_PR_METHOD = cdim1201.CD -- 데이터처리방식
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '03' AND DEL_YN = 'N') cdim03 ON a.DATA_FREQ = cdim03.CD -- 발생주기명
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND DEL_YN = 'N') cdim0401 ON a.START_RES_TYPE = cdim0401.CD -- 인터페이스 시작노드 리소스
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '04' AND DEL_YN = 'N') cdim0402 ON a.END_RES_TYPE = cdim0402.CD -- 인터페이스 종료노드 리소스
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '01' AND DEL_YN = 'N') cdim0102 ON h.DATA_PR_DIR = cdim0102.CD -- 패턴-데이터 흐름제어
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '02' AND DEL_YN = 'N') cdim0202 ON h.APP_PR_METHOD = cdim0202.CD -- 패턴-어를처리방식(동기/비동기)
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '12' AND DEL_YN = 'N') cdim1202 ON h.DATA_PR_METHOD = cdim1202.CD -- 패턴-데이터처리방식
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '05' AND DEL_YN = 'N') cdim05 ON a.MAX_DELAY_UNIT = cdim05.CD -- 지연임계시간단위명
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'IM' AND LEVEL2 = '06' AND DEL_YN = 'N') cdim06 ON a.MAX_ERROR_UNIT = cdim06.CD -- 장애임계시간단위명
+		LEFT OUTER JOIN TAN0228 tan0228 ON a.INTERFACE_ID = tan0228.INTERFACE_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '14' AND DEL_YN = 'N') CDAN1401 ON a.HAS_DATA_MAP = CDAN1401.CD -- hasDataMap
+        LEFT OUTER JOIN
+        (
+        	SELECT
+		        A.ORG_ID
+		        , A.ORG_CD
+		        , A.ORG_NM
+		        , B.SYSTEM_ID
+        	FROM TIM0401 A
+        	INNER JOIN TIM0403 B
+        	ON A.ORG_ID = B.ORG_ID
+        	WHERE A.DEL_YN = 'N' AND B.DEL_YN = 'N'
+        ) TIM0403 ON TIM0403.SYSTEM_ID = c.SYSTEM_ID
+		WHERE a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		AND c.DEL_YN = 'N'
+		AND d.DEL_YN = 'N'
+		AND f.DEL_YN = 'N'
+		AND g.DEL_YN = 'N'
+		 <!--  and c.NODE_TYPE = f.NODE_TYPE  -->
+		  <!-- and c.SEQ = f.SEQ -->
+		AND (a.INTERFACE_ID = #{interfaceId} or a.INTEGRATION_ID = #{interfaceId})
+		<!--
+		order by c.SEQ, c.NODE_TYPE
+		-->
+		ORDER BY c.SEQ, c.NODE_TYPE
+	</select>
+
+	<resultMap id="interfaceResultMap" type="Interface">
+		<id property="interfaceId" 			column="INTERFACE_ID" />
+		<result property="integrationId" 	column="INTEGRATION_ID" />
+		<result property="interfaceNm" 		column="INTERFACE_NM"/>
+		<result property="importance"		column="IMPORTANCE"/>
+		<result property="maxDelayTime"		column="MAX_DELAY_TIME"/>
+	    <result property="maxDelayUnit"		column="MAX_DELAY_UNIT"/>
+		<result property="maxDelayUnitNm"	column="MAX_DELAY_UNIT_NM"/>
+	    <result property="maxErrorTime"		column="MAX_ERROR_TIME"/>
+	    <result property="maxErrorUnit"		column="MAX_ERROR_UNIT"/>
+		<result property="maxErrorUnitNm"	column="MAX_ERROR_UNIT_NM"/>
+		<result property="dataPrDir"		column="DATA_PR_DIR"/>
+	    <result property="dataPrDirNm"		column="DATA_PR_DIR_NM"/>
+	    <result property="appPrMethod"		column="APP_PR_METHOD"/>
+	    <result property="appPrMethodNm" 	column="APP_PR_METHOD_NM"/>
+	    <result property="dataPrMethod"		column="DATA_PR_METHOD"/>
+	    <result property="dataPrMethodNm"	column="DATA_PR_METHOD_NM"/>
+	    <result property="dataFrequency"	column="DATA_FREQ"/>
+		<result property="dataFrequencyInput"	column="DATA_FREQ_INPUT"/>
+
+		<result property="hasDataMap" 		column="HAS_DATA_MAP"/>
+		<result property="hasDataMapNm" 	column="HAS_DATA_MAP_NM"/>
+
+	    <result property="dataFrequencyNm"	column="DATA_FREQ_NM"/>
+	    <result property="sizePerTran"		column="SZ_PER_TRAN"/>
+	    <result property="cntPerFrequency"	column="CNT_PER_FREQ"/>
+	    <result property="cntPerDay"		column="CNT_PER_DAY"/>
+	    <result property="qttPerDay"		column="QTT_PER_DAY"/>
+	    <result property="startResType"		column="START_RES_TYPE"/>
+	    <result property="startResTypeNm"	column="START_RES_NM"/>
+	    <result property="endResType"		column="END_RES_TYPE"/>
+	    <result property="endResTypeNm"		column="END_RES_NM"/>
+	    <result property="startNodeCnt"		column="START_NODE_CNT"/>
+	    <result property="endNodeCnt"		column="END_NODE_CNT"/>
+	    <result property="dataSeqYn"		column="DATA_ORDER_YN"/>
+	    <result property="delYn"			column="IF_DEL_YN"/>
+	    <result property="comments"			column="IF_COMMENTS"/>
+	    <result property="regDate"			column="IF_REG_DATE"/>
+	    <result property="regId"			column="IF_REG_ID"/>
+	    <result property="modDate"			column="IF_MOD_DATE"/>
+	    <result property="modId"			column="IF_MOD_ID"/>
+
+		<association property="channel" javaType="Channel">
+			<id property="channelId" 			column="CHANNEL_ID"/>
+			<result property="channelNm" 		column="CHANNEL_NM"/>
+			<result property="channelCd" 		column="CHANNEL_CD"/>
+			<result property="comments" 		column="COMMENTS"/>
+			<result property="externalYn" 		column="EXTERNAL_YN"/>
+			<result property="mapRule" 			column="MAP_RULE"/>
+		</association>
+
+		<association property="refPattern" javaType="InterfacePattern">
+			<id property="patternId" 			column="PATTERN_ID"/>
+			<result property="patternNm"		column="PATTERN_NM"/>
+			<result property="patternImg"		column="PATTERN_IMG"/>
+			<result property="dataPrDir"		column="PTN_DATA_PR_DIR"/>
+			<result property="dataPrDirNm"		column="PTN_DATA_PR_DIR_NM"/>
+			<result property="appPrMethod"		column="PTN_APP_PR_METHOD"/>
+			<result property="appPrMethodNm"	column="PTN_APP_PR_METHOD_NM"/>
+			<result property="dataPrMethod"		column="PTN_DATA_PR_METHOD"/>
+			<result property="dataPrMethodNm"	column="PTN_DATA_PR_METHOD_NM"/>
+			<result property="sndRcvRel"		column="SND_RCV_REL"/>
+			<result property="comments"			column="PTN_COMMENTS"/>
+		</association>
+
+		<association property="interfaceMapping" javaType="InterfaceMapping">
+			<result property="asisInterfaceId" column="AS_INTERFACE_ID"/>
+		</association>
+
+		<collection property="systemList" ofType="System">
+			<id property="systemId" 		column="SYSTEM_ID"/>
+			<id property="seq" 				column="SYS_SEQ"/>
+			<result property="systemCd" 	column="SYSTEM_CD"/>
+			<result property="systemNm" 	column="SYSTEM_NM"/>
+			<result property="nodeType" 	column="SYS_NODE_TYPE"/>
+			<result property="nodeTypeNm" 	column="SYS_NODE_TYPE_NM"/>
+			<result property="service" 		column="SERVICE"/>
+			<result property="serviceDesc" 	column="SERVICE_DESC"/>
+			<result property="resourceCd" 	column="RESOURCE_TYPE"/>
+			<result property="resourceNm" 	column="RESOURCE_NM"/>
+		</collection>
+
+		<collection property="businessList" ofType="Business">
+			<id property="businessId" 		column="BZ_BUSINESS_ID"/>
+			<id property="seq" 				column="BZ_SEQ"/>
+			<result property="businessCd" 	column="BZ_BUSINESS_CD"/>
+			<result property="businessNm" 	column="BZ_BUSINESS_NM"/>
+			<result property="nodeType" 	column="BZ_NODE_TYPE"/>
+			<result property="nodeTypeNm" 	column="BZ_NODE_NM"/>
+		</collection>
+
+
+		<collection property="senderSystemInfoList" ofType="DisplaySystemInfo">
+			<discriminator javaType="string" column="SYS_NODE_TYPE">
+				<case value="0" resultMap="displaySystemInfoResultMap"/>
+			</discriminator>
+		</collection>
+
+		<collection property="receiverSystemInfoList" ofType="DisplaySystemInfo">
+			<discriminator javaType="string" column="SYS_NODE_TYPE">
+				<case value="2" resultMap="displaySystemInfoResultMap"/>
+			</discriminator>
+		</collection>
+
+	 	<collection property="tagList" ofType="InterfaceTag">
+			<id property="interfaceId" 	column="INTERFACE_ID"/>
+			<id property="tag" 			column="TAG"/>
+			<id property="seq" 			column="SEQ"/>
+		</collection>
+
+		<collection property="relUsers" ofType="RelUser" column="INTERFACE_ID" select="selectInterfaceUsers"/>
+		<collection property="properties" ofType="InterfaceProperties" column="INTERFACE_ID" select="selectInterfaceProperties"/>
+
+	</resultMap>
+
+	<resultMap type="DisplaySystemInfo" id="displaySystemInfoResultMap">
+		<id property="systemId" 		column="SYSTEM_ID"/>
+		<id property="seq" 				column="SYS_SEQ"/>
+		<result property="systemCd" 	column="SYSTEM_CD"/>
+		<result property="systemNm" 	column="SYSTEM_NM"/>
+		<result property="seq" 			column="SYS_SEQ"/>
+		<result property="nodeType" 	column="SYS_NODE_TYPE"/>
+		<result property="nodeTypeNm" 	column="SYS_NODE_TYPE_NM"/>
+		<result property="service" 		column="SERVICE"/>
+		<result property="serviceDesc" 	column="SERVICE_DESC"/>
+		<result property="resourceCd" 	column="RESOURCE_TYPE"/>
+		<result property="resourceNm" 	column="RESOURCE_NM"/>
+		<result property="businessId" 	column="BZ_BUSINESS_ID"/>
+		<result property="businessCd" 	column="BZ_BUSINESS_CD"/>
+		<result property="businessNm" 	column="BZ_BUSINESS_NM"/>
+        <result property="orgId" 		column="ORG_ID"/>
+        <result property="orgCd" 		column="ORG_CD"/>
+        <result property="orgNm" 		column="ORG_NM"/>
+	</resultMap>
+
+	<select id="selectInterfaceProperties" resultMap="selectInterfacePropertiesMap">
+		SELECT * from (
+			SELECT
+				A.CHANNEL_ID
+				, A.INTERFACE_ID
+				, B.ATTRIBUTE_ID
+				, B.ATTRIBUTE_CD
+				, B.ATTRIBUTE_NM
+				, A.ATTRIBUTE_VALUE
+				, '0' AS TYPE
+			FROM TAN0205 A
+			INNER JOIN TAN0204 B
+			ON A.CHANNEL_ID = B.CHANNEL_ID
+			AND A.ATTRIBUTE_ID = B.ATTRIBUTE_ID
+			WHERE A.INTERFACE_ID = #{interfaceId}
+			UNION
+			SELECT
+				'' AS CHANNEL_ID
+				, A.INTERFACE_ID
+				, B.ATTRIBUTE_ID
+				, B.ATTRIBUTE_CD
+				, B.ATTRIBUTE_NM
+				, A.ATTRIBUTE_VALUE
+				, '1' AS TYPE
+	        FROM TAN0203 A
+	  		INNER JOIN TAN0202 B
+			ON A.ATTRIBUTE_ID = B.ATTRIBUTE_ID
+			WHERE A.INTERFACE_ID = #{interfaceId}
+		) PROPERTIES
+		ORDER BY ATTRIBUTE_ID
+	</select>
+
+	<resultMap id="selectInterfacePropertiesMap" type="InterfaceProperties">
+		<id property="attrId" 				column="ATTRIBUTE_ID"/>
+		<result property="channelId" 		column="CHANNEL_ID"/>
+		<result property="attrCd" 			column="ATTRIBUTE_CD"/>
+		<result property="attrNm" 			column="ATTRIBUTE_NM"/>
+		<result property="attrValue" 		column="ATTRIBUTE_VALUE"/>
+		<result property="type" 			column="TYPE"/>
+	</resultMap>
+
+
+	<select id="selectInterfaceUsers" resultMap="relUserResultMap">
+		SELECT
+			 si.USER_ID     AS IF_USER_ID
+			,si.SEQ         AS IF_USER_SEQ
+			,si.ROLE_TYPE   AS IF_USER_ROLE
+			,cdim09.NM      AS IF_USER_ROLE_NM
+			,sq.SYSTEM_ID   AS IF_USER_SYSTEM_ID
+			,sq.SYSTEM_NM   AS IF_USER_SYSTEM_NM
+			,sq.SYSTEM_CD   AS IF_USER_SYSTEM_CD
+			,sp.USER_NM     AS IF_USER_NM
+			,sp.CELL_PHONE  AS IF_USER_CELL_PHONE
+			,sp.PHONE       AS IF_USER_PHONE
+			,sp.EMAIL       AS IF_USER_EMAIL
+		FROM TAN0219 si
+		INNER JOIN TSU0101 sp ON si.USER_ID = sp.USER_ID
+		AND si.INTERFACE_ID = #{interfaceId}
+		AND si.DEL_YN = 'N'
+		AND sp.DEL_YN = 'N'
+		LEFT OUTER JOIN TIM0101 sq ON si.SYSTEM_ID = sq.SYSTEM_ID
+		AND sq.DEL_YN = 'N'
+		LEFT OUTER JOIN TSU0301 cdim09 ON si.ROLE_TYPE = cdim09.CD
+		AND cdim09.LEVEL1 = 'IM'
+		AND cdim09.LEVEL2 = '09'
+		AND cdim09.DEL_YN = 'N'
+		ORDER BY si.SEQ
+	</select>
+
+	<resultMap id="relUserResultMap" type="RelUser">
+		<id property="user.userId" 			column="IF_USER_ID"/>
+		<id property="seq"					column="IF_USER_SEQ"/>
+		<result property="roleType"			column="IF_USER_ROLE"/>
+		<result property="roleTypeNm"		column="IF_USER_ROLE_NM"/>
+		<result property="systemId"			column="IF_USER_SYSTEM_ID"/>
+		<result property="systemNm"			column="IF_USER_SYSTEM_NM"/>
+		<result property="systemCd"			column="IF_USER_SYSTEM_CD"/>
+
+		<association property="user" javaType="User">
+			<id property="userId" 			column="IF_USER_ID"/>
+			<result property="userNm" 		column="IF_USER_NM"/>
+			<result property="cellPhone" 	column="IF_USER_CELL_PHONE"/>
+			<result property="phone"		column="IF_USER_PHONE"/>
+			<result property="email"		column="IF_USER_EMAIL"/>
+		</association>
+	</resultMap>
+
+
+		<!--
+            REST-R03-CO-01-00-008 인터페이스상세-요건리스트
+        -->
+	<select id="getInterfaceDetailRequiremnets" resultMap="interfaceRequirementsResultMap">
+		SELECT
+			----------------------
+			-- 요건
+			----------------------
+			 a.REQUIREMENT_NM
+			,a.REQUIREMENT_ID
+			,a.STATUS
+			,cdan01.NM AS STATUS_NM
+			,a.COMMENTS
+			,a.DEV_EXP_YMD
+			,a.DEV_FIN_YMD
+			,a.TEST_EXP_YMD
+			,a.TEST_FIN_YMD
+			,a.REAL_EXP_YMD
+			,a.REAL_FIN_YMD
+			----------------------
+			-- 업무(프로세스)
+			----------------------
+			,b.BUSINESS_ID
+			,b.BUSINESS_NM
+			,b.BUSINESS_CD
+			----------------------
+			-- 요건첨부파일
+			----------------------
+			,c.FILE_ID AS ATTATCH_ID
+			,c.FILE_NM AS ATTATCH_FILE_NM
+			,c.FILE_PATH AS ATTATCH_FILE_PATH
+			,c.REG_USER AS ATTATCH_USER_ID
+			,c.REG_DATE AS ATTATCH_USER_DATE
+		FROM TAN0101 a
+		INNER JOIN TIM0301 b ON a.BUSINESS_ID = b.BUSINESS_ID
+		LEFT OUTER JOIN (SELECT CD, NM FROM TSU0301 WHERE LEVEL1 = 'AN' AND LEVEL2 = '01' AND DEL_YN = 'N') cdan01 ON a.STATUS = cdan01.CD -- 요건상태명
+		LEFT OUTER JOIN TAN0103 c ON a.REQUIREMENT_ID = c.REQUIREMENT_ID AND c.DEL_YN = 'N' -- 인터페이스요건첨부파일
+		WHERE a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		AND a.INTERFACE_ID = #{interfaceId}
+		ORDER BY a.REQUIREMENT_NM, a.STATUS
+	</select>
+
+	<resultMap id="interfaceRequirementsResultMap" type="Requirement">
+	    <id property="requirementId" 		column="REQUIREMENT_ID"/>
+		<result property="requirementNm" 	column="REQUIREMENT_NM"/>
+		<result property="status" 			column="STATUS"/>
+		<result property="statusNm" 		column="STATUS_NM"/>
+	  	<result property="comments" 		column="COMMENTS"/>
+	  	<result property="devExpYmd" 		column="DEV_EXP_YMD"/>
+		<result property="devFinYmd" 		column="DEV_FIN_YMD"/>
+		<result property="testExpYmd" 		column="TEST_EXP_YMD"/>
+		<result property="testFinYmd" 		column="TEST_FIN_YMD"/>
+		<result property="realExpYmd" 		column="REAL_EXP_YMD"/>
+		<result property="realFinYmd" 		column="REAL_FIN_YMD"/>
+		<association property="business" javaType="Business">
+			<id property="businessId" 		column="BUSINESS_ID"/>
+			<result property="businessNm" 	column="BUSINESS_NM"/>
+			<result property="businessCd" 	column="BUSINESS_CD"/>
+
+		</association>
+		<collection property="attatchFileList" ofType="RequirementAttatchFile">
+
+			<id property="fileId"				column="ATTATCH_ID"/>
+			<result property="fileNm"			column="ATTATCH_FILE_NM"/>
+			<result property="filePath"			column="ATTATCH_FILE_PATH"/>
+			<result property="regId"			column="ATTATCH_USER_ID"/>
+			<result property="regDate"			column="ATTATCH_USER_DATE"/>
+		</collection>
+
+	</resultMap>
+
+	<!--
+		REST-R04-CO-01-00-008 인터페이스상세 존재유무 체크
+		<select id="existInterface" resultType="string">
+		select
+			max(a.INTERFACE_ID) as interfaceId
+		from TAN0201 a
+		<if test="dataPrDir eq '0'.toString()">
+			inner join (
+				select INTERFACE_ID
+				 from TAN0213
+				where DEL_YN = 'N'
+				  and NODE_TYPE = '0'
+				  and SERVICE = #{sendService}
+				  and SYSTEM_ID = #{sendSystemId}
+			) b on a.INTERFACE_ID  = b.INTERFACE_ID
+		</if>
+		<if test="dataPrDir eq '1'.toString()">
+			inner join (
+				select INTERFACE_ID
+				 from TAN0213
+				where DEL_YN = 'N'
+				  and NODE_TYPE = '2'
+				  and SERVICE = #{receiveService}
+				  and SYSTEM_ID = #{receiveSystemId}
+			) c on a.INTERFACE_ID  = c.INTERFACE_ID
+		</if>
+		where a.DEL_YN = 'N'
+	</select>
+	-->
+	<!--
+		[변경]
+		  - 전사솔루션별로 중복 체크.
+	 -->
+	<select id="existInterface" resultType="string">
+		SELECT MAX(a.INTERFACE_ID) AS interfaceId
+		FROM TAN0201 a
+		INNER JOIN TAN0213 b
+		ON a.INTERFACE_ID  = b.INTERFACE_ID
+		AND a.DEL_YN = 'N'
+		AND b.DEL_YN = 'N'
+		AND b.NODE_TYPE = #{nodeType}
+		AND b.SYSTEM_ID = #{systemId}
+
+		<if test="channelId != null and channelId != '' ">
+		AND a.CHANNEL_ID = #{channelId}
+		</if>
+		<if test="service != null and service != '' ">
+		AND b.SERVICE = #{service}
+		</if>
+		<if test="serviceDesc != null and serviceDesc != '' ">
+		AND b.SERVICE_DESC LIKE '%'||#{serviceDesc}||'%'
+		</if>
+	</select>
+
+	<!-- REST-R01-CO-03-00-001 메뉴검색 -->
+	<select id="getMenuList" resultMap="menuResultMap">
+		SELECT
+		   a.ROLE_ID
+		  ,a.ROLE_NM
+		  ,a.MENU_ID
+		  ,a.MENU_NM
+		  ,a.MENU_OPT
+		  ,a.MENU_SEQ
+		  ,a.ROOT_YN
+		  ,b.APP_ID
+		  ,b.APP_SEQ
+		  ,b.APP_NM
+		  ,b.APP_OPT
+		  ,b.APP_URI
+		  ,b.CMD_STRING
+		FROM (
+		    SELECT
+		       a.ROLE_ID
+		      ,d.ROLE_NM
+			  ,a.SEQ as MENU_SEQ
+		      ,a.MENU_ID
+		      ,c.MENU_NM
+		      ,c.MENU_OPT
+		      ,c.ROOT_YN
+		    FROM TSU0203 a
+		      INNER JOIN TSU0101 b ON a.ROLE_ID = b.ROLE_ID
+		      INNER JOIN TSU0207 c ON a.MENU_ID = c.MENU_ID
+		      INNER JOIN TSU0201 d ON a.ROLE_ID = d.ROLE_ID
+		    WHERE a.HAS_YN = 'Y'
+		          AND a.DEL_YN = 'N'
+		          AND b.USER_ID = #{userId}
+		          AND b.DEL_YN = 'N'
+		) a
+		LEFT OUTER JOIN (
+			SELECT
+				a.MENU_ID
+		        ,b.APP_ID
+		        ,a.SEQ as APP_SEQ
+		        ,b.APP_NM
+		        ,b.APP_URI
+		        ,b.APP_OPT
+		        ,c.CMD_STRING
+			FROM TSU0214 a
+		    INNER JOIN TSU0204 b ON a.APP_ID = b.APP_ID
+		    INNER JOIN TSU0202 c ON a.APP_ID = c.APP_ID
+		    INNER JOIN TSU0101 d ON c.ROLE_ID = d.ROLE_ID
+		    WHERE c.HAS_YN = 'Y'
+		    AND b.DEL_YN = 'N'
+		    AND d.USER_ID = #{userId}
+		) b ON a.MENU_ID = b.MENU_ID
+		ORDER BY a.MENU_SEQ, b.APP_SEQ
+	</select>
+
+	<resultMap id="menuResultMap" type="Menu">
+	    <id property="menuId" 				column="MENU_ID"/>
+		<result property="menuNm" 			column="MENU_NM"/>
+		<result property="menuOpt" 			column="MENU_OPT"/>
+		<result property="rootYn" 			column="ROOT_YN"/>
+		<collection property="appList" ofType="App">
+			<id property="appId"			column="APP_ID"/>
+			<result property="appNm" 		column="APP_NM"/>
+			<result property="appOpt" 		column="APP_OPT"/>
+			<result property="seq" 			column="SEQ"/>
+			<result property="appUri" 		column="APP_URI"/>
+			<result property="cmdString" 	column="CMD_STRING"/>
+		</collection>
+	</resultMap>
+
+	<select id="getMenuPathList" resultMap="menuPathResultMap">
+		SELECT
+		   A.P_MENU_ID
+		  ,A.C_MENU_ID
+		FROM (
+		  SELECT *
+		  FROM TSU0208
+		  WHERE P_MENU_ID = #{menuId} AND DEL_YN = 'N'
+		  UNION
+		  SELECT *
+		  FROM TSU0208
+		  WHERE P_MENU_ID IN (
+		  	SELECT C_MENU_ID
+		    FROM TSU0208
+		    WHERE P_MENU_ID = #{menuId} AND DEL_YN = 'N')
+		) A
+		WHERE DEPTH = 1
+		ORDER BY 1, 2
+	</select>
+
+	<resultMap type="java.util.Map" id="menuPathResultMap">
+		<result property="parent" 		column="P_MENU_ID"/>
+		<result property="child" 		column="C_MENU_ID"/>
+	</resultMap>
+
+	<select id="getEnvironmentalValues" resultType="java.util.LinkedHashMap">
+		SELECT
+			 PACKAGE || '.' || ATTRIBUTE_ID AS "key"
+			,ATTRIBUTE_VALUE AS "value"
+		FROM TSU0302 WHERE DEL_YN = 'N'
+	</select>
+
+	<select id="getEnvironmentalValue" resultType="string">
+		SELECT ATTRIBUTE_VALUE
+		FROM TSU0302
+		WHERE DEL_YN = 'N'
+		AND PACKAGE = #{package}
+		AND ATTRIBUTE_ID = #{attributeId}
+        ORDER BY IDX
+	</select>
+
+	<select id="getEnvironmentalValuesById" resultType="java.util.LinkedHashMap">
+		SELECT
+			 PACKAGE || '.' || ATTRIBUTE_ID as "key"
+			,ATTRIBUTE_VALUE as "value"
+		FROM TSU0302
+		WHERE DEL_YN = 'N'
+		AND PACKAGE = #{package}
+		AND ATTRIBUTE_ID = #{attributeId}
+	</select>
+
+	<select id="getEnvironmentalValueList" resultType="String">
+		SELECT ATTRIBUTE_VALUE as "value"
+		  FROM TSU0302
+		 WHERE DEL_YN = 'N'
+		   AND PACKAGE = #{package}
+		   AND ATTRIBUTE_ID = #{attributeId}
+	  ORDER BY IDX ASC
+	</select>
+
+
+	<!--
+	<select id="getAsisInterfaceList" parameterType="string" resultType="java.util.LinkedHashMap">
+		select distinct
+			 INTERFACE_ID as "asisInterfaceId"
+			,INTERFACE_NM as "asisInterfaceNm"
+		from TAN0211
+		where CHANNEL_ID = #{channelId}
+		  and INTERFACE_ID not in (select AS_INTERFACE_ID from TAN0210 where DEL_YN = 'N')
+		  and DEL_YN = 'N'
+		order by INTERFACE_ID
+	</select>
+	-->
+
+	<!--
+		channelId 가
+		SAP PO(CN00000002), B2Bi(CN00000005) 일 경우는 같은 카테고리롤 묶어
+		SAP PO 또는 B2Bi 내에 기매핑 인터페이스 건을 양쪽 모두 체크하여 결과 목록에서 제외하도록 코드 수정함.
+	-->
+	<select id="getAsisInterfaceList" parameterType="string" resultType="java.util.LinkedHashMap">
+		SELECT DISTINCT
+			 INTERFACE_ID AS "asisInterfaceId"
+			,INTERFACE_NM AS "asisInterfaceNm"
+		FROM TAN0211
+		<choose>
+			<when test="channelId eq 'CN00000002'.toString() or channelId eq 'CN00000005'.toString() ">
+		WHERE (CHANNEL_ID = 'CN00000002' OR CHANNEL_ID = 'CN00000005')
+			</when>
+			<otherwise>
+		WHERE CHANNEL_ID = #{channelId}
+			</otherwise>
+		</choose>
+		AND INTERFACE_ID NOT IN (SELECT AS_INTERFACE_ID FROM TAN0210 WHERE DEL_YN = 'N')
+		AND DEL_YN = 'N'
+		ORDER BY INTERFACE_ID
+	</select>
+
+    <select id="getProblemCdList" parameterType="Map" resultMap="ProblemCdResult">
+        SELECT
+            CLASS_CD AS PROBLEM_CD
+            , NM     AS PROBLEM_NM
+        FROM TOP0302
+        WHERE DEL_YN = 'N'
+        <if test="depth != null">
+        AND DEPTH = #{depth}
+        </if>
+        <if test="parentCd != null">
+        AND PARENT_CD = #{parentCd}
+        </if>
+        ORDER BY sort_no ASC
+    </select>
+
+    <resultMap id="ProblemCdResult" type="ProblemClass" >
+        <result property="problemCd"        column="PROBLEM_CD" />
+        <result property="problemNm"        column="PROBLEM_NM" />
+    </resultMap>
+
+	<insert id="insertLoginUser">
+		INSERT INTO TOP0200 (USER_ID, SESSION_ID, LOGIN_DATE) VALUES (
+			 #{userId}
+			,#{sessionId}
+			,#{loginDate, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateLogoutUser">
+		UPDATE TOP0200
+		SET LOGOUT_DATE = #{logoutDate, jdbcType=VARCHAR}
+		WHERE USER_ID = #{userId}
+		AND SESSION_ID = #{sessionId}
+	</update>
+
+	<select id="getTotalLoginUserCnt" resultType="int">
+		SELECT COUNT(*) AS "totalLoginUserCnt" FROM TOP0200
+	</select>
+	<select id="getTodayLoginUserCnt" resultType="int">
+		SELECT COUNT(*) AS "todayLoginUserCnt" FROM TOP0200 WHERE LOGIN_DATE > TO_CHAR(SYSDATE,'yyyymmdd') || '000000000'
+	</select>
+	<select id="getTodayLoginUserCnt" resultType="int" databaseId="postgres">
+		SELECT COUNT(*) AS "todayLoginUserCnt" FROM TOP0200 WHERE LOGIN_DATE > TO_CHAR(NOW(),'yyyymmdd') || '000000000'
+	</select>
+
+	<select id="getLoginUserInfo" resultType="java.util.Map">
+		SELECT
+			 USER_ID 	 AS "userId"
+			,SESSION_ID  AS "sessionId"
+			,LOGIN_DATE  AS "loginDate"
+			,LOGOUT_DATE AS "logoutDate"
+		FROM TOP0200
+		WHERE USER_ID = #{userId}
+		AND SESSION_ID = #{sessionId}
+	</select>
+
+	<select id="getOrganizationList" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.organizationResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.organizationList"/>
+		<if test="organizationId != null">
+		AND a.ORG_ID = #{organizationId}
+		</if>
+		<if test="organizationCd != null">
+		AND a.ORG_CD LIKE '%'||#{organizationCd}||'%'
+		</if>
+		<if test="organizationNm != null">
+		AND a.ORG_NM LIKE '%'||#{organizationNm}||'%'
+		</if>
+	</select>
+
+	<select id="getSystemToOrganization" parameterType="Map" resultType="java.util.Map">
+		SELECT
+			---------------------------
+			-- organization
+			---------------------------
+			 a.ORG_ID
+			,a.ORG_NM
+			,a.ORG_CD
+			---------------------------
+			-- system list
+			---------------------------
+			,d.SYSTEM_ID
+			,d.SEQ AS SV_SEQ
+			,d.SYSTEM_NM
+			,d.SYSTEM_CD
+		FROM TIM0401 a
+		LEFT OUTER JOIN (
+			SELECT
+				 a.ORG_ID
+				,a.SYSTEM_ID
+				,a.SEQ
+				,b.SYSTEM_NM
+				,b.SYSTEM_CD
+				,b.COMMENTS
+				,b.ZONE_ID
+			FROM TIM0403 a
+			INNER JOIN TIM0101 b ON b.SYSTEM_ID = a.SYSTEM_ID ) d ON a.ORG_ID = d.ORG_ID
+			WHERE a.DEL_YN = 'N'
+		<if test="organizationId != null">
+			AND a.ORG_ID = #{organizationId}
+		</if>
+	</select>
+
+	<select id="getOrganizationOfSystemList" parameterType="Map" resultMap="orgResultMap">
+		SELECT
+			 a.ORG_ID
+			,a.ORG_NM
+			,a.ORG_CD
+			,a.ROOT_YN
+			,a.GRP_YN
+		FROM TIM0401 a
+		LEFT OUTER JOIN TIM0403 d ON a.ORG_ID = d.ORG_ID
+		WHERE 1 = 1
+		AND a.DEL_YN = 'N'
+     	AND d.SYSTEM_ID = #{systemId}
+	</select>
+
+	<resultMap type="Organization" id="orgResultMap">
+		<id property="organizationId"		column="ORG_ID"/>
+		<result property="organizationNm" 	column="ORG_NM" />
+		<result property="organizationCd" 	column="ORG_CD" />
+		<result property="rootYn" 			column="ROOT_YN" />
+		<result property="grpYn" 			column="GRP_YN" />
+	</resultMap>
+
+	<select id="getOrganizationListByRelation" resultMap="getOrganizationListResultMap">
+		SELECT DISTINCT
+			c.ORG_ID
+			,c.ORG_NM
+			,c.ORG_CD
+		FROM (
+			SELECT DISTINCT
+				a.SYSTEM_ID
+			FROM TAN0213 a, TIM0101 b
+			WHERE a.SYSTEM_ID = b.SYSTEM_ID
+			<if test="channelId != null">
+			AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE CHANNEL_ID = #{channelId} AND DEL_YN = 'N')
+			</if>
+			<if test="channelNm != null">
+			AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0201 c, TIM0002 d WHERE c.CHANNEL_ID = d.CHANNEL_ID AND d.CHANNEL_NM LIKE '%'||#{channelNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+			</if>
+			<if test="businessId != null">
+			AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0218 WHERE BUSINESS_ID = #{businessId} AND DEL_YN = 'N')
+			</if>
+			<if test="businessNm != null">
+			AND a.INTERFACE_ID IN (SELECT DISTINCT c.INTERFACE_ID FROM TAN0218 c, TIM0301 d WHERE c.BUSINESS_ID = d.BUSINESS_ID AND d.BUSINESS_NM LIKE '%'||#{businessNm}||'%' AND c.DEL_YN = 'N' AND d.DEL_YN = 'N')
+			</if>
+			<if test="integrationId != null">
+			AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTEGRATION_ID = #{integrationId} AND DEL_YN = 'N')
+			</if>
+			<if test="interfaceNm != null">
+			AND a.INTERFACE_ID IN (SELECT DISTINCT INTERFACE_ID FROM TAN0201 WHERE INTERFACE_NM LIKE '%'||#{interfaceNm}||'%' AND DEL_YN = 'N')
+			</if>
+			<if test="systemId != null">
+			AND a.SYSTEM_ID = #{systemId}
+			</if>
+			<if test="systemNm != null">
+			AND b.SYSTEM_NM LIKE '%'||#{systemNm}||'%'
+			</if>
+			--AND b.ROOT_YN = 'Y'
+			AND a.DEL_YN = 'N'
+			AND b.DEL_YN = 'N'
+			--AND b.GRP_YN = 'N'
+			) k , TIM0403 b, TIM0401 c
+		WHERE k.SYSTEM_ID = b.SYSTEM_ID  AND b.ORG_ID = c.ORG_ID
+		AND c.DEL_YN='N' AND b.DEL_YN='N'
+		ORDER BY c.ORG_NM
+	</select>
+
+	 <resultMap id="getOrganizationListResultMap" type="Organization">
+		<id property="organizationId"		column="ORG_ID"/>
+		<result property="organizationNm" 	column="ORG_NM" />
+		<result property="organizationCd" 	column="ORG_CD" />
+	</resultMap>
+
+	<select id="getSystemOfOrganization" parameterType="Map" resultMap="pep.per.mint.database.mapper.CoreMapper.systemTreeWithModelResultMap">
+		SELECT
+	  		 P_SYS_ID
+			,P_SYS_CD
+			,P_SYS_NM
+			,P_GRP_YN
+			,P_ROOT_YN
+			,C_SYS_ID
+			,C_SYS_CD
+			,C_SYS_NM
+			,C_GRP_YN
+			,DEPTH
+	 	FROM (
+	  		SELECT
+				 a.P_SYS_ID
+				,b.SYSTEM_CD AS P_SYS_CD
+				,b.SYSTEM_NM AS P_SYS_NM
+				,b.GRP_YN    AS P_GRP_YN
+				,b.ROOT_YN   AS P_ROOT_YN
+				,a.C_SYS_ID
+				,c.SYSTEM_CD AS C_SYS_CD
+				,c.SYSTEM_NM AS C_SYS_NM
+				,c.GRP_YN    AS C_GRP_YN
+				,a.DEPTH
+			FROM TIM0102 a
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') b ON a.P_SYS_ID = b.SYSTEM_ID
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') c ON a.C_SYS_ID = c.SYSTEM_ID
+			WHERE a.DEL_YN = 'N'
+			AND a.DEPTH = 0
+			AND b.ROOT_YN='Y'
+	  		UNION ALL
+			SELECT
+				 a.P_SYS_ID
+				,b.SYSTEM_CD AS P_SYS_CD
+				,b.SYSTEM_NM AS P_SYS_NM
+				,b.GRP_YN    AS P_GRP_YN
+				,b.ROOT_YN   AS P_ROOT_YN
+				,a.C_SYS_ID
+				,c.SYSTEM_CD AS C_SYS_CD
+				,c.SYSTEM_NM AS C_SYS_NM
+				,c.GRP_YN    AS C_GRP_YN
+				,a.DEPTH
+			FROM TIM0102 a
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') b ON a.P_SYS_ID = b.SYSTEM_ID
+			INNER JOIN (SELECT * FROM TIM0101 WHERE DEL_YN = 'N') c ON a.C_SYS_ID = c.SYSTEM_ID
+			WHERE a.DEL_YN = 'N'
+		 	AND a.DEPTH = 1
+  		) k
+  		WHERE 1=1
+  		<if test="(organizationId != null)  and (organizationId != '') ">
+     	AND k.C_SYS_ID IN (
+     		SELECT b.SYSTEM_ID
+			FROM TIM0403 b
+            INNER JOIN (
+            	SELECT C_ORG_ID
+            	FROM TIM0402
+            	WHERE DEL_YN='N'
+            	AND P_ORG_ID = #{organizationId}
+            ) g ON b.ORG_ID = g.C_ORG_ID
+		)
+		</if>
+	</select>
+
+	<select id="getOrganizationToSystem" parameterType="Map" resultType="java.util.Map">
+		SELECT
+		  A.SYSTEM_ID AS "systemId",
+		  A.SYSTEM_NM AS "systemNm",
+		  A.SYSTEM_CD AS "systemCd",
+		  C.ORG_ID AS "orgId",
+		  C.ORG_NM AS "orgNm",
+		  C.ORG_CD AS "orgCd"
+		FROM TIM0101 A
+		INNER JOIN TIM0403 B
+		ON B.SYSTEM_ID=A.SYSTEM_ID
+		INNER JOIN TIM0401 C
+		ON C.ORG_ID=B.ORG_ID
+		WHERE 1=1
+		<if test="systemCd != null and systemCd != ''">
+		AND SYSTEM_CD = #{systemCd}
+		</if>
+	</select>
+
+	<select id="getInterfaceID" parameterType="String" resultType="java.lang.String">
+		SELECT #{idKey} || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(INTEGRATION_ID,13)),'0')) + 1),4,'0')
+		FROM TAN0201
+		WHERE SUBSTR(INTEGRATION_ID,1,12) = #{idKey}
+	</select>
+
+	<select id="getParentSystem" parameterType="string" resultMap="pep.per.mint.database.mapper.CoreMapper.systemResultMap">
+		<include refid="pep.per.mint.database.mapper.CoreMapper.systemList"/>
+		AND a.SYSTEM_ID = #{systemId}
+	</select>
+
+	<select id="getInterfaceIDMax" parameterType="Map" resultType="java.lang.String">
+		SELECT LPAD(TO_CHAR(NVL(MAX(MAX_SEQ),'1')), #{seqLen},'0')
+		FROM TAN0229
+		WHERE INTEGRATION_ID_KEY = #{idKey}
+	</select>
+
+	<select id="getInterfaceIDMaxHDINS" parameterType="Map" resultType="java.lang.String">
+		SELECT LPAD(TO_CHAR(TO_NUMBER(NVL(SUBSTR(MAX(INTEGRATION_ID),-4),'0'))) +1, 4, '0')
+		FROM tan0201
+		WHERE INTEGRATION_ID LIKE '${idKey}%'
+	</select>
+
+	<select id="getInterfaceIDMaxSHL" parameterType="Map" resultType="java.lang.String">
+		SELECT LPAD(TO_CHAR(TO_NUMBER(NVL(SUBSTR(MAX(INTEGRATION_ID),-5),'0'))) +1, 5, '0')
+		FROM tan0201
+		WHERE INTEGRATION_ID LIKE '${idKey}%'
+	</select>
+
+	<select id="generateIntegrationId" resultType="string">
+		SELECT LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(INTEGRATION_ID,#{startIndex},#{endIndex})),'0')) + 1),#{seqLength},'0') as SEQ
+		FROM TAN0201
+		WHERE INTEGRATION_ID LIKE #{prefix} || '%'
+	</select>
+
+	<update id="updateInterfaceIDMax" parameterType="string">
+		MERGE INTO TAN0229
+			USING DUAL
+			ON (INTEGRATION_ID_KEY =#{idKey} )
+			when matched then
+			    update
+			    set     MAX_SEQ = MAX_SEQ+1
+			when not matched then
+			    insert  (INTEGRATION_ID_KEY, MAX_SEQ)
+			    values  (#{idKey}, 1)
+	</update>
+
+	<select id="getApplicationMenuPath" parameterType="Map" resultMap="menuResultMap">
+		SELECT C.MENU_ID, C.MENU_NM, C.MENU_OPT
+		FROM TSU0207 C
+		INNER JOIN (
+			SELECT K.P_MENU_ID, K.DEPTH
+		    FROM TSU0208 K
+		    INNER JOIN (
+		    	SELECT B.MENU_ID
+		    	FROM TSU0214 B
+		    	INNER JOIN (
+		    		SELECT APP_ID FROM TSU0204 WHERE DEL_YN='N' AND APP_CD = #{appCd}
+		    	) A ON B.APP_ID = A.APP_ID
+			) G ON G.MENU_ID = K.C_MENU_ID
+			WHERE K.DEL_YN='N'
+		) h ON h.P_MENU_ID = C.MENU_ID
+		WHERE C.DEL_YN = 'N'
+		ORDER BY H.DEPTH DESC
+	</select>
+
+	<select id="getSystemPathList" parameterType="Map" resultMap="systemPathResultMap">
+		SELECT C.SYSTEM_ID, C.SYSTEM_NM, C.SYSTEM_CD, H.DEPTH
+		FROM TIM0101 C
+		INNER JOIN (
+			SELECT K.P_SYS_ID, K.DEPTH
+		    FROM TIM0102 K
+		    WHERE K.C_SYS_ID = #{systemId}
+			AND  K.DEL_YN='N'
+		) h ON h.P_SYS_ID = C.SYSTEM_ID
+		WHERE C.DEL_YN = 'N'
+		ORDER BY H.DEPTH DESC
+	</select>
+
+	<resultMap id="systemPathResultMap" type="System">
+	    <id property="systemId"				column="SYSTEM_ID"/>
+		<result property="systemNm"			column="SYSTEM_NM"/>
+		<result property="systemCd"			column="SYSTEM_CD"/>
+	</resultMap>
+
+	<!--
+	 	change-when : 20170829
+	 	change-what : add funciton
+			public Business getBusinessByCd(String cd)throws Exception;
+			public System getSystemByCd(String cd)throws Exception;
+			public Channel getChannelByCd(String cd)throws Exception;
+			public DataAccessRole getDataAccessRoleByCd(String cd)throws Exception;
+			public InterfaceProperties getInterfacePropertyByCd(String cd, String type, String channelId)throws Exception;
+	 -->
+	<select id="getBusinessByCd" parameterType="string" resultMap="businessCdResultMap">
+		SELECT
+		     a.BUSINESS_ID
+		    ,a.BUSINESS_NM
+		    ,a.BUSINESS_CD
+		    ,a.ROOT_YN
+		    ,a.GRP_YN
+		    ,a.COMMENTS
+		    ,a.DEL_YN
+		    ,a.REG_DATE
+		    ,a.REG_USER
+		    ,a.MOD_DATE
+		    ,a.MOD_USER
+		FROM TIM0301 a
+		WHERE a.DEL_YN = 'N'
+		AND a.BUSINESS_CD = #{cd}
+        AND ROWNUM = 1
+	 </select>
+
+	<select id="getSystemByCd" parameterType="string" resultMap="systemCdResultMap">
+		SELECT
+			 a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+		FROM TIM0101 a
+		WHERE a.DEL_YN = 'N'
+		AND a.SYSTEM_CD = #{cd}
+        AND ROWNUM = 1
+	</select>
+
+	<select id="getChannelByCd" parameterType="string" resultMap="channelCdResultMap">
+		SELECT
+		     a.CHANNEL_ID
+		    ,a.CHANNEL_NM
+		    ,a.CHANNEL_CD
+		FROM TIM0002 a
+		WHERE a.DEL_YN = 'N'
+		AND a.CHANNEL_CD = #{cd}
+		AND ROWNUM = 1
+	</select>
+
+	<resultMap id="channelCdResultMap" type="Channel" >
+		<id property="channelId" 		column="CHANNEL_ID" />
+		<result property="channelNm" 	column="CHANNEL_NM" />
+		<result property="channelCd" 	column="CHANNEL_CD" />
+	</resultMap>
+
+	<select id="getDataAccessRoleByCd" parameterType="string" resultMap="dataAccessRoleResultMap">
+		SELECT
+			 a.ROLE_ID
+			,a.ROLE_CD
+			,a.ROLE_NM
+			,a.COMMENTS
+			,a.DEL_YN
+			,a.REG_DATE
+			,a.REG_USER
+			,a.MOD_DATE
+			,a.MOD_USER
+		FROM TSU0218 a
+		WHERE a.DEL_YN = 'N'
+		AND a.ROLE_CD = #{cd}
+		AND ROWNUM = 1
+	</select>
+
+	<select id="getInterfacePropertyByCd" parameterType="map" resultMap="interfacePropertyCdResultMap">
+		<choose>
+			<when test="type eq '0'.toString() ">
+		SELECT
+			  a.CHANNEL_ID
+		    , a.ATTRIBUTE_ID
+			, a.ATTRIBUTE_CD
+			, a.ATTRIBUTE_NM
+		FROM TAN0204 a
+		WHERE a.DEL_YN = 'N'
+		AND a.ATTRIBUTE_CD = #{cd}
+		AND a.CHANNEL_ID = #{channelId}
+		AND ROWNUM = 1
+			</when>
+			<otherwise>
+		SELECT
+			'' AS CHANNEL_ID
+			, a.ATTRIBUTE_ID
+			, a.ATTRIBUTE_CD
+			, a.ATTRIBUTE_NM
+		FROM TAN0202 a
+		WHERE a.DEL_YN = 'N'
+		AND a.ATTRIBUTE_CD = #{cd}
+		AND ROWNUM = 1
+			</otherwise>
+		</choose>
+	</select>
+
+	<resultMap id="interfacePropertyCdResultMap" type="InterfaceProperties">
+		<id property="attrId" 				column="ATTRIBUTE_ID"/>
+		<result property="attrCd" 			column="ATTRIBUTE_CD"/>
+		<result property="attrNm" 			column="ATTRIBUTE_NM"/>
+		<result property="channelId" 		column="CHANNEL_ID"/>
+	</resultMap>
+
+    <select id="getSite" resultMap="siteResultMap">
+        SELECT * FROM TIM0001
+    </select>
+
+   	<resultMap id="siteResultMap" type="Site">
+		<id property="siteId"           column="SITE_ID"/>
+		<result property="siteCode"     column="SITE_CD"/>
+		<result property="siteNm"       column="SITE_NM"/>
+		<result property="sdnm"         column="SDNM"/>
+		<result property="contractYn"   column="CONTRACT_YN"/>
+		<result property="comments"     column="COMMENTS"/>
+		<result property="delYn" 	column="DEL_YN"/>
+		<result property="regDate" 	column="REG_DATE"/>
+		<result property="regId" 	column="REG_USER"/>
+		<result property="modDate" 	column="MOD_DATE"/>
+		<result property="modId"	column="MOD_USER"/>
+	</resultMap>
+
+	<select id="getAppServiceList" resultMap="serviceResultMap" parameterType="String">
+		SELECT * FROM TSU0205 a WHERE a.DEL_YN = 'N'
+	</select>
+
+	<resultMap id="serviceResultMap" type="Service">
+		<id property="serviceId"        column="SERVICE_ID"/>
+		<result property="serviceCd"    column="SERVICE_CD"/>
+		<result property="serviceNm"    column="SERVICE_NM"/>
+		<result property="serviceUri"   column="SERVICE_URI"/>
+		<result property="serviceType"  column="SERVICE_TYPE"/>
+		<result property="scheduleType" column="SCHEDULE_TYPE"/>
+		<result property="schedule"     column="SCHEDULE"/>
+		<result property="useYn"        column="USE_YN"/>
+		<result property="paramsString" column="PARAMS"/>
+		<result property="comments"     column="COMMENTS"/>
+		<result property="delYn" 	    column="DEL_YN"/>
+		<result property="regDate" 	    column="REG_DATE"/>
+		<result property="regId" 	    column="REG_USER"/>
+		<result property="modDate" 	    column="MOD_DATE"/>
+		<result property="modId"	    column="MOD_USER"/>
+	</resultMap>
+
+	<select id="getServerAccessRole" resultType="String">
+	    SELECT a.ROLE_ID
+		FROM TSU0222 a
+		INNER JOIN TIM0202 b
+	    ON a.SYSTEM_ID = b.SYSTEM_ID
+	    AND b.SERVER_ID = #{serverId}
+		AND b.DEL_YN = 'N'
+	</select>
+
+	<select id="getSystemOfServer" resultMap="systemCdResultMap">
+		SELECT
+			 a.SYSTEM_ID
+			,a.SYSTEM_NM
+			,a.SYSTEM_CD
+		FROM TIM0101 a
+		INNER JOIN TIM0202 c
+		ON c.SYSTEM_ID = a.SYSTEM_ID
+		AND c.SERVER_ID = #{serverId}
+		AND c.DEL_YN = 'N'
+	</select>
+</mapper>

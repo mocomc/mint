@@ -1,0 +1,15 @@
+#for maven
+target/
+target*/
+
+#for mac
+.DS_Store
+
+#for eclipse
+.classpath
+.project
+.settings
+.factorypath
+
+#for project
+IIP_LOG_HOME_IS_UNDEFINED/

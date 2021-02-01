@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.CommonMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<select id="getCommonSysConf" parameterType="string" resultMap="commonSysConfResult">
+		select
+			* 
+	     from TB_CMM_SYS_CONF
+	    where KEY = #{id} 
+  	</select>
+  
+  
+  	<resultMap id="commonSysConfResult" type="CommonSysConf">
+  		<id property="id" column="KEY"/>
+		<result property="value" 		column="VALUE"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+   	  	
+</mapper>

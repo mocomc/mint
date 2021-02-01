@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mint</artifactId>
+        <groupId>pep.per</groupId>
+		<version>3.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mint-batch</artifactId>
+
+    <properties>
+        <mybatis-spring-version>1.2.0</mybatis-spring-version>
+        <org.mybatis-version>3.1.0</org.mybatis-version>
+        <commons-dbcp-version>20030825.184428</commons-dbcp-version>
+        <commons-pool-version>20030825.183949</commons-pool-version>
+        <commons-collections-version>20040616</commons-collections-version>
+        <com.oracle.ojdbc6-version>11.2.0.3</com.oracle.ojdbc6-version>
+        <!-- <com.h2database.h2-version>1.4.178</com.h2database.h2-version> -->
+        <org.quartz-version>2.2.1</org.quartz-version>
+
+
+
+
+        <jdom-version>1.0b8</jdom-version>
+		<xml-apis-version>1.4.01</xml-apis-version>
+		<mi-common-version>1.0-20201020</mi-common-version>
+		<mi-server-version>1.0</mi-server-version>
+		<junit-version>4.11</junit-version>
+		<logback-classic-version>1.1.8</logback-classic-version>
+		<log4jdbc-remix-version>0.2.7</log4jdbc-remix-version>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+    </properties>
+
+    <repositories>
+		<repository>
+	     	<id>ta-repository</id>
+	     	<!--
+			<url>http://10.10.1.54:8081/nexus/content/groups/public/</url>
+			 -->
+			<url>http://idc.mocomsys.com:28081/nexus/content/groups/public/</url>
+	   	</repository>
+	 </repositories>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${org.quartz-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>${org.quartz-version}</version>
+        </dependency>
+
+        <!-- mint -->
+        <dependency>
+            <groupId>pep.per</groupId>
+            <artifactId>mint-common</artifactId>
+            <version>${pep.per.mint-version}</version>
+        </dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-solution-mi</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-inhouse</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+        <!-- mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${org.mybatis-version}</version>
+        </dependency>
+
+        <!-- mybatis-spring -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring-version}</version>
+        </dependency>
+
+
+
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>${logback-classic-version}</version>
+		</dependency>
+		<!-- jdbc log -->
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<version>${log4jdbc-remix-version}</version>
+		</dependency>
+
+        <!-- commons -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>${commons-pool-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons-collections-version}</version>
+        </dependency>
+
+        <!-- Oracle JDBC  -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${com.oracle.ojdbc6-version}</version>
+        </dependency>
+
+        <!-- H2 Database -->
+        <!-- <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com.h2database.h2-version}</version>
+        </dependency> -->
+
+		<dependency>
+		    <groupId>jdom</groupId>
+		    <artifactId>jdom</artifactId>
+		    <version>${jdom-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
+		<dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>${xml-apis-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mocomsys</groupId>
+			<artifactId>mi-common</artifactId>
+			<version>${mi-common-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mocomsys</groupId>
+			<artifactId>mi-server</artifactId>
+			<version>${mi-server-version}</version>
+		</dependency>
+
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>mint-2.0.0</id>
+
+            <build>
+
+				<finalName> ${project.artifactId}-product-${project.version}</finalName>
+				<directory>${basedir}/target-version-2.0.0</directory>
+
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/*.java</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.3</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>config/**</exclude>
+                                <exclude>config</exclude>
+                                <exclude>log4j.xml</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>mint-develop-2.0.0</id>
+            <build>
+                <finalName> ${project.artifactId}-test-${project.version}</finalName>
+				<directory>${basedir}/target-test-version-2.0.0</directory>
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/test/resources</directory>
+                        <excludes>
+                            <exclude>**/*.java</exclude>
+                        </excludes>
+                    </resource>
+                    <resource>
+                        <directory>${basedir}/src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/*.java</exclude>
+                            <exclude>log4j.xml</exclude>
+                            <exclude>config/**</exclude>
+                            <exclude>config</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.3</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>config/**</exclude>
+                                <exclude>config</exclude>
+                                <exclude>log4j.xml</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>mint-3.0.0</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+            <build>
+
+				<finalName> ${project.artifactId}-product-${project.version}</finalName>
+				<directory>${basedir}/target-version-3.0.0</directory>
+
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/*.java</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.3</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>config/**</exclude>
+                                <exclude>config</exclude>
+                                <exclude>log4j.xml</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+
+</project>

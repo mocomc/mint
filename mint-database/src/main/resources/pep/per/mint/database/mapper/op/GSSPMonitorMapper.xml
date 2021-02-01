@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.GSSPMonitorMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<select id="getTrackingLogListTotalCount" parameterType="Map" resultType="int">
+	SELECT
+		COUNT(TRACKING.EAI_IF_ID) AS TOTAL_CNT
+	FROM (
+		SELECT *
+		FROM (
+			SELECT *
+			FROM (
+				SELECT
+					M.*, S.*
+				FROM (
+					SELECT /*+ INDEX_DESC(A NUI01_TOP0814) */
+						A.*
+					FROM TOP0814 A
+					WHERE 1 = 1
+					---------------------
+					-- 트레킹 테이블 필터조건
+					---------------------
+					AND FST_TRNS_PROC_MCSEC BETWEEN #{startDate} AND #{endDate}
+					<if test="tranId !=null and tranId !=''">
+					AND FST_TRNS_PROC_MCSEC = #{tranId}
+					</if>
+
+					<if test="status != null and status != ''">
+					AND IF_PROC_STAT_CD = #{status}
+					</if>
+
+					<if test="rcvSysRefVal != null and rcvSysRefVal != ''">
+					AND RCV_SYS_REF_VAL LIKE '%'||#{rcvSysRefVal}||'%'
+					</if>
+
+				) M
+				------------------------------
+				--if ( 필터링 조건이 존재하면 )
+				--필터링 조건 : 시스템, 인터페이스명 ,기타 ...
+				------------------------------
+				INNER JOIN (
+					SELECT
+						DISTINCT
+						A.INTEGRATION_ID,
+						A.INTERFACE_ID,
+						A.INTERFACE_NM
+					FROM TAN0201 A
+					INNER JOIN TAN0213 B
+						ON A.INTERFACE_ID = B.INTERFACE_ID
+						<if test="interfaceNm != null and interfaceNm != ''">
+						AND A.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+						</if>
+						<if test="integrationId != null and integrationId != ''">
+						AND A.INTEGRATION_ID = #{integrationId}
+						</if>
+					INNER JOIN TIM0101 C
+						ON C.SYSTEM_ID = B.SYSTEM_ID
+						<if test="systemId != null and systemId != ''">
+						AND C.SYSTEM_ID = #{systemId}
+						</if>
+
+					INNER JOIN TAN0101 REQ
+        				ON REQ.INTERFACE_ID = A.INTERFACE_ID
+
+					INNER JOIN TIM0301 BIZ
+                    	ON BIZ.BUSINESS_ID = REQ.BUSINESS_ID
+                   		<if test="businessId != null and businessId != ''">
+                   		AND BIZ.BUSINESS_ID = #{businessId}
+                   		</if>
+				) S ON M.EAI_IF_ID = S.INTEGRATION_ID
+			)
+		) A
+	) TRACKING
+	---------------------
+	-- 상태 정보 조인
+	---------------------
+	LEFT OUTER JOIN TSU0301 STAT ON STAT.CD = TRACKING.IF_PROC_STAT_CD AND STAT.LEVEL1 = 'OP' AND STAT.LEVEL2 = '01'  -- 상태코드
+	--------------------
+	-- 송신시스템 정보 조인
+	---------------------
+	LEFT OUTER JOIN (
+		SELECT
+			A.INTERFACE_ID,
+			A.SYSTEM_ID,
+			A.NODE_TYPE,
+			A.RESOURCE_TYPE,
+			B.SYSTEM_NM,
+			B.SYSTEM_CD
+		FROM TAN0213 A
+		INNER JOIN TIM0101 B
+			ON A.SYSTEM_ID = B.SYSTEM_ID
+			AND A.NODE_TYPE = '0'
+			AND A.SEQ = (
+				SELECT
+					MAX(C.SEQ)
+				FROM TAN0213 C
+				WHERE C.SYSTEM_ID = A.SYSTEM_ID
+				AND C.INTERFACE_ID = A.INTERFACE_ID
+				AND C.NODE_TYPE = A.NODE_TYPE
+		)
+	) SND_SYSTEM ON SND_SYSTEM.INTERFACE_ID = TRACKING.INTERFACE_ID
+	---------------------
+	-- 수신시스템 정보 조인
+	---------------------
+	LEFT OUTER JOIN (
+		SELECT
+			A.INTERFACE_ID,
+			A.SYSTEM_ID,
+			A.NODE_TYPE,
+			A.RESOURCE_TYPE,
+			B.SYSTEM_NM,
+			B.SYSTEM_CD
+		FROM TAN0213 A
+		INNER JOIN TIM0101 B
+			ON A.SYSTEM_ID = B.SYSTEM_ID
+			AND A.NODE_TYPE = '2'
+			AND A.SEQ = (
+				SELECT MAX(C.SEQ)
+				FROM TAN0213 C
+				WHERE C.INTERFACE_ID = A.INTERFACE_ID
+				AND C.NODE_TYPE = A.NODE_TYPE
+		)
+	) RCV_SYSTEM_A ON RCV_SYSTEM_A.INTERFACE_ID = TRACKING.INTERFACE_ID
+	LEFT OUTER JOIN (
+		SELECT
+			A.SYSTEM_ID,
+			A.SYSTEM_NM,
+			A.SYSTEM_CD
+  		FROM TIM0101 A
+  	) RCV_SYSTEM_B ON RCV_SYSTEM_B.SYSTEM_CD = TRACKING.RCV_SYS_REF_VAL
+	---------------------
+	-- 수신점포 정보 조인
+	---------------------
+	LEFT OUTER JOIN TIM0501 RCV_STORE ON RCV_STORE.STORE_CD = SUBSTR(TRACKING.RCV_SYS_REF_VAL,1,5)
+	AND RCV_STORE.POS_NO = SUBSTR(TRACKING.RCV_SYS_REF_VAL,6,1)
+	</select>
+
+	<select id="getTrackingLogList" parameterType="Map" resultMap="TRLogResult">
+	SELECT
+		TRACKING.IDX								AS IDX,
+		TRACKING.RNUM                               AS RNUM,
+		STAT.NM                                    AS STATUS_NM,
+	    TRACKING.EAI_IF_ID                     AS INTEGRATION_ID,
+	    TRACKING.INTERFACE_ID				AS INTERFACE_ID,
+	    NVL(TRACKING.INTERFACE_NM,'미식별인터페이스')  AS INTERFACE_NM,
+	    SND_SYSTEM.SYSTEM_NM                       AS SND_SYSTEM_NM,  --송신시스템명
+	    SND_SYSTEM.SYSTEM_CD                       AS SND_SYSTEM_CD,  --송신시스템코드
+	    SND_SYSTEM.SYSTEM_NM || '(' || SND_SYSTEM.SYSTEM_CD || ')' AS SND_SYSTEM, --송신시스템
+	    DECODE(RCV_SYSTEM_A.SYSTEM_CD,'PS',RCV_STORE.STORE_NM,DECODE(TRACKING.RCV_SYS_REF_VAL,'XX',RCV_SYSTEM_A.SYSTEM_NM,RCV_SYSTEM_B.SYSTEM_NM)) AS RCV_SYSTEM_NM,  --수신시스템명
+	    --DECODE(RCV_SYSTEM_A.SYSTEM_CD,'PS',TRACKING.RCV_SYS_REF_VAL,DECODE(TRACKING.RCV_SYS_REF_VAL,'XX',RCV_SYSTEM_A.SYSTEM_CD,RCV_SYSTEM_B.SYSTEM_CD)) AS RCV_SYSTEM_CD,  --수신시스템코드
+	    RCV_SYSTEM_A.SYSTEM_CD AS RCV_SYSTEM_CD,  --수신시스템코드
+	    DECODE(RCV_SYSTEM_A.SYSTEM_CD,'PS',RCV_STORE.STORE_NM,DECODE(TRACKING.RCV_SYS_REF_VAL,'XX',RCV_SYSTEM_A.SYSTEM_NM,RCV_SYSTEM_B.SYSTEM_NM)) || '(' || DECODE(RCV_SYSTEM_A.SYSTEM_CD,'PS',TRACKING.RCV_SYS_REF_VAL,DECODE(TRACKING.RCV_SYS_REF_VAL,'XX',RCV_SYSTEM_A.SYSTEM_CD,RCV_SYSTEM_B.SYSTEM_CD)) || ')' AS RCV_SYSTEM, -- 수신시스템
+	    RCV_STORE.STORE_NM                         AS RCV_STORE_NM,   --수신점포명
+	    TRACKING.RCV_SYS_REF_VAL                   AS RCV_POSNO,      --수신점포코드
+	    TRACKING.EAI_TRNS_PROC_MCSEC               AS PROCESS_TIME,   --시작시간
+	    TRACKING.FST_TRNS_PROC_MCSEC				AS TRAN_ID -- 트랜젝션ID
+	FROM (
+		SELECT 
+			A.IDX AS IDX,
+			A.RNUM AS RNUM,
+			A.EAI_IF_ID,
+			A.INTERFACE_ID,
+			A.INTERFACE_NM,
+			A.RCV_SYS_REF_VAL,
+			A.EAI_TRNS_PROC_MCSEC,
+			A.FST_TRNS_PROC_MCSEC,
+			A.IF_PROC_STAT_CD 
+		FROM (
+			SELECT 
+				ROWNUM AS RNUM,
+				TMP.IDX,
+				TMP.EAI_IF_ID,
+				TMP.INTERFACE_ID,
+				TMP.INTERFACE_NM,
+				TMP.RCV_SYS_REF_VAL,
+				TMP.EAI_TRNS_PROC_MCSEC,
+				TMP.FST_TRNS_PROC_MCSEC,
+				TMP.IF_PROC_STAT_CD 
+			FROM (
+				SELECT
+					M.IDX,
+					M.EAI_IF_ID,
+					S.INTERFACE_ID,
+					S.INTERFACE_NM,
+					M.RCV_SYS_REF_VAL,
+					M.EAI_TRNS_PROC_MCSEC,
+					M.FST_TRNS_PROC_MCSEC,
+					M.IF_PROC_STAT_CD 
+				FROM (
+					SELECT /*+ INDEX_DESC(A NUI01_TOP0814) */
+						ROWNUM AS IDX,
+						A.EAI_IF_ID,
+						A.RCV_SYS_REF_VAL,
+						A.EAI_TRNS_PROC_MCSEC,
+						A.FST_TRNS_PROC_MCSEC,
+						A.IF_PROC_STAT_CD 
+					FROM TOP0814 A
+					WHERE 1 = 1
+					---------------------
+					-- 트레킹 테이블 필터조건
+					---------------------
+					AND FST_TRNS_PROC_MCSEC BETWEEN #{startDate} AND #{endDate}
+					<if test="tranId !=null and tranId !=''">
+					AND FST_TRNS_PROC_MCSEC = #{tranId}
+					</if>
+
+					<if test="status != null and status != ''">
+					AND IF_PROC_STAT_CD = #{status}
+					</if>
+
+					<if test="rcvSysRefVal != null and rcvSysRefVal != ''">
+					AND RCV_SYS_REF_VAL LIKE '%'||#{rcvSysRefVal}||'%'
+					</if>
+
+				) M
+				------------------------------
+				--if ( 필터링 조건이 존재하면 )
+				--필터링 조건 : 시스템, 인터페이스명 ,기타 ...
+				------------------------------
+				INNER JOIN (
+					SELECT
+						DISTINCT
+						A.INTEGRATION_ID,
+						A.INTERFACE_ID,
+						A.INTERFACE_NM
+					FROM TAN0201 A
+					INNER JOIN TAN0213 B
+						ON A.INTERFACE_ID = B.INTERFACE_ID
+						<if test="interfaceNm != null and interfaceNm != ''">
+						AND A.INTERFACE_NM LIKE '%'||#{interfaceNm}||'%'
+						</if>
+						<if test="integrationId != null and integrationId != ''">
+						AND A.INTEGRATION_ID = #{integrationId}
+						</if>
+					INNER JOIN TIM0101 C
+						ON C.SYSTEM_ID = B.SYSTEM_ID
+						<if test="systemId != null and systemId != ''">
+						AND C.SYSTEM_ID = #{systemId}
+						</if>
+
+					INNER JOIN TAN0101 REQ
+        				ON REQ.INTERFACE_ID = A.INTERFACE_ID
+
+					INNER JOIN TIM0301 BIZ
+                    	ON BIZ.BUSINESS_ID = REQ.BUSINESS_ID
+                   		<if test="businessId != null and businessId != ''">
+                   		AND BIZ.BUSINESS_ID = #{businessId}
+                   		</if>
+
+				) S ON M.EAI_IF_ID = S.INTEGRATION_ID
+			) TMP
+			WHERE ROWNUM <![CDATA[<]]>= #{endIndex}
+		) A
+		WHERE A.RNUM <![CDATA[>]]>= #{startIndex}
+	) TRACKING
+	---------------------
+	-- 상태 정보 조인
+	---------------------
+	LEFT OUTER JOIN TSU0301 STAT ON STAT.CD = TRACKING.IF_PROC_STAT_CD AND STAT.LEVEL1 = 'OP' AND STAT.LEVEL2 = '01'  -- 상태코드
+	--------------------
+	-- 송신시스템 정보 조인
+	---------------------
+	LEFT OUTER JOIN (
+		SELECT
+			A.INTERFACE_ID,
+			A.SYSTEM_ID,
+			A.NODE_TYPE,
+			A.RESOURCE_TYPE,
+			B.SYSTEM_NM,
+			B.SYSTEM_CD
+		FROM TAN0213 A
+		INNER JOIN TIM0101 B
+			ON A.SYSTEM_ID = B.SYSTEM_ID
+			AND A.NODE_TYPE = '0'
+			AND A.SEQ = (
+				SELECT
+					MAX(C.SEQ)
+				FROM TAN0213 C
+				WHERE C.SYSTEM_ID = A.SYSTEM_ID
+				AND C.INTERFACE_ID = A.INTERFACE_ID
+				AND C.NODE_TYPE = A.NODE_TYPE
+		)
+	) SND_SYSTEM ON SND_SYSTEM.INTERFACE_ID = TRACKING.INTERFACE_ID
+	---------------------
+	-- 수신시스템 정보 조인
+	---------------------
+	LEFT OUTER JOIN (
+		SELECT
+			A.INTERFACE_ID,
+			A.SYSTEM_ID,
+			A.NODE_TYPE,
+			A.RESOURCE_TYPE,
+			B.SYSTEM_NM,
+			B.SYSTEM_CD
+		FROM TAN0213 A
+		INNER JOIN TIM0101 B
+			ON A.SYSTEM_ID = B.SYSTEM_ID
+			AND A.NODE_TYPE = '2'
+			AND A.SEQ = (
+				SELECT MAX(C.SEQ)
+				FROM TAN0213 C
+				WHERE C.INTERFACE_ID = A.INTERFACE_ID
+				AND C.NODE_TYPE = A.NODE_TYPE
+		)
+	) RCV_SYSTEM_A ON RCV_SYSTEM_A.INTERFACE_ID = TRACKING.INTERFACE_ID
+	LEFT OUTER JOIN (
+		SELECT
+			A.SYSTEM_ID,
+			A.SYSTEM_NM,
+			A.SYSTEM_CD
+  		FROM TIM0101 A
+  	) RCV_SYSTEM_B ON RCV_SYSTEM_B.SYSTEM_CD = TRACKING.RCV_SYS_REF_VAL
+	---------------------
+	-- 수신점포 정보 조인
+	---------------------
+	LEFT OUTER JOIN TIM0501 RCV_STORE ON RCV_STORE.STORE_CD = SUBSTR(TRACKING.RCV_SYS_REF_VAL,1,5)
+	AND RCV_STORE.POS_NO = SUBSTR(TRACKING.RCV_SYS_REF_VAL,6,1)
+	ORDER BY IDX
+	</select>
+
+	<resultMap id="TRLogResult" type="GSTRLog" >
+		<result property="idx"            column="RNUM" />
+		<result property="statusNm"            column="STATUS_NM" />
+		<result property="interfaceId"              column="INTERFACE_ID" />
+		<result property="integrationId"              column="INTEGRATION_ID" />
+		<result property="interfaceNm"           column="INTERFACE_NM" />
+		<result property="sndSystemNm"        column="SND_SYSTEM_NM" />
+		<result property="sndSystemCd"      column="SND_SYSTEM_CD" />
+		<result property="sndSystem"      column="SND_SYSTEM" />
+		<result property="rcvSystemNm"        column="RCV_SYSTEM_NM" />
+		<result property="rcvSystemCd"          column="RCV_SYSTEM_CD" />
+		<result property="rcvSystem"          column="RCV_SYSTEM" />
+		<result property="rcvStoreNm"         column="RCV_STORE_NM" />
+		<result property="rcvPosNo"           column="RCV_POSNO" />
+		<result property="processTime"     column="PROCESS_TIME" />
+		<result property="tranId"     column="TRAN_ID" />
+	</resultMap>
+
+
+
+
+
+
+
+
+	<select id="getTrackingLogDetail" parameterType="Map" resultMap="TRLogDetailResult">
+	SELECT
+        DECODE(DETAIL.SNRC_SP_CD,'S','송신','수신') AS SNRC_SP_NM,
+        DECODE(DETAIL.SNRC_SP_CD,'S',DETAIL.SND_SYS_CD,DECODE(DETAIL.RCV_SYS_REF_VAL,'XX',H.SYSTEM_CD,DETAIL.RCV_SYS_REF_VAL)) AS SYS_CD,
+        DECODE(DETAIL.SNRC_SP_CD,'S',B.SYSTEM_NM,DECODE(DETAIL.MNTR_INFO_INQ_SP_CD,'9',DECODE(DETAIL.RCV_SYS_REF_VAL,'XX',H.SYSTEM_NM,C.SYSTEM_NM),D.STORE_NM)) AS SYSTEM_NM,
+        DETAIL.MNTR_INFO_INQ_SP_CD AS MNTR_INFO_INQ_SP_CD,
+        to_char(DETAIL.RCV_PROC_DTTM, 'yyyymmddhh24miss') AS PROC_DTTM,
+        DETAIL.IF_PROC_STAT_CD AS STATUS_CD,
+        DETAIL.TOT_TRNS_REC_CNT AS TOT_TRNS_REC_CNT,
+        DETAIL.WRK_REC_CNT AS WRK_REC_CNT,
+        E.NM AS STATUS_NM,
+        ERR_MSG_CNTS AS ERROR_MSG
+    FROM TOP0815 DETAIL
+	INNER JOIN TIM0101 B
+        ON DETAIL.SND_SYS_CD = B.SYSTEM_CD
+       AND DETAIL.SND_SYS_CD = #{logKey1}
+       AND DETAIL.EAI_IF_ID = #{logKey2}
+       AND DETAIL.TRAN_ID             = #{logKey3}
+       AND DETAIL.FST_TRNS_PROC_MCSEC = #{logKey3}
+       AND DETAIL.EAI_TRNS_PROC_MCSEC = #{logKey4}
+       AND DETAIL.RCV_SYS_REF_VAL     = #{logKey5}
+	LEFT OUTER JOIN TIM0101 C
+        ON C.SYSTEM_CD = DETAIL.RCV_SYS_REF_VAL
+	LEFT OUTER JOIN TIM0501 D
+        ON D.STORE_CD = SUBSTR(DETAIL.RCV_SYS_REF_VAL,1,5)
+        AND D.POS_NO = SUBSTR(DETAIL.RCV_SYS_REF_VAL,6,1)
+	LEFT OUTER JOIN TSU0301 E
+        ON E.LEVEL1 = 'OP'
+       AND E.LEVEL2 = '01'
+       AND E.CD = DETAIL.IF_PROC_STAT_CD
+    INNER JOIN TAN0201 F ON F.INTEGRATION_ID = DETAIL.EAI_IF_ID
+    INNER JOIN TAN0213 G ON G.INTERFACE_ID = F.INTERFACE_ID AND G.NODE_TYPE = '2'
+    INNER JOIN TIM0101 H ON H.SYSTEM_ID = G.SYSTEM_ID
+    <if test="logKey6 != 'PS'">
+    AND H.SYSTEM_CD = #{logKey6}
+    </if>
+	ORDER BY DETAIL.SNRC_SP_CD DESC
+	</select>
+
+	<resultMap id="TRLogDetailResult" type="GSTRLogDetail">
+		<result property="snrcSpNm"				column="SNRC_SP_NM" />
+		<result property="sysCd"				column="SYS_CD" />
+        <result property="sysNm"				column="SYSTEM_NM" />
+        <result property="mntrInfoInqSpCd"	column="MNTR_INFO_INQ_SP_CD" />
+        <result property="procDttm"				column="PROC_DTTM" />
+        <result property="status"					column="STATUS_CD" />
+        <result property="statusNm"				column="STATUS_NM" />
+        <result property="totTrnsRecCnt"		column="TOT_TRNS_REC_CNT" />
+        <result property="wrkRecCnt"				column="WRK_REC_CNT" />
+        <result property="errorMsg"				column="ERROR_MSG" />
+    </resultMap>
+
+</mapper>

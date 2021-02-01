@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013 ~ 2015. Mocomsys's guys(Sanghoon Lim, Deahun Ham, dhkim, whoana.j), Inc.  All Rights Reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~ [주의!]
+  ~ 본 코드가 하자없이 완벽할거라 믿었다간 엄청난 욕을 먹고 그로 인한 스트레스로 병들거나 심하면 살기 싫어질 수도 있으니 부디 살얼음판을 걷듯이 주의하여 사용하기 바란다.
+  ~ 사용상 받을지 모를 스트레스 및 기타 피해에 대한 책임은 사용자 본인에게 있음을 명시한다. 부디 행운을 빈다.
+  ~ Please Don't contact Mocomsys, Inc., NURITKUM SQUARE R&D TOWER, 11F DMC 1605,
+  ~ Sangam-Dong, Mapo-Gu, Seoul, 121-795 Korea or visit mocomsys.com if you need additional information or have any questions.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.batch.mapper.su.TSU080XJobMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<delete id="deleteTSU0804">
+	<![CDATA[
+		DELETE FROM TSU0804
+		WHERE TR_DAY >= SUBSTR(#{fromDate},1,8)
+		AND TR_DAY <= SUBSTR(#{toDate},1,8)
+   	]]>
+	</delete>
+
+	<insert id="insertTSU0804">
+		INSERT INTO TSU0804 (
+			 INTERFACE_ID
+			,TR_DAY
+			,DATA_SIZE
+			,SUCCESS_CNT
+			,ERROR_CNT
+			,PROCESS_CNT
+			,REG_DATE
+			,REG_APP
+		)
+		SELECT
+		     INTERFACE_ID
+		    ,SUBSTR(TR_DATE,1,8)  AS TR_DAY
+		    ,SUM(DATA_SIZE)       AS DATA_SIZE
+		    ,SUM(SUCCESS_CNT)     AS SUCCESS_CNT
+		    ,SUM(ERROR_CNT)       AS ERROR_CNT
+		    ,SUM(PROCESS_CNT)     AS PROCESS_CNT
+		    <choose>
+				<when test="_databaseId == 'altibase'">
+		    ,'${regDate}'
+		    ,'${regApp}'
+		    	</when>
+		    	<otherwise>
+		    ,#{regDate}
+		    ,#{regApp}
+		    	</otherwise>
+			</choose>
+		FROM TSU0803
+		WHERE TR_DATE <![CDATA[>=]]> #{fromDate}
+		AND TR_DATE <![CDATA[<=]]> #{toDate}
+		GROUP BY INTERFACE_ID,SUBSTR(TR_DATE,1,8)
+		ORDER BY 1
+	</insert>
+
+	<delete id="deleteTSU0805">
+	<![CDATA[
+		DELETE FROM TSU0805 WHERE TR_MONTH = SUBSTR(#{fromDay},1,6)
+   	]]>
+	</delete>
+
+	<insert id="insertTSU0805">
+		INSERT INTO TSU0805 (
+			 INTERFACE_ID
+			,TR_MONTH
+			,DATA_SIZE
+			,SUCCESS_CNT
+			,ERROR_CNT
+			,PROCESS_CNT
+			,REG_DATE
+			,REG_APP
+		)
+		SELECT
+		     INTERFACE_ID
+		    ,SUBSTR(TR_DAY,1,6)  AS TR_DAY
+		    ,SUM(DATA_SIZE)      AS DATA_SIZE
+		    ,SUM(SUCCESS_CNT)    AS SUCCESS_CNT
+		    ,SUM(ERROR_CNT)      AS ERROR_CNT
+		    ,SUM(PROCESS_CNT)    AS PROCESS_CNT
+		    <choose>
+				<when test="_databaseId == 'altibase'">
+		    ,'${regDate}'
+		    ,'${regApp}'
+		    	</when>
+		    	<otherwise>
+		    ,#{regDate}
+		    ,#{regApp}
+		    	</otherwise>
+			</choose>
+		FROM TSU0804
+		WHERE TR_DAY <![CDATA[>=]]> #{fromDay}
+		AND TR_DAY <![CDATA[<=]]> #{toDay}
+		GROUP BY INTERFACE_ID, SUBSTR(TR_DAY,1,6)
+		ORDER BY 1
+	</insert>
+
+	<delete id="deleteTSU0807">
+	<![CDATA[
+		DELETE FROM TSU0807 WHERE TR_DAY >= #{fromDay} AND TR_DAY <= #{toDay}
+   	]]>
+	</delete>
+
+	<insert id="insertTSU0807">
+		INSERT INTO TSU0807 (
+			 ORG_ID
+			,TR_DAY
+			,TR_CNT
+			,REG_DATE
+			,REG_APP
+		)
+		SELECT
+		   	 c.ORG_ID
+		  	,a.TR_DAY
+		  	,SUM(a.ERROR_CNT + a.PROCESS_CNT + a.SUCCESS_CNT) AS TR_CNT
+		    <choose>
+				<when test="_databaseId == 'altibase'">
+		    ,'${regDate}'
+		    ,'${regApp}'
+		    	</when>
+		    	<otherwise>
+		    ,#{regDate}
+		    ,#{regApp}
+		    	</otherwise>
+			</choose>
+		FROM TSU0804 a
+		INNER JOIN TAN0213 b ON a.INTERFACE_ID = b.INTERFACE_ID AND b.NODE_TYPE = '0' AND a.TR_DAY <![CDATA[>=]]> #{fromDay} AND a.TR_DAY <![CDATA[<=]]> #{toDay}
+		INNER JOIN TIM0403 c ON b.SYSTEM_ID = c.SYSTEM_ID
+		GROUP BY c.ORG_ID, a.TR_DAY
+		ORDER BY a.TR_DAY, c.ORG_ID
+	</insert>
+
+	<delete id="deleteTSU0808">
+	<![CDATA[
+		DELETE FROM TSU0808 WHERE TR_MONTH = SUBSTR(#{fromDay},1,6)
+   	]]>
+	</delete>
+
+	<insert id="insertTSU0808">
+		INSERT INTO TSU0808 (
+			 ORG_ID
+			,TR_MONTH
+			,TR_CNT
+			,REG_DATE
+			,REG_APP
+		)
+		SELECT
+		   	 ORG_ID
+		  	,SUBSTR(TR_DAY,1,6) AS TR_MONTH
+		  	,SUM(TR_CNT) AS TR_CNT
+		    <choose>
+				<when test="_databaseId == 'altibase'">
+		    ,'${regDate}'
+		    ,'${regApp}'
+		    	</when>
+		    	<otherwise>
+		    ,#{regDate}
+		    ,#{regApp}
+		    	</otherwise>
+			</choose>
+		FROM TSU0807
+		WHERE TR_DAY <![CDATA[>=]]> #{fromDay} AND TR_DAY <![CDATA[<=]]> #{toDay}
+		GROUP BY SUBSTR(TR_DAY,1,6), ORG_ID
+		ORDER BY ORG_ID
+	</insert>
+
+	<!-- TSU0811 -->
+	<delete id="deleteTSU0811">
+	<![CDATA[
+		DELETE FROM TSU0811 WHERE TR_DAY >= SUBSTR(#{fromDate},1,8) AND TR_DAY <= SUBSTR(#{toDate},1,8)
+   	]]>
+	</delete>
+
+	<insert id="insertTSU0811">
+		INSERT INTO TSU0811 (
+			 INTERFACE_ID
+			,TR_DAY
+			,SUCCESS_R_CNT
+			,ERROR_R_CNT
+			,PROCESS_R_CNT
+			,REG_DATE
+			,REG_APP
+		)
+		SELECT
+		     INTERFACE_ID
+		    ,SUBSTR(TR_DATE,1,8)  AS TR_DAY
+		    ,SUM(SUCCESS_R_CNT)   AS SUCCESS_R_CNT
+		    ,SUM(ERROR_R_CNT)     AS ERROR_R_CNT
+		    ,SUM(PROCESS_R_CNT)   AS PROCESS_R_CNT
+		    <choose>
+				<when test="_databaseId == 'altibase'">
+		    ,'${regDate}'
+		    ,'${regApp}'
+		    	</when>
+		    	<otherwise>
+		    ,#{regDate}
+		    ,#{regApp}
+		    	</otherwise>
+			</choose>
+		FROM TSU0810
+		WHERE TR_DATE <![CDATA[>=]]> #{fromDate}
+		AND TR_DATE <![CDATA[<=]]> #{toDate}
+		GROUP BY INTERFACE_ID, SUBSTR(TR_DATE,1,8)
+		ORDER BY 1
+	</insert>
+
+	<!-- TSU0812 -->
+	<delete id="deleteTSU0812">
+	<![CDATA[
+		DELETE FROM TSU0812 WHERE TR_MONTH = SUBSTR(#{fromDay},1,6)
+   	]]>
+	</delete>
+
+	<insert id="insertTSU0812">
+		INSERT INTO TSU0812 (
+			 INTERFACE_ID
+			,TR_MONTH
+			,SUCCESS_R_CNT
+			,ERROR_R_CNT
+			,PROCESS_R_CNT
+			,REG_DATE
+			,REG_APP
+		)
+		SELECT
+		     INTERFACE_ID
+		    ,SUBSTR(TR_DAY,1,6)  AS TR_DAY
+		    ,SUM(SUCCESS_R_CNT)  AS SUCCESS_R_CNT
+		    ,SUM(ERROR_R_CNT)    AS ERROR_R_CNT
+		    ,SUM(PROCESS_R_CNT)  AS PROCESS_R_CNT
+		    <choose>
+				<when test="_databaseId == 'altibase'">
+		    ,'${regDate}'
+		    ,'${regApp}'
+		    	</when>
+		    	<otherwise>
+		    ,#{regDate}
+		    ,#{regApp}
+		    	</otherwise>
+			</choose>
+		FROM tsu0811
+		WHERE TR_DAY <![CDATA[>=]]> #{fromDay}
+		AND TR_DAY <![CDATA[<=]]> #{toDay}
+		GROUP BY INTERFACE_ID, SUBSTR(TR_DAY,1,6)
+		ORDER BY 1
+	</insert>
+
+	<!-- TSU0810 -->
+	<select id="selectOneTSU0810" resultType="int">
+    <![CDATA[
+        SELECT COUNT(*) AS CNT
+        FROM TSU0810 a
+        WHERE a.INTERFACE_ID = #{interfaceId}
+        AND a.TR_DATE = #{trDate}
+		AND a.SEQ = 1
+    ]]>
+    </select>
+
+	<insert id="insertTSU0810">
+		INSERT INTO TSU0810(
+			 INTERFACE_ID
+			,TR_DATE
+			,SEQ
+			,SUCCESS_R_CNT
+			,ERROR_R_CNT
+			,PROCESS_R_CNT
+			,REG_DATE
+			,REG_APP
+        ) VALUES (
+             #{interfaceId, jdbcType=VARCHAR}
+            ,#{trDate, 		jdbcType=VARCHAR}
+            ,1
+            ,#{successRCnt,	jdbcType=NUMERIC}
+            ,#{errorRCnt, 	jdbcType=NUMERIC}
+            ,#{processRCnt, jdbcType=NUMERIC}
+            ,#{regDate,		jdbcType=VARCHAR}
+            ,#{regApp,		jdbcType=VARCHAR}
+        )
+	</insert>
+
+    <update id="updateTSU0810" >
+		UPDATE TSU0810
+		SET
+			 SUCCESS_R_CNT	= #{successRCnt,jdbcType=NUMERIC}
+			,ERROR_R_CNT	= #{errorRCnt, 	jdbcType=NUMERIC}
+			,PROCESS_R_CNT	= #{processRCnt,jdbcType=NUMERIC}
+			,REG_DATE		= #{regDate,	jdbcType=VARCHAR}
+			,REG_APP		= #{regApp,		jdbcType=VARCHAR}
+		WHERE INTERFACE_ID = #{interfaceId, jdbcType=VARCHAR}
+		AND TR_DATE = #{trDate, jdbcType=VARCHAR}
+        AND SEQ = 1
+    </update>
+</mapper>

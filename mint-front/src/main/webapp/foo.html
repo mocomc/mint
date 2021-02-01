@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="./js/external/jquery/js/jquery.min.js"></script>
+</head>
+<body>
+
+Foo 서비스 테스트 : ./foos/icallfoo 
+
+<div id="modalPopopSample"></div>
+
+<script>
+	$(document).ready(function () {
+ 
+		$.ajax({
+			url: "./foos/icallfoo",
+				success:function(foo){
+				 
+					$("#modalPopopSample").text("name:" + foo.name + ", age:" + foo.age);
+					console.log(data);
+				}
+		});
+		
+	});
+</script>
+
+</body>
+</html>

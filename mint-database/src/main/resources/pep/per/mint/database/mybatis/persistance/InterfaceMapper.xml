@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mybatis.persistance.InterfaceMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+  	<!-- <select id="getInterface" parameterType="string" resultMap="interfaceResult">
+		select
+			* 
+	     from TB_INT_INTERFACE
+	    where INTERFACE_ID = #{id} 
+  	</select>
+   -->
+  	<select id="getInterface" parameterType="string" resultMap="interfaceResult">
+		select 
+  			 a.INTERFACE_NM as INTERFACE_NM
+  			,a.INTERFACE_ID as INTERFACE_ID
+  			,a.TYPE         as TYPE
+  			,b.NM 			as TYPE_NM
+  			,a.SEND_BIZ_CD  as SEND_BIZ_CD
+  			,c.BIZ_NM 		as SEND_BIZ_NM
+  			,a.RECV_BIZ_CD  as RECV_BIZ_CD
+  			,d.BIZ_NM 		as RECV_BIZ_NM
+  			,a.ROUTE_TYPE   as ROUTE_TYPE
+  			,e.NM 			as ROUTE_TYPE_NM
+  			,a.DESCRIPTION  as DESCRIPTION
+  			,a.REG_DATE     as REG_DATE
+  			,a.REG_ID		as REG_ID
+  			,a.MOD_DATE		as MOD_DATE
+  			,a.MOD_ID		as MOD_ID
+  		 from TB_INT_INTERFACE a, TB_CMM_CODE b, TB_INT_BIZINFO c, TB_INT_BIZINFO d, TB_CMM_CODE e
+  		where a.INTERFACE_ID = #{id} 
+  		  and a.TYPE = b.CD and b.LEVEL1 = '0' and b.LEVEL2 = '0'
+  		  and a.SEND_BIZ_CD = c.BIZ_CD
+  		  and a.RECV_BIZ_CD = d.BIZ_CD
+  		  and a.TYPE = e.CD and e.LEVEL1 = '0' and e.LEVEL2 = '1'
+  	</select>
+  	 
+  
+  	<resultMap id="interfaceResult" type="Interface">
+  		<id property="id" column="INTERFACE_ID"/>
+		<result property="name" 		column="INTERFACE_NM"/>
+		<result property="type" 		column="TYPE"/>
+		<result property="typeNm" 		column="TYPE_NM"/>
+		<result property="sendBizCd" 	column="SEND_BIZ_CD"/>
+		<result property="sendBizNm" 	column="SEND_BIZ_NM"/>
+		<result property="recvBizCd" 	column="RECV_BIZ_CD"/>
+		<result property="recvBizNm" 	column="RECV_BIZ_NM"/>
+		<result property="routeType" 	column="ROUTE_TYPE"/>
+		<result property="routeTypeNm" 	column="ROUTE_TYPE_NM"/>
+		<result property="description" 	column="DESCRIPTION"/>
+		<result property="regDate" 		column="REG_DATE"/>
+		<result property="regId" 		column="REG_ID"/>
+		<result property="modDate" 		column="MOD_DATE"/>
+		<result property="modId" 		column="MOD_ID"/>
+	</resultMap>
+	
+	
+	<!-- <select id="getInterfaceListByName" parameterType="Interface" resultMap="interfaceResult">
+		select
+			* 
+	     from TB_INT_INTERFACE
+	    <if test="#{name} != null">
+	    where INTERFACE_NM like '%' || #{name} || '%'
+	    </if>
+  	</select> -->
+  	
+	<select id="getInterfaceListByName" parameterType="Interface" resultMap="interfaceResult">
+		select 
+  			 a.INTERFACE_NM as INTERFACE_NM
+  			,a.INTERFACE_ID as INTERFACE_ID
+  			,a.TYPE         as TYPE
+  			,b.NM 			as TYPE_NM
+  			,a.SEND_BIZ_CD  as SEND_BIZ_CD
+  			,c.BIZ_NM 		as SEND_BIZ_NM
+  			,a.RECV_BIZ_CD  as RECV_BIZ_CD
+  			,d.BIZ_NM 		as RECV_BIZ_NM
+  			,a.ROUTE_TYPE   as ROUTE_TYPE
+  			,e.NM 			as ROUTE_TYPE_NM
+  			,a.DESCRIPTION  as DESCRIPTION
+  			,a.REG_DATE     as REG_DATE
+  			,a.REG_ID		as REG_ID
+  			,a.MOD_DATE		as MOD_DATE
+  			,a.MOD_ID		as MOD_ID
+  		 from TB_INT_INTERFACE a, TB_CMM_CODE b, TB_INT_BIZINFO c, TB_INT_BIZINFO d, TB_CMM_CODE e
+  		where a.TYPE = b.CD and b.LEVEL1 = '0' and b.LEVEL2 = '0'
+  		  and a.SEND_BIZ_CD = c.BIZ_CD
+  		  and a.RECV_BIZ_CD = d.BIZ_CD
+  		  and a.TYPE = e.CD and e.LEVEL1 = '0' and e.LEVEL2 = '1'
+	    <if test="#{name} != null">
+	      and a.INTERFACE_NM like '%' || #{name} || '%'
+	    </if>
+  	</select>
+  	
+	<insert id="insertInterface" parameterType="Interface">
+	   		insert into TB_INT_INTERFACE (
+		   		 INTERFACE_ID
+				,INTERFACE_NM
+				,TYPE
+				,SEND_BIZ_CD
+				,RECV_BIZ_CD
+				,ROUTE_TYPE
+				,DESCRIPTION
+				,REG_DATE
+				,REG_ID
+				,MOD_DATE
+				,MOD_ID
+			) values (
+				 #{id}
+				,#{name}
+				,#{type}
+				,#{sendBizCd}
+				,#{recvBizCd}
+				,#{routeType}
+				,#{description}
+				,#{regDate}
+				,#{regId}
+				,#{modDate}
+				,#{modId}
+			)
+   	</insert>
+  		
+  		
+	<!-- update -->
+	<update id="updateInterface" parameterType="Interface">
+   		update TB_INT_INTERFACE
+   		   set
+			 INTERFACE_NM= #{name}
+			,TYPE        = #{type}
+			,SEND_BIZ_CD = #{sendBizCd}
+			,RECV_BIZ_CD = #{recvBizCd}
+			,ROUTE_TYPE  = #{routeType}
+			,DESCRIPTION = #{description}
+			,REG_DATE    = #{regDate}
+			,REG_ID      = #{regId}
+			,MOD_DATE    = #{modDate}
+			,MOD_ID      = #{modId}
+	   	where INTERFACE_ID  = #{id}
+   	</update>  		
+   	
+</mapper>

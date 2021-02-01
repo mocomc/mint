@@ -1,0 +1,327 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>pep.per</groupId>
+		<artifactId>mint</artifactId>
+		<version>3.0.0</version>
+	</parent>
+	<artifactId>mint-batch-manager</artifactId>
+	<packaging>war</packaging>
+	<name>mint-batch-manager Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+
+		<javax.servlet.servlet-api-version>2.5</javax.servlet.servlet-api-version>
+		<javax.servlet.jsp-api-version>2.1</javax.servlet.jsp-api-version>
+		<javax.servlet.jstl-version>1.2</javax.servlet.jstl-version>
+		<commons-dbcp-version>1.4</commons-dbcp-version>
+		<commons-pool-version>1.6</commons-pool-version>
+		<commons-collections-version>3.2.1</commons-collections-version>
+		<jackson-version>2.3.4</jackson-version>
+		<commons-fileupload-version>1.3.1</commons-fileupload-version>
+		<commons-logging-version>1.1.1</commons-logging-version>
+		<commons-io-version>1.4</commons-io-version>
+		<wstx-lgpl-version>3.2.7</wstx-lgpl-version>
+		<jexcelapi-version>2.6</jexcelapi-version>
+		<logback-classic-version>1.1.8</logback-classic-version>
+		<log4jdbc-remix-version>0.2.7</log4jdbc-remix-version>
+		<poi-version>3.9</poi-version>
+		<pep.per.mint-version>3.0.0</pep.per.mint-version>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload-version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-common</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-database</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-inhouse</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-batch</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pep.per</groupId>
+			<artifactId>mint-solution-mi</artifactId>
+			<version>${pep.per.mint-version}</version>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javax.servlet.servlet-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${javax.servlet.jsp-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${javax.servlet.jstl-version}</version>
+		</dependency>
+		<!-- commons -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons-dbcp-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>${commons-pool-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${commons-collections-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+
+		<!-- Excel Library -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi-version}</version>
+		</dependency>
+
+
+		<!-- Excel Library - large file access -->
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>wstx-lgpl</artifactId>
+			<version>3.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>${jexcelapi-version}</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-classic-version}</version>
+		</dependency>
+
+		<!-- jdbc log -->
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<version>${log4jdbc-remix-version}</version>
+		</dependency>
+	</dependencies>
+
+
+	<!-- START of profiles -->
+ 	<profiles>
+		<!-- START of version 2.0.0 product mode profile -->
+		<profile>
+			<id>mint-2.0.0</id>
+			<build>
+				<finalName>${project.artifactId}-product-2.0.0</finalName>
+				<directory>${basedir}/target-version-2.0.0</directory>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+			      	 	<!--<version>3.0.0</version>--><!-- 초기 로컬 PC에서  maven build시 주석 풀구할 것  , 이후 network 단절되어도 추가 download 시도 안함  -->
+						<configuration>
+							<warSourceDirectory>src/main/webapp</warSourceDirectory>
+							<warSourceExcludes>
+								view_design/**,
+								view_dev/**,
+								sample/**,
+								foo.html,
+								index.html,
+								view/sub-op/OP-01-01-999.html,
+								WEB-INF-3.0.0/**
+							</warSourceExcludes><!-- 특정 폴더 제외-->
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- END of product mode profile -->
+
+
+		<!-- START of product 3.0.0 build profile -->
+		<profile>
+			<id>mint-3.0.0</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<org.springframework-version>4.3.17.RELEASE</org.springframework-version>
+				<jackson-version>2.9.5</jackson-version>
+			</properties>
+			<dependencies>
+				<!-- <dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-websocket</artifactId>
+					<version>${org.springframework-version}</version>
+					<type>jar</type>
+				</dependency> -->
+
+				<dependency>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+					<version>2.6</version>
+				</dependency>
+
+				<!-- <dependency>
+					<groupId>pep.per</groupId>
+					<artifactId>mint-websocket</artifactId>
+					<version>${pep.per.mint-version}</version>
+				</dependency> -->
+
+			</dependencies>
+			<build>
+				<finalName>${project.artifactId}-product-3.0.0</finalName>
+				<directory>${basedir}/target-version-3.0.0</directory>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+			      	 	<!--<version>3.0.0</version>--><!-- 초기 로컬 PC에서  maven build시 주석 풀구할 것  , 이후 network 단절되어도 추가 download 시도 안함  -->
+
+						<configuration>
+							<warSourceDirectory>src/main/webapp</warSourceDirectory>
+							<warSourceExcludes>
+								view_design/**,
+								view_dev/**,
+								sample/**,
+								foo.html,
+								index.html,
+								view/sub-op/OP-01-01-999.html,
+								WEB-INF-3.0.0/**
+							</warSourceExcludes><!-- 특정 폴더 제외-->
+						</configuration>
+
+					</plugin>
+
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<!-- here the phase you need -->
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/target-version-3.0.0</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${basedir}/logback/</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+		</build>
+		</profile>
+		<!-- END of product 3.0.0 build profile -->
+
+
+	</profiles>
+  	<!-- END of profiles -->
+
+
+</project>

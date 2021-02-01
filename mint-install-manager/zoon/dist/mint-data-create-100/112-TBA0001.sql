@@ -1,0 +1,17 @@
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('1','1','일별개발진척률집계','pep.per.mint.batch.job.su.TSU0505Job','0','TSU0505','일별개발진척률집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('10','1','10일 이전의 I/F 거래로그 삭제','pep.per.mint.batch.job.op.LogPurgeJob','0','MASTERLOG','10일 이전의 I/F 거래로그 삭제');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('11','1','미등록 I/F 수집','pep.per.mint.batch.job.su.TSU0501Job','0','TSU0501','미등록 I/F 수집');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('12','1','I/F별 처리 건수 전일대비 증가율 수집 ','pep.per.mint.batch.job.su.TSU0502Job','0','TSU0502','I/F별 처리 건수 전일대비 증가율 수집 ');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('13','1','I/F stage별 건수 집계','pep.per.mint.batch.job.su.TSU0503Job','0','TSU0503','I/F stage별 건수 집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('14','1','I/F 별 처리 건수 집계(시간별)','pep.per.mint.batch.job.su.TSU0803Job','0','TSU0803','I/F 별 처리 건수 집계(시간별)');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('15','1','MI에이전트/러너상태모니터링','pep.per.mint.batch.job.op.MIAgentStateCheckJob','0','TOP0809,TOP0810','MI에이전트/러너상태모니터링');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('16','1','I/F 별 처리 건수 집계(일)','pep.per.mint.batch.job.su.TSU0804Job','0','TSU0804','I/F 별 처리 건수 집계(일)');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('17','1','각종로그삭제배치','pep.per.mint.batch.job.op.LogPurgeJob','0','TSU08XX','각종로그삭제배치');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('2','1','일별사용자집계','pep.per.mint.batch.job.op.TOP0201Job','0','TOP0201','일별로그인사용자집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('3','1','CPU MEM 상태 집계','pep.per.mint.batch.job.su.TSU0601Job','0','TSU0601','CPU MEM 상태 집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('4','1','디스크 사용량 집계','pep.per.mint.batch.job.su.TSU0602Job','0','TSU0602','디스크 사용량 집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('5','1','거래로그 사이즈 집계','pep.per.mint.batch.job.an.TAN0201Job','0','TAN0201','거래로그 사이즈 집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('6','1','장기 지연 I/F 상태를 에러로 변경','pep.per.mint.batch.job.op.DetailLogErrorJob','0','DETAILLOG_ERR','장기 지연 I/F 상태를 에러로 변경');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('7','1','I/F별 시간 단위 건수 집계','pep.per.mint.batch.job.op.HourStatisticsJob','0','SI_STAT_INTF_HOUR','I/F별 시간 단위 건수 집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('8','1','I/F별 일 단위 건수 집계','pep.per.mint.batch.job.op.DayStatisticsJob','0','SI_STAT_INTF_DAY','I/F별 일 단위 건수 집계');
+insert into TBA0001 (JOB_ID,GRP_ID,JOB_NM,IMPL_CLASS,TYPE,TABLE_NM,COMMENTS) values ('9','1','I/F별 월 단위 건수 집계','pep.per.mint.batch.job.op.MonthStatisticsJob','0','SI_STAT_INTF_MONTH','I/F별 월 단위 건수 집계');

@@ -1,0 +1,1557 @@
+/*******************************************************************
+ *   MINT - OVERWRITE.CSS
+ *   - Bootstrap 및 inspinia CSS 내용중 편집된 항목을 나열 하였음
+ *   - 버전 업그레이드시 아래 내용을 참고하여 수정 필요
+ *******************************************************************/
+
+
+
+
+/*******************************************************************
+ *                          bootstrap.css                          *
+ *                                                                 *
+ *******************************************************************/
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+/*
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+*/
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+th {
+  text-align: left;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+th {
+  /*text-align: left;*/
+}
+
+
+/*******************************************************************/
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.table {
+  width: 100%;
+  max-width: 100%;
+/*margin-bottom: 20px;*/
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 1px solid #ddd;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  /*font-size: 14px;*/
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+
+
+
+/*******************************************************************/
+
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.form-group {
+  margin-bottom: 15px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.form-group {
+  /*margin-bottom: 6px;*/
+}
+
+
+
+
+/*******************************************************************/
+
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.form-horizontal .form-group {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.form-horizontal .form-group {
+  margin-right: -7px;
+  /*margin-left: -15px;*/
+}
+
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.btn {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-bottom: 0;
+  /*font-size: 14px;*/
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  /*border: 1px solid #ddd;*/
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.panel-body {
+  padding: 15px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.panel-body {
+  /*padding: 15px;*/
+ padding-top:15px;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.panel-group {
+  margin-bottom: 20px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.panel-group {
+  margin-bottom: 5px;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.modal-header {
+  min-height: 10px;
+  padding: 3px 0px 3px 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.modal-body {
+  position: relative;
+  padding: 15px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.modal-body {
+  position: relative;
+  /*padding: 15px;*/
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.modal-footer {
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.modal-footer {
+  padding: 8px 15px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 600px;
+    margin: 30px auto;
+  }
+  .modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+  }
+  .modal-sm {
+    width: 300px;
+  }
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+@media (min-width: 900px) {
+  .modal-dialog {
+    width: 900px;
+    margin: 30px auto;
+  }
+  .modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+  }
+  .modal-sm {
+    width: 300px;
+  }
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel {
+  position: relative;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel {
+  /*position: relative;*/
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 15%;
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+  background-color: rgba(0, 0, 0, 0);
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width:4%;
+  font-size: 20px;
+  color: #999999;
+  text-align: center;
+  /*text-shadow: 0 1px 2px rgba(0, 0, 0, .6);*/
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control.left {
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
+  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));
+  background-image:         linear-gradient(to right, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+  background-repeat: repeat-x;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control.left {
+  /*background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
+  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));
+  background-image:         linear-gradient(to right, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);*/
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+  background-repeat: repeat-x;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control.right {
+  right: 0;
+  left: auto;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
+  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));
+  background-image:         linear-gradient(to right, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+  background-repeat: repeat-x;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control.right {
+  right: 0;
+  left: auto;
+  /*background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
+  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
+  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));
+  background-image:         linear-gradient(to right, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);*/
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+  background-repeat: repeat-x;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control:hover,
+.carousel-control:focus {
+  color: #fff;
+  text-decoration: none;
+  filter: alpha(opacity=90);
+  outline: 0;
+  opacity: .9;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel-control:hover{
+ color: #111111;
+ text-decoration: none;
+ filter: alpha(opacity=50);
+ opacity: .5;
+ outline: 0;
+}
+.carousel-control:focus {
+  color: #999999;
+  text-decoration: none;
+  filter: alpha(opacity=90);
+  outline: 0;
+  opacity: .5;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel-indicators li {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-color: #000 \9;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #fff;
+  border-radius: 10px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel-indicators li {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-color: #000 \9;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #666666;
+  border-radius: 10px;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.carousel-indicators .active {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  background-color: #fff;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.carousel-indicators .active {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  background-color: #666666;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+@media screen and (min-width: 768px) {
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .icon-prev,
+  .carousel-control .icon-next {
+    width: 30px;
+    height: 30px;
+    margin-top: -10px;
+    font-size: 30px;
+  }
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .icon-prev {
+    margin-left: -10px;
+  }
+  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .icon-next {
+    margin-right: -10px;
+  }
+  .carousel-caption {
+    right: 20%;
+    left: 20%;
+    padding-bottom: 30px;
+  }
+  .carousel-indicators {
+    bottom: 20px;
+  }
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+@media screen and (min-width: 768px) {
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .icon-prev,
+  .carousel-control .icon-next {
+    width: 60px;
+    height: 30px;
+    margin-top: -15px;
+    font-size: 45px;
+  }
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .icon-prev {
+    margin-left: -15px;
+  }
+  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .icon-next {
+    margin-right: -15px;
+  }
+  .carousel-caption {
+    right: 20%;
+    left: 20%;
+    padding-bottom: 30px;
+  }
+  .carousel-indicators {
+    /*bottom: 20px;*/
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************
+ *                          style.css                              *
+ *                                                                 *
+ *******************************************************************/
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+h2 {
+  font-size: 24px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+h2 {
+  font-size: 24px;font-weight: 400;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.nav > li > a {
+  color: #a7b1c2;
+  font-weight: 600;
+  padding: 14px 20px 14px 25px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.nav > li > a {
+  color: #a7b1c2;
+  font-weight: 600;
+  padding: 14px 20px 14px 20px;
+}
+
+
+
+
+/*******************************************************************/
+
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.nav-header {
+  padding: 33px 25px;
+  background-color: #2f4050;
+  background-image: url("patterns/header-profile.png");
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.nav-header {
+  padding: 23px 25px;
+  background: url("patterns/header-profile.png") no-repeat;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.fixed-nav #wrapper {
+  margin-top: 0;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.fixed-nav #wrapper {
+  margin-top: 60px;
+}
+
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.btn-default {
+  color: inherit;
+  background: white;
+  border: 1px solid #e7eaec;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.btn-default {
+  background-color: #c2c2c2;
+  border-color: #c2c2c2;
+  color: #FFFFFF;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default,
+.btn-default:active:focus,
+.btn-default:active:hover,
+.btn-default.active:hover,
+.btn-default.active:focus {
+  color: inherit;
+  border: 1px solid #d2d2d2;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+  background-color: #bababa;
+  border-color: #bababa;
+  color: #FFFFFF;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) inset;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+  background-image: none;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+btn-default.disabled,
+.btn-default.disabled:hover,
+.btn-default.disabled:focus,
+.btn-default.disabled:active,
+.btn-default.disabled.active,
+.btn-default[disabled],
+.btn-default[disabled]:hover,
+.btn-default[disabled]:focus,
+.btn-default[disabled]:active,
+.btn-default.active[disabled],
+fieldset[disabled] .btn-default,
+fieldset[disabled] .btn-default:hover,
+fieldset[disabled] .btn-default:focus,
+fieldset[disabled] .btn-default:active,
+fieldset[disabled] .btn-default.active {
+  color: #cacaca;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.btn-default.disabled,
+.btn-default.disabled:hover,
+.btn-default.disabled:focus,
+.btn-default.disabled:active,
+.btn-default.disabled.active,
+.btn-default[disabled],
+.btn-default[disabled]:hover,
+.btn-default[disabled]:focus,
+.btn-default[disabled]:active,
+.btn-default.active[disabled],
+fieldset[disabled] .btn-default,
+fieldset[disabled] .btn-default:hover,
+fieldset[disabled] .btn-default:focus,
+fieldset[disabled] .btn-default:active,
+fieldset[disabled] .btn-default.active {
+  background-color: #cccccc;
+  border-color: #cccccc;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+button.dim {
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 6px;
+  margin-right: 10px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 600;
+  margin-bottom: 20px !important;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+button.dim {
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 6px;
+  margin-right: 0px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 600;
+  margin-bottom: 10px !important;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.label {
+  background-color: #d1dade;
+  color: #5e5e5e;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  text-shadow: none;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.label {
+  background-color: #d1dade;
+  color: #5e5e5e;
+  /*font-family: 'Open Sans';*/
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  text-shadow: none;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.list-group-item {
+  background-color: inherit;
+  border: 1px solid #e7eaec;
+  display: block;
+  margin-bottom: -1px;
+  padding: 10px 15px;
+  position: relative;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.list-group-item {
+  background-color: inherit;
+  /*border: 1px solid #e7eaec;*/
+  display: block;
+  margin-bottom: -1px;
+  padding: 10px 15px;
+  position: relative;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.flot-chart.dashboard-chart {
+  display: block;
+  height: 180px;
+  margin-top: 40px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.flot-chart.dashboard-chart {
+  display: block;
+  height: 180px;
+  margin-top: 20px;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.stat-list li {
+  margin-top: 15px;
+  position: relative;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.stat-list li {
+  margin-top: 16px;
+  position: relative;
+}
+
+
+/*******************************************************************/
+
+
+
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.show-grid {
+  margin: 15px 0;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.show-grid {
+  margin: 2px 0;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.form-control,
+.single-line {
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  display: block;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  font-size: 14px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.form-control,
+.single-line {
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  display: block;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  /*font-size: 14px;*/
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.sidebard-panel .feed-element,
+.media-body,
+.sidebard-panel p {
+  font-size: 12px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.sidebard-panel .feed-element,
+.media-body,
+.sidebard-panel p {
+  /*font-size: 12px;*/
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+body {
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #2f4050;
+  font-size: 13px;
+  color: #676a6c;
+  overflow-x: hidden;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+body {
+  /*font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+  background-color: #2f4050;
+  font-size: 13px;
+  color: #676a6c;
+  overflow-x: hidden;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.hr-line-dashed {
+  border-top: 1px dashed #e7eaec;
+  color: #ffffff;
+  background-color: #ffffff;
+  height: 1px;
+  margin: 20px 0;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.hr-line-dashed {
+  border-top: 1px dashed #e7eaec;
+  color: #ffffff;
+  background-color: #ffffff;
+  height: 10px;
+  margin: 20px 0;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.modal-dialog {
+  z-index: 2200;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.modal-dialog {
+  z-index: 1200;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.modal-body {
+  padding: 20px 30px 30px 30px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.modal-body {
+  /*padding: 0px 0px 15px 0px;*/
+  overflow: hidden;height:auto;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.inmodal .modal-body {
+  background: #f8fafb;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.inmodal .modal-body {
+  /*background: #f8fafb;*/
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.inmodal .modal-header {
+  padding: 30px 15px;
+  text-align: center;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.inmodal .modal-header {
+  /*padding: 30px 15px;*/
+  /*text-align: center;*/
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+
+.wrapper-content {
+  padding: 20px 10px 40px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.wrapper-content {
+  padding: 10px 10px 10px;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.title-action {
+  text-align: right;
+  padding-top: 30px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.title-action {
+  text-align: right;
+  padding-top: 34px;
+}
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.big-icon {
+  font-size: 160px !important;
+  color: #e5e6e7;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.big-icon {
+  font-size: 80px;
+  color: #e5e6e7;
+}
+
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.page-heading {
+  border-top: 0;
+  padding: 0 10px 20px 10px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.page-heading {
+  border-top: 0;
+  padding: 0px 10px 15px 10px;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.table > thead > tr > th {
+  border-bottom: 1px solid #DDDDDD;
+  vertical-align: bottom;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.table > thead > tr > th {
+  /* border-bottom: 1px solid #DDDDDD;*/
+  vertical-align: bottom;
+}
+
+
+/*******************************************************************/
+
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  border-top: 1px solid #e7eaec;
+  line-height: 1.42857;
+  padding: 8px;
+  vertical-align: top;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  border-top: 1px solid #e7eaec;
+  line-height: 1.42857;
+  padding:7px 7px 7px 13px;
+  vertical-align:middle;
+}
+
+
+/*******************************************************************/
+
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.ibox {
+  clear: both;
+  margin-bottom: 25px;
+  margin-top: 0;
+  padding: 0;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.ibox {
+  clear: both;
+  margin-bottom: 10px;
+  margin-top: 0;
+  padding: 0;
+}
+
+
+/*******************************************************************/
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+
+.ibox-title {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #ffffff;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 2px 0 0;
+  color: inherit;
+  margin-bottom: 0;
+  padding: 15px 15px 7px;
+  min-height: 48px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.ibox-title {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #ffffff;
+  /*border-color: #e7eaec;*/
+  border-color: #1AB394;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 4px 0px 0;
+  color: inherit;
+  margin-bottom: 0;
+  padding:7px 15px 8px;
+  min-height: 46px;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.ibox-title h5 {
+  display: inline-block;
+  font-size: 14px;
+  margin: 0 0 7px;
+  padding: 0;
+  text-overflow: ellipsis;
+  float: left;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.ibox-title h5 {
+  display: inline-block;
+  font-size: 16px;
+  /*margin: 0 0 7px;*/
+  padding: 0;
+  text-overflow: ellipsis;
+  float: left;
+}
+
+
+/*******************************************************************/
+
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.ibox-tools {
+  display: block;
+  float: none;
+  margin-top: 0;
+  position: relative;
+  padding: 0;
+  text-align: right;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.ibox-tools {
+  display: inline-block;
+  float: right;
+  margin-top: 5px;
+  position: relative;
+  padding: 0;
+}
+
+
+/*******************************************************************/
+
+/*-----------------------------------------------------------------*/
+/*                             원본                                 */
+/*-----------------------------------------------------------------*/
+.feed-element {
+  padding-bottom: 15px;
+}
+/*-----------------------------------------------------------------*/
+/*                             수정                                 */
+/*-----------------------------------------------------------------*/
+.feed-element {
+  padding-bottom: 15px;
+  padding-left: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

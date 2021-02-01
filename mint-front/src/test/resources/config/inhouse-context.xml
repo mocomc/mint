@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+<context:annotation-config/>
+	<context:component-scan base-package="com.mocomsys.iip.inhouse.excel
+										 ,com.mocomsys.iip.inhouse.wrapper
+										 ,com.mocomsys.iip.inhouse.selecotr.hdins
+									     ,pep.per.mint.database.service.selector.samsung.electro
+										 ,pep.per.mint.inhouse.ism" />
+
+
+
+
+
+	<!--
+		[ Excel Upload Service Define ]
+		- COMMON :: com.mocomsys.iip.inhouse.excel.DefaultExcelUploadService
+		- KICS   :: com.mocomsys.iip.inhouse.excel.InHouseExcelUploadService
+		- HDINS  :: com.mocomsys.iip.inhouse.excel.HdinsExcelUploadService
+		- SSHP   :: com.mocomsys.iip.inhouse.excel.SSHPExcelUploadService
+	-->
+
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.DefaultExcelUploadService"/>-->
+	<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.InHouseExcelUploadService"/>
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.HdinsExcelUploadService"/>-->
+	<!--<bean id="inHouseExcelUploadService" class="com.mocomsys.iip.inhouse.excel.SSHPExcelUploadService"/>-->
+
+
+	<!--
+		[ Interface Id Selector Service Define ]
+		- KICS,SSHP   :: com.mocomsys.iip.inhouse.selector.kics.KICSIdSelector
+		- HDINS       :: com.mocomsys.iip.inhouse.selector.hdins.HDINSIdSelector
+	-->
+	<!-- <bean id="inHouseIdSelector" class="com.mocomsys.iip.inhouse.selector.kics.KICSIdSelector"/> -->
+	<bean id="inHouseIdSelector" class="com.mocomsys.iip.inhouse.selector.hdins.HDINSIdSelector"/>
+
+
+	<!--
+		[ Login Service Define ]
+		- HDINS  :: pep.per.mint.inhouse.sso.hdins.LoginService
+	-->
+	<bean id="loginService" class="pep.per.mint.inhouse.sso.hdins.LoginService" init-method="init"/>
+</beans>

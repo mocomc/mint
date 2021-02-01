@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.su.UserRoleMapper">
+  	<!--
+  	<cache/>
+  	-->
+
+	<insert id="insertUserRole">
+		<selectKey keyProperty="roleId" resultType="string" order="BEFORE" >
+			<choose>
+        		<when test="_databaseId == 'postgres'">
+				SELECT 'UR' || LPAD((COALESCE(MAX(SUBSTR(ROLE_ID,3)),'0')::numeric+1)::text,8,'0') FROM TSU0201
+        		</when>
+        		<otherwise>
+				SELECT 'UR' || LPAD(TO_CHAR(TO_NUMBER(NVL(MAX(SUBSTR(ROLE_ID,3)),'0')) + 1),8,'0') FROM TSU0201
+        		</otherwise>
+        	</choose>
+		</selectKey>
+
+		INSERT INTO TSU0201
+		(
+			ROLE_ID,
+			ROLE_NM,
+			COMMENTS,
+			DEL_YN,
+			REG_DATE,
+			REG_USER
+		) VALUES (
+			#{roleId, jdbcType=VARCHAR},
+			#{roleNm, jdbcType=VARCHAR},
+			#{comments, jdbcType=VARCHAR},
+			'N',
+			#{regDate, jdbcType=VARCHAR},
+			#{regId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="getUserRoleList" parameterType="Map" resultMap="userRoleResultMap">
+		SELECT
+			A.ROLE_ID,
+			A.ROLE_NM,
+			A.COMMENTS,
+			A.DEL_YN,
+			A.REG_DATE,
+			A.REG_USER,
+			A.MOD_DATE,
+			A.MOD_USER
+		FROM TSU0201 A
+  		WHERE DEL_YN = 'N'
+  		AND ROLE_ID <![CDATA[ <> ]]> 'UR00000000'
+		ORDER BY ROLE_ID ASC
+	</select>
+
+	<resultMap type="UserRole" id="userRoleResultMap">
+		<id property="roleId" 				column="ROLE_ID"/>
+		<result property="roleNm"				column="ROLE_NM"/>
+		<result property="comments"				column="COMMENTS"/>
+		<result property="regDate"				column="REG_DATE"/>
+		<result property="regId"				column="REG_USER"/>
+		<result property="modDate"				column="MOD_DATE"/>
+		<result property="modId"				column="MOD_USER"/>
+
+		<collection property="appList" ofType="Application">
+			<id property="appId"				column="APP_ID"/>
+			<result property="appNm"		column="APP_NM"/>
+			<result property="hasYn"		column="APP_HASYN"/>
+			<result property="cmdString"	column="APP_CMD"/>
+			<result property="comments"		column="APP_COMMENTS"/>
+		</collection>
+
+		<collection property="menuList" ofType="Menu">
+			<id property="menuId"			column="MENU_ID"/>
+			<result property="menuNm"		column="MENU_NM"/>
+			<result property="hasYn"		column="MENU_HASYN"/>
+			<result property="comments"		column="MENU_COMMENTS"/>
+			<result property="seq"			column="MENU_SEQ"/>
+		</collection>
+	</resultMap>
+
+	<update id="updateUserRole">
+		UPDATE TSU0201
+		   SET
+		    	ROLE_NM	= #{roleNm, jdbcType=VARCHAR}
+		    	,COMMENTS		= #{comments, jdbcType=VARCHAR}
+				,MOD_DATE 		= #{modDate, jdbcType=VARCHAR}
+				,MOD_USER 		= #{modId, jdbcType=VARCHAR}
+
+		WHERE ROLE_ID = #{roleId}
+	</update>
+
+	<delete id="deleteUserRole">
+		UPDATE TSU0201
+		SET DEL_YN = 'Y',
+			MOD_DATE = #{modDate},
+			MOD_USER = #{modId}
+		WHERE ROLE_ID = #{roleId}
+	</delete>
+
+	<select id="existUserRole" parameterType="Map" resultMap="userRoleResultMap">
+		SELECT
+			ROLE_ID,
+			ROLE_NM
+  		FROM TSU0201
+  		WHERE DEL_YN= 'N'
+		AND ROLE_NM = #{roleNm, jdbcType=VARCHAR}
+		<if test="roleId != null">
+		AND ROLE_ID &lt;&gt; #{roleId}
+		</if>
+	</select>
+
+	<select id="usedUserRole" parameterType="Map" resultType="String">
+		SELECT USER_ID
+  		FROM TSU0102
+  		WHERE ROLE_ID = #{roleId}
+	</select>
+
+	<select id="getUserRoleDetail" parameterType="Map" resultMap="userRoleResultMap">
+		SELECT
+			A.ROLE_ID,
+			A.ROLE_NM,
+			A.COMMENTS,
+			A.DEL_YN,
+			A.REG_DATE,
+			A.REG_USER,
+			A.MOD_DATE,
+			A.MOD_USER,
+			H.APP_ID,
+			H.APP_NM,
+			H.HAS_YN  		AS APP_HASYN,
+			H.CMD_STRING 	AS APP_CMD,
+			H.COMMENTS 		AS APP_COMMENTS,
+			K.MENU_ID,
+			K.MENU_NM,
+			K.HAS_YN 		AS MENU_HASYN,
+			K.COMMENTS 		AS MENU_COMMENTS,
+			K.SEQ			AS MENU_SEQ
+		FROM TSU0201 A
+		LEFT OUTER JOIN (
+			SELECT
+				B.ROLE_ID
+				,B.HAS_YN
+				,B.CMD_STRING
+				,c.APP_ID
+				,c.APP_NM
+				,c.APP_CD
+				,c.APP_URI
+				,c.APP_OPT
+				,c.COMMENTS
+			FROM TSU0204 c
+			INNER JOIN TSU0202 b ON c.APP_ID = b.APP_ID
+		) h ON a.ROLE_ID = h.ROLE_ID
+		LEFT OUTER JOIN (
+			SELECT
+				E.ROLE_ID
+				,E.HAS_YN
+				,E.SEQ
+				,d.MENU_ID
+				,d.MENU_NM
+				,d.MENU_OPT
+				,d.COMMENTS
+			FROM TSU0207 d
+			INNER JOIN TSU0203 e ON e.MENU_ID = d.MENU_ID
+		) k ON a.ROLE_ID = k.ROLE_ID
+  		WHERE A.DEL_YN = 'N'
+		AND A.ROLE_ID = #{roleId}
+	</select>
+
+	<update id="updateUserRoleMenu">
+		UPDATE TSU0203
+		SET
+			HAS_YN = #{menu.hasYn, jdbcType=VARCHAR}
+		    	<choose>
+		       		<when test="_databaseId == 'postgres'">
+		    ,SEQ = #{menu.seq, jdbcType=VARCHAR}::numeric
+		       		</when>
+		       		<otherwise>
+		    ,SEQ = #{menu.seq, jdbcType=VARCHAR}
+		       		</otherwise>
+		       	</choose>
+			,MOD_DATE = #{menu.modDate, jdbcType=VARCHAR}
+			,MOD_USER = #{menu.modId, jdbcType=VARCHAR}
+		WHERE ROLE_ID = #{roleId} AND MENU_ID=#{menu.menuId}
+	</update>
+
+	<update id="updateUserRoleApp">
+		UPDATE TSU0202
+		SET
+			HAS_YN			= #{app.hasYn, jdbcType=VARCHAR}
+		    ,CMD_STRING		= #{app.cmdString, jdbcType=VARCHAR}
+			,MOD_DATE 		= #{app.modDate, jdbcType=VARCHAR}
+			,MOD_USER 		= #{app.modId, jdbcType=VARCHAR}
+		WHERE ROLE_ID = #{roleId} AND APP_ID= #{app.appId}
+	</update>
+
+	<insert id="insertUserRoleMenu">
+		INSERT INTO TSU0203
+		SELECT
+		<choose>
+			<when test="_databaseId == 'altibase'">
+			'${roleId}',
+		    </when>
+		    <otherwise>
+			#{roleId},
+		    </otherwise>
+		</choose>
+		  	MENU_ID,
+		  	SEQ,
+		  	HAS_YN,
+		  	DEL_YN,
+		  	REG_DATE,
+		  	REG_USER,
+		  	MOD_DATE,
+		  	MOD_USER
+		FROM TSU0203
+		WHERE ROLE_ID = #{defRoleId} AND DEL_YN='N'
+	</insert>
+
+	<insert id="insertUserRoleApp">
+		INSERT INTO TSU0202
+		SELECT
+		<choose>
+			<when test="_databaseId == 'altibase'">
+			'${roleId}',
+		    </when>
+		    <otherwise>
+			#{roleId},
+		    </otherwise>
+		</choose>
+		  	APP_ID,
+		  	HAS_YN,
+		  	CMD_STRING,
+		  	DEL_YN,
+		  	REG_DATE,
+		  	REG_USER,
+		  	MOD_DATE,
+		  	MOD_USER
+		FROM TSU0202
+		WHERE ROLE_ID = #{defRoleId} AND DEL_YN='N'
+	</insert>
+
+	<delete id="deleteAllUserRoleMenu">
+		DELETE FROM TSU0203 WHERE ROLE_ID =#{roleId}
+	</delete>
+
+	<delete id="deleteAllUserRoleApp">
+		DELETE FROM TSU0202 WHERE ROLE_ID =#{roleId}
+	</delete>
+</mapper>

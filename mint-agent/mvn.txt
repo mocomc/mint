@@ -1,0 +1,6 @@
+cd C:\WORK\IIP_V3\mint\
+mvn17 -pl mint-common,mint-agent clean package -Dmaven.test.skip=true -P mint-3.0.0 -X
+copy /Y C:\WORK\IIP_V3\mint\mint-common\target-version-3.0.0\mint-common-product-3.0.0.jar C:\WORK\IIP_V3\mint\mint-front\src\main\webapp\agent\deploy_v3.1\lib\mint-common-3.0.0.jar
+copy /Y C:\WORK\IIP_V3\mint\mint-agent\target\mint-agent-3.0.0.jar C:\WORK\IIP_V3\mint\mint-front\src\main\webapp\agent\deploy_v3.1\lib
+
+

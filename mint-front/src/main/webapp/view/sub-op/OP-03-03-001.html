@@ -1,0 +1,776 @@
+<!--
+	Screen ID : OP-03-03-001
+	Screen NM : 미등록 인터페이스 대장.
+-->
+<!--location -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div id="oldPath" class="col-lg-5">
+        <h2 id="t1"><lb class="lb-493"></lb></h2>
+        <ol class="breadcrumb">
+			<li><lb class="lb-636"></lb></li>
+			<li><lb class="lb-25"></lb></li>
+            <li class="active"><strong><lb class="lb-493"></lb></strong></li>
+        </ol>
+    </div>
+    <div id="menuPath" class="col-lg-5">
+    </div>
+    <!--button-->
+    <div class="col-lg-7">
+        <div class="title-action">
+
+        </div>
+    </div>
+    <!--button end-->
+</div>
+<!--location end-->
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!--row-->
+    <div class="row">
+        <!--col-lg-12-->
+        <div class="col-lg-12">
+            <!--ibox float-e-margins-->
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><lb class="lb-78"></lb></h5>
+                    <div class="ibox-tools">
+                    	<!-- <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000021','H001')"></a> -->
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+					<div style="float: right; padding: 0px 20px 0px 0px;">
+						<a class="btn btn-w-m btn-default btn-outline btn-search"><i class="fa fa-search "></i> <lb class="lb-10"></lb> </a>
+					</div>
+                </div>
+                <!--ibox-content-->
+                <div class="ibox-content">
+                    <!--row-->
+                    <div class="row">
+                    	<div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="lable_tag"><lb class="lb-10"></lb> <lb class="lb-494"></lb></span>
+                                <label style="padding-left: 12px;">
+									<input type="radio" name="sc-isRegYn" value="ALL" checked /> <lb class="lb-89"></lb>
+								</label>
+								<label style="padding-left: 12px;">
+									<input type="radio" name="sc-isRegYn" value="Y" /> <lb class="lb-421"></lb>
+								</label>
+								<label style="padding-left: 12px;">
+									<input type="radio" name="sc-isRegYn" value="N" /> <lb class="lb-452"></lb>
+								</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <span class="lable_tag4" style="width: 17%;"><lb class="lb-302"></lb></span>
+                                <input id="startDate" class="input-width"  tabIndex="7" style="text-align:center; width: 19.1%"> <span style="padding: 0px 5px;"> ~ </span>
+                                <input id="endDate" class="input-width" style="text-align:center; width: 19.1%">
+                            </div>
+                        </div>
+                    </div>
+                    <!--row end-->
+                </div>
+                <!--ibox-content end-->
+            </div>
+            <!--ibox float-e-margins end-->
+        </div>
+        <!--col-lg-12 end-->
+    </div>
+    <!--row end-->
+
+    <!--row start-->
+    <div class="row">
+        <!--col-lg-12-->
+        <div class="col-lg-12">
+            <!--ibox float-e-margins-->
+            <div class="ibox float-e-margins">
+                <!--ibox-title-->
+                <div class="ibox-title">
+                    <h5><lb class="lb-91"></lb></h5>
+                    <div class="ibox-tools">
+                    	<!-- <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000021','H001')"></a> -->
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <!--ibox-title end-->
+                <!--ibox-content-->
+                <div class="ibox-content">
+                    <!-- kendo table-->
+                    <div id="example">
+                        <div id="grid" class="grid"></div>
+                    </div>
+                    <!--kendo table end-->
+                </div>
+                <!--ibox-content end-->
+            </div>
+            <!--ibox float-e-margins end-->
+        </div>
+        <!--col-lg-12 end-->
+    </div>
+    <!--row end-->
+</div>
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "OP-03-03-001";
+
+    $.extend({
+        main : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+            modRegYn : "",
+            modRegDate : "",
+
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.main.fn_initCallback');
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+                    //검색조건 세팅
+                    var tmpToday = new Date();
+                    var tmpYesterday =  new Date(tmpToday.valueOf() - (24*60*60*1000));
+                    $("#startDate").kendoDatePicker({
+                        //format : "yyyy/MM/01",
+                        format : "yyyy/MM/dd",
+                        culture: "ko-KR",
+                        value : tmpYesterday
+                    });
+
+                    $("#endDate").kendoDatePicker({
+                        format : "yyyy/MM/dd",
+                        culture: "ko-KR",
+                        value :tmpToday
+                    });
+
+
+                    // 그리드 초기화
+                    $.main.fn_setGrid(null);
+
+                 	// start. 연계 조회(자동) 여부 체크 및 조회
+					var linkedFromDate = mint.common.getScreenParam("fromSearchPeriod");
+					var linkedToDate = mint.common.getScreenParam("toSearchPeriod");
+
+					if ( linkedFromDate != null && linkedToDate != null ) {
+						//console.log(linkedFromDate + "~" + linkedToDate);
+
+						var tmpFromDate = new Date(linkedFromDate.substring(0,4), Number(linkedFromDate.substring(4,6)) - 1, linkedFromDate.substring(6,8));
+						$("#startDate").data("kendoDatePicker").value(tmpFromDate);
+
+						var tmpToDate = new Date(linkedToDate.substring(0,4), Number(linkedToDate.substring(4,6)) - 1, linkedToDate.substring(6,8));
+						$("#endDate").data("kendoDatePicker").value(tmpToDate);
+
+						$.main.fn_getData();
+					}
+					mint.common.setScreenParam("fromSearchPeriod", null);
+					mint.common.setScreenParam("toSearchPeriod", null);
+					// end. 연계 조회(자동) 여부 체크 및 조회
+
+					mint.common.siteMenuPath(screenName);
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+                }
+            },// end fn_initCallback
+
+            fn_getData : function() {
+                try{
+                    mint.callService($.main.fn_getRequestObject(), screenName, 'REST-R01-SU-03-05-001', '$.main.fn_setGrid', {errorCall : true });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getData"});
+                }
+            },
+
+            fn_getRequestObject : function() {
+                var searchObject = new Object();
+
+                searchObject.startDate = mint.common.replaceAll($("#startDate").val(), "/", "");
+                searchObject.endDate = mint.common.replaceAll($("#endDate").val(), "/", "");
+                searchObject.regYn = $("input[type=radio][name='sc-isRegYn']:checked").val();
+
+                return searchObject;
+            },
+
+            fn_setGrid : function(jsonData) {
+
+                if(jsonData != null) {
+                    $(".grid").kendoGrid({
+                        dataSource : {
+                        data : jsonData,
+                        schema : {
+                            model : {
+                            	id:"id",
+                                fields : {
+		                            	checkDate         : {editable: false, type : "string"},
+		                            	integrationId       : {editable: false, type : "string"},
+		                                sourceHost        : {editable: false, type : "string"},
+		                                sourceService     : {editable: false, type : "string"},
+		                                targetHost        : {editable: false, type : "string"},
+		                                targetService     : {editable: false, type : "string"},
+		                                tranCnt           : {editable: false, type : "string"},
+		                                cfInterfaceId     : {type : "string"},
+                                        regYn             : {type : "string"},
+                                        regDate           : {type : "date"}
+                                    }
+                                }
+                            },
+                            pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+                        },
+                        filterable: true,
+                        sortable : true,
+                        scrollable : true,
+                        resizable: true,
+                        pageable : {
+                            refresh       : false
+                          , pageSizes     : mint.ui.getPageSizesS()
+                          , buttonCount   : 5
+
+                        },
+                        cancel: function(e) {
+                            //this.refresh();
+                            $.main.fn_getData();
+                        },
+                        editable: "inline",
+                        save: $.main.fn_updateData,
+                        columns : [ {
+                            field : "checkDate",
+                            title : mint.label.getLabel('lb-50'),
+                            width : "90px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${checkDate}'>#=$.main.fn_replaceNull(checkDate)#</span>"
+                        },{
+                            field : "integrationId",
+                            title : mint.label.getLabel('lb-597'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${integrationId}'>#=$.main.fn_replaceNull(integrationId)#</span>"
+                        },{
+                            field : "sourceHost",
+                            title : mint.label.getLabel('lb-509') + " " + mint.label.getLabel('lb-359'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${sourceHost}'>#=$.main.fn_replaceNull(sourceHost)#</span>"
+                        },{
+                            field : "sourceService",
+                            title : mint.label.getLabel('lb-509') + " " + mint.label.getLabel('lb-87'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${sourceService}'>#=$.main.fn_replaceNull(sourceService)#</span>"
+                        },{
+                            field : "targetHost",
+                            title : mint.label.getLabel('lb-530') + " " + mint.label.getLabel('lb-359'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${targetHost}'>#=$.main.fn_replaceNull(targetHost)#</span>"
+                        },{
+                            field : "targetService",
+                            title : mint.label.getLabel('lb-530') + " " + mint.label.getLabel('lb-87'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${targetService}'>#=$.main.fn_replaceNull(targetService)#</span>"
+                        },{
+                            field : "tranCnt",
+                            title :  mint.label.getLabel('lb-528') + " " + mint.label.getLabel('lb-349'),
+                            width : "70px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template : "#=$.main.fn_setNumberFormat(tranCnt)#"
+                        },{
+                            field : "cfInterfaceId",
+                            title :  mint.label.getLabel('lb-598'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${cfInterfaceId}'>#=$.main.fn_replaceNull(cfInterfaceId)#</span>"
+                        },{
+                            field : "regYn",
+                            title : mint.label.getLabel('lb-596'),
+                            width : "70px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            editor : $.main.fn_comboBox
+                        },{
+                            field : "regDate",
+                            title : mint.label.getLabel('lb-479'),
+                            width : "140px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            format: "{0:yyyy-MM-dd}",
+                            editor: $.main.fn_dateEditor
+                        },{ command: ["edit"], title: mint.label.getLabel('lb-342'), width: "180px", headerAttributes : {style : "text-align: center"} }
+
+                        ],
+                        dataBound: function (e) {
+							if(1 > $(".grid").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+								$(".grid").children(".k-grid-content").height(gridHeight /2.5);
+								$(".grid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$(".grid").children(".k-grid-content").height('auto');
+								$(".grid").children(".k-grid-content-locked").height('auto');
+							}
+						}
+                    });
+
+                    $(".grid").data("kendoGrid").dataSource.sync();
+                } else {
+                    /* var dataSource = new kendo.data.DataSource({
+                        data : jsonData,
+                        schema : {
+                            model : {
+                            	   id:"id",
+                            	   fields : {
+                            		   checkDate         : {editable: false, type : "string"},
+                                       interfaceId       : {editable: false, type : "string"},
+                                       sourceHost        : {editable: false, type : "string"},
+                                       sourceService     : {editable: false, type : "string"},
+                                       targetHost        : {editable: false, type : "string"},
+                                       targetService     : {editable: false, type : "string"},
+                                       tranCnt           : {editable: false, type : "string"},
+                                       cfInterfaceId     : {type : "string"},
+                                       regYn             : {type : "string"},
+                                       regDate           : {type : "date"}
+                                    }
+                                }
+                            },
+                            pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+                        }
+                    );
+
+                    $(".grid").data("kendoGrid").setDataSource(dataSource);
+                    $(".grid").data("kendoGrid").dataSource.sync();
+                    $(".grid").data('kendoGrid').refresh(); */
+
+                	$(".grid").kendoGrid({
+                        dataSource : {
+                        data : [],
+                        schema : {
+                            model : {
+                            	id:"id",
+                                fields : {
+		                            	checkDate         : {editable: false, type : "string"},
+		                            	integrationId       : {editable: false, type : "string"},
+		                                sourceHost        : {editable: false, type : "string"},
+		                                sourceService     : {editable: false, type : "string"},
+		                                targetHost        : {editable: false, type : "string"},
+		                                targetService     : {editable: false, type : "string"},
+		                                tranCnt           : {editable: false, type : "string"},
+		                                cfInterfaceId     : {type : "string"},
+                                        regYn             : {type : "string"},
+                                        regDate           : {type : "date"}
+                                    }
+                                }
+                            },
+                            pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+                        },
+                        filterable: true,
+                        sortable : true,
+                        scrollable : true,
+                        resizable: true,
+                        pageable : {
+                            refresh       : false
+                          , pageSizes     : mint.ui.getPageSizesS()
+                          , buttonCount   : 5
+
+                        },
+                        cancel: function(e) {
+                            //this.refresh();
+                            $.main.fn_getData();
+                        },
+                        editable: "inline",
+                        save: $.main.fn_updateData,
+                        columns : [ {
+                            field : "checkDate",
+                            title : mint.label.getLabel('lb-50'),
+                            width : "120px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${checkDate}'>#=$.main.fn_replaceNull(checkDate)#</span>"
+                        },{
+                            field : "integrationId",
+                            title : mint.label.getLabel('lb-597'),
+                            width : "110px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${integrationId}'>#=$.main.fn_replaceNull(integrationId)#</span>"
+                        },{
+                            field : "sourceHost",
+                            title : mint.label.getLabel('lb-509') + " " + mint.label.getLabel('lb-359'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            width : "130px",
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${sourceHost}'>#=$.main.fn_replaceNull(sourceHost)#</span>"
+                        },{
+                            field : "sourceService",
+                            title : mint.label.getLabel('lb-509') + " " + mint.label.getLabel('lb-87'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            width : "100px",
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${sourceService}'>#=$.main.fn_replaceNull(sourceService)#</span>"
+                        },{
+                            field : "targetHost",
+                            title : mint.label.getLabel('lb-530') + " " + mint.label.getLabel('lb-359'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            width : "130px",
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${targetHost}'>#=$.main.fn_replaceNull(targetHost)#</span>"
+                        },{
+                            field : "targetService",
+                            title : mint.label.getLabel('lb-530') + " " + mint.label.getLabel('lb-87'),
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            width : "100px",
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${targetService}'>#=$.main.fn_replaceNull(targetService)#</span>"
+                        },{
+                            field : "tranCnt",
+                            title :  mint.label.getLabel('lb-528') + " " + mint.label.getLabel('lb-349'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template : "#=$.main.fn_setNumberFormat(tranCnt)#"
+                        },{
+                            field : "cfInterfaceId",
+                            title :  mint.label.getLabel('lb-598'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            template: "<span title='${cfInterfaceId}'>#=$.main.fn_replaceNull(cfInterfaceId)#</span>"
+                        },{
+                            field : "regYn",
+                            title : mint.label.getLabel('lb-596'),
+                            width : "70px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            attributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            editor : $.main.fn_comboBox
+                        },{
+                            field : "regDate",
+                            title : mint.label.getLabel('lb-479'),
+                            width : "100px",
+                            headerAttributes : {
+                                style : "text-align: center"
+                            },
+                            filterable: { multi: true, search: true },
+                            attributes : {
+                                style : "text-align: center"
+                            },filterable: { multi: true, search: true },
+                            format: "{0:yyyy-MM-dd}",
+                            editor: $.main.fn_dateEditor
+                        },{ command: ["edit"], title: mint.label.getLabel('lb-342'), width: "120px", headerAttributes : {style : "text-align: center"} }
+
+                        ],
+                        dataBound: function (e) {
+							if(1 > $(".grid").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+								$(".grid").children(".k-grid-content").height(gridHeight /2.5);
+								$(".grid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$(".grid").children(".k-grid-content").height('auto');
+								$(".grid").children(".k-grid-content-locked").height('auto');
+							}
+						}
+                    });
+                }
+            },
+
+            fn_update : function(e) {
+            	alert("a");
+            },
+
+            fn_replaceNull : function(data) {
+            	if(data == null || data == "") {
+            		return "";
+            	} else {
+            		return data;
+            	}
+            },
+
+            fn_dateEditor : function(container, options) {
+            	$('<input name="regDate" data-format="yyyy-MM-dd"/>')
+                .appendTo(container)
+                .kendoDatePicker({
+                	format: "{0:yyyy MM dd}",
+                    change : $.main.fn_onDatePickerSelect
+                });
+            },
+
+            fn_onDatePickerSelect : function(e) {
+            	var arrDate = kendo.toString(this.value(), 'd').split("/");
+
+
+            	if(parseInt(arrDate[0]) < 10) {
+            		arrDate[0] = "0" + arrDate[0];
+            	}
+
+            	if(parseInt(arrDate[1]) < 10) {
+                    arrDate[1] = "0" + arrDate[1];
+                }
+
+            	$.main.modRegDate = arrDate[2] + arrDate[0] + arrDate[1];
+            },
+
+            fn_comboBox : function(container, options) {
+                var comboObj = [
+                            { text: "Y", value: "Y" },
+                            { text: "N", value: "N" }
+                        ];
+
+            	if('undefined' == typeof options.regYn || options.regYn == '') {
+
+            		$('<input data-text-field="text" data-value-field="value" data-bind="value:' + options.field + '"/>')
+	                    .appendTo(container)
+	                    .kendoDropDownList ({
+	                        dataSource: comboObj,
+	                        //dataSource:["Y", "N"],
+	                        dataTextField: "text",
+	                        dataValueField:"value",
+	                        select:$.main.fn_onSelect
+
+	                });
+            	} else {
+            		$('<input data-text-field="text" data-value-field="value" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList ({
+                        dataSource: comboObj,
+                        dataTextField: "text",
+                        dataValueField:"value",
+                        select:$.main.fn_onSelect
+
+                });
+            	}
+            },
+
+            fn_onSelect : function(e) {
+            	try{
+	            	var dataItem = this.dataItem(e.item.index());
+
+	            	$.main.modRegYn = dataItem.value;
+            	} catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onSelect"});
+            	}
+            },
+
+            fn_setNumberFormat : function(val) {
+            	if(val != null && val != "") {
+            		return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            	} else {
+            		return "";
+            	}
+
+            },
+
+            fn_cancel : function() {
+            	return false;
+            },
+
+            fn_updateData : function(e) {
+            	try{
+            		console.log("=======================================================");
+            		console.log("e.model.cfInterface : " + e.model.cfInterfaceId);
+                    console.log("modRegYn : " + $.main.modRegYn);
+                    console.log("modRegDate : " + $.main.modRegDate);
+                    console.log("regYn : " + e.model.regYn);
+                    console.log("regDate : " + e.model.regDate);
+                    console.log("e.model : ", e.model);
+                    console.log("=======================================================");
+
+                    mint.callService($.main.fn_getUpdateObject(e.model.cfInterfaceId), screenName, 'REST-U01-SU-03-05-001', '$.main.fn_completeUpdate', {errorCall : true, params : {checkDate : mint.common.replaceAll(e.model.checkDate, "-", ""), interfaceId : e.model.integrationId} });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_updateData"});
+                }
+            },
+
+            fn_getUpdateObject : function(interfaceId) {
+            	try{
+	            	var updateObject = new Object();
+
+	            	updateObject.cfInterfaceId = interfaceId;
+	            	updateObject.regYn = $.main.modRegYn;
+	            	updateObject.regDate = $.main.modRegDate;
+
+	            	return updateObject;
+            	} catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getUpdateObject"});
+            	}
+            },
+
+            fn_completeUpdate : function() {
+            	//alert("aa");
+            	//$(".grid").data('kendoGrid').refresh();
+
+            	$.main.fn_getData();
+
+            	$.main.modRegYn = "";
+            	$.main.modRegDate = "";
+            },
+
+          	//-----------------------------------------------------------------------
+			// Description :: 엔터키 이벤트
+			//-----------------------------------------------------------------------
+			fn_onKeyDownOP0303001 : function(event) {
+				try {
+					if(event.keyCode == 13) {
+						$.main.fn_getData();
+					}
+				}
+				catch(e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_onKeyDownOP0303001"});
+				}
+			} // end fn_onKeyDownOP0303001
+        }
+    });
+
+
+    //=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+    $('.btn-search').on('click', function() {
+        $.main.fn_getData();
+    });
+
+
+  	//-----------------------------------------------------------------------
+	// Description :: 조회기간 KeyDown 이벤트 설정 (상단)
+	//-----------------------------------------------------------------------
+    $('#startDate').keydown(function(event) {
+		$.main.fn_onKeyDownOP0303001(event);
+	});
+
+    $('#endDate').keydown(function(event) {
+		$.main.fn_onKeyDownOP0303001(event);
+	});
+
+    $('input:radio[name="sc-isRegYn"]').keydown(function(event) {
+		$.main.fn_onKeyDownOP0303001(event);
+	});
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.main.fn_init();
+    mint.label.attachLabel(null);
+
+});
+
+</script>

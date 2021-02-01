@@ -1,0 +1,1877 @@
+<!--
+	Screen ID : OP-02-00-101
+	Screen NM : 대시보드 - MOCOMSYS MI EAI Product
+	Reference : GS Retail
+-->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-5">
+		<h2><lb class="lb-31"></lb></h2>
+		<!--
+		<ol class="breadcrumb">
+			<li><lb class="lb-29"></lb></li>
+			<li class="active"><strong><lb class="lb-31"></lb></strong></li>
+		</ol>
+		-->
+	</div>
+
+	<div class="col-lg-7">
+		<div class="mint-page-top-group" >
+			<a class="btn btn-page-sort" style="margin-left: 10px; display:none;"><input style="margin-top:5px;" type="checkbox" id="sortWidget-switch" class="btn-page-sort" aria-label="Sort Switch" checked="checked" /></a>
+            <a class="btn btn-white btn-page-expand"><i class="fa fa-window-maximize"></i> <lb class="lb-999">전체화면</lb></a>
+		</div>
+	</div>
+</div>
+
+<!--wrapper wrapper-content-->
+<div class="wrapper wrapper-content animated fadeInRight" id="dashboard-attachDiv">
+	<div class="dashboard-item dashboard-layout-default sortable" id="sortable">
+
+		<div class="row sortable-child" id="sortable-child">
+			<div class="col-lg-4 mint-col-default">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-270">처리건수(인터페이스)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label time-throughput-daily" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a id="dailyRefresh">
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div id="chart-throughput-daily" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                        	<th></th>
+			                            <th class="mint-th-m-right">건수</th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button><lb class="lb-89">전체</lb></td>
+			                            <td class="mint-td-m-right">0</td>
+			                        </tr>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button><lb class="lb-412">완료</lb></td>
+			                            <td class="mint-td-m-right mint-success">0</td>
+			                        </tr>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-warning m-r-sm mint-td-i-badge"></button><lb class="lb-511">처리중</lb></td>
+			                            <td class="mint-td-m-right mint-warning">0</td>
+			                        </tr>
+			                        <tr>
+			                        	<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button><lb class="lb-32">오류</lb></td>
+			                           	<td class="mint-td-m-right mint-danger">0</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 mint-col-default">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-271">오류 인터페이스</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label time-error-count-top" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a id="errorRefresh">
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div id="chart-error-count-top" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                            <th class="mint-th-m-right"><lb class="lb-153">인터페이스명</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-154">인터페이스ID</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-240">오류건수</lb></th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                           	<td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 mint-col-default">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-272">지연 인터페이스</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label time-delay-count-top" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                            <a id="delayRefresh">
+                                <i class="fa fa-refresh"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" >
+						<div id="chart-delay-count-top" class="table-responsive">
+		                    <table class="table table-hover no-margins">
+		                        <thead>
+			                        <tr>
+			                            <th class="mint-th-m-right"><lb class="lb-153">인터페이스명</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-154">인터페이스ID</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-473">상태</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-241">시작시간</lb></th>
+			                            <th class="mint-th-m-right"><lb class="lb-243">지연시간</lb></th>
+			                        </tr>
+		                        </thead>
+		                        <tbody>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+			                        <tr>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                            <td class="mint-td-m-right">&nbsp;</td>
+			                        </tr>
+		                        </tbody>
+		                    </table>
+	                    </div>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+
+		<div class="row sortable-child" id="sortable-child">
+			<div class="col-lg-6 mint-col-default">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-3060">TR로그 - 처리현황</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label time-realTime-tran-count" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:200px;">
+						<div class="col-lg-66" id="chart-realTime-tran-count" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 mint-col-default">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-274">실시간 - 처리현황(관심)</lb></h5>
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label time-realTime-favorite-count" style="display: none"></label>
+                            <a class="chart-realTime-favorite-count-config"><i class="fa fa-cog"></i></a>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content" style="height:200px;">
+						<div class="col-lg-66" id="chart-realTime-favorite-count" style="width:100%; height: 100%;"></div>
+					</div>
+				</div>
+			</div>
+
+		</div><!-- end row -->
+
+		<div class="row sortable-child" id="sortable-child">
+			<div class="col-lg-12 mint-col-default filtered">
+				<div class="panel panel-default mint-panel">
+					<div class="panel-heading mint-panel-title">
+						<h5><lb class="lb-278">알림 이벤트</lb></h5>
+						<!--
+						<h6 style="float:none; display: inline;">
+							<span><i class="fa fa-circle text-success"> <lb class="lb-999"></lb></i> </span>
+							<span><i class="fa fa-circle text-warning"> <lb class="lb-999"></lb></i></span>
+							<span><i class="fa fa-circle text-danger"> <lb class="lb-999"></lb></i></span>
+						</h6>
+						-->
+                        <div class="mint-panel-tools">
+                        	<label class="label mint-panel-label time-resource-state" style="display: none"></label>
+                            <a class="fullscreen-link">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+					</div>
+					<div class="panel-body mint-panel-content">
+						<div class="col-lg-12 mint-col-default sortable-child-alert">
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-cpu" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-448">CPU</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-memory" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-451">MEMORY</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-disk" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-294">DISK</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%; display:none;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-process" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-472">PROCESS</lb></h3></span>
+								</button>
+							</div>
+
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-pos" type="button">
+									<span><h2>0</h2></span>
+									<span><h4><lb class="">POS<br />통신상태</lb></h4></span>
+								</button>
+							</div>
+							<!-- <div class="col-lg-2 mint-col-default" style="width:11.11%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-notran" type="button">
+									<span><h2>0</h2></span>
+									<span><h4><lb class="">거래미발생<br />POS</lb></h4></span>
+								</button>
+							</div> -->
+
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-qmgr" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-263">큐매니져</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-channel" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-265">채널</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-qdepth" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-266">큐깊이</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%; display:none;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-batch" type="button">
+									<span><h2>0</h2></span>
+									<span><h3><lb class="lb-269">주요배치</lb></h3></span>
+								</button>
+							</div>
+							<div class="col-lg-2 mint-col-default" style="width:12.50%;">
+								<button class="btn btn-outline btn-success dim mint-chart-square-large btn-state-iipagent" type="button">
+									<span><h2>0</h2></span>
+									<span><h3>IIP <lb class="lb-260">AGENT</lb></h3></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- end row -->
+	</div><!-- dashboard-layout -->
+</div><!-- wrapper wrapper-content -->
+
+<script type="text/x-kendo-template" id="template-chart-throughput-daily">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+		# for ( var i = 0; i < data.length; i++ ) { #
+			<th class="mint-th-m-right">#= data[i].roleNm #</th>
+		# } #
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-default m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-89') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right" onclick="$.main.fn_moveTracking({status: '', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].totalCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-success m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-412') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-success" onclick="$.main.fn_moveTracking({status: '00', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].successCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-warning m-r-sm mint-td-i-badge"></button>#= mint.label.getLabel('lb-511') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-warning" onclick="$.main.fn_moveTracking({status: '01', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].processCnt) #</td>
+		# } #
+		</tr>
+		<tr>
+			<td class="mint-td-m-left"><button type="button" class="btn btn-danger m-r-sm mint-chart-label-m"></button>#= mint.label.getLabel('lb-32') #</td>
+		# for ( var i = 1; i < data.length; i++ ) { #
+			<td class="mint-td-m-right mint-danger" onclick="$.main.fn_moveTracking({status: '99', accRoleId:'#= data[i].roleId #'});">#= mint.common.addComma(data[i].errorCnt) #</td>
+        # } #
+		</tr>
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-error-count-top">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-153') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-154') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-240') #</th>
+		</tr>
+	</thead>
+	<tbody>
+	# for ( var i = 0; i < data.length; i++ ) { #
+		<tr onclick="$.main.fn_moveTracking({status: '99', accRoleId:'', interfaceId: '#= data[i].interfaceId #', integrationId: '#= data[i].integrationId #' });">
+			<td class="mint-td-m-right">#= data[i].interfaceNm #</td>
+			<td class="mint-td-m-right">#= data[i].integrationId #</td>
+			<td class="mint-td-m-right">#= mint.common.addComma(data[i].errorCnt) #</td>
+		</tr>
+	# } #
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-chart-delay-count-top">
+<table class="table table-hover no-margins">
+	<thead>
+		<tr>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-153') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-154') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-473') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-241') #</th>
+			<th class="mint-th-m-right">#= mint.label.getLabel('lb-243') #</th>
+		</tr>
+	</thead>
+	<tbody>
+	# for ( var i = 0; i < data.length; i++ ) { #
+		<tr onclick="$.main.fn_moveTracking({status: '01', accRoleId:'', interfaceId: '#= data[i].interfaceId #', integrationId: '#= data[i].integrationId #', msgDateTime: '#= data[i].msgDateTime2 #' });">
+			<td class="mint-td-m-right">#= data[i].interfaceNm #</td>
+			<td class="mint-td-m-right">#= data[i].integrationId #</td>
+			<td class="mint-td-m-right">#= data[i].statusNm #</td>
+			<td class="mint-td-m-right">#= mint.common.isEmpty(data[i].msgDateTime2) ? '' : mint.common.formatDateTime(data[i].msgDateTime2) #</td>
+			<td class="mint-td-m-right">#= data[i].elapsedTime #</td>
+		</tr>
+	# } #
+	</tbody>
+</table>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-window">
+<div id="dashboard-window">
+	<div id="dashboard-toolbar"></div>
+	<div id="dashboard-content" class="col-lg-12" style="box-sizing: border-box;"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-template" id="template-dashboard-title">
+<h6 style="float:none; display:inline; padding-bottom:2px;">
+	<span><i class="fa fa-circle text-success"></i> </span>
+	<span><i class="fa fa-circle text-warning"></i> </span>
+	<span><i class="fa fa-circle text-danger"></i> </span>
+	<span style="font-size:14px;">#= mint.label.getLabel('lb-31') #</span>
+</h6>
+</script>
+
+
+
+
+<script>
+$(document).ready(function () {
+	//=======================================================================
+	//(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+	//=======================================================================
+	screenName = "OP-02-00-101";
+	$.extend({
+		main : {
+			//=======================================================================
+			// (2) Screen 에서 사용할 variable 정의
+			//=======================================================================
+			seriesHoverChartId : '',
+			//=======================================================================
+			// (3) Screen 에서 사용할 function 정의
+			//=======================================================================
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화
+			//-----------------------------------------------------------------------
+			fn_init : function() {
+				try {
+					mint.init('$.main.fn_initCallback');
+				} catch( e ) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_init"});
+				}
+			}, // end fn_init()
+
+			//-----------------------------------------------------------------------
+			// Description :: 화면 초기화 콜백
+			//-----------------------------------------------------------------------
+			fn_initCallback : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// Description :: Chart init
+					//-----------------------------------------------------------------------
+					$.main.fn_initChartRealTimeTotalCount();
+					$.main.fn_initChartRealTimeFavoriteCount();
+
+					//-----------------------------------------------------------------------
+					// Description :: 인터벌 설정.
+					//-----------------------------------------------------------------------
+					var timeoutTerm = (2 * 1000); // 2초 배수
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getDailyThroughput'      , 600);
+		            },0);
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getErrorCountTop'        , 600);
+		            },timeoutTerm * 1);
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getDelayCountTop'        , 600);
+		            },timeoutTerm * 2);
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getRealTimeTranCount'   , 600);
+		            },timeoutTerm * 3);
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getRealTimeFavoriteCount', 10);
+		            },timeoutTerm * 4);
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getResourceState'        , 120);
+		            },timeoutTerm * 5);
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getDeadPosState'  , 300);
+		            },timeoutTerm * 6);
+
+		            /* mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getNotranPosState'  , 600);
+		            },timeoutTerm * 7); */
+
+		            mint.common.setTimeout(function () {
+		            	$.main.fn_initInterval('$.main.fn_getImportantBatchState'  , 600);
+		            },timeoutTerm * 8);
+
+					//-----------------------------------------------------------------------
+					// Description :: 알림 이벤트 RollOver
+					//-----------------------------------------------------------------------
+					var intervalObj = mint.common.addInterval( function(){
+						$('button.btn-success.dim').removeClass('active');
+						$('button.btn-danger.dim').toggleClass('active');
+					}, (1000 * 1) );
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+
+
+
+			}, // end fn_initCallback
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initInterval
+			//-----------------------------------------------------------------------
+			fn_initInterval : function( fnc, interval ) {
+				try {
+					if( !mint.common.isEmpty(fnc) && $.isFunction(eval(fnc)) ) {
+
+						eval(fnc).call();
+
+						if( interval <= 0 ) {
+							eval(fnc).call();
+						} else {
+							var intervalObj = mint.common.addInterval( function(){
+								eval(fnc).call();
+							}, (1000 * interval) );
+							return intervalObj;
+						}
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initInterval"});
+				}
+
+			}, // end fn_initInterval
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDailyThroughput
+			//-----------------------------------------------------------------------
+			fn_getDailyThroughput : function() {
+				try {
+					var requestObject = new Object();
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R01-OP-02-00',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	var firstData = {roleId:'', roleNm:'', totalCnt:0, successCnt:0, processCnt:0, errorCnt:0};
+				    	if( !mint.common.isEmpty(jsonData) ) {
+
+				    		if( jsonData.length > 1 ) {
+
+				    			//-----------------------------------------------------------------------
+				    			// 20170519 - 로직 보완으로 주석처리
+				    			//-----------------------------------------------------------------------
+				    			/*
+				    			// 다중건이면 전체 건수를 계산한다.
+								var totalObject = new Object();
+								totalObject.roleId     = '';
+								totalObject.roleNm     = mint.label.getLabel('lb-89'); //전체
+								totalObject.totalCnt   = 0;
+								totalObject.successCnt = 0;
+								totalObject.processCnt = 0;
+								totalObject.errorCnt   = 0;
+
+								for( var i = 0; i < jsonData.length; i++ ) {
+									totalObject.totalCnt += jsonData[i].totalCnt;
+									totalObject.successCnt += jsonData[i].successCnt;
+									totalObject.processCnt += jsonData[i].processCnt;
+									totalObject.errorCnt   += jsonData[i].errorCnt;
+								}
+
+								jsonData.unshift(totalObject);
+								*/
+
+								//전체 건수를 합산하여 계산 하지 않고 DEPTH = 0 인 데이터를 전체건수로 정의한다
+								for( var i = 0; i < jsonData.length; i++ ) {
+									if( jsonData[i].depth == 0 ) {
+										jsonData[i].roleNm = mint.label.getLabel('lb-89'); //전체
+										break;
+									}
+								}
+
+				    		} else {
+				    			// 단일 건이면, rloeNm 만 치환한다.
+				    			jsonData[0].roleNm = mint.label.getLabel('lb-349'); //'건수'
+				    		}
+
+				    	} else {
+				    		jsonData = [];
+				    		var emptyObject = new Object();
+				    		emptyObject.totalCnt   = 0;
+				    		emptyObject.successCnt = 0;
+				    		emptyObject.processCnt = 0;
+				    		emptyObject.errorCnt   = 0;
+				    		emptyObject.roleId     = '';
+				    		emptyObject.roleNm = mint.label.getLabel('lb-349'); //'건수'
+				    		jsonData.push(emptyObject);
+				    	}
+				    	//-----------------------------------------------------------------------
+				    	// 그리드 첫번째 데이터에 라벨정보를 추가한다.( 그리드 맨 첫번째 TD )
+				    	//-----------------------------------------------------------------------
+			    		jsonData.unshift(firstData);
+				    	//-----------------------------------------------------------------------
+				    	// 그리드에 데이터를 바인딩 한다.
+				    	//-----------------------------------------------------------------------
+			    		var htmlTemplate = kendo.template($('#template-chart-throughput-daily').html());
+						$('#chart-throughput-daily').html( htmlTemplate(jsonData) );
+						$('#chart-throughput-daily').removeClass('table-responsive');
+						$('#chart-throughput-daily').addClass('table-responsive');
+
+						$('.time-throughput-daily').html($.main.fn_checkTimeDisplay());
+						$('.time-throughput-daily').show();
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initCallback"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getErrorCountTop
+			//-----------------------------------------------------------------------
+			fn_getErrorCountTop : function() {
+				try {
+					var requestObject = new Object();
+					requestObject.max = 4;
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R02-OP-02-00',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( mint.common.isEmpty(jsonData) ) {
+					    	jsonData = [];
+				    		for( var i = 0; i < 4; i++ ) {
+				    			jsonData.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',errorCnt:'&nbsp;'});
+				    		}
+					    } else {
+					    	if( jsonData.length < 4 ) {
+					    		var pushCnt = 4 - jsonData.length;
+					    		for( var i = 0; i < pushCnt; i++ ) {
+					    			jsonData.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',errorCnt:'&nbsp;'});
+					    		}
+					    	}
+					    }
+
+				    	//-----------------------------------------------------------------------
+				    	// 그리드에 데이터를 바인딩 한다.
+				    	//-----------------------------------------------------------------------
+			    		var htmlTemplate = kendo.template($('#template-chart-error-count-top').html());
+						$('#chart-error-count-top').html( htmlTemplate(jsonData) );
+						$('#chart-error-count-top').removeClass('table-responsive');
+						$('#chart-error-count-top').addClass('table-responsive');
+
+						$('.time-error-count-top').html($.main.fn_checkTimeDisplay());
+						$('.time-error-count-top').show();
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getErrorCountTop"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDelayCountTop
+			//-----------------------------------------------------------------------
+			fn_getDelayCountTop : function() {
+				try {
+					var env = mint.common.getEnvorinment();
+					var checkTime = env['dashboard.item.delaylist.checktime'];
+
+					var requestObject = new Object();
+					requestObject.max = 4;
+					requestObject.checkTime = ( !mint.common.isEmpty(checkTime) && checkTime.length > 0 ) ? checkTime[0] : 10;
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R03-OP-02-00-002',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( mint.common.isEmpty(jsonData) ) {
+					    	jsonData = [];
+				    		for( var i = 0; i < 4; i++ ) {
+				    			jsonData.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',statusNm:'&nbsp;',minPrDt:'&nbsp;',maxPrDt:'&nbsp;',elapsedTime:'&nbsp;' });
+				    		}
+					    } else {
+					    	if( jsonData.length < 4 ) {
+					    		var pushCnt = 4 - jsonData.length;
+					    		for( var i = 0; i < pushCnt; i++ ) {
+					    			jsonData.push({interfaceNm:'&nbsp;',integrationId:'&nbsp;',statusNm:'&nbsp;',minPrDt:'&nbsp;',maxPrDt:'&nbsp;',elapsedTime:'&nbsp;' });
+					    		}
+					    	}
+					    }
+
+				    	//-----------------------------------------------------------------------
+				    	// 그리드에 데이터를 바인딩 한다.
+				    	//-----------------------------------------------------------------------
+			    		var htmlTemplate = kendo.template($('#template-chart-delay-count-top').html());
+						$('#chart-delay-count-top').html( htmlTemplate(jsonData) );
+						$('#chart-delay-count-top').removeClass('table-responsive');
+						$('#chart-delay-count-top').addClass('table-responsive');
+
+						$('.time-delay-count-top').html($.main.fn_checkTimeDisplay());
+						$('.time-delay-count-top').show();
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDelayCountTop"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartRealTimeTotalCount
+			//-----------------------------------------------------------------------
+			fn_initChartRealTimeTotalCount : function() {
+				try {
+
+                    $("#chart-realTime-tran-count").kendoChart({
+                        //renderAs: "canvas",
+                        theme: "default",
+                        transitions: false,
+                        zoomable: false,
+                        title: {
+                            //text: ""
+                        },
+                        dataSource: {
+                        	data: []
+                        },
+                        seriesDefaults: {
+                        	type: "line",
+                        	style: "normal", //normal/step/smooth
+   							markers: {
+   				                size: 3
+   				            },
+			                line: {
+			                    width: 1
+			                },
+			                labels: {
+			                	visible: false,
+			                	background: "transparent"
+			                }
+                        },
+                        tooltip: {
+                        	visible: true,
+                        	shared: true,
+                        	template: "#= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: true,
+                            position: "top",
+                            orientation: "horizontal",
+                        },
+                        series: [],
+                        // Y축
+                        valueAxis: [
+   	                        {
+   	                        	name: "totalCount",
+   	                            labels: {
+   	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+   	                                template: '#= $.main.fn_valueAxisTemplate(value) #'
+   	                            },
+   	                            line: {
+   	                                visible: true
+   	                            },
+	                            majorGridLines: {
+	                            	visible: true,
+	                            	//step:2,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+   	                            visible: true,
+   	                            max: 10,
+   	                            //color: "#2080D0"
+   	                        },
+	                        {
+	                        	name: "count",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.main.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            majorGridLines: {
+	                            	visible: true,
+	                            },
+	                            minorGridLines: {
+	                            	visible: false,
+	                            },
+	                            crosshair: {
+	                            	visible: false,
+	                            	width: 0.8,
+	                            	opacity: 0.7,
+	                            },
+	                            visible: false,
+	                            max: 10,
+	                        },
+
+
+                        ],
+                        // X축
+                        categoryAxis: {
+                        	justified: false,
+                        	labels: {
+                        		rotation: "auto"
+                        	},
+                            categories: [],
+                            majorGridLines: {
+                                visible: false
+                            },
+                            crosshair: {
+                            	visible: false
+                            }
+                        },
+                        seriesHover: function(e) {
+                        	$.main.seriesHoverChartId = e.sender.wrapper.context.id;
+                        },
+                    });
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartRealTimeTotalCount"});
+				}
+			},
+
+
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getRealTimeTranCount
+			//-----------------------------------------------------------------------
+			fn_getRealTimeTranCount : function() {
+				try {
+
+					if( $('.k-tooltip.k-chart-tooltip.k-chart-shared-tooltip').size() > 0 && $.main.seriesHoverChartId == 'chart-realTime-tran-count' ) {
+						return;
+					}
+
+					//-----------------------------------------------------------------------
+					// Sample Data
+					//-----------------------------------------------------------------------
+					var count = Math.random() * 100;
+					var jsonData =
+					[
+						{roleNm: "전체",		cnt:  count, flag: ""},
+					]
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+					var fromDate = new Date();
+					var toDate = new Date();
+
+					fromDate.setMinutes(fromDate.getMinutes()-20,0,0);
+					requestObject.startDate      = mint.common.formatDate(fromDate, 'yyyyMMddHHmmss');
+                	requestObject.endDate        = mint.common.formatDate(toDate, 'yyyyMMddHHmmss');
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R15-OP-02-00-002',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+
+				    	if( ! mint.common.isEmpty(jsonData) ) {
+
+							var totalObject = new Object();
+							totalObject.roleId     = '';
+							totalObject.roleNm     = mint.label.getLabel('lb-89'); //전체
+							totalObject.cnt        = 0;
+							totalObject.flag       = 'totalCount';
+
+							totalObject.cnt += jsonData;
+							var jsonData = [];
+
+							jsonData.push(totalObject);
+							$.main.fn_setRealTimeTranCount(jsonData);
+					    }
+				    }, {errorCall: true, notificationView: false, waitingView: false, isPool: true, timeout:10000});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getRealTimeTranCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setRealTimeTranCount
+			//-----------------------------------------------------------------------
+			fn_setRealTimeTranCount : function(jsonData) {
+				try {
+					//-----------------------------------------------------------------------
+					// Chart Configuration
+					//-----------------------------------------------------------------------
+					var POINTS = 20;
+
+					var chart = $("#chart-realTime-tran-count").data("kendoChart");
+					var categoryAxis = chart.options.categoryAxis;
+					var categories   = categoryAxis.categories;
+					var valueAxis    = chart.options.valueAxis;
+					var series       = chart.options.series;
+
+					if( mint.common.isEmpty(categories) ) {
+						categories = [];
+					}
+
+					if( mint.common.isEmpty(series) ) {
+						series = [];
+					}
+
+					//-----------------------------------------------------------------------
+					// categories
+					//-----------------------------------------------------------------------
+					var checkDate = new Date();
+
+					categories.push( mint.common.formatDateTime(checkDate, "mm") );
+					if (categories.length > POINTS) {
+						categories.shift();
+					}
+
+					//-----------------------------------------------------------------------
+					// series
+					//-----------------------------------------------------------------------
+
+					var chartColors = ["#ffba00", "#FF8000", "#808000", "#2080D0", "#795CF3", "#DCC414", "#800080", "#604800", "#8D414E", "#48452D", "#92BAFD", "#99A9B7", "#B68EED", "#565656"];
+					for (var i = 0; i < jsonData.length; i++) {
+
+						var isExistSeries = false;
+						for(var j = 0; j < series.length; j++) {
+							if(jsonData[i].roleNm == series[j].name) {
+								series[j].data.push(jsonData[i].cnt);
+								if (series[j].data.length > POINTS) {
+									series[j].data.shift();
+								}
+								isExistSeries = true;
+
+								break;
+							}
+						}
+
+						if( ! isExistSeries ) {
+							var seriesItem = new Object();
+							seriesItem.type  = 'line';
+							seriesItem.name  = jsonData[i].roleNm;
+							seriesItem.color = chartColors[i];
+							seriesItem.data  = [jsonData[i].cnt];
+
+							if( !mint.common.isEmpty(jsonData[i].flag) && jsonData[i].flag == 'totalCount' ) {
+								seriesItem.type    = "line";
+								seriesItem.opacity = 0.3;
+								seriesItem.color   = "#2080D0";
+								seriesItem.line    = {opacity: 0.2};
+								seriesItem.axis    = 'totalCount';
+								for(var j = 0; j < valueAxis.length; j++) {
+									if(jsonData[i].flag == valueAxis[j].name) {
+										valueAxis[j].visible = true;
+									}
+								}
+							} else {
+								seriesItem.axis = 'count';
+							}
+							series.push(seriesItem);
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 구한다.
+					//-----------------------------------------------------------------------
+					var seriesMaxValue = new Object();
+					for( var i = 0 ; i < series.length; i++ ) {
+						var maxValue = Math.max.apply(null,series[i].data);
+						if( mint.common.isEmpty(seriesMaxValue[series[i].axis]) || seriesMaxValue[series[i].axis] < maxValue) {
+							seriesMaxValue[series[i].axis] = maxValue;
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 판단하여 valuAxis max 를 설정한다.
+					//-----------------------------------------------------------------------
+					for( var i = 0; i < valueAxis.length; i++ ) {
+						if( mint.common.isEmpty(seriesMaxValue[valueAxis[i].name]) || seriesMaxValue[valueAxis[i].name] <= 10) {
+							valueAxis[i].max = 10;
+						} else {
+							valueAxis[i].max = undefined;
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Chart Refresh
+					//-----------------------------------------------------------------------
+					{
+						chart.options.valueAxis = valueAxis;
+						chart.options.categoryAxis.categories = categories;
+						chart.options.categoryAxis.title.text = mint.common.formatDateTime(checkDate, "HH:mm");
+						chart.options.categoryAxis.title.font = '12px Arial';
+						chart.options.categoryAxis.title.margin = {top: 2, bottom:0};
+						chart.options.categoryAxis.title.padding = {bottom:0};
+						chart.options.categoryAxis.axisCrossingValues = [0, 59];
+						chart.options.series = series;
+
+						chart.refresh();
+						//chart.redraw();
+						//if( $.main.chartRealTimeTotalProcessCountPlay == true) {
+						//	kendo.animationFrame(this);
+						//}
+					}
+
+					//$('.time-realTime-tran-count').html($.main.fn_checkTimeDisplay());
+					//$('.time-realTime-tran-count').show();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRealTimeTranCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_initChartRealTimeFavoriteCount
+			//-----------------------------------------------------------------------
+			fn_initChartRealTimeFavoriteCount : function() {
+				try {
+
+                    $("#chart-realTime-favorite-count").kendoChart({
+                        //renderAs: "canvas",
+                        theme: "default",
+                        transitions: false,
+                        zoomable: false,
+                        title: {
+                            //text: ""
+                        },
+                        dataSource: {
+                        	data: []
+                        },
+                        seriesDefaults: {
+                        	type: "line",
+                        	style: "normal", //normal/step/smooth
+   							markers: {
+   				                size: 3
+   				            },
+			                line: {
+			                    width: 1
+			                },
+			                labels: {
+			                	visible: false,
+			                	background: "transparent"
+			                }
+                        },
+                        tooltip: {
+                        	visible: true,
+                        	shared: true,
+                        	template: "#= kendo.format('{0:n0}', value) #"
+                        },
+                        // 그래프 범례 설정.
+                        legend: {
+                            visible: true,
+                            position: "top",
+                            orientation: "horizontal",
+                        },
+                        series: [],
+                        // Y축
+                        valueAxis: [
+	                        {
+	                        	name: "count",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.main.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            minorGridLines: {
+	                            	visible: false
+	                            },
+	                            crosshair: {
+	                            	visible: false,
+	                            	width: 0.8,
+	                            	opacity: 0.7,
+	                            },
+	                            max: 10
+	                        },
+	                        {
+	                        	name: "totalCount",
+	                            labels: {
+	                                //format: '#,###'// + mint.label.getLabel('lb-584')
+	                            	template: '#= $.main.fn_valueAxisTemplate(value) #'
+	                            },
+	                            line: {
+	                                visible: true
+	                            },
+	                            max: 10,
+	                            visible: false,
+	                            color: "#2080D0"
+	                        },
+
+                        ],
+                        // X축
+                        categoryAxis: {
+                        	justified: false,
+                        	labels: {
+                        		rotation: "auto"
+                        	},
+                            categories: [],
+                            majorGridLines: {
+                                visible: false
+                            },
+                            crosshair: {
+                            	visible: false
+                            }
+                        },
+                        seriesHover: function(e) {
+                        	$.main.seriesHoverChartId = e.sender.wrapper.context.id;
+                        }
+                    });
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_initChartRealTimeFavoriteCount"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getRealTimeFavoriteCount
+			//-----------------------------------------------------------------------
+			fn_getRealTimeFavoriteCount : function(resetFlag) {
+				try {
+
+					if( $('.k-tooltip.k-chart-tooltip.k-chart-shared-tooltip').size() > 0 && $.main.seriesHoverChartId == 'chart-realTime-favorite-count' ) {
+						return;
+					}
+					var isTest = false;
+
+					//-----------------------------------------------------------------------
+					// Real Data
+					//-----------------------------------------------------------------------
+					var requestObject = new Object();
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R16-OP-02-00-002',
+				    function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( !mint.common.isEmpty(jsonData) ){
+							var totalObject = new Object();
+							totalObject.integrationId     = '';
+							totalObject.interfaceNm       = mint.label.getLabel('lb-89'); //전체
+							totalObject.cnt               = 0;
+							totalObject.flag              = 'totalCount';
+							for( var i = 0; i < jsonData.length; i++ ) {
+								if( isTest ) jsonData[i].cnt = Math.random() * 100;
+								totalObject.cnt += jsonData[i].cnt;
+							}
+
+							//jsonData.push(totalObject);
+							$.main.fn_setRealTimeFavoriteCount(resetFlag, jsonData);
+				    	}
+				    }, {errorCall: true, notificationView: false, waitingView: false, isPool: true, timeout:10000});
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getRealTimeFavoriteCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setRealTimeFavoriteCount
+			//-----------------------------------------------------------------------
+			fn_setRealTimeFavoriteCount : function(resetFlag, jsonData) {
+				try {
+
+					//-----------------------------------------------------------------------
+					// Chart Configuration
+					//-----------------------------------------------------------------------
+					var POINTS = 20;
+
+					var chart = $("#chart-realTime-favorite-count").data("kendoChart");
+					var categoryAxis = chart.options.categoryAxis;
+					var categories   = categoryAxis.categories;
+					var valueAxis    = chart.options.valueAxis;
+					var series       = chart.options.series;
+
+					if( mint.common.isEmpty(categories) || resetFlag) {
+						categories = [];
+					}
+
+					if( mint.common.isEmpty(series) || resetFlag) {
+						series = [];
+					}
+
+					//-----------------------------------------------------------------------
+					// categories
+					//-----------------------------------------------------------------------
+					var checkDate = new Date();
+
+					categories.push( mint.common.formatDateTime(checkDate, "ss") );
+					if (categories.length > POINTS) {
+						categories.shift();
+					}
+
+					//-----------------------------------------------------------------------
+					// series
+					//-----------------------------------------------------------------------
+
+					var chartColors = ["#ffba00", "#795CF3","#92BAFD", "#2080D0", "#808000", "#FF8000", "#DCC414", "#800080", "#604800", "#8D414E", "#48452D",  "#99A9B7", "#B68EED", "#565656"];
+					for (var i = 0; i < jsonData.length; i++) {
+
+						var isExistSeries = false;
+						for(var j = 0; j < series.length; j++) {
+							if(jsonData[i].interfaceNm == series[j].name) {
+								series[j].data.push(jsonData[i].cnt);
+								if (series[j].data.length > POINTS) {
+									series[j].data.shift();
+								}
+								isExistSeries = true;
+
+								break;
+							}
+						}
+
+						if( ! isExistSeries ) {
+							var seriesItem = new Object();
+							seriesItem.type  = 'line';
+							seriesItem.name  = jsonData[i].interfaceNm;
+							seriesItem.color = chartColors[i];
+							seriesItem.data  = [jsonData[i].cnt];
+
+							if( !mint.common.isEmpty(jsonData[i].flag) && jsonData[i].flag == 'totalCount' ) {
+								seriesItem.type    = "area";
+								seriesItem.opacity = 0.3;
+								seriesItem.color   = "#2080D0";
+								seriesItem.line    = {opacity: 0.2};
+								seriesItem.axis    = 'totalCount';
+								for(var j = 0; j < valueAxis.length; j++) {
+									if(jsonData[i].flag == valueAxis[j].name) {
+										valueAxis[j].visible = true;
+									}
+								}
+							} else {
+								seriesItem.axis = 'count';
+							}
+							series.push(seriesItem);
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 구한다.
+					//-----------------------------------------------------------------------
+					var seriesMaxValue = new Object();
+					for( var i = 0 ; i < series.length; i++ ) {
+						var maxValue = Math.max.apply(null,series[i].data);
+						if( mint.common.isEmpty(seriesMaxValue[series[i].axis]) || seriesMaxValue[series[i].axis] < maxValue) {
+							seriesMaxValue[series[i].axis] = maxValue;
+						}
+
+					}
+
+					//-----------------------------------------------------------------------
+					// Series 의 maxValue 값을 판단하여 valuAxis max 를 설정한다.
+					//-----------------------------------------------------------------------
+					for( var i = 0; i < valueAxis.length; i++ ) {
+						if( mint.common.isEmpty(seriesMaxValue[valueAxis[i].name]) || seriesMaxValue[valueAxis[i].name] <= 10) {
+							valueAxis[i].max = 10;
+						} else {
+							valueAxis[i].max = undefined;
+						}
+					}
+
+					//-----------------------------------------------------------------------
+					// Chart Refresh
+					//-----------------------------------------------------------------------
+					{
+						chart.options.valueAxis = valueAxis;
+						chart.options.categoryAxis.categories = categories;
+						chart.options.categoryAxis.title.text = mint.common.formatDateTime(checkDate, "HH:mm");
+						chart.options.categoryAxis.title.font = '12px Arial';
+						chart.options.categoryAxis.title.margin = {top: 2, bottom:0};
+						chart.options.categoryAxis.title.padding = {bottom:0};
+						chart.options.categoryAxis.axisCrossingValues = [0, 59];
+						chart.options.series = series;
+
+						chart.refresh();
+
+					}
+
+					//$('.time-realTime-favorite-count').html($.main.fn_checkTimeDisplay());
+					//$('.time-realTime-favorite-count').show();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRealTimeFavoriteCount"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getResourceState
+			//-----------------------------------------------------------------------
+			fn_getResourceState : function() {
+				try {
+					var requestObject = new Object();
+					requestObject.resourceList = ['cpu', 'memory', 'disk', 'process', 'qmgr', 'channel', 'qdepth', 'iipagent']
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R10-OP-02-01',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( !mint.common.isEmpty(jsonData) ) {
+				    		$.main.fn_setEventStateStyle('btn-state-cpu'     , jsonData.engineLimitCount.cpuLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-memory'  , jsonData.engineLimitCount.memoryLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-disk'    , jsonData.engineLimitCount.diskLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-process' , jsonData.engineLimitCount.processLimitCnt);
+				    		/* $.main.fn_setEventStateStyle('btn-state-agent'   , jsonData.engineLimitCount.agentLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-runner'  , jsonData.engineLimitCount.brokerLimitCnt); */
+				    		$.main.fn_setEventStateStyle('btn-state-qmgr'    , jsonData.engineLimitCount.qmgrLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-channel' , jsonData.engineLimitCount.channelLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-qdepth'  , jsonData.engineLimitCount.queueLimitCnt);
+				    		$.main.fn_setEventStateStyle('btn-state-iipagent', jsonData.engineLimitCount.iipAgentLimitCnt);
+				    	}
+
+
+						$('.time-resource-state').html($.main.fn_checkTimeDisplay());
+						$('.time-resource-state').show();
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getResourceState"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_getDeadPosState
+			//-----------------------------------------------------------------------
+			fn_getDeadPosState : function() {
+				try {
+					var requestObject = new Object();
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R11-OP-02-00-002',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( !mint.common.isEmpty(jsonData) ) {
+				    		$.main.fn_setEventStateStyle('btn-state-pos'  , jsonData);
+				    	}
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getDeadPosState"});
+				}
+			},
+			//-----------------------------------------------------------------------
+			// Description :: fn_getNotranPosState
+			//-----------------------------------------------------------------------
+			/* fn_getNotranPosState : function() {
+				try {
+					var requestObject = new Object();
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R13-OP-02-00-002',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( !mint.common.isEmpty(jsonData) ) {
+				    		$.main.fn_setEventStateStyle('btn-state-notran'  , jsonData);
+				    	}
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getNotranPosState"});
+				}
+			}, */
+			//-----------------------------------------------------------------------
+			// Description :: fn_getImportantBatchState
+			//-----------------------------------------------------------------------
+			fn_getImportantBatchState : function() {
+				try {
+					var requestObject = new Object();
+
+				    mint.callService(requestObject, 'OP-02-00-101', 'REST-R06-OP-02-00',
+				   	function(jsonData, errorCd) {
+
+				    	// Session 이 종료되면 Terminate
+				    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+				    		mint.common.terminateInterval("OP-02-00-101");
+				    		return;
+				    	}
+
+				    	if( !mint.common.isEmpty(jsonData) ) {
+				    		$.main.fn_setEventStateStyle('btn-state-batch'  , jsonData[0].cnt);
+				    	}
+
+				    }, {errorCall: true, notificationView: false, waitingView: false});
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_getImportantBatchState"});
+				}
+			},
+			//-----------------------------------------------------------------------
+			// Description :: fn_setEventStateStyle
+			//-----------------------------------------------------------------------
+			fn_setEventStateStyle : function(chartId, count) {
+				try {
+
+					var cssSuccess = 'btn-success';
+					var cssWarning = 'btn-warning';
+					var cssDanger  = 'btn-danger';
+					var cssRemove  = 'btn-success btn-warning btn-danger';
+
+
+					$('.' + chartId + ' > span > h2').html(count);
+					$('.' + chartId).removeClass(cssRemove);
+					if(count > 0) {
+						$('.' + chartId).addClass(cssDanger);
+					} else {
+						$('.' + chartId).addClass(cssSuccess);
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setEventStateStyle"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_moveTracking
+			//-----------------------------------------------------------------------
+			fn_moveTracking : function(options) {
+				try {
+					if( !mint.common.isEmpty(options) ) {
+						mint.common.setScreenParam('caller', 'dashboard');
+						mint.common.setScreenParam('options', options);
+						mint.move('../sub-op/OP-01-01-101');
+					}
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_moveTracking"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_setRealTimeFavoriteCountConfig
+			//-----------------------------------------------------------------------
+			fn_setRealTimeFavoriteCountConfig : function(selectedItem) {
+				try {
+					if( !mint.common.isEmpty(selectedItem) ) {
+						var interfaceList = [];
+						for( var i = 0 ; i < selectedItem.length; i++ ) {
+							interfaceList.push(selectedItem[i].INTERFACE_ID);
+						}
+
+						var requestObject = new Object();
+						requestObject.interfaceList = interfaceList;
+						requestObject.monitorYn     = 'Y';
+
+					    mint.callService(requestObject, 'OP-02-00-101', 'REST-U02-AN-02-01',
+						   	function(jsonData, errorCd) {
+
+						    	// Session 이 종료되면 Terminate
+						    	if( !mint.common.isEmpty(errorCd) && errorCd == 1102 ) {
+						    		mint.common.terminateInterval("OP-02-00-101");
+						    		return;
+						    	}
+
+					    		$.main.fn_getRealTimeFavoriteCount(true);
+						    },
+						    {errorCall: true, notificationView: true, waitingView: false, params:{typeCd: '0'}}
+					    );
+					}
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_setRealTimeFavoriteCountConfig"});
+				}
+			},
+
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_valueAxisTemplate
+			//-----------------------------------------------------------------------
+			fn_valueAxisTemplate : function(value) {
+				try {
+					var returnValue = '';
+					if (value % 1 !== 0) {
+						returnValue = '';
+					} else {
+						returnValue = kendo.format('{0:n0}', value);
+					}
+					return returnValue;
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_valueAxisTemplate"});
+				}
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_dashboardWindowOpen
+			//-----------------------------------------------------------------------
+			fn_dashboardWindowOpen : function() {
+				try {
+
+					//-----------------------------------------------------------------------
+					// Variables
+					//-----------------------------------------------------------------------
+					var attachDiv       = 'dashboard-attachDiv';
+					var dashboardWindow = 'dashboard-window';
+
+					var dashboardLayout = kendo.template($('#template-dashboard-window').html());
+					var dashboardTitle  = kendo.template($('#template-dashboard-title').html());
+
+					//-----------------------------------------------------------------------
+					// DashBoard Main Layout Attach
+					//-----------------------------------------------------------------------
+					$('#' + attachDiv).prepend( dashboardLayout );
+
+					//-----------------------------------------------------------------------
+					// screen size 구하기
+					//-----------------------------------------------------------------------
+					var bd = document.documentElement ? document.documentElement : document.body;
+					var screenW = bd.scrollWidth;
+					var screenH = window.innerHeight || bd.clientHeight; //screen.height;
+
+					var scrollX = (window.pageXOffset || window.scrollX || bd.scrollLeft);
+					var scrollY = (window.pageYOffset || window.scrollY || bd.scrollTop);
+
+					var offsetTop    = $('#' + attachDiv).offset().top;
+					var offsetLeft   = $('#' + attachDiv).offset().left;
+					var clientWidth  = $('#' + attachDiv)[0].clientWidth;
+					var clientHeight = $('#' + attachDiv)[0].clientHeight;
+
+					var scrollWidth  = $('#' + attachDiv)[0].scrollWidth;
+					var scrollHeight = $('#' + attachDiv)[0].scrollHeight;
+
+
+					//-----------------------------------------------------------------------
+					// DashBoard Window Init
+					//-----------------------------------------------------------------------
+					$('#' + dashboardWindow).kendoWindow({
+						title : '',
+						actions    : ['Close'],
+						animation  : false,
+						autoFocus  : true,
+						draggable  : false,
+						modal      : false,
+						finned     : false,
+						resizable  : false,
+						scrollable : false,
+						iframe     : false,
+
+						//minWidth   : '500px',
+						//minHeight  : '400px',
+						//width   : clientWidth,
+						//height  : clientHeight,
+						close: function(e) {
+							$('#' + attachDiv).html($('.dashboard-item'));
+							mint.ui.resize();
+							this.destroy();
+						}
+					});
+
+					//-----------------------------------------------------------------------
+					// DashBoard Window Position
+					//-----------------------------------------------------------------------
+					$('#' + dashboardWindow).data("kendoWindow").setOptions({
+						position: {
+							top: offsetTop,
+							left: offsetLeft
+						}
+					});
+
+					//-----------------------------------------------------------------------
+					// DashBoard Window Maximize Event
+					//-----------------------------------------------------------------------
+					$('#' + dashboardWindow).data("kendoWindow").maximize();
+
+					//-----------------------------------------------------------------------
+					// DashBoard Window Scroll
+					//-----------------------------------------------------------------------
+					$('#' + dashboardWindow).slimScroll({
+						height:'100%',
+						width:'100%',
+						axis: 'y',
+						railOpacity: 0.3,
+						opacity: 0.8,
+						color: '#908FCD'
+					});
+
+					//-----------------------------------------------------------------------
+					// DashBoard Window Title
+					// - window title 에 html을 더이상 지원하지 않아 아래와 같은 방법으로 구현
+					//-----------------------------------------------------------------------
+					$(".k-window-title").append( dashboardTitle );
+
+					//-----------------------------------------------------------------------
+					// DashBoard Window Resize
+					//----------------------------------------------------------------------
+					 mint.ui.resize();
+
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_dashboardWindowOpen"});
+				}
+
+			},
+
+			//-----------------------------------------------------------------------
+			// Description :: fn_checkTimeDisplay
+			//-----------------------------------------------------------------------
+			fn_checkTimeDisplay : function() {
+				try {
+					var currentTime = new Date();
+					return '<i class="fa fa-clock-o"> ' + mint.common.formatDateTime(currentTime, "HH") + ':' + mint.common.formatDateTime(currentTime, "mm") + ' ' + mint.label.getLabel('lb-998') + '</i>';
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_checkTimeDisplay"});
+				}
+			},
+
+			fn_refreshing : function(targetList) {
+				try {
+					targetList.addClass('fa-spin');
+					mint.common.setTimeout(function () {
+						targetList.removeClass( 'fa-spin' );
+						targetList.css('transform', 'none');
+
+			        },(2 * 1000) * 1);
+				} catch (e) {
+					mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.main.fn_refreshing"});
+				}
+			}
+		}// end main
+	});//end extends
+
+	//=======================================================================
+	// (4) 이벤트 핸들러 정의
+	//=======================================================================
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - cpu
+	//-----------------------------------------------------------------------
+	$('.btn-state-cpu').on('click', function () {
+		mint.common.setScreenParam('state-item', 'cpu');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - memory
+	//-----------------------------------------------------------------------
+	$('.btn-state-memory').on('click', function () {
+		mint.common.setScreenParam('state-item', 'memory');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - disk
+	//-----------------------------------------------------------------------
+	$('.btn-state-disk').on('click', function () {
+		mint.common.setScreenParam('state-item', 'disk');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - process
+	//-----------------------------------------------------------------------
+	$('.btn-state-process').on('click', function () {
+		mint.common.setScreenParam('state-item', 'process');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - pos
+	//-----------------------------------------------------------------------
+	$('.btn-state-pos').on('click', function () {
+		mint.common.setScreenParam('state-item', 'pos');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - notran
+	//-----------------------------------------------------------------------
+	/* $('.btn-state-notran').on('click', function () {
+		mint.common.setScreenParam('state-item', 'notran');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	}); */
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - qmgr
+	//-----------------------------------------------------------------------
+	$('.btn-state-qmgr').on('click', function () {
+		mint.common.setScreenParam('state-item', 'qmgr');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - channel
+	//-----------------------------------------------------------------------
+	$('.btn-state-channel').on('click', function () {
+		mint.common.setScreenParam('state-item', 'channel');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - qdepth
+	//-----------------------------------------------------------------------
+	$('.btn-state-qdepth').on('click', function () {
+		mint.common.setScreenParam('state-item', 'qdepth');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - batch
+	//-----------------------------------------------------------------------
+	$('.btn-state-batch').on('click', function () {
+		mint.common.setScreenParam('state-item', 'batch');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: Alert Event - iipAgent
+	//-----------------------------------------------------------------------
+	$('.btn-state-iipagent').on('click', function () {
+		mint.common.setScreenParam('state-item', 'iipagent');
+		mint.common.searchPopup('../sub-op/OP-02-00-502.html','OP-02-00-502');
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: (팝업) 실시간 관심인터페이스 설정 팝업
+	//-----------------------------------------------------------------------
+	$('.chart-realTime-favorite-count-config').on('click', function () {
+		mint.common.setScreenParam('callback', '$.main.fn_setRealTimeFavoriteCountConfig');
+		mint.common.searchPopup('../sub-op/OP-02-00-501.html','OP-02-00-501');
+	});
+
+
+	//-----------------------------------------------------------------------
+	// Description :: 대시보드 전체 화면
+	//-----------------------------------------------------------------------
+	$('.btn-page-expand').on('click', function () {
+		$.main.fn_dashboardWindowOpen();
+		$('#dashboard-content').html($('.dashboard-item'));
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 윈도우 리사이즈 이벤트
+	//-----------------------------------------------------------------------
+	$(window).on('resize', function(e) {
+        mint.ui.resize();
+	});
+
+	//-----------------------------------------------------------------------
+	// Description :: 그리드 가로 스크롤바 생성
+	//-----------------------------------------------------------------------
+	$('.table-responsive').slimScroll({
+		height:'100%',
+		width:'100%',
+		axis: 'x',
+		railOpacity: 0.3,
+		opacity: 0.3,
+		color: '#908FCD'
+	});
+
+	//=======================================================================
+	// (5) 기타 Function 정의
+	//=======================================================================
+	$("#sortWidget-switch").kendoMobileSwitch({
+		onLabel: mint.label.getLabel('lb-3062'),
+        offLabel: mint.label.getLabel('lb-3061')
+	});
+
+	$(".sortable").kendoSortable({
+		filter: ".sortable-child:not(.disabled)",
+		axis: "y"
+	});
+
+	$(".sortable-child").kendoSortable({
+		filter: ">div:not(.filtered)",
+		axis: "x"
+	});
+
+	$(".sortable-child-alert").kendoSortable({
+		axis: "x"
+	});
+
+	$("#dailyRefresh").on('click', function () {
+		$.main.fn_refreshing($(this).children());
+		$.main.fn_getDailyThroughput();
+	});
+
+	$("#errorRefresh").on('click', function () {
+		$.main.fn_refreshing($(this).children());
+		$.main.fn_getErrorCountTop();
+	});
+
+	$("#delayRefresh").on('click', function () {
+		$.main.fn_refreshing($(this).children());
+		$.main.fn_getDelayCountTop();
+	});
+
+	$(".btn-page-sort").on('click', function () {
+		$("#sortWidget-switch").data("kendoMobileSwitch").toggle();
+		$(".sortable").children().toggleClass("disabled");
+	});
+
+
+	//=======================================================================
+	// (6) 화면 로딩시 실행할 항목 기술
+	//=======================================================================
+	$.main.fn_init();
+	mint.label.attachLabel(null);
+	//mint.ui.draggablePannels();
+
+});//end document.ready()
+</script>
+
+<style>
+<!--
+ .mint-col-default > button {
+	height: 100px;
+	margin-bottom: 10px !important;
+}
+ .km-checkbox, .km-switch {
+ 	display : block;
+ 	height: 27px;
+ 	width: 83.53px;
+ 	border-radius: 3px;
+ 	vertical-align: middle;
+ 	font-size:13px;
+ 	line-height: 1.42857143;
+ 	color: #676a6c;
+ 	border: 1px solid #c2c2c2 !important;
+ }
+ .km-switch-handle {
+ 	background-color : #1972ab;
+ }
+
+ .km-switch-handle > span {
+ 	text-shadow: 0 0px 0 rgba(0,0,0,.3);
+ }
+-->
+</style>

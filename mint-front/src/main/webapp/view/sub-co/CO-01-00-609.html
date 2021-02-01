@@ -1,0 +1,870 @@
+﻿<!--
+	Screen ID : CO-01-00-609
+	Screen NM : 인터페이스 트레킹 상세 팝업(공통) - GS개발
+-->
+
+<div class="modal" id="CO-01-00-609" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="padding: 15px;">
+                    <span aria-hidden="true">&times;</span> <span id="bt-if-search-close" class="sr-only bt-if-search-close">Close</span>
+                </button>
+                <span style="float: right; font-size:15px; font-weight: bold; padding: 15px 0px 0px 0px;">
+                    <a class="help-over-pannel" onclick="mint.ui.help(this, 'AP00000050','H001')"></a>
+                </span>
+                <div>
+                    <h2><lb class="lb-30"></lb> <lb class="lb-353"></lb></h2>
+                </div>
+            </div>
+
+            <!--modal-body-->
+            <div class="modal-body">
+                <div class="ibox-content4">
+
+                    <div class="col-lg-12">
+                        <div>
+                            <h4>▶ <lb class="lb-152"></lb></h4>
+                        </div>
+                        <div>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="thbg"><lb class="lb-153"></lb>( <lb class="lb-422"></lb> )</th>
+                                    <td id="interfaceIdNm" colspan="3"></td>
+                                </tr>
+                                <tr>
+                                    <th width="20%" class="thbg"><lb class="lb-80"></lb></th>
+                                    <td width="30%" id="channelNm"></td>
+                                    <th width="20%" class="thbg"><lb class="lb-81"></lb></th>
+                                    <td width="30%" id="businessNm"></td>
+                                </tr>
+
+                                <tr>
+                                	<th class="thbg"><lb class="lb-158"></lb></th>
+                                    <td id="dataPrMethodNm"></td>
+                                    <th class="thbg"><lb class="lb-155"></lb></th>
+                                    <td id="dataPrDirNm"></td>
+                                </tr>
+                                <tr>
+                                    <th class="thbg"><lb class="lb-162"></lb></th>
+                                    <td id="appPrMethodNm"></td>
+                                    <th class="thbg"><lb class="lb-166"></lb></th>
+                                    <td id="dataFrequency"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+					<hr class="hr-space">
+					<hr class="hr-space">
+
+                    <div class="col-lg-12">
+                        <div>
+                            <h4>▶ <lb class="lb-180"></lb></h4>
+                        </div>
+                        <div>
+                            <div id="systemGrid" ></div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-space">
+                    <hr class="hr-space">
+
+					<div class="col-lg-12">
+                        <div>
+							<sapn style="padding: 0px; float: left;">
+								<h4> ▶ <lb class="lb-459"></lb> <lb class="lb-352"></lb></h4>
+							</sapn>
+							<span style="padding: 0px; float: right;">
+								<span class="lable-sm" style="margin-right: 7px"><lb class="lb-459"></lb> <lb class="lb-460"></lb></span>
+								<span style="margin-right: 7px"><strong><lb class="lb-89"></lb> </strong><span id="totalCnt"></span></span>
+								<span style="margin-right: 7px"><strong><lb class="lb-412"></lb> </strong><span id="completeCnt"></span></span>
+								<span style="margin-right: 7px"><strong><lb class="lb-476"></lb> </strong><font color="#ff0000"><span id="errorCnt"></span></font></span>
+							</span>
+                        </div>
+
+                        <div style="padding:30px 0px 0px 0px;">
+							<div id="nodeListGrid"></div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-space">
+ 					<hr class="hr-space">
+
+                    <div class="col-lg-12">
+                        <div class="panel blank-panel">
+                            <div class="poupup-tabs-container">
+                                <ul id="tab-detail-info" class="nav nav-tabs">
+                                    <li class="active" style="display:none;"><a data-toggle="tab" href="#tab-01"><lb class="lb-462">Message</lb> <lb class="lb-464">Detail</lb></a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-02"><lb class="lb-463">Error</lb> <lb class="lb-464">Detail</lb></a></li>
+                                    <li class="" style="display:none;"><a data-toggle="tab" href="#tab-03"><lb class="lb-32">오류</lb> <lb class="lb-465">이력</lb></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                   	<div id="tab-01" class="tab-pane active">
+                                        <div class="col-sm-12" style="padding: 0px 2px 0px 2px">
+                                            <textarea id="msg" class="well" style="padding: 10px 10px 10px 10px; width:100%; height: 100px; overflow-y:auto;" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <div id="tab-02" class="tab-pane">
+                                        <div class="col-sm-12" style="padding: 0px 2px 0px 2px">
+                                        	<textarea id="errorMsg" class="alert alert-danger" style="padding: 10px 10px 10px 10px; width:100%; height: 100px; overflow-y:auto;" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <div id="tab-03" class="tab-pane">
+	                                    <div class="col-sm-12" style="padding: 0px 2px 0px 2px">
+	                                    	<div id="problemInterfaceListGrid"></div>
+	                                    </div>
+                                    </div>
+                                </div><!--tab-content end-->
+                            </div> <!--panel-body-->
+                        </div><!--panel blank-panel-->
+                    </div><!--col-lg-12 end-->
+                </div>
+            </div>
+
+            <!--modal-footer-->
+            <div class="modal-footer-original" style="clear: both">
+                <button id="btnClose" type="button" class="btn btn-danger btn-outline btnClose" data-dismiss="modal"><i class="fa fa-ban"></i> Close </button>
+            </div>
+            <!--modal-footer END-->
+        </div>
+    </div>
+    <!--modal-content animated fadeIn END-->
+</div>
+<!-- modal-dialog END-->
+
+
+
+<script>
+$(document).ready(function() {
+    //=======================================================================
+    //(1) function 및 variable scope 설정 :: (메인은 main, 팝업 및 서브는 sub)
+    //=======================================================================
+    screenName = "CO-01-00-609";
+    $.extend({
+        sub : {
+            //=======================================================================
+            // (2) Screen 에서 사용할 variable 정의
+            //=======================================================================
+			detailKey : '',
+            //=======================================================================
+            // (3) Screen 에서 사용할 function 정의
+            //=======================================================================
+
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화
+            //-----------------------------------------------------------------------
+            fn_init : function() {
+                try {
+                    mint.init('$.sub.fn_initCallback');
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_init"});
+                }
+            },//end fn_init()
+
+            //-----------------------------------------------------------------------
+            // Description :: 화면 초기화 콜백
+            //-----------------------------------------------------------------------
+            fn_initCallback : function() {
+                try{
+
+                	$.sub.fn_initGridSystem();
+                	$.sub.fn_initGridNode();
+
+                	$.sub.detailKey = mint.common.getScreenParam('detailKey');
+
+                	if( !mint.common.isEmpty($.sub.detailKey) ) {
+                		$.sub.fn_getInterfaceInfo();
+                		$.sub.fn_getTrackingDetail();
+                	}
+
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initCallback"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_initGridSystem
+            //-----------------------------------------------------------------------
+            fn_initGridSystem : function() {
+                try{
+            		$("#systemGrid").kendoGrid({
+						dataSource: {
+							data: [],
+							pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+						},
+						selectable: true,
+						scrollable: true,
+						resizable: true,
+						sortable: true,
+						columns: [
+							{
+								field: "nodeTypeNm",
+								title: mint.label.getLabel('lb-494'),
+								width:"80px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template: "<span title='${nodeTypeNm}'>${nodeTypeNm}</span>",
+							},
+							{
+								field: "systemNm",
+								title: mint.label.getLabel('lb-82'),
+								width: "180px;",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template: "<span title='${systemNm}(${systemCd})'>${systemNm}(${systemCd})</span>",
+							},
+							{
+								field: "resourceNm",
+								title: mint.label.getLabel('lb-86'),
+								width:"80px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template: "<span title='${resourceNm}'>${resourceNm}</span>",
+							},
+							{
+								field: "service",
+								title: mint.label.getLabel('lb-87'),
+								width:"200px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template: "<span title='${service}'>${service}</span>",
+							},
+							{field:"systemCd", hidden:true},
+						],
+						dataBound: function (e) {
+							if('undefined' != typeof $("#systemGrid").data()) {
+								if(0 == $("#systemGrid").data().kendoGrid.dataSource.view().length) {
+						    		$("#systemGrid").children(".k-grid-content").height('50');
+						    	} else {
+						    		$("#systemGrid").children(".k-grid-content").height('auto');
+						    	}
+							}
+					    }
+
+                    });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGridSystem"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_initGrid
+            //-----------------------------------------------------------------------
+            fn_initGridNode : function() {
+                try{
+                	
+					$("#nodeListGrid").kendoGrid({
+						dataSource: {
+							data: [],
+							pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+						},
+						sortable: true,
+						selectable: true,
+						resizable: true,
+						columns: [
+							{
+								field: "statusNm",
+								title: mint.label.getLabel('lb-473'),
+								width: "70px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template: "#=$.sub.fn_setColor(status)#",
+							},
+							{
+								field: "snrcSpNm",
+								title: mint.label.getLabel('lb-643') + " " + mint.label.getLabel('lb-494'), 
+								 
+								width: "110px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "system",
+								title: mint.label.getLabel('lb-82'),
+								width: "100px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template: "<span title='${sysNm}(${sysCd})'>${sysNm}(${sysCd})</span>",
+							},
+							{
+								field: "totTrnsRecCnt",
+								title: mint.label.getLabel('lb-3065'),
+								width: "110px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "wrkRecCnt",
+								title: mint.label.getLabel('lb-3066'),
+								width: "110px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								}
+							},
+							{
+								field: "procDttm",
+								title: mint.label.getLabel('lb-471'),
+								width: "150px",
+								headerAttributes: {
+									style: "text-align: center"
+								},
+								attributes: {
+									style: "text-align: center"
+								},
+								template : '#=$.main.fn_changeTime(procDttm)#'
+							},
+							{field:"errorMsg", hidden:true},
+							{field:"msg", hidden:true},
+							{field:"status", hidden:true}
+						],
+                        dataBound: function(e) {
+							if('undefined' != typeof $("#nodeListGrid").data()) {
+								if(0 == $("#nodeListGrid").data().kendoGrid.dataSource.view().length) {
+						    		$("#nodeListGrid").children(".k-grid-content").height('50');
+						    	} else {
+						    		$("#nodeListGrid").children(".k-grid-content").height('auto');
+						    	}
+							}
+
+							//-----------------------------------------------------------------------
+							// Node Count 처리
+							//-----------------------------------------------------------------------
+							var totalCnt = 0;
+							var completeCnt = 0;
+							var errorCnt = 0;
+
+							var items = e.sender.dataItems();
+							if( items.length > 0 ) {
+								for(var i = 0; i < items.length; i++ ) {
+									var status = items[i].status;
+									if( status == "99" ) {
+										errorCnt++;
+									} else {
+										completeCnt++;
+									}
+								}
+							}
+
+		                    totalCnt = completeCnt + errorCnt;
+
+		                    $("#totalCnt").html(totalCnt);
+		                    $("#completeCnt").html(completeCnt);
+		                    $("#errorCnt").html(errorCnt);
+
+                        }
+                    });
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initGridNode"});
+                }
+            },
+
+          	//-----------------------------------------------------------------------
+            // Description :: 인터페이스 오류/장애 대장 이력(조회)
+            //-----------------------------------------------------------------------
+            fn_initProblemInterfaceGrid : function() {
+            	try {
+            		$("#problemInterfaceListGrid").kendoGrid({
+                        dataSource : {
+                        	data : [],
+                            pageSize : mint.ui.getPageSizesS({'currentPage' : true})
+                        },
+                        sortable : true,
+                        //scrollable : true,
+                        pageable : {
+	                        //refresh       : true,
+	                        pageSizes     : mint.ui.getPageSizesS(),
+	                        buttonCount   : 5
+                        },
+                        //selectable : true,
+                        columns : [
+                           {
+                               field : "channelNm",
+                               title : mint.label.getLabel('lb-80'),
+                               width : "150px",
+                               headerAttributes : {
+                                   style : "text-align: center"
+                               },
+                               attributes : {
+                                   style : "text-align: center"
+                               },
+                           },
+                           {
+                               field : "typeNm",
+                               title : mint.label.getLabel('lb-494'),
+                               width : "100px",
+                               headerAttributes : {
+                                   style : "text-align: center"
+                               },
+                               attributes : {
+                                   style : "text-align: center"
+                               },
+                           },
+                           {
+                               field : "interfaceNm",
+                               title : mint.label.getLabel('lb-153'),
+                               headerAttributes : {
+                                   style : "text-align: center"
+                               },
+                               attributes : {
+                                   style : "text-align: left"
+                               },
+                           },
+                           {
+                               field : "interfaceId",
+                               title : mint.label.getLabel('lb-154'),
+                               headerAttributes : {
+                                   style : "text-align: center"
+                               },
+                               attributes : {
+                                   style : "text-align: center"
+                               },
+                           },
+	                        {
+	                            field : "startDate",
+	                            title : mint.label.getLabel('lb-50'),
+	                            width : "150px",
+	                            template : '#=$.sub.fn_changeTime(startDate)#',
+	                            headerAttributes : {
+	                                style : "text-align: center"
+	                            },
+	                            attributes : {
+	                                style : "text-align: center"
+	                            }
+	                        }, {
+	                            field : "endDate",
+	                            title : mint.label.getLabel('lb-479'),
+	                            width : "150px",
+	                            template : '#=$.sub.fn_changeTime(endDate)#',
+	                            headerAttributes : {
+	                                style : "text-align: center"
+	                            },
+	                            attributes : {
+	                                style : "text-align: center"
+	                            }
+	                        }, {
+	                            field : "statusNm",
+	                            title : mint.label.getLabel('lb-473'),
+	                            width : "70px",
+	                            headerAttributes : {
+	                                style : "text-align: center"
+	                            },
+	                            attributes : {
+	                                style : "text-align: center"
+	                            }
+	                        }
+	                        , {field : "problemId", hidden : true}
+	                        , {field : "classCdPath", hidden : true}
+                        ],
+                        dataBound: function (e) {
+							if(1 > $("#problemInterfaceListGrid").data().kendoGrid.dataSource.view().length) {
+								var gridHeight = window.innerHeight - ($('.navbar-static-top').height() + $('.page-heading').height() + $('.col-lg-12').height());
+
+								$("#problemInterfaceListGrid").children(".k-grid-content").height(gridHeight /2.5);
+								$("#problemInterfaceListGrid").children(".k-grid-content-locked").height(gridHeight / 2.5);
+							} else {
+								$("#problemInterfaceListGrid").children(".k-grid-content").height('auto');
+								$("#problemInterfaceListGrid").children(".k-grid-content-locked").height('auto');
+							}
+						}
+               		});
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_initProblemInterfaceGrid"});
+            	}
+            }, // end fn_initProblemInterfaceGrid
+
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_getInterfaceInfo
+            //-----------------------------------------------------------------------
+            fn_getInterfaceInfo : function() {
+            	try {
+            		
+            		if( mint.common.isEmpty($.sub.detailKey.interfaceId) ) {
+            			return;
+            		}
+
+            		mint.callService( null, 'CO-01-00-609', 'REST-R02-CO-01-00-008',
+            				function( jsonData ) {
+								$.sub.fn_setInterfaceInfo( jsonData );
+            				},
+            				{ errorCall : true, params : { interfaceId : $.sub.detailKey.interfaceId } }
+            		);
+
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getInterfaceInfo"});
+            	}
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_setInterfaceInfo
+            //-----------------------------------------------------------------------
+            fn_setInterfaceInfo : function(jsonData) {
+                try {
+                	if( !mint.common.isEmpty(jsonData) ) {
+                        //-----------------------------------------------------------------------
+                        // 기본 정보
+                        //-----------------------------------------------------------------------
+						$("#interfaceIdNm").html( jsonData.interfaceNm + "( " + jsonData.integrationId + " )");
+                        if( !mint.common.isEmpty( jsonData.channel ) ) {
+                            $("#channelNm").html( jsonData.channel.channelNm );
+                        }
+                        if( !mint.common.isEmpty( jsonData.businessList ) && jsonData.businessList.length > 0 ) {
+                            $("#businessNm").html( jsonData.businessList[0].businessNm );
+                        }
+                        $("#appPrMethodNm").html( jsonData.appPrMethodNm );
+                        $("#dataPrDirNm").html(  jsonData.dataPrDirNm );
+                        $("#dataFrequency").html( jsonData.dataFrequencyNm );
+                        $("#dataPrMethodNm").html( jsonData.dataPrMethodNm );
+
+                        //-----------------------------------------------------------------------
+                        // 연계 시스템
+                        //-----------------------------------------------------------------------
+                        if( !mint.common.isEmpty(jsonData.systemList) ) {
+                    		var dataSource = new kendo.data.DataSource({
+								data: jsonData.systemList,
+								schema: {
+									model: {
+										fields: {
+											nodeTypeNm: {type: "String"},
+											systemNm: {type: "String"},
+											systemCd: {type: "String"},
+											resourceNm: {type: "String"},
+											service: {type: "String"}
+										}
+									}
+								},
+								page:1,
+								pageSize:mint.ui.getPageSizesS({'currentPage' : true}),
+								sort: { field: "nodeTypeNm", dir: "asc" }
+      						});
+      						$("#systemGrid").data("kendoGrid").setDataSource(dataSource);
+                        }
+                    }
+                } catch ( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setInterfaceInfo"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_getTrackingDetail
+            //-----------------------------------------------------------------------
+            fn_getTrackingDetail : function() {
+            	try {
+            		var requestObject = new Object();
+            		mint.callService(requestObject, 'CO-01-00-609', 'REST-R02-OP-01-01-GSSP',
+            				function( jsonData ) {
+            					$.sub.fn_setTrackingDetail( jsonData );
+            				},
+            				{ errorCall : true, notificationView : false, params : {logKey1: $.sub.detailKey.sndSystemCd, logKey2: $.sub.detailKey.integrationId,
+            					logKey3: $.sub.detailKey.tranId, logKey4: $.sub.detailKey.processTime, logKey5: $.sub.detailKey.rcvPosNo, logKey6: $.sub.detailKey.rcvSystemCd } }
+            		);
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getTrackingDetail"});
+            	}
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_setTrackingDetail
+            //-----------------------------------------------------------------------
+            fn_setTrackingDetail : function(jsonData) {
+            	try {
+            		var dataSource = new kendo.data.DataSource({
+						data: jsonData,
+                        schema: {
+                            model: {
+                                fields: {
+                                	
+                                	snrcSpNm: {type: "String"},
+                                	sysCd: {type: "String"},
+                                    sysNm: {type: "String"},
+                                    procDttm: {type: "String"},
+                                    status: {type: "String"},
+                                    statusNm: {type: "String"},
+                                    totTrnsRecCnt: {type: "String"},
+                                    wrkRecCnt: {type: "String"},
+                                    errorMsg: {type: "String"}
+                                }
+                            }
+                        },
+						page:1,
+						pageSize:mint.ui.getPageSizesS({'currentPage' : true})
+					});
+					$("#nodeListGrid").data("kendoGrid").setDataSource(dataSource);
+
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setTrackingDetail"});
+            	}
+            },
+
+
+            //-----------------------------------------------------------------------
+            // Description :: 하단 msg detail과 error msg를 세팅한다.
+            //-----------------------------------------------------------------------
+            fn_setMsg : function(data) {
+                try {
+                	var grid = $("#nodeListGrid").data("kendoGrid");
+                    var selectedItem = grid.dataItem(grid.select());
+
+                    status   = selectedItem.status;
+                    statusNm = selectedItem.statusNm;
+
+                    $("#msg").val( mint.common.isEmpty( selectedItem.msgToString ) ? '' : selectedItem.msgToString );
+                    $("#errorMsg").val( mint.common.isEmpty( selectedItem.errorMsg ) ? '' : selectedItem.errorMsg );
+
+                    if( selectedItem.status === '99' ) {
+                    	$('#tab-detail-info a:eq(1)').tab('show');
+                    } else {
+                    	$('#tab-detail-info a:eq(0)').tab('show');
+                    }
+                } catch ( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setMsg"});
+                }
+            },
+
+            //-----------------------------------------------------------------------
+            // Description :: node list의 상태 정보 색깔을 변경한다.
+            //-----------------------------------------------------------------------
+            fn_setColor : function(val) {
+                try {
+                	var result = "";
+                    if (val && val != null && val == "99") {
+                        result = "<b style='color:red'>" + "오류" + "</b>";
+                    } else if (val && val != null && val == "01") {
+                        result = "완료";
+                    } else {
+                        result = "완료";
+                    }
+                    return result;
+                } catch ( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setColor"});
+                }
+            },
+
+          	//-----------------------------------------------------------------------
+            // Description :: 그리드 시간 설정
+            //-----------------------------------------------------------------------
+            fn_changeTime : function(val) {
+                try {
+                    if(val != null && val != "") {
+                        var str = val.substring(0, 14);
+                        var returnVal = str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8) + " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
+                        return returnVal;
+                    } else {
+                    	return "";
+                    }
+                } catch( e ) {
+                    mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_changeTime"});
+                }
+            },
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_initDiagram
+            //-----------------------------------------------------------------------
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_getTrackingDiagram
+            //-----------------------------------------------------------------------
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_setTrackingDiagram
+            //-----------------------------------------------------------------------
+
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_setTrackingDiagram
+            //-----------------------------------------------------------------------
+            fn_getStatusColor : function(statusCode) {
+            	try {
+
+		           	var fill_color ="";
+           	    	if(statusCode =='00'){
+            	    	var color =  "#" + kendo.Color.fromBytes(102, 112, 244, 1).toHex();
+            	    	fill_color =color;
+           	    	}else if(statusCode =='99'){
+         	    		var color =  "#" + kendo.Color.fromBytes(219, 41, 41, 1).toHex();
+            	    	fill_color =color;
+           	    	}else if(statusCode =='01'){
+            	    	var color =  "#" + kendo.Color.fromBytes(202, 202, 202, 1).toHex();
+            	    	fill_color = color;
+           	    	}
+		           	return fill_color;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getStatusColor"});
+            	}
+            }, // end fn_getStatusColor
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_setTrackingDiagram
+            //-----------------------------------------------------------------------
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_nodeClickEvent
+            //-----------------------------------------------------------------------
+            fn_nodeClickEvent : function(e) {
+            	try {
+					//TODO
+                    if(e.item instanceof kendo.dataviz.diagram.Shape) {
+                    } else {
+                    }
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_nodeClickEvent"});
+            	}
+            }, // end fn_nodeClickEvent
+
+
+            //-----------------------------------------------------------------------
+            // Description :: fn_getProblemHistory
+            //-----------------------------------------------------------------------
+            fn_getProblemHistory : function() {
+            	try {
+                    $.sub.fn_initProblemInterfaceGrid();
+
+                    var requestObject = new Object();
+                    requestObject.integrationId = jsonData.integrationId;
+
+        			mint.callService(requestObject, 'CO-01-00-009', 'REST-R15-OP-03-02', '$.sub.fn_setProblemInterfaceGridData', {errorCall : true, notificationView : false});
+            	} catch ( e ) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getProblemHistory"});
+            	}
+            },
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_setProblemInterfaceGridData
+            //-----------------------------------------------------------------------
+            fn_setProblemInterfaceGridData : function(jsonData) {
+            	try {
+                 	var gridData = $.sub.fn_getProblemInterfaceGridData_custom(jsonData);
+            		var dataSource = new kendo.data.DataSource({
+						  data: gridData
+					    , page:1
+					    , pageSize: mint.ui.getPageSizesS({'currentPage' : true})
+					});
+
+					//데이터 재설정
+					$("#problemInterfaceListGrid").data("kendoGrid").setDataSource(dataSource);
+ 				}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_setProblemInterfaceGrid"});
+            	}
+            }, // end fn_setProblemInterfaceGrid
+
+          	//-----------------------------------------------------------------------
+            // Description :: fn_getProblemInterfaceGridData_custom
+            //-----------------------------------------------------------------------
+            fn_getProblemInterfaceGridData_custom : function(jsonData) {
+            	try {
+            		var problemGridDataList = [];
+            		var problemGridData = {};
+            		for (var i in jsonData) {
+            			problemGridData = {};
+
+            			problemGridData.problemId = jsonData[i].problemId;
+            			problemGridData.classCd = jsonData[i].classCd;
+            			problemGridData.classCdNm = jsonData[i].classCdNm;
+            			problemGridData.classCdPath = jsonData[i].classCdPath;
+            			problemGridData.problemSubject = jsonData[i].problemSubject;
+            			problemGridData.startDate = jsonData[i].startDate;
+            			problemGridData.endDate = jsonData[i].endDate;
+            			problemGridData.status = jsonData[i].status;
+            			problemGridData.statusNm = jsonData[i].statusNm;
+            			problemGridData.nodeName = jsonData[i].nodeName;
+
+            			problemGridData.interfaceId = jsonData[i].interfaceId;
+            			problemGridData.interfaceNm = jsonData[i].interfaceNm;
+            			problemGridData.channelId = jsonData[i].channelId;
+            			problemGridData.channelNm = jsonData[i].channelNm;
+            			problemGridData.typeNm = jsonData[i].typeNm;
+
+
+            			problemGridDataList.push(problemGridData);
+
+            		}
+
+            		return problemGridDataList;
+            	}
+            	catch(e) {
+            		mint.common.errorLog(e, {"screenName" : screenName, "fnName" : "$.sub.fn_getProblemInterfaceGridData_custom"});
+            	}
+            }, // end fn_getProblemInterfaceGridData_custom
+
+
+        }
+    });
+
+
+    //=======================================================================
+    // (4) 이벤트 핸들러 정의
+    //=======================================================================
+	//-----------------------------------------------------------------------
+	// Description :: 노드리스트 그리드 Double Click 이벤트 (상세 조회)
+	//-----------------------------------------------------------------------
+    $('#nodeListGrid').on("click", "tr.k-state-selected", function(e) {
+        $.sub.fn_setMsg();
+    });
+
+	//-----------------------------------------------------------------------
+	// Description :: 그리드 가로 스크롤바 생성
+	//-----------------------------------------------------------------------
+	$('.tracking-diagram').slimScroll({
+		width:'100%',
+		axis: 'both',
+		size:'10px',
+		railVisible: false,
+		railOpacity: 0.3,
+		opacity: 0.3,
+		color: '#908FCD'
+	});
+    //=======================================================================
+    // (5) 기타 Function 정의
+    //=======================================================================
+
+    //=======================================================================
+    // (6) 화면 로딩시 실행할 항목 기술
+    //=======================================================================
+    $.sub.fn_init();
+    mint.label.attachLabel(null);
+});
+</script>

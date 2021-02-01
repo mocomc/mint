@@ -1,0 +1,2 @@
+DELETE FROM TSU0302 WHERE "PACKAGE" = 'system' AND ATTRIBUTE_ID = 'fetch.user';
+INSERT INTO TSU0302 ("PACKAGE", ATTRIBUTE_ID, IDX, ATTRIBUTE_NM, ATTRIBUTE_VALUE, COMMENTS, DEL_YN, REG_DATE, REG_USER) VALUES('system', 'fetch.user', 0, 'system.fetch.user', 'iip', 'fetch user', 'N' ,TO_CHAR(SYSDATE,'yyyymmddhh24miss'), 'iip');

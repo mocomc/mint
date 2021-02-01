@@ -1,0 +1,4 @@
+DELETE FROM TSU0301 WHERE LEVEL1 = 'SU' AND LEVEL2 = '09';
+INSERT INTO TSU0301 (LEVEL1, LEVEL2, CD, LEVEL1_NM, LEVEL2_NM, NM, NM2, COMMENTS, DEL_YN, REG_DATE, REG_USER) VALUES('SU', '09', '0', '지원', '패치처리결과', '등록', '등록', '패치처리결과코드', 'N' , TO_CHAR(SYSDATE,'yyyymmddhh24miss'), 'iip');
+INSERT INTO TSU0301 (LEVEL1, LEVEL2, CD, LEVEL1_NM, LEVEL2_NM, NM, NM2, COMMENTS, DEL_YN, REG_DATE, REG_USER) VALUES('SU', '09', '1', '지원', '패치처리결과', '완료', '완료', '패치처리결과코드', 'N' , TO_CHAR(SYSDATE,'yyyymmddhh24miss'), 'iip');
+INSERT INTO TSU0301 (LEVEL1, LEVEL2, CD, LEVEL1_NM, LEVEL2_NM, NM, NM2, COMMENTS, DEL_YN, REG_DATE, REG_USER) VALUES('SU', '09', '9', '지원', '패치처리결과', '실패', '실패', '패치처리결과코드', 'N' , TO_CHAR(SYSDATE,'yyyymmddhh24miss'), 'iip');

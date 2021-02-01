@@ -1,0 +1,34 @@
+#=====================================================
+#IIP AGENT PROPERTIES DEFINITION
+#----------------------------------------------------
+iip.agent.cd=NH_TST_1
+iip.agent.nm=NH_TST_1
+iip.agent.home=C://WORK//IIP_V3//mint//mint-agent-boot//target
+iip.agent.repository.path=${iip.agent.home}/repository
+iip.agent.console.ip=127.0.0.1
+iip.agent.console.port=9090
+iip.agent.console.path=/application
+iip.agent.charset=UTF-8
+#iip.server.protocol=http
+iip.server.websocket.protocol=ws
+#------------------------------
+#for local test
+#------------------------------
+iip.server.websocket.ip=localhost
+iip.server.websocket.port=8082
+#------------------------------
+#for server test
+#------------------------------
+#iip.server.ip=idc.mocomsys.com
+#iip.server.port=38080
+iip.server.websocket.contextroot=mint
+iip.server.websocket.agentpath=push
+iip.server.websocket.websocketUrl=/agent
+
+
+
+iip.server.protocol=http
+iip.server.ip=localhost
+iip.server.port=8082
+iip.server.contextroot=mint
+iip.server.agentpath=agent

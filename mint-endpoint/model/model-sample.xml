@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><model xmlns="http://www.w3.org/2001/XMLSchema-instance">
+    <id>103</id>
+    <name>배포명2</name>
+    <stage>1</stage>
+    <createDate>20201112154231</createDate>
+    <description>배포명2</description>
+    <interface id="SAMPLE-001" name="UI-FW 샘플"/>
+    <apps>
+        <app id="1" name="Vitria DB Service">
+            <type cd="VDS" name="Vitria DB Service"/>
+            <system cd="EH" name="본부" seq="0" type="0"/>
+            <server cd="BO1" name="BOS 1"/>
+            <properties>
+                <property name="isProcedure">TRUE</property>
+                <property name="sql"><![CDATA[SQL11]]></property>
+                <property name="sqlType">prepared sql</property>
+                <property name="tableName">테이블명11</property>
+                <property name="crudType">select</property>
+                <property name="serviceName">DB서비스명11</property>
+            </properties>
+            <layouts>
+                <layout ref="AABB0001" type="1"/>
+            </layouts>
+        </app>
+        <app id="2" name="Vitria DB Service">
+            <type cd="VDS" name="Vitria DB Service"/>
+            <system cd="BO" name="BOS" seq="1" type="2"/>
+            <server cd="BO2" name="BOS 2"/>
+            <properties>
+                <property name="isProcedure">FALSE</property>
+                <property name="sql"><![CDATA[SQL22]]></property>
+                <property name="sqlType">literal sql</property>
+                <property name="tableName">테이블명22</property>
+                <property name="crudType">insert</property>
+                <property name="serviceName">DB서비스명22</property>
+            </properties>
+            <layouts>
+                <layout ref="AABB0001" type="1"/>
+            </layouts>
+        </app>
+    </apps>
+    <layouts>
+        <layout id="AABB0001" name="고객계좌정보조회"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="AABB0001">
+        <xs:annotation>
+            <xs:documentation>고객계좌정보조회</xs:documentation>
+            <xs:appinfo>
+                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                    <mx:property key="format" value="xml"/>
+                </mx:properties>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" name="custId">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>고객ID</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="justify" value="left"/>
+                                    <mx:property key="padding" value="space"/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="10"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="opBrch">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>계좌개설점</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="justify" value="left"/>
+                                    <mx:property key="padding" value="space"/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="1"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element default="000000" maxOccurs="1" minOccurs="1" name="accNum">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>계좌번호</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="justify" value="left"/>
+                                    <mx:property key="padding" value="0"/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="6"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="aacPw">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>비밀번호</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="justify" value="left"/>
+                                    <mx:property key="padding" value="space"/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="4"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="amt">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>잔액</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="justify" value="left"/>
+                                    <mx:property key="padding" value="space"/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="cusNm">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation>고객명</xs:documentation>
+                            <xs:appinfo>
+                                <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                    <mx:property key="justify" value="left"/>
+                                    <mx:property key="padding" value="space"/>
+                                </mx:properties>
+                            </xs:appinfo>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" name="accountTrxInfoDto">
+                    <xs:annotation>
+                        <xs:documentation>계좌거래정보</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="accNum">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>계좌번호</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="trxDate">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래일자</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="8"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="trxTime">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래시각</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="trxAmt">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래금액</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="20"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="trxType">
+                                <xs:simpleType>
+                                    <xs:annotation>
+                                        <xs:documentation>거래유형명</xs:documentation>
+                                        <xs:appinfo>
+                                            <mx:properties xmlns:mx="http://mint.mocomsys.com/2020/schema">
+                                                <mx:property key="justify" value="left"/>
+                                                <mx:property key="padding" value="space"/>
+                                            </mx:properties>
+                                        </xs:appinfo>
+                                    </xs:annotation>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+]]></layout>
+    </layouts>
+    <mappings>
+    </mappings>
+</model>

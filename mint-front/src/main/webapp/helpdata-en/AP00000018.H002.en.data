@@ -1,0 +1,36 @@
+AP00000018$$$H002$$$en$$$오늘 오류현황$$$<p><font color="#000000" face="굴림" size="3">
+
+</font><b style="mso-bidi-font-weight: normal;"><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><font size="2">Today's Error<br></font><font size="2">
+</font></span></b><span lang="EN-US" style='color: black; font-family: "Tahoma","sans-serif"; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: "맑은 고딕"; mso-font-kerning: 0pt;'><span style="mso-spacerun: yes;"><font size="2">&nbsp; &nbsp;</font></span><font size="2">Mark Only today's Interface error state<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp; </font></span><font size="2">If processing status lasts for more than
+2 hours, it changes to an error<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">1.
+Processing<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Interface has started, but not ended
+and this state is classified in a 2 type<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. Processing state according to a time
+lag of refreshing page<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Click processing number &gt; number
+changed in real time<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">b. In case of SAP PO, monitoring cycle
+is 5 minutes so that processing state seen for a long time<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">c. details<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Click number &gt; processing list
+&gt; click the row &gt; Interface tracking details popup<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;</font></span><font size="2">2.
+Error<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></span><font size="2">It is marked when error occure in
+processing Interface transaction<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. Details<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">Click error number &gt; error list
+&gt; click the row &gt; Interface tracking details popup<br></font><font size="2">
+</font><b style="mso-bidi-font-weight: normal;"><span style="mso-spacerun: yes;"><font size="2">&nbsp; </font></span><font size="2">3.
+Error handling<br></font><font size="2">
+</font></b><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">You can see the results of occured
+errors<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">a. details<br></font><font size="2">
+</font><span style="mso-spacerun: yes;"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span><font size="2">click error handling number &gt;
+error/failure list popup &gt; click the row &gt; move to an error/failure
+result menu</font></span></p><p><font color="#000000" face="굴림" size="3">
+
+</font></p>

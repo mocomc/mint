@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pep.per.mint.database.mapper.op.AlarmMapper">
+  	<!--
+  	<cache/>
+  	-->
+	<insert id="addAlramMessage">
+		<selectKey keyProperty="messageId" resultType="string" order="BEFORE" >
+	            select nvl(max(TO_NUMBER(MESSAGE_ID)),0) + 1 from TSU1501
+        </selectKey>
+
+		insert into TSU1501 (
+			 MESSAGE_ID
+			,REG_DATE
+			,TYPE
+			,MESSAGE
+			,REG_USER
+		) values (
+			 #{messageId,jdbcType=VARCHAR}
+			,#{regDate	,jdbcType=VARCHAR}
+			,#{type		,jdbcType=VARCHAR}
+			,#{message	,jdbcType=CLOB, typeHandler=org.apache.ibatis.type.ClobTypeHandler, javaType=String}
+			,#{regUser	,jdbcType=VARCHAR}
+		)
+
+	</insert>
+
+
+	<insert id="addAlramMessageRole">
+		insert into TSU1502 (
+			 MESSAGE_ID
+			,ROLE_ID
+		) values (
+			 #{messageId,jdbcType=VARCHAR}
+			,#{roleId	,jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+
+</mapper>

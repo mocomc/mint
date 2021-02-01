@@ -1,0 +1,94 @@
+{
+	"objectType": "InterfaceModel",
+	"mid": "103",
+	"interfaceId": "",
+	"integrationId": "",
+	"name": "배포명2",
+	"stage": "1",
+	"stageName": "검증",
+	"deployStatus": "",
+	"deployStatusName": "",
+	"lastDeployDate": "",
+	"lastDeployUser": "",
+	"lastDeployUserNm": "",
+	"layoutCount": 3,
+	"mappingCount": 4,
+	"comments": "배포명2",
+	"delYn": "N",
+	"regDate": "20200814150937186",
+	"regId": "shl",
+	"regNm": "포털개발자",
+	"modDate": "20200826135807764",
+	"modId": "iip",
+	"modNm": "포탈관리자",
+	"appModels": [
+		{
+			"objectType": "AppModel",
+			"interfaceMid": "103",
+			"mid": "1",
+			"name": "Vitria DB Service",
+			"cd": "VDS",
+			"type": "VDS",
+			"typeName": "Vitria DB Service",
+			"systemId": "SS00000007",
+			"systemName": "본부",
+			"systemCd": "EH",
+			"systemSeq": 0,
+			"systemType": "0",
+			"systemTypeName": "송신",
+			"serverId": "SV00000003",
+			"serverName": "BOS 1",
+			"serverCd": "BO1",
+			"tagInfo": "",
+			"attributes": {
+				"sqlType": [
+					{
+						"objectType": "AppModelAttribute",
+						"interfaceMid": "103",
+						"appMid": "1",
+						"appType": "VDS",
+						"aid": "4",
+						"name": "SQL유형",
+						"cd": "sqlType",
+						"type": "0",
+						"inputType": "4",
+						"seq": 0,
+						"val": "prepared sql",
+						"tag": ""
+					}
+				]
+			}
+		},
+		{
+			"objectType": "AppModel",
+			"interfaceMid": "103",
+			"mid": "3",
+			"name": "Vitria File Service",
+			"cd": "VFS",
+			"type": "VFS",
+			"typeName": "Vitria File Service",
+			"systemId": "SS00000015",
+			"systemName": "Event DB",
+			"systemCd": "EV",
+			"systemSeq": 2,
+			"systemType": "2",
+			"systemTypeName": "수신",
+			"serverId": "SV00000001",
+			"serverName": "EAI HUB 1",
+			"serverCd": "EC1",
+			"tagInfo": "",
+			"attributes": {
+			},
+			"comments": "런타임모델-앱유형-Vitria File Service",
+			"delYn": "N",
+			"regDate": "20200826135807764",
+			"regId": "iip",
+			"modDate": "",
+			"modId": "",
+			"msgs": [
+			],
+			"mappings": [
+			]
+		}
+	]
+}
