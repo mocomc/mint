@@ -30,7 +30,7 @@ public class ComMessageCheckUtil {
 	/**
 	 *
 	 * @param serviceId
-	 * @param requirement
+	 * @param comMessage
 	 * @param messageSource
 	 * @param locale
 	 * @throws ControllerException
